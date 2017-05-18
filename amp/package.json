@@ -8,7 +8,6 @@
   "devDependencies": {
     "amphtml-validator": "^1.0.20",
     "autoprefixer": "6.7.7",
-    "archiver": "1.3.0",
     "babel-cli": "6.24.1",
     "babel-loader": "6.4.1",
     "babel-preset-es2015": "6.24.1",
@@ -50,7 +49,8 @@
     "source-map-support": "0.4.15",
     "stylelint": "7.10.1",
     "susy": "^2.2.12",
-    "webpack": "2.5.1"
+    "webpack": "2.5.1",
+    "yargs": "^8.0.1"
   },
   "scripts": {
     "add:component": "amp-sdk-add-component",
@@ -65,7 +65,8 @@
     "lint:amp-scss": "stylelint './app/**/*.scss' --config ../web/.stylelintrc.yml",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
-    "build": "cross-env NODE_ENV=production node ./scripts/build.js"
+    "build": "cross-env NODE_ENV=production node ./scripts/build/build.js",
+    "deploy": "node ./scripts/deploy.js"
   },
   "jest": {
     "moduleNameMapper": {

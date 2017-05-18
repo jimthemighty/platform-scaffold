@@ -55,11 +55,15 @@ const initializeStore = (req) => {
 const render = (req, res, store, component, css) => {
     const scripts = new ampSDK.Set()
     const body = ReactDOMServer.renderToStaticMarkup(
-        <Provider store={store}>
-            <ampSDK.AmpContext declareDependency={scripts.add}>
-                {React.createElement(component, {}, null)}
-            </ampSDK.AmpContext>
-        </Provider>
+        <div>
+            <h1>Static URL: "{process.env.STATIC_URL}"</h1>
+            <amp-img src={process.env.STATIC_URL + 'mobify.png'} height="64" width="252" />
+            <Provider store={store}>
+                <ampSDK.AmpContext declareDependency={scripts.add}>
+                    {React.createElement(component, {}, null)}
+                </ampSDK.AmpContext>
+            </Provider>
+        </div>
     )
     const state = store.getState()
     const rendered = ampPage({
