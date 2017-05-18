@@ -12,7 +12,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from '../../integration-manager/account/commands'
-import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
+import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
@@ -35,7 +35,7 @@ export const onRouteChanged = createActionWithAnalytics(
 )
 
 export const setFetchedPage = createAction('Set fetched page', ['url'])
-export const clearPageFetchError = createAction('Clear page fetch error')
+export {clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 /**
  * Make a separate request that is intercepted by the worker. The worker will
