@@ -12,7 +12,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from '../../integration-manager/account/commands'
-import {setPageFetchError} from '../../integration-manager/results'
+import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
