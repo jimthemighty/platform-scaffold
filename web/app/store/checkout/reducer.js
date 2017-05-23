@@ -24,6 +24,11 @@ const checkoutReducer = handleActions({
     [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billing', 'address'),
     [integrationManagerResults.receivePaymentCustomContent]: setCustomContent('payment'),
     [integrationManagerResults.receivePaymentAddressCustomContent]: setCustomContent('payment', 'address'),
+    [integrationManagerResults.receiveShippingMethods]: (state, {payload}) => (
+        // Using `set` here will make sure the list in the store is
+        // correctly truncated.
+        state.set('shippingMethods', payload)
+    ),
     [setDefaultShippingAddressId]: mergePayload
 }, Immutable.Map())
 
