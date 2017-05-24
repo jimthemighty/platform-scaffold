@@ -30,5 +30,7 @@ export const getAvailableRegions = (formKey) => createSelector(
     (regions, id) => regions.filter((region) => region.get('countryId') === id)
 )
 
+export const getShippingMethods = createGetSelector(getCheckout, 'shippingMethods', Immutable.List())
+
 export const getCheckoutCustomContent = createGetSelector(getCheckout, 'custom')
 export const getLocationsCustomContent = createGetSelector(getLocations, 'custom')
