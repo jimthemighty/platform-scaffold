@@ -1,0 +1,12 @@
+{
+    "source": {
+        "include": ["app/integration-manager"],
+        "includePattern": "commands\\.js$",
+        "excludePattern": ".*/_.+/.*"
+    },
+    "opts": {
+        "recurse": true,
+        "destination": "jsdoc"
+    },
+    "plugins": ["plugins/markdown"]
+}

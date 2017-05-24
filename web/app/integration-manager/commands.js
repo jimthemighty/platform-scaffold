@@ -23,5 +23,8 @@ export const register = (commands) => {
     registerAccount(commands.account)
 }
 
+/** @function */
 export const submitNewsletter = (...args) => connector.submitNewsletter(...args)
+
+/** @function */
 export const getSearchSuggestions = (...args) => connector.getSearchSuggestions(...args)

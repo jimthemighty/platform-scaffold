@@ -8,3 +8,4 @@ lighthouse/audit*
 
 app/loader-routes.js
 .tern-port
+jsdoc
