@@ -11,7 +11,7 @@ import {parseProductListData} from '../parsers'
 import {SITE_ID} from '../constants'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id) => `/product_search?expand=images,prices&q=&refine_1=cgid=${id}`
+const makeCategorySearchURL = (id) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}`
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {

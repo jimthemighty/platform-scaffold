@@ -132,18 +132,18 @@ export const parseCategories = (categories) => {
     })
 }
 
-export const parseProductHit = ({product_id, product_name, price, prices, image}) => {
+export const parseProductHit = ({product_id, product_name, price, prices, orderable, image}) => {
     // Some products don't have _any_ pricing on them!
     const finalPrice = price || (prices && prices['usd-sale-prices']) || undefined
     const thumbnail = {
         alt: image.alt,
         src: image.link
     }
-
     return {
         id: product_id,
         title: product_name,
         price: finalPrice ? formatPrice(finalPrice) : '$ N/A',
+        available: orderable,
         href: getProductHref(product_id),
         thumbnail,
         images: [thumbnail]
@@ -152,6 +152,7 @@ export const parseProductHit = ({product_id, product_name, price, prices, image}
 
 export const parseProductListData = (products) => {
     const productListData = {}
+
     products.forEach((productHit) => {
         productListData[getProductHref(productHit.product_id)] = parseProductHit(productHit)
     })
