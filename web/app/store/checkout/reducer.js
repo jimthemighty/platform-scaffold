@@ -16,13 +16,13 @@ const checkoutReducer = handleActions({
     [integrationManagerResults.receiveCheckoutData]: mergePayload,
     [integrationManagerResults.receiveUserEmail]: mergePayload,
     [integrationManagerResults.receiveCheckoutCustomContent]: mergePayload,
-    [integrationManagerResults.receiveLocationsCustomContent]: setCustomContent(['locations']),
-    [integrationManagerResults.receiveShippingCustomContent]: setCustomContent(['shipping']),
-    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent(['shipping', 'address']),
-    [integrationManagerResults.receiveBillingCustomContent]: setCustomContent(['billing']),
-    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent(['billing', 'address']),
-    [integrationManagerResults.receivePaymentCustomContent]: setCustomContent(['payment']),
-    [integrationManagerResults.receivePaymentAddressCustomContent]: setCustomContent(['payment', 'address']),
+    [integrationManagerResults.receiveLocationsCustomContent]: setCustomContent('locations'),
+    [integrationManagerResults.receiveShippingCustomContent]: setCustomContent('shipping'),
+    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shipping', 'address'),
+    [integrationManagerResults.receiveBillingCustomContent]: setCustomContent('billing'),
+    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billing', 'address'),
+    [integrationManagerResults.receivePaymentCustomContent]: setCustomContent('payment'),
+    [integrationManagerResults.receivePaymentAddressCustomContent]: setCustomContent('payment', 'address'),
     [setDefaultShippingAddressId]: mergePayload
 }, Immutable.Map())
 
