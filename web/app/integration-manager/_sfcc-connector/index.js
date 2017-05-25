@@ -4,7 +4,9 @@
 
 import commands from './commands'
 import reducer from './reducer'
+import {registerConfig} from './config'
 
-const connector = {commands, reducer}
-
-export default connector
+export const Connector = (cfg) => {
+    registerConfig(cfg)
+    return {commands, reducer}
+}

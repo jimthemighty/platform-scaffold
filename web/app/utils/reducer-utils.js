@@ -18,3 +18,5 @@ export const mergeSkipLists = (a, b) => {
     }
     return b
 }
+
+export const setCustomContent = (...customPath) => (state, {payload}) => state.setIn([...customPath, 'custom'], payload)
