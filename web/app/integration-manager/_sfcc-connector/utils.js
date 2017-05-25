@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {API_END_POINT_URL, REQUEST_HEADERS} from './constants'
+import {getApiEndPoint, getRequestHeaders} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
@@ -48,11 +48,15 @@ export const getAuthTokenPayload = (authToken) => {
     return JSON.parse(window.atob(authToken.split('.')[1]))
 }
 
+export const getCustomerData = (authorization) => {
+    const {sub} = getAuthTokenPayload(authorization)
+    const subData = JSON.parse(sub)
+    return subData.customer_info
+}
+
 export const isUserLoggedIn = (authorization) => {
     try {
-        const {sub} = getAuthTokenPayload(authorization)
-        const subData = JSON.parse(sub)
-        return !subData.customer_info.guest
+        return !getCustomerData(authorization).guest
     } catch (e) {
         console.log('Error checking if user is logged in. Assuming `false`', e)
         return false
@@ -64,11 +68,11 @@ export const initSfccSession = (authorization) => {
         method: 'POST',
         body: '{ type : "session" }',
         headers: {
-            ...REQUEST_HEADERS,
+            ...getRequestHeaders(),
             Authorization: authorization
         }
     }
-    return makeRequest(`${API_END_POINT_URL}/sessions`, options)
+    return makeRequest(`${getApiEndPoint()}/sessions`, options)
         .then(() => {
             // Once the session has been opened return the authorization headers to the next request
             return options.headers
@@ -84,7 +88,7 @@ export const initSfccAuthAndSession = () => {
         if (currentTime <= exp) {
             // The token is still valid
             return Promise.resolve({
-                ...REQUEST_HEADERS,
+                ...getRequestHeaders(),
                 Authorization: authorizationToken
             })
         }
@@ -93,11 +97,11 @@ export const initSfccAuthAndSession = () => {
             method: 'POST',
             body: '{ type : "refresh" }',
             headers: {
-                ...REQUEST_HEADERS,
+                ...getRequestHeaders(),
                 Authorization: authorizationToken
             }
         }
-        return makeRequest(`${API_END_POINT_URL}/customers/auth`, requestOptions)
+        return makeRequest(`${getApiEndPoint()}/customers/auth`, requestOptions)
             .then((response) => {
                 if (response.status === 401) {
                     // The server did not accept the token, start from scratch
@@ -108,7 +112,7 @@ export const initSfccAuthAndSession = () => {
                 const authorizationToken = response.headers.get('Authorization')
                 storeAuthToken(authorizationToken)
                 return {
-                    ...REQUEST_HEADERS,
+                    ...getRequestHeaders(),
                     Authorization: authorizationToken
                 }
             })
@@ -116,10 +120,10 @@ export const initSfccAuthAndSession = () => {
     const options = {
         method: 'POST',
         body: '{ type : "guest" }',
-        headers: REQUEST_HEADERS
+        headers: getRequestHeaders()
     }
     let authorization
-    return makeRequest(`${API_END_POINT_URL}/customers/auth`, options)
+    return makeRequest(`${getApiEndPoint()}/customers/auth`, options)
         .then((response) => {
             authorization = response.headers.get('Authorization')
             storeAuthToken(authorization)
@@ -134,7 +138,7 @@ export const makeApiRequest = (path, options) => {
                 ...options,
                 headers
             }
-            return makeRequest(API_END_POINT_URL + path, requestOptions)
+            return makeRequest(getApiEndPoint() + path, requestOptions)
         })
 }
 
@@ -143,7 +147,12 @@ export const makeApiJsonRequest = (path, body, options) => {
         ...options,
         body: JSON.stringify(body)
     })
-        .then((response) => response.json())
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(response.statusText)
+            }
+            return response.json()
+        })
         .then((responseJSON) => {
             if (responseJSON.fault) {
                 throw new Error(responseJSON.fault.message)
@@ -155,9 +164,9 @@ export const makeApiJsonRequest = (path, body, options) => {
 export const makeUnAuthenticatedApiRequest = (path, options) => {
     const requestOptions = {
         ...options,
-        headers: REQUEST_HEADERS
+        headers: getRequestHeaders()
     }
-    return makeRequest(API_END_POINT_URL + path, requestOptions)
+    return makeRequest(getApiEndPoint() + path, requestOptions)
 }
 
 export const formatPrice = (price) => {

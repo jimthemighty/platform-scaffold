@@ -7,9 +7,14 @@ dependencies:
         - "native/node_modules"
         - "amp/node_modules"
     pre:
-        - ./web/scripts/install-google-chrome-stable.sh
+        - mkdir $CIRCLE_ARTIFACTS/logs
+        - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
+            background: true
         - npm install:
             pwd: web
+        - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
+            pwd: web
+            background: true
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
         #- npm install:
         #    pwd: native
@@ -18,18 +23,9 @@ dependencies:
         #    pwd: amp
 test:
     override:
-        - npm run lint:
+        - ./tests/system/run-all-tests.sh:
             pwd: web
-        - npm test -- --runInBand:
-            pwd: web
-        # Calculate the Lighthouse score
-        - npm run test:pwa-ci:
-            pwd: web
-        # Run end-to-end tests
-        # - npm run smoke-test:
-        #    pwd: web
-        # - npm run test:
-        #    pwd: amp
+            parallel: true
     post:
        - cp -R lighthouse/* $CIRCLE_ARTIFACTS:
            pwd: web

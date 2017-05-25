@@ -3,97 +3,93 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {SubmissionError} from 'redux-form'
-import {createBasket, handleCartData} from '../cart/utils'
+import {createBasket, handleCartData, requestCartData} from '../cart/utils'
 import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
-import {PAYMENT_URL, SITE_ID} from '../constants'
+import {getPaymentURL, getConfirmationURL} from '../config'
 import {STATES} from './constants'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveCheckoutData, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveCheckoutData, receiveCheckoutLocations, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
 
 export const fetchShippingMethodsEstimate = () => (dispatch) => {
     return createBasket()
-        .then((basket) => {
-            return makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'})
-                .then((response) => response.json())
-                .then((responseJSON) => {
-                    const shippingMethods = responseJSON.applicable_shipping_methods.map(({name, description, price, id}) => {
-                        return {
-                            label: `${name} - ${description}`,
-                            cost: `$${price.toFixed(2)}`,
-                            value: id
-                        }
-                    })
+        .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
+        .then((response) => response.json())
+        .then(({applicable_shipping_methods}) => {
+            const shippingMethods = applicable_shipping_methods
+                  .map(({name, description, price, id}) => ({
+                      label: `${name} - ${description}`,
+                      cost: `$${price.toFixed(2)}`,
+                      value: id
+                  }))
 
-                    return dispatch(receiveCheckoutData({shipping: {shippingMethods}}))
-                })
+            return dispatch(receiveCheckoutData({shipping: {shippingMethods}}))
         })
 }
 
 export const initCheckoutShippingPage = () => (dispatch) => {
-    return createBasket()
+    return requestCartData()
         .then((basket) => {
-            return makeApiRequest(`/baskets/${basket.basket_id}`, {method: 'GET'})
-                .then((response) => response.json())
-                .then((responseJSON) => {
-                    const {
-                        customer_info: {
-                            email
-                        },
-                        shipments: [{
-                            shipping_address,
-                            shipping_method
-                        }]
-                    } = responseJSON
-                    let initialValues
-                    /* eslint-disable camelcase */
-                    if (shipping_address) {
-                        initialValues = {
-                            username: email,
-                            name: shipping_address.full_name,
-                            company: shipping_address.company_name,
-                            addressLine1: shipping_address.address1,
-                            addressLine2: shipping_address.address2,
-                            countryId: shipping_address.country_code,
-                            city: shipping_address.city,
-                            regionId: shipping_address.state_code,
-                            postcode: shipping_address.postal_code,
-                            telephone: shipping_address.phone,
-                            shipping_method: shipping_method ? shipping_method.id : undefined
-                        }
-                    } else {
-                        initialValues = {
-                            countryId: 'us'
-                        }
-                    }
-                    dispatch(receiveShippingInitialValues({initialValues}))
-                    /* eslint-enable camelcase */
-                    return dispatch(receiveCheckoutData({
-                        locations: {
-                            countries: [{value: 'us', label: 'United States'}],
-                            regions: STATES
-                        }
-                    }))
-                })
-                .then(() => dispatch(fetchShippingMethodsEstimate()))
+            const {
+                customer_info: {
+                    email
+                },
+                shipments: [{
+                    shipping_address,
+                    shipping_method
+                }]
+            } = basket
+
+            let initialValues
+            /* eslint-disable camelcase */
+            if (shipping_address) {
+                initialValues = {
+                    username: email,
+                    name: shipping_address.full_name,
+                    company: shipping_address.company_name,
+                    addressLine1: shipping_address.address1,
+                    addressLine2: shipping_address.address2,
+                    countryId: shipping_address.country_code,
+                    city: shipping_address.city,
+                    regionId: shipping_address.state_code,
+                    postcode: shipping_address.postal_code,
+                    telephone: shipping_address.phone,
+                    shipping_method: shipping_method ? shipping_method.id : undefined
+                }
+            } else {
+                initialValues = {
+                    countryId: 'us'
+                }
+            }
+            dispatch(receiveShippingInitialValues({initialValues}))
+            /* eslint-enable camelcase */
+            return dispatch(receiveCheckoutLocations({
+                countries: [{
+                    id: 'us',
+                    label: 'United States',
+                    regionRequired: true,
+                    postcodeRequired: true
+                }],
+                regions: STATES
+            }))
         })
+        .then(() => dispatch(fetchShippingMethodsEstimate()))
 }
+
+// We don't need to fetch any data for this page
+export const initCheckoutConfirmationPage = () => () => Promise.resolve()
 
 export const initCheckoutPaymentPage = () => (dispatch) => {
     dispatch(populateLocationsData())
-    return createBasket()
+    return requestCartData()
         .then((basket) => {
-            return makeApiRequest(`/baskets/${basket.basket_id}`, {method: 'GET'})
-                .then((response) => response.json())
-                .then((responseJSON) => {
-                    const addressData = parseShippingAddressFromBasket(responseJSON)
+            const addressData = parseShippingAddressFromBasket(basket)
 
-                    dispatch(receiveShippingInitialValues({initialValues: addressData}))
-                    dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
-                })
+            dispatch(receiveShippingInitialValues({initialValues: addressData}))
+            dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
         })
 }
 
@@ -113,14 +109,13 @@ const setCustomerNameAndEmail = (formValues, basket) => () => {
     )
 }
 
-const setShippingAddress = (formValues, basket) => () => {
-    const orderAddress = createOrderAddressObject(formValues)
-    return makeApiJsonRequest(
+const setShippingAddress = (formValues, basket) => () => (
+    makeApiJsonRequest(
         `/baskets/${basket.basket_id}/shipments/me/shipping_address?use_as_billing=true`,
-        orderAddress,
+        createOrderAddressObject(formValues),
         {method: 'PUT'}
     )
-}
+)
 
 const setShippingMethod = (formValues, basket) => () => (
     makeApiJsonRequest(
@@ -130,17 +125,17 @@ const setShippingMethod = (formValues, basket) => () => (
     )
 )
 
-export const submitShipping = (formValues) => (dispatch) => {
-    return createBasket()
+export const submitShipping = (formValues) => (dispatch) => (
+    createBasket()
         .then((basket) => dispatch(setCustomerNameAndEmail(formValues, basket)))
         .then((basket) => dispatch(setShippingAddress(formValues, basket)))
         .then((basket) => dispatch(setShippingMethod(formValues, basket)))
         .catch(() => { throw new SubmissionError({_error: 'Unable to save shipping data'}) })
         .then((basket) => {
             dispatch(handleCartData(basket))
-            return PAYMENT_URL
+            return getPaymentURL()
         })
-}
+)
 
 const addPaymentMethod = (formValues, basket) => (dispatch, getState) => {
     const orderTotal = getOrderTotal(getState())
@@ -211,7 +206,7 @@ export const submitPayment = (formValues) => (dispatch) => {
             dispatch(receiveOrderConfirmationContents({
                 orderNumber: order.order_no
             }))
-            return `/on/demandware.store/${SITE_ID}/default/COSummary-Submit`
+            return getConfirmationURL()
         })
 }
 
