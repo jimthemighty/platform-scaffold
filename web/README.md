@@ -1,8 +1,10 @@
 # Mobify Progressive Web Scaffold
 
+The quick start guide for using the scaffold can be found [here](https://docs.mobify.com/progressive-web/latest/guides/quick-start-guide/)
+
 ## Running npm scripts
 
-All the `npm` scripts listed below must be run from the `web` directory inside your project directory. 
+All the `npm` scripts listed below must be run from the `web` directory inside your project directory.
 
 Here's how to get a list of all the available npm scripts in the Progressive Web Scaffold:
 
@@ -138,8 +140,8 @@ npm run lint
 If this code style is a poor match for your pre-existing practices,
 there are two ways you can modify the linter configuration to suit
 your use case better. For small changes, you can add rules to the
-[`.eslintrc.yml`](./.eslintrc.yml) file in the `web` directory inside your project directory. 
-Rules specified in this file override rules in the Mobify standard; 
+[`.eslintrc.yml`](./.eslintrc.yml) file in the `web` directory inside your project directory.
+Rules specified in this file override rules in the Mobify standard;
 the following `rules` section adds an additional rule and disables an existing rule:
 
 ```yaml
@@ -204,62 +206,3 @@ For CI builds, this command builds and serves the bundle for testing with Previe
 npm run test:pwa-ci
 ```
 
-## Developing against `develop` of the Progressive Web SDK
-
-If you are wanting to improve or add a library/component in the [Progressive Web SDK](https://github.com/mobify/progressive-web-sdk),
-you will need to clone the SDK (note: it is not open on Github).
-
-```
-git clone git@github.com:mobify/progressive-web-sdk.git
-cd progressive-web-sdk
-npm link
-npm install # REQUIRED!!
-npm run dev:build # Some assets required by the scaffold build are only created by this command (/dist/*)
-```
-
-Then navigate back to this directory and run:
-```
-cd ../platform-scaffold/web
-npm link progressive-web-sdk
-npm run dev
-```
-
-## Analyze Bundle Size
-
-To visualize bundle script content, run:
-
-```
-npm run analyze-build
-```
-
-## Swapping Integration Managers
-
-Note: This should make it's way into the Tutorial eventually, but this is here for now.
-
-### Running against custom Merlin's connector:
-
-1. Open `app/main.jsx`.
-2. Import the Merlin's connector:
-
-```
-import connector from './integration-manager/_merlins-connector'
-// import connector from './integration-manager/_sfcc-connector'
-```
-
-3. Open Preview using the following link:
-
-https://preview.mobify.com/?url=https%3A%2F%2Fwww.merlinspotions.com%2F&site_folder=https%3A%2F%2Flocalhost%3A8443%2Floader.js&disabled=0&domain=&scope=0
-
-### Running against Salesforce Commerce Cloud:
-
-1. Open `app/main.jsx`.
-2. Import the SFCC connector:
-
-```
-// import connector from './integration-manager/_merlins-connector'
-import connector from './integration-manager/_sfcc-connector'
-```
-
-3. Open Preview using the following link:
-
-https://preview.mobify.com/?url=https%3A%2F%2Fmobify-tech-prtnr-na03-dw.demandware.net%2Fon%2Fdemandware.store%2FSites-2017refresh-Site%2Fdefault%2FHome-Show&site_folder=https%3A%2F%2Flocalhost%3A8443%2Floader.js&disabled=0&domain=&scope=1
