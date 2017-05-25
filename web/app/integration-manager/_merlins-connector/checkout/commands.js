@@ -10,7 +10,14 @@ import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
 import {parseLocationData} from '../../../utils/utils'
 import {getCart} from '../cart/commands'
-import {receiveCheckoutData, receiveCheckoutLocations, receiveShippingInitialValues, receiveCheckoutConfirmationData, receiveBillingInitialValues} from './../../checkout/results'
+import {
+    receiveCheckoutData,
+    receiveCheckoutLocations,
+    receiveShippingInitialValues,
+    receiveCheckoutConfirmationData,
+    receiveBillingInitialValues,
+    receiveShippingMethods
+} from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
 import {fetchPageData} from '../app/commands'
 import {getCustomerEntityID} from '../selectors'
@@ -43,7 +50,7 @@ export const fetchShippingMethodsEstimate = (formKey) => (dispatch, getState) =>
                 ...address
             }
 
-            dispatch(receiveCheckoutData({shipping: {shippingMethods}}))
+            dispatch(receiveShippingMethods(shippingMethods))
             dispatch(receiveShippingInitialValues({address: initialValues})) // set initial value for method
         })
 }
