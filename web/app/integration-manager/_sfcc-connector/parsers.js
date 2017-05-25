@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {SITE_ID} from './constants'
+import {getSiteID, getCategoryPath} from './config'
 import {formatPrice} from './utils'
 
 const parseImages = (imageGroups) => {
@@ -43,7 +43,7 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
 
 /* eslint-enable camelcase */
 
-export const getProductHref = (productID) => `/s/2017refresh/${productID}.html`
+export const getProductHref = (productID) => `/s/${getSiteID()}/${productID}.html`
 
 export const parseProductDetails = ({id, name, price, inventory, long_description, image_groups, variants, variation_attributes}) => {
     const images = parseImages(image_groups)
@@ -125,7 +125,7 @@ export const parseCategories = (categories) => {
     return categories.map((category) => {
         return {
             title: category.name,
-            path: `/s/${SITE_ID}/${category.id}`,
+            path: getCategoryPath(category.id),
             isCategoryLink: true,
             children: category.categories ? parseCategories(category.categories) : []
         }

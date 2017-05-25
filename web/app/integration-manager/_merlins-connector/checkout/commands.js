@@ -10,12 +10,12 @@ import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
 import {parseLocationData} from '../../../utils/utils'
 import {getCart} from '../cart/commands'
-import {receiveCheckoutData, receiveShippingInitialValues, receiveCheckoutConfirmationData, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveCheckoutData, receiveCheckoutLocations, receiveShippingInitialValues, receiveCheckoutConfirmationData, receiveBillingInitialValues} from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
 import {fetchPageData} from '../app/commands'
 import {getCustomerEntityID} from '../selectors'
 import {receiveEntityID} from '../actions'
-import {PAYMENT_URL} from '../constants'
+import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import {getFormValues, getFormRegisteredFields} from '../../../store/form/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
@@ -53,8 +53,8 @@ const processCheckoutData = ($response) => (dispatch) => {
     const magentoFieldData = extractMagentoShippingStepData($response)
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
-    return dispatch(receiveCheckoutData({
-        locations: parseLocations(magentoFieldData).locations,
+    dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+    dispatch(receiveCheckoutData({
         shipping: {
             initialValues: parseShippingInitialValues(magentoFieldData)
         }

@@ -18,6 +18,7 @@ export const getProductDescription = createGetSelector(getSelectedProduct, 'desc
 export const getProductImages = createGetSelector(getSelectedProduct, 'images', Immutable.List())
 export const getProductThumbnail = createGetSelector(getSelectedProduct, 'thumbnail', Immutable.Map())
 export const getProductAvailability = createGetSelector(getSelectedProduct, 'available')
+export const getProductCustomContent = createGetSelector(getSelectedProduct, 'custom')
 
 export const getProductVariationCategories = createGetSelector(getSelectedProduct, 'variationCategories', Immutable.List())
 
