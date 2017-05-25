@@ -282,5 +282,20 @@ export const STATES = [
         countryId: 'us',
         label: 'Wyoming',
         id: 'WY'
+    },
+    {
+        countryId: 'us',
+        label: 'Armed Forces America (exc. Canada)',
+        id: 'AA'
+    },
+    {
+        countryId: 'us',
+        label: 'Armed Forces Elsewhere',
+        id: 'AE'
+    },
+    {
+        countryId: 'us',
+        label: 'Armed Forces Pacific',
+        id: 'AP'
     }
 ]
