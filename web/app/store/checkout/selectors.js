@@ -31,3 +31,4 @@ export const getAvailableRegions = (formKey) => createSelector(
 )
 
 export const getCheckoutCustomContent = createGetSelector(getCheckout, 'custom')
+export const getLocationsCustomContent = createGetSelector(getLocations, 'custom')
