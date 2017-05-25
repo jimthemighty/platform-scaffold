@@ -28,8 +28,9 @@ const ProductDetailsHeading = ({available, breadcrumbs, title, price, isInChecko
             <SkeletonBlock width="50%" height="32px" className="u-margin-bottom" />
         }
 
-        {(available != null && price != null) ?
-            price.length > 0 && <span className="t-product-details-heading__price t-product-details__price u-color-accent u-text-weight-regular u-text-family-header u-text-letter-spacing-small">{price}</span>
+        {(available !== null && available !== undefined && price !== null && price !== undefined) ?
+            (price.length > 0 &&
+                <span className="t-product-details-heading__price t-product-details__price u-color-accent u-text-weight-regular u-text-family-header u-text-letter-spacing-small">{price}</span>)
         :
             <SkeletonBlock width="25%" height="32px" />
         }
