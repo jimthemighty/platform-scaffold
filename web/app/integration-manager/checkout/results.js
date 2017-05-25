@@ -6,14 +6,14 @@ import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/
 import {EVENT_ACTION, Transaction, Product} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getCartItems, getOrderTotal, getTax} from '../../store/cart/selectors'
 import {createTypedAction} from '../../utils/utils'
-import {LocationList, ShippingMethods} from './types'
+import {LocationList, ShippingMethods, Address} from './types'
 
 export const receiveCheckoutLocations = createTypedAction('Receive Checkout Locations', LocationList, 'locations')
 export const receiveShippingMethods = createTypedAction('Receive Shipping Methods', ShippingMethods)
+export const receiveShippingAddress = createTypedAction('Receive Shipping Address', Address, 'shippingAddress')
 
 export const receiveCheckoutData = createAction('Receive Checkout Data')
 export const receiveCheckoutCustomContent = createAction('Receive Checkout Custom Content', ['custom'])
-export const receiveShippingAddress = createAction('Receive Shipping Initial Values', ['shippingAddress'])
 export const receiveHasExistingCard = createAction('Receive Has Existing Cart flag', ['hasExistingCreditCard'])
 export const receiveBillingAddress = createAction('Receive Billing Initial Values', ['billingAddress'])
 
