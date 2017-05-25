@@ -1,4 +1,4 @@
-// List Tile
+// List Tile Theme
 // ===
 
 // Primary
@@ -6,6 +6,7 @@
 //
 // 1. Slightly larger than standard font size, at 15px
 
+.pw-list-tile__primary,
 .c-list-tile__primary {
     font-size: $font-size + 1; // 1
 }
@@ -14,6 +15,7 @@
 // Content
 // ---
 
+.pw-list-tile__content,
 .c-list-tile__content {
     padding: $unit $unit*1.5;
 }
@@ -22,6 +24,7 @@
 // Action
 // ---
 
+.pw-list-tile__action,
 .c-list-tile__action {
     display: flex;
     justify-content: center;
