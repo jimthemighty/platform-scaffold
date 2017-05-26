@@ -13,15 +13,15 @@ import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 
-import Home from './containers/home/container'
-import PDP from './containers/pdp/container'
-import PLP from './containers/plp/container'
+import * as home from './containers/home/container'
+import * as pdp from './containers/pdp/container'
+import * as plp from './containers/plp/container'
 
 
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
 
-import styles from './stylesheet.scss'
+
 
 
 const jsdom = Promise.promisifyAll(_jsdom)
@@ -52,7 +52,7 @@ const initializeStore = (req) => {
 }
 
 
-const render = (req, res, store, component) => {
+const render = (req, res, store, component, css) => {
     const scripts = new ampSDK.Set()
     const body = ReactDOMServer.renderToStaticMarkup(
         <Provider store={store}>
@@ -66,7 +66,7 @@ const render = (req, res, store, component) => {
         title: state.title,
         canonicalURL: req.url,
         body,
-        css: styles.toString(),
+        css,
         ampScriptIncludes: scripts.items().join('\n')
     })
     res.send(rendered)
@@ -75,19 +75,19 @@ const render = (req, res, store, component) => {
 
 const productDetailPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, PDP))
+        .then((store) => render(req, res, store, pdp.PDP, pdp.styles))
         .catch(next)
 }
 
 const productListPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, PLP))
+        .then((store) => render(req, res, store, plp.PLP, plp.styles))
         .catch(next)
 }
 
 const homePage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, Home))
+        .then((store) => render(req, res, store, home.Home, home.styles))
         .catch(next)
 }
 
@@ -129,5 +129,3 @@ const makeHandler = (expressApp) => {
 
 
 export const handler = onLambda ? makeHandler(app) : undefined
-
-
