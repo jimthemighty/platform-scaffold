@@ -75,19 +75,19 @@ const render = (req, res, store, component, css) => {
 
 export const productDetailPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, pdp.PDP, pdp.styles))
+        .then((store) => render(req, res, store, pdp.default, pdp.styles))
         .catch(next)
 }
 
 export const productListPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, plp.PLP, plp.styles))
+        .then((store) => render(req, res, store, plp.default, plp.styles))
         .catch(next)
 }
 
 export const homePage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, home.Home, home.styles))
+        .then((store) => render(req, res, store, home.default, home.styles))
         .catch(next)
 }
 
