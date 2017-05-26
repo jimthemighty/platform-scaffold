@@ -25,8 +25,8 @@ import configureStore from './store'
 import Stylesheet from './stylesheet.scss' // eslint-disable-line no-unused-vars
 
 
- import {Connector} from './integration-manager/_merlins-connector'
-//import {Connector} from './integration-manager/_sfcc-connector'
+import {Connector} from './integration-manager/_merlins-connector'
+// import {Connector} from './integration-manager/_sfcc-connector'
 
 import {registerConnector} from './integration-manager'
 
