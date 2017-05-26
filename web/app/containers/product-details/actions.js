@@ -14,6 +14,7 @@ import {getAddToCartFormValues} from '../../store/form/selectors'
 
 import {addToCart} from '../../integration-manager/cart/commands'
 import {getProductVariantData} from '../../integration-manager/products/commands'
+import * as integrationManager from '../../integration-manager'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from './constants'
@@ -85,11 +86,14 @@ const variationChangeSelector = createPropsSelector({
 })
 
 export const onVariationChange = () => (dispatch, getStore) => {
-    const {
-        variationSelections,
-        categoryIds,
-        variants
-    } = variationChangeSelector(getStore())
+    // const {
+    //     variationSelections,
+    //     categoryIds,
+    //     variants
+    // } = variationChangeSelector(getStore())
 
-    return dispatch(getProductVariantData(variationSelections, variants, categoryIds))
+    debugger
+    console.log(integrationManager)
+
+    // return dispatch(getProductVariantData(variationSelections, variants, categoryIds))
 }

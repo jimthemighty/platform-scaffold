@@ -4,6 +4,7 @@
 
 import * as commands from './commands'
 import * as reducer from './reducer'
+import merge from 'lodash.merge'
 
 let registeredConnector = {}
 
@@ -14,11 +15,15 @@ export const registerConnector = (connector) => {
 }
 
 export const registerConnectorExtension = (extension) => {
-    registeredConnector.commands = {
-        ...registerConnector.commands,
-        ...extension.commands,
-        custom: extension.commands,
-    }
+    registeredConnector.commands = merge(
+        registeredConnector.commands,
+        {
+            ...extension.commandOverrides,
+            custom: extension.commands
+        }
+    )
+
+    commands.registerCustom(registeredConnector.commands.custom)
 }
 
 // this isn't necessary, just useful
