@@ -9,7 +9,7 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {connect} from 'react-redux'
 
-import {getCountries} from '../../store/checkout/locations/selectors'
+import {getCountries} from '../../store/checkout/selectors'
 
 /**
  * A field for selecting a country.
@@ -29,8 +29,8 @@ const CountrySelect = ({
             label="Country"
         >
             <select>
-                {countries.map(({label, value}) => (
-                    <option value={value} key={value}>
+                {countries.map(({label, id}) => (
+                    <option value={id} key={id}>
                         {label}
                     </option>
                 ))}
@@ -55,7 +55,7 @@ CountrySelect.propTypes = {
      */
     countries: PropTypes.arrayOf(PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.string
+        id: PropTypes.string
     }))
 }
 

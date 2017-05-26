@@ -8,11 +8,11 @@ import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} f
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
-import {PAYMENT_URL, SITE_ID} from '../constants'
+import {getPaymentURL, getConfirmationURL} from '../config'
 import {STATES} from './constants'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveCheckoutData, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveShippingMethods, receiveCheckoutLocations, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
 
 export const fetchShippingMethodsEstimate = () => (dispatch) => {
     return createBasket()
@@ -23,10 +23,10 @@ export const fetchShippingMethodsEstimate = () => (dispatch) => {
                   .map(({name, description, price, id}) => ({
                       label: `${name} - ${description}`,
                       cost: `$${price.toFixed(2)}`,
-                      value: id
+                      id
                   }))
 
-            return dispatch(receiveCheckoutData({shipping: {shippingMethods}}))
+            return dispatch(receiveShippingMethods(shippingMethods))
         })
 }
 
@@ -66,11 +66,14 @@ export const initCheckoutShippingPage = () => (dispatch) => {
             }
             dispatch(receiveShippingInitialValues({initialValues}))
             /* eslint-enable camelcase */
-            return dispatch(receiveCheckoutData({
-                locations: {
-                    countries: [{value: 'us', label: 'United States'}],
-                    regions: STATES
-                }
+            return dispatch(receiveCheckoutLocations({
+                countries: [{
+                    id: 'us',
+                    label: 'United States',
+                    regionRequired: true,
+                    postcodeRequired: true
+                }],
+                regions: STATES
             }))
         })
         .then(() => dispatch(fetchShippingMethodsEstimate()))
@@ -130,7 +133,7 @@ export const submitShipping = (formValues) => (dispatch) => (
         .catch(() => { throw new SubmissionError({_error: 'Unable to save shipping data'}) })
         .then((basket) => {
             dispatch(handleCartData(basket))
-            return PAYMENT_URL
+            return getPaymentURL()
         })
 )
 
@@ -203,7 +206,7 @@ export const submitPayment = (formValues) => (dispatch) => {
             dispatch(receiveOrderConfirmationContents({
                 orderNumber: order.order_no
             }))
-            return `/on/demandware.store/${SITE_ID}/default/COSummary-Submit`
+            return getConfirmationURL()
         })
 }
 
