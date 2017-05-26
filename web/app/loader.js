@@ -138,7 +138,7 @@ const attemptToInitializeApp = () => {
         // We know we're not running in Astro, and that service worker is
         // supported and loaded, so we can add a deferred function to
         // load and initialize the Messaging client.
-        deferredUntilLoadComplete.push(() => loadAndInitMessagingClient(IS_PREVIEW, MESSAGING_SITE_ID))
+        deferredUntilLoadComplete.push(loadAndInitMessagingClient(IS_PREVIEW, MESSAGING_SITE_ID))
     }
 
     if (isReactRoute() && !isSamsungBrowser(window.navigator.userAgent) && !isFirefoxBrowser(window.navigator.userAgent)) {
