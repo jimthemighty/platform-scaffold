@@ -6,7 +6,8 @@
     },
     "opts": {
         "recurse": true,
-        "destination": "jsdoc"
+        "destination": "jsdoc",
+        "readme": "app/integration-manager/README.md"
     },
     "plugins": ["plugins/markdown"]
 }
