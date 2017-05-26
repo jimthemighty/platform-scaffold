@@ -15,7 +15,8 @@ config:
     default_url:
 
     # The domain (netloc) of the project's website, which must be
-    # https-everywhere.
+    # https-everywhere. Do not include the 'https://' here - this
+    # is the domain name only.
     target_domain: "www.merlinspotions.com"
 
     # This is set for a Progressive Web App
