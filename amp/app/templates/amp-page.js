@@ -1,6 +1,6 @@
 
 
-const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes}) => (
+const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes, ampAnalytics}) => (
     /*eslint-disable */
     `
     <!doctype html>
@@ -22,6 +22,7 @@ const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes}) => (
             </style>
         </head>
         <body>
+            ${ampAnalytics}
             <div id="root">
                 ${body}
             </div>

@@ -13,6 +13,8 @@ import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 
+import Analytics from './components/analytics'
+
 import Home from './containers/home/container'
 import PDP from './containers/pdp/container'
 import PLP from './containers/plp/container'
@@ -54,12 +56,19 @@ const initializeStore = (req) => {
 
 const render = (req, res, store, component) => {
     const scripts = new ampSDK.Set()
+
+    const ampAnalytics = ReactDOMServer.renderToStaticMarkup(
+        <ampSDK.AmpContext declareDependency={scripts.add}>
+            <Analytics templateName={component.templateName} projectSlug="merlinspotions-2" gaAccount="UA-76264428-1" />
+        </ampSDK.AmpContext>
+    )
+
     const body = ReactDOMServer.renderToStaticMarkup(
-        <Provider store={store}>
-            <ampSDK.AmpContext declareDependency={scripts.add}>
+        <ampSDK.AmpContext declareDependency={scripts.add}>
+            <Provider store={store}>
                 {React.createElement(component, {}, null)}
-            </ampSDK.AmpContext>
-        </Provider>
+            </Provider>
+        </ampSDK.AmpContext>
     )
     const state = store.getState()
     const rendered = ampPage({
@@ -67,6 +76,7 @@ const render = (req, res, store, component) => {
         canonicalURL: req.url,
         body,
         css: styles.toString(),
+        ampAnalytics,
         ampScriptIncludes: scripts.items().join('\n')
     })
     res.send(rendered)
@@ -129,5 +139,3 @@ const makeHandler = (expressApp) => {
 
 
 export const handler = onLambda ? makeHandler(app) : undefined
-
-

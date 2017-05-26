@@ -31,6 +31,8 @@ PDP.propTypes = {
     title: PropTypes.string
 }
 
+PDP.templateName = 'pdp'
+
 const mapStateToProps = (state) => ({
     links: state.links,
     title: `PDP! - ${state.title}` || '',
