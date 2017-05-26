@@ -34,6 +34,7 @@ Cart.prototype.removeItems = function() {
     this.browser
         .preview()
         .log('Opening mini cart')
+        .waitForElementVisible(selectors.miniCart)
         .click(selectors.miniCart)
         .element('css selector', selectors.viewCart, (result) => {
             if (result.value && result.value.ELEMENT) {
