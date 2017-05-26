@@ -11,9 +11,9 @@ import {splitFullName} from '../../utils/utils'
 import {receiveCheckoutData} from '../../integration-manager/checkout/results'
 
 import {
-    submitShipping as submitShippingCommand,
-    isEmailAvailable as isEmailAvailableCommand
+    submitShipping as submitShippingCommand
 } from '../../integration-manager/checkout/commands'
+import {customCommands} from '../../integration-manager/custom/commands'
 import {login} from '../../integration-manager/account/commands'
 
 import {getShippingFormValues} from '../../store/form/selectors'
@@ -89,11 +89,15 @@ export const submitShipping = () => (dispatch, getState) => {
 export const isEmailAvailable = () => (dispatch, getState) => {
     const formValues = getShippingFormValues(getState())
 
-    return dispatch(isEmailAvailableCommand(formValues.username))
+    if (customCommands.isEmailAvailable) {
+        return dispatch(customCommands.isEmailAvailable(formValues.username))
         .then((emailAvailable) => {
             if (emailAvailable) {
                 return dispatch(onShippingEmailAvailable())
             }
             return dispatch(onShippingEmailRecognized())
         })
+    }
+
+    return dispatch(onShippingEmailAvailable())
 }
