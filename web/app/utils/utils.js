@@ -47,7 +47,7 @@ export const splitFullName = (fullname) => {
 
 /**
  * Currently requestIdleCallback is only supported in Chrome,
- * we'll have to provide a fallback for iOS Safari
+ * TODO: We'll have to provide a fallback for iOS Safari
  * https://developers.google.com/web/updates/2015/08/using-requestidlecallback
  * http://caniuse.com/#feat=requestidlecallback
  */
@@ -68,9 +68,24 @@ export const typecheck = (type, value) => {
     return value
 }
 
-export const createTypedAction = (description, type) => createReduxAction(
+/**
+ * Create an action creator that typechecks its argument.
+ *
+ * The action creator argument is passed unchanged as the payload if
+ * no key is passed, while if a key is provided the action creator
+ * argument is wrapped in an object under that key. This allows the
+ * action to set a specific key within the Redux store using mergePayload.
+ *
+ * @param description {string} The description of the action (seen in dev tools)
+ * @param type {Runtype} The type to check the action argument against
+ * @param key {string} (optional) The key in the store to set with the payload
+ * @returns {function} The action creator.
+ */
+export const createTypedAction = (description, type, key) => createReduxAction(
     description,
-    (payload) => typecheck(type, payload)
+    key
+        ? (payload) => { return {[key]: typecheck(type, payload)} }
+        : (payload) => typecheck(type, payload)
 )
 
 export const parseLocationData = (formValues, registeredFieldNames) => {
