@@ -1,4 +1,4 @@
-/* global AstroNative */
+/* global AstroNative, MESSAGING_ENABLED */
 
 import Promise from 'bluebird'
 import Astro from 'progressive-app-sdk/astro-full'
@@ -31,7 +31,8 @@ OnboardingModalController.init = async function() {
     ] = await Promise.all([
         ModalViewPlugin.init(),
         OnboardingController.init(),
-        PushController.init()
+        // If messaging is not enabled, pushController will become null
+        MESSAGING_ENABLED ? PushController.init() : Promise.resolve(null)
     ])
 
     modalView.setContentView(onboardingController.viewPlugin)
@@ -51,10 +52,13 @@ OnboardingModalController.init = async function() {
     })
 
     Astro.registerRpcMethod(AppRpc.names.pushEnable, [], () => {
-        if (AstroNative.Configuration.DEBUG) {
-            pushController.subscribeTest()
-        } else {
-            pushController.subscribe()
+        // If pushController wasn't initialized, this becomes a no-op
+        if (pushController) {
+            if (AstroNative.Configuration.DEBUG) {
+                pushController.subscribeTest()
+            } else {
+                pushController.subscribe()
+            }
         }
     })
 
