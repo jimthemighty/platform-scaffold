@@ -206,3 +206,10 @@ For CI builds, this command builds and serves the bundle for testing with Previe
 npm run test:pwa-ci
 ```
 
+## Analyze Bundle Size
+
+To visualize bundle script content, run:
+
+```
+npm run analyze-build
+```

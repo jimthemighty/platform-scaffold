@@ -20,13 +20,6 @@ npm link progressive-web-sdk
 npm run dev
 ```
 
-## Analyze Bundle Size
-
-To visualize bundle script content, run:
-
-```
-npm run analyze-build
-```
 
 ## Swapping Integration Managers
 
