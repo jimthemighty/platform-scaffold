@@ -1,8 +1,12 @@
+// Nav Theme
+// ===
+//
 // The nav needs to be given dimensions explicitly. In this case, it is
 // mounted as the child of a Sheet, and should fill it completely.
 //
 // 1) Positioned relative to the containing Sheet.
 
+.pw-nav,
 .c-nav {
     position: absolute; // 1
     top: 0;

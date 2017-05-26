@@ -6,14 +6,13 @@ import {createSelector} from 'reselect'
 import Immutable from 'immutable'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getCheckout} from '../../selectors'
+import {getShippingMethods} from '../selectors'
 
 export const getShipping = createGetSelector(getCheckout, 'shipping', Immutable.Map())
 
 export const getShippingCustomContent = createGetSelector(getShipping, 'custom')
 
 export const getSavedAddresses = createGetSelector(getCheckout, 'savedAddresses', Immutable.List())
-
-export const getShippingMethods = createGetSelector(getShipping, 'shippingMethods', Immutable.List())
 
 export const getShippingAddress = createGetSelector(getShipping, 'address', Immutable.Map())
 
@@ -38,7 +37,7 @@ export const getSelectedShippingMethod = createSelector(
         if (!shippingMethods.size) {
             return Immutable.Map()
         }
-        const selectedValue = shippingMethods.filter((method) => method.get('value') === selectedMethodValue)
+        const selectedValue = shippingMethods.filter((method) => method.get('id') === selectedMethodValue)
         return selectedValue.size ? selectedValue.get(0) : shippingMethods.get(0)
     })
 
