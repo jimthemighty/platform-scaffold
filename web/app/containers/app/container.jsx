@@ -35,17 +35,15 @@ import Offline from '../offline/container'
 import OfflineBanner from '../offline/partials/offline-banner'
 import OfflineModal from '../offline/partials/offline-modal'
 
-const hidePreloaderWhenCSSIsLoaded = () => {
-    if (window.Progressive.stylesheetLoaded) {
-        hidePreloader()
-    } else {
-        setTimeout(hidePreloaderWhenCSSIsLoaded, 100)
-    }
-}
-
 class App extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.hidePreloaderWhenCSSIsLoaded = this.hidePreloaderWhenCSSIsLoaded.bind(this)
+    }
+
     componentDidMount() {
-        hidePreloaderWhenCSSIsLoaded()
+        this.hidePreloaderWhenCSSIsLoaded()
         this.props.fetchSvgSprite()
         this.props.initApp()
         WebFont.load({
@@ -59,6 +57,19 @@ class App extends React.Component {
         registerPreloadCallbacks()
     }
 
+    hidePreloaderWhenCSSIsLoaded() {
+        if (window.Progressive.stylesheetLoaded) {
+            hidePreloader()
+
+            // Only after we loaded the CSS can confidently unhide the app.
+            // This is necessary, because showing the app by default might show
+            // a flash of an ugly, unstyled app until the CSS finally loads.
+            this.props.toggleHideApp(false)
+        } else {
+            setTimeout(this.hidePreloaderWhenCSSIsLoaded, 100)
+        }
+    }
+
     render() {
         const {
             children,
@@ -68,7 +79,8 @@ class App extends React.Component {
             hasFetchedCurrentPath,
             notifications,
             removeNotification,
-            sprite
+            sprite,
+            hideApp
         } = this.props
 
         const routeProps = children.props.route
@@ -95,7 +107,7 @@ class App extends React.Component {
             <div
                 id="app"
                 className={appClassNames}
-                style={{display: 'none'}}
+                style={{display: hideApp ? 'none' : 'initial'}}
             >
                 <DangerousHTML html={sprite}>
                     {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
@@ -158,6 +170,7 @@ App.propTypes = {
     fetchPage: PropTypes.func,
     fetchSvgSprite: PropTypes.func,
     hasFetchedCurrentPath: PropTypes.bool,
+    hideApp: PropTypes.bool,
     /**
      * The react-router history object
      */
@@ -172,18 +185,21 @@ App.propTypes = {
      * The SVG icon sprite needed in order for all Icons to work
      */
     sprite: PropTypes.string,
+    toggleHideApp: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
     notifications: getNotifications,
     fetchError: selectors.getFetchError,
     hasFetchedCurrentPath: selectors.hasFetchedCurrentPath,
-    sprite: selectors.getSvgSprite
+    sprite: selectors.getSvgSprite,
+    hideApp: selectors.getHideApp
 })
 
 const mapDispatchToProps = {
     removeNotification,
     fetchSvgSprite: appActions.fetchSvgSprite,
+    toggleHideApp: appActions.toggleHideApp,
     fetchPage: (fetchAction, url, routeName) => fetchAction(url, routeName),
     initApp
 }
