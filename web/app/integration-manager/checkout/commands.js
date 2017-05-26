@@ -53,4 +53,3 @@ export const fetchShippingMethodsEstimate = (formName) => connector.fetchShippin
  * checkout once shipping information has been provided.
  */
 export const updateShippingAndBilling = () => connector.updateShippingAndBilling()
-

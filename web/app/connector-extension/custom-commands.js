@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const isEmailAvailable = (email) => (dispatch) => {
