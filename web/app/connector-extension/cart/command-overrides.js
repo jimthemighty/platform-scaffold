@@ -1,3 +1,3 @@
 export const addToCart = () => (dispatch) => {
-    console.log('Adding to Cart!')
+    console.log('%cAdd to Cart Override', "color: green; font-size: x-large")
 }

@@ -13,7 +13,7 @@ import {getSelectedProductId, getProductVariants, getProductVariationCategories,
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
 import {addToCart} from '../../integration-manager/cart/commands'
-import {getProductVariantData} from '../../integration-manager/products/commands'
+// import {getProductVariantData} from '../../integration-manager/products/commands'
 import {customCommands} from '../../integration-manager/custom/commands'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
@@ -86,12 +86,13 @@ const variationChangeSelector = createPropsSelector({
 })
 
 export const onVariationChange = () => (dispatch, getStore) => {
-    const {
-        variationSelections,
-        categoryIds,
-        variants
-    } = variationChangeSelector(getStore())
+    // const {
+    //     variationSelections,
+    //     categoryIds,
+    //     variants
+    // } = variationChangeSelector(getStore())
 
 
-    return dispatch(getProductVariantData(variationSelections, variants, categoryIds))
+    // return dispatch(getProductVariantData(variationSelections, variants, categoryIds))
+    dispatch(customCommands.testCommand())
 }
