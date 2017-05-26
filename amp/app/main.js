@@ -57,16 +57,13 @@ const initializeStore = (req) => {
 const render = (req, res, store, component, css) => {
     const scripts = new ampSDK.Set()
 
-    const ampAnalytics = ReactDOMServer.renderToStaticMarkup(
-        <ampSDK.AmpContext declareDependency={scripts.add}>
-            <Analytics templateName={component.templateName} projectSlug="merlinspotions-2" gaAccount="UA-76264428-1" />
-        </ampSDK.AmpContext>
-    )
-
     const body = ReactDOMServer.renderToStaticMarkup(
         <ampSDK.AmpContext declareDependency={scripts.add}>
             <Provider store={store}>
-                {React.createElement(component, {}, null)}
+                <div>
+                    <Analytics templateName={component.templateName} projectSlug="merlinspotions-2" gaAccount="UA-76264428-1" />
+                    {React.createElement(component, {}, null)}
+                </div>
             </Provider>
         </ampSDK.AmpContext>
     )
@@ -76,8 +73,7 @@ const render = (req, res, store, component, css) => {
         canonicalURL: req.url,
         body,
         css,
-        ampScriptIncludes: scripts.items().join('\n'),
-        ampAnalytics
+        ampScriptIncludes: scripts.items().join('\n')
     })
     res.send(rendered)
 }
