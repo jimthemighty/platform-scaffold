@@ -24,10 +24,10 @@ import {getCustomerEntityID} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
-import {getFormValues, isRegionFreeform} from '../../../store/form/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {prepareEstimateAddress} from '../utils'
 
 const getCartBaseUrl = createSelector(
     getIsLoggedIn,
@@ -35,37 +35,9 @@ const getCartBaseUrl = createSelector(
     (isLoggedIn, entityID) => `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}`
 )
 
-const formValuesToAddress = (formValues = {}, freeformRegion) => {
-    const {
-        countryId = 'US',
-        regionId = '0',
-        region,
-        postcode = null
-    } = formValues
-
-    const address = {
-        country_id: countryId,
-        postcode
-    }
-
-    if (freeformRegion) {
-        address.region = region
-    } else {
-        address.region_id = regionId
-    }
-
-    return address
-}
-
-export const fetchShippingMethodsEstimate = (formKey) => (dispatch, getState) => {
-    const currentState = getState()
-    const cartBaseUrl = getCartBaseUrl(currentState)
-    const formValues = getFormValues(formKey)(currentState)
-    const freeformRegion = isRegionFreeform(formKey)(currentState)
-
-    // @TODO: We should probably pull this data from the STATE instead of form
-    //        fields since there might not be fields, i.e. w/ Saved Addresses
-    const address = formValuesToAddress(formValues, freeformRegion)
+export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
+    const cartBaseUrl = getCartBaseUrl(getState())
+    const address = prepareEstimateAddress(inputAddress)
 
     const estimateURL = `${cartBaseUrl}/estimate-shipping-methods`
     return makeJsonEncodedRequest(estimateURL, {address}, {method: 'POST'})

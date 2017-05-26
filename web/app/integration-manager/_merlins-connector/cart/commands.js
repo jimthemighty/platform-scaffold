@@ -14,7 +14,7 @@ import {getSelectedShippingMethod, getShippingAddress} from '../../../store/chec
 import {getCouponValue} from '../../../store/form/selectors'
 import {receiveCartContents} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
-import {submitForm, textFromFragment} from '../utils'
+import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
 import {parseLocations} from '../checkout/parsers'
 import {receiveCheckoutLocations} from '../../checkout/results'
 import {fetchShippingMethodsEstimate} from '../checkout/commands'
@@ -22,7 +22,6 @@ import {fetchPageData} from '../app/commands'
 import {parseCart, parseCartProducts, parseCartTotals} from './parser'
 import {parseCheckoutEntityID, extractMagentoJson} from '../../../utils/magento-utils'
 import {ADD_TO_WISHLIST_URL, PROMO_ERROR} from '../../../containers/cart/constants'
-import {ESTIMATE_FORM_NAME} from '../../../store/form/constants'
 import {getProductById} from '../../../store/products/selectors'
 
 const LOAD_CART_SECTION_URL = '/customer/section/load/?sections=cart%2Cmessages&update_section_id=true'
@@ -138,7 +137,7 @@ export const initCartPage = (url) => (dispatch) => {
             dispatch(receiveEntityID(parseCheckoutEntityID($response)))
             dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
 
-            return dispatch(fetchShippingMethodsEstimate(ESTIMATE_FORM_NAME))
+            return dispatch(fetchShippingMethodsEstimate({}))
         })
 }
 
@@ -161,30 +160,6 @@ export const addToWishlist = (productId, productURL) => (dispatch, getState) => 
                 }
                 throw new Error('Add Request Failed')
             })
-}
-
-const prepareEstimateAddress = (inputAddress = {}) => {
-    const {
-        countryId = 'US',
-        regionId,
-        region,
-        postcode = null
-    } = inputAddress
-
-    const address = {
-        country_id: countryId,
-        postcode
-    }
-
-    if (region) {
-        address.region = region
-    } else if (regionId) {
-        address.regionId = regionId
-    } else {
-        address.regionId = '0'
-    }
-
-    return address
 }
 
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState) => {

@@ -22,7 +22,6 @@ import {
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
-import {ESTIMATE_FORM_NAME} from '../../store/form/constants'
 import {getEstimateShippingAddress} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
 
@@ -40,15 +39,13 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
     const {address, shippingMethod} = shippingFormSelector(currentState)
 
     dispatch(setTaxRequestPending(true))
-    dispatch(fetchShippingMethodsEstimate(ESTIMATE_FORM_NAME))
-        .then(() => {
-            return dispatch(fetchTaxEstimate(address, shippingMethod.id))
-                .catch(() => dispatch(addNotification(
-                    'taxError',
-                    'Unable to calculate tax.',
-                    true
-                )))
-        })
+    dispatch(fetchShippingMethodsEstimate(address))
+        .then(() => dispatch(fetchTaxEstimate(address, shippingMethod.id)))
+        .catch(() => dispatch(addNotification(
+            'taxError',
+            'Unable to calculate tax or shipping.',
+            true
+        )))
         .then(() => {
             dispatch(closeModal(CART_ESTIMATE_SHIPPING_MODAL))
             dispatch(setTaxRequestPending(false))
