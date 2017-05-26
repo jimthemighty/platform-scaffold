@@ -18,6 +18,32 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
 import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/accordion'
 
+const TaxAmountRow = ({taxAmount, zipCode, openCalculateModal}) => {
+    const editButton = (
+        <span>Based on delivery to
+            <Button innerClassName="u-padding-start-sm u-color-brand u-text-letter-spacing-normal" onClick={openCalculateModal}>
+                {zipCode}
+            </Button>
+        </span>
+    )
+
+    return (
+        <LedgerRow
+            className="u-flex-none u-border-0"
+            label="Taxes"
+            value={taxAmount}
+            labelAction={editButton}
+            key="Taxes"
+        />
+    )
+}
+
+TaxAmountRow.propTypes = {
+    openCalculateModal: PropTypes.func,
+    taxAmount: PropTypes.string,
+    zipCode: PropTypes.string
+}
+
 const CartSummary = ({
     checkoutShippingURL,
     summaryCount,
@@ -38,27 +64,11 @@ const CartSummary = ({
         </Button>
     )
 
-    const editButton = (
-        <span>Based on delivery to
-            <Button innerClassName="u-padding-start-sm u-color-brand u-text-letter-spacing-normal" onClick={onCalculateClick}>
-                {zipCode}
-            </Button>
-        </span>
-    )
-
     const removeButton = (
         <Button innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal" onClick={removePromoCode}>
             Remove Discount
         </Button>
     )
-
-    // when we want to show taxes with Calculate button
-    const neitherShippingNorDiscountsCalculatedYet = !zipCode && !discountLabel
-    const onlyDiscountCalculated = !zipCode && discountLabel
-
-    // When we want taxes to show with actual tax values
-    const onlyTaxIsCalculated = zipCode && !discountLabel
-    const bothTaxAndDiscountsCalculated = zipCode && discountLabel
 
     return (
         <div className="t-cart__summary">
@@ -97,18 +107,9 @@ const CartSummary = ({
                         />
                     }
 
-                    {(onlyTaxIsCalculated || bothTaxAndDiscountsCalculated) &&
-                        <LedgerRow
-                            className="u-flex-none u-border-0"
-                            label="Taxes"
-                            value={taxAmount}
-                            labelAction={editButton}
-                            key="Taxes"
-                        />
-                    }
-
-                    {(onlyDiscountCalculated || neitherShippingNorDiscountsCalculatedYet) &&
-                        <LedgerRow
+                    {taxAmount
+                        ? <TaxAmountRow taxAmount={taxAmount} zipCode={zipCode} openCalculateModal={onCalculateClick} />
+                        : <LedgerRow
                             className="u-flex-none"
                             label="Taxes"
                             labelAction="Rates based on shipping location"

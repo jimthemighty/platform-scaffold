@@ -73,7 +73,8 @@ export const fetchShippingMethodsEstimate = (formKey) => (dispatch, getState) =>
         .then((responseJSON) => {
             const shippingMethods = parseShippingMethods(responseJSON)
             const initialValues = {
-                shipping_method: shippingMethods[0].id
+                shipping_method: shippingMethods[0].id,
+                postcode: address.postcode
             }
 
             dispatch(receiveShippingMethods(shippingMethods))
