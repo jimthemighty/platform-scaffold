@@ -26,6 +26,9 @@ import * as appActions from '../app/actions'
 import * as selectors from './selectors'
 import {getNotifications} from '../../store/selectors'
 
+import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging'
+import DefaultAsk from 'progressive-web-sdk/dist/components/push-messaging/default-ask'
+
 import NotificationManager from '../../components/notification-manager'
 
 import {registerPreloadCallbacks} from '../templates'
@@ -104,6 +107,9 @@ class App extends React.Component {
                 <SkipLinks items={skipLinksItems} />
 
                 <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
+                    <PushMessagingController dimScreenOnSystemAsk />
+                    <DefaultAsk showOnPageCount={1} />
+
                     {isRunningInAstro &&
                         <NativeConnector />
                     }

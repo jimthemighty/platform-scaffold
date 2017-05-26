@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {onRouteChanged, checkIfOffline, setFetchedPage} from './containers/app/actions'
 import {removeAllNotifications} from 'progressive-web-sdk/dist/store/notifications/actions'
+import {incrementPageCount} from 'progressive-web-sdk/dist/store/push-messaging/actions'
 
 import {trigger as astroTrigger} from './utils/astro-integration'
 
@@ -23,6 +24,7 @@ const template = (WrappedComponent) => {
             const url = getURL(location)
 
             dispatch(onRouteChanged(url, route.routeName))
+            dispatch(incrementPageCount())
 
             if (route.fetchAction) {
                 dispatch(route.fetchAction(route.fetchUrl || url, route.routeName))

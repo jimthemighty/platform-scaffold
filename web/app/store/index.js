@@ -12,6 +12,7 @@ import cartReducer from './cart/reducer'
 import categoryReducer from './categories/reducer'
 import modalReducer from 'progressive-web-sdk/dist/store/modals/reducer'
 import notificationsReducer from 'progressive-web-sdk/dist/store/notifications/reducer'
+import pushMessagingReducer from 'progressive-web-sdk/dist/store/push-messaging/reducer'
 import productReducer from './products/reducer'
 import checkoutReducer from './checkout/reducer'
 import {reducer as imReducer} from '../integration-manager/reducer'
@@ -42,7 +43,8 @@ const configureStore = (initialState) => {
         products: productReducer,
         checkout: checkoutReducer,
         integrationManager: imReducer,
-        form: formReducer
+        form: formReducer,
+        pushMessaging: pushMessagingReducer
     })
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
