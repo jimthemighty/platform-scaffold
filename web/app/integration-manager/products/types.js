@@ -34,7 +34,8 @@ const Product = Runtypes.Record({
     id: ProductID,
     title: Text,
     price: Money,
-    href: URL
+    href: URL,
+    available: Runtypes.Boolean
 }).And(Runtypes.Optional({
     thumbnail: Image,
     images: Runtypes.Array(Image),

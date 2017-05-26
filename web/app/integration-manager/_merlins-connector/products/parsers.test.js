@@ -46,7 +46,7 @@ describe('the ProductList product parser', () => {
         const urls = Object.keys(parsedContent)
         expect(urls.length).toBe(7)
         const expected = {
-            productKeys: ['id', 'title', 'price', 'href', 'thumbnail', 'images'],
+            productKeys: ['id', 'title', 'price', 'available', 'href', 'thumbnail', 'images'],
             imageKeys: ['title', 'alt', 'src']
         }
         // Test that the shallow properties of the product list object are correct

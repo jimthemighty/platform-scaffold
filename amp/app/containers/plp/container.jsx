@@ -4,6 +4,7 @@ import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 
 const containerClass = 't-home'
+import containerStyles from './plp.scss'
 
 const PLP = ({links, title}) => {
     return (
@@ -41,3 +42,5 @@ const mapStateToProps = (state) => ({
 export default connect(
     mapStateToProps
 )(PLP)
+
+export const styles = containerStyles.toString()
