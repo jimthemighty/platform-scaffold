@@ -4,11 +4,11 @@
 
 import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
+import {createSelector} from 'reselect'
 
 import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
 import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
-import {parseLocationData} from '../../../utils/utils'
 import {getCart} from '../cart/commands'
 import {
     receiveCheckoutData,
@@ -24,30 +24,56 @@ import {getCustomerEntityID} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
-import {getFormValues, getFormRegisteredFields} from '../../../store/form/selectors'
+import {getFormValues, isRegionFreeform} from '../../../store/form/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
 
+const getCartBaseUrl = createSelector(
+    getIsLoggedIn,
+    getCustomerEntityID,
+    (isLoggedIn, entityID) => `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}`
+)
+
+const formValuesToAddress = (formValues = {}, freeformRegion) => {
+    const {
+        countryId = 'US',
+        regionId = '0',
+        region,
+        postcode = null
+    } = formValues
+
+    const address = {
+        country_id: countryId,
+        postcode
+    }
+
+    if (freeformRegion) {
+        address.region = region
+    } else {
+        address.region_id = regionId
+    }
+
+    return address
+}
+
 export const fetchShippingMethodsEstimate = (formKey) => (dispatch, getState) => {
     const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
+    const cartBaseUrl = getCartBaseUrl(currentState)
     const formValues = getFormValues(formKey)(currentState)
-    const entityID = getCustomerEntityID(currentState)
-    const registeredFieldNames = getFormRegisteredFields(formKey)(currentState).map(({name}) => name)
+    const freeformRegion = isRegionFreeform(formKey)(currentState)
 
     // @TODO: We should probably pull this data from the STATE instead of form
     //        fields since there might not be fields, i.e. w/ Saved Addresses
-    const address = parseLocationData(formValues, registeredFieldNames)
+    const address = formValuesToAddress(formValues, freeformRegion)
 
-    const estimateURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/estimate-shipping-methods`
+    const estimateURL = `${cartBaseUrl}/estimate-shipping-methods`
     return makeJsonEncodedRequest(estimateURL, {address}, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {
             const shippingMethods = parseShippingMethods(responseJSON)
             const initialValues = {
-                shipping_method: shippingMethods[0].value,
-                ...address
+                shipping_method: shippingMethods[0].id
             }
 
             dispatch(receiveShippingMethods(shippingMethods))

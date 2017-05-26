@@ -1,6 +1,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+import {createSelector} from 'reselect'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
@@ -23,7 +24,7 @@ import {addNotification} from 'progressive-web-sdk/dist/store/notifications/acti
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
 import {ESTIMATE_FORM_NAME} from '../../store/form/constants'
-import {getFormValues, getFormRegisteredFields} from '../../store/form/selectors'
+import {getFormValues, isRegionFreeform} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
 import {parseLocationData} from '../../utils/utils'
 
@@ -33,19 +34,19 @@ export const setTaxRequestPending = createAction('Set tax request pending', ['ta
 
 const shippingFormSelector = createPropsSelector({
     formValues: getFormValues(ESTIMATE_FORM_NAME),
-    registeredFields: getFormRegisteredFields(ESTIMATE_FORM_NAME),
+    freeformRegion: isRegionFreeform(ESTIMATE_FORM_NAME),
     shippingMethod: getSelectedShippingMethod
 })
 
 export const submitEstimateShipping = () => (dispatch, getState) => {
     const currentState = getState()
-    const {formValues, registeredFields, shippingMethod} = shippingFormSelector(currentState)
-    const address = parseLocationData(formValues, registeredFields.map(({name}) => name))
+    const {formValues, freeformRegion, shippingMethod} = shippingFormSelector(currentState)
+    const address = parseLocationData(formValues, freeformRegion)
 
     dispatch(setTaxRequestPending(true))
     dispatch(fetchShippingMethodsEstimate(ESTIMATE_FORM_NAME))
         .then(() => {
-            return dispatch(fetchTaxEstimate(address, shippingMethod.value))
+            return dispatch(fetchTaxEstimate(address, shippingMethod.id))
                 .catch(() => dispatch(addNotification(
                     'taxError',
                     'Unable to calculate tax.',

@@ -17,6 +17,11 @@ export const getFormValues = (formKey) => createSelector(getFormByKey(formKey), 
 
 export const getFormRegisteredFields = (formKey) => createSelector(getFormByKey(formKey), ({registeredFields}) => { return registeredFields ? registeredFields : [] })
 
+export const isRegionFreeform = (formName) => createSelector(
+    getFormRegisteredFields(formName),
+    (fields) => fields.some(({name}) => name === 'region')
+)
+
 export const getShippingFormValues = getFormValues(SHIPPING_FORM_NAME)
 export const getPaymentBillingFormValues = getFormValues(PAYMENT_FORM_NAME)
 export const getConfirmationFormValues = getFormValues(CONFIRMATION_FORM_NAME)
