@@ -6,6 +6,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
+import isEmail from 'validator/lib/isEmail'
 
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getInitialShippingAddress} from '../../../store/checkout/shipping/selectors'
@@ -39,7 +40,7 @@ const validate = (values, props) => {
         return errors
     }
 
-    if (values.username && !/^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.username)) {
+    if (values.username && !isEmail(values.username)) {
         errors.username = 'Enter a valid email address'
     }
 
