@@ -107,11 +107,13 @@ class App extends React.Component {
                 <SkipLinks items={skipLinksItems} />
 
                 <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
-                    <PushMessagingController dimScreenOnSystemAsk />
-                    <DefaultAsk showOnPageCount={1} />
-
-                    {isRunningInAstro &&
+                    {isRunningInAstro ?
                         <NativeConnector />
+                    :
+                        <div>
+                            <PushMessagingController dimScreenOnSystemAsk />
+                            <DefaultAsk showOnPageCount={1} />
+                        </div>
                     }
 
                     <div id="app-header" className="u-flex-none" role="banner">
