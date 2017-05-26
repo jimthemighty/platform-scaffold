@@ -88,29 +88,6 @@ export const createTypedAction = (description, type, key) => createReduxAction(
         : (payload) => typecheck(type, payload)
 )
 
-export const parseLocationData = (formValues, freeformRegion) => {
-    const {
-        countryId = 'US',
-        regionId = '0',
-        region,
-        postcode = null
-    } = (formValues || {})
-
-    const address = {
-        country_id: countryId,
-        postcode
-    }
-
-    if (freeformRegion && formValues) {
-        address.region = region
-    } else {
-        address.region_id = regionId
-    }
-
-    return address
-}
-
-
 export const buildQueryString = (query) => {
     return query.replace(/ /g, '+')
 }

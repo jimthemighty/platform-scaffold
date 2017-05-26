@@ -24,24 +24,21 @@ import {addNotification} from 'progressive-web-sdk/dist/store/notifications/acti
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
 import {ESTIMATE_FORM_NAME} from '../../store/form/constants'
-import {getFormValues, isRegionFreeform} from '../../store/form/selectors'
+import {getEstimateShippingAddress} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
-import {parseLocationData} from '../../utils/utils'
 
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])
 export const setIsWishlistComplete = createAction('Set wishlist add complete', ['isWishlistAddComplete'])
 export const setTaxRequestPending = createAction('Set tax request pending', ['taxRequestPending'])
 
 const shippingFormSelector = createPropsSelector({
-    formValues: getFormValues(ESTIMATE_FORM_NAME),
-    freeformRegion: isRegionFreeform(ESTIMATE_FORM_NAME),
+    address: getEstimateShippingAddress,
     shippingMethod: getSelectedShippingMethod
 })
 
 export const submitEstimateShipping = () => (dispatch, getState) => {
     const currentState = getState()
-    const {formValues, freeformRegion, shippingMethod} = shippingFormSelector(currentState)
-    const address = parseLocationData(formValues, freeformRegion)
+    const {address, shippingMethod} = shippingFormSelector(currentState)
 
     dispatch(setTaxRequestPending(true))
     dispatch(fetchShippingMethodsEstimate(ESTIMATE_FORM_NAME))

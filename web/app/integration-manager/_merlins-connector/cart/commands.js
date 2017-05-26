@@ -6,6 +6,7 @@ import {makeRequest, makeJsonEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
+import {createSelector} from 'reselect'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getUenc, getCustomerEntityID} from '../selectors'
 import {receiveEntityID} from '../actions'
@@ -30,6 +31,12 @@ const UPDATE_ITEM_URL = '/checkout/sidebar/updateItemQty/'
 const BASE_HEADERS = {
     Accept: 'application/json',
 }
+
+export const getCartBaseUrl = createSelector(
+    getIsLoggedIn,
+    getCustomerEntityID,
+    (isLoggedIn, entityID) => `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}`
+)
 
 /**
  * Get the contents of the users cart
@@ -156,17 +163,39 @@ export const addToWishlist = (productId, productURL) => (dispatch, getState) => 
             })
 }
 
-export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState) => {
-    const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
+const prepareEstimateAddress = (inputAddress = {}) => {
+    const {
+        countryId = 'US',
+        regionId,
+        region,
+        postcode = null
+    } = inputAddress
 
-    const getTotalsURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/totals-information`
+    const address = {
+        country_id: countryId,
+        postcode
+    }
+
+    if (region) {
+        address.region = region
+    } else if (regionId) {
+        address.regionId = regionId
+    } else {
+        address.regionId = '0'
+    }
+
+    return address
+}
+
+export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState) => {
+    const cartBaseUrl = getCartBaseUrl(getState())
+
+    const getTotalsURL = `${cartBaseUrl}/totals-information`
     const shippingMethodParts = shippingMethod.split('_')
 
     const requestData = {
         addressInformation: {
-            address,
+            address: prepareEstimateAddress(address),
             shipping_carrier_code: shippingMethodParts[0],
             shipping_method_code: shippingMethodParts[1]
         }
@@ -174,11 +203,9 @@ export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState
 
     return makeJsonEncodedRequest(getTotalsURL, requestData, {method: 'POST'})
         .then((response) => response.json())
-        .then((responseJSON) => {
-            dispatch(receiveCartContents(
-                parseCartTotals(responseJSON)
-            ))
-        })
+        .then((responseJSON) => dispatch(receiveCartContents(
+            parseCartTotals(responseJSON)
+        )))
 }
 
 export const getCartTotalsInfo = (currentState) => {
