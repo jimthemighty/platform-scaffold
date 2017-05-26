@@ -12,7 +12,7 @@ import {getPaymentURL, getConfirmationURL} from '../config'
 import {STATES} from './constants'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveCheckoutData, receiveCheckoutLocations, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveShippingMethods, receiveCheckoutLocations, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
 
 export const fetchShippingMethodsEstimate = () => (dispatch) => {
     return createBasket()
@@ -23,10 +23,10 @@ export const fetchShippingMethodsEstimate = () => (dispatch) => {
                   .map(({name, description, price, id}) => ({
                       label: `${name} - ${description}`,
                       cost: `$${price.toFixed(2)}`,
-                      value: id
+                      id
                   }))
 
-            return dispatch(receiveCheckoutData({shipping: {shippingMethods}}))
+            return dispatch(receiveShippingMethods(shippingMethods))
         })
 }
 
