@@ -1,7 +1,10 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
+import Link from '../../components/link'
+
 import containerStyles from './home.scss'
 
 const containerClass = 't-home'
@@ -16,6 +19,7 @@ const Home = ({links, title}) =>
             <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
 
             <h1>{title}</h1>
+            <Link href="http://www.google.ca">Hello</Link>
             {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
         </div>
     )
