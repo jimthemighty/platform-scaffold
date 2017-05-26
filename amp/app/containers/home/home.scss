@@ -1,19 +1,18 @@
 @charset 'UTF-8';
 
+// Globals
+// ---
+
+
 // Components
 // ---
-@import 'components/page/base';
-@import 'components/page/theme';
+
+// TODO: Import all components used here
+@import '../../components/page/base';
+@import '../../components/page/theme';
 
 
-// Containers
-// ---
-@import 'containers/home/home';
-@import 'containers/pdp/pdp';
-@import 'containers/plp/plp';
-
-
-// Body
+// Sample page style....
 // ---
 $bg: #ff0;
 $fg: #f0f;

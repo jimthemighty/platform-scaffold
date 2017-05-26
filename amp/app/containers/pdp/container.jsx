@@ -1,5 +1,6 @@
 import Page from '../../components/page/'
 import {connect} from 'react-redux'
+import containerStyles from './pdp.scss'
 
 const containerClass = 't-pdp'
 
@@ -13,10 +14,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {}
 
 
-const PDP = connect(
+export const PDP = connect(
     mapStateToProps,
     mapDispatchToProps
 )(Page)
 
 
-export default PDP
+export const styles = containerStyles.toString()

@@ -1,5 +1,6 @@
 import Page from '../../components/page/'
 import {connect} from 'react-redux'
+import containerStyles from './home.scss'
 
 const containerClass = 't-home'
 
@@ -13,10 +14,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {}
 
 
-const Home = connect(
+export const Home = connect(
     mapStateToProps,
     mapDispatchToProps
 )(Page)
 
 
-export default Home
+export const styles = containerStyles.toString()
