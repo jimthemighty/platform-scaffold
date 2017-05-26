@@ -24,13 +24,9 @@ import configureStore from './store'
 // added to the markup in `loader.js`
 import Stylesheet from './stylesheet.scss' // eslint-disable-line no-unused-vars
 
-import {analyticManager} from 'progressive-web-sdk/dist/analytics/analytic-manager'
-import {clientAnalytics} from './utils/analytics/client-analytics'
-
 
 import {Connector} from './integration-manager/_merlins-connector'
 // import {Connector} from './integration-manager/_sfcc-connector'
-
 
 import {registerConnector} from './integration-manager'
 
@@ -41,10 +37,6 @@ registerConnector(Connector({
     clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93'
 }))
 
-analyticManager.init({
-    projectSlug: AJS_SLUG, // eslint-disable-line no-undef
-    isDebug: false
-}, clientAnalytics)
 initCacheManifest(cacheHashManifest)
 
 const store = configureStore()

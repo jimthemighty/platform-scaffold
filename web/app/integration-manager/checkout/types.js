@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import * as Runtypes from 'runtypes'
-import {Identifier, Text} from '../types'
+import {Identifier, Text, Money} from '../types'
 
 const CountryID = Identifier
 
@@ -24,3 +24,12 @@ export const LocationList = Runtypes.Record({
     countries: Runtypes.Array(Country),
     regions: Runtypes.Array(Region)
 })
+
+
+const ShippingMethod = Runtypes.Record({
+    label: Text,
+    cost: Money,
+    id: Identifier
+})
+
+export const ShippingMethods = Runtypes.Array(ShippingMethod)

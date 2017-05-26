@@ -3,6 +3,7 @@
 //
 // 1. Account for size of the physical line, which takes up a pixel of height
 
+.pw-divider,
 .c-divider {
     padding-top: $unit*2 - 1; // 1
     padding-bottom: $unit*2;
@@ -21,6 +22,7 @@
     }
 }
 
+.pw-divider__text,
 .c-divider__text {
     max-width: 80%;
     padding: 0 $unit;
