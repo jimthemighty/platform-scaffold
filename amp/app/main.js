@@ -73,19 +73,19 @@ const render = (req, res, store, component, css) => {
 }
 
 
-export const productDetailPage = (req, res, next) => {
+const productDetailPage = (req, res, next) => {
     initializeStore(req)
         .then((store) => render(req, res, store, pdp.default, pdp.styles))
         .catch(next)
 }
 
-export const productListPage = (req, res, next) => {
+const productListPage = (req, res, next) => {
     initializeStore(req)
         .then((store) => render(req, res, store, plp.default, plp.styles))
         .catch(next)
 }
 
-export const homePage = (req, res, next) => {
+const homePage = (req, res, next) => {
     initializeStore(req)
         .then((store) => render(req, res, store, home.default, home.styles))
         .catch(next)
@@ -129,3 +129,5 @@ const makeHandler = (expressApp) => {
 
 
 export const handler = onLambda ? makeHandler(app) : undefined
+
+export default app
