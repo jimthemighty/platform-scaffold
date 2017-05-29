@@ -54,6 +54,9 @@ export const getFormAddressValues = (formKey) => createSelector(
 export const getEstimateShippingAddress = getFormAddressValues(ESTIMATE_FORM_NAME)
 
 export const getShippingFormValues = getFormValues(SHIPPING_FORM_NAME)
+
+export const getShippingEstimateAddress = getFormAddressValues(SHIPPING_FORM_NAME)
+
 export const getPaymentBillingFormValues = getFormValues(PAYMENT_FORM_NAME)
 export const getConfirmationFormValues = getFormValues(CONFIRMATION_FORM_NAME)
 export const getAddToCartFormValues = getFormValues(ADD_TO_CART_FORM_NAME)

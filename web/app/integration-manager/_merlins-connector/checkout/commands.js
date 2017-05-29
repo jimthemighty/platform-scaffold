@@ -25,7 +25,6 @@ import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import {getIsLoggedIn} from '../../../store/user/selectors'
-import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
 import {prepareEstimateAddress} from '../utils'
 
@@ -71,7 +70,7 @@ const processCheckoutData = ($response) => (dispatch) => {
 export const initCheckoutShippingPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
-        .then(() => dispatch(fetchShippingMethodsEstimate(SHIPPING_FORM_NAME)))
+        .then(() => dispatch(fetchShippingMethodsEstimate({})))
 }
 
 export const initCheckoutConfirmationPage = (url) => (dispatch) => {

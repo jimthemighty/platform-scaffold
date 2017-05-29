@@ -12,11 +12,12 @@ import {receiveCheckoutData} from '../../integration-manager/checkout/results'
 
 import {
     submitShipping as submitShippingCommand,
-    isEmailAvailable as isEmailAvailableCommand
+    isEmailAvailable as isEmailAvailableCommand,
+    fetchShippingMethodsEstimate
 } from '../../integration-manager/checkout/commands'
 import {login} from '../../integration-manager/account/commands'
 
-import {getShippingFormValues} from '../../store/form/selectors'
+import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'
 import {addNotification, removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 
 export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields (Shipping)')
@@ -97,3 +98,9 @@ export const isEmailAvailable = () => (dispatch, getState) => {
             return dispatch(onShippingEmailRecognized())
         })
 }
+
+export const fetchShippingMethods = () => (dispatch, getState) => (
+    dispatch(
+        fetchShippingMethodsEstimate(getShippingEstimateAddress(getState()))
+    )
+)

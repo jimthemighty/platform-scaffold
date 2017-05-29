@@ -35,8 +35,7 @@ const shippingFormSelector = createPropsSelector({
 })
 
 export const submitEstimateShipping = () => (dispatch, getState) => {
-    const currentState = getState()
-    const {address, shippingMethod} = shippingFormSelector(currentState)
+    const {address, shippingMethod} = shippingFormSelector(getState())
 
     dispatch(setTaxRequestPending(true))
     dispatch(fetchShippingMethodsEstimate(address))
