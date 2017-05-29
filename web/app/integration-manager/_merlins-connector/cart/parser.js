@@ -18,7 +18,8 @@ export const parseCartProducts = ({items}) => { /* Products */
                 width: '240px',
                 height: '300px'
             }
-        }
+        },
+        available: true
     }))
 
     const productMap = {}
