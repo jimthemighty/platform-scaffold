@@ -80,18 +80,16 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
  * - Important: The cart contents rendered in the main HTML is *not* updated until `getCart()` has been called which
  *   busts a cache. removeFromCart() will call getCart() once the request to remove the item has completed
  */
-export const removeFromCart = (itemId) => {
-    return (dispatch) => {
-        return submitForm(REMOVE_CART_ITEM_URL, {item_id: itemId}, {method: 'POST'})
-            .then((response) => response.json())
-            .then((responseJSON) => {
-                if (responseJSON.success) {
-                    return dispatch(getCart())
-                }
-                throw new Error('Unable to remove item')
-            })
-    }
-}
+export const removeFromCart = (itemId) => (dispatch) => (
+    submitForm(REMOVE_CART_ITEM_URL, {item_id: itemId}, {method: 'POST'})
+        .then((response) => response.json())
+        .then(({success}) => {
+            if (success) {
+                return dispatch(getCart())
+            }
+            throw new Error('Unable to remove item')
+        })
+)
 
 /**
  * Update the quantity of an item in the users cart
@@ -101,22 +99,20 @@ export const removeFromCart = (itemId) => {
  * - Response is 200 with JSON: `{"success":true}` on success
  * - Response is 200 with JSON: `{"success":false,"error_message":"We can't find the quote item."}` if item not in cart
  */
-export const updateItemQuantity = (itemId, itemQuantity) => {
-    return (dispatch) => {
-        const requestData = {
-            item_id: itemId,
-            item_qty: itemQuantity
-        }
-
-        return submitForm(UPDATE_ITEM_URL, requestData, {method: 'POST'})
-            .then((response) => response.json())
-            .then((responseJSON) => {
-                if (responseJSON.success) {
-                    return dispatch(getCart())
-                }
-                throw new Error('Unable to update Quantity')
-            })
+export const updateItemQuantity = (itemId, itemQuantity) => (dispatch) => {
+    const requestData = {
+        item_id: itemId,
+        item_qty: itemQuantity
     }
+
+    return submitForm(UPDATE_ITEM_URL, requestData, {method: 'POST'})
+        .then((response) => response.json())
+        .then(({success}) => {
+            if (success) {
+                return dispatch(getCart())
+            }
+            throw new Error('Unable to update Quantity')
+        })
 }
 
 const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
@@ -143,21 +139,18 @@ export const addToWishlist = (productId, productURL) => (dispatch, getState) => 
     }
 
     return submitForm(ADD_TO_WISHLIST_URL, payload, {method: 'POST'})
-            .then(jqueryResponse)
-            .then((response) => {
-                const [$, $response] = response // eslint-disable-line no-unused-vars
-                // The response is the HTML of the wishlist page, so check for the item we added
-                if ($response.find(`.product-item-link[href="${productURL}"]`).length) {
-                    return
-                }
+        .then(jqueryResponse)
+        .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            // The response is the HTML of the wishlist page, so check for the item we added
+            if (!$response.find(`.product-item-link[href="${productURL}"]`).length) {
                 throw new Error('Add Request Failed')
-            })
+            }
+        })
 }
 
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState) => {
     const cartBaseUrl = getCartBaseUrl(getState())
 
-    const getTotalsURL = `${cartBaseUrl}/totals-information`
     const shippingMethodParts = shippingMethod.split('_')
 
     const requestData = {
@@ -168,7 +161,7 @@ export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState
         }
     }
 
-    return makeJsonEncodedRequest(getTotalsURL, requestData, {method: 'POST'})
+    return makeJsonEncodedRequest(`${cartBaseUrl}/totals-information`, requestData, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => dispatch(receiveCartContents(
             parseCartTotals(responseJSON)
