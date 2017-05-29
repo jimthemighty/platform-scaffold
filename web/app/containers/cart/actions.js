@@ -113,15 +113,9 @@ export const updateItem = (itemId, itemQuantity) => (dispatch) => {
 export const submitPromoCode = (couponCode) => (dispatch) => {
     dispatch(putPromoCode(couponCode))
         .catch(({message}) => {
-            let notificationMessage
-            if (message.includes(PROMO_ERROR)) {
-                notificationMessage = message
-            } else {
-                notificationMessage = PROMO_ERROR
-            }
             dispatch(addNotification(
                 'submitPromoError',
-                notificationMessage,
+                message.includes(PROMO_ERROR) ? message : PROMO_ERROR,
                 true
             ))
         })
