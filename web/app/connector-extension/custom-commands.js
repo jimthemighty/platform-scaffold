@@ -1,3 +1,4 @@
-export const testCommand = () => (dispatch) => {
-    console.log('%cCustom Command Dispatched', 'color: green; font-size: x-large')
-}
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+

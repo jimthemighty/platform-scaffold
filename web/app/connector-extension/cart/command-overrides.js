@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 // import {submitForm} from '../../utils'
 const UPDATE_ITEM_URL = '/checkout/cart/updatePost/'
 import {getCart} from '../../integration-manager/cart/commands'
@@ -32,3 +36,4 @@ export const updateItemQuantity = (itemId, itemQuantity) => {
             .then(() => dispatch(getCart()))
     }
 }
+

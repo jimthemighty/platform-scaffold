@@ -27,6 +27,7 @@ import Stylesheet from './stylesheet.scss' // eslint-disable-line no-unused-vars
 import {Connector} from './integration-manager/_merlins-connector'
 // import {Connector} from './integration-manager/_sfcc-connector'
 
+
 import connectorExtension from './connector-extension'
 
 import {registerConnector, registerConnectorExtension} from './integration-manager'
