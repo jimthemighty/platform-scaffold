@@ -192,9 +192,8 @@ export const getCartTotalsInfo = (currentState) => {
         }
     }
 
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
-    const getTotalsURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/totals-information`
+    const cartBaseUrl = getCartBaseUrl(currentState)
+    const getTotalsURL = `${cartBaseUrl}/totals-information`
     return makeJsonEncodedRequest(getTotalsURL, requestData, {method: 'POST'})
         .then((response) => response.json())
         // the above request will be handled by other actions below!
@@ -202,11 +201,10 @@ export const getCartTotalsInfo = (currentState) => {
 
 export const putPromoCode = (couponCode) => (dispatch, getState) => {
     const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
+    const cartBaseUrl = getCartBaseUrl(currentState)
     couponCode = getCouponValue(currentState)
 
-    const putPromoUrl = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/coupons/${couponCode}`
+    const putPromoUrl = `${cartBaseUrl}/coupons/${couponCode}`
     return makeJsonEncodedRequest(putPromoUrl, couponCode, {method: 'PUT'})
         .then((response) => {
             // Check if coupon is valid
@@ -222,11 +220,10 @@ export const putPromoCode = (couponCode) => (dispatch, getState) => {
 
 export const deletePromoCode = (couponCode) => (dispatch, getState) => {
     const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
+    const cartBaseUrl = getCartBaseUrl(currentState)
     couponCode = getCouponValue(currentState)
 
-    const deletePromoUrl = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/coupons/`
+    const deletePromoUrl = `${cartBaseUrl}/coupons/`
     return makeJsonEncodedRequest(deletePromoUrl, couponCode, {method: 'DELETE'})
         .then((response) => response.json())
         .then(() => getCartTotalsInfo(currentState))
