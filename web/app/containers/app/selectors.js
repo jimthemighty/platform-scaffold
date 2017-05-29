@@ -20,6 +20,7 @@ export const getFetchedPaths = createGetSelector(getApp, FETCHED_PATHS)
 export const hasFetchedCurrentPath = createHasSelector(getFetchedPaths, getCurrentPathKey)
 
 export const getSvgSprite = createGetSelector(getApp, 'sprite')
+export const getHideApp = createGetSelector(getApp, 'hideApp')
 
 export const getCheckoutShippingURL = createGetSelector(getApp, 'checkoutShippingURL')
 export const getCartURL = createGetSelector(getApp, 'cartURL')

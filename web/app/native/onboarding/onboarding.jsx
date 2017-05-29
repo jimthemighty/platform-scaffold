@@ -69,17 +69,19 @@ const login = {
     }
 }
 
-const carouselData = {
-    location,
-    login
-}
+const carouselData = [
+    location
+]
 
 // MESSAGING_ENABLED is replaced at build time by webpack.
 if (MESSAGING_ENABLED) {
-    carouselData.notifications = notifications
+    carouselData.push(notifications)
 }
 
 const rootEl = document.getElementsByClassName('react-target')[0]
+
+// Login should always be the last stage, so do this last
+carouselData.push(login)
 
 // There's a bug in the Android webview that doesn't immediately register
 // the event handlers for the carousel, so we delay rendering to next runloop
