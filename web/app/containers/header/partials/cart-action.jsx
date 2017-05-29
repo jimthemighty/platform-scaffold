@@ -33,7 +33,7 @@ CartItemCounterBadge.propTypes = {
 
 const CartAction = ({innerButtonClassName, onClick, itemCount}) => (
     <HeaderBarActions>
-        <Button className="u-position-relative" innerClassName={innerButtonClassName} onClick={onClick}>
+        <Button className="u-position-relative qa-header__cart" innerClassName={innerButtonClassName} onClick={onClick}>
             <IconLabel label="Cart" iconName="cart" iconSize="medium" />
             <CartItemCounterBadge itemCount={itemCount} />
         </Button>
