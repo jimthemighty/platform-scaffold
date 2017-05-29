@@ -1,8 +1,7 @@
-const webpack = require('webpack');
-
 const path = require('path');
-const fs = require('fs');
+const webpack = require('webpack');
 const autoprefixer = require('autoprefixer')
+const fs = require('fs');
 
 module.exports = {
     entry: './app/main.js',
@@ -32,12 +31,25 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    {loader: 'css-loader', options: {minimize : true}},
+                    {loader: 'css-loader?-autoprefixer&-url', options: {minimize : true}},
                     {lodaer: 'postcss-loader'},
                     {loader: 'sass-loader'}
                 ]
             }
         ]
     },
+    plugins: [
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: autoprefixer({
+                    browsers: [
+                        'iOS >= 9.0',
+                        'Android >= 4.4.4',
+                        'last 4 ChromeAndroid versions'
+                    ]
+                })
+            }
+        })
+    ],
     devtool: 'sourcemap'
 }
