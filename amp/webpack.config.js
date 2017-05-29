@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer')
+const baseCommon = require('./webpack/base.common')
 const fs = require('fs');
 
 module.exports = {
@@ -21,19 +21,6 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.json']
     },
-    plugins: [
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                postcss: autoprefixer({
-                    browsers: [
-                        'iOS >= 9.0',
-                        'Android >= 4.4.4',
-                        'last 4 ChromeAndroid versions'
-                    ]
-                })
-            }
-        })
-    ],
     module: {
         rules: [
             {
@@ -51,5 +38,12 @@ module.exports = {
             }
         ]
     },
+    plugins: [
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: baseCommon.postcss
+            }
+        })
+    ],
     devtool: 'sourcemap'
 }
