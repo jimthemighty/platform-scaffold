@@ -1,7 +1,8 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
+const webpack = require('webpack');
 
+const path = require('path');
+const fs = require('fs');
+const autoprefixer = require('autoprefixer')
 
 module.exports = {
     entry: './app/main.js',
@@ -32,6 +33,7 @@ module.exports = {
                 test: /\.scss$/,
                 use: [
                     {loader: 'css-loader', options: {minimize : true}},
+                    {lodaer: 'postcss-loader'},
                     {loader: 'sass-loader'}
                 ]
             }
