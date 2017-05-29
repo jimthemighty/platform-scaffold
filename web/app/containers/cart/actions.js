@@ -43,7 +43,7 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
         .then(() => dispatch(fetchTaxEstimate(address, shippingMethod.id)))
         .catch(() => dispatch(addNotification(
             'taxError',
-            'Unable to calculate tax or shipping.',
+            'Unable to calculate tax and/or shipping.',
             true
         )))
         .then(() => {

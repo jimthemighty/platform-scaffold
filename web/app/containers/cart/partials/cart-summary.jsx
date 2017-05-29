@@ -18,7 +18,9 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
 import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/accordion'
 
-const TaxAmountRow = ({taxAmount, zipCode, openCalculateModal}) => {
+// This is not written as a component to preserve the proptype
+// requirements of the Ledger component.
+const renderTaxAmountRow = (taxAmount, zipCode, openCalculateModal) => {
     const editButton = (
         <span>Based on delivery to
             <Button innerClassName="u-padding-start-sm u-color-brand u-text-letter-spacing-normal" onClick={openCalculateModal}>
@@ -36,12 +38,6 @@ const TaxAmountRow = ({taxAmount, zipCode, openCalculateModal}) => {
             key="Taxes"
         />
     )
-}
-
-TaxAmountRow.propTypes = {
-    openCalculateModal: PropTypes.func,
-    taxAmount: PropTypes.string,
-    zipCode: PropTypes.string
 }
 
 const CartSummary = ({
@@ -108,7 +104,7 @@ const CartSummary = ({
                     }
 
                     {taxAmount
-                        ? <TaxAmountRow taxAmount={taxAmount} zipCode={zipCode} openCalculateModal={onCalculateClick} />
+                        ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)
                         : <LedgerRow
                             className="u-flex-none"
                             label="Taxes"

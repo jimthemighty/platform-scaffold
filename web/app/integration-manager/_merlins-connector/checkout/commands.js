@@ -39,18 +39,19 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
     const cartBaseUrl = getCartBaseUrl(getState())
     const address = prepareEstimateAddress(inputAddress)
 
-    const estimateURL = `${cartBaseUrl}/estimate-shipping-methods`
-    return makeJsonEncodedRequest(estimateURL, {address}, {method: 'POST'})
+    return makeJsonEncodedRequest(
+        `${cartBaseUrl}/estimate-shipping-methods`,
+        {address},
+        {method: 'POST'}
+    )
         .then((response) => response.json())
-        .then((responseJSON) => {
-            const shippingMethods = parseShippingMethods(responseJSON)
-            const initialValues = {
+        .then((responseJSON) => parseShippingMethods(responseJSON))
+        .then((shippingMethods) => {
+            dispatch(receiveShippingMethods(shippingMethods))
+            dispatch(receiveShippingInitialValues({address: {
                 shipping_method: shippingMethods[0].id,
                 postcode: address.postcode
-            }
-
-            dispatch(receiveShippingMethods(shippingMethods))
-            dispatch(receiveShippingInitialValues({address: initialValues})) // set initial value for method
+            }})) // set initial value for method and postcode
         })
 }
 
