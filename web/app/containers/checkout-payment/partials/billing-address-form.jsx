@@ -13,7 +13,7 @@ import {getAvailableRegions} from '../../../store/checkout/selectors'
 import {getShippingFullName, getAddressLineOne, getCity, getPostcode} from '../../../store/checkout/shipping/selectors'
 
 // Actions
-import * as checkoutPaymentActions from '../actions'
+import {toggleNewAddressFields, toggleCompanyAptField} from '../actions'
 
 // Local components
 import CountrySelect from '../../../components/country-select'
@@ -32,11 +32,6 @@ class BillingAddressForm extends React.Component {
         super(props)
 
         this.handleSavedAddress = this.handleSavedAddress.bind(this)
-        this.showCompanyAndAptField = this.showCompanyAndAptField.bind(this)
-    }
-
-    showCompanyAndAptField() {
-        this.props.handleShowCompanyAndApt(true)
     }
 
     handleSavedAddress(e) {
@@ -52,7 +47,8 @@ class BillingAddressForm extends React.Component {
             postcode,
             regions,
             street,
-            newShippingAddressIsEnabled
+            newShippingAddressIsEnabled,
+            handleShowCompanyAndApt
         } = this.props
 
         const hasShippingAddress = !!(street || city || postcode || name)
@@ -67,7 +63,7 @@ class BillingAddressForm extends React.Component {
             <Button
                 className="c--is-anchor"
                 innerClassName="c--no-min-height u-padding-0"
-                onClick={this.showCompanyAndAptField}
+                onClick={handleShowCompanyAndApt}
             >
                 <span className="u-color-brand u-text-letter-spacing-normal u-text-size-small">
                     Add company, apt #, suite etc.
@@ -229,8 +225,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    toggleNewAddressFields: checkoutPaymentActions.toggleNewAddressFields,
-    handleShowCompanyAndApt: checkoutPaymentActions.toggleCompanyAptField,
+    toggleNewAddressFields,
+    handleShowCompanyAndApt: () => toggleCompanyAptField(true)
 }
 
 export default connect(

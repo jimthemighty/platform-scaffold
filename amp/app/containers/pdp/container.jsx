@@ -2,9 +2,9 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
+import containerStyles from './container.scss'
 
 const containerClass = 't-pdp'
-import containerStyles from './pdp.scss'
 
 const PDP = ({links, title}) => {
     return (
