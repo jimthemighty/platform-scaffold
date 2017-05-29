@@ -1,6 +1,6 @@
 import Page from '../../components/page/'
 import {connect} from 'react-redux'
-import containerStyles from './home.scss'
+import containerStyles from './container.scss'
 
 const containerClass = 't-home'
 

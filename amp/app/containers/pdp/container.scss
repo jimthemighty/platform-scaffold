@@ -1,0 +1,40 @@
+@charset 'UTF-8';
+
+// Globals
+// ===
+
+@import '../../styles/global';
+
+
+// Components
+// ===
+//
+// Import all components used on container
+
+// Local Components
+// ---
+//
+
+@import '../../components/amp-lightbox/base';
+@import '../../components/amp-lightbox/theme';
+
+
+// AMP Components
+// ---
+
+// AMP SDK Base Styles from mobify-amp-sdk
+// ---
+
+@import '../../../node_modules/mobify-amp-sdk/src/components/heading/base';
+
+
+// AMP SDK Custom Styles
+// ---
+
+@import '../../styles/themes/amp-components/amp-heading';
+
+
+// Template style
+// ===
+
+@import 'pdp';
