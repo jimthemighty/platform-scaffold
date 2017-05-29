@@ -9,10 +9,9 @@ import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
-import {STATES} from './constants'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveShippingMethods, receiveCheckoutLocations, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveShippingMethods, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
 
 export const fetchShippingMethodsEstimate = () => (dispatch) => {
     return createBasket()
