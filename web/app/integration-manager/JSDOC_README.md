@@ -9,11 +9,11 @@ Commerce Cloud).
 
 The Integration Manager consists of a set of commands, results, and types.
 
-* **Commands** These are really just redux thunks, but have a special term to
+* **Commands** - These are really just redux thunks, but have a special term to
   differentiate them from other Redux actions.
-* **Results** Flux Standard Actions that communicate result data from a
+* **Results** - Flux Standard Actions that communicate result data from a
   connector's command implementation back to the redux store.
-* **Types** These are [runtype](https://github.com/pelotom/runtypes) types that
+* **Types** - These are [runtype](https://github.com/pelotom/runtypes) types that
   define the structure and types used by IM results.
 
 ## Commands
