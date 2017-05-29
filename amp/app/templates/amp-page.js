@@ -24,7 +24,7 @@ const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes}) => (
         </head>
         <body>
             <img src="/static/mobify.png" />
-            <div id="app">
+            <div id="root">
                 ${body}
             </div>
         </body>
