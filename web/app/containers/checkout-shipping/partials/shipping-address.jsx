@@ -73,7 +73,7 @@ const ShippingAddressForm = ({
     }
 
     const renderAddressFormOrSavedAddressesOrBoth = () => {
-        if (isLoggedIn && savedAddresses) {
+        if (isLoggedIn && !!savedAddresses.length) {
             const classes = classNames('t-checkout-payment__add-new-address', {
                 'u-border-light u-padding-md': showAddNewAddress
             })
