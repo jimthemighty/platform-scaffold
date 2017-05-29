@@ -16,7 +16,8 @@ export const initialState = fromJS({
     [CURRENT_URL]: window.location.href,
     fetchError: null,
     [FETCHED_PATHS]: {},
-    sprite: ''
+    sprite: '',
+    hideApp: true
 })
 
 export default handleActions({
@@ -28,5 +29,6 @@ export default handleActions({
     [appActions.onRouteChanged]: mergePayload,
     [appActions.setFetchedPage]: (state, {payload: {url}}) => state.setIn([FETCHED_PATHS, urlToPathKey(url)], true),
     [appActions.clearPageFetchError]: (state) => state.set('fetchError', null),
-    [appActions.updateSvgSprite]: mergePayload
+    [appActions.updateSvgSprite]: mergePayload,
+    [appActions.toggleHideApp]: mergePayload
 }, initialState)
