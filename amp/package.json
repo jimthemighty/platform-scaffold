@@ -25,6 +25,7 @@
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "2.2.3",
     "eslint-plugin-react": "6.10.3",
+    "express-mocks-http": "0.0.11",
     "git-rev-sync": "1.9.1",
     "jest-cli": "19.0.2",
     "mobify-amp-sdk": "ssh+git://git@github.com:mobify/mobify-amp-sdk.git#master",
