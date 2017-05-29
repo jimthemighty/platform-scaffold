@@ -66,15 +66,7 @@ export const initCheckoutShippingPage = () => (dispatch) => {
             }
             dispatch(receiveShippingInitialValues({initialValues}))
             /* eslint-enable camelcase */
-            return dispatch(receiveCheckoutLocations({
-                countries: [{
-                    id: 'us',
-                    label: 'United States',
-                    regionRequired: true,
-                    postcodeRequired: true
-                }],
-                regions: STATES
-            }))
+            return dispatch(populateLocationsData())
         })
         .then(() => dispatch(fetchShippingMethodsEstimate()))
 }

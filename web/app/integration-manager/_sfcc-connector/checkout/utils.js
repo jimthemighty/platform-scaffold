@@ -3,16 +3,18 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {STATES} from './constants'
-import {receiveCheckoutData} from './../../checkout/results'
+import {receiveCheckoutLocations} from './../../checkout/results'
 
-export const populateLocationsData = () => (dispatch) => {
-    return dispatch(receiveCheckoutData({
-        locations: {
-            countries: [{value: 'us', label: 'United States'}],
-            regions: STATES
-        }
-    }))
-}
+export const populateLocationsData = () => receiveCheckoutLocations({
+    countries: [{
+        id: 'us',
+        label: 'United States',
+        regionRequired: true,
+        postcodeRequired: true
+    }],
+    regions: STATES
+})
+
 
 export const createOrderAddressObject = (formValues) => {
     const {
