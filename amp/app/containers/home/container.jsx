@@ -4,8 +4,8 @@ import {connect} from 'react-redux'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import Link from '../../components/link'
+import containerStyles from './container.scss'
 
-import containerStyles from './home.scss'
 
 const containerClass = 't-home'
 

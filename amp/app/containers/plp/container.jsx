@@ -2,9 +2,9 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
+import containerStyles from './container.scss'
 
-const containerClass = 't-home'
-import containerStyles from './plp.scss'
+const containerClass = 't-plp'
 
 const PLP = ({links, title}) => {
     return (
