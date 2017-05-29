@@ -25,13 +25,15 @@
 // AMP SDK Base Styles from mobify-amp-sdk
 // ---
 
-@import '../../../node_modules/mobify-amp-sdk/src/components/heading/base';
+@import '../../../node_modules/mobify-amp-sdk/src/components/amp-image/base';
+@import '../../../node_modules/mobify-amp-sdk/src/components/price/base';
 
 
 // AMP SDK Custom Styles
 // ---
 
-@import '../../styles/themes/amp-components/amp-heading';
+@import '../../styles/themes/amp-components/amp-image';
+@import '../../styles/themes/amp-components/price';
 
 
 // Template style
