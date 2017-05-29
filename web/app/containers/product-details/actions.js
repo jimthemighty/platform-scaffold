@@ -91,6 +91,5 @@ export const onVariationChange = () => (dispatch, getStore) => {
         variants
     } = variationChangeSelector(getStore())
 
-
     return dispatch(getProductVariantData(variationSelections, variants, categoryIds))
 }
