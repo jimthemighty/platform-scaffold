@@ -4,7 +4,6 @@
 
 import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
-import {createSelector} from 'reselect'
 
 import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
 import {parseCartTotals} from '../cart/parser'
