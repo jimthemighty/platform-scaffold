@@ -21,6 +21,19 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.json']
     },
+    plugins: [
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: autoprefixer({
+                    browsers: [
+                        'iOS >= 9.0',
+                        'Android >= 4.4.4',
+                        'last 4 ChromeAndroid versions'
+                    ]
+                })
+            }
+        })
+    ],
     module: {
         rules: [
             {
@@ -38,18 +51,5 @@ module.exports = {
             }
         ]
     },
-    plugins: [
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                postcss: autoprefixer({
-                    browsers: [
-                        'iOS >= 9.0',
-                        'Android >= 4.4.4',
-                        'last 4 ChromeAndroid versions'
-                    ]
-                })
-            }
-        })
-    ],
     devtool: 'sourcemap'
 }
