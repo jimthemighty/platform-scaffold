@@ -2,10 +2,10 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-let customCommands = {}
+const customCommands = {}
 
 export const register = (commands) => {
-    customCommands = commands
+    Object.assign(customCommands, commands)
 }
 
 

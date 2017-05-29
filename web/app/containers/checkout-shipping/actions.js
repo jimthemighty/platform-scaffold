@@ -19,7 +19,7 @@ import {login} from '../../integration-manager/account/commands'
 import {getShippingFormValues} from '../../store/form/selectors'
 import {addNotification, removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 
-export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields')
+export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields (Shipping)')
 export const setCustomerEmailRecognized = createAction('Set Customer email Recognized', ['customerEmailRecognized'])
 export const setShowAddNewAddress = createAction('Setting the "Saved/New Address" field', ['showAddNewAddress'])
 export const receiveData = createAction('Receive Checkout Shipping Data')
