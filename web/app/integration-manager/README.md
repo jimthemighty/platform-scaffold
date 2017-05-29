@@ -1,19 +1,10 @@
 # Integration Manager
 
-The Integration Manager (IM) provides an API to back-end services that your PWA
-can interact with. This helps to isolate network calls from the rest of your
-app. It also provides an abstraction to make it easier when re-platforming your
-app against a new e-commerce service (maybe you're using a home-grown solution
-and it's time to move to an "enterprise" solution like Hybris or Salesforce
-Commerce Cloud).
+This folder contains the Integration Manager. Currently this includes two
+connector implementations: a Demo Merlin's Connector and a Salesforce Commerce
+Cloud (SFCC) Connector.
 
-The IM API is composed of a series of Command actions. This forms the API that
-you can call from the app to interact with the service you are building against.
-The full list of commands is listed to the right (click to see full
-documentation).
-
-Commands that are designed to be called when a template loads follow a naming
-convention of `initMyPage` (eg. [`initHomePage`](global.html#initHomePage)).
+**Note**: Much of the code in this folder will be moving to the Web SDK shortly!
 
 ## API Reference
 
