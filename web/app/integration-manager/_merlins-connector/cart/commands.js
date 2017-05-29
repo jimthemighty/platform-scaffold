@@ -6,6 +6,7 @@ import {makeRequest, makeJsonEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getUenc, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
@@ -168,25 +169,32 @@ export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState
         )))
 }
 
+const getCartTotalsSelector = createPropsSelector({
+    address: getShippingAddress,
+    shippingMethod: getSelectedShippingMethod,
+    cartBaseUrl: getCartBaseUrl
+})
+
+// Note that this isn't an action/thunk, but rather just a regular function
 export const getCartTotalsInfo = (currentState) => {
-    const address = getShippingAddress(currentState).toJS()
-    let shippingMethod = getSelectedShippingMethod(currentState).toJS().value || ''
-    shippingMethod = shippingMethod.length ? shippingMethod.split('_') : []
-    const requestData = {
-        addressInformation: {
-            address: {
-                country_id: address.countryId || address.country_id,
-                region_id: address.regionId || address.region_id,
-                postcode: address.postcode
-            },
-            shipping_carrier_code: shippingMethod[0],
-            shipping_method_code: shippingMethod[1]
-        }
+    const {address, shippingMethod, cartBaseUrl} = getCartTotalsSelector(currentState)
+    const shippingMethodId = shippingMethod.id || ''
+    const shippingCodes = shippingMethodId.length ? shippingMethodId.split('_') : []
+    const addressInformation = {
+        address: {
+            country_id: address.countryId,
+            region_id: address.regionId,
+            postcode: address.postcode
+        },
+        shipping_carrier_code: shippingCodes[0],
+        shipping_method_code: shippingCodes[1]
     }
 
-    const cartBaseUrl = getCartBaseUrl(currentState)
-    const getTotalsURL = `${cartBaseUrl}/totals-information`
-    return makeJsonEncodedRequest(getTotalsURL, requestData, {method: 'POST'})
+    return makeJsonEncodedRequest(
+        `${cartBaseUrl}/totals-information`,
+        {addressInformation},
+        {method: 'POST'}
+    )
         .then((response) => response.json())
         // the above request will be handled by other actions below!
 }
