@@ -2,28 +2,13 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-// import {submitForm} from '../../utils'
-const UPDATE_ITEM_URL = '/checkout/cart/updatePost/'
 import {getCart} from '../../integration-manager/cart/commands'
-import {makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {submitForm} from '../../integration-manager/_merlins-connector/utils'
+const UPDATE_ITEM_URL = '/checkout/cart/updatePost/'
 
-const getCookieValue = (cookieName) => {
-    const result = document.cookie.replace(new RegExp(`(?:(?:^|.*;\\s*)${cookieName}\\s*\\=\\s*([^;]*).*$)|^.*$`), '$1')
-    return result
-}
-
-const submitForm = (url, data, options) => {
-    // The form_key is a session-level value. If there is
-    // a form_key cookie, that trumps all!
-    const formKey = getCookieValue('form_key')
-    if (formKey) {
-        data.form_key = formKey
-    }
-
-    return makeFormEncodedRequest(url, data, options)
-}
-
-
+// This command overrides the Merlin's connector updateItemQuantity
+// instead of submitting the "mini-cart form" from the desktop site,
+// this command now submits the "standard" cart form
 export const updateItemQuantity = (itemId, itemQuantity) => {
     return (dispatch) => {
         const requestData = {
