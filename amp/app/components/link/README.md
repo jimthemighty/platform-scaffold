@@ -1,15 +1,10 @@
 ```js
 // JS import
-import Link from 'progressive-web-sdk/dist/components/link'
+import Link from 'mobify-amp-sdk/dist/components/link'
 
 // SCSS import
-@import 'node_modules/progressive-web-sdk/dist/components/link/link';
+@import 'node_modules/mobify-amp-sdk/dist/components/link/link';
 ```
-
-
-If the SDK `Router` component is used, the list of routes is
-automatically used to make decisions in the Link component.
-
 
 ## Example Usage
 
@@ -30,9 +25,3 @@ automatically used to make decisions in the Link component.
 *With no href*
 
     <Link text="No URL provided" />
-
-*With an onClick handler*
-
-    <Link text="Click me!" onClick={(e) => {
-        alert('Clicked'), e.preventDefault()
-    }} />
