@@ -19,6 +19,7 @@ import {addNotification} from 'progressive-web-sdk/dist/store/notifications/acti
 import {OFFLINE_MODAL} from '../offline/constants'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
+export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
 
 /**
  * Action dispatched when the route changes
