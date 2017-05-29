@@ -20,19 +20,13 @@ import {
 } from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
 import {fetchPageData} from '../app/commands'
-import {getCustomerEntityID} from '../selectors'
+import {getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
 import {prepareEstimateAddress} from '../utils'
-
-const getCartBaseUrl = createSelector(
-    getIsLoggedIn,
-    getCustomerEntityID,
-    (isLoggedIn, entityID) => `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}`
-)
 
 export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
     const cartBaseUrl = getCartBaseUrl(getState())

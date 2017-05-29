@@ -6,9 +6,8 @@ import {makeRequest, makeJsonEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {createSelector} from 'reselect'
 import {getIsLoggedIn} from '../../../store/user/selectors'
-import {getUenc, getCustomerEntityID} from '../selectors'
+import {getUenc, getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
 import {getCouponValue} from '../../../store/form/selectors'
@@ -30,12 +29,6 @@ const UPDATE_ITEM_URL = '/checkout/sidebar/updateItemQty/'
 const BASE_HEADERS = {
     Accept: 'application/json',
 }
-
-export const getCartBaseUrl = createSelector(
-    getIsLoggedIn,
-    getCustomerEntityID,
-    (isLoggedIn, entityID) => `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}`
-)
 
 /**
  * Get the contents of the users cart
