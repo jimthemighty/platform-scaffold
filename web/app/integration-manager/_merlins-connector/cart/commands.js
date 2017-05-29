@@ -10,7 +10,6 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getUenc, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
-import {getCouponValue} from '../../../store/form/selectors'
 import {receiveCartContents} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
 import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
@@ -219,11 +218,15 @@ export const putPromoCode = (couponCode) => (dispatch, getState) => {
 export const deletePromoCode = (couponCode) => (dispatch, getState) => {
     const currentState = getState()
     const cartBaseUrl = getCartBaseUrl(currentState)
-    couponCode = getCouponValue(currentState)
 
     const deletePromoUrl = `${cartBaseUrl}/coupons/`
     return makeJsonEncodedRequest(deletePromoUrl, couponCode, {method: 'DELETE'})
-        .then((response) => response.json())
+        .then((response) => response.text())
+        .then((responseText) => {
+            if (!/true/i.test(responseText)) {
+                throw new Error('Failed to remove promo code')
+            }
+        })
         .then(() => getCartTotalsInfo(currentState))
         .then((responseJSON) => {
             dispatch(receiveCartContents(parseCartTotals(responseJSON)))
