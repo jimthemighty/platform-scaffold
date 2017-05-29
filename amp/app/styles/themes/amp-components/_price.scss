@@ -1,34 +1,7 @@
-// Price Theme
+// AMP Image Theme
 // ===
+//
 
-
-// Price Current
-// ---
-
-.amp-price__current {
-    color: $neutral-60;
-    font-weight: bold;
-
-    + .amp-price__previous {
-        margin-left: $sub-unit;
-    }
-}
-
-
-// Price Previous
-// ---
-
-.amp-price__previous {
-    color: $neutral-40;
-    font-weight: normal;
-    font-size: $small-font-size;
-    text-decoration: line-through;
-}
-
-
-// Modifier Reduced price
-// ---
-
-.amp-price__current.amp--reduced {
-    color: $sale-color;
+.amp-price {
+    border: $border;
 }
