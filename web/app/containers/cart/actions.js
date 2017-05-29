@@ -110,8 +110,8 @@ export const updateItem = (itemId, itemQuantity) => (dispatch) => {
         })
 }
 
-export const submitPromoCode = (couponCode) => (dispatch) => {
-    dispatch(putPromoCode(couponCode))
+export const submitPromoCode = ({promo}) => (dispatch) => {
+    dispatch(putPromoCode(promo))
         .catch(({message}) => {
             dispatch(addNotification(
                 'submitPromoError',

@@ -202,10 +202,8 @@ export const getCartTotalsInfo = (currentState) => {
 export const putPromoCode = (couponCode) => (dispatch, getState) => {
     const currentState = getState()
     const cartBaseUrl = getCartBaseUrl(currentState)
-    couponCode = getCouponValue(currentState)
 
-    const putPromoUrl = `${cartBaseUrl}/coupons/${couponCode}`
-    return makeJsonEncodedRequest(putPromoUrl, couponCode, {method: 'PUT'})
+    return makeRequest(`${cartBaseUrl}/coupons/${couponCode}`, {method: 'PUT'})
         .then((response) => {
             // Check if coupon is valid
             if (response.status === 404) {
