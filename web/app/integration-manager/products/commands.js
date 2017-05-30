@@ -10,6 +10,7 @@ export const register = (commands) => {
 
 /**
  * Initializes any required data for the Product Details page
+ * @function
  * @param {string} url The url of the current page
  * @param {string} routeName The route name of the current page
  */
@@ -18,6 +19,7 @@ export const initProductDetailsPage = (url, routeName) => connector.initProductD
 /**
  * Called when the user selects a product variation. This provides a
  * hook so that the connector can take some action if needed.
+ * @function
  * @param {object} variationSelections The user's product variation selections
  * @param {object} variants The list of product variants
  * @param {object} categoryIds The list of product variation category IDs
