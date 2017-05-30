@@ -4,7 +4,7 @@
 
 import {SubmissionError} from 'redux-form'
 import {createBasket, handleCartData, requestCartData, createNewBasket} from '../cart/utils'
-import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload, deleteBasketID} from '../utils'
+import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
