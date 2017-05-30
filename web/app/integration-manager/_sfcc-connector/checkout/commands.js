@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {SubmissionError} from 'redux-form'
-import {createBasket, handleCartData, requestCartData} from '../cart/utils'
+import {createBasket, handleCartData, requestCartData, createNewBasket} from '../cart/utils'
 import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
@@ -206,6 +206,10 @@ export const submitPayment = (formValues) => (dispatch) => {
             dispatch(receiveOrderConfirmationContents({
                 orderNumber: order.order_no
             }))
+            // The new basket data isn't required for the confirmation page,
+            // so we can return the URL without waiting for this to complete
+            dispatch(createNewBasket())
+
             return getConfirmationURL()
         })
 }
