@@ -19,7 +19,7 @@ const Home = ({links, title}) =>
             <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
 
             <h1>{title}</h1>
-            <Link href="http://www.google.ca">Hello</Link>
+            <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
             {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
         </div>
     )
