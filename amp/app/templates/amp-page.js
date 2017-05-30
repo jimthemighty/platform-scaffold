@@ -17,12 +17,13 @@ const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes}) => (
             <!-- AMP Component JS includes go here -->
             ${ampScriptIncludes}
 
+            <!-- Page styles -->
             <style amp-custom>
                 ${css}
             </style>
         </head>
-        <body>
-            <div id="root">
+        <body id="root">
+            <div id="app">
                 ${body}
             </div>
         </body>

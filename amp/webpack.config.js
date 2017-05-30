@@ -1,7 +1,7 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
-
+const path = require('path');
+const webpack = require('webpack');
+const baseCommon = require('./webpack/base.common')
+const fs = require('fs');
 
 module.exports = {
     entry: './app/main.js',
@@ -31,11 +31,19 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    {loader: 'css-loader', options: {minimize : true}},
+                    {loader: 'css-loader?-autoprefixer&-url', options: {minimize : true}},
+                    {loader: 'postcss-loader'},
                     {loader: 'sass-loader'}
                 ]
             }
         ]
     },
+    plugins: [
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: baseCommon.postcss
+            }
+        })
+    ],
     devtool: 'sourcemap'
 }
