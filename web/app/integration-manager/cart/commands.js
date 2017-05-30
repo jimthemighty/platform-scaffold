@@ -2,6 +2,10 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
+import {EVENT_ACTION, Transaction, Product} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {getCartSummaryCount} from '../../store/cart/selectors'
+
 let connector = {}
 
 export const register = (commands) => {
@@ -19,12 +23,27 @@ export const initCartPage = (url, routeName) => connector.initCartPage(url, rout
  */
 export const getCart = () => connector.getCart()
 
+const createCartAction = createActionWithAnalytics(
+    'Add to cart',
+    ['id', 'quantity'],
+    'cartAdd',
+    (quantity) => ({quantity})
+)
+
 /**
  * Adds a product to the cart
  * @param productId {string} The product's ID
  * @param quantity {number} The quantity to add
  */
-export const addToCart = (productId, quantity) => connector.addToCart(productId, quantity)
+export const addToCart = (productId, quantity) => (dispatch, getState) => {
+    debugger;
+    connector.addToCart(productId, quantity)(dispatch)
+        .then((cart) => {
+            debugger;
+            const cartCount = getCartSummaryCount(getState())
+            dispatch(createCartAction(cartCount))
+        })
+}
 
 /**
  * Removes an item from the cart
