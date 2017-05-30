@@ -6,12 +6,12 @@ import React, {PropTypes} from 'react'
 import * as ReduxForm from 'redux-form'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import classNames from 'classnames'
 import {PAYMENT_EXISTING_CARD, PAYMENT_NEW_CARD, AMEX_CARD, DEFAULT_CARD, NUMBER_FIELD} from '../constants'
 
 // Selectors
 import * as selectors from '../selectors'
+import * as formSelectors from '../../../store/form/selectors'
 
 // Actions
 import * as checkoutPaymentActions from '../actions'
@@ -21,20 +21,7 @@ import CardInput from 'progressive-web-sdk/dist/components/card-input'
 import ExpiryDate from 'progressive-web-sdk/dist/components/expiry-date'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
-import Image from 'progressive-web-sdk/dist/components/image'
-
-const CVV = { /* eslint-disable key-spacing */
-    [AMEX_CARD]: {
-        alt: 'Demonstrating that the CVV is on the front of the Credit Card',
-        src: 'hint-amex@3x.png',
-        cvvLength: 4
-    },
-    [DEFAULT_CARD]: {
-        alt: 'Demonstrating that the CVV is on the back of the Credit Card',
-        src: 'hint-visa-mc@3x.png',
-        cvvLength: 3
-    }
-} /* eslint-enable key-spacing */
+import CardVerification from 'progressive-web-sdk/dist/components/card-verification'
 
 class CreditCardForm extends React.Component {
     constructor(props) {
@@ -71,35 +58,48 @@ class CreditCardForm extends React.Component {
 
     render() {
         const {
-            cvvType,
+            ccnumber,
             hasExistingCreditCard,
             isNewCardInputSelected
         } = this.props
 
-        const currentCard = CVV[cvvType]
-        const cvvHint = <Image src={getAssetUrl(`static/img/checkout/${currentCard.src}`)} alt={currentCard.alt} height="29px" width="48px" />
-
         const creditCardForm = (
             <div onChange={this.handleCVV}>
                 <FieldRow>
-                    <ReduxForm.Field component={Field} name="ccname" label="Cardholder Name">
+                    <ReduxForm.Field
+                        component={Field}
+                        name="ccname"
+                        label="Cardholder Name"
+                    >
                         <input type="text" noValidate />
                     </ReduxForm.Field>
                 </FieldRow>
 
                 <FieldRow>
-                    <ReduxForm.Field component={Field} name={NUMBER_FIELD} label="Card number">
+                    <ReduxForm.Field
+                        component={Field}
+                        name={NUMBER_FIELD}
+                        label="Card number"
+                    >
                         <CardInput />
                     </ReduxForm.Field>
                 </FieldRow>
 
                 <FieldRow>
-                    <ReduxForm.Field component={Field} name="ccexpiry" label="Expiry">
+                    <ReduxForm.Field
+                        component={Field}
+                        name="ccexpiry"
+                        label="Expiry"
+                    >
                         <ExpiryDate placeholder="mm/yy" />
                     </ReduxForm.Field>
 
-                    <ReduxForm.Field component={Field} className="pw--overlayed-hint t-checkout-payment__credit-card-hints" name="cvv" label="CVV" hint={cvvHint}>
-                        <input type="tel" noValidate maxLength={currentCard.cvvLength} />
+                    <ReduxForm.Field
+                        component={Field}
+                        name="cvv"
+                        label="CVV"
+                    >
+                        <CardVerification cardNumber={ccnumber} />
                     </ReduxForm.Field>
                 </FieldRow>
             </div>
@@ -154,6 +154,11 @@ class CreditCardForm extends React.Component {
 
 CreditCardForm.propTypes = {
     /**
+     * CVV Number
+     */
+    ccnumber: PropTypes.string,
+
+    /**
      * CVV type
      */
     cvvType: PropTypes.string,
@@ -180,6 +185,7 @@ CreditCardForm.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
+    ccnumber: formSelectors.getPaymentBillingCCNumber,
     cvvType: selectors.getCvvType,
     hasExistingCreditCard: selectors.getHasExistingCreditCard,
     isNewCardInputSelected: selectors.getIsNewCardInputSelected
