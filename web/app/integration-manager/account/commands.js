@@ -9,7 +9,7 @@ export const register = (commands) => {
 }
 
 /**
- * Initializes any required data for the Login page
+ * Initializes any required data for the Login page.
  * @function
  * @param {string} url The url of the current page
  * @param {string} routeName The route name of the current page
@@ -17,7 +17,7 @@ export const register = (commands) => {
 export const initLoginPage = (url, routeName) => connector.initLoginPage(url, routeName)
 
 /**
- * Initializes any required data for the Register page
+ * Initializes any required data for the Register page.
  * @function
  * @param {string} url The url of the current page
  * @param {string} routeName The route name of the current page
@@ -34,7 +34,7 @@ export const initRegisterPage = (url, routeName) => connector.initRegisterPage(u
 export const navigateToSection = (router, routes, sectionName) => connector.navigateToSection(router, routes, sectionName)
 
 /**
- * Logs the user in with the given credentials
+ * Logs the user in with the given credentials.
  * @function
  * @param {string} username The user's username
  * @param {string} password The password provided by the user in clear text
@@ -47,13 +47,13 @@ export const navigateToSection = (router, routes, sectionName) => connector.navi
 export const login = (username, password, rememberMe) => connector.login(username, password, rememberMe)
 
 /**
- * Logs the current user out
+ * Logs the current user out.
  * @function
  */
 export const logout = () => connector.logout()
 
 /**
- * Creates an account using the given parameters
+ * Creates an account using the given parameters.
  * @function
  * @param {string} firstname The user's first name
  * @param {string} lastname The user's lastname
@@ -63,18 +63,18 @@ export const logout = () => connector.logout()
 export const registerUser = (firstname, lastname, email, password) => connector.registerUser(firstname, lastname, email, password)
 
 /**
- * Updates the user's shipping address to the given address
- * Some backends don't distinguish between a save shipping and saved billing address
- * In those cases this command will still save the address for the user
+ * Updates the user's shipping address to the given address.
+ * Some backends don't distinguish between a save shipping and saved billing address.
+ * In those cases this command will still save the address for the user.
  * @function
  * @param {object} formValues The form values provided from the address form
  */
 export const updateShippingAddress = (formValues) => connector.updateShippingAddress(formValues)
 
 /**
- * Updates the user's billing address to the given address
- * Some backends don't distinguish between a save shipping and saved billing address
- * In those cases this command will still save the address for the user
+ * Updates the user's billing address to the given address.
+ * Some backends don't distinguish between a saved shipping and saved billing addresses.
+ * In those cases this command will still save the address for the user.
  * @function
  * @param {object} formValues The form values provided from the address form
  */
