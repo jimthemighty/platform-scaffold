@@ -121,7 +121,7 @@
     "lint:fix": "npm run lint:js -- --fix && npm run copyright:fix",
     "lint:js": "eslint '**/*.{js,jsx}'",
     "lint:sass": "sass-lint -c .sass-lint.yml 'app/**/*.scss' -v",
-    "lint:amp-scss": "stylelint --config .stylelintrc.js",
+    "lint:amp-scss": "stylelint './app/styles/base/*.scss' './app/styles/animations/*.scss' './app/styles/lib/*.scss' './app/styles/utilities/*.scss' --config .stylelintrc.yml",
     "push": "cross-env NODE_ENV=production npm run prod:build && sdk-upload",
     "styleguide": "styleguidist --config webpack/styleguide.config.js server",
     "save-credentials": "sdk-save-credentials",
