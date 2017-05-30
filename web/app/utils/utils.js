@@ -3,84 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createAction as createReduxAction} from 'redux-actions'
-import fromPairs from 'lodash.frompairs'
-
-// simplify redux-actions createAction method.
-// usage: createAction('Update Campaign', 'id', 'update')
-// instead of: createAction('Update Campaign', (id, update) => ({id, update}))
-export const createAction = (description, ...argNames) => {
-    return createReduxAction(
-        description,
-        argNames.length ?
-            (...args) => fromPairs(argNames.map((arg, idx) => [arg, args[idx]]))
-            : null
-    )
-}
-
-export const createAnalyticsMeta = (type, payload) => ({
-    analytics: {
-        type,
-        payload
-    }
-})
-
-/**
- * createActionWithMeta - creates action with meta
- *
- * The parameter after the last payload parameter will always be the meta payload
- *
- * Usage:
- *
- * = Creating the action =
- * export const actionVariable = createActionWithMeta('Action name',
- *      ['parameter1', 'parameter2']                                // The parameter name to map to payload
- *      (parameter1, parameter2, parameter3) => (parameter3)        // The meta payload creator - this tells the action which parameter to use for meta payload
- * )
- *
- *
- * You can also create meta payload from payload as well
- * export const actionVariable = createActionWithMeta('Action name',
- *      ['parameter1', 'parameter2']
- *      (parameter1, parameter2) => ({
- *          analytics: {
- *              type: parameter1,
- *              payload: {
- *                  name: parameter2
- *              }
- *          }
- *      })
- * )
- *
- * = Dispatching the action =
- * dispatch(actionVariable('abc', 'def', {
- *      analytics: {                            // Define meta payload here: It must be in FSA standard
- *          type: 'Pageview',
- *          payload: {
- *              name: 'PLP'
- *          }
- *      }
- * }))
- *
- * = Using convient meta payload creator for analytic =
- * dispatch(actionVariable('abc', 'def', createAnalyticsMeta('Pageview', {
- *      name: 'PLP'
- * })
- *
- * Note: The intention of this function is to replace createAction utilty function defined above
- *
- * @description {string} - a unique name for the action
- * @payloadArgumentNames {array} - an array of strings that identifies each parameter
- */
-export const createActionWithMeta = (description, payloadArgumentNames, metaCreator) => {
-    return createReduxAction(
-        description,
-        payloadArgumentNames.length ?
-            (...args) => fromPairs(payloadArgumentNames.map((arg, idx) => [arg, args[idx]]))
-            : null,
-        metaCreator ? metaCreator : null
-
-    )
-}
 
 /**
  * Wraps an action creator function so that the React synthetic action
@@ -92,21 +14,6 @@ export const createActionWithMeta = (description, payloadArgumentNames, metaCrea
 export const stripEvent = (fn) =>
 /* istanbul ignore next */
     () => fn()
-
-
-/**
- * Converts a full URL to the preferred format for keying the redux store,
- * i.e. the path and query string
- */
-export const urlToPathKey = (url) => {
-    if (/^\//.test(url)) {
-        // The URL is already relative, so just return it
-        return url
-    }
-    const urlObject = new URL(url)
-
-    return `${urlObject.pathname}${urlObject.search}`
-}
 
 /**
  * Returns a path given a `location` object.
@@ -130,16 +37,17 @@ export const getCookieValue = (cookieName) => {
     return result
 }
 
-
-// converts the image URL to a high resolution format
-export const getHighResImage = (src) => {
-    return src.replace(/thumbnail\/\d+x\d+/, 'small_image/240x300')
+export const splitFullName = (fullname) => {
+    const names = fullname.split(' ')
+    return {
+        firstname: names.slice(0, -1).join(' '),
+        lastname: names.slice(-1).join(' ')
+    }
 }
-
 
 /**
  * Currently requestIdleCallback is only supported in Chrome,
- * we'll have to provide a fallback for iOS Safari
+ * TODO: We'll have to provide a fallback for iOS Safari
  * https://developers.google.com/web/updates/2015/08/using-requestidlecallback
  * http://caniuse.com/#feat=requestidlecallback
  */
@@ -151,6 +59,34 @@ export const requestIdleCallback = (fn) => {
     }
 }
 
+export const typecheck = (type, value) => {
+    try {
+        type.check(value)
+    } catch (e) {
+        console.error('Type check failed: ', e, '\n\nValue: ', value)
+    }
+    return value
+}
+
+/**
+ * Create an action creator that typechecks its argument.
+ *
+ * The action creator argument is passed unchanged as the payload if
+ * no key is passed, while if a key is provided the action creator
+ * argument is wrapped in an object under that key. This allows the
+ * action to set a specific key within the Redux store using mergePayload.
+ *
+ * @param description {string} The description of the action (seen in dev tools)
+ * @param type {Runtype} The type to check the action argument against
+ * @param key {string} (optional) The key in the store to set with the payload
+ * @returns {function} The action creator.
+ */
+export const createTypedAction = (description, type, key) => createReduxAction(
+    description,
+    key
+        ? (payload) => { return {[key]: typecheck(type, payload)} }
+        : (payload) => typecheck(type, payload)
+)
 
 export const parseLocationData = (formValues, registeredFieldNames) => {
     // Default values to use if none have been selected
@@ -161,8 +97,17 @@ export const parseLocationData = (formValues, registeredFieldNames) => {
         const getRegisteredFieldValue = (fieldName) => {
             return registeredFieldNames.includes(fieldName) ? formValues[fieldName] : undefined
         }
-        address.country_id = getRegisteredFieldValue('country_id')
-        address.postcode = getRegisteredFieldValue('postcode')
+
+        const countryId = getRegisteredFieldValue('country_id')
+        if (countryId) {
+            address.country_id = countryId
+        }
+
+        const postcode = getRegisteredFieldValue('postcode')
+        if (postcode) {
+            address.postcode = postcode
+        }
+
         if (formValues.region) {
             address.region = getRegisteredFieldValue('region')
             // Remove the region_id in case we have an old value
@@ -171,6 +116,7 @@ export const parseLocationData = (formValues, registeredFieldNames) => {
             address.region_id = getRegisteredFieldValue('region_id')
         }
     }
+
     return address
 }
 

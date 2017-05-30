@@ -24,14 +24,19 @@ import configureStore from './store'
 // added to the markup in `loader.js`
 import Stylesheet from './stylesheet.scss' // eslint-disable-line no-unused-vars
 
-import {analyticManager} from 'progressive-web-sdk/dist/analytics/analytic-manager'
-import {clientAnalytics} from './utils/analytics/client-analytics'
-import {pushMessaging} from './utils/push-messaging/push-messaging-distributor'
+// DO NOT USE! Merlins Connector is an example connector that is for demo only
+import {Connector} from './integration-manager/_merlins-connector'
+// import {Connector} from './integration-manager/_sfcc-connector'
 
-analyticManager.init({
-    projectSlug: AJS_SLUG, // eslint-disable-line no-undef
-    isDebug: false
-}, clientAnalytics, pushMessaging)
+import {registerConnector} from './integration-manager'
+
+// This is okay to pass to both SFCC and Merlin's connectors,
+// as Merlin's doesn't need a configuration object
+registerConnector(Connector({
+    siteID: '2017refresh',
+    clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93'
+}))
+
 initCacheManifest(cacheHashManifest)
 
 const store = configureStore()

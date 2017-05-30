@@ -4,26 +4,27 @@
 
 import React from 'react'
 import * as ReduxForm from 'redux-form'
+import isEmail from 'validator/lib/isEmail'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 
-const NewsletterForm = (props) => {
-    const {handleSubmit, disabled, submitting} = props
+const NewsletterForm = ({handleSubmit, disabled, submitting, onSubmit}) => {
     return (
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <FieldRow>
                 <ReduxForm.Field component={Field} name="email">
-                    <input type="email"
+                    <input
+                        type="email"
                         placeholder="Enter your email..."
-                        noValidate />
+                        noValidate
+                    />
                 </ReduxForm.Field>
-            </FieldRow>
 
-            <FieldRow>
-                <Button type="submit"
-                    className="c--secondary u-width-full u-text-uppercase"
+                <Button
+                    type="submit"
+                    className="c--tertiary u-margin-0 u-text-uppercase"
                     disabled={submitting || disabled}>
                     Submit
                 </Button>
@@ -37,21 +38,23 @@ NewsletterForm.propTypes = {
      * Whether the form is disabled or not
      */
     disabled: React.PropTypes.bool,
-
     /**
      * Redux-form internal
      */
     handleSubmit: React.PropTypes.func,
-
     /**
      * Redux-form internal
      */
-    submitting: React.PropTypes.bool
+    submitting: React.PropTypes.bool,
+    /**
+    * Submits the form
+    */
+    onSubmit: React.PropTypes.func
 }
 
 const validate = (values) => {
     const errors = {}
-    if (values.email && !values.email.match('@')) {  // Obviously not for real
+    if (values.email && !isEmail(values.email)) {
         errors.email = 'Enter a valid email address'
     }
     return errors

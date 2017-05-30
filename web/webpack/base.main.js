@@ -13,6 +13,8 @@ const CopyPlugin = require('copy-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin
 
+const webPackageJson = require('../package.json')   // eslint-disable-line import/no-extraneous-dependencies
+
 const analyzeBundle = process.env.MOBIFY_ANALYZE === 'true'
 
 const config = {
@@ -65,8 +67,11 @@ const config = {
             {from: 'app/static/', to: 'static/'}
         ]),
         new webpack.DefinePlugin({
-            PROJECT_SLUG: JSON.stringify(require('../package.json').projectSlug), // eslint-disable-line import/no-extraneous-dependencies
-            AJS_SLUG: JSON.stringify(require('../package.json').aJSSlug) // eslint-disable-line import/no-extraneous-dependencies
+            // This is defined as a boolean, not a string
+            MESSAGING_ENABLED: `${webPackageJson.messagingEnabled}`,
+            // These are defined as string constants
+            PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
+            AJS_SLUG: `'${webPackageJson.aJSSlug}'`
         }),
         new webpack.LoaderOptionsPlugin({
             options: {

@@ -9,11 +9,15 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Selectors
 import * as selectors from '../selectors'
-import {getCountries, getRegions} from '../../../store/checkout/locations/selectors'
-import {getShippingFullName, getStreetLineOne, getCity, getPostcode} from '../../../store/checkout/shipping/selectors'
+import {getAvailableRegions} from '../../../store/checkout/selectors'
+import {getShippingFullName, getAddressLineOne, getCity, getPostcode} from '../../../store/checkout/shipping/selectors'
 
 // Actions
-import * as checkoutPaymentActions from '../actions'
+import {toggleNewAddressFields, toggleCompanyAptField} from '../actions'
+
+// Local components
+import CountrySelect from '../../../components/country-select'
+import RegionField from '../../../components/region-field'
 
 // SDK Components
 import Button from 'progressive-web-sdk/dist/components/button'
@@ -21,16 +25,13 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 
+import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
+
 class BillingAddressForm extends React.Component {
     constructor(props) {
         super(props)
 
         this.handleSavedAddress = this.handleSavedAddress.bind(this)
-        this.showCompanyAndAptField = this.showCompanyAndAptField.bind(this)
-    }
-
-    showCompanyAndAptField() {
-        this.props.handleShowCompanyAndApt(true)
     }
 
     handleSavedAddress(e) {
@@ -41,15 +42,16 @@ class BillingAddressForm extends React.Component {
     render() {
         const {
             city,
-            countries,
             isCompanyOrAptShown,
             name,
-            newShippingAddressIsEnabled,
             postcode,
             regions,
-            street
+            street,
+            newShippingAddressIsEnabled,
+            handleShowCompanyAndApt
         } = this.props
 
+        const hasShippingAddress = !!(street || city || postcode || name)
         const shippingAddress = (
             <div>
                 <p>{street}, {city}, {postcode}</p>
@@ -61,9 +63,9 @@ class BillingAddressForm extends React.Component {
             <Button
                 className="c--is-anchor"
                 innerClassName="c--no-min-height u-padding-0"
-                onClick={this.showCompanyAndAptField}
+                onClick={handleShowCompanyAndApt}
             >
-                <span className="u-color-brand u-text-letter-spacing-normal u-text-small">
+                <span className="u-color-brand u-text-letter-spacing-normal u-text-size-small">
                     Add company, apt #, suite etc.
                 </span>
                 <Icon name="chevron-down" className="u-margin-start-sm u-color-brand" />
@@ -77,20 +79,24 @@ class BillingAddressForm extends React.Component {
                 </div>
 
                 <div className="u-border-light-top u-border-light-bottom u-bg-color-neutral-00 t-checkout-payment__card">
-                    {city &&
+                    {hasShippingAddress &&
                         <FieldRow className="u-padding-md">
                             <ReduxForm.Field
                                 component={Field}
                                 name="billing_same_as_shipping"
-                                label={<strong className="u-text-semi-bold">Same as shipping address</strong>}
+                                type="checkbox"
+                                label={<strong className="u-text-weight-medium">Same as shipping address</strong>}
                                 caption={shippingAddress}
+                                customEventHandlers={{
+                                    onChange: this.handleSavedAddress
+                                }}
                             >
-                                <input type="checkbox" defaultChecked={!newShippingAddressIsEnabled} onChange={this.handleSavedAddress} noValidate />
+                                <input type="checkbox" noValidate />
                             </ReduxForm.Field>
                         </FieldRow>
                     }
 
-                    {(newShippingAddressIsEnabled || !city) &&
+                    {(newShippingAddressIsEnabled || !hasShippingAddress) &&
                         <div className="u-padding-md u-padding-top-lg u-padding-bottom-lg u-border-light-top">
                             <FieldRow>
                                 <ReduxForm.Field component={Field} name="name" label="Full name">
@@ -136,11 +142,7 @@ class BillingAddressForm extends React.Component {
                             </FieldRow>
 
                             <FieldRow>
-                                <ReduxForm.Field component={Field} className="pw--has-select" name="region_id" label="State/Province">
-                                    <select>
-                                        {regions.map(({label, value}) => <option value={value} key={value}>{label}</option>)}
-                                    </select>
-                                </ReduxForm.Field>
+                                <RegionField regions={regions} />
                             </FieldRow>
 
                             <FieldRow>
@@ -151,11 +153,7 @@ class BillingAddressForm extends React.Component {
                             </FieldRow>
 
                             <FieldRow>
-                                <ReduxForm.Field component={Field} className="pw--has-select" name="country_id" label="Country">
-                                    <select>
-                                        {countries.map(({label, value}) => <option value={value} key={value}>{label}</option>)}
-                                    </select>
-                                </ReduxForm.Field>
+                                <CountrySelect />
                             </FieldRow>
                         </div>
                     }
@@ -172,14 +170,6 @@ BillingAddressForm.propTypes = {
     city: PropTypes.string,
 
     /**
-    * Countries available to ship to
-    */
-    countries: PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string
-    })),
-
-    /**
      * Shows the "Company" and "Apt #" fields
      */
     handleShowCompanyAndApt: PropTypes.func,
@@ -193,10 +183,9 @@ BillingAddressForm.propTypes = {
     * Name of saved shipping address
     */
     name: PropTypes.string,
-
     /**
-     * Whether the new address fields display
-     */
+    * Whether the new address fields display
+    */
     newShippingAddressIsEnabled: PropTypes.bool,
 
     /**
@@ -227,18 +216,17 @@ BillingAddressForm.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     city: getCity,
-    countries: getCountries,
     isCompanyOrAptShown: selectors.getIsCompanyOrAptShown,
     name: getShippingFullName,
     newShippingAddressIsEnabled: selectors.getNewShippingAddressIsEnabled,
     postcode: getPostcode,
-    regions: getRegions,
-    street: getStreetLineOne,
+    regions: getAvailableRegions(PAYMENT_FORM_NAME),
+    street: getAddressLineOne,
 })
 
 const mapDispatchToProps = {
-    toggleNewAddressFields: checkoutPaymentActions.toggleNewAddressFields,
-    handleShowCompanyAndApt: checkoutPaymentActions.toggleCompanyAptField,
+    toggleNewAddressFields,
+    handleShowCompanyAndApt: () => toggleCompanyAptField(true)
 }
 
 export default connect(

@@ -6,12 +6,27 @@ import {createSelector} from 'reselect'
 import Immutable from 'immutable'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getCheckout} from '../../selectors'
+import {getShippingMethods} from '../selectors'
 
 export const getShipping = createGetSelector(getCheckout, 'shipping', Immutable.Map())
 
-export const getShippingMethods = createGetSelector(getShipping, 'shippingMethods', Immutable.List())
+export const getShippingCustomContent = createGetSelector(getShipping, 'custom')
+
+export const getSavedAddresses = createGetSelector(getCheckout, 'savedAddresses', Immutable.List())
 
 export const getShippingAddress = createGetSelector(getShipping, 'address', Immutable.Map())
+
+export const getInitialShippingAddress = createSelector(
+    getCheckout,
+    getShippingAddress,
+    (checkout, address) => {
+        const savedAddressId = checkout.get('defaultShippingAddressId')
+        if (savedAddressId) {
+            return address.set('saved_address', `${savedAddressId}`)
+        }
+        return address
+    }
+)
 
 export const getSelectedShippingMethodValue = createGetSelector(getShippingAddress, 'shipping_method', '')
 
@@ -22,7 +37,7 @@ export const getSelectedShippingMethod = createSelector(
         if (!shippingMethods.size) {
             return Immutable.Map()
         }
-        const selectedValue = shippingMethods.filter((method) => method.get('value') === selectedMethodValue)
+        const selectedValue = shippingMethods.filter((method) => method.get('id') === selectedMethodValue)
         return selectedValue.size ? selectedValue.get(0) : shippingMethods.get(0)
     })
 
@@ -38,9 +53,9 @@ export const getShippingFullName = createSelector(getShippingFirstName, getShipp
 
 export const getStreet = createGetSelector(getShippingAddress, 'street', Immutable.List())
 
-export const getStreetLineOne = createSelector(getStreet, (street) => { return street.size ? street.get(0) : '' })
+export const getAddressLineOne = createGetSelector(getShippingAddress, 'addressLine1')
 
-export const getStreetLineTwo = createSelector(getStreet, (street) => { return street.size ? street.get(1) : '' })
+export const getAddressLineTwo = createGetSelector(getShippingAddress, 'addressLine2')
 
 export const getTelephone = createGetSelector(getShippingAddress, 'telephone')
 
@@ -53,3 +68,6 @@ export const getRegionId = createGetSelector(getShippingAddress, 'regionId')
 export const getCountryId = createGetSelector(getShippingAddress, 'countryId')
 
 export const getCity = createGetSelector(getShippingAddress, 'city')
+
+export const getShippingAddressCustomContent = createGetSelector(getShippingAddress, 'custom')
+

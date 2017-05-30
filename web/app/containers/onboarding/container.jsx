@@ -8,17 +8,17 @@ import CarouselItem from 'progressive-web-sdk/dist/components/carousel/carousel-
 import Carousel from 'progressive-web-sdk/dist/components/carousel'
 import Button from 'progressive-web-sdk/dist/components/button'
 
-const OnboardingScreen = ({imageURL, imageAlt, title, subtitle, primaryButton, laterButton, actionButton, key}) => {
+const OnboardingScreen = ({imageURL, imageAlt, title, subtitle, primaryButton, laterButton, actionButton, id}) => {
     return (
-        <CarouselItem caption="Get started" key={key} className="carousel-item">
+        <CarouselItem caption="Get started" key={id} className="carousel-item">
             <div className="carousel-item-wrapper u-direction-column">
                 <div className="u-flex u-flexbox u-align-center u-justify-center">
                     <div>
                         <img src={imageURL} className="carousel-item-image" alt={imageAlt} />
                         {title &&
-                            <h2 className="item-title u-color-neutral-60 u-text-font-family u-text-semi-bold">{title}</h2>
+                            <h2 className="item-title u-color-neutral-60 u-text-family u-text-weight-medium">{title}</h2>
                         }
-                        <p className="item-subtitle u-text-font-family">{subtitle}</p>
+                        <p className="item-subtitle u-text-family">{subtitle}</p>
                     </div>
                 </div>
                 {primaryButton &&
@@ -41,9 +41,9 @@ const OnboardingScreen = ({imageURL, imageAlt, title, subtitle, primaryButton, l
 
 OnboardingScreen.propTypes = {
     actionButton: React.PropTypes.object,
+    id: React.PropTypes.string,
     imageAlt: React.PropTypes.string,
     imageURL: React.PropTypes.string,
-    key: React.PropTypes.string,
     laterButton: React.PropTypes.object,
     primaryButton: React.PropTypes.object,
     subtitle: React.PropTypes.string,
@@ -53,13 +53,13 @@ OnboardingScreen.propTypes = {
 const Onboarding = ({carouselData}) => {
     return (
         <Carousel allowLooping={false}>
-            {Object.keys(carouselData).map((key) => <OnboardingScreen {...carouselData[key]} key={key} />)}
+            {carouselData.map((val, idx) => <OnboardingScreen {...val} id={idx.toString()} key={idx.toString()} />)}
         </Carousel>
     )
 }
 
 Onboarding.propTypes = {
-    carouselData: React.PropTypes.object
+    carouselData: React.PropTypes.array
 }
 
 export default Onboarding

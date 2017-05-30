@@ -1,6 +1,7 @@
-// Header Bar
+// Header Bar Theme
 // ===
 
+.pw-header-bar,
 .c-header-bar {
     padding: $unit/2;
 
@@ -13,6 +14,7 @@
 // Title
 // ---
 
+.pw-header-bar__title,
 .c-header-bar__title {
     line-height: 0;
 }
