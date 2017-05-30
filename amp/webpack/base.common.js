@@ -1,10 +1,3 @@
-/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
-/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-
-/* eslint-disable import/no-commonjs */
-/* eslint-env node */
-
 const autoprefixer = require('autoprefixer')
 
 module.exports = {
