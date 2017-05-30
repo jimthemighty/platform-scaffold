@@ -131,3 +131,10 @@ export const handleCartData = (basket) => (dispatch) => {
 
     return dispatch(fetchCartItemImages())
 }
+
+
+export const createNewBasket = () => (dispatch) => {
+    deleteBasketID()
+    return requestCartData()
+        .then((basket) => dispatch(handleCartData(basket)))
+}
