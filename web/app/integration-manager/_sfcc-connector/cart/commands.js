@@ -11,6 +11,7 @@ export const getCart = () => (dispatch) =>
 
 
 export const addToCart = (productId, quantity) => (dispatch) => (
+    debugger;
     createBasket()
         .then((basket) => {
             const requestBody = [{

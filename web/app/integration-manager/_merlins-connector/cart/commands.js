@@ -56,6 +56,7 @@ export const getCart = () => (dispatch) => {
 }
 
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
+    debugger;
     const product = getProductById(productId)(getState())
     const formInfo = getState().integrationManager.get(urlToPathKey(product.get('href')))
     const formValues = {

@@ -24,8 +24,8 @@ export const initCartPage = (url, routeName) => connector.initCartPage(url, rout
 export const getCart = () => connector.getCart()
 
 const createCartAction = createActionWithAnalytics(
-    'Add to cart',
-    ['id', 'quantity'],
+    'Add to cart complete',
+    ['quantity'],
     'cartAdd',
     (quantity) => ({quantity})
 )
@@ -36,13 +36,11 @@ const createCartAction = createActionWithAnalytics(
  * @param quantity {number} The quantity to add
  */
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
-    debugger;
-    connector.addToCart(productId, quantity)(dispatch)
-        .then((cart) => {
-            debugger;
-            const cartCount = getCartSummaryCount(getState())
-            dispatch(createCartAction(cartCount))
-        })
+    return connector.addToCart(productId, quantity)(dispatch, getState)
+            .then((cart) => {
+                const cartCount = getCartSummaryCount(getState())
+                dispatch(createCartAction(cartCount))
+            })
 }
 
 /**
