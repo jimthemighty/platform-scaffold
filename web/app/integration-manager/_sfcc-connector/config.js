@@ -22,7 +22,7 @@ export const getRequestHeaders = () => ({
 
 export const getCategoryPath = (id) => `/s/${getSiteID()}/${id}`
 
-const getBaseURL = () => `/on/demandware.store/${getSiteID()}/default/`
+const getBaseURL = () => `/on/demandware.store/Sites-${getSiteID()}-Site/default/`
 
 export const getHomeURL = () => `${getBaseURL()}Home-Show`
 export const getSignInURL = () => `${getBaseURL()}Account-Show`
