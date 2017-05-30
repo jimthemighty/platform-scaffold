@@ -10,6 +10,7 @@ export const register = (commands) => {
 
 /**
  * Initializes any required data for the Home page
+ * @function
  * @param {string} url The url of the current page
  * @param {string} routeName The route name of the current page
  */
