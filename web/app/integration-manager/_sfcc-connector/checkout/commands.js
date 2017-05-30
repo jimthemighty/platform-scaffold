@@ -211,7 +211,3 @@ export const submitPayment = (formValues) => (dispatch) => {
 }
 
 export const updateShippingAndBilling = () => () => Promise.resolve()
-
-// We're not currently checking the customer's email on the sfcc site
-// Return true to prevent the welcome banner from showing
-export const isEmailAvailable = () => () => Promise.resolve(true)
