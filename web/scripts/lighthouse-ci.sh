@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 # Run the Lighthouse test against the dev build with continuous integration.
 
+REPO_NAME=${CIRCLE_PROJECT_REPONAME:-test}
+# ID=${CIRCLE_BUILD_NUM:-test}
+# curl https://hooks.zapier.com/hooks/catch/87314/9mex4p/
+curl \
+	-H 'Accept: application/json' \
+	-H 'Content-Type: application/json' \
+	-X POST \
+	-d "{ \"repo_name\": \"$REPO_NAME\"}" \
+	https://hooks.zapier.com/hooks/catch/87314/9mex4p/
+exit 0
+
 # Location to save the generated report.
 OUTPUT_PATH=./lighthouse/audit-local
 # See package.json's siteUrl key.
