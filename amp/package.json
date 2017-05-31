@@ -28,7 +28,7 @@
     "express-mocks-http": "0.0.11",
     "git-rev-sync": "1.9.1",
     "jest-cli": "19.0.2",
-    "mobify-amp-sdk": "ssh+git://git@github.com:mobify/mobify-amp-sdk.git#master",
+    "mobify-amp-sdk": "0.0.2",
     "mobify-code-style": "2.8.2",
     "ncp": "2.0.0",
     "node-fetch": "1.6.3",
