@@ -4,7 +4,7 @@
 
 import Connector from 'progressive-web-sdk/dist/analytics/connectors/connector'
 
-class ClientAnalytics extends Connector {
+export default class ClientAnalytics extends Connector {
     constructor() {
         super('Client Analytics')
 
@@ -41,5 +41,3 @@ class ClientAnalytics extends Connector {
     //     super.send(type, payload)
     // }
 }
-
-export const clientAnalytics = new ClientAnalytics()
