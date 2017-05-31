@@ -5,11 +5,6 @@
 export const STATES = [
     {
         countryId: 'us',
-        label: 'Select...',
-        id: ''
-    },
-    {
-        countryId: 'us',
         label: 'Alabama',
         id: 'AL'
     },

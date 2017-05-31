@@ -27,7 +27,7 @@ const checkoutReducer = handleActions({
     [integrationManagerResults.receiveShippingMethods]: (state, {payload}) => (
         // Using `set` here will make sure the list in the store is
         // correctly truncated.
-        state.set('shippingMethods', payload)
+        state.set('shippingMethods', Immutable.fromJS(payload))
     ),
     [setDefaultShippingAddressId]: mergePayload
 }, Immutable.Map())
