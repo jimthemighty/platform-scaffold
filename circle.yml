@@ -27,7 +27,7 @@ test:
            pwd: web
        - cp -R build/report.html $CIRCLE_ARTIFACTS:
            pwd: web
-       - cp -R build/stats.json  $CIRCLE_ARTIFACTS:
+       - cp -R stats.json $CIRCLE_ARTIFACTS:
            pwd: web
 experimental:
     notify:
