@@ -22,36 +22,29 @@ import {
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
-import {ESTIMATE_FORM_NAME} from '../../store/form/constants'
-import {getFormValues, getFormRegisteredFields} from '../../store/form/selectors'
+import {getEstimateShippingAddress} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
-import {parseLocationData} from '../../utils/utils'
 
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])
 export const setIsWishlistComplete = createAction('Set wishlist add complete', ['isWishlistAddComplete'])
 export const setTaxRequestPending = createAction('Set tax request pending', ['taxRequestPending'])
 
 const shippingFormSelector = createPropsSelector({
-    formValues: getFormValues(ESTIMATE_FORM_NAME),
-    registeredFields: getFormRegisteredFields(ESTIMATE_FORM_NAME),
+    address: getEstimateShippingAddress,
     shippingMethod: getSelectedShippingMethod
 })
 
 export const submitEstimateShipping = () => (dispatch, getState) => {
-    const currentState = getState()
-    const {formValues, registeredFields, shippingMethod} = shippingFormSelector(currentState)
-    const address = parseLocationData(formValues, registeredFields.map(({name}) => name))
+    const {address, shippingMethod} = shippingFormSelector(getState())
 
     dispatch(setTaxRequestPending(true))
-    dispatch(fetchShippingMethodsEstimate(ESTIMATE_FORM_NAME))
-        .then(() => {
-            return dispatch(fetchTaxEstimate(address, shippingMethod.value))
-                .catch(() => dispatch(addNotification(
-                    'taxError',
-                    'Unable to calculate tax.',
-                    true
-                )))
-        })
+    dispatch(fetchShippingMethodsEstimate(address))
+        .then(() => dispatch(fetchTaxEstimate(address, shippingMethod.id)))
+        .catch(() => dispatch(addNotification(
+            'taxError',
+            'Unable to calculate tax and/or shipping.',
+            true
+        )))
         .then(() => {
             dispatch(closeModal(CART_ESTIMATE_SHIPPING_MODAL))
             dispatch(setTaxRequestPending(false))
