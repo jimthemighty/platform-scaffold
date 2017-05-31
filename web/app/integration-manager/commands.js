@@ -9,6 +9,8 @@ import {register as registerCart} from './cart/commands'
 import {register as registerApp} from './app/commands'
 import {register as registerCheckout} from './checkout/commands'
 import {register as registerAccount} from './account/commands'
+import {register as registerCustomCommands} from './custom/commands'
+
 
 let connector = {}
 
@@ -21,6 +23,10 @@ export const register = (commands) => {
     registerCart(commands.cart)
     registerCheckout(commands.checkout)
     registerAccount(commands.account)
+}
+
+export const registerCustom = (commands) => {
+    registerCustomCommands(commands)
 }
 
 /** @function */

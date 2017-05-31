@@ -150,18 +150,6 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
         })
 }
 
-export const isEmailAvailable = (email) => (dispatch) => {
-    return makeJsonEncodedRequest(
-            '/rest/default/V1/customers/isEmailAvailable',
-            {customerEmail: email},
-            {method: 'POST'}
-        )
-        .then((response) => response.text())
-        .then((responseText) => {
-            return /true/.test(responseText)
-        })
-}
-
 export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
