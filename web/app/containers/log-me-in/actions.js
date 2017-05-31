@@ -1,6 +1,6 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
-import {createAction} from '../../utils/utils'
 import {makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {createAction} from '../../utils/utils'
 import {getLogin} from './selectors'
 import signinParser from './parsers/signin'
 

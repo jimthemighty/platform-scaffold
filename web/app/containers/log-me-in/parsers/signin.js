@@ -6,7 +6,7 @@ const parseForm = ($, $form) => {
     return {
         href: $form.attr('action'),
         fields: $.makeArray(parseFields($, $form.find('.field:not(.note)'))),
-        hiddenInputs: $.makeArray(parseHiddenInputs($, $form.find('input[type="hidden"]'))),
+        hiddenInputs: $.makeArray(parseHiddenInputs($, $form.find('[type="hidden"]'))),
         submitText: getTextFrom($form, 'button[type="submit"]')
     }
 }

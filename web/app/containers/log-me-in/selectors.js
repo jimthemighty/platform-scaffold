@@ -4,11 +4,8 @@ import {getUi} from '../../store/selectors'
 import fromPairs from 'lodash.frompairs'
 
 export const getLogin = createSelector(getUi, ({login}) => login)
-
 export const getLoginTitle = createGetSelector(getLogin, 'title')
-
 export const getSigninSection = createGetSelector(getLogin, 'signinSection')
-export const getRegisterSection = createGetSelector(getLogin, 'registerSection')
 
 const sectionKeys = [
     ['getDescription', 'description'],
@@ -27,12 +24,4 @@ signin.form = makeSelectorsFrom(signin.getFormInfo, [
     ['getFields', 'fields'],
     ['getHref', 'href'],
     ['getSubmitText', 'submitText'],
-])
-
-export const register = makeSelectorsFrom(getRegisterSection, sectionKeys)
-
-register.form = makeSelectorsFrom(register.getFormInfo, [
-    ['getSections', 'sections'],
-    ['getHref', 'href'],
-    ['getSubmitText', 'submitText']
 ])
