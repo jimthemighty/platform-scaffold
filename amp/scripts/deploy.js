@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+/**
+ * TODO: This is not fit for production - we would have to give partners
+ * user accounts and permissions to change IAM roles on Mobify's
+ * AWS account. This is a proof of concept that will be easy
+ * to modify to run on mobify-cloud.
+ */
 const yargs = require('yargs');
 const process = require('process');
 const chalk = require('chalk');
