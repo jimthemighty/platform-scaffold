@@ -77,7 +77,7 @@
     "json-loader": "0.5.4",
     "lighthouse": "1.6.5",
     "minimist": "1.2.0",
-    "mobify-code-style": "2.8.2",
+    "mobify-code-style": "2.8.3",
     "nightwatch": "0.9.8",
     "nightwatch-commands": "2.0.1",
     "node-sass": "4.5.2",
