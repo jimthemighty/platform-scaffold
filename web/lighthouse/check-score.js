@@ -29,7 +29,6 @@ let failure = false
  * Verify the bundle size. CDN will not compress files larger than 2MB.
  */
  try {
- 	console.log(`${path.resolve(__dirname, '../stats.json')}`)
 	const stats = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../stats.json'), 'utf8'))
 	let children = stats.children
 	for (let child in children) {
