@@ -22,9 +22,22 @@ test('If no children are passed, it renders the link with the text prop', () => 
     expect(wrapper.children().text()).toBe('Test')
 })
 
-// TODO: Test that contains GET params
-// TODO: Test that http gets transformed to https
-// TODO: Only enable analytics for https links? 🤔
+test('If a http URL is passed, it renders a https one', () => {
+    const wrapper = shallow(<Link href="http://google.com/" text="Test" />)
+
+    expect(wrapper.is('a')).toBe(true)
+    expect(wrapper.prop('href')).toBe('https://google.com/?mobify_id=CLIENT_ID(sandy-client-id)')
+})
+
+test('Renders the appropriate properties for the resulting <a> tag', () => {
+    const wrapper = shallow(<Link href="https://google.com/" text="Test" />)
+
+    const outboundLink = 'https://google.com/?mobify_id=CLIENT_ID(sandy-client-id)'
+    expect(wrapper.is('a')).toBe(true)
+    expect(wrapper.prop('href')).toBe(outboundLink)
+    expect(wrapper.prop('data-vars-outbound-link')).toBe(outboundLink)
+    expect(wrapper.prop('data-amp-replace')).toBe('CLIENT_ID')
+})
 
 test('If no href is passed, it renders a link with #', () => {
     const wrapper = shallow(<Link text="test" />)
