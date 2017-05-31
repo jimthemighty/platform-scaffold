@@ -47,7 +47,6 @@ Cart.prototype.removeItems = function() {
                     .execute(`document.querySelector('${selectors.removeItem}').click()`)
                     .waitForElementVisible(selectors.confirmRemove)
                     .execute(`document.querySelector('${selectors.confirmRemove}').click()`)
-                    // .click(selectors.confirmRemove)
                     .waitUntilMobified()
                     .waitForElementVisible(selectors.emptyCart)
                 self.removeItems()
