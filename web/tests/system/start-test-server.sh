@@ -17,7 +17,7 @@ if [ "$CURRENT_BRANCH" != "master" ]; then
     trap 'kill $(jobs -p)' EXIT
     export ACTIVE_PROFILE=local
     echo "Running Test Server."
-    npm run prod:build
+    MOBIFY_ANALYZE=true npm run prod:build
     npm run test:server
 else
     echo "On production branch, test server not needed."
