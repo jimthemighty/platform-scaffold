@@ -3,16 +3,15 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {SubmissionError} from 'redux-form'
-import {createBasket, handleCartData, requestCartData} from '../cart/utils'
+import {createBasket, handleCartData, requestCartData, createNewBasket} from '../cart/utils'
 import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
-import {STATES} from './constants'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveShippingMethods, receiveCheckoutLocations, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveShippingMethods, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
 
 export const fetchShippingMethodsEstimate = () => (dispatch) => {
     return createBasket()
@@ -66,15 +65,7 @@ export const initCheckoutShippingPage = () => (dispatch) => {
             }
             dispatch(receiveShippingInitialValues({initialValues}))
             /* eslint-enable camelcase */
-            return dispatch(receiveCheckoutLocations({
-                countries: [{
-                    id: 'us',
-                    label: 'United States',
-                    regionRequired: true,
-                    postcodeRequired: true
-                }],
-                regions: STATES
-            }))
+            return dispatch(populateLocationsData())
         })
         .then(() => dispatch(fetchShippingMethodsEstimate()))
 }
@@ -206,12 +197,12 @@ export const submitPayment = (formValues) => (dispatch) => {
             dispatch(receiveOrderConfirmationContents({
                 orderNumber: order.order_no
             }))
+            // The new basket data isn't required for the confirmation page,
+            // so we can return the URL without waiting for this to complete
+            dispatch(createNewBasket())
+
             return getConfirmationURL()
         })
 }
 
 export const updateShippingAndBilling = () => () => Promise.resolve()
-
-// We're not currently checking the customer's email on the sfcc site
-// Return true to prevent the welcome banner from showing
-export const isEmailAvailable = () => () => Promise.resolve(true)
