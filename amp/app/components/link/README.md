@@ -1,9 +1,9 @@
 ```js
 // JS import
-import Link from 'mobify-amp-sdk/dist/components/link'
+import Link from '../components/link'
 
 // SCSS import
-@import 'node_modules/mobify-amp-sdk/dist/components/link/link';
+@import '../components/link/base';
 ```
 
 ## Example Usage

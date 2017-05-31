@@ -12,6 +12,7 @@ import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
+import ampPackageJson from '../package.json'
 
 import Analytics from './components/analytics'
 import * as home from './containers/home/container'
@@ -61,7 +62,7 @@ const render = (req, res, store, component, css) => {
         <ampSDK.AmpContext declareDependency={scripts.add}>
             <Provider store={store}>
                 <div>
-                    <Analytics templateName={component.templateName} projectSlug="merlinspotions-2" gaAccount="UA-76264428-1" />
+                    <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
                     {React.createElement(component, {}, null)}
                 </div>
             </Provider>

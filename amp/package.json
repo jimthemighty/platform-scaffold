@@ -1,4 +1,6 @@
 {
+  "cloudSlug": "merlinspotions-2",
+  "gaAccount": "UA-76264428-1",
   "dependencies": {
     "aws-serverless-express": "3.0.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
