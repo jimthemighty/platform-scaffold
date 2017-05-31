@@ -24,6 +24,7 @@ import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getShippingFormValues} from '../../../store/form/selectors'
 import {prepareEstimateAddress} from '../utils'
 
 export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
@@ -41,7 +42,10 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
             dispatch(receiveShippingMethods(shippingMethods))
             dispatch(receiveShippingInitialValues({address: {
                 shipping_method: shippingMethods[0].id,
-                postcode: address.postcode
+                postcode: address.postcode,
+                countryId: address.country_id,
+                region: address.region,
+                regionId: address.regionId
             }})) // set initial value for method and postcode
         })
 }
@@ -52,17 +56,13 @@ const processCheckoutData = ($response) => (dispatch) => {
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    dispatch(receiveCheckoutData({
-        shipping: {
-            initialValues: parseShippingInitialValues(magentoFieldData)
-        }
-    }))
+    dispatch(receiveShippingInitialValues({address: parseShippingInitialValues(magentoFieldData)}))
 }
 
-export const initCheckoutShippingPage = (url) => (dispatch) => {
+export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
-        .then(() => dispatch(fetchShippingMethodsEstimate({})))
+        .then(() => dispatch(fetchShippingMethodsEstimate(getShippingFormValues(getState()))))
 }
 
 export const initCheckoutConfirmationPage = (url) => (dispatch) => {

@@ -2,13 +2,19 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+const removeIfUndefined = (object, keyName) => {
+    if (!object[keyName]) {
+        delete object[keyName]
+    }
+}
+
 const getNameValue = (firstname, lastname) =>
       [firstname, lastname].filter((item) => item).join(' ')
 
 export const parseShippingInitialValues = (shippingFieldData) => {
     const fieldData = shippingFieldData.toJS()
     const streetFields = fieldData.street.children
-    return {
+    const addressData = {
         name: getNameValue(fieldData.firstname.value, fieldData.lastname.value),
         addressLine1: streetFields[0].value,
         company: fieldData.company.value,
@@ -20,6 +26,14 @@ export const parseShippingInitialValues = (shippingFieldData) => {
         telephone: fieldData.telephone.value,
         billing_same_as_shipping: true
     }
+
+    // Remove the postcode, regionId and countryId keys if they're undefined
+    // Otherwise they'll override what we have in place from the estimate shipping form
+    removeIfUndefined(addressData, 'postcode')
+    removeIfUndefined(addressData, 'countryId')
+    removeIfUndefined(addressData, 'regionId')
+
+    return addressData
 }
 
 /* eslint-disable camelcase */
