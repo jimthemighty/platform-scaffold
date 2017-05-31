@@ -7,13 +7,13 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../../store/user/selectors'
-import {getUenc, getCustomerEntityID} from '../selectors'
+import {getUenc, getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
 import {getCouponValue} from '../../../store/form/selectors'
 import {receiveCartContents} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
-import {submitForm, textFromFragment} from '../utils'
+import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
 import {parseLocations} from '../checkout/parsers'
 import {receiveCheckoutLocations} from '../../checkout/results'
 import {fetchShippingMethodsEstimate} from '../checkout/commands'
@@ -21,7 +21,6 @@ import {fetchPageData} from '../app/commands'
 import {parseCart, parseCartProducts, parseCartTotals} from './parser'
 import {parseCheckoutEntityID, extractMagentoJson} from '../../../utils/magento-utils'
 import {ADD_TO_WISHLIST_URL, PROMO_ERROR} from '../../../containers/cart/constants'
-import {ESTIMATE_FORM_NAME} from '../../../store/form/constants'
 import {getProductById} from '../../../store/products/selectors'
 
 const LOAD_CART_SECTION_URL = '/customer/section/load/?sections=cart%2Cmessages&update_section_id=true'
@@ -131,7 +130,7 @@ export const initCartPage = (url) => (dispatch) => {
             dispatch(receiveEntityID(parseCheckoutEntityID($response)))
             dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
 
-            return dispatch(fetchShippingMethodsEstimate(ESTIMATE_FORM_NAME))
+            return dispatch(fetchShippingMethodsEstimate({}))
         })
 }
 
@@ -157,16 +156,14 @@ export const addToWishlist = (productId, productURL) => (dispatch, getState) => 
 }
 
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState) => {
-    const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
+    const cartBaseUrl = getCartBaseUrl(getState())
 
-    const getTotalsURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/totals-information`
+    const getTotalsURL = `${cartBaseUrl}/totals-information`
     const shippingMethodParts = shippingMethod.split('_')
 
     const requestData = {
         addressInformation: {
-            address,
+            address: prepareEstimateAddress(address),
             shipping_carrier_code: shippingMethodParts[0],
             shipping_method_code: shippingMethodParts[1]
         }
@@ -174,11 +171,9 @@ export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState
 
     return makeJsonEncodedRequest(getTotalsURL, requestData, {method: 'POST'})
         .then((response) => response.json())
-        .then((responseJSON) => {
-            dispatch(receiveCartContents(
-                parseCartTotals(responseJSON)
-            ))
-        })
+        .then((responseJSON) => dispatch(receiveCartContents(
+            parseCartTotals(responseJSON)
+        )))
 }
 
 export const getCartTotalsInfo = (currentState) => {
