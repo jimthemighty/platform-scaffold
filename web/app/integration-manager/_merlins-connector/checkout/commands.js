@@ -12,7 +12,7 @@ import {getCart} from '../cart/commands'
 import {
     receiveCheckoutData,
     receiveCheckoutLocations,
-    receiveShippingAddressValues,
+    receiveShippingAddress,
     receiveCheckoutConfirmationData,
     receiveBillingAddress,
     receiveShippingMethods
@@ -40,7 +40,7 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
         .then((responseJSON) => parseShippingMethods(responseJSON))
         .then((shippingMethods) => {
             dispatch(receiveShippingMethods(shippingMethods))
-            dispatch(receiveShippingAddressValues({
+            dispatch(receiveShippingAddress({
                 shipping_method: shippingMethods[0].id,
                 postcode: address.postcode,
                 countryId: address.country_id,
@@ -56,7 +56,7 @@ const processCheckoutData = ($response) => (dispatch) => {
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    dispatch(receiveShippingAddressValues(parseShippingInitialValues(magentoFieldData)))
+    dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
 }
 
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {

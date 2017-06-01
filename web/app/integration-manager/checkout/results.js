@@ -13,7 +13,7 @@ export const receiveShippingMethods = createTypedAction('Receive Shipping Method
 
 export const receiveCheckoutData = createAction('Receive Checkout Data')
 export const receiveCheckoutCustomContent = createAction('Receive Checkout Custom Content', ['custom'])
-export const receiveShippingAddressValues = createAction('Receive Shipping Initial Values', ['shippingAddress'])
+export const receiveShippingAddress = createAction('Receive Shipping Initial Values', ['shippingAddress'])
 export const receiveHasExistingCard = createAction('Receive Has Existing Cart flag', ['hasExistingCreditCard'])
 export const receiveBillingAddress = createAction('Receive Billing Initial Values', ['billingAddress'])
 

@@ -11,7 +11,7 @@ import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveShippingMethods, receiveShippingAddressValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress} from './../../checkout/results'
 
 export const fetchShippingMethodsEstimate = () => (dispatch) => {
     return createBasket()
@@ -63,7 +63,7 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                     countryId: 'us'
                 }
             }
-            dispatch(receiveShippingAddressValues(initialValues))
+            dispatch(receiveShippingAddress(initialValues))
             /* eslint-enable camelcase */
             return dispatch(populateLocationsData())
         })
