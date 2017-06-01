@@ -36,14 +36,7 @@ const sendAddToCartAnalytics = createActionWithAnalytics(
             count,
             subtotal
         }),
-        product: (
-            product ?
-                new Product({
-                    ...product,
-                    [Product.NAME]: product.title
-                })
-                : null
-        )
+        product: new Product(product)
     })
 )
 
