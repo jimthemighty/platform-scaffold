@@ -20,6 +20,7 @@ if [ "$CURRENT_BRANCH" != "master" ]; then
     npm run prod:build
     npm run test:stats
     npm run test:server
+    while ! echo exit | nc localhost 8443; do sleep 5; done
 else
     echo "On production branch, test server not needed."
     export ACTIVE_PROFILE=production

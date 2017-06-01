@@ -30,7 +30,6 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 fi
 
 # --ignore-certificate-errors thanks to https://github.com/GoogleChrome/lighthouse/issues/559
-while ! echo exit | nc localhost 8443; do sleep 5; done
 lighthouse \
     --chrome-flags='--user-agent="MobifyPreview" --allow-insecure-localhost --ignore-certificate-errors' \
 	--output json \
