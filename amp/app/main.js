@@ -12,11 +12,13 @@ import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
+import ampPackageJson from '../package.json'
 
+import Analytics from './components/analytics'
 import * as home from './containers/home/container'
 import * as productDetails from './containers/product-details/container'
 import * as productList from './containers/product-list/container'
-
+import AppComponent from './containers/app/container'
 
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
@@ -54,12 +56,18 @@ const initializeStore = (req) => {
 
 const render = (req, res, store, component, css) => {
     const scripts = new ampSDK.Set()
+
     const body = ReactDOMServer.renderToStaticMarkup(
-        <Provider store={store}>
-            <ampSDK.AmpContext declareDependency={scripts.add}>
-                {React.createElement(component, {}, null)}
-            </ampSDK.AmpContext>
-        </Provider>
+        <ampSDK.AmpContext declareDependency={scripts.add}>
+            <Provider store={store}>
+                <div>
+                    <AppComponent>
+                        <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                        {React.createElement(component, {}, null)}
+                    </AppComponent>
+                </div>
+            </Provider>
+        </ampSDK.AmpContext>
     )
     const state = store.getState()
     const rendered = ampPage({

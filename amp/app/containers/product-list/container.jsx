@@ -32,6 +32,8 @@ ProductList.propTypes = {
     title: PropTypes.string
 }
 
+PLP.templateName = 'plp'
+
 const mapStateToProps = (state) => ({
     links: state.links,
     title: `ProductList! - ${state.title}` || '',

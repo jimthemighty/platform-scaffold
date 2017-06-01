@@ -32,6 +32,8 @@ ProductDetails.propTypes = {
     title: PropTypes.string
 }
 
+PDP.templateName = 'pdp'
+
 const mapStateToProps = (state) => ({
     links: state.links,
     title: `ProductDetails! - ${state.title}` || '',
