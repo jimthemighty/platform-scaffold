@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Selectors
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
-import {getBillingAddress} from '../../../store/checkout/billing/selectors'
+import {getBillingInitialValues} from '../../../store/checkout/billing/selectors'
 
 // Actions
 import {submitPayment} from '../actions'
@@ -54,7 +54,7 @@ CheckoutPaymentForm.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    initialValues: getBillingAddress
+    initialValues: getBillingInitialValues
 })
 
 const mapDispatchToProps = {
