@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-const getNameValue = (firstname, lastname) =>
+export const getNameValue = (firstname, lastname) =>
       [firstname, lastname].filter((item) => item).join(' ')
 
 export const parseShippingInitialValues = (shippingFieldData) => {

@@ -5,7 +5,7 @@
 import {makeJsonEncodedRequest, makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
 
-import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
+import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser, getNameValue} from './parsers'
 import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
 import {getCart} from '../cart/commands'
@@ -26,6 +26,7 @@ import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getIsLoggedIn} from '../../../store/user/selectors'
 import {prepareEstimateAddress} from '../utils'
 
 export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
@@ -48,6 +49,47 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
         })
 }
 
+
+
+export const fetchSavedShippingAddresses = () => {
+    return (dispatch) => {
+        const fetchURL = `/rest/default/V1/carts/mine`
+        return makeRequest(fetchURL, {method: 'GET'})
+            .then((response) => response.json())
+            .then(({customer}) => {
+                let defaultShippingId
+                const addresses = customer.addresses.map((address) => {
+                    if (address.default_shipping) {
+                        defaultShippingId = address.id
+                    }
+                    const [addressLine1, addressLine2] = address.street
+
+                    // Not spreading `address` because it has key/values that
+                    // we want to rename and remove
+                    return {
+                        city: address.city,
+                        countryId: address.country_id,
+                        id: `${address.id}`,
+                        firstname: address.firstname,
+                        lastname: address.lastname,
+                        fullname: getNameValue(address.firstname, address.lastname),
+                        postcode: address.postcode,
+                        regionId: `${address.region.region_id}`,
+                        region: address.region.region,
+                        regionCode: address.region.region_code,
+                        addressLine1,
+                        addressLine2,
+                        telephone: address.telephone,
+                    }
+                })
+
+                dispatch(setDefaultShippingAddressId(defaultShippingId))
+                dispatch(receiveSavedShippingAddresses(addresses))
+            })
+    }
+}
+
+
 const processCheckoutData = ($response) => (dispatch) => {
     dispatch(receiveEntityID(parseCheckoutEntityID($response)))
     const magentoFieldData = extractMagentoShippingStepData($response)
@@ -61,10 +103,16 @@ const processCheckoutData = ($response) => (dispatch) => {
     }))
 }
 
-export const initCheckoutShippingPage = (url) => (dispatch) => {
+export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
         .then(() => dispatch(fetchShippingMethodsEstimate({})))
+        .then(() => {
+            if (getIsLoggedIn(getState())) {
+                return dispatch(fetchSavedShippingAddresses())
+            }
+            return Promise.resolve()
+        })
 }
 
 export const initCheckoutConfirmationPage = (url) => (dispatch) => {
@@ -221,40 +269,4 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
                 throw new Error(responseJSON.message)
             }
         })
-}
-
-export const fetchSavedShippingAddresses = () => {
-    return (dispatch) => {
-        const fetchURL = `/rest/default/V1/carts/mine`
-        return makeRequest(fetchURL, {method: 'GET'})
-            .then((response) => response.json())
-            .then(({customer}) => {
-                let defaultShippingId
-                const addresses = customer.addresses.map((address) => {
-                    if (address.default_shipping) {
-                        defaultShippingId = address.id
-                    }
-
-                    // Not spreading `address` because it has key/values that
-                    // we want to rename and remove
-                    return {
-                        city: address.city,
-                        countryId: address.country_id,
-                        customerAddressId: `${address.id}`,
-                        customerId: `${address.customer_id}`,
-                        firstname: address.firstname,
-                        lastname: address.lastname,
-                        postcode: address.postcode,
-                        regionCode: address.region.region_code,
-                        regionId: `${address.region.region_id}`,
-                        region: address.region.region,
-                        street: address.street,
-                        telephone: address.telephone,
-                    }
-                })
-
-                dispatch(setDefaultShippingAddressId(defaultShippingId))
-                dispatch(receiveSavedShippingAddresses(addresses))
-            })
-    }
 }
