@@ -13,7 +13,7 @@ export const getBillingAddress = createGetSelector(getCheckout, 'billingAddress'
 export const getBillingInitialValues = createSelector(
     getBillingAddress,
     getBillingSameAsShipping,
-    (billingAddress, billingSameAsShipping) => billingAddress.merge({billingSameAsShipping})
+    (billingAddress, billingSameAsShipping) => billingAddress.set('billingSameAsShipping', billingSameAsShipping)
 )
 
 export const getBillingAddressCustomContent = createGetSelector(getBillingAddress, 'custom')
