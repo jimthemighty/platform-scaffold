@@ -86,3 +86,27 @@ export const jqueryAjaxWrapper = (options) => {
         })
     })
 }
+
+export const prepareEstimateAddress = (inputAddress = {}) => {
+    const {
+        countryId = 'US',
+        regionId,
+        region,
+        postcode = null
+    } = inputAddress
+
+    const address = {
+        country_id: countryId,
+        postcode
+    }
+
+    if (region) {
+        address.region = region
+    } else if (regionId) {
+        address.regionId = regionId
+    } else {
+        address.regionId = '0'
+    }
+
+    return address
+}

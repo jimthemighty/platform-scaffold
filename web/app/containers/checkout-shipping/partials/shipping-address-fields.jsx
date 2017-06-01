@@ -9,9 +9,8 @@ import * as ReduxForm from 'redux-form'
 import {normalizePhone} from '../../../utils/normalize-utils'
 import {stripEvent} from '../../../utils/utils'
 
-import {showCompanyAndApt} from '../actions'
+import {showCompanyAndApt, fetchShippingMethods} from '../actions'
 import {getIsCompanyOrAptShown} from '../selectors'
-import {fetchShippingMethodsEstimate} from '../../../integration-manager/checkout/commands'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
 import {getAvailableRegions} from '../../../store/checkout/selectors'
 
@@ -175,7 +174,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     handleShowCompanyAndApt: stripEvent(showCompanyAndApt),
-    fetchShippingMethods: () => fetchShippingMethodsEstimate(SHIPPING_FORM_NAME)
+    fetchShippingMethods
 }
 
 export default connect(

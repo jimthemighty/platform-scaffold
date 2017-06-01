@@ -88,39 +88,6 @@ export const createTypedAction = (description, type, key) => createReduxAction(
         : (payload) => typecheck(type, payload)
 )
 
-export const parseLocationData = (formValues, registeredFieldNames) => {
-    // Default values to use if none have been selected
-    const address = {country_id: 'US', region_id: '0', postcode: null}
-
-    if (formValues) {
-        // Only return the field value if the field is registered
-        const getRegisteredFieldValue = (fieldName) => {
-            return registeredFieldNames.includes(fieldName) ? formValues[fieldName] : undefined
-        }
-
-        const countryId = getRegisteredFieldValue('country_id')
-        if (countryId) {
-            address.country_id = countryId
-        }
-
-        const postcode = getRegisteredFieldValue('postcode')
-        if (postcode) {
-            address.postcode = postcode
-        }
-
-        if (formValues.region) {
-            address.region = getRegisteredFieldValue('region')
-            // Remove the region_id in case we have an old value
-            delete address.region_id
-        } else {
-            address.region_id = getRegisteredFieldValue('region_id')
-        }
-    }
-
-    return address
-}
-
-
 export const buildQueryString = (query) => {
     return query.replace(/ /g, '+')
 }
