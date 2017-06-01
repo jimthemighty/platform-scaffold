@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import Sheet from '../../components/sheet'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import DangerousHTML from '../../components/dangerous-html'
+import Link from '../../components/link'
 
 // import container styles
 import containerStyles from './container.scss'
@@ -55,10 +56,12 @@ class Home extends React.Component {
 
                 <h1>{title}</h1>
                 {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
+                <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
             </div>
         )
     }
 }
+
 
 Home.propTypes = {
     fetchSvgSprite: PropTypes.func,
@@ -75,6 +78,8 @@ Home.propTypes = {
      */
     title: PropTypes.string
 }
+
+Home.templateName = 'home'
 
 const mapStateToProps = (state) => ({
     links: state.links,

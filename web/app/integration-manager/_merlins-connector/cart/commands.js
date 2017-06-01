@@ -6,11 +6,10 @@ import {makeRequest, makeJsonEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {getIsLoggedIn} from '../../../store/user/selectors'
-import {getUenc, getCustomerEntityID, getCartBaseUrl} from '../selectors'
+import {createPropsSelector} from 'reselect-immutable-helpers'
+import {getUenc, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
-import {getCouponValue} from '../../../store/form/selectors'
 import {receiveCartContents} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
 import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
@@ -81,18 +80,16 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
  * - Important: The cart contents rendered in the main HTML is *not* updated until `getCart()` has been called which
  *   busts a cache. removeFromCart() will call getCart() once the request to remove the item has completed
  */
-export const removeFromCart = (itemId) => {
-    return (dispatch) => {
-        return submitForm(REMOVE_CART_ITEM_URL, {item_id: itemId}, {method: 'POST'})
-            .then((response) => response.json())
-            .then((responseJSON) => {
-                if (responseJSON.success) {
-                    return dispatch(getCart())
-                }
-                throw new Error('Unable to remove item')
-            })
-    }
-}
+export const removeFromCart = (itemId) => (dispatch) => (
+    submitForm(REMOVE_CART_ITEM_URL, {item_id: itemId}, {method: 'POST'})
+        .then((response) => response.json())
+        .then(({success}) => {
+            if (success) {
+                return dispatch(getCart())
+            }
+            throw new Error('Unable to remove item')
+        })
+)
 
 /**
  * Update the quantity of an item in the users cart
@@ -102,22 +99,20 @@ export const removeFromCart = (itemId) => {
  * - Response is 200 with JSON: `{"success":true}` on success
  * - Response is 200 with JSON: `{"success":false,"error_message":"We can't find the quote item."}` if item not in cart
  */
-export const updateItemQuantity = (itemId, itemQuantity) => {
-    return (dispatch) => {
-        const requestData = {
-            item_id: itemId,
-            item_qty: itemQuantity
-        }
-
-        return submitForm(UPDATE_ITEM_URL, requestData, {method: 'POST'})
-            .then((response) => response.json())
-            .then((responseJSON) => {
-                if (responseJSON.success) {
-                    return dispatch(getCart())
-                }
-                throw new Error('Unable to update Quantity')
-            })
+export const updateItemQuantity = (itemId, itemQuantity) => (dispatch) => {
+    const requestData = {
+        item_id: itemId,
+        item_qty: itemQuantity
     }
+
+    return submitForm(UPDATE_ITEM_URL, requestData, {method: 'POST'})
+        .then((response) => response.json())
+        .then(({success}) => {
+            if (success) {
+                return dispatch(getCart())
+            }
+            throw new Error('Unable to update Quantity')
+        })
 }
 
 const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
@@ -144,21 +139,18 @@ export const addToWishlist = (productId, productURL) => (dispatch, getState) => 
     }
 
     return submitForm(ADD_TO_WISHLIST_URL, payload, {method: 'POST'})
-            .then(jqueryResponse)
-            .then((response) => {
-                const [$, $response] = response // eslint-disable-line no-unused-vars
-                // The response is the HTML of the wishlist page, so check for the item we added
-                if ($response.find(`.product-item-link[href="${productURL}"]`).length) {
-                    return
-                }
+        .then(jqueryResponse)
+        .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            // The response is the HTML of the wishlist page, so check for the item we added
+            if (!$response.find(`.product-item-link[href="${productURL}"]`).length) {
                 throw new Error('Add Request Failed')
-            })
+            }
+        })
 }
 
-export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState) => {
+const getCartTotals = (address, shippingMethod) => (dispatch, getState) => {
     const cartBaseUrl = getCartBaseUrl(getState())
 
-    const getTotalsURL = `${cartBaseUrl}/totals-information`
     const shippingMethodParts = shippingMethod.split('_')
 
     const requestData = {
@@ -169,68 +161,52 @@ export const fetchTaxEstimate = (address, shippingMethod) => (dispatch, getState
         }
     }
 
-    return makeJsonEncodedRequest(getTotalsURL, requestData, {method: 'POST'})
+    return makeJsonEncodedRequest(`${cartBaseUrl}/totals-information`, requestData, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => dispatch(receiveCartContents(
             parseCartTotals(responseJSON)
         )))
 }
 
-export const getCartTotalsInfo = (currentState) => {
-    const address = getShippingAddress(currentState).toJS()
-    let shippingMethod = getSelectedShippingMethod(currentState).toJS().value || ''
-    shippingMethod = shippingMethod.length ? shippingMethod.split('_') : []
-    const requestData = {
-        addressInformation: {
-            address: {
-                country_id: address.countryId || address.country_id,
-                region_id: address.regionId || address.region_id,
-                postcode: address.postcode
-            },
-            shipping_carrier_code: shippingMethod[0],
-            shipping_method_code: shippingMethod[1]
-        }
-    }
+export const fetchTaxEstimate = getCartTotals
 
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
-    const getTotalsURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/totals-information`
-    return makeJsonEncodedRequest(getTotalsURL, requestData, {method: 'POST'})
-        .then((response) => response.json())
-        // the above request will be handled by other actions below!
+const getCartTotalsSelector = createPropsSelector({
+    address: getShippingAddress,
+    shippingMethod: getSelectedShippingMethod
+})
+
+export const getCartTotalsInfo = () => (dispatch, getState) => {
+    const {address, shippingMethod} = getCartTotalsSelector(getState())
+    const shippingMethodId = shippingMethod.id || ''
+
+    return dispatch(fetchTaxEstimate(address, shippingMethodId))
 }
 
 export const putPromoCode = (couponCode) => (dispatch, getState) => {
     const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
-    couponCode = getCouponValue(currentState)
+    const cartBaseUrl = getCartBaseUrl(currentState)
 
-    const putPromoUrl = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/coupons/${couponCode}`
-    return makeJsonEncodedRequest(putPromoUrl, couponCode, {method: 'PUT'})
+    return makeRequest(`${cartBaseUrl}/coupons/${couponCode}`, {method: 'PUT'})
         .then((response) => {
             // Check if coupon is valid
             if (response.status === 404) {
                 throw Error(`${PROMO_ERROR}, code is invalid`)
             }
         })
-        .then(() => getCartTotalsInfo(currentState))
-        .then((responseJSON) => {
-            dispatch(receiveCartContents(parseCartTotals(responseJSON)))
-        })
+        .then(() => dispatch(getCartTotalsInfo()))
 }
 
 export const deletePromoCode = (couponCode) => (dispatch, getState) => {
     const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const entityID = getCustomerEntityID(currentState)
-    couponCode = getCouponValue(currentState)
+    const cartBaseUrl = getCartBaseUrl(currentState)
 
-    const deletePromoUrl = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/coupons/`
+    const deletePromoUrl = `${cartBaseUrl}/coupons/`
     return makeJsonEncodedRequest(deletePromoUrl, couponCode, {method: 'DELETE'})
-        .then((response) => response.json())
-        .then(() => getCartTotalsInfo(currentState))
-        .then((responseJSON) => {
-            dispatch(receiveCartContents(parseCartTotals(responseJSON)))
+        .then((response) => response.text())
+        .then((responseText) => {
+            if (!/true/i.test(responseText)) {
+                throw new Error('Failed to remove promo code')
+            }
         })
+        .then(() => dispatch(getCartTotalsInfo()))
 }
