@@ -10,7 +10,6 @@ import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
 import {getCart} from '../cart/commands'
 import {
-    receiveCheckoutData,
     receiveCheckoutLocations,
     receiveShippingAddress,
     receiveCheckoutConfirmationData,
