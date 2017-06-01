@@ -42,7 +42,7 @@ export const Address = Runtypes.Record({
     countryId: CountryID,
     postcode: Text,
     telephone: Text
-}).Add(Runtypes.Optional({
+}).And(Runtypes.Optional({
     // We expect one of these to be non-null
     regionId: Nullable(Identifier),
     region: Nullable(Text),
