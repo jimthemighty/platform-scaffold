@@ -117,15 +117,16 @@ export const updateItemQuantity = (itemId, itemQuantity) => (dispatch) => {
 
 const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
 
-export const initCartPage = (url) => (dispatch) => {
+export const initCartPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            const shippingAddress = getShippingAddress(getState()).toJS()
             const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
 
             dispatch(receiveEntityID(parseCheckoutEntityID($response)))
             dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
 
-            return dispatch(fetchShippingMethodsEstimate({}))
+            return dispatch(fetchShippingMethodsEstimate(shippingAddress || {}))
         })
 }
 
