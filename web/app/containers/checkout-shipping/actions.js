@@ -8,7 +8,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {splitFullName} from '../../utils/utils'
-import {receiveCheckoutData} from '../../integration-manager/checkout/results'
+import {receiveCheckoutData, receiveShippingAddressValues} from '../../integration-manager/checkout/results'
 
 import {
     submitShipping as submitShippingCommand,
@@ -66,12 +66,11 @@ export const submitShipping = () => (dispatch, getState) => {
         lastname,
         ...formValues
     }
-    const shippingData = {shipping: {address}}
 
     if (formValues.username) {
-        shippingData.emailAddress = formValues.username
+        dispatch(receiveCheckoutData({emailAddress: formValues.username}))
     }
-    dispatch(receiveCheckoutData(shippingData))
+    dispatch(receiveShippingAddressValues(address))
     return dispatch(submitShippingCommand(address))
         .then((paymentURL) => {
             browserHistory.push({
