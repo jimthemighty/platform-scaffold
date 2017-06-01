@@ -16,10 +16,9 @@ import ampPackageJson from '../package.json'
 
 import Analytics from './components/analytics'
 import * as home from './containers/home/container'
-import * as pdp from './containers/pdp/container'
-import * as plp from './containers/plp/container'
+import * as productDetails from './containers/product-details/container'
+import * as productList from './containers/product-list/container'
 import AppComponent from './containers/app/container'
-
 
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
@@ -82,15 +81,15 @@ const render = (req, res, store, component, css) => {
 }
 
 
-const productDetailPage = (req, res, next) => {
+const productDetailsPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, pdp.default, pdp.styles))
+        .then((store) => render(req, res, store, productDetails.default, productDetails.styles))
         .catch(next)
 }
 
 const productListPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, plp.default, plp.styles))
+        .then((store) => render(req, res, store, productList.default, productList.styles))
         .catch(next)
 }
 
@@ -109,8 +108,8 @@ app.get('/ingredients.html', productListPage)
 app.get('/supplies.html', productListPage)
 app.get('/new-arrivals.html', productListPage)
 app.get('/charms.html', productListPage)
-app.get('/checkout/cart/configure/id/*/product_id/*/', productDetailPage)
-app.get('*.html', productDetailPage)
+app.get('/checkout/cart/configure/id/*/product_id/*/', productDetailsPage)
+app.get('*.html', productDetailsPage)
 
 app.use('/static', express.static(path.resolve('./app/static')))
 
