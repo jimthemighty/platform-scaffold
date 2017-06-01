@@ -33,7 +33,7 @@ npm run test:server &
 # --ignore-certificate-errors thanks to https://github.com/GoogleChrome/lighthouse/issues/559
 sleep 5
 lighthouse \
-    --chrome-flags='--user-agent="MobifyPreview" --allow-insecure-localhost --ignore-certificate-errors' \
+    --chrome-flags='--user-agent="MobifyPreview" --allow-insecure-localhost --ignore-certificate-errors --headless' \
 	--output json \
 	--output html \
 	--output-path ${OUTPUT_PATH} \

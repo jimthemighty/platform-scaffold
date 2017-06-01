@@ -51,9 +51,6 @@ module.exports = {
                         'window-size=320,850',
                         '--allow-running-insecure-content',
                         '--test-type',
-                        'headless',
-                        'no-sandbox',
-                        'disable-gpu'
                     ],
                     prefs: {
                         'profile.default_content_setting_values.notifications': 1
