@@ -116,7 +116,7 @@ const deploy = (argv) => {
     const aws = child_process.execSync('which aws').toString().trim()
 
     const {dir, businessId, siteId, environment} = argv;
-    const appStackName = [businessId, siteId, environment].join('-').toLowerCase()
+    const appStackName = ['amp-', businessId, siteId, environment].join('-').toLowerCase()
     const domainName = `${businessId}-${siteId}.com`.toLowerCase()
 
     const cwd = path.resolve(dir)
