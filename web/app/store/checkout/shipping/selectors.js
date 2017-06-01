@@ -14,7 +14,7 @@ export const getShippingCustomContent = createGetSelector(getShipping, 'custom')
 
 export const getSavedAddresses = createGetSelector(getCheckout, 'savedAddresses', Immutable.List())
 
-export const getShippingAddress = createGetSelector(getShipping, 'address', Immutable.Map())
+export const getShippingAddress = createGetSelector(getCheckout, 'shippingAddress', Immutable.Map())
 
 export const getInitialShippingAddress = createSelector(
     getCheckout,
