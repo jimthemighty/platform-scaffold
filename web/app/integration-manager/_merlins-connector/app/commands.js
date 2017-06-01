@@ -43,10 +43,7 @@ export const fetchPageData = (url) => (dispatch) => (
 
 export const initApp = () => (dispatch) => {
     // Use the pre-existing form_key if it already exists
-    let formKey = getCookieValue('form_key')
-    if (!formKey) {
-        formKey = generateFormKeyCookie()
-    }
+    const formKey = getCookieValue('form_key') || generateFormKeyCookie()
     dispatch(receiveFormKey(formKey))
 
     dispatch(setCheckoutShippingURL(CHECKOUT_SHIPPING_URL))
