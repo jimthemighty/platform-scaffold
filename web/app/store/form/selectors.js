@@ -67,7 +67,3 @@ export const getPaymentBillingCCNumber = createSelector(getPaymentBillingFormVal
 })
 export const getConfirmationFormValues = getFormValues(CONFIRMATION_FORM_NAME)
 export const getAddToCartFormValues = getFormValues(ADD_TO_CART_FORM_NAME)
-export const getCouponForm = createSelector(getForm, (form) => form.cartPromoForm)
-export const getCouponValue = createSelector(getCouponForm, (cartPromoForm) => {
-    return cartPromoForm ? cartPromoForm.values.promo : undefined
-})
