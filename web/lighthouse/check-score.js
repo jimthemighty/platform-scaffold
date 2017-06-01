@@ -55,6 +55,8 @@ let failure = false
 if (actualLighthouseScore < minimumLighthouseScore) {
     console.error(chalk.red(`Lighthouse score is lower than required! ${actualLighthouseScore} < ${minimumLighthouseScore}`))
     failure = true
+} else {
+	console.log(`Lighthouse score is fine (${actualLighthouseScore})`)
 }
 
 if (failure) {
