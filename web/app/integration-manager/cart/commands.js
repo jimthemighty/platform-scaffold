@@ -4,7 +4,8 @@
 
 import {createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 import {EVENT_ACTION, Product, ShoppingList} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {getCartSummaryCount, getSubtotal, getCartItems} from '../../store/cart/selectors'
+import {getCartSummaryCount, getSubtotal} from '../../store/cart/selectors'
+import {getProductById} from '../../store/products/selectors'
 
 let connector = {}
 
@@ -26,7 +27,7 @@ export const initCartPage = (url, routeName) => connector.initCartPage(url, rout
 export const getCart = () => connector.getCart()
 
 const sendAddToCartAnalytics = createActionWithAnalytics(
-    'Add to cart complete',
+    'Send cart analytics',
     [],
     EVENT_ACTION.addToCart,
     (count, subtotal, product) => ({
@@ -55,20 +56,14 @@ const sendAddToCartAnalytics = createActionWithAnalytics(
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
     return dispatch(connector.addToCart(productId, quantity)).then((cart) => {
         const currentState = getState()
-        const cartCount = getCartSummaryCount(currentState) + quantity
+        const cartCount = getCartSummaryCount(currentState)
         const subtotal = getSubtotal(currentState)
+        const product = getProductById(productId)(currentState).toJS()
 
-        const cartItems = getCartItems(currentState)
-
-        let matchedItem = null
-        if (cartItems) {
-            matchedItem = cartItems.find((item) => (item.id === productId))
-        }
-        dispatch(sendAddToCartAnalytics(cartCount, subtotal, matchedItem))
+        dispatch(sendAddToCartAnalytics(cartCount, subtotal, product))
 
         return cart
     })
-
 }
 
 /**
