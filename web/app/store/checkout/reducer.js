@@ -18,10 +18,8 @@ const checkoutReducer = handleActions({
     [integrationManagerResults.receiveUserEmail]: mergePayload,
     [integrationManagerResults.receiveCheckoutCustomContent]: mergePayload,
     [integrationManagerResults.receiveLocationsCustomContent]: setCustomContent('locations'),
-    [integrationManagerResults.receiveShippingCustomContent]: setCustomContent('shipping'),
-    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shipping', 'address'),
-    [integrationManagerResults.receiveBillingCustomContent]: setCustomContent('billing'),
-    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billing', 'address'),
+    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shippingAddress'),
+    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billingAddress'),
     [integrationManagerResults.receiveShippingMethods]: (state, {payload}) => (
         // Using `set` here will make sure the list in the store is
         // correctly truncated.
