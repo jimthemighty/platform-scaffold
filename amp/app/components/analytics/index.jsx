@@ -89,7 +89,6 @@ GoogleAnalyticsTag.propTypes = {
     templateName: PropTypes.string.isRequired
 }
 
-
 /**
  * Analytics
  */
