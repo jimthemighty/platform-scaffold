@@ -22,8 +22,6 @@ const checkoutReducer = handleActions({
     [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shipping', 'address'),
     [integrationManagerResults.receiveBillingCustomContent]: setCustomContent('billing'),
     [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billing', 'address'),
-    [integrationManagerResults.receivePaymentCustomContent]: setCustomContent('payment'),
-    [integrationManagerResults.receivePaymentAddressCustomContent]: setCustomContent('payment', 'address'),
     [integrationManagerResults.receiveShippingMethods]: (state, {payload}) => (
         // Using `set` here will make sure the list in the store is
         // correctly truncated.
