@@ -36,15 +36,17 @@ Cart.prototype.removeItems = function() {
         .log('Opening mini cart')
         .waitForElementVisible(selectors.miniCart)
         .click(selectors.miniCart)
+        .waitForAnimation()
         .element('css selector', selectors.viewCart, (result) => {
             if (result.value && result.value.ELEMENT) {
                 self.browser
                     .log('View cart')
+                    .waitForElementVisible(selectors.viewCart)
                     .click(selectors.viewCart)
                     .log('Removing item from cart')
-                    .trigger(selectors.removeItem)
+                    .execute(`document.querySelector('${selectors.removeItem}').click()`)
                     .waitForElementVisible(selectors.confirmRemove)
-                    .click(selectors.confirmRemove)
+                    .execute(`document.querySelector('${selectors.confirmRemove}').click()`)
                     .waitUntilMobified()
                     .waitForElementVisible(selectors.emptyCart)
                 self.removeItems()
