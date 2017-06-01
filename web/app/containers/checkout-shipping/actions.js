@@ -4,6 +4,7 @@
 
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
@@ -18,6 +19,7 @@ import {customCommands} from '../../integration-manager/custom/commands'
 import {login} from '../../integration-manager/account/commands'
 
 import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'
+import {getSelectedSavedShippingAddress} from '../../store/checkout/shipping/selectors'
 import {addNotification, removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 
 export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields (Shipping)')
@@ -57,9 +59,23 @@ export const submitSignIn = () => (dispatch, getState) => {
         .catch((error) => dispatch(onShippingLoginError(error.message)))
 }
 
+const submitShippingSelector = createPropsSelector({
+    address: getSelectedSavedShippingAddress,
+    formValues: getShippingFormValues
+})
+
 export const submitShipping = () => (dispatch, getState) => {
-    const currentState = getState()
-    const formValues = getShippingFormValues(currentState)
+    const shippingSelections = submitShippingSelector(getState())
+    let formValues = shippingSelections.formValues
+    const savedAddress = shippingSelections.address
+    if (savedAddress) {
+        formValues = {
+            ...formValues,
+            ...savedAddress
+        }
+    }
+
+
     const {firstname, lastname} = splitFullName(formValues.name)
     const address = {
         firstname,

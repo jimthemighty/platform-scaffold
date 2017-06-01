@@ -13,7 +13,6 @@ import {
     receiveCheckoutLocations,
     receiveShippingAddress,
     receiveCheckoutConfirmationData,
-    receiveBillingInitialValues,
     setDefaultShippingAddressId,
     receiveSavedShippingAddresses,
     receiveBillingAddress,
@@ -124,44 +123,32 @@ export const initCheckoutConfirmationPage = (url) => (dispatch) => {
 }
 
 export const submitShipping = (formValues) => (dispatch, getState) => {
-    const currentState = getState()
-    const savedAddress = formValues.saved_address
+    const savedAddress = formValues.savedAddress
     const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
-    let address
 
-    // Format the shipping address according to whether it's a saved or new address
-    if (submittingWithNewAddress) {
-        const {name} = formValues
-        const names = name.split(' ')
-        const newAddress = formValues
+    // Format the shipping address
+    const {name} = formValues
+    const names = name.split(' ')
+    const newAddress = formValues
 
-        address = {
-            firstname: names.slice(0, -1).join(' '),
-            lastname: names.slice(-1).join(' '),
-            company: newAddress.company || '',
-            telephone: newAddress.telephone,
-            postcode: newAddress.postcode,
-            city: newAddress.city,
-            street: newAddress.addressLine2
-                ? [newAddress.addressLine1, newAddress.addressLine2]
-                : [newAddress.addressLine1],
-            regionId: newAddress.regionId,
-            region: newAddress.region,
-            countryId: newAddress.countryId,
-            saveInAddressBook: true
-        }
-    } else {
-        const {saved_address} = formValues
-        const savedAddress = shippingSelectors.getSavedAddresses(currentState).toJS()
-            .filter(({customerAddressId}) => {
-                return parseInt(customerAddressId) === parseInt(saved_address)
-            })[0] || {}
+    const address = {
+        firstname: names.slice(0, -1).join(' '),
+        lastname: names.slice(-1).join(' '),
+        company: newAddress.company || '',
+        telephone: newAddress.telephone,
+        postcode: newAddress.postcode,
+        city: newAddress.city,
+        street: newAddress.addressLine2
+            ? [newAddress.addressLine1, newAddress.addressLine2]
+            : [newAddress.addressLine1],
+        regionId: newAddress.regionId,
+        region: newAddress.region,
+        countryId: newAddress.countryId,
+        saveInAddressBook: true
+    }
 
-        address = {
-            ...savedAddress,
-            region: savedAddress.region,
-            saveInAddressBook: false
-        }
+    if (!submittingWithNewAddress) {
+        address.saveInAddressBook = false
 
         delete address.default_billing
         delete address.default_shipping
@@ -181,7 +168,7 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             shipping_method_code: shippingSelections[1]
         }
     }
-    const cartBaseUrl = getCartBaseUrl(currentState)
+    const cartBaseUrl = getCartBaseUrl(getState())
     const persistShippingURL = `${cartBaseUrl}/shipping-information`
     return makeJsonEncodedRequest(persistShippingURL, addressData, {method: 'POST'})
         .then((response) => {

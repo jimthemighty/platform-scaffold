@@ -32,7 +32,7 @@ const validate = (values, props) => {
         'postcode',
         'telephone'
     ]
-    const isSavedAddressSelected = !!values.saved_address
+    const isSavedAddressSelected = !!values.savedAddress
 
     if (isSavedAddressSelected) {
         // If user has chosen a saved address, no further validation necessary
@@ -66,8 +66,7 @@ class CheckoutShippingForm extends React.Component {
         return new Promise((resolve, reject) => {
             const errors = validate(values, this.props)
             if (!Object.keys(errors).length) {
-                this.props.submitShipping()
-                return resolve()
+                return this.props.submitShipping()
             }
             return reject(new ReduxForm.SubmissionError(errors))
         })
