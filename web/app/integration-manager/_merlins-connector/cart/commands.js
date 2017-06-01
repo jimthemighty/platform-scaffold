@@ -10,7 +10,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getUenc, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
-import {receiveCartContents} from '../../cart/results'
+import {receiveCartContents, receiveCartTotals} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
 import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
 import {parseLocations} from '../checkout/parsers'
@@ -163,9 +163,16 @@ const getCartTotals = (address, shippingMethod) => (dispatch, getState) => {
 
     return makeJsonEncodedRequest(`${cartBaseUrl}/totals-information`, requestData, {method: 'POST'})
         .then((response) => response.json())
-        .then((responseJSON) => dispatch(receiveCartContents(
-            parseCartTotals(responseJSON)
-        )))
+        .then((responseJSON) => {
+            const {
+                shipping,
+                discount,
+                subtotal,
+                tax,
+                orderTotal
+            } = parseCartTotals(responseJSON)
+            return dispatch(receiveCartTotals(shipping, discount, subtotal, tax, orderTotal))
+        })
 }
 
 export const fetchTaxEstimate = getCartTotals
