@@ -221,12 +221,8 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         })
 }
 
-export const fetchSavedShippingAddresses = (isLoggedIn) => {
+export const fetchSavedShippingAddresses = () => {
     return (dispatch) => {
-        if (!isLoggedIn) {
-            return false
-        }
-
         const fetchURL = `/rest/default/V1/carts/mine`
         return makeRequest(fetchURL, {method: 'GET'})
             .then((response) => response.json())
