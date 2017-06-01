@@ -105,13 +105,14 @@ const processCheckoutData = ($response) => (dispatch) => {
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
-        .then(() => dispatch(fetchShippingMethodsEstimate(getShippingFormValues(getState()))))
         .then(() => {
             if (getIsLoggedIn(getState())) {
                 return dispatch(fetchSavedShippingAddresses())
             }
             return Promise.resolve()
         })
+        .then(() => dispatch(fetchShippingMethodsEstimate(getShippingFormValues(getState()))))
+        
 }
 
 export const initCheckoutConfirmationPage = (url) => (dispatch) => {
