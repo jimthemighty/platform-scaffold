@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+import Runtypes from 'runtypes'
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 import {EVENT_ACTION, Transaction, Product} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getCartItems, getOrderTotal, getTax} from '../../store/cart/selectors'
@@ -11,11 +12,11 @@ import {LocationList, ShippingMethods, Address} from './types'
 export const receiveCheckoutLocations = createTypedAction('Receive Checkout Locations', LocationList, 'locations')
 export const receiveShippingMethods = createTypedAction('Receive Shipping Methods', ShippingMethods)
 export const receiveShippingAddress = createTypedAction('Receive Shipping Address', Address, 'shippingAddress')
+export const receiveBillingAddress = createTypedAction('Receive Billing Address', Address, 'billingAddress')
+export const receiveHasExistingCard = createTypedAction('Receive Has Existing Cart flag', Runtypes.Boolean, 'hasExistingCreditCard')
 
 export const receiveCheckoutData = createAction('Receive Checkout Data')
 export const receiveCheckoutCustomContent = createAction('Receive Checkout Custom Content', ['custom'])
-export const receiveHasExistingCard = createAction('Receive Has Existing Cart flag', ['hasExistingCreditCard'])
-export const receiveBillingAddress = createAction('Receive Billing Initial Values', ['billingAddress'])
 
 const remapProducts = (products) => {
     const mappedProducts = []
