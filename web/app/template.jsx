@@ -29,8 +29,8 @@ const template = (WrappedComponent) => {
             if (route.fetchAction) {
                 dispatch(route.fetchAction(route.fetchUrl || url, route.routeName))
                     .then(() => dispatch(setFetchedPage(url)))
-                    .then(() => dispatch(checkIfOffline()))
                     .catch((error) => console.error(`Error executing fetch action for ${route.routeName}`, error))
+                    .then(() => dispatch(checkIfOffline()))
             }
             dispatch(removeAllNotifications())
         }

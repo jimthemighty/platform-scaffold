@@ -25,10 +25,12 @@ import configureStore from './store'
 import Stylesheet from './stylesheet.scss' // eslint-disable-line no-unused-vars
 
 
+// DO NOT USE! Merlins Connector is an example connector that is for demo only
 import {Connector} from './integration-manager/_merlins-connector'
 // import {Connector} from './integration-manager/_sfcc-connector'
+import connectorExtension from './connector-extension'
 
-import {registerConnector} from './integration-manager'
+import {registerConnector, registerConnectorExtension} from './integration-manager'
 
 // This is okay to pass to both SFCC and Merlin's connectors,
 // as Merlin's doesn't need a configuration object
@@ -36,6 +38,7 @@ registerConnector(Connector({
     siteID: '2017refresh',
     clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93'
 }))
+registerConnectorExtension(connectorExtension)
 
 initCacheManifest(cacheHashManifest)
 

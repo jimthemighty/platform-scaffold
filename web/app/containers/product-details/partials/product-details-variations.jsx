@@ -9,31 +9,34 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getProductVariationCategories} from '../../../store/products/selectors'
 import {onVariationChange} from '../actions'
 
+import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Field from 'progressive-web-sdk/dist/components/field'
 
-const ProductDetailsVariations = ({variations, onVariationChange}) => {
-    return (
-        <div>
-            {variations.map(({id, label, values = []}) => (
+const ProductDetailsVariations = ({variations, onVariationChange}) => (
+    <div className={variations.length > 0 && 'u-margin-top-lg'}>
+        {variations.map(({id, label, values = []}) => (
+            <FieldRow key={id}>
                 <ReduxForm.Field
                     label={label}
                     name={id}
                     component={Field}
-                    key={id}
-                    className="u-margin-bottom-lg u-margin-top"
-                    customEventHandlers={{
-                        onChange: onVariationChange
-                    }}
+                    className="pw--has-select"
+                    customEventHandlers={{onChange: onVariationChange}}
                 >
                     <select name={id}>
                         <option disabled value="">{label}</option>
-                        {values.map(({label, value}) => <option value={value} key={value}>{label}</option>)}
+
+                        {values.map(({label, value}) =>
+                            <option value={value} key={value}>
+                                {label}
+                            </option>
+                        )}
                     </select>
                 </ReduxForm.Field>
-            ))}
-        </div>
-    )
-}
+            </FieldRow>
+        ))}
+    </div>
+)
 
 ProductDetailsVariations.propTypes = {
     variations: PropTypes.arrayOf(PropTypes.shape({

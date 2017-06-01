@@ -60,11 +60,11 @@
 // ---
 
 .t-header__link {
-    color: $neutral-00;
+    color: currentColor;
 
     &:focus,
     &:active {
-        color: $neutral-00;
+        color: currentColor;
     }
 
     .c-button__inner {
