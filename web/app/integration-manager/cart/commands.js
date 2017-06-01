@@ -2,9 +2,9 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
-import {EVENT_ACTION, Transaction, Product} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {getCartSummaryCount} from '../../store/cart/selectors'
+import {createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
+import {EVENT_ACTION, Product, ShoppingList} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {getCartSummaryCount, getSubtotal, getCartItems} from '../../store/cart/selectors'
 
 let connector = {}
 
@@ -27,7 +27,14 @@ const createCartAction = createActionWithAnalytics(
     'Add to cart complete',
     ['cart_count'],
     EVENT_ACTION.addToCart,
-    (cart_count) => ({cart_count})
+    (cartCount, subtotal, addedItem) => ({
+        cart: {
+            [ShoppingList.TYPE]: 'cart',
+            [ShoppingList.COUNT]: cartCount,
+            [ShoppingList.SUBTOTAL]: subtotal
+        },
+        product: addedItem
+    })
 )
 
 /**
@@ -36,12 +43,36 @@ const createCartAction = createActionWithAnalytics(
  * @param quantity {number} The quantity to add
  */
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
-    return connector.addToCart(productId, quantity)(dispatch, getState)
-            .then((cart) => {
-                const cartCount = getCartSummaryCount(getState())
-                const cartAction = createCartAction(cartCount)
-                dispatch(cartAction)
-            })
+    return dispatch(connector.addToCart(productId, quantity)).then((cart) => {
+        const currentState = getState()
+        const cartCount = getCartSummaryCount(currentState) + quantity
+        const subtotal = getSubtotal(currentState)
+
+        const cartItems = getCartItems(currentState)
+
+        let matchedProduct = {}
+        if (cartItems) {
+            const matchedItem = cartItems.find((item) => (item.id === productId))
+            if (matchedItem) {
+                matchedProduct = {
+                    [Product.ID]: matchedItem.id,
+                    [Product.NAME]: matchedItem.title,
+                    [Product.PRICE]: matchedItem.price
+                }
+            }
+        }
+
+        // find the cartItems that have the same productId
+        const cartAction = createCartAction(
+            cartCount,
+            subtotal,
+            matchedProduct
+        )
+        dispatch(cartAction)
+
+        return cart
+    })
+
 }
 
 /**
