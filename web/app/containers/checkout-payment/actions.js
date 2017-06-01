@@ -9,7 +9,7 @@ import {getEmailAddress} from '../../store/checkout/selectors'
 import {getShippingAddress} from '../../store/checkout/shipping/selectors'
 import {submitPayment as submitPaymentCommand} from '../../integration-manager/checkout/commands'
 import {splitFullName} from '../../utils/utils'
-import {receiveCheckoutData} from '../../integration-manager/checkout/results'
+import {receiveBillingAddress} from '../../integration-manager/checkout/results'
 
 export const receiveContents = createAction('Received CheckoutPayment Contents')
 export const toggleFixedPlaceOrder = createAction('Toggled the fixed "Place Order" container', ['isFixedPlaceOrderShown'])
@@ -49,7 +49,7 @@ export const submitPayment = () => (dispatch, getState) => {
         }
     }
 
-    dispatch(receiveCheckoutData({billing: {address}}))
+    dispatch(receiveBillingAddress(address))
     return dispatch(submitPaymentCommand({...address, ...paymentInfo}))
         .then((url) => {
             browserHistory.push({
