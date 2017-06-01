@@ -158,7 +158,7 @@ const attemptToInitializeApp = () => {
         // Gather analytics information indicating loading is happening, so we can determine
         // the % of people who don't make it to the pageview.
         Sandy.init(window)
-        Sandy.create(AJS_SLUG, 'auto')
+        Sandy.create(AJS_SLUG, 'auto') // eslint-disable-line no-undef
         const tracker = Sandy.trackers[Sandy.DEFAULT_TRACKER_NAME]
         tracker.set('mobify_adapted', true)
         tracker.set('platform', 'PWA')
