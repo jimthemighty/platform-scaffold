@@ -30,7 +30,7 @@ export default {
     },
 
     after: (browser) => {
-        cart.removeItems()
+        // cart.removeItems()
         browser.end()
     },
 

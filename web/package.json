@@ -89,6 +89,7 @@
     "react-styleguidist": "4.1.0",
     "redux-form": "6.1.1",
     "rimraf": "2.6.1",
+    "sandy-tracking-pixel-client": "^0.1.21",
     "sass-lint": "1.10.2",
     "sass-loader": "6.0.3",
     "stylelint": "7.10.1",
