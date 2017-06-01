@@ -23,10 +23,10 @@ config:
     pwa: true
 
     # The App ID for iOS
-    apn_app_id: "com.mobify.astro.scaffold"
+    apn_app_id: "ios.com.merlinspotions.www"
 
-    # The name of the certificate used for native push.
-    apn_native_certificate_name: "com.mobify.astro.scaffold"
+    # The name of the certificate used for iOS push.
+    apn_native_certificate_name: "ios.com.merlinspotions.www"
 
     # Send a push message to new subscribers confirming
     # that they have subscribed.
