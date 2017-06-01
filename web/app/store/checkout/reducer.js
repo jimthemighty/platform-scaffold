@@ -10,18 +10,14 @@ import * as integrationManagerResults from '../../integration-manager/checkout/r
 const checkoutReducer = handleActions({
     [integrationManagerResults.receiveSavedShippingAddresses]: mergePayload,
     [integrationManagerResults.receiveCheckoutLocations]: mergePayload,
-    [integrationManagerResults.receiveBillingInitialValues]: mergePayload,
-    [integrationManagerResults.receiveShippingInitialValues]: mergePayload,
+    [integrationManagerResults.receiveBillingAddress]: mergePayload,
+    [integrationManagerResults.receiveShippingAddress]: mergePayload,
     [integrationManagerResults.receiveCheckoutData]: mergePayload,
     [integrationManagerResults.receiveUserEmail]: mergePayload,
     [integrationManagerResults.receiveCheckoutCustomContent]: mergePayload,
     [integrationManagerResults.receiveLocationsCustomContent]: setCustomContent('locations'),
-    [integrationManagerResults.receiveShippingCustomContent]: setCustomContent('shipping'),
-    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shipping', 'address'),
-    [integrationManagerResults.receiveBillingCustomContent]: setCustomContent('billing'),
-    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billing', 'address'),
-    [integrationManagerResults.receivePaymentCustomContent]: setCustomContent('payment'),
-    [integrationManagerResults.receivePaymentAddressCustomContent]: setCustomContent('payment', 'address'),
+    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shippingAddress'),
+    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billingAddress'),
     [integrationManagerResults.receiveShippingMethods]: (state, {payload}) => (
         // Using `set` here will make sure the list in the store is
         // correctly truncated.

@@ -13,13 +13,11 @@ export const receiveShippingMethods = createTypedAction('Receive Shipping Method
 
 export const receiveCheckoutData = createAction('Receive Checkout Data')
 export const receiveCheckoutCustomContent = createAction('Receive Checkout Custom Content', ['custom'])
-export const receiveShippingInitialValues = createAction('Receive Shipping Initial Values', ['shipping'])
+export const receiveShippingAddress = createAction('Receive Shipping Initial Values', ['shippingAddress'])
 export const receiveHasExistingCard = createAction('Receive Has Existing Cart flag', ['hasExistingCreditCard'])
-export const receiveBillingInitialValues = createAction('Receive Billing Initial Values', ['billing'])
+export const receiveBillingAddress = createAction('Receive Billing Initial Values', ['billingAddress'])
 export const setDefaultShippingAddressId = createAction('Receive default shipping address ID', ['defaultShippingAddressId'])
 export const receiveSavedShippingAddresses = createAction('Receive Saved Shipping Addresses', ['storedAddresses'])
-
-
 
 const remapProducts = (products) => {
     const mappedProducts = []
@@ -64,9 +62,5 @@ export const receiveCheckoutConfirmationData = (confirmationData) => (dispatch, 
 
 export const receiveUserEmail = createAction('Receive User Email Address', ['emailAddress'])
 export const receiveLocationsCustomContent = createAction('Receive Locations Custom Content')
-export const receiveShippingCustomContent = createAction('Receive Shipping Custom Content')
 export const receiveShippingAddressCustomContent = createAction('Receive Shipping Address Custom Content')
-export const receiveBillingCustomContent = createAction('Receive Billing Custom Content')
 export const receiveBillingAddressCustomContent = createAction('Receive Billing Address Custom Content')
-export const receivePaymentCustomContent = createAction('Receive Payment Custom Content')
-export const receivePaymentAddressCustomContent = createAction('Receive Payment Address Custom Content')

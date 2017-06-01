@@ -2,14 +2,24 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+const removeUndefinedAddressKeys = (addressData) => {
+    for (const item in addressData) {
+        if (!addressData[item]) {
+            delete addressData[item]
+        }
+    }
+
+    return addressData
+}
+
 export const getNameValue = (firstname, lastname) =>
       [firstname, lastname].filter((item) => item).join(' ')
 
 export const parseShippingInitialValues = (shippingFieldData) => {
     const fieldData = shippingFieldData.toJS()
     const streetFields = fieldData.street.children
-    return {
-        name: getNameValue(fieldData.firstname, fieldData.lastname),
+    const addressData = {
+        name: getNameValue(fieldData.firstname.value, fieldData.lastname.value),
         addressLine1: streetFields[0].value,
         company: fieldData.company.value,
         addressLine2: streetFields[1].value,
@@ -20,6 +30,9 @@ export const parseShippingInitialValues = (shippingFieldData) => {
         telephone: fieldData.telephone.value,
         billing_same_as_shipping: true
     }
+
+    // Remove undefined keys to prevent valid content being overriden in the store
+    return removeUndefinedAddressKeys(addressData)
 }
 
 /* eslint-disable camelcase */

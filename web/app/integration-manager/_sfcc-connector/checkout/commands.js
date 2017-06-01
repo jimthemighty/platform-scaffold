@@ -11,9 +11,9 @@ import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveShippingMethods, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress} from './../../checkout/results'
 
-export const fetchShippingMethodsEstimate = () => (dispatch) => {
+export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch) => {
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
         .then((response) => response.json())
@@ -24,6 +24,14 @@ export const fetchShippingMethodsEstimate = () => (dispatch) => {
                       cost: `$${price.toFixed(2)}`,
                       id
                   }))
+
+            dispatch(receiveShippingAddress({
+                shipping_method: shippingMethods[0].id,
+                postcode: inputAddress.postcode,
+                countryId: inputAddress.countryId,
+                region: inputAddress.region,
+                regionId: inputAddress.regionId
+            })) // set initial values for the shipping form
 
             return dispatch(receiveShippingMethods(shippingMethods))
         })
@@ -63,7 +71,7 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                     countryId: 'us'
                 }
             }
-            dispatch(receiveShippingInitialValues({initialValues}))
+            dispatch(receiveShippingAddress(initialValues))
             /* eslint-enable camelcase */
             return dispatch(populateLocationsData())
         })
@@ -79,8 +87,8 @@ export const initCheckoutPaymentPage = () => (dispatch) => {
         .then((basket) => {
             const addressData = parseShippingAddressFromBasket(basket)
 
-            dispatch(receiveShippingInitialValues({initialValues: addressData}))
-            dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
+            dispatch(receiveShippingAddress(addressData))
+            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
         })
 }
 
