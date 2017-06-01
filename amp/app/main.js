@@ -18,7 +18,7 @@ import Analytics from './components/analytics'
 import * as home from './containers/home/container'
 import * as pdp from './containers/pdp/container'
 import * as plp from './containers/plp/container'
-
+import AppComponent from './containers/app/container'
 
 
 import ampPage from './templates/amp-page'
@@ -62,8 +62,10 @@ const render = (req, res, store, component, css) => {
         <ampSDK.AmpContext declareDependency={scripts.add}>
             <Provider store={store}>
                 <div>
-                    <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
-                    {React.createElement(component, {}, null)}
+                    <AppComponent>
+                        <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                        {React.createElement(component, {}, null)}
+                    </AppComponent>
                 </div>
             </Provider>
         </ampSDK.AmpContext>
