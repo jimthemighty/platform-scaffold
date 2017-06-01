@@ -3,8 +3,7 @@
 import Analytics from '../components/analytics'
 ```
 
-There should only be one of these in a template. Usually this will be included
-at a higher level than a page template (main.js).
+There should only be one of these in a page. 
 
 ## Example Usage
 

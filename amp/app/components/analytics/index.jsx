@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import * as ampSDK from '../../amp-sdk'
 
-const genEngagementEngineTag = (templateName, projectSlug) => {
+const EngagementEngineTag = ({templateName, projectSlug}) => {
     /* eslint-disable max-len */
     const engagementConfig = {
         vars: {
@@ -45,7 +45,7 @@ const genEngagementEngineTag = (templateName, projectSlug) => {
     )
 }
 
-const genGoogleAnalyticsTag = (templateName, gaAccount) => {
+const GoogleAnalyticsTag = ({templateName, gaAccount}) => {
     const gaConfig = {
         vars: {
             account: gaAccount
@@ -82,22 +82,12 @@ const genGoogleAnalyticsTag = (templateName, gaAccount) => {
 /**
  * Analytics
  */
-const Analytics = ({templateName, gaAccount, projectSlug}) => {
-    let engagementEngineTag = ''
-    if (projectSlug) {
-        engagementEngineTag = genEngagementEngineTag(templateName, projectSlug)
-    }
-
-    let gaTag = ''
-    if (gaAccount) {
-        gaTag = genGoogleAnalyticsTag(templateName, gaAccount)
-    }
-
-    return (<div>
-        {engagementEngineTag}
-        {gaTag}
-    </div>)
-}
+const Analytics = (props) => (
+    <div>
+        {props.projectSlug && <EngagementEngineTag {...props} /> }
+        {props.gaAccount && <GoogleAnalyticsTag {...props} /> }
+    </div>
+)
 
 Analytics.propTypes = {
     templateName: PropTypes.string.isRequired,
