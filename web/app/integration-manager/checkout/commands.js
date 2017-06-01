@@ -61,3 +61,5 @@ export const fetchShippingMethodsEstimate = (formName) => connector.fetchShippin
  */
 export const updateShippingAndBilling = () => connector.updateShippingAndBilling()
 
+
+export const fetchSavedShippingAddresses = () => connector.fetchSavedShippingAddresses()

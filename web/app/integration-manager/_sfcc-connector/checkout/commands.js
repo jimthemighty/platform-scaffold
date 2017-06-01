@@ -206,3 +206,5 @@ export const submitPayment = (formValues) => (dispatch) => {
 }
 
 export const updateShippingAndBilling = () => () => Promise.resolve()
+
+export const fetchSavedShippingAddresses = () => () => Promise.resolve()

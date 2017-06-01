@@ -16,6 +16,10 @@ export const receiveCheckoutCustomContent = createAction('Receive Checkout Custo
 export const receiveShippingInitialValues = createAction('Receive Shipping Initial Values', ['shipping'])
 export const receiveHasExistingCard = createAction('Receive Has Existing Cart flag', ['hasExistingCreditCard'])
 export const receiveBillingInitialValues = createAction('Receive Billing Initial Values', ['billing'])
+export const setDefaultShippingAddressId = createAction('Receive default shipping address ID', 'defaultShippingAddressId')
+export const receiveSavedShippingAddresses = createAction('Receive Saved Shipping Addresses', 'storedAddresses')
+
+
 
 const remapProducts = (products) => {
     const mappedProducts = []
