@@ -17,7 +17,6 @@ const fs = require('fs')
 const {success, info, error, step} = common
 
 const region = 'us-east-1'
-const s3StackName = 'amp-s3-assets'
 const deploymentBucket = 'amp-deployment.mobify.com'
 const packagedTemplate = 'packaged.yaml'
 const gitRevisionLength = 40
@@ -29,15 +28,15 @@ const join = (...args) => args.join('')
 
 
 /**
- * Ensure the required S3 buckets exist for deployment and hosting static assets.
+ * Ensure shared resources exist on AWS.
  */
-const createS3Buckets = ({aws, exec, domainName}) => {
-    step('Creating S3 buckets')
+const createdSharedResources = ({aws, exec, domainName}) => {
+    step('Creating shared resources')
     try {
         exec(join(
             `${aws} cloudformation deploy`,
             ` --template-file ./cloudformation-static.yaml`,
-            ` --stack-name ${s3StackName}`,
+            ` --stack-name amp--common`,
             ` --region ${region}`,
             ` --parameter-overrides DomainName=${domainName}`
         ))
@@ -56,7 +55,7 @@ const createS3Buckets = ({aws, exec, domainName}) => {
  */
 const syncStaticAssets = ({aws, exec, rev, staticDir}) => {
     step('Syncing static assets')
-    exec(`${aws} s3 sync ${staticDir} s3://amp-static.mobify.com/${rev}`)
+    exec(`${aws} s3 sync ${staticDir} s3://cdn.mobify.net/amp/v0/${rev}`)
 }
 
 /**
@@ -64,7 +63,7 @@ const syncStaticAssets = ({aws, exec, rev, staticDir}) => {
  */
 const deployApp = ({aws, exec, rev, appStackName}) => {
     step('Deploying the app')
-    const staticUrl = `http://amp-static.mobify.com.s3.amazonaws.com/${rev}/`
+    const staticUrl = `https://cdn.mobify.net/amp/v0/${rev}/`
 
     exec(join(
         `${aws} cloudformation package`,
@@ -162,7 +161,7 @@ const deploy = (argv) => {
         aws
     }
 
-    createS3Buckets(ctx)
+    createdSharedResources(ctx)
     syncStaticAssets(ctx)
     deployApp(ctx)
     const outputs = getStackOutputs(ctx)
