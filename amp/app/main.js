@@ -62,10 +62,10 @@ const render = (req, res, store, component, css) => {
         <ampSDK.AmpContext declareDependency={scripts.add}>
             <Provider store={store}>
                 <div>
-					<AppComponent>
-	                    <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
-    	                {React.createElement(component, {}, null)}
-					</AppComponent>
+                    <AppComponent>
+                        <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                        {React.createElement(component, {}, null)}
+                    </AppComponent>
                 </div>
             </Provider>
         </ampSDK.AmpContext>
