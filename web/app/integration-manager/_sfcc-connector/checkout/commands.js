@@ -11,7 +11,7 @@ import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress} from './../../checkout/results'
+import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress, receiveBillingSameAsShipping} from './../../checkout/results'
 
 export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch) => {
     return createBasket()
@@ -88,7 +88,8 @@ export const initCheckoutPaymentPage = () => (dispatch) => {
             const addressData = parseShippingAddressFromBasket(basket)
 
             dispatch(receiveShippingAddress(addressData))
-            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
+            dispatch(receiveBillingSameAsShipping(true))
+            dispatch(receiveBillingAddress(addressData))
         })
 }
 
@@ -155,7 +156,7 @@ const addPaymentMethod = (formValues, basket) => (dispatch, getState) => {
 }
 
 const setBillingAddress = (formValues, basket) => () => {
-    if (formValues.billing_same_as_shipping) {
+    if (formValues.billingSameAsShipping) {
         // No change to the address is necessary
         return Promise.resolve(basket)
     }
