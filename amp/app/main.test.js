@@ -22,11 +22,10 @@ describe('Renders valid AMP', () => {
                 eventEmitter: events.EventEmitter
             })
 
-            app.handle(req, res)
-
             res.on('end', () => resolve(res))
             res.on('send', () => resolve(res))
 
+            app.handle(req, res)
         })
     }
 
