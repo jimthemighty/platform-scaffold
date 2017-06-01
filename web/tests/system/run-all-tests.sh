@@ -39,6 +39,7 @@ else
       for testfile in $(find ./tests/system/workflows/ -name '*.js'| sort); do
         if [ $(expr $i % $(expr $CIRCLE_NODE_TOTAL - 1)) -eq $(expr $CIRCLE_NODE_INDEX - 1) ]; then
           echo 'Running test: ' ${testfile}
+          while ! echo exit | nc localhost 8443; do sleep 5; done
           npm run test:e2e --test ${testfile}
         fi
         ((i=i+1))
