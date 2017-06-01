@@ -38,12 +38,13 @@ export const Address = Runtypes.Record({
     firstname: Text,
     lastname: Text,
     addressLine1: Text,
-    addressLine2: Nullable(Text),
     city: Text,
-    // We expect one of these to be non-null
-    regionId: Nullable(Identifier),
-    region: Nullable(Text),
     countryId: CountryID,
     postcode: Text,
     telephone: Text
-})
+}).Add(Runtypes.Optional({
+    // We expect one of these to be non-null
+    regionId: Nullable(Identifier),
+    region: Nullable(Text),
+    addressLine2: Nullable(Text)
+}))
