@@ -15,7 +15,6 @@ export const receiveShippingAddress = createTypedAction('Receive Shipping Addres
 export const receiveBillingAddress = createTypedAction('Receive Billing Address', Address, 'billingAddress')
 export const receiveHasExistingCard = createTypedAction('Receive Has Existing Cart flag', Runtypes.Boolean, 'hasExistingCreditCard')
 
-export const receiveCheckoutData = createAction('Receive Checkout Data')
 export const receiveCheckoutCustomContent = createAction('Receive Checkout Custom Content', ['custom'])
 
 const remapProducts = (products) => {
