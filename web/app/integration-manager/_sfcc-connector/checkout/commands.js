@@ -79,8 +79,8 @@ export const initCheckoutPaymentPage = () => (dispatch) => {
         .then((basket) => {
             const addressData = parseShippingAddressFromBasket(basket)
 
-            dispatch(receiveShippingAddressValues(addressData))
-            dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
+            dispatch(receiveShippingAddress(addressData))
+            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
         })
 }
 

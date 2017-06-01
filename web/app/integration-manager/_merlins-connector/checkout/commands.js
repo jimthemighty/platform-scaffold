@@ -14,7 +14,7 @@ import {
     receiveCheckoutLocations,
     receiveShippingAddressValues,
     receiveCheckoutConfirmationData,
-    receiveBillingInitialValues,
+    receiveBillingAddress,
     receiveShippingMethods
 } from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
@@ -154,8 +154,8 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            const addressData = shippingSelectors.getInitialShippingAddress(getState())
-            dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
+            const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
+            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
             return dispatch(processCheckoutData($response))
         })
 }
