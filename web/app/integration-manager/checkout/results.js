@@ -58,7 +58,7 @@ export const receiveCheckoutConfirmationData = (confirmationData) => (dispatch, 
     }))
 }
 
-export const receiveUserEmail = createAction('Receive User Email Address', ['emailAddress'])
+export const receiveUserEmail = createAction('Receive User Email Address', ['email'])
 export const receiveLocationsCustomContent = createAction('Receive Locations Custom Content')
 export const receiveShippingAddressCustomContent = createAction('Receive Shipping Address Custom Content')
 export const receiveBillingAddressCustomContent = createAction('Receive Billing Address Custom Content')

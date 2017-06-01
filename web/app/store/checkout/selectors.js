@@ -9,7 +9,7 @@ import {createGetSelector} from 'reselect-immutable-helpers'
 import {getFormValues} from '../form/selectors'
 import {getCheckout} from '../selectors'
 
-export const getEmailAddress = createGetSelector(getCheckout, 'emailAddress')
+export const getEmailAddress = createGetSelector(getCheckout, 'email')
 
 export const getLocations = createGetSelector(getCheckout, 'locations', Immutable.Map())
 export const getCountries = createGetSelector(getLocations, 'countries', Immutable.List())
