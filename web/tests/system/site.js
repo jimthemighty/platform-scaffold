@@ -4,15 +4,15 @@
 
 var Site = {
     /*
-     activeProfile defines which environment to run tests against.
+     testProfile defines which environment to run tests against.
      By default, builds on master branch run against production, without preview.
      Builds on any other branch should use preview with local build.
-     $ACTIVE_PROFILE can be set in your runner.
-     Change activeProfile whenever you need to override the default behaviour.
+     $TEST_PROFILE can be set in your runner.
+     Change testProfile whenever you need to override the default behaviour.
 
      This should correspond to the connector being used in main.jsx.
     */
-    activeProfile: 'local',
+    testProfile: 'local',
 
     /*
      Define new profiles as needed for different URLs, eg. staging, prod.
