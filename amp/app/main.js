@@ -16,7 +16,7 @@ import * as awsServerlessExpress from 'aws-serverless-express'
 import * as home from './containers/home/container'
 import * as pdp from './containers/pdp/container'
 import * as plp from './containers/plp/container'
-
+import AppComponent from './containers/app/container'
 
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
@@ -57,7 +57,9 @@ const render = (req, res, store, component, css) => {
     const body = ReactDOMServer.renderToStaticMarkup(
         <Provider store={store}>
             <ampSDK.AmpContext declareDependency={scripts.add}>
-                {React.createElement(component, {}, null)}
+                <AppComponent>
+                    {React.createElement(component, {}, null)}
+                </AppComponent>
             </ampSDK.AmpContext>
         </Provider>
     )
