@@ -13,7 +13,6 @@ import {getInitialShippingAddress} from '../../../store/checkout/shipping/select
 
 import {submitShipping} from '../actions'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
-import {fetchSavedShippingAddresses} from '../../../store/checkout/shipping/actions'
 
 import {Grid, GridSpan} from 'progressive-web-sdk/dist/components/grid'
 import ShippingAddress from './shipping-address'
@@ -103,10 +102,6 @@ CheckoutShippingForm.propTypes = {
      */
     disabled: React.PropTypes.bool,
     /**
-     * Fetches the current user's saved addresses
-     */
-    fetchSavedAddresses: React.PropTypes.func,
-    /**
      * Redux-form internal
      */
     handleSubmit: React.PropTypes.func,
@@ -126,7 +121,6 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    fetchSavedAddresses: fetchSavedShippingAddresses,
     submitShipping
 }
 
