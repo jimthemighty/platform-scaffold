@@ -1,13 +1,16 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
+import Link from '../../components/link'
 import containerStyles from './container.scss'
+
 
 const containerClass = 't-home'
 
-const Home = ({links, title}) => {
-    return (
+const Home = ({links, title}) =>
+    (
         <div className={containerClass}>
             <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
             <AmpLightbox id="my-lightbox">
@@ -16,10 +19,10 @@ const Home = ({links, title}) => {
             <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
 
             <h1>{title}</h1>
+            <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
             {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
         </div>
     )
-}
 
 Home.propTypes = {
     /**
@@ -31,6 +34,8 @@ Home.propTypes = {
      */
     title: PropTypes.string
 }
+
+Home.templateName = 'home'
 
 const mapStateToProps = (state) => ({
     links: state.links,
