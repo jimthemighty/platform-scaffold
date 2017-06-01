@@ -47,8 +47,7 @@ Cart.prototype.removeItems = function() {
                     .execute(`document.querySelector('${selectors.removeItem}').click()`)
                     .waitForElementVisible(selectors.confirmRemove)
                     .execute(`document.querySelector('${selectors.confirmRemove}').click()`)
-                    .waitUntilMobified()
-                    .waitForElementVisible(selectors.emptyCart)
+                    .waitForAjaxCompleted()
                 self.removeItems()
             }
         })
