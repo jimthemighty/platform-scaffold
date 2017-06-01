@@ -110,7 +110,7 @@ app.use('/static', express.static(path.resolve('./app/static')))
 const onLambda = process.env.hasOwnProperty('AWS_LAMBDA_FUNCTION_NAME')
 
 
-if (!onLambda) {
+if (!onLambda && require.main === module) {
     app.listen(3000, () => console.log('Example app listening on port 3000!'))
 }
 
