@@ -21,7 +21,7 @@ export const setCvvType = createAction('Setting CVV type', ['cvvType'])
 export const submitPayment = () => (dispatch, getState) => {
     const currentState = getState()
     const billingFormValues = getPaymentBillingFormValues(currentState)
-    const billingIsSameAsShippingAddress = billingFormValues.billing_same_as_shipping
+    const billingIsSameAsShippingAddress = billingFormValues.billingSameAsShipping
 
     // Careful. This get's completely overwritten below
     let address = null
