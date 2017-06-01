@@ -15,7 +15,9 @@ import {
     receiveShippingInitialValues,
     receiveCheckoutConfirmationData,
     receiveBillingInitialValues,
-    receiveShippingMethods
+    receiveShippingMethods,
+    setDefaultShippingAddressId,
+    receiveSavedShippingAddresses
 } from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
 import {fetchPageData} from '../app/commands'
