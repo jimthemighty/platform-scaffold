@@ -50,7 +50,10 @@ module.exports = {
                         '--user-agent="Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Mobile Safari/537.36"',
                         'window-size=320,850',
                         '--allow-running-insecure-content',
-                        '--test-type'
+                        '--test-type',
+                        'headless',
+                        'no-sandbox',
+                        'disable-gpu'
                     ],
                     prefs: {
                         'profile.default_content_setting_values.notifications': 1
