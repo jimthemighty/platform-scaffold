@@ -66,7 +66,7 @@ const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-
  */
 export const loadAndInitMessagingClient = (debug, siteId) => {
     // Creating an early promise that users of the Messaging Client can
-    // chain means they don't need to poll for it's existence
+    // chain means they don't need to poll for its existence
     let clientInitResolver
     let clientInitRejecter
     window.Progressive.MessagingClientInitPromise = new Promise((resolve, reject) => {
