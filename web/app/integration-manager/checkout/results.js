@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import Runtypes from 'runtypes'
+import * as Runtypes from 'runtypes'
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 import {EVENT_ACTION, Transaction, Product} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getCartItems, getOrderTotal, getTax} from '../../store/cart/selectors'
