@@ -45,6 +45,11 @@ const EngagementEngineTag = ({templateName, projectSlug}) => {
     )
 }
 
+EngagementEngineTag.propTypes = {
+    projectSlug: PropTypes.string.isRequired,
+    templateName: PropTypes.string.isRequired
+}
+
 const GoogleAnalyticsTag = ({templateName, gaAccount}) => {
     const gaConfig = {
         vars: {
@@ -78,6 +83,12 @@ const GoogleAnalyticsTag = ({templateName, gaAccount}) => {
         </amp-analytics>
     )
 }
+
+GoogleAnalyticsTag.propTypes = {
+    gaAccount: PropTypes.string.isRequired,
+    templateName: PropTypes.string.isRequired
+}
+
 
 /**
  * Analytics
