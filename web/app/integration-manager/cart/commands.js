@@ -25,17 +25,24 @@ export const initCartPage = (url, routeName) => connector.initCartPage(url, rout
  */
 export const getCart = () => connector.getCart()
 
-const createCartAction = createActionWithAnalytics(
+const sendAddToCartAnalytics = createActionWithAnalytics(
     'Add to cart complete',
-    ['cart_count'],
+    [],
     EVENT_ACTION.addToCart,
-    (cartCount, subtotal, addedItem) => ({
-        cart: {
+    (count, subtotal, product) => ({
+        cart: new ShoppingList({
             [ShoppingList.TYPE]: 'cart',
-            [ShoppingList.COUNT]: cartCount,
-            [ShoppingList.SUBTOTAL]: subtotal
-        },
-        product: addedItem
+            count,
+            subtotal
+        }),
+        product: (
+            product ?
+                new Product({
+                    ...product,
+                    [Product.NAME]: product.title
+                })
+                : null
+        )
     })
 )
 
@@ -53,25 +60,11 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
 
         const cartItems = getCartItems(currentState)
 
-        let matchedProduct = {}
+        let matchedItem = null
         if (cartItems) {
-            const matchedItem = cartItems.find((item) => (item.id === productId))
-            if (matchedItem) {
-                matchedProduct = {
-                    [Product.ID]: matchedItem.id,
-                    [Product.NAME]: matchedItem.title,
-                    [Product.PRICE]: matchedItem.price
-                }
-            }
+            matchedItem = cartItems.find((item) => (item.id === productId))
         }
-
-        // find the cartItems that have the same productId
-        const cartAction = createCartAction(
-            cartCount,
-            subtotal,
-            matchedProduct
-        )
-        dispatch(cartAction)
+        dispatch(sendAddToCartAnalytics(cartCount, subtotal, matchedItem))
 
         return cart
     })
