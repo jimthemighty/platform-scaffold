@@ -1,28 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Static asset and code hosting on S3 for AMP (shared between projects)
+Description: Shared resources for AMP projects
 
 Resources:
-  StaticS3Bucket:
-    Type: AWS::S3::Bucket
-    Description: Public static assets
-    Properties:
-      BucketName: amp-static.mobify.com
-      AccessControl: PublicRead
-      WebsiteConfiguration:
-        IndexDocument: index.html
-        ErrorDocument: error.html
-    DeletionPolicy: Delete
-
-  StaticS3BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref StaticS3Bucket
-      PolicyDocument:
-        Statement:
-          Action: s3:GetObject
-          Effect: Allow
-          Resource: !Sub arn:aws:s3:::${StaticS3Bucket}/*
-          Principal: "*"
 
   DeploymentS3Bucket:
     Type: AWS::S3::Bucket
@@ -31,8 +10,3 @@ Resources:
       BucketName: amp-deployment.mobify.com
       AccessControl: Private
     DeletionPolicy: Delete
-
-Outputs:
-  StaticS3BucketURL:
-    Value: !GetAtt StaticS3Bucket.WebsiteURL
-    Description: URL for Amp static assets hosted on S3
