@@ -3,7 +3,10 @@
     "aws-serverless-express": "3.0.0",
     "encoding": "0.1.12",
     "express": "4.14.0",
-    "jsdom": "9.12.0"
+    "jsdom": "9.12.0",
+    "lodash.frompairs": "^4.0.1",
+    "reselect": "3.0.0",
+    "reselect-immutable-helpers": "1.2.2"
   },
   "devDependencies": {
     "amphtml-validator": "^1.0.20",
@@ -28,7 +31,7 @@
     "express-mocks-http": "0.0.11",
     "git-rev-sync": "1.9.1",
     "jest-cli": "19.0.2",
-    "mobify-amp-sdk": "ssh+git://git@github.com:mobify/mobify-amp-sdk.git#master",
+    "mobify-amp-sdk": "0.0.2",
     "mobify-code-style": "2.8.3",
     "ncp": "2.0.0",
     "node-fetch": "1.6.3",
