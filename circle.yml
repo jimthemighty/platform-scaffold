@@ -25,7 +25,7 @@ test:
         - ./tests/system/run-all-tests.sh:
             pwd: web
             parallel: true
-        - npm test:all:
+        - npm run test:all:
             pwd: amp
     post:
        - cp -R lighthouse/* $CIRCLE_ARTIFACTS:
