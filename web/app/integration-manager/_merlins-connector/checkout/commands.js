@@ -23,7 +23,6 @@ import {getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
-import {getIsLoggedIn} from '../../../store/user/selectors'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
 import {prepareEstimateAddress} from '../utils'
 
@@ -132,9 +131,8 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             shipping_method_code: shippingSelections[1]
         }
     }
-    const entityID = getCustomerEntityID(currentState)
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const persistShippingURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/shipping-information`
+    const cartBaseUrl = getCartBaseUrl(currentState)
+    const persistShippingURL = `${cartBaseUrl}/shipping-information`
     return makeJsonEncodedRequest(persistShippingURL, addressData, {method: 'POST'})
         .then((response) => {
             if (response.status === 400) {
@@ -164,8 +162,8 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
 
 export const submitPayment = (formValues) => (dispatch, getState) => {
     const currentState = getState()
+    const cartBaseUrl = getCartBaseUrl(currentState)
     const entityID = getCustomerEntityID(currentState)
-    const isLoggedIn = getIsLoggedIn(currentState)
     const {
         firstname,
         lastname,
@@ -208,7 +206,7 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         }
     }
 
-    const persistPaymentURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/payment-information`
+    const persistPaymentURL = `${cartBaseUrl}/payment-information`
     // Save payment address for confirmation
     dispatch(receiveCheckoutData({payment: {address}}))
     return makeJsonEncodedRequest(persistPaymentURL, paymentInformation, {method: 'POST'})
