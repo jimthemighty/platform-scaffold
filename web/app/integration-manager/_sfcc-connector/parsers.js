@@ -60,14 +60,14 @@ export const parseProductDetails = ({id, name, price, inventory, long_descriptio
         available: inventory.orderable,
         thumbnail: images[0],
         images,
-        initialValues: setInitialVariantValues(variants, id, variation_attributes),
-        variationCategories: parseVariationCategories(variation_attributes),
-        variants: variants.map(({product_id, variation_values}) => {
+        initialValues: variants ? setInitialVariantValues(variants, id, variation_attributes) : [],
+        variationCategories: variants ? parseVariationCategories(variation_attributes) : [],
+        variants: variants ? variants.map(({product_id, variation_values}) => {
             return {
                 id: product_id,
                 values: variation_values
             }
-        })
+        }) : []
     }
 }
 
@@ -101,7 +101,7 @@ export const parseBasketContents = ({product_items, product_sub_total, product_t
 export const getCurrentProductID = (url) => {
     let productID
 
-    let productIDMatch = /(\d+).html/.exec(url)
+    let productIDMatch = /\/([^/]+).html/.exec(url)
 
     if (productIDMatch) {
         productID = productIDMatch[1]

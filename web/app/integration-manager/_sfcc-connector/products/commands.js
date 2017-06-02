@@ -30,7 +30,8 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 
             // since the pathname will always be master, the productHref will
             // only === pathname when landing on master page
-            if (getProductHref(productDetailsData.id) === window.location.pathname) {
+
+            if (getProductHref(productDetailsData.id) === window.location.pathname && productDetailsData.variants) {
                 const {variants, initialValues} = productDetailsData
                 const defaultVariant = getInitialSelectedVariant(variants, initialValues)
                 const currentProductHref = defaultVariant.id
