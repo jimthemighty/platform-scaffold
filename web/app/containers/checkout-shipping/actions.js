@@ -60,20 +60,40 @@ export const submitSignIn = () => (dispatch, getState) => {
 
 export const submitShipping = () => (dispatch, getState) => {
     const currentState = getState()
-    const formValues = getShippingFormValues(currentState)
-    const {firstname, lastname} = splitFullName(formValues.name)
+    const {
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
+        shippingMethodId,
+        username
+    } = getShippingFormValues(currentState)
+    const {firstname, lastname} = splitFullName(name)
     const address = {
         firstname,
         lastname,
-        ...formValues
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
     }
 
-    if (formValues.username) {
-        dispatch(receiveCheckoutData({emailAddress: formValues.username}))
+    if (username) {
+        dispatch(receiveCheckoutData({emailAddress: username}))
     }
-    dispatch(receiveSelectedShippingMethod(formValues.shippingMethodId))
+    dispatch(receiveSelectedShippingMethod(shippingMethodId))
     dispatch(receiveShippingAddress(address))
-    return dispatch(submitShippingCommand(address))
+    return dispatch(submitShippingCommand({...address, shippingMethodId}))
         .then((paymentURL) => {
             browserHistory.push({
                 pathname: paymentURL
