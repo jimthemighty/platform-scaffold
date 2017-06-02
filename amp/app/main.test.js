@@ -6,10 +6,10 @@ import events from 'events'
 import app from './main'
 
 describe('Renders valid AMP', () => {
-    let validator;
+    let validator
 
     beforeAll(() => {
-        return AmpHtmlValidator.getInstance().then(v => validator = v)
+        return AmpHtmlValidator.getInstance().then((v) => { validator = v })
     })
 
     const validateAmp = (html) => {
@@ -17,7 +17,7 @@ describe('Renders valid AMP', () => {
     }
 
     const handle = (req) => {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             const res = httpMocks.createResponse({
                 eventEmitter: events.EventEmitter
             })
@@ -34,22 +34,22 @@ describe('Renders valid AMP', () => {
             method: 'GET',
             url: '/'
         })
-        return handle(req).then(res => validateAmp(res._getData()))
+        return handle(req).then((res) => validateAmp(res._getData()))
     })
 
-    test('PLP', () => {
+    test('ProductList', () => {
         const req = httpMocks.createRequest({
             method: 'GET',
             url: '/potions.html'
         })
-        return handle(req).then(res => validateAmp(res._getData()))
+        return handle(req).then((res) => validateAmp(res._getData()))
     })
 
-    test('PDP', () => {
+    test('ProductDetails', () => {
         const req = httpMocks.createRequest({
             method: 'GET',
             url: '/eye-of-newt.html'
         })
-        return handle(req).then(res => validateAmp(res._getData()))
+        return handle(req).then((res) => validateAmp(res._getData()))
     })
 })

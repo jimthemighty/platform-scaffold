@@ -4,9 +4,9 @@ import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import containerStyles from './container.scss'
 
-const containerClass = 't-plp'
+const containerClass = 't-product-list'
 
-const PLP = ({links, title}) => {
+const ProductList = ({links, title}) => {
     return (
         <div className={containerClass}>
             <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
@@ -21,7 +21,7 @@ const PLP = ({links, title}) => {
     )
 }
 
-PLP.propTypes = {
+ProductList.propTypes = {
     /**
      * An array of links
      */
@@ -32,17 +32,17 @@ PLP.propTypes = {
     title: PropTypes.string
 }
 
-PLP.templateName = 'plp'
+ProductList.templateName = 'plp'
 
 const mapStateToProps = (state) => ({
     links: state.links,
-    title: `PLP! - ${state.title}` || '',
+    title: `ProductList! - ${state.title}` || '',
     className: containerClass
 })
 
 
 export default connect(
     mapStateToProps
-)(PLP)
+)(ProductList)
 
 export const styles = containerStyles.toString()

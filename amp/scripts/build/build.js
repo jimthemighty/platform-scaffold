@@ -6,24 +6,21 @@
  */
 const Promise = require('bluebird');
 const git = require('git-rev-sync');
-const archiver = require('archiver');
 const path = require('path');
 const process = require('process');
 const execSync = require('child_process').execSync;
+const common = require('../common');
 const rimraf = Promise.promisify(require('rimraf'));
 const fs = Promise.promisifyAll(require('fs'));
 const ncp = Promise.promisify(require('ncp').ncp);
-const chalk = require('chalk');
 
-const ampRootDir = path.resolve(path.join(__dirname), '..')
+const here = path.resolve(path.join(__dirname))
+const ampRootDir = path.resolve(path.join(__dirname), '..', '..')
 const buildDir = path.join(ampRootDir, 'build')
 
 const staticInDir = path.join(ampRootDir, 'app', 'static')
 
-
-const info = (m) => console.log(m)
-const success = (m) => console.log(chalk.green(m))
-const error = (m) => console.error(chalk.red(m))
+const {info, success, error} = common
 
 
 const webpack = (outputDir) => execSync(
@@ -36,29 +33,13 @@ const installDependencies = (outputDir) => execSync(
 )
 
 
-const zip = (inDir, outPath) => {
-    return new Promise((resolve, reject) => {
-        const output = fs.createWriteStream(outPath);
-        const archive = archiver('zip');
-        output.on('close', resolve);
-        output.on('end', resolve);
-        output.on('finish', resolve);
-        archive.pipe(output)
-        archive.on('error', reject);
-        archive.glob('**/*.*', {cwd: inDir}, {})
-        archive.finalize()
-    })
-}
-
-
-const build = () => {
+const main = () => {
     Promise.resolve()
         .then(() => {
-            const commitId = git.short()
+            const commitId = git.long()
             const outputDir = path.join(buildDir, commitId)
             const staticOutDir = path.join(outputDir, 'static')
             const serverOutDir = path.join(outputDir, 'server')
-            const serverOutZip = path.join(outputDir, 'server.zip')
 
             return Promise.resolve()
                 .tap(() => info('Cleaning build directory'))
@@ -79,9 +60,9 @@ const build = () => {
                 .tap(() => info('Building app'))
                 .then(() => webpack(serverOutDir))
 
-                .tap(() => info('Creating Zip archive'))
-                .then(() => zip(serverOutDir, serverOutZip))
-                .then(() => rimraf(serverOutDir))
+                .tap(() => info('Copying configs'))
+                .then(() => ncp(path.join(here, 'cloudformation.yaml'), path.join(outputDir, 'cloudformation.yaml')))
+                .then(() => ncp(path.join(here, 'cloudformation-static.yaml'), path.join(outputDir, 'cloudformation-static.yaml')))
 
                 .tap(() => success(`Built version '${commitId}' successfully`))
         })
@@ -91,5 +72,6 @@ const build = () => {
         })
 }
 
-
-build()
+if (require.main === module) {
+    main()
+}
