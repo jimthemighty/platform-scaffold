@@ -42,4 +42,4 @@ lighthouse \
 node ./lighthouse/check-score.js
 
 print 'Uploading Data to Sheets.'
-bash ./lighthouse/gather-perf-data.sh
+bash ./scripts/gather-perf-data.sh
