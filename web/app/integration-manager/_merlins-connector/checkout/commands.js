@@ -233,7 +233,6 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         customerAddressId,
         customerId
     } = formValues
-
     const address = {
         firstname,
         lastname,
