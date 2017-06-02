@@ -83,7 +83,7 @@ class BillingAddressForm extends React.Component {
                         <FieldRow className="u-padding-md">
                             <ReduxForm.Field
                                 component={Field}
-                                name="billing_same_as_shipping"
+                                name="billingSameAsShipping"
                                 type="checkbox"
                                 label={<strong className="u-text-weight-medium">Same as shipping address</strong>}
                                 caption={shippingAddress}
@@ -142,6 +142,10 @@ class BillingAddressForm extends React.Component {
                             </FieldRow>
 
                             <FieldRow>
+                                <CountrySelect />
+                            </FieldRow>
+
+                            <FieldRow>
                                 <RegionField regions={regions} />
                             </FieldRow>
 
@@ -150,10 +154,6 @@ class BillingAddressForm extends React.Component {
                                     {/* @TODO: Set Type to text or tel based on country! */}
                                     <input type="text" noValidate />
                                 </ReduxForm.Field>
-                            </FieldRow>
-
-                            <FieldRow>
-                                <CountrySelect />
                             </FieldRow>
                         </div>
                     }

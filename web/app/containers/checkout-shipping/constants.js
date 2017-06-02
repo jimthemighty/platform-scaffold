@@ -3,4 +3,4 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 export const ADD_NEW_ADDRESS_FIELD = 'addNewAddressField'
-export const SAVED_SHIPPING_ADDRESS_FIELD = 'saved_address'
+export const SAVED_SHIPPING_ADDRESS_FIELD = 'savedAddress'

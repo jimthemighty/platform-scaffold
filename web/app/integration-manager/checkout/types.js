@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import * as Runtypes from 'runtypes'
-import {Identifier, Text, Money} from '../types'
+import {Identifier, Text, Money, Nullable} from '../types'
 
 const CountryID = Identifier
 
@@ -33,3 +33,18 @@ const ShippingMethod = Runtypes.Record({
 })
 
 export const ShippingMethods = Runtypes.Array(ShippingMethod)
+
+export const Address = Runtypes.Record({
+    firstname: Text,
+    lastname: Text,
+    addressLine1: Text,
+    city: Text,
+    countryId: CountryID,
+    postcode: Text,
+    telephone: Text
+}).And(Runtypes.Optional({
+    addressLine2: Nullable(Text),
+    // We expect one of these two "region" fields to be non-null
+    regionId: Nullable(Identifier),
+    region: Nullable(Text)
+}))
