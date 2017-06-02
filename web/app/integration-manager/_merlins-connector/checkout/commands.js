@@ -4,6 +4,7 @@
 
 import {makeJsonEncodedRequest, makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser, getNameValue} from './parsers'
 import {parseCartTotals} from '../cart/parser'
@@ -54,7 +55,7 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
 
 
 
-export const fetchSavedShippingAddresses = () => {
+export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
     return (dispatch) => {
         const fetchURL = `/rest/default/V1/carts/mine`
         return makeRequest(fetchURL, {method: 'GET'})
@@ -86,7 +87,7 @@ export const fetchSavedShippingAddresses = () => {
                     }
                 })
 
-                dispatch(setDefaultShippingAddressId(defaultShippingId))
+                dispatch(setDefaultShippingAddressId(selectedSavedAddressId || defaultShippingId))
                 dispatch(receiveSavedShippingAddresses(addresses))
             })
     }
@@ -102,12 +103,22 @@ const processCheckoutData = ($response) => (dispatch) => {
     dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
 }
 
+const shippingDataSelector = createPropsSelector({
+    isLoggedIn: getIsLoggedIn,
+    selectedSavedAddressId: shippingSelectors.getSelectedSavedAddressId
+})
+
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
         .then(() => {
-            if (getIsLoggedIn(getState())) {
-                return dispatch(fetchSavedShippingAddresses())
+            const {
+                isLoggedIn,
+                selectedSavedAddressId
+            } = shippingDataSelector(getState())
+
+            if (isLoggedIn) {
+                return dispatch(fetchSavedShippingAddresses(selectedSavedAddressId))
             }
             return Promise.resolve()
         })

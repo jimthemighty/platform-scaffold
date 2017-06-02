@@ -24,11 +24,13 @@ export const getSelectedSavedShippingAddress = createSelector(
 
 export const getShippingAddress = createGetSelector(getCheckout, 'shippingAddress', Immutable.Map())
 
+export const getSelectedSavedAddressId = createGetSelector(getCheckout, 'defaultShippingAddressId')
+
 export const getInitialShippingAddress = createSelector(
     getCheckout,
     getShippingAddress,
-    (checkout, address) => {
-        const savedAddressId = checkout.get('defaultShippingAddressId')
+    getSelectedSavedAddressId,
+    (checkout, address, savedAddressId) => {
         if (savedAddressId) {
             return address.set('savedAddress', `${savedAddressId}`)
         }
