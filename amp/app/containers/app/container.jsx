@@ -4,38 +4,29 @@ import Header from '../header/container'
 import Footer from '../footer/container'
 import DangerousHTML from '../../components/dangerous-html'
 
-import * as appActions from './actions'
 import * as selectors from './selectors'
 
-class App extends React.Component {
+const App = ({
+    children,
+    sprite
+}) => {
 
-    componentDidMount() {
-        this.props.fetchSvgSprite()
-    }
+    return (
+        <div
+            id="app"
+            className="t-app"
+            >
+            <DangerousHTML html={sprite}>
+                {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
+            </DangerousHTML>
 
-    render() {
-        const {
-            children,
-            sprite
-        } = this.props
+            <Header />
 
-        return (
-            <div
-                id="app"
-                className="t-app"
-                >
-                <DangerousHTML html={sprite}>
-                    {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
-                </DangerousHTML>
+            {children}
 
-                <Header />
-
-                {children}
-
-                <Footer />
-            </div>
-        )
-    }
+            <Footer />
+        </div>
+    )
 }
 
 App.propTypes = {
@@ -51,11 +42,6 @@ const mapStateToProps = (state) => ({
     sprite: selectors.getSvgSprite
 })
 
-const mapDispatchToProps = {
-    fetchSvgSprite: appActions.fetchSvgSprite,
-}
-
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )(App)
