@@ -52,7 +52,9 @@ const CheckoutConfirmationSplash = (props) => {
                             { orderNumber ?
                                 <p>Your order # is: {OrderNumber}.</p>
                                 :
-                                <SkeletonText width="60%" style={{lineHeight: '20px'}} />
+                                <p>
+                                    <SkeletonText width="60%" style={{lineHeight: '20px'}} />
+                                </p>
                             }
                             <p>Email: <strong>{emailAddress}</strong></p>
                         </div>
