@@ -16,8 +16,9 @@ import {changeSort} from '../actions'
 import Button from 'progressive-web-sdk/dist/components/button'
 import List from 'progressive-web-sdk/dist/components/list'
 import Image from 'progressive-web-sdk/dist/components/image'
-import Icon from 'progressive-web-sdk/dist/components/icon'
+// import Icon from 'progressive-web-sdk/dist/components/icon'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
+import Field from 'progressive-web-sdk/dist/components/field'
 
 import ProductTile from '../../../components/product-tile'
 
@@ -92,38 +93,38 @@ const ProductListContents = ({
                         {products.length > 0 &&
                             <div className="u-flexbox">
                                 <div className="t-product-list__filter u-flex u-margin-end-md">
-                                    <div className="u-text-weight-semi-bold u-margin-bottom-sm">
-                                        {products.length} Items
-                                    </div>
-                                    <Button
-                                        className="c--tertiary u-width-full u-text-uppercase"
-                                        onClick={openModal}
-                                        disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
+                                    <Field
+                                        idForLabel="filterButton"
+                                        label={`${products.length} Items`}
                                     >
-                                        Filter
-                                    </Button>
+                                        <Button
+                                            className="c--tertiary u-width-full u-text-uppercase"
+                                            onClick={openModal}
+                                            disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
+                                            id="filterButton"
+                                        >
+                                            Filter
+                                        </Button>
+                                    </Field>
                                 </div>
+
                                 <div className="t-product-list__sort u-flex">
-                                    <label htmlFor="sort" className="u-text-weight-semi-bold u-margin-bottom-sm">
-                                        Sort by
-                                    </label>
-                                    <div>
-                                        <div className="u-position-relative u-width-full">
-                                            <select
-                                                className="t-product-list__sort-select"
-                                                onChange={(e) => { sortChange(e.target.value) }}
-                                                onBlur={(e) => { sortChange(e.target.value) }}
-                                            >
-                                                {/* This list of options corresponds to the functions in app/utils/sort-utils.js */}
-                                                <option value="position">Position</option>
-                                                <option value="name">Name</option>
-                                                <option value="price">Price</option>
-                                            </select>
-                                            <div className="t-product-list__sort-icon">
-                                                <Icon name="caret-down" />
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <Field
+                                        className="pw--has-select"
+                                        idForLabel="sort"
+                                        label="Sort by"
+                                    >
+                                        <select
+                                            className="u-color-neutral-60"
+                                            onChange={(e) => { sortChange(e.target.value) }}
+                                            onBlur={(e) => { sortChange(e.target.value) }}
+                                        >
+                                            {/* This list of options corresponds to the functions in app/utils/sort-utils.js */}
+                                            <option value="position">Position</option>
+                                            <option value="name">Name</option>
+                                            <option value="price">Price</option>
+                                        </select>
+                                    </Field>
                                 </div>
                             </div>
                         }

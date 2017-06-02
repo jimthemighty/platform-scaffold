@@ -3,18 +3,17 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {SubmissionError} from 'redux-form'
-import {createBasket, handleCartData, requestCartData} from '../cart/utils'
+import {createBasket, handleCartData, requestCartData, createNewBasket} from '../cart/utils'
 import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
-import {PAYMENT_URL, SITE_ID} from '../constants'
-import {STATES} from './constants'
+import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveCheckoutData, receiveShippingInitialValues, receiveBillingInitialValues} from './../../checkout/results'
+import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress} from './../../checkout/results'
 
-export const fetchShippingMethodsEstimate = () => (dispatch) => {
+export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch) => {
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
         .then((response) => response.json())
@@ -23,10 +22,18 @@ export const fetchShippingMethodsEstimate = () => (dispatch) => {
                   .map(({name, description, price, id}) => ({
                       label: `${name} - ${description}`,
                       cost: `$${price.toFixed(2)}`,
-                      value: id
+                      id
                   }))
 
-            return dispatch(receiveCheckoutData({shipping: {shippingMethods}}))
+            dispatch(receiveShippingAddress({
+                shipping_method: shippingMethods[0].id,
+                postcode: inputAddress.postcode,
+                countryId: inputAddress.countryId,
+                region: inputAddress.region,
+                regionId: inputAddress.regionId
+            })) // set initial values for the shipping form
+
+            return dispatch(receiveShippingMethods(shippingMethods))
         })
 }
 
@@ -64,14 +71,9 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                     countryId: 'us'
                 }
             }
-            dispatch(receiveShippingInitialValues({initialValues}))
+            dispatch(receiveShippingAddress(initialValues))
             /* eslint-enable camelcase */
-            return dispatch(receiveCheckoutData({
-                locations: {
-                    countries: [{value: 'us', label: 'United States'}],
-                    regions: STATES
-                }
-            }))
+            return dispatch(populateLocationsData())
         })
         .then(() => dispatch(fetchShippingMethodsEstimate()))
 }
@@ -85,8 +87,8 @@ export const initCheckoutPaymentPage = () => (dispatch) => {
         .then((basket) => {
             const addressData = parseShippingAddressFromBasket(basket)
 
-            dispatch(receiveShippingInitialValues({initialValues: addressData}))
-            dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
+            dispatch(receiveShippingAddress(addressData))
+            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
         })
 }
 
@@ -130,7 +132,7 @@ export const submitShipping = (formValues) => (dispatch) => (
         .catch(() => { throw new SubmissionError({_error: 'Unable to save shipping data'}) })
         .then((basket) => {
             dispatch(handleCartData(basket))
-            return PAYMENT_URL
+            return getPaymentURL()
         })
 )
 
@@ -203,12 +205,12 @@ export const submitPayment = (formValues) => (dispatch) => {
             dispatch(receiveOrderConfirmationContents({
                 orderNumber: order.order_no
             }))
-            return `/on/demandware.store/${SITE_ID}/default/COSummary-Submit`
+            // The new basket data isn't required for the confirmation page,
+            // so we can return the URL without waiting for this to complete
+            dispatch(createNewBasket())
+
+            return getConfirmationURL()
         })
 }
 
 export const updateShippingAndBilling = () => () => Promise.resolve()
-
-// We're not currently checking the customer's email on the sfcc site
-// Return true to prevent the welcome banner from showing
-export const isEmailAvailable = () => () => Promise.resolve(true)

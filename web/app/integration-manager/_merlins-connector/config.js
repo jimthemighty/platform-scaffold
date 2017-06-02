@@ -7,3 +7,10 @@ export const CART_URL = '/checkout/cart/'
 export const PAYMENT_URL = '/checkout/payment/'
 export const CREATE_ACCOUNT_POST_URL = '/customer/account/createpost/'
 export const LOGIN_POST_URL = '/customer/account/loginPost/'
+
+// configuration is not currently used by the Merlin's connector
+let config = {} // eslint-disable-line
+
+export const registerConfig = (cfg) => {
+    config = cfg
+}

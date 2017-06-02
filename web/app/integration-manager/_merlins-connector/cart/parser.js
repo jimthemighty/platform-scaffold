@@ -18,7 +18,8 @@ export const parseCartProducts = ({items}) => { /* Products */
                 width: '240px',
                 height: '300px'
             }
-        }
+        },
+        available: true
     }))
 
     const productMap = {}
@@ -54,21 +55,11 @@ export const parseCartTotals = ({
     subtotal_incl_tax
 }) => {
 
+    // We need the grand total if there's a discount or non-free shipping.
     /* eslint-disable camelcase */
-    const hasOnlyDiscountCalculated = discount_amount && !shipping_amount
-    const hasDiscountAndTaxCalculated = discount_amount && shipping_amount
-    let orderTotal
-
-    if (hasOnlyDiscountCalculated || hasDiscountAndTaxCalculated) {
-        orderTotal = base_grand_total
-    } else { // if neither discount and tax is calculated
-        orderTotal = subtotal_incl_tax
-    }
-
-    // when user chose another shipping method other than default shipping method
-    if (shipping_amount > 0) {
-        orderTotal = base_grand_total
-    }
+    const orderTotal = (discount_amount || shipping_amount > 0)
+          ? base_grand_total
+          : subtotal_incl_tax
     /* eslint-enable camelcase */
 
     return {

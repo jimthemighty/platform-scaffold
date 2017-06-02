@@ -8,43 +8,44 @@ import {SubmissionError} from 'redux-form'
 import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
 import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
-import {parseLocationData} from '../../../utils/utils'
 import {getCart} from '../cart/commands'
-import {receiveCheckoutData, receiveShippingInitialValues, receiveCheckoutConfirmationData, receiveBillingInitialValues} from './../../checkout/results'
+import {
+    receiveCheckoutLocations,
+    receiveShippingAddress,
+    receiveCheckoutConfirmationData,
+    receiveBillingAddress,
+    receiveShippingMethods
+} from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
 import {fetchPageData} from '../app/commands'
-import {getCustomerEntityID} from '../selectors'
+import {getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
-import {PAYMENT_URL} from '../constants'
+import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
-import {getFormValues, getFormRegisteredFields} from '../../../store/form/selectors'
-import {getIsLoggedIn} from '../../../store/user/selectors'
-import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getShippingFormValues} from '../../../store/form/selectors'
+import {prepareEstimateAddress} from '../utils'
 
-export const fetchShippingMethodsEstimate = (formKey) => (dispatch, getState) => {
-    const currentState = getState()
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const formValues = getFormValues(formKey)(currentState)
-    const entityID = getCustomerEntityID(currentState)
-    const registeredFieldNames = getFormRegisteredFields(formKey)(currentState).map(({name}) => name)
+export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
+    const cartBaseUrl = getCartBaseUrl(getState())
+    const address = prepareEstimateAddress(inputAddress)
 
-    // @TODO: We should probably pull this data from the STATE instead of form
-    //        fields since there might not be fields, i.e. w/ Saved Addresses
-    const address = parseLocationData(formValues, registeredFieldNames)
-
-    const estimateURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/estimate-shipping-methods`
-    return makeJsonEncodedRequest(estimateURL, {address}, {method: 'POST'})
+    return makeJsonEncodedRequest(
+        `${cartBaseUrl}/estimate-shipping-methods`,
+        {address},
+        {method: 'POST'}
+    )
         .then((response) => response.json())
-        .then((responseJSON) => {
-            const shippingMethods = parseShippingMethods(responseJSON)
-            const initialValues = {
-                shipping_method: shippingMethods[0].value,
-                ...address
-            }
-
-            dispatch(receiveCheckoutData({shipping: {shippingMethods}}))
-            dispatch(receiveShippingInitialValues({address: initialValues})) // set initial value for method
+        .then((responseJSON) => parseShippingMethods(responseJSON))
+        .then((shippingMethods) => {
+            dispatch(receiveShippingMethods(shippingMethods))
+            dispatch(receiveShippingAddress({
+                shipping_method: shippingMethods[0].id,
+                postcode: address.postcode,
+                countryId: address.country_id,
+                region: address.region,
+                regionId: address.regionId
+            })) // set initial values for the shipping form
         })
 }
 
@@ -53,18 +54,14 @@ const processCheckoutData = ($response) => (dispatch) => {
     const magentoFieldData = extractMagentoShippingStepData($response)
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
-    return dispatch(receiveCheckoutData({
-        locations: parseLocations(magentoFieldData).locations,
-        shipping: {
-            initialValues: parseShippingInitialValues(magentoFieldData)
-        }
-    }))
+    dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+    dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
 }
 
-export const initCheckoutShippingPage = (url) => (dispatch) => {
+export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
-        .then(() => dispatch(fetchShippingMethodsEstimate(SHIPPING_FORM_NAME)))
+        .then(() => dispatch(fetchShippingMethodsEstimate(getShippingFormValues(getState()))))
 }
 
 export const initCheckoutConfirmationPage = (url) => (dispatch) => {
@@ -133,9 +130,8 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             shipping_method_code: shippingSelections[1]
         }
     }
-    const entityID = getCustomerEntityID(currentState)
-    const isLoggedIn = getIsLoggedIn(currentState)
-    const persistShippingURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/shipping-information`
+    const cartBaseUrl = getCartBaseUrl(currentState)
+    const persistShippingURL = `${cartBaseUrl}/shipping-information`
     return makeJsonEncodedRequest(persistShippingURL, addressData, {method: 'POST'})
         .then((response) => {
             if (response.status === 400) {
@@ -153,32 +149,20 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
         })
 }
 
-export const isEmailAvailable = (email) => (dispatch) => {
-    return makeJsonEncodedRequest(
-            '/rest/default/V1/customers/isEmailAvailable',
-            {customerEmail: email},
-            {method: 'POST'}
-        )
-        .then((response) => response.text())
-        .then((responseText) => {
-            return /true/.test(responseText)
-        })
-}
-
 export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            const addressData = shippingSelectors.getInitialShippingAddress(getState())
-            dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
+            const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
+            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
             return dispatch(processCheckoutData($response))
         })
 }
 
 export const submitPayment = (formValues) => (dispatch, getState) => {
     const currentState = getState()
+    const cartBaseUrl = getCartBaseUrl(currentState)
     const entityID = getCustomerEntityID(currentState)
-    const isLoggedIn = getIsLoggedIn(currentState)
     const {
         firstname,
         lastname,
@@ -221,9 +205,8 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         }
     }
 
-    const persistPaymentURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/payment-information`
-    // Save payment address for confirmation
-    dispatch(receiveCheckoutData({payment: {address}}))
+    const persistPaymentURL = `${cartBaseUrl}/payment-information`
+    dispatch(receiveBillingAddress(address))
     return makeJsonEncodedRequest(persistPaymentURL, paymentInformation, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {

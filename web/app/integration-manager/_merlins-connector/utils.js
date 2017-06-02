@@ -64,9 +64,7 @@ export const submitForm = (url, data, options) => {
  * @param {*string} src the URL to the higher resolution image
  */
 export const getHighResImage = (src) => {
-    const result = src ? src.replace(/thumbnail\/\d+x\d+/, 'small_image/240x300') : src
-    console.log(`getHighResImage ${src} -> ${result}`)
-    return result
+    return src ? src.replace(/thumbnail\/\d+x\d+/, 'small_image/240x300') : src
 }
 
 
@@ -87,4 +85,28 @@ export const jqueryAjaxWrapper = (options) => {
             error: (xhr, status) => reject(status)
         })
     })
+}
+
+export const prepareEstimateAddress = (inputAddress = {}) => {
+    const {
+        countryId = 'US',
+        regionId,
+        region,
+        postcode = null
+    } = inputAddress
+
+    const address = {
+        country_id: countryId,
+        postcode
+    }
+
+    if (region) {
+        address.region = region
+    } else if (regionId) {
+        address.regionId = regionId
+    } else {
+        address.regionId = '0'
+    }
+
+    return address
 }

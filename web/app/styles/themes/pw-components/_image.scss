@@ -1,10 +1,12 @@
-// Image
+// Image Theme
 // ===
 
+.pw-image,
 .c-image {
     display: inline-block;
 }
 
+.pw--is-transitioning,
 .c--is-transitioning {
     opacity: 0.5;
 }

@@ -8,15 +8,15 @@ import {receiveCategoryContents, receiveCategoryInformation} from '../../categor
 import {receiveProductListProductData} from '../../products/results'
 import {parseProductListData} from '../parsers'
 
-import {SITE_ID} from '../constants'
+import {getCategoryPath} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id) => `/product_search?expand=images,prices&q=&refine_1=cgid=${id}`
+const makeCategorySearchURL = (id) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}`
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     const parentId = parent_category_id !== 'root' ? parent_category_id : null
-    const path = `/s/${SITE_ID}/${id}`
+    const path = getCategoryPath(id)
     dispatch(receiveCategoryInformation(path, {
         id,
         title: name,

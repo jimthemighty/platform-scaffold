@@ -7,12 +7,12 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 import {normalizePhone} from '../../../utils/normalize-utils'
+import {stripEvent} from '../../../utils/utils'
 
-import {showCompanyAndApt} from '../actions'
+import {showCompanyAndApt, fetchShippingMethods} from '../actions'
 import {getIsCompanyOrAptShown} from '../selectors'
-import {fetchShippingMethodsEstimate} from '../../../integration-manager/checkout/commands'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
-import {getAvailableRegions} from '../../../store/checkout/locations/selectors'
+import {getAvailableRegions} from '../../../store/checkout/selectors'
 
 import CountrySelect from '../../../components/country-select'
 import RegionField from '../../../components/region-field'
@@ -173,8 +173,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    handleShowCompanyAndApt: showCompanyAndApt,
-    fetchShippingMethods: () => fetchShippingMethodsEstimate(SHIPPING_FORM_NAME)
+    handleShowCompanyAndApt: stripEvent(showCompanyAndApt),
+    fetchShippingMethods
 }
 
 export default connect(
