@@ -4,11 +4,12 @@
 
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {splitFullName} from '../../utils/utils'
-import {receiveUserEmail, receiveShippingAddress} from '../../integration-manager/checkout/results'
+import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
 
 import {
     submitShipping as submitShippingCommand,
@@ -18,6 +19,7 @@ import {customCommands} from '../../integration-manager/custom/commands'
 import {login} from '../../integration-manager/account/commands'
 
 import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'
+import {getSelectedSavedShippingAddress} from '../../store/checkout/shipping/selectors'
 import {addNotification, removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 
 export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields (Shipping)')
@@ -57,21 +59,57 @@ export const submitSignIn = () => (dispatch, getState) => {
         .catch((error) => dispatch(onShippingLoginError(error.message)))
 }
 
+const submitShippingSelector = createPropsSelector({
+    address: getSelectedSavedShippingAddress,
+    formValues: getShippingFormValues
+})
+
 export const submitShipping = () => (dispatch, getState) => {
-    const currentState = getState()
-    const formValues = getShippingFormValues(currentState)
-    const {firstname, lastname} = splitFullName(formValues.name)
+    const shippingSelections = submitShippingSelector(getState())
+    let formValues = shippingSelections.formValues
+    const savedAddress = shippingSelections.address
+    if (savedAddress) {
+        // Merge form values with the values we have for the selected saved address
+        formValues = {
+            ...formValues,
+            ...savedAddress
+        }
+        dispatch(setDefaultShippingAddressId(formValues.savedAddress))
+    }
+    const {
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
+        shippingMethodId,
+        username
+    } = formValues
+    const {firstname, lastname} = splitFullName(name)
     const address = {
         firstname,
         lastname,
-        ...formValues
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
     }
 
     if (formValues.username) {
         dispatch(receiveUserEmail(formValues.username))
     }
+    dispatch(receiveSelectedShippingMethod(shippingMethodId))
     dispatch(receiveShippingAddress(address))
-    return dispatch(submitShippingCommand(address))
+    return dispatch(submitShippingCommand({...address, shippingMethodId}))
         .then((paymentURL) => {
             browserHistory.push({
                 pathname: paymentURL

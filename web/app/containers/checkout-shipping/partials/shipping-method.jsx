@@ -26,7 +26,7 @@ const ShippingMethod = ({shippingMethods}) => (
                 <FieldRow key={id}>
                     <ReduxForm.Field
                         component={Field}
-                        name="shipping_method"
+                        name="shippingMethodId"
                         type="radio"
                         value={id}
                         label={<ShippingMethodLabel label={label} info={info} cost={cost} />}
