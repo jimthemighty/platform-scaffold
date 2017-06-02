@@ -23,6 +23,10 @@ export const initLoginPage = (url) => (dispatch) => {
         })
 }
 
+export const initPrivacyPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+}
+
 export const initRegisterPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then(() => {

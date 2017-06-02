@@ -16,8 +16,10 @@ import header from './header/reducer'
 import home from './home/reducer'
 import login from './login/reducer'
 import navigation from './navigation/reducer'
+import privacyPage from './privacy-page/reducer'
 import productDetails from './product-details/reducer'
 import productList from './product-list/reducer'
+
 
 const uiReducer = combineReducers({
     app,
@@ -30,8 +32,10 @@ const uiReducer = combineReducers({
     home,
     login,
     navigation,
+    privacyPage,
     productDetails,
-    productList
+    productList,
+
 })
 
 export default uiReducer

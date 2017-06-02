@@ -32,5 +32,6 @@ export const CheckoutConfirmation = PWALoadable(() => import('./checkout-confirm
 export const CheckoutPayment = PWALoadable(() => import('./checkout-payment/container'))
 export const CheckoutShipping = PWALoadable(() => import('./checkout-shipping/container'))
 export const Login = PWALoadable(() => import('./login/container'))
+export const PrivacyPage = PWALoadable(() => import('./privacy-page/container'))
 export const ProductDetails = PWALoadable(() => import('./product-details/container'))
 export const ProductList = PWALoadable(() => import('./product-list/container'))

@@ -9,3 +9,4 @@ tests/system/nightwatch-config.js
 tests/system/site.js
 tests/jest-setup.js
 tests/jest-preprocessor.js
+app/integration-manager/docs

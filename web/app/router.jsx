@@ -7,7 +7,7 @@ import {Provider} from 'react-redux'
 // Containers
 import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
-import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails} from './containers/templates'
+import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, PrivacyPage, ProductList, ProductDetails} from './containers/templates'
 // We build this into the app so we can load the home page right away
 import Home from './containers/home/container'
 import CheckoutHeader from './containers/checkout-header/container'
@@ -17,7 +17,7 @@ import {initHomePage} from './integration-manager/home/commands'
 import {initCartPage} from './integration-manager/cart/commands'
 import {initProductListPage} from './integration-manager/categories/commands'
 import {initProductDetailsPage} from './integration-manager/products/commands'
-import {initRegisterPage, initLoginPage} from './integration-manager/account/commands'
+import {initRegisterPage, initLoginPage, initPrivacyPage} from './integration-manager/account/commands'
 import {initCheckoutShippingPage, initCheckoutPaymentPage, initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
 
 import {getURL} from './utils/utils'
@@ -48,6 +48,7 @@ const Router = ({store}) => (
                 <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initCartPage} />
                 <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initLoginPage} />
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initRegisterPage} />
+                <Route component={PrivacyPage} path="privacy-policy-cookie-restriction-mode" routeName="privacyPage" fetchAction={initPrivacyPage} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initProductListPage} />
