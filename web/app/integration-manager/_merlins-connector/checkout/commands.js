@@ -117,8 +117,8 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
     }
 
     // Prepare and then run Shipping Information request
-    const {shipping_method} = formValues
-    const shippingSelections = shipping_method.split('_')
+    const {shippingMethodId} = formValues
+    const shippingSelections = shippingMethodId.split('_')
     const addressData = {
         addressInformation: {
             shippingAddress: address,

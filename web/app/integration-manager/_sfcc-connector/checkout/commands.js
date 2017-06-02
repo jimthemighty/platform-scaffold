@@ -119,7 +119,7 @@ const setShippingAddress = (formValues, basket) => () => (
 const setShippingMethod = (formValues, basket) => () => (
     makeApiJsonRequest(
         `/baskets/${basket.basket_id}/shipments/me/shipping_method`,
-        {id: formValues.shipping_method},
+        {id: formValues.shippingMethodId},
         {method: 'PUT'}
     )
 )
