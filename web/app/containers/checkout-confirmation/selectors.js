@@ -8,6 +8,7 @@ import {getUi} from '../../store/selectors'
 
 export const getCheckoutConfirmation = createSelector(getUi, ({checkoutConfirmation}) => checkoutConfirmation)
 
+export const getConfirmationData = createGetSelector(getCheckoutConfirmation, 'confirmationData')
 export const getIsRegistrationFormHidden = createGetSelector(getCheckoutConfirmation, 'isRegistrationFormHidden')
-export const getOrderNumber = createGetSelector(getCheckoutConfirmation, 'orderNumber')
+export const getOrderNumber = createGetSelector(getConfirmationData, 'orderNumber')
 export const getOrderUrl = createGetSelector(getCheckoutConfirmation, 'orderUrl')
