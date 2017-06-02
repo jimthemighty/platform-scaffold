@@ -49,7 +49,7 @@ const CheckoutConfirmationSplash = (props) => {
 
                         <div className="u-text-content">
                             <p>We’ve sent you an email confirmation along with your order receipt.</p>
-                            { orderUrl ?
+                            { orderNumber ?
                                 <p>Your order # is: {OrderNumber}.</p>
                                 :
                                 <SkeletonText width="60%" style={{lineHeight: '20px'}} />
