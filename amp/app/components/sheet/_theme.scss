@@ -1,0 +1,35 @@
+// Sheet Theme
+// ===
+
+// Sheet AMP sidebar elemet
+// ---
+//
+// 1. 80% is the highest, in AMP's built in sidebar there is 80vh !important
+//    style that we cannot override
+
+.amp-sheet {
+    width: 80%; // 1
+
+
+    box-shadow: $box-shadow;
+}
+
+// Inner
+// ---
+//
+// 1. requested by designer
+
+.amp-sheet__inner {
+    max-width: 340px; // 1
+}
+
+
+// AMP classes
+// ---
+//
+// Style AMP built in classes
+
+.i-amphtml-sidebar-mask {
+    opacity: 0.7;
+    background: $neutral-70;
+}
