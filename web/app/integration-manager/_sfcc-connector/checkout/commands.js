@@ -11,9 +11,11 @@ import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
+import {getSelectedShippingMethodValue} from '../../../store/checkout/shipping/selectors'
 import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress, receiveSelectedShippingMethod} from './../../checkout/results'
 
-export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch) => {
+export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
+    const selectedShippingMethodId = getSelectedShippingMethodValue(getState())
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
         .then((response) => response.json())
@@ -31,7 +33,7 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch) => {
                 region: inputAddress.region,
                 regionId: inputAddress.regionId
             })) // set initial values for the shipping form
-            dispatch(receiveSelectedShippingMethod(shippingMethods[0].id))
+            dispatch(receiveSelectedShippingMethod(selectedShippingMethodId || shippingMethods[0].id))
             return dispatch(receiveShippingMethods(shippingMethods))
         })
 }
