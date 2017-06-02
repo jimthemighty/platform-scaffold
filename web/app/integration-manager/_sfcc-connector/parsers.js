@@ -42,12 +42,10 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
 }
 
 
-
 export const getProductHref = (productID) => `/s/${getSiteID()}/${productID}.html`
 
 export const parseProductDetails = ({id, name, price, inventory, long_description, image_groups, variants, variation_attributes}) => {
     const images = parseImages(image_groups)
-
     return {
         id,
         title: name,
