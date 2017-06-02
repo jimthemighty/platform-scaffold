@@ -93,9 +93,8 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
             }).then(clientInitResolver)
         })
         .catch((error) => {
-            const message = `Error loading ${MESSAGING_PWA_CLIENT_PATH}: ${error}`
-            console.log(message)
-            clientInitRejecter(message)
+            console.error(`Error loading ${MESSAGING_PWA_CLIENT_PATH}:`, error)
+            clientInitRejecter(error)
             throw error
         })
 }
