@@ -11,6 +11,8 @@ const chalk = require('chalk')
 const htmlReport = fs.readFileSync('lighthouse/audit-local.report.html', 'utf8')
 const jsonResults = JSON.parse(fs.readFileSync('lighthouse/audit-local.report.json', 'utf8'))
 
+process.env.TTI = jsonResults.audits['time-to-interactive'].displayValue
+
 // Tell me about some performance metrics that are important to me.
 console.log(chalk.yellow(`Time to interactive: ${jsonResults.audits['time-to-interactive'].displayValue}`))
 console.log(chalk.yellow(`${jsonResults.audits['total-byte-weight'].displayValue}`))

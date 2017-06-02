@@ -3,6 +3,8 @@
 
 # Location to save the generated report.
 OUTPUT_PATH=./lighthouse/audit-local
+
+export TTI=0
 # See package.json's siteUrl key.
 URL=${1-$npm_package_siteUrl}
 # Append Mobify Hash to the URL to force the Mobify Tag to load the local bundle.
