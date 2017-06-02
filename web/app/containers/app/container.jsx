@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+/* global MESSAGING_ENABLED */
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
 import React, {PropTypes} from 'react'
@@ -106,6 +107,8 @@ class App extends React.Component {
 
         const appClassNames = classNames('t-app', `t-app--${routeProps.routeName}`)
 
+        const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
+
         return (
             <div
                 id="app"
@@ -119,14 +122,14 @@ class App extends React.Component {
                 <SkipLinks items={skipLinksItems} />
 
                 <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
-                    {isRunningInAstro ?
-                        <NativeConnector />
-                    :
+                    {isRunningInAstro && <NativeConnector />}
+
+                    {messagingEnabled && (
                         <div>
                             <PushMessagingController dimScreenOnSystemAsk />
                             <DefaultAsk showOnPageCount={1} />
                         </div>
-                    }
+                    )}
 
                     <div id="app-header" className="u-flex-none" role="banner">
                         <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
