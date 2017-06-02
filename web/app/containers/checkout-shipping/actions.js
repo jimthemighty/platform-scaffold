@@ -9,7 +9,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {splitFullName} from '../../utils/utils'
-import {receiveCheckoutData, receiveShippingAddress, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
+import {receiveCheckoutData, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
 
 import {
     submitShipping as submitShippingCommand,
@@ -69,26 +69,47 @@ export const submitShipping = () => (dispatch, getState) => {
     let formValues = shippingSelections.formValues
     const savedAddress = shippingSelections.address
     if (savedAddress) {
+        // Merge form values with the values we have for the selected saved address
         formValues = {
             ...formValues,
             ...savedAddress
         }
         dispatch(setDefaultShippingAddressId(formValues.savedAddress))
     }
-
-
-    const {firstname, lastname} = splitFullName(formValues.name)
+    const {
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
+        shippingMethodId,
+        username
+    } = formValues
+    const {firstname, lastname} = splitFullName(name)
     const address = {
         firstname,
         lastname,
-        ...formValues
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
     }
 
-    if (formValues.username) {
-        dispatch(receiveCheckoutData({emailAddress: formValues.username}))
+    if (username) {
+        dispatch(receiveCheckoutData({emailAddress: username}))
     }
+    dispatch(receiveSelectedShippingMethod(shippingMethodId))
     dispatch(receiveShippingAddress(address))
-    return dispatch(submitShippingCommand(address))
+    return dispatch(submitShippingCommand({...address, shippingMethodId}))
         .then((paymentURL) => {
             browserHistory.push({
                 pathname: paymentURL
