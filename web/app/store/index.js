@@ -25,7 +25,7 @@ analyticsManager.init({
     projectSlug: AJS_SLUG,              // eslint-disable-line no-undef
     mobifyGAID: 'UA-53825302-1',
     ecommerceLibrary: 'ec',
-    debug: true
+    debug: DEBUG                        // eslint-disable-line no-undef
 })
 
 const configureStore = (initialState) => {

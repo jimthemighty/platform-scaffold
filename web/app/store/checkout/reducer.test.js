@@ -33,50 +33,21 @@ test('receiveLocationsCustomContent updates the custom branch of locations', () 
     expect(reducer(Immutable.Map(), action).toJS()).toEqual(expectedState)
 })
 
-test('receiveShippingCustomContent updates the custom branch of shipping', () => {
-    const customContent = {test: 'shipping content'}
-    const expectedState = {shipping: {custom: customContent}}
-    const action = checkoutActions.receiveShippingCustomContent(customContent)
-
-    expect(reducer(Immutable.Map(), action).toJS()).toEqual(expectedState)
-})
 
 test('receiveShippingAddressCustomContent updates the custom branch of the shipping address', () => {
     const customContent = {test: 'shipping address content'}
-    const expectedState = {shipping: {address: {custom: customContent}}}
+    const expectedState = {shippingAddress: {custom: customContent}}
     const action = checkoutActions.receiveShippingAddressCustomContent(customContent)
 
     expect(reducer(Immutable.Map(), action).toJS()).toEqual(expectedState)
 })
 
-test('receiveBillingCustomContent updates the custom branch of billing', () => {
-    const customContent = {test: 'billing content'}
-    const expectedState = {billing: {custom: customContent}}
-    const action = checkoutActions.receiveBillingCustomContent(customContent)
-
-    expect(reducer(Immutable.Map(), action).toJS()).toEqual(expectedState)
-})
 
 test('receiveBillingAddressCustomContent updates the custom branch of the billing address', () => {
     const customContent = {test: 'billing address content'}
-    const expectedState = {billing: {address: {custom: customContent}}}
+    const expectedState = {billingAddress: {custom: customContent}}
     const action = checkoutActions.receiveBillingAddressCustomContent(customContent)
 
     expect(reducer(Immutable.Map(), action).toJS()).toEqual(expectedState)
 })
 
-test('receivePaymentCustomContent updates the custom branch of payment', () => {
-    const customContent = {test: 'Payment content'}
-    const expectedState = {payment: {custom: customContent}}
-    const action = checkoutActions.receivePaymentCustomContent(customContent)
-
-    expect(reducer(Immutable.Map(), action).toJS()).toEqual(expectedState)
-})
-
-test('receivePaymentAddressCustomContent updates the custom branch of the payment address', () => {
-    const customContent = {test: 'Payment address content'}
-    const expectedState = {payment: {address: {custom: customContent}}}
-    const action = checkoutActions.receivePaymentAddressCustomContent(customContent)
-
-    expect(reducer(Immutable.Map(), action).toJS()).toEqual(expectedState)
-})
