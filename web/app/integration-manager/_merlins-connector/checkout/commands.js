@@ -10,11 +10,10 @@ import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
 import {getCart} from '../cart/commands'
 import {
-    receiveCheckoutData,
     receiveCheckoutLocations,
-    receiveShippingInitialValues,
+    receiveShippingAddress,
     receiveCheckoutConfirmationData,
-    receiveBillingInitialValues,
+    receiveBillingAddress,
     receiveShippingMethods
 } from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
@@ -24,6 +23,7 @@ import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getShippingFormValues} from '../../../store/form/selectors'
 import {prepareEstimateAddress} from '../utils'
 
 export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
@@ -39,10 +39,13 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
         .then((responseJSON) => parseShippingMethods(responseJSON))
         .then((shippingMethods) => {
             dispatch(receiveShippingMethods(shippingMethods))
-            dispatch(receiveShippingInitialValues({address: {
+            dispatch(receiveShippingAddress({
                 shipping_method: shippingMethods[0].id,
-                postcode: address.postcode
-            }})) // set initial value for method and postcode
+                postcode: address.postcode,
+                countryId: address.country_id,
+                region: address.region,
+                regionId: address.regionId
+            })) // set initial values for the shipping form
         })
 }
 
@@ -52,17 +55,13 @@ const processCheckoutData = ($response) => (dispatch) => {
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    dispatch(receiveCheckoutData({
-        shipping: {
-            initialValues: parseShippingInitialValues(magentoFieldData)
-        }
-    }))
+    dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
 }
 
-export const initCheckoutShippingPage = (url) => (dispatch) => {
+export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
-        .then(() => dispatch(fetchShippingMethodsEstimate({})))
+        .then(() => dispatch(fetchShippingMethodsEstimate(getShippingFormValues(getState()))))
 }
 
 export const initCheckoutConfirmationPage = (url) => (dispatch) => {
@@ -154,8 +153,8 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            const addressData = shippingSelectors.getInitialShippingAddress(getState())
-            dispatch(receiveBillingInitialValues({initialValues: {...addressData, billing_same_as_shipping: true}}))
+            const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
+            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
             return dispatch(processCheckoutData($response))
         })
 }
@@ -207,8 +206,7 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
     }
 
     const persistPaymentURL = `${cartBaseUrl}/payment-information`
-    // Save payment address for confirmation
-    dispatch(receiveCheckoutData({payment: {address}}))
+    dispatch(receiveBillingAddress(address))
     return makeJsonEncodedRequest(persistPaymentURL, paymentInformation, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {

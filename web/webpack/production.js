@@ -19,7 +19,8 @@ const productionMainConfig = assign(baseMainConfig, {
     // Extend base config with production settings here
     plugins: [].concat(baseMainConfig.plugins, [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+            DEBUG: false
         })
     ])
 })

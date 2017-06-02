@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Selectors
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
-import {getBillingInitialValues} from '../../../store/checkout/billing/selectors'
+import {getBillingAddress} from '../../../store/checkout/billing/selectors'
 
 // Actions
 import {submitPayment} from '../actions'
@@ -54,7 +54,7 @@ CheckoutPaymentForm.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    initialValues: getBillingInitialValues
+    initialValues: getBillingAddress
 })
 
 const mapDispatchToProps = {
@@ -62,7 +62,9 @@ const mapDispatchToProps = {
 }
 
 const CheckoutPaymentReduxForm = ReduxForm.reduxForm({
-    form: PAYMENT_FORM_NAME
+    form: PAYMENT_FORM_NAME,
+    keepDirtyOnReinitialize: true,
+    enableReinitialize: true
 })(CheckoutPaymentForm)
 
 export default connect(
