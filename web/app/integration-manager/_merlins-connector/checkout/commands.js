@@ -112,7 +112,6 @@ export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
             return Promise.resolve()
         })
         .then(() => dispatch(fetchShippingMethodsEstimate(getShippingFormValues(getState()))))
-        
 }
 
 export const initCheckoutConfirmationPage = (url) => (dispatch) => {
