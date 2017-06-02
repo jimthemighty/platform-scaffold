@@ -21,43 +21,25 @@ import classNames from 'classnames'
  * For example usecases where `DangerousHTML` can be used, see the
  * [Leveraging Existing Page Content guide](/dev/guides/leveraging-existing-page-content).
  */
-class DangerousHTML extends React.Component {
-    constructor(props) {
-        super(props)
 
-        this.processHTML = this.processHTML.bind(this)
-    }
+const DangerousHTML = ({
+    children,
+    className,
+    html
+}) => {
+    const classes = classNames('amp-dangerous-html', className)
 
-    render() {
-        const {children, className} = this.props
-        const html = this.processHTML(this.props.html)
-
-        const classes = classNames('amp-dangerous-html', className)
-
-        /* Disable this eslint a11y rule, because it's meant to catch bubbled
-         * click events */
-        /* eslint-disable jsx-a11y/no-static-element-interactions */
-        return (
-            <div
-                className={classes}
-            >
-                {children({__html: html})}
-            </div>
-        )
-        /* eslint-enable jsx-a11y/no-static-element-interactions */
-    }
-
-    /**
-     * HTML transformations, current steps:
-     * - enable external resources if specified
-     */
-    processHTML(html) {
-        if (this.props.enableExternalResources && typeof window.Capture !== 'undefined') {
-            html = window.Capture.enable(html, this.props.externalResourcesPrefix)
-        }
-
-        return html
-    }
+    /* Disable this eslint a11y rule, because it's meant to catch bubbled
+     * click events */
+    /* eslint-disable jsx-a11y/no-static-element-interactions */
+    return (
+        <div
+            className={classes}
+        >
+            {children({__html: html})}
+        </div>
+    )
+    /* eslint-enable jsx-a11y/no-static-element-interactions */
 }
 
 DangerousHTML.propTypes = {
@@ -76,22 +58,6 @@ DangerousHTML.propTypes = {
      * Adds values to the `class` attribute of the root element
      */
     className: PropTypes.string,
-
-    /**
-     * Enable external resources (like images), that were previously disabled by capture.js
-     */
-    enableExternalResources: PropTypes.bool,
-
-    /**
-     * Prefix used for external resources. Look at capture.js for more details
-     */
-    externalResourcesPrefix: PropTypes.string
-}
-
-DangerousHTML.defaultProps = {
-    enableBrowserHistoryForLinks: true,
-    enableExternalResources: false,
-    externalResourcesPrefix: 'x-'
 }
 
 export default DangerousHTML
