@@ -11,9 +11,11 @@ import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
-import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress} from './../../checkout/results'
+import {getSelectedShippingMethodValue} from '../../../store/checkout/shipping/selectors'
+import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress, receiveSelectedShippingMethod, receiveBillingSameAsShipping} from './../../checkout/results'
 
-export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch) => {
+export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
+    const selectedShippingMethodId = getSelectedShippingMethodValue(getState())
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
         .then((response) => response.json())
@@ -26,13 +28,12 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch) => {
                   }))
 
             dispatch(receiveShippingAddress({
-                shipping_method: shippingMethods[0].id,
                 postcode: inputAddress.postcode,
                 countryId: inputAddress.countryId,
                 region: inputAddress.region,
                 regionId: inputAddress.regionId
             })) // set initial values for the shipping form
-
+            dispatch(receiveSelectedShippingMethod(selectedShippingMethodId || shippingMethods[0].id))
             return dispatch(receiveShippingMethods(shippingMethods))
         })
 }
@@ -63,14 +64,14 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                     city: shipping_address.city,
                     regionId: shipping_address.state_code,
                     postcode: shipping_address.postal_code,
-                    telephone: shipping_address.phone,
-                    shipping_method: shipping_method ? shipping_method.id : undefined
+                    telephone: shipping_address.phone
                 }
             } else {
                 initialValues = {
                     countryId: 'us'
                 }
             }
+            dispatch(receiveSelectedShippingMethod(shipping_method ? shipping_method.id : undefined))
             dispatch(receiveShippingAddress(initialValues))
             /* eslint-enable camelcase */
             return dispatch(populateLocationsData())
@@ -85,10 +86,13 @@ export const initCheckoutPaymentPage = () => (dispatch) => {
     dispatch(populateLocationsData())
     return requestCartData()
         .then((basket) => {
+            const shippingMethod = basket.shipments[0].shipping_method
             const addressData = parseShippingAddressFromBasket(basket)
 
+            dispatch(receiveSelectedShippingMethod(shippingMethod ? shippingMethod.id : undefined))
             dispatch(receiveShippingAddress(addressData))
-            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
+            dispatch(receiveBillingSameAsShipping(true))
+            dispatch(receiveBillingAddress(addressData))
         })
 }
 
@@ -119,7 +123,7 @@ const setShippingAddress = (formValues, basket) => () => (
 const setShippingMethod = (formValues, basket) => () => (
     makeApiJsonRequest(
         `/baskets/${basket.basket_id}/shipments/me/shipping_method`,
-        {id: formValues.shipping_method},
+        {id: formValues.shippingMethodId},
         {method: 'PUT'}
     )
 )
@@ -155,7 +159,7 @@ const addPaymentMethod = (formValues, basket) => (dispatch, getState) => {
 }
 
 const setBillingAddress = (formValues, basket) => () => {
-    if (formValues.billing_same_as_shipping) {
+    if (formValues.billingSameAsShipping) {
         // No change to the address is necessary
         return Promise.resolve(basket)
     }
