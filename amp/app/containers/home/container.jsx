@@ -19,7 +19,9 @@ const Home = ({
 }) => {
     return (
         <div className={containerClass}>
-            <Sheet id="menu-sheet" headerContent="Header" footerContent="Footer">
+            <Sheet id="menu-sheet"
+                   headerContent={<p>Header</p>}
+                   footerContent={<p>Footer</p>}>
                 <ul>
                     <li><a href="#">Home</a></li>
                     <li><a href="#">Sign in</a></li>
