@@ -16,5 +16,3 @@ curl \
 	-X POST \
 	-d "{ \"repo_name\": \"$REPO_NAME\", \"git_hash\": \"$GIT_HASH\", \"branch\": \"$BRANCH\",  \"tti\": \"$TTI\", \"report\": \"$REPORT_PATH\" }" \
 	https://hooks.zapier.com/hooks/catch/87314/9mex4p/
-
-exit 0
