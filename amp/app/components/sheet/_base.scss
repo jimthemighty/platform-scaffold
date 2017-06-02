@@ -9,7 +9,13 @@
 // `amp--shrink-to-content` is active.
 
 .amp-sheet {
+    box-shadow: $box-shadow;
+
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0); // 1
+
+    &.amp--no-shadow {
+        box-shadow: none;
+    }
 }
 
 

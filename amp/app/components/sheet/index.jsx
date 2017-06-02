@@ -15,8 +15,11 @@ const Sheet = ({
     side,
     title,
     shrinkToContent,
+    noShadow
 }) => {
-    const classes = classNames('amp-sheet', className)
+    const classes = classNames('amp-sheet', {
+        'amp--no-shadow': noShadow
+    }, className)
 
     const innerClasses = classNames('amp-sheet__inner', {
         'amp--shrink-to-content': shrinkToContent
@@ -82,6 +85,11 @@ Sheet.propTypes = {
     id: PropTypes.string,
 
     /**
+     * Remove shadow to Sheet
+     */
+    noShadow: PropTypes.bool,
+
+    /**
      * Dictate whether the height of the modal grows to the maximum height as
      * declared by the `coverage` prop, or to shrink down to the height of the
      * modal's content.
@@ -103,6 +111,7 @@ Sheet.propTypes = {
 }
 
 Sheet.defaultProps = {
+    noShadow: false,
     shrinkToContent: false,
     side: 'left'
 }
