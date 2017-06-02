@@ -18,6 +18,7 @@ const checkoutReducer = handleActions({
     [integrationManagerResults.receiveUserEmail]: mergePayload,
     [integrationManagerResults.receiveCheckoutCustomContent]: mergePayload,
     [integrationManagerResults.receiveSelectedShippingMethod]: mergePayload,
+    [integrationManagerResults.receiveBillingSameAsShipping]: mergePayload,
     [integrationManagerResults.receiveLocationsCustomContent]: setCustomContent('locations'),
     [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shippingAddress'),
     [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billingAddress'),

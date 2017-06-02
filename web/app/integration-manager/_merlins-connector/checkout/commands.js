@@ -15,7 +15,8 @@ import {
     receiveCheckoutConfirmationData,
     receiveBillingAddress,
     receiveShippingMethods,
-    receiveSelectedShippingMethod
+    receiveSelectedShippingMethod,
+    receiveBillingSameAsShipping
 } from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
 import {fetchPageData} from '../app/commands'
@@ -160,7 +161,8 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
-            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
+            dispatch(receiveBillingSameAsShipping(true))
+            dispatch(receiveBillingAddress(addressData))
             return dispatch(processCheckoutData($response))
         })
 }
@@ -212,7 +214,6 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
     }
 
     const persistPaymentURL = `${cartBaseUrl}/payment-information`
-    dispatch(receiveBillingAddress(address))
     return makeJsonEncodedRequest(persistPaymentURL, paymentInformation, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {
