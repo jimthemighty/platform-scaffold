@@ -12,7 +12,7 @@ const removeUndefinedAddressKeys = (addressData) => {
     return addressData
 }
 
-const getNameValue = (firstname, lastname) =>
+export const getNameValue = (firstname, lastname) =>
       [firstname, lastname].filter((item) => item).join(' ')
 
 export const parseShippingInitialValues = (shippingFieldData) => {
@@ -27,8 +27,7 @@ export const parseShippingInitialValues = (shippingFieldData) => {
         countryId: fieldData.country_id.value,
         regionId: fieldData.region_id.value,
         postcode: fieldData.postcode.value,
-        telephone: fieldData.telephone.value,
-        billing_same_as_shipping: true
+        telephone: fieldData.telephone.value
     }
 
     // Remove undefined keys to prevent valid content being overriden in the store

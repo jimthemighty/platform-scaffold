@@ -7,28 +7,39 @@ import Immutable from 'immutable'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getCheckout} from '../../selectors'
 import {getShippingMethods} from '../selectors'
+import {getShippingSavedAddressID} from '../../form/selectors'
 
 export const getShipping = createGetSelector(getCheckout, 'shipping', Immutable.Map())
 
 export const getShippingCustomContent = createGetSelector(getShipping, 'custom')
 
-export const getSavedAddresses = createGetSelector(getCheckout, 'savedAddresses', Immutable.List())
+export const getSavedAddresses = createGetSelector(getCheckout, 'storedAddresses', Immutable.List())
+
+
+export const getSelectedSavedShippingAddress = createSelector(
+    getSavedAddresses,
+    getShippingSavedAddressID,
+    (savedAddresses, selectedAddressID) => savedAddresses.find((address) => address.get('id') === selectedAddressID)
+)
 
 export const getShippingAddress = createGetSelector(getCheckout, 'shippingAddress', Immutable.Map())
+export const getSelectedSavedAddressId = createGetSelector(getCheckout, 'defaultShippingAddressId')
+export const getSelectedShippingMethodValue = createGetSelector(getCheckout, 'selectedShippingMethodId', '')
 
 export const getInitialShippingAddress = createSelector(
     getCheckout,
     getShippingAddress,
-    (checkout, address) => {
-        const savedAddressId = checkout.get('defaultShippingAddressId')
+    getSelectedSavedAddressId,
+    getSelectedShippingMethodValue,
+    (checkout, address, savedAddressId, shippingMethodId) => {
+        address = address.set('shippingMethodId', shippingMethodId)
         if (savedAddressId) {
-            return address.set('saved_address', `${savedAddressId}`)
+            return address.set('savedAddress', `${savedAddressId}`)
         }
         return address
     }
 )
 
-export const getSelectedShippingMethodValue = createGetSelector(getShippingAddress, 'shipping_method', '')
 
 export const getSelectedShippingMethod = createSelector(
     getShippingMethods,
