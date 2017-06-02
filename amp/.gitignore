@@ -1,2 +1,5 @@
 coverage
-build
+/build
+!*/build
+/env
+.python-version
