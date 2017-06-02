@@ -2,7 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
+import {makeRequest, makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const isEmailAvailable = (email) => (dispatch) => {
     return makeJsonEncodedRequest(
@@ -15,3 +16,36 @@ export const isEmailAvailable = (email) => (dispatch) => {
             return /true/.test(responseText)
         })
 }
+
+const fetchPageData = (url) => (dispatch) => {
+    console.log('sending request')
+    return makeRequest(url)
+        .then(jqueryResponse)
+        .then((res) => {
+            console.log('got response')
+            const [$, $response] = res
+            // const isLoggedIn = parseLoginStatus($response)
+            // dispatch(setLoggedIn(isLoggedIn))
+            // dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
+            return res
+        })
+        .catch((error) => {
+            console.info(error.message)
+            if (error.name !== 'FetchError') {
+                throw error
+            } else {
+                throw error
+                // dispatch(setPageFetchError(error.message))
+            }
+        })
+}
+
+export const initPrivacyPage = (url) => (dispatch) => {
+    console.log('yay')
+    return dispatch(fetchPageData(url))
+        .then(() => {
+            // dispatch(setSigninLoaded())
+        })
+}
+
+

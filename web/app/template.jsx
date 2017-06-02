@@ -23,7 +23,7 @@ const template = (WrappedComponent) => {
             const url = getURL(location)
 
             dispatch(onRouteChanged(url, route.routeName))
-
+            console.log('test')
             if (route.fetchAction) {
                 dispatch(route.fetchAction(route.fetchUrl || url, route.routeName))
                     .then(() => dispatch(setFetchedPage(url)))
@@ -34,6 +34,7 @@ const template = (WrappedComponent) => {
         }
 
         componentWillMount() {
+            console.log('test')
             this.dispatchRouteChange(this.props)
         }
 
