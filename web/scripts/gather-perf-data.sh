@@ -3,9 +3,9 @@
 REPO_NAME=${CIRCLE_PROJECT_REPONAME:-Repo Name}
 GIT_HASH=${CIRCLE_SHA1:-Commit}
 BRANCH=${CIRCLE_BRANCH:-Branch}
-TTI=${TIME_TO_INTERACTIVE}
+TTI=${jsonResults.audits['time-to-interactive'].displayValue}
 REPORT_PATH=${CIRCLE_ARTIFACTS:-`pwd`/reports}/audit-local.html
-
+DATE=`date +%Y-%m-%d`
 
 # ID=${CIRCLE_BUILD_NUM:-test}
 # curl https://hooks.zapier.com/hooks/catch/87314/9mex4p/
