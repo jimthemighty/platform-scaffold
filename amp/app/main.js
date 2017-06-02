@@ -18,7 +18,7 @@ import Analytics from './components/analytics'
 import * as home from './containers/home/container'
 import * as productDetails from './containers/product-details/container'
 import * as productList from './containers/product-list/container'
-import AppComponent from './containers/app/container'
+import App from './containers/app/container'
 
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
@@ -60,12 +60,10 @@ const render = (req, res, store, component, css) => {
     const body = ReactDOMServer.renderToStaticMarkup(
         <ampSDK.AmpContext declareDependency={scripts.add}>
             <Provider store={store}>
-                <div>
-                    <AppComponent>
-                        <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
-                        {React.createElement(component, {}, null)}
-                    </AppComponent>
-                </div>
+                <App>
+                    <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                    {React.createElement(component, {}, null)}
+                </App>
             </Provider>
         </ampSDK.AmpContext>
     )
