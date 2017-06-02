@@ -177,6 +177,7 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         customerAddressId,
         customerId
     } = formValues
+
     const address = {
         firstname,
         lastname,
@@ -206,7 +207,6 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
     }
 
     const persistPaymentURL = `${cartBaseUrl}/payment-information`
-    dispatch(receiveBillingAddress(address))
     return makeJsonEncodedRequest(persistPaymentURL, paymentInformation, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {
