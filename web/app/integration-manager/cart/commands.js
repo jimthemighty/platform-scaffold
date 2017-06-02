@@ -26,19 +26,29 @@ export const initCartPage = (url, routeName) => connector.initCartPage(url, rout
  */
 export const getCart = () => connector.getCart()
 
-const sendAddToCartAnalytics = createActionWithAnalytics(
-    'Send cart analytics',
-    [],
-    EVENT_ACTION.addToCart,
-    (count, subtotal, product) => ({
-        cart: new ShoppingList({
-            [ShoppingList.TYPE]: 'cart',
-            count,
-            subtotal
-        }),
-        product: new Product(product)
-    })
-)
+const cartMetaCreator = (count, subtotal, product) => ({
+    cart: new ShoppingList({
+        [ShoppingList.TYPE]: 'cart',
+        count,
+        subtotal
+    }),
+    product
+})
+
+const sendAddToCartAnalytics = createActionWithAnalytics('Send cart analytics', [], EVENT_ACTION.addToCart, cartMetaCreator)
+const sendRemoveFromCartAnalytics = createActionWithAnalytics('Send cart analytics', [], EVENT_ACTION.removeFromCart, cartMetaCreator)
+
+const dispatchCartAnalytics = (action, dispatch, getState, id) => {
+    const currentState = getState()
+    const cartCount = getCartSummaryCount(currentState)
+    const subtotal = getSubtotal(currentState)
+
+    if (action === EVENT_ACTION.addToCart) {
+        dispatch(sendAddToCartAnalytics(cartCount, subtotal, new Product(getProductById(id)(currentState).toJS())))
+    } else {
+        dispatch(sendRemoveFromCartAnalytics(cartCount, subtotal))
+    }
+}
 
 /**
  * Adds a product to the cart
@@ -48,13 +58,7 @@ const sendAddToCartAnalytics = createActionWithAnalytics(
  */
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
     return dispatch(connector.addToCart(productId, quantity)).then((cart) => {
-        const currentState = getState()
-        const cartCount = getCartSummaryCount(currentState)
-        const subtotal = getSubtotal(currentState)
-        const product = getProductById(productId)(currentState).toJS()
-
-        dispatch(sendAddToCartAnalytics(cartCount, subtotal, product))
-
+        dispatchCartAnalytics(EVENT_ACTION.addToCart, dispatch, getState, productId)
         return cart
     })
 }
@@ -64,7 +68,12 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
  * @function
  * @param itemID {string} The cart item ID to remove
  */
-export const removeFromCart = (itemID) => connector.removeFromCart(itemID)
+export const removeFromCart = (ItemId) => (dispatch, getState) => {
+    return dispatch(connector.removeFromCart(ItemId)).then((cart) => {
+        dispatchCartAnalytics(EVENT_ACTION.removeFromCart, dispatch, getState, ItemId)
+        return cart
+    })
+}
 
 /**
  * Updates the quantity of the given item in the cart
