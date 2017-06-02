@@ -2,10 +2,10 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {makeJsonEncodedRequest, makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
+import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser, getNameValue} from './parsers'
 import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
 import {getCart} from '../cart/commands'
@@ -13,6 +13,8 @@ import {
     receiveCheckoutLocations,
     receiveShippingAddress,
     receiveCheckoutConfirmationData,
+    setDefaultShippingAddressId,
+    receiveSavedShippingAddresses,
     receiveBillingAddress,
     receiveShippingMethods,
     receiveSelectedShippingMethod,
@@ -25,6 +27,7 @@ import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
 import {prepareEstimateAddress} from '../utils'
 
@@ -56,6 +59,47 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
         })
 }
 
+
+
+export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
+    return (dispatch) => {
+        const fetchURL = `/rest/default/V1/carts/mine`
+        return makeRequest(fetchURL, {method: 'GET'})
+            .then((response) => response.json())
+            .then(({customer}) => {
+                let defaultShippingId
+                const addresses = customer.addresses.map((address) => {
+                    if (address.default_shipping) {
+                        defaultShippingId = address.id
+                    }
+                    const [addressLine1, addressLine2] = address.street
+
+                    // Not spreading `address` because it has key/values that
+                    // we want to rename and remove
+                    return {
+                        city: address.city,
+                        countryId: address.country_id,
+                        id: `${address.id}`,
+                        firstname: address.firstname,
+                        lastname: address.lastname,
+                        fullname: getNameValue(address.firstname, address.lastname),
+                        postcode: address.postcode,
+                        regionId: `${address.region.region_id}`,
+                        region: address.region.region,
+                        regionCode: address.region.region_code,
+                        addressLine1,
+                        addressLine2,
+                        telephone: address.telephone,
+                    }
+                })
+
+                dispatch(setDefaultShippingAddressId(selectedSavedAddressId || defaultShippingId))
+                dispatch(receiveSavedShippingAddresses(addresses))
+            })
+    }
+}
+
+
 const processCheckoutData = ($response) => (dispatch) => {
     dispatch(receiveEntityID(parseCheckoutEntityID($response)))
     const magentoFieldData = extractMagentoShippingStepData($response)
@@ -65,9 +109,25 @@ const processCheckoutData = ($response) => (dispatch) => {
     dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
 }
 
+const shippingDataSelector = createPropsSelector({
+    isLoggedIn: getIsLoggedIn,
+    selectedSavedAddressId: shippingSelectors.getSelectedSavedAddressId
+})
+
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
+        .then(() => {
+            const {
+                isLoggedIn,
+                selectedSavedAddressId
+            } = shippingDataSelector(getState())
+
+            if (isLoggedIn) {
+                return dispatch(fetchSavedShippingAddresses(selectedSavedAddressId))
+            }
+            return Promise.resolve()
+        })
         .then(() => dispatch(fetchShippingMethodsEstimate(getShippingFormValues(getState()))))
 }
 
@@ -80,44 +140,32 @@ export const initCheckoutConfirmationPage = (url) => (dispatch) => {
 }
 
 export const submitShipping = (formValues) => (dispatch, getState) => {
-    const currentState = getState()
-    const savedAddress = formValues.saved_address
+    const savedAddress = formValues.savedAddress
     const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
-    let address
 
-    // Format the shipping address according to whether it's a saved or new address
-    if (submittingWithNewAddress) {
-        const {name} = formValues
-        const names = name.split(' ')
-        const newAddress = formValues
+    // Format the shipping address
+    const {name} = formValues
+    const names = name.split(' ')
+    const newAddress = formValues
 
-        address = {
-            firstname: names.slice(0, -1).join(' '),
-            lastname: names.slice(-1).join(' '),
-            company: newAddress.company || '',
-            telephone: newAddress.telephone,
-            postcode: newAddress.postcode,
-            city: newAddress.city,
-            street: newAddress.addressLine2
-                ? [newAddress.addressLine1, newAddress.addressLine2]
-                : [newAddress.addressLine1],
-            regionId: newAddress.regionId,
-            region: newAddress.region,
-            countryId: newAddress.countryId,
-            saveInAddressBook: true
-        }
-    } else {
-        const {saved_address} = formValues
-        const savedAddress = shippingSelectors.getSavedAddresses(currentState).toJS()
-            .filter(({customerAddressId}) => {
-                return parseInt(customerAddressId) === parseInt(saved_address)
-            })[0] || {}
+    const address = {
+        firstname: names.slice(0, -1).join(' '),
+        lastname: names.slice(-1).join(' '),
+        company: newAddress.company || '',
+        telephone: newAddress.telephone,
+        postcode: newAddress.postcode,
+        city: newAddress.city,
+        street: newAddress.addressLine2
+            ? [newAddress.addressLine1, newAddress.addressLine2]
+            : [newAddress.addressLine1],
+        regionId: newAddress.regionId,
+        region: newAddress.region,
+        countryId: newAddress.countryId,
+        saveInAddressBook: true
+    }
 
-        address = {
-            ...savedAddress,
-            region: savedAddress.region,
-            saveInAddressBook: false
-        }
+    if (!submittingWithNewAddress) {
+        address.saveInAddressBook = false
 
         delete address.default_billing
         delete address.default_shipping
@@ -137,7 +185,7 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             shipping_method_code: shippingSelections[1]
         }
     }
-    const cartBaseUrl = getCartBaseUrl(currentState)
+    const cartBaseUrl = getCartBaseUrl(getState())
     const persistShippingURL = `${cartBaseUrl}/shipping-information`
     return makeJsonEncodedRequest(persistShippingURL, addressData, {method: 'POST'})
         .then((response) => {

@@ -14,7 +14,7 @@ import {getCardData} from 'progressive-web-sdk/dist/card-utils'
 import {getSelectedShippingMethodValue} from '../../../store/checkout/shipping/selectors'
 import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress, receiveSelectedShippingMethod, receiveBillingSameAsShipping} from './../../checkout/results'
 
-export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
+export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, getState) => {
     const selectedShippingMethodId = getSelectedShippingMethodValue(getState())
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
@@ -28,10 +28,7 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
                   }))
 
             dispatch(receiveShippingAddress({
-                postcode: inputAddress.postcode,
-                countryId: inputAddress.countryId,
-                region: inputAddress.region,
-                regionId: inputAddress.regionId
+                ...inputAddress
             })) // set initial values for the shipping form
             dispatch(receiveSelectedShippingMethod(selectedShippingMethodId || shippingMethods[0].id))
             return dispatch(receiveShippingMethods(shippingMethods))
@@ -218,3 +215,5 @@ export const submitPayment = (formValues) => (dispatch) => {
 }
 
 export const updateShippingAndBilling = () => () => Promise.resolve()
+
+export const fetchSavedShippingAddresses = () => () => Promise.resolve()

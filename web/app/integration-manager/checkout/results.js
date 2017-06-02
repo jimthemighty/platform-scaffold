@@ -16,6 +16,8 @@ export const receiveCheckoutCustomContent = createAction('Receive Checkout Custo
 export const receiveShippingAddress = createAction('Receive Shipping Initial Values', ['shippingAddress'])
 export const receiveHasExistingCard = createAction('Receive Has Existing Cart flag', ['hasExistingCreditCard'])
 export const receiveBillingAddress = createAction('Receive Billing Initial Values', ['billingAddress'])
+export const setDefaultShippingAddressId = createAction('Receive default shipping address ID', ['defaultShippingAddressId'])
+export const receiveSavedShippingAddresses = createAction('Receive Saved Shipping Addresses', ['storedAddresses'])
 export const receiveBillingSameAsShipping = createAction('Receive Billing same as Shipping', ['billingSameAsShipping'])
 
 
