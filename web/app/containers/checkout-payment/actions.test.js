@@ -23,7 +23,7 @@ test('submitPayment calls submitPayment command', () => {
         form: {
             [PAYMENT_FORM_NAME]: {
                 values: {
-                    billing_same_as_shipping: false,
+                    billingSameAsShipping: false,
                     name: 'Test Name'
                 }
             }

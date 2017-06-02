@@ -5,18 +5,18 @@
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
 import {mergePayload, setCustomContent} from '../../utils/reducer-utils'
-import {receiveSavedShippingAddresses} from './actions'
 import * as integrationManagerResults from '../../integration-manager/checkout/results'
-import {setDefaultShippingAddressId} from './shipping/actions'
 
 const checkoutReducer = handleActions({
-    [receiveSavedShippingAddresses]: mergePayload,
+    [integrationManagerResults.receiveSavedShippingAddresses]: mergePayload,
     [integrationManagerResults.receiveCheckoutLocations]: mergePayload,
     [integrationManagerResults.receiveBillingAddress]: mergePayload,
     [integrationManagerResults.receiveShippingAddress]: mergePayload,
     [integrationManagerResults.receiveCheckoutData]: mergePayload,
     [integrationManagerResults.receiveUserEmail]: mergePayload,
     [integrationManagerResults.receiveCheckoutCustomContent]: mergePayload,
+    [integrationManagerResults.receiveSelectedShippingMethod]: mergePayload,
+    [integrationManagerResults.receiveBillingSameAsShipping]: mergePayload,
     [integrationManagerResults.receiveLocationsCustomContent]: setCustomContent('locations'),
     [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shippingAddress'),
     [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billingAddress'),
@@ -25,7 +25,7 @@ const checkoutReducer = handleActions({
         // correctly truncated.
         state.set('shippingMethods', Immutable.fromJS(payload))
     ),
-    [setDefaultShippingAddressId]: mergePayload
+    [integrationManagerResults.setDefaultShippingAddressId]: mergePayload
 }, Immutable.Map())
 
 export default checkoutReducer
