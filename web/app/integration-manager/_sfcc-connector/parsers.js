@@ -41,12 +41,17 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
     return defaultVariant
 }
 
-/* eslint-enable camelcase */
+
 
 export const getProductHref = (productID) => `/s/${getSiteID()}/${productID}.html`
 
 export const parseProductDetails = ({id, name, price, inventory, long_description, image_groups, variants, variation_attributes}) => {
-    const images = parseImages(image_groups)
+    let images = []
+
+    if (image_groups) {
+        images = parseImages(image_groups)
+    }
+
     return {
         id,
         title: name,
@@ -67,7 +72,6 @@ export const parseProductDetails = ({id, name, price, inventory, long_descriptio
 }
 
 export const parseBasketContents = ({product_items, product_sub_total, product_total, order_total}) => {
-    /* eslint-disable camelcase */
     let summary_count = 0
     const items = product_items ? product_items.map(({item_id, product_name, product_id, base_price, quantity}) => {
         summary_count += quantity
