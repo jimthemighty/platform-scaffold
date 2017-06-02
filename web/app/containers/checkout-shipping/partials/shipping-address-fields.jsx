@@ -116,7 +116,7 @@ const ShippingAddressFields = ({
                 <ReduxForm.Field
                     component={Field}
                     name="postcode"
-                    label="Postal Code"
+                    label="Zip/Postal Code"
                     customEventHandlers={{
                         onBlur: fetchShippingMethods
                     }}

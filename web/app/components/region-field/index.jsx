@@ -41,7 +41,7 @@ const RegionField = ({
             className={classNames(classes, 'pw--has-select')}
             component={Field}
             name="regionId"
-            label="State/Province"
+            label="Region"
         >
             <select>
                 <option value={null}>Please select a region, state, or province</option>
