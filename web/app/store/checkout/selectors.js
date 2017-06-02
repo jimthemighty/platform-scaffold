@@ -15,6 +15,8 @@ export const getLocations = createGetSelector(getCheckout, 'locations', Immutabl
 export const getCountries = createGetSelector(getLocations, 'countries', Immutable.List())
 export const getRegions = createGetSelector(getLocations, 'regions', Immutable.List())
 
+export const getBillingSameAsShipping = createGetSelector(getCheckout, 'billingSameAsShipping')
+
 export const getSelectedCountryID = (formKey) => createSelector(
     getFormValues(formKey),
     (values) => {

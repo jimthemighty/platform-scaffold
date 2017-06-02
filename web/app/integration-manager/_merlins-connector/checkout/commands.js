@@ -4,7 +4,7 @@
 
 import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
-
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
 import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
@@ -14,7 +14,9 @@ import {
     receiveShippingAddress,
     receiveCheckoutConfirmationData,
     receiveBillingAddress,
-    receiveShippingMethods
+    receiveShippingMethods,
+    receiveSelectedShippingMethod,
+    receiveBillingSameAsShipping
 } from './../../checkout/results'
 import {receiveCartContents} from './../../cart/results'
 import {fetchPageData} from '../app/commands'
@@ -26,8 +28,13 @@ import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
 import {prepareEstimateAddress} from '../utils'
 
+const shippingMethodEstimateSelector = createPropsSelector({
+    cartBaseUrl: getCartBaseUrl,
+    selectedShippingMethodId: shippingSelectors.getSelectedShippingMethodValue
+})
+
 export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
-    const cartBaseUrl = getCartBaseUrl(getState())
+    const {cartBaseUrl, selectedShippingMethodId} = shippingMethodEstimateSelector(getState())
     const address = prepareEstimateAddress(inputAddress)
 
     return makeJsonEncodedRequest(
@@ -40,12 +47,12 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
         .then((shippingMethods) => {
             dispatch(receiveShippingMethods(shippingMethods))
             dispatch(receiveShippingAddress({
-                shipping_method: shippingMethods[0].id,
                 postcode: address.postcode,
                 countryId: address.country_id,
                 region: address.region,
                 regionId: address.regionId
             })) // set initial values for the shipping form
+            dispatch(receiveSelectedShippingMethod(selectedShippingMethodId || shippingMethods[0].id))
         })
 }
 
@@ -117,8 +124,8 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
     }
 
     // Prepare and then run Shipping Information request
-    const {shipping_method} = formValues
-    const shippingSelections = shipping_method.split('_')
+    const {shippingMethodId} = formValues
+    const shippingSelections = shippingMethodId.split('_')
     const addressData = {
         addressInformation: {
             shippingAddress: address,
@@ -154,7 +161,8 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
-            dispatch(receiveBillingAddress({...addressData, billing_same_as_shipping: true}))
+            dispatch(receiveBillingSameAsShipping(true))
+            dispatch(receiveBillingAddress(addressData))
             return dispatch(processCheckoutData($response))
         })
 }
@@ -206,7 +214,6 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
     }
 
     const persistPaymentURL = `${cartBaseUrl}/payment-information`
-    dispatch(receiveBillingAddress(address))
     return makeJsonEncodedRequest(persistPaymentURL, paymentInformation, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {
