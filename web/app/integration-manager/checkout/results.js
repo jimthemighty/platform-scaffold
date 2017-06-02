@@ -34,7 +34,7 @@ const remapProducts = (products) => {
     return mappedProducts
 }
 
-const realReceiveCheckoutConfirmationData = createActionWithAnalytics(
+export const realReceiveCheckoutConfirmationData = createActionWithAnalytics(
     'Receive Checkout Confirmation Data',
     ['confirmationData'],
     EVENT_ACTION.purchase,
