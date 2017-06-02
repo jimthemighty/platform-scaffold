@@ -43,8 +43,8 @@ export const Address = Runtypes.Record({
     postcode: Text,
     telephone: Text
 }).And(Runtypes.Optional({
-    // We expect one of these to be non-null
+    addressLine2: Nullable(Text),
+    // We expect one of these two "region" fields to be non-null
     regionId: Nullable(Identifier),
-    region: Nullable(Text),
-    addressLine2: Nullable(Text)
+    region: Nullable(Text)
 }))
