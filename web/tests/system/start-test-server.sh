@@ -18,6 +18,7 @@ if [ "$CURRENT_BRANCH" != "master" ]; then
     export ACTIVE_PROFILE=local
     echo "Running Test Server."
     npm run prod:build
+    npm run test:stats
     npm run test:server
 else
     echo "On production branch, test server not needed."

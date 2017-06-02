@@ -30,19 +30,18 @@ trap 'kill $(jobs -pr)' SIGINT SIGTERM EXIT
 # CI will fail the build if the score is below a threshold.
 # See min_lighthouse_score in package.json
 
-sudo apt-get install libnss3-tools
-# Initialize database of certificates
-mkdir -p $HOME/.pki/nssdb
-# Pass in a password
-certutil -d $HOME/.pki/nssdb -N --empty-password
-# Add self-signed SSL certificate
-certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n dev-server/localhost.pem -i dev-server/localhost.pem
-
-npm run prod:build
-npm run test:server &
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+	sudo apt-get install libnss3-tools
+	# Initialize database of certificates
+	mkdir -p $HOME/.pki/nssdb
+	# Pass in a password
+	certutil -d $HOME/.pki/nssdb -N --empty-password
+	# Add self-signed SSL certificate
+	certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n dev-server/localhost.pem -i dev-server/localhost.pem
+fi
 
 # --ignore-certificate-errors thanks to https://github.com/GoogleChrome/lighthouse/issues/559
-sleep 5
+while ! echo exit | nc localhost 8443; do sleep 10; done
 lighthouse \
     --chrome-flags='--user-agent="MobifyPreview" --allow-insecure-localhost --ignore-certificate-errors' \
 	--output json \

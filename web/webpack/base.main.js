@@ -11,6 +11,7 @@ const baseCommon = require('./base.common')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin
 
 const webPackageJson = require('../package.json')   // eslint-disable-line import/no-extraneous-dependencies
 
@@ -76,7 +77,8 @@ const config = {
             options: {
                 postcss: baseCommon.postcss
             }
-        })
+        }),
+        new WebpackBundleSizeAnalyzerPlugin('./reports/plain-report.txt')
     ],
     module: {
         rules: [
@@ -106,7 +108,8 @@ if (analyzeBundle) {
     config.plugins = config.plugins.concat([
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
-            openAnalyzer: true
+            openAnalyzer: true,
+            generateStatsFile: true
         })
     ])
 }
