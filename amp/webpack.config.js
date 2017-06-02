@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
-const baseCommon = require('./webpack/base.common')
 const fs = require('fs');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
     entry: './app/main.js',
@@ -35,13 +35,25 @@ module.exports = {
                     {loader: 'postcss-loader'},
                     {loader: 'sass-loader'}
                 ]
+            },
+            {
+                test: /\.svg$/,
+                use: 'raw-loader'
             }
         ]
     },
     plugins: [
         new webpack.LoaderOptionsPlugin({
             options: {
-                postcss: baseCommon.postcss
+                postcss: () => [
+                    autoprefixer({
+                        browsers: [
+                            'iOS >= 9.0',
+                            'Android >= 4.4.4',
+                            'last 4 ChromeAndroid versions'
+                        ]
+                    })
+                ]
             }
         })
     ],
