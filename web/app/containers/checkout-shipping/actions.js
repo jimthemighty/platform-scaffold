@@ -9,7 +9,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {splitFullName} from '../../utils/utils'
-import {receiveCheckoutData, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
+import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
 
 import {
     submitShipping as submitShippingCommand,
@@ -105,7 +105,7 @@ export const submitShipping = () => (dispatch, getState) => {
     }
 
     if (username) {
-        dispatch(receiveCheckoutData({emailAddress: username}))
+        dispatch(receiveUserEmail(username))
     }
     dispatch(receiveSelectedShippingMethod(shippingMethodId))
     dispatch(receiveShippingAddress(address))
