@@ -12,11 +12,13 @@ import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
+import ampPackageJson from '../package.json'
 
+import Analytics from './components/analytics'
 import * as home from './containers/home/container'
-import * as pdp from './containers/pdp/container'
-import * as plp from './containers/plp/container'
-
+import * as productDetails from './containers/product-details/container'
+import * as productList from './containers/product-list/container'
+import AppComponent from './containers/app/container'
 
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
@@ -54,16 +56,18 @@ const initializeStore = (req) => {
 
 const render = (req, res, store, component, css) => {
     const scripts = new ampSDK.Set()
+
     const body = ReactDOMServer.renderToStaticMarkup(
-        <div>
-            <h1>Static URL: "{process.env.STATIC_URL}"</h1>
-            <amp-img src={process.env.STATIC_URL + 'mobify.png'} height="64" width="252" />
+        <ampSDK.AmpContext declareDependency={scripts.add}>
             <Provider store={store}>
-                <ampSDK.AmpContext declareDependency={scripts.add}>
-                    {React.createElement(component, {}, null)}
-                </ampSDK.AmpContext>
+                <div>
+                    <AppComponent>
+                        <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                        {React.createElement(component, {}, null)}
+                    </AppComponent>
+                </div>
             </Provider>
-        </div>
+        </ampSDK.AmpContext>
     )
     const state = store.getState()
     const rendered = ampPage({
@@ -77,15 +81,15 @@ const render = (req, res, store, component, css) => {
 }
 
 
-const productDetailPage = (req, res, next) => {
+const productDetailsPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, pdp.default, pdp.styles))
+        .then((store) => render(req, res, store, productDetails.default, productDetails.styles))
         .catch(next)
 }
 
 const productListPage = (req, res, next) => {
     initializeStore(req)
-        .then((store) => render(req, res, store, plp.default, plp.styles))
+        .then((store) => render(req, res, store, productList.default, productList.styles))
         .catch(next)
 }
 
@@ -104,8 +108,8 @@ app.get('/ingredients.html', productListPage)
 app.get('/supplies.html', productListPage)
 app.get('/new-arrivals.html', productListPage)
 app.get('/charms.html', productListPage)
-app.get('/checkout/cart/configure/id/*/product_id/*/', productDetailPage)
-app.get('*.html', productDetailPage)
+app.get('/checkout/cart/configure/id/*/product_id/*/', productDetailsPage)
+app.get('*.html', productDetailsPage)
 
 app.use('/static', express.static(path.resolve('./app/static')))
 
@@ -114,7 +118,7 @@ app.use('/static', express.static(path.resolve('./app/static')))
 const onLambda = process.env.hasOwnProperty('AWS_LAMBDA_FUNCTION_NAME')
 
 
-if (!onLambda) {
+if (!onLambda && require.main === module) {
     app.listen(3000, () => console.log('Example app listening on port 3000!'))
 }
 

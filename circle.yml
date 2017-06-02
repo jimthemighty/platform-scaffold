@@ -15,17 +15,18 @@ dependencies:
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
             pwd: web
             background: true
+        - npm install:
+            pwd: amp
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
         #- npm install:
         #    pwd: native
-        # Disabling amp `npm install` for now as we aren't set up to `npm install` a git dep yet
-        #- npm install:
-        #    pwd: amp
 test:
     override:
         - ./tests/system/run-all-tests.sh:
             pwd: web
             parallel: true
+        - npm run test:all:
+            pwd: amp
     post:
        - cp -R lighthouse/* $CIRCLE_ARTIFACTS:
            pwd: web

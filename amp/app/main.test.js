@@ -1,71 +1,55 @@
 /* eslint-env jest */
 import AmpHtmlValidator from 'amphtml-validator'
-import httpMocks from 'express-mocks-http'
+import httpMocks from 'node-mocks-http'
 import events from 'events'
 
 import app from './main'
 
 describe('Renders valid AMP', () => {
+    let validator
 
-    const validateAmp = (renderedPage, resolve, reject) => {
-        return AmpHtmlValidator.getInstance().then((validator) => {
-            const result = validator.validateString(renderedPage)
-            expect(result.status).toEqual('PASS')
-            resolve()
-        })
-        .catch((error) => {
-            reject(error)
-        })
+    beforeAll(() => {
+        return AmpHtmlValidator.getInstance().then((v) => { validator = v })
+    })
+
+    const validateAmp = (html) => {
+        expect(validator.validateString(html).status).toEqual('PASS')
     }
 
-    const makeResponse = () => {
-        return httpMocks.createResponse({
-            eventEmitter: events.eventEmitter
+    const handle = (req) => {
+        return new Promise((resolve) => {
+            const res = httpMocks.createResponse({
+                eventEmitter: events.EventEmitter
+            })
+
+            res.on('end', () => resolve(res))
+            res.on('send', () => resolve(res))
+
+            app.handle(req, res)
         })
     }
 
     test('Home', () => {
-        return new Promise((resolve, reject) => {
-            const request = httpMocks.createRequest({
-                method: 'GET',
-                url: '/'
-            })
-            const response = makeResponse()
-            response.send = (renderedPage) => {
-                return validateAmp(renderedPage, resolve, reject)
-            }
-
-            app.handle(request, response)
+        const req = httpMocks.createRequest({
+            method: 'GET',
+            url: '/'
         })
+        return handle(req).then((res) => validateAmp(res._getData()))
     })
 
-    test('PLP', () => {
-        return new Promise((resolve, reject) => {
-            const request = httpMocks.createRequest({
-                method: 'GET',
-                url: '/potions.html'
-            })
-            const response = makeResponse()
-            response.send = (renderedPage) => {
-                return validateAmp(renderedPage, resolve, reject)
-            }
-
-            app.handle(request, response)
+    test('ProductList', () => {
+        const req = httpMocks.createRequest({
+            method: 'GET',
+            url: '/potions.html'
         })
+        return handle(req).then((res) => validateAmp(res._getData()))
     })
 
-    test('PDP', () => {
-        return new Promise((resolve, reject) => {
-            const request = httpMocks.createRequest({
-                method: 'GET',
-                url: '/eye-of-newt.html'
-            })
-            const response = makeResponse()
-            response.send = (renderedPage) => {
-                return validateAmp(renderedPage, resolve, reject)
-            }
-
-            app.handle(request, response)
+    test('ProductDetails', () => {
+        const req = httpMocks.createRequest({
+            method: 'GET',
+            url: '/eye-of-newt.html'
         })
+        return handle(req).then((res) => validateAmp(res._getData()))
     })
 })

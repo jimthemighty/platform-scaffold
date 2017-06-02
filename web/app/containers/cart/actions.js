@@ -19,6 +19,7 @@ import {
     putPromoCode,
     deletePromoCode
 } from '../../integration-manager/cart/commands'
+import {getDiscountCode} from '../../store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
@@ -110,25 +111,19 @@ export const updateItem = (itemId, itemQuantity) => (dispatch) => {
         })
 }
 
-export const submitPromoCode = (couponCode) => (dispatch) => {
-    dispatch(putPromoCode(couponCode))
+export const submitPromoCode = ({promo}) => (dispatch) => {
+    dispatch(putPromoCode(promo))
         .catch(({message}) => {
-            let notificationMessage
-            if (message.includes(PROMO_ERROR)) {
-                notificationMessage = message
-            } else {
-                notificationMessage = PROMO_ERROR
-            }
             dispatch(addNotification(
                 'submitPromoError',
-                notificationMessage,
+                message.includes(PROMO_ERROR) ? message : PROMO_ERROR,
                 true
             ))
         })
 }
 
-export const removePromoCode = (couponCode) => (dispatch) => {
-    dispatch(deletePromoCode(couponCode))
+export const removePromoCode = () => (dispatch, getState) => {
+    dispatch(deletePromoCode(getDiscountCode(getState())))
         .catch(() => {
             dispatch(addNotification(
                 'removePromoError',

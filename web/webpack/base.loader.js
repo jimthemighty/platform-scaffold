@@ -64,7 +64,9 @@ module.exports = {
             MESSAGING_ENABLED: `${webPackageJson.messagingEnabled}`,
             // These are defined as string constants
             MESSAGING_SITE_ID: `'${webPackageJson.messagingSiteId}'`,
-            NATIVE_WEBPACK_ASTRO_VERSION: readNativeAstroVersion()
+            NATIVE_WEBPACK_ASTRO_VERSION: readNativeAstroVersion(),
+            PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
+            AJS_SLUG: `'${webPackageJson.aJSSlug}'`
         })
     ]
 }

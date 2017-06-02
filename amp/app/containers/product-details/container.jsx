@@ -4,9 +4,9 @@ import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import containerStyles from './container.scss'
 
-const containerClass = 't-pdp'
+const containerClass = 't-product-details'
 
-const PDP = ({links, title}) => {
+const ProductDetails = ({links, title}) => {
     return (
         <div className={containerClass}>
             <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
@@ -21,7 +21,7 @@ const PDP = ({links, title}) => {
     )
 }
 
-PDP.propTypes = {
+ProductDetails.propTypes = {
     /**
      * An array of links
      */
@@ -32,15 +32,17 @@ PDP.propTypes = {
     title: PropTypes.string
 }
 
+ProductDetails.templateName = 'pdp'
+
 const mapStateToProps = (state) => ({
     links: state.links,
-    title: `PDP! - ${state.title}` || '',
+    title: `ProductDetails! - ${state.title}` || '',
     className: containerClass
 })
 
 
 export default connect(
     mapStateToProps
-)(PDP)
+)(ProductDetails)
 
 export const styles = containerStyles.toString()

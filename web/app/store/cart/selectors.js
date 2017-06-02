@@ -38,6 +38,7 @@ export const getTax = createGetSelector(getCart, 'tax')
 export const getDiscount = createGetSelector(getCart, 'discount', Immutable.Map())
 export const getDiscountAmount = createGetSelector(getDiscount, 'amount')
 export const getDiscountLabel = createGetSelector(getDiscount, 'label')
+export const getDiscountCode = createGetSelector(getDiscount, 'code')
 
 export const getShipping = createGetSelector(getCart, 'shipping', Immutable.Map())
 export const getShippingAmount = createGetSelector(getShipping, 'amount')
