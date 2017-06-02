@@ -83,7 +83,7 @@ class BillingAddressForm extends React.Component {
                         <FieldRow className="u-padding-md">
                             <ReduxForm.Field
                                 component={Field}
-                                name="billing_same_as_shipping"
+                                name="billingSameAsShipping"
                                 type="checkbox"
                                 label={<strong className="u-text-weight-medium">Same as shipping address</strong>}
                                 caption={shippingAddress}
