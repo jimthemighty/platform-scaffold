@@ -13,6 +13,7 @@ import {getEmailAddress} from '../../../store/checkout/selectors'
 import {Grid, GridSpan} from 'progressive-web-sdk/dist/components/grid'
 import Image from 'progressive-web-sdk/dist/components/image'
 import Link from 'progressive-web-sdk/dist/components/link'
+import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 
 const CheckoutConfirmationSplash = (props) => {
     const {
@@ -48,7 +49,13 @@ const CheckoutConfirmationSplash = (props) => {
 
                         <div className="u-text-content">
                             <p>We’ve sent you an email confirmation along with your order receipt.</p>
-                            <p>Your order # is: {OrderNumber}.</p>
+                            { orderNumber ?
+                                <p>Your order # is: {OrderNumber}.</p>
+                                :
+                                <p>
+                                    <SkeletonText width="60%" style={{lineHeight: '20px'}} />
+                                </p>
+                            }
                             <p>Email: <strong>{emailAddress}</strong></p>
                         </div>
                     </div>
