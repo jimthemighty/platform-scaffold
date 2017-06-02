@@ -1,9 +1,12 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
+import classnames from 'classnames'
 
+const Header = () => {
 
-const Footer = () =>
-    (
-        <div id="footer" />
+    return (
+        <header id="header">
+        </header>
     )
+}
 
-export default Footer
+export default Header
