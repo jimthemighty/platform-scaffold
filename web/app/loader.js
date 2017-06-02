@@ -155,8 +155,8 @@ const attemptToInitializeApp = () => {
     }
 
     const triggerAppStartEvent = () => {
-        // Gather analytics information indicating loading is happening, so we can determine
-        // the % of people who don't make it to the pageview.
+        // Collect timing put for when app has started loading in order to
+        // determine % dropoff of users who don't make it to the "pageview" event.
         Sandy.init(window)
         Sandy.create(AJS_SLUG, 'auto') // eslint-disable-line no-undef
         const tracker = Sandy.trackers[Sandy.DEFAULT_TRACKER_NAME]
