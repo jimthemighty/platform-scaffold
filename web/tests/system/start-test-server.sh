@@ -15,11 +15,11 @@ if [ "$CURRENT_BRANCH" != "master" ]; then
     echo "Running tests against local build."
     # Kill background processes when this script exits.
     trap 'kill $(jobs -p)' EXIT
-    export ACTIVE_PROFILE=local
+    export TEST_PROFILE=local
     echo "Running Test Server."
     npm run prod:build
     npm run test:server
 else
     echo "On production branch, test server not needed."
-    export ACTIVE_PROFILE=production
+    export TEST_PROFILE=production
 fi
