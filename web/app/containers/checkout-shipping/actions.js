@@ -104,8 +104,8 @@ export const submitShipping = () => (dispatch, getState) => {
         telephone,
     }
 
-    if (formValues.username) {
-        dispatch(receiveUserEmail(formValues.username))
+    if (username) {
+        dispatch(receiveUserEmail(username))
     }
     dispatch(receiveSelectedShippingMethod(shippingMethodId))
     dispatch(receiveShippingAddress(address))
