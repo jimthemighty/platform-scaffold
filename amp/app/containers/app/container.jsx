@@ -10,7 +10,7 @@ const App = ({
         <div
             id="app"
             className="t-app"
-            >
+        >
             <Header />
 
             {children}
