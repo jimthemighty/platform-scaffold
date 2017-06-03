@@ -54,7 +54,7 @@ export const parseProductDetails = ({id, name, price, inventory, long_descriptio
         available: inventory.orderable,
         thumbnail: images[0],
         images,
-        initialValues: variants ? setInitialVariantValues(variants, id, variation_attributes) : [],
+        initialValues: variants ? setInitialVariantValues(variants, id, variation_attributes) : {},
         variationCategories: variants ? parseVariationCategories(variation_attributes) : [],
         variants: variants ? variants.map(({product_id, variation_values}) => {
             return {
@@ -91,6 +91,8 @@ export const parseBasketContents = ({product_items, product_sub_total, product_t
         orderTotal: order_total
     }
 }
+
+/* eslint-enable camelcase */
 
 export const getCurrentProductID = (url) => {
     let productID
