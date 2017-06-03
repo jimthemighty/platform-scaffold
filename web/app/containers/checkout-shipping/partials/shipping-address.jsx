@@ -30,12 +30,14 @@ const ShippingAddressForm = ({
             city,
             countryId,
             firstname,
-            customerAddressId,
+            id,
             lastname,
             postcode,
-            regionCode
+            regionCode,
+            addressLine1,
+            addressLine2
         } = address
-        const street = address.street.join(', ')
+        const street = [addressLine1, addressLine2].filter((item) => item).join(', ')
         const shippingAddress = (
             <div className="u-color-neutral-40">
                 <p className="u-margin-bottom-sm">
@@ -46,7 +48,7 @@ const ShippingAddressForm = ({
         )
 
         return (
-            <FieldRow key={customerAddressId}>
+            <FieldRow key={id}>
                 <ReduxForm.Field
                     component={Field}
                     name={SAVED_SHIPPING_ADDRESS_FIELD}
@@ -55,7 +57,7 @@ const ShippingAddressForm = ({
                     }
                     caption={shippingAddress}
                     type="radio"
-                    value={customerAddressId}
+                    value={id}
                     customEventHandlers={{
                         onChange: () => {
                             handleShowAddNewAddress(false)
@@ -65,7 +67,7 @@ const ShippingAddressForm = ({
                     <input
                         type="radio"
                         noValidate
-                        value={customerAddressId}
+                        value={id}
                     />
                 </ReduxForm.Field>
             </FieldRow>

@@ -83,8 +83,6 @@ class CartProductItem extends React.Component {
                 title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{product.title}</h2>}
                 image={<ProductImage {...product.thumbnail} />}
                 >
-                <p className="u-color-neutral-50">Color: Maroon</p>
-                <p className="u-margin-bottom-sm u-color-neutral-50">Size: XL</p>
 
                 <FieldRow className="u-align-bottom">
                     <Field label="Quantity" idFor={`quantity-${cartItemId}`}>
