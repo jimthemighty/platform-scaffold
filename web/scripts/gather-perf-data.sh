@@ -3,8 +3,8 @@
 REPO_NAME=${CIRCLE_PROJECT_REPONAME:-Repo Name}
 GIT_HASH=${CIRCLE_SHA1:-Commit}
 BRANCH=${CIRCLE_BRANCH:-Branch}
-TTI=${process.env.TTI:-Unknown}
-REPORT_PATH=https://${CIRCLE_BUILD_NUM}-${WINDOWID}-gh.circle-artifacts.com/0/${CIRCLE_ARTIFACTS}/audit-local.report.html
+TTI=${TTI:-TTI}
+REPORT_PATH=https://${CIRCLE_BUILD_NUM}-${WINDOWID}-gh.circle-artifacts.com/0${CIRCLE_ARTIFACTS}/audit-local.report.html
 DATE=`date +%Y-%m-%d`
 
 # ID=${CIRCLE_BUILD_NUM:-test}
