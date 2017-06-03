@@ -16,37 +16,35 @@ const Home = ({
     links,
     title,
     buttontest
-}) => {
-    return (
-        <div className={containerClass}>
-            <Sheet id="menu-sheet" headerContent="Header" footerContent="Footer">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Sign in</a></li>
-                    <li><a href="#">Potions</a></li>
-                    <li><a href="#">Spellbooks</a></li>
-                    <li><a href="#">Ingredients</a></li>
-                    <li><a href="#">Supplies</a></li>
-                    <li><a href="#">Charms</a></li>
-                    <li><a href="#">New Arrivals</a></li>
-                    <DangerousHTML html={buttontest}>
-                        {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-                    </DangerousHTML>
-                </ul>
-            </Sheet>
+}) => (
+    <div className={containerClass}>
+        <Sheet id="menu-sheet" headerContent="Header" footerContent="Footer">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Sign in</a></li>
+                <li><a href="#">Potions</a></li>
+                <li><a href="#">Spellbooks</a></li>
+                <li><a href="#">Ingredients</a></li>
+                <li><a href="#">Supplies</a></li>
+                <li><a href="#">Charms</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <DangerousHTML html={buttontest}>
+                    {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+                </DangerousHTML>
+            </ul>
+        </Sheet>
 
-            <DangerousHTML html={buttontest}>
-                {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-            </DangerousHTML>
+        <DangerousHTML html={buttontest}>
+            {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+        </DangerousHTML>
 
-            <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
+        <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
 
-            <h1>{title}</h1>
-            {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
-            <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
-        </div>
-    )
-}
+        <h1>{title}</h1>
+        {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
+        <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
+    </div>
+)
 
 Home.propTypes = {
     buttontest: PropTypes.string,

@@ -4,21 +4,18 @@ import Footer from '../footer/container'
 
 const App = ({
     children
-}) => {
+}) => (
+    <div
+        id="app"
+        className="t-app"
+    >
+        <Header />
 
-    return (
-        <div
-            id="app"
-            className="t-app"
-        >
-            <Header />
+        {children}
 
-            {children}
-
-            <Footer />
-        </div>
-    )
-}
+        <Footer />
+    </div>
+)
 
 App.propTypes = {
     children: PropTypes.node
