@@ -1,30 +1,53 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
+// import components
+import Sheet from '../../components/sheet'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import AmpLightbox from '../../components/amp-lightbox'
 import Link from '../../components/link'
-import containerStyles from './container.scss'
+import DangerousHTML from '../../components/dangerous-html'
 
+// import container styles
+import containerStyles from './container.scss'
 
 const containerClass = 't-home'
 
-const Home = ({links, title}) =>
-    (
-        <div className={containerClass}>
-            <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
-            <AmpLightbox id="my-lightbox">
-                <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
-            </AmpLightbox>
-            <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
+const Home = ({
+    links,
+    title,
+    buttontest
+}) => (
+    <div className={containerClass}>
+        <Sheet id="menu-sheet" headerContent="Header" footerContent="Footer">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Sign in</a></li>
+                <li><a href="#">Potions</a></li>
+                <li><a href="#">Spellbooks</a></li>
+                <li><a href="#">Ingredients</a></li>
+                <li><a href="#">Supplies</a></li>
+                <li><a href="#">Charms</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <DangerousHTML html={buttontest}>
+                    {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+                </DangerousHTML>
+            </ul>
+        </Sheet>
 
-            <h1>{title}</h1>
-            <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
-            {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
-        </div>
-    )
+        <DangerousHTML html={buttontest}>
+            {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+        </DangerousHTML>
+
+        <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
+
+        <h1>{title}</h1>
+        {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
+        <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
+    </div>
+)
 
 Home.propTypes = {
+    buttontest: PropTypes.string,
     /**
      * An array of links
      */
@@ -40,9 +63,9 @@ Home.templateName = 'home'
 const mapStateToProps = (state) => ({
     links: state.links,
     title: `Home! - ${state.title}` || '',
-    className: containerClass
+    className: containerClass,
+    buttontest: '<button on="tap:menu-sheet.toggle">Button</button>'
 })
-
 
 export default connect(
     mapStateToProps
