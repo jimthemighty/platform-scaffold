@@ -1,21 +1,19 @@
-// window = {location: {href: 'test'}}
-
 import sourceMapSupport from 'source-map-support'
 sourceMapSupport.install()
 
 import process from 'process'
 import path from 'path'
 import Promise from 'bluebird'
-import fetch from 'node-fetch'
 import express from 'express'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
-import thunk from 'redux-thunk'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
+
+import thunk from 'redux-thunk'
 import {fromJS} from 'immutable'
 
 import Analytics from './components/analytics'
@@ -44,28 +42,7 @@ import {CURRENT_URL} from '../../web/app/containers/app/constants'
 
 export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js'])
 
-export const parse = (window, html) => {
-    const $ = window.$
-    const $html = $(html)
-    return {
-        links: $.map($html.find('a'), (el) => $(el).text()),
-        title: $html.find('h1').text()
-    }
-}
 
-/* const addIMData = (initialData, url) => {
-    initialData.ui = {
-        app: {
-            currentURL: Immutable.string(url)
-        }
-    }
-    return initialData
-}*/
-
-
-/**
- * This could be either an HTML-scraper or an integration manager call.
- */
 const initializeStore = (req) => {
     return jsdomEnv().then((window) => {
         const appReducer = require('../../web/app/containers/app/reducer').default
