@@ -69,24 +69,24 @@ const removeItemFromBrowserStorage = (keyName) => {
 
 export const storeAuthToken = (authorization) => {
     if (authorization) {
-        window.sessionStorage.setItem(AUTH_KEY_NAME, authorization)
+        setItemInBrowserStorage(AUTH_KEY_NAME, authorization)
     }
 }
 
 export const getAuthToken = () => {
-    return window.sessionStorage.getItem(AUTH_KEY_NAME)
+    return getItemFromBrowserStorage(AUTH_KEY_NAME)
 }
 
 export const deleteAuthToken = () => {
-    window.sessionStorage.removeItem(AUTH_KEY_NAME)
+    removeItemFromBrowserStorage(AUTH_KEY_NAME)
 }
 
 export const deleteBasketID = () => {
-    window.sessionStorage.removeItem(BASKET_KEY_NAME)
+    removeItemFromBrowserStorage(BASKET_KEY_NAME)
 }
 
 export const getBasketID = () => {
-    return window.sessionStorage.getItem(BASKET_KEY_NAME)
+    return getItemFromBrowserStorage(BASKET_KEY_NAME)
 }
 
 export const storeBasketID = (basketID) => {
@@ -94,7 +94,7 @@ export const storeBasketID = (basketID) => {
         throw new Error('Storing basketID that is undefined!!')
     }
 
-    window.sessionStorage.setItem(BASKET_KEY_NAME, basketID)
+    setItemInBrowserStorage(BASKET_KEY_NAME, basketID)
 }
 
 export const getAuthTokenPayload = (authToken) => {
