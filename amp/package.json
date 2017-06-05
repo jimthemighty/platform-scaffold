@@ -61,7 +61,7 @@
   "scripts": {
     "add:component": "amp-sdk-add-component",
     "add:container": "amp-sdk-add-container",
-    "build-sprites": "npm run clean:svgs && svg-sprite --symbol --symbol-dest='.' --symbol-sprite='sprite.svg' --shape-id-generator='pw-%s' --dest=./app/static/svg/sprite-dist ../web/app/static/svg/sprite-source/*.svg",
+    "build-sprites": "npm run clean:svgs && svg-sprite --symbol --symbol-dest='.' --symbol-sprite='sprite.svg' --shape-id-generator='amp-%s' --dest=./app/static/svg/sprite-dist ../web/app/static/svg/sprite-source/*.svg",
     "clean:svgs": "svgo --enable='removeUselessStrokeAndFill' -f ../web/app/static/svg/sprite-source",
     "dev:serve": "nodemon build/main.js",
     "dev:watch": "webpack --watch",
