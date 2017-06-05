@@ -19,6 +19,9 @@ const requestCapturedDoc = () => {
 
 let isInitialEntryToSite = true
 
+/**
+ * This function is used to fetch data from a desktop page
+ */
 export const fetchPageData = (url) => (dispatch) => {
     const request = isInitialEntryToSite ? requestCapturedDoc() : makeRequest(url)
     isInitialEntryToSite = false

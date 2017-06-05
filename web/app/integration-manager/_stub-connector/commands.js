@@ -10,6 +10,9 @@ import * as checkoutCommands from './checkout/commands'
 import * as homeCommands from './home/commands'
 import * as productsCommands from './products/commands'
 
+export const submitNewsletter = (formData) => Promise.resolve()
+export const getSearchSuggestions = (query) => (dispatch) => Promise.resolve()
+
 export default {
     account: accountCommands,
     app: appCommands,
@@ -18,4 +21,6 @@ export default {
     checkout: checkoutCommands,
     home: homeCommands,
     products: productsCommands,
+    submitNewsletter,
+    getSearchSuggestions
 }
