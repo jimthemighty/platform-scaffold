@@ -41,7 +41,7 @@
 
     -webkit-overflow-scrolling: touch;
 
-    &.pw--shrink-to-content {
+    &.amp--shrink-to-content {
         position: static;
         top: auto;
         right: auto;
@@ -65,8 +65,8 @@
 // Sheet Content
 // ---
 //
-// 1. This is necessary to ensure that the scroll fix on `pw-sheet__inner` works
-//    when `pw-sheet__content` spans the full height (i.e. `pw--shrink-to-content`
+// 1. This is necessary to ensure that the scroll fix on `amp-sheet__inner` works
+//    when `amp-sheet__content` spans the full height (i.e. `amp--shrink-to-content`
 //    is not enabled)
 
 .amp-sheet__content {
