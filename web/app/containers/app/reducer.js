@@ -13,7 +13,7 @@ import {setPageFetchError, setCheckoutShippingURL, setCartURL, setCurrentURL} fr
 import {CURRENT_URL, FETCHED_PATHS} from './constants'
 
 export const initialState = fromJS({
-    [CURRENT_URL]: '',
+    [CURRENT_URL]: window.location.href,
     fetchError: null,
     [FETCHED_PATHS]: {},
     sprite: '',
