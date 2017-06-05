@@ -2,6 +2,11 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+import {createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
+import {EVENT_ACTION, Product, ShoppingList} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {getCartSummaryCount, getSubtotal} from '../../store/cart/selectors'
+import {getProductById} from '../../store/products/selectors'
+
 let connector = {}
 
 export const register = (commands) => {
@@ -21,20 +26,54 @@ export const initCartPage = (url, routeName) => connector.initCartPage(url, rout
  */
 export const getCart = () => connector.getCart()
 
+const cartMetaCreator = (count, subtotal, product) => ({
+    cart: new ShoppingList({
+        [ShoppingList.TYPE]: 'cart',
+        count,
+        subtotal
+    }),
+    product
+})
+
+const sendAddToCartAnalytics = createActionWithAnalytics('Send cart analytics', [], EVENT_ACTION.addToCart, cartMetaCreator)
+const sendRemoveFromCartAnalytics = createActionWithAnalytics('Send cart analytics', [], EVENT_ACTION.removeFromCart, cartMetaCreator)
+
+const dispatchCartAnalytics = (action, dispatch, getState, id) => {
+    const currentState = getState()
+    const cartCount = getCartSummaryCount(currentState)
+    const subtotal = getSubtotal(currentState)
+
+    if (action === EVENT_ACTION.addToCart) {
+        dispatch(sendAddToCartAnalytics(cartCount, subtotal, new Product(getProductById(id)(currentState).toJS())))
+    } else {
+        dispatch(sendRemoveFromCartAnalytics(cartCount, subtotal))
+    }
+}
+
 /**
  * Adds a product to the cart
  * @function
  * @param productId {string} The product's ID
  * @param quantity {number} The quantity to add
  */
-export const addToCart = (productId, quantity) => connector.addToCart(productId, quantity)
+export const addToCart = (productId, quantity) => (dispatch, getState) => {
+    return dispatch(connector.addToCart(productId, quantity)).then((cart) => {
+        dispatchCartAnalytics(EVENT_ACTION.addToCart, dispatch, getState, productId)
+        return cart
+    })
+}
 
 /**
  * Removes an item from the cart
  * @function
  * @param itemID {string} The cart item ID to remove
  */
-export const removeFromCart = (itemID) => connector.removeFromCart(itemID)
+export const removeFromCart = (ItemId) => (dispatch, getState) => {
+    return dispatch(connector.removeFromCart(ItemId)).then((cart) => {
+        dispatchCartAnalytics(EVENT_ACTION.removeFromCart, dispatch, getState, ItemId)
+        return cart
+    })
+}
 
 /**
  * Updates the quantity of the given item in the cart
