@@ -3,9 +3,7 @@ import classNames from 'classnames'
 
 const uuid = (() => {
     let i = 0
-    return () => {
-        return i++
-    }
+    return () => i++
 })()
 
 class Icon extends React.Component {
