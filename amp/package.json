@@ -3,7 +3,6 @@
   "gaAccount": "UA-76264428-1",
   "dependencies": {
     "aws-serverless-express": "3.0.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "encoding": "0.1.12",
     "express": "4.14.0",
     "jsdom": "9.12.0"
@@ -13,6 +12,7 @@
     "autoprefixer": "6.7.7",
     "babel-cli": "6.24.1",
     "babel-loader": "6.4.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "6.24.1",
     "babel-preset-react": "6.24.1",
     "bluebird": "3.5.0",
@@ -39,6 +39,7 @@
     "npm-run-all": "4.0.2",
     "postcss-loader": "1.3.3",
     "progressive-web-scaffold": "file:../web",
+    "raw-loader": "^0.5.1",
     "react": "15.4.2",
     "react-addons-shallow-compare": "15.4.2",
     "react-addons-test-utils": "15.4.2",
@@ -52,12 +53,16 @@
     "source-map-support": "0.4.15",
     "stylelint": "7.10.1",
     "susy": "^2.2.12",
+    "svg-sprite": "1.3.6",
+    "svgo": "0.7.2",
     "webpack": "2.5.1",
     "yargs": "^8.0.1"
   },
   "scripts": {
     "add:component": "amp-sdk-add-component",
     "add:container": "amp-sdk-add-container",
+    "build-sprites": "npm run clean:svgs && svg-sprite --symbol --symbol-dest='.' --symbol-sprite='sprite.svg' --shape-id-generator='pw-%s' --dest=./app/static/svg/sprite-dist ../web/app/static/svg/sprite-source/*.svg",
+    "clean:svgs": "svgo --enable='removeUselessStrokeAndFill' -f ../web/app/static/svg/sprite-source",
     "dev:serve": "nodemon build/main.js",
     "dev:watch": "webpack --watch",
     "dev": "npm-run-all --parallel dev:watch dev:serve",

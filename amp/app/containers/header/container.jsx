@@ -1,12 +1,10 @@
-import React, {PropTypes} from 'react'
-import classnames from 'classnames'
+import React from 'react'
 
-const Header = () => {
 
-    return (
-        <header id="header">
-        </header>
-    )
-}
+const Header = () => (
+    <div id="header">
+        <h1>Header</h1>
+    </div>
+)
 
 export default Header
