@@ -168,6 +168,10 @@ const attemptToInitializeApp = () => {
         if (timingStart) {
             window.sandy('send', 'timing', 'timing', 'appStart', '', Date.now() - timingStart)
         }
+
+        // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client
+        // We are restoring it here for now and will revisit this when we rewrite sandy tracking pixel client
+        window.sandy.instance = Sandy
     }
 
     if (isReactRoute() && !isSamsungBrowser(window.navigator.userAgent) && !isFirefoxBrowser(window.navigator.userAgent)) {
