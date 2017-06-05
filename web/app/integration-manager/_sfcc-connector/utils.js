@@ -8,6 +8,21 @@ import {getApiEndPoint, getRequestHeaders} from './config'
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
 
+const setCookieValue = (keyName, value) => {
+    document.cookie = `${keyName}=${value}`
+}
+
+const getCookieValue = (keyName) => {
+    const cookieRegex = new RegExp(`${keyName}=([^;]+);`)
+    const cookieMatch = cookieRegex.exec(document.cookie)
+
+    return cookieMatch ? cookieMatch[1] : ''
+}
+
+const removeCookieValue = (keyName) => {
+    document.cookie = `${keyName}=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+}
+
 // sessionStorage detection as seen in such great libraries as Modernizr
 // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/sessionstorage.js
 let cachedSessionStorageSupport
