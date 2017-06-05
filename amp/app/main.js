@@ -39,6 +39,7 @@ import {registerConnector} from '../../web/app/integration-manager'
 import {waitForResolves} from 'react-redux-resolve'
 
 import {CURRENT_URL} from '../../web/app/containers/app/constants'
+const PAGE_TITLE = 'pageTitle'
 
 export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js'])
 
@@ -86,8 +87,10 @@ const initializeStore = (req) => {
         const noop = (f) => f
 
         const initialState = ({ui: {app: fromJS({
-            [CURRENT_URL]: `${ampPackageJson.siteUrl}${req.url}`
+            [CURRENT_URL]: `${ampPackageJson.siteUrl}${req.url}`,
+            [PAGE_TITLE]: 'Merlins AMP' // Fetch the page again and get title?
         })}})
+
         const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
         const renderProps = {
             location: {},
@@ -120,8 +123,8 @@ const render = (req, res, store, component, css) => {
     )
     const state = store.getState()
     const rendered = ampPage({
-        title: state.title,
-        canonicalURL: req.url,
+        title: state.ui.app.get(PAGE_TITLE),
+        canonicalURL: `${ampPackageJson.siteUrl}${req.url}`,
         body,
         css,
         ampScriptIncludes: scripts.items().join('\n')
