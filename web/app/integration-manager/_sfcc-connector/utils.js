@@ -8,6 +8,23 @@ import {getApiEndPoint, getRequestHeaders} from './config'
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
 
+// sessionStorage detection as seen in such great libraries as Modernizr
+// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/sessionstorage.js
+let cachedSessionStorageSupport
+const supportsSessionStorage = () => {
+    if (cachedSessionStorageSupport !== undefined) {
+        return cachedSessionStorageSupport
+    }
+    const mod = 'modernizr'
+    try {
+        sessionStorage.setItem(mod, mod)
+        sessionStorage.removeItem(mod)
+        cachedSessionStorageSupport = true
+    } catch (e) {
+        cachedSessionStorageSupport = false
+    }
+    return cachedSessionStorageSupport
+}
 export const storeAuthToken = (authorization) => {
     if (authorization) {
         window.sessionStorage.setItem(AUTH_KEY_NAME, authorization)
