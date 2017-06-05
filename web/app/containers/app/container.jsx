@@ -124,12 +124,10 @@ class App extends React.Component {
                 <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
                     {isRunningInAstro && <NativeConnector />}
 
-                    {messagingEnabled && (
-                        <div>
-                            <PushMessagingController dimScreenOnSystemAsk />
-                            <DefaultAsk showOnPageCount={1} />
-                        </div>
-                    )}
+                    {messagingEnabled && [
+                        <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={0} />,
+                        <DefaultAsk key="ask" showOnPageCount={1} />
+                    ]}
 
                     <div id="app-header" className="u-flex-none" role="banner">
                         <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
