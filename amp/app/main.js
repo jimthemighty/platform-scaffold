@@ -68,8 +68,7 @@ export const parse = (window, html) => {
  */
 const initializeStore = (req) => {
     return jsdomEnv().then((window) => {
-        console.log('JSDOM IS READY')
-
+        console.log(req)
         const appReducer = require('../../web/app/containers/app/reducer').default
         const footerReducer = require('../../web/app/containers/footer/reducer').default
         const headerReducer = require('../../web/app/containers/header/reducer').default
@@ -88,9 +87,6 @@ const initializeStore = (req) => {
         }))
 
         global.window = window
-        console.log(`global.window is ${global.window}`)
-        console.log(`window.$ is ${window.$}`)
-        console.log(`window.jQuery is ${window.jQuery}`)
         const uiReducer = combineReducers({
             app: appReducer,
             footer: footerReducer,
@@ -114,12 +110,9 @@ const initializeStore = (req) => {
         const noop = (f) => f
 
         const CURRENT_URL = 'currentURL'
-        const FETCHED_PATHS = 'fetchedPaths'
-
         const initialState = ({ui: {app: fromJS({
             [CURRENT_URL]: 'https://www.merlinspotions.com/eye-of-newt.html'
         })}})
-        // .then((initialData) => addIMData(initialData, req.url))
         const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
         const renderProps = {
             location: {},
@@ -129,7 +122,6 @@ const initializeStore = (req) => {
 
         return waitForResolves(renderProps, createdStore)
         .then(() => {
-            console.log(createdStore.getState())
             return createdStore
         })
     })
