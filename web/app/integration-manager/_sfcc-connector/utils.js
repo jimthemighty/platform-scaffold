@@ -40,6 +40,33 @@ const supportsSessionStorage = () => {
     }
     return cachedSessionStorageSupport
 }
+
+const setItemInBrowserStorage = (keyName, value) => {
+    // Use session storage if it's supported
+    if (supportsSessionStorage()) {
+        window.sessionStorage.setItem(keyName, value)
+    } else {
+        // Use Cookies otherwise
+        setCookieValue(keyName, value)
+    }
+}
+
+const getItemFromBrowserStorage = (keyName) => {
+    if (supportsSessionStorage()) {
+        return window.sessionStorage.getItem(keyName)
+    }
+
+    return getCookieValue(keyName)
+}
+
+const removeItemFromBrowserStorage = (keyName) => {
+    if (supportsSessionStorage()) {
+        window.sessionStorage.removeItem(keyName)
+    } else {
+        removeCookieValue(keyName)
+    }
+}
+
 export const storeAuthToken = (authorization) => {
     if (authorization) {
         window.sessionStorage.setItem(AUTH_KEY_NAME, authorization)
