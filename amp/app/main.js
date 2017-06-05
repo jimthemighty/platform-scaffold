@@ -40,7 +40,7 @@ import {registerConnector} from '../../web/app/integration-manager'
 
 import {waitForResolves} from 'react-redux-resolve'
 
-const base = 'https://www.merlinspotions.com'
+import {CURRENT_URL} from '../../web/app/containers/app/constants'
 
 export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js'])
 
@@ -68,7 +68,6 @@ export const parse = (window, html) => {
  */
 const initializeStore = (req) => {
     return jsdomEnv().then((window) => {
-        console.log(req)
         const appReducer = require('../../web/app/containers/app/reducer').default
         const footerReducer = require('../../web/app/containers/footer/reducer').default
         const headerReducer = require('../../web/app/containers/header/reducer').default
@@ -109,9 +108,8 @@ const initializeStore = (req) => {
 
         const noop = (f) => f
 
-        const CURRENT_URL = 'currentURL'
         const initialState = ({ui: {app: fromJS({
-            [CURRENT_URL]: 'https://www.merlinspotions.com/eye-of-newt.html'
+            [CURRENT_URL]: `${ampPackageJson.siteUrl}${req.url}`
         })}})
         const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
         const renderProps = {
