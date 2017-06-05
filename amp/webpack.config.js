@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const baseCommon = require('./webpack/base.common')
-const fs = require('fs');
 
 module.exports = {
     entry: './app/main.js',
@@ -29,6 +28,12 @@ module.exports = {
                 loader: 'babel-loader?cacheDirectory=true'
             },
             {
+                test: /\.js(x?)$/,
+                use: [
+                    {loader: "imports-loader?window=>{location: {href: 'https://www.merlinspotions.com/eye-of-newt.html'}},window.Progressive=>{},navigator=>{userAgent: ''}"}
+                ],
+            },
+            {
                 test: /\.scss$/,
                 use: [
                     {loader: 'css-loader?-autoprefixer&-url', options: {minimize : true}},
@@ -43,6 +48,12 @@ module.exports = {
             options: {
                 postcss: baseCommon.postcss
             }
+        }),
+        new webpack.ProvidePlugin({
+            fetch: 'node-fetch'
+        }),
+        new webpack.ProvidePlugin({
+            $: 'jquery'
         })
     ],
     devtool: 'sourcemap'

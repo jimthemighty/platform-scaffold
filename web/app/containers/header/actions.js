@@ -7,7 +7,7 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {SUGGESTION_URL} from './constants'
 import {buildQueryString} from '../../utils/utils'
 import {getSearchSuggestions} from '../../integration-manager/commands'
-import {browserHistory} from 'progressive-web-sdk/dist/routing'
+// import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 export const toggleHeader = createAction('Toggled the header', ['isCollapsed'])
 
@@ -20,5 +20,5 @@ export const searchQueryChanged = (query) => (dispatch) => (
 )
 
 export const searchSubmit = (query) => (dispatch) => {
-    browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
+    // browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
 }

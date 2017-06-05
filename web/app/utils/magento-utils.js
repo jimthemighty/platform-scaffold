@@ -12,7 +12,7 @@ import Immutable from 'immutable'
  */
 export const extractMagentoJson = ($html) => {
     return $html
-        .find('script[x-type="text/x-magento-init"]')
+        .find('script[type="text/x-magento-init"]')
         .map((_, item) => item.innerHTML)
         .get()
         .map(JSON.parse)

@@ -11,11 +11,15 @@ import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../
 import {productDetailsParser, productDetailsUIParser, pdpAddToCartFormParser} from './parsers'
 
 export const initProductDetailsPage = (url) => (dispatch) => {
+    console.log('hey1')
     return dispatch(fetchPageData(url))
         .then((res) => {
+            console.log('hey3')
             const [$, $response] = res
 
+            console.log(url)
             const pathKey = urlToPathKey(url)
+            console.log(pathKey)
 
             dispatch(receiveProductDetailsUIData({[pathKey]: productDetailsUIParser($, $response)}))
             dispatch(receiveProductDetailsProductData({[pathKey]: {

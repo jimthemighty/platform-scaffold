@@ -78,6 +78,7 @@ export const getHighResImage = (src) => {
 // Alternatively, we could have an issue with header case:
 // http://stackoverflow.com/questions/34656412/fetch-sends-lower-case-header-keys
 export const jqueryAjaxWrapper = (options) => {
+    return null
     return new Promise((resolve, reject) => {
         window.Progressive.$.ajax({
             ...options,

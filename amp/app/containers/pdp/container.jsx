@@ -4,9 +4,12 @@ import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import containerStyles from './container.scss'
 
+import {createPropsSelector} from 'reselect-immutable-helpers'
+import {getProductDescription, getProductTitle} from '../../../../web/app/store/products/selectors'
+
 const containerClass = 't-pdp'
 
-const PDP = ({links, title}) => {
+const PDP = ({description, title}) => {
     return (
         <div className={containerClass}>
             <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
@@ -16,28 +19,27 @@ const PDP = ({links, title}) => {
             <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
 
             <h1>{title}</h1>
-            {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
+            <p>{description}</p>
         </div>
     )
 }
 
 PDP.propTypes = {
     /**
-     * An array of links
+     * A description <-- not a good comment!
      */
-    links: PropTypes.array,
+    description: PropTypes.string,
     /**
-     * A title
+     * A title <-- not a good comment!
      */
     title: PropTypes.string
 }
 
 PDP.templateName = 'pdp'
 
-const mapStateToProps = (state) => ({
-    links: state.links,
-    title: `PDP! - ${state.title}` || '',
-    className: containerClass
+const mapStateToProps = createPropsSelector({
+    description: getProductDescription,
+    title: getProductTitle
 })
 
 

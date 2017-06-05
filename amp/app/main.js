@@ -1,3 +1,5 @@
+// window = {location: {href: 'test'}}
+
 import sourceMapSupport from 'source-map-support'
 sourceMapSupport.install()
 
@@ -10,9 +12,11 @@ import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
-import {createStore} from 'redux'
+import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
+import thunk from 'redux-thunk'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
+import {fromJS} from 'immutable'
 
 import Analytics from './components/analytics'
 import * as home from './containers/home/container'
@@ -24,11 +28,17 @@ import AppComponent from './containers/app/container'
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
 
-
-
+import {reducer as imReducer} from '../../web/app/integration-manager/reducer'
 
 const jsdom = Promise.promisifyAll(_jsdom)
 
+// DO NOT USE! Merlins Connector is an example connector that is for demo only
+import {Connector} from '../../web/app/integration-manager/_merlins-connector'
+// import {Connector} from './integration-manager/_sfcc-connector'
+
+import {registerConnector} from '../../web/app/integration-manager'
+
+import {waitForResolves} from 'react-redux-resolve'
 
 const base = 'https://www.merlinspotions.com'
 
@@ -43,15 +53,86 @@ export const parse = (window, html) => {
     }
 }
 
+/* const addIMData = (initialData, url) => {
+    initialData.ui = {
+        app: {
+            currentURL: Immutable.string(url)
+        }
+    }
+    return initialData
+}*/
+
 
 /**
  * This could be either an HTML-scraper or an integration manager call.
  */
 const initializeStore = (req) => {
-    const noopReducer = (state) => state
-    return Promise.all([jsdomEnv(), fetch(base + req.url).then((res) => res.text())])
-    .then(([window, html]) => parse(window, html))
-    .then((initialData) => createStore(noopReducer, initialData))
+    return jsdomEnv().then((window) => {
+        console.log('JSDOM IS READY')
+
+        const appReducer = require('../../web/app/containers/app/reducer').default
+        const footerReducer = require('../../web/app/containers/footer/reducer').default
+        const headerReducer = require('../../web/app/containers/header/reducer').default
+        const navigationReducer = require('../../web/app/containers/navigation/reducer').default
+        const productDetailsReducer = require('../../web/app/containers/product-details/reducer').default
+        const productListReducer = require('../../web/app/containers/product-list/reducer').default
+
+        const categoryReducer = require('../../web/app/store/categories/reducer').default
+        const productReducer = require('../../web/app/store/products/reducer').default
+
+        // This is okay to pass to both SFCC and Merlin's connectors,
+        // as Merlin's doesn't need a configuration object
+        registerConnector(Connector({
+            siteID: '2017refresh',
+            clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93'
+        }))
+
+        global.window = window
+        console.log(`global.window is ${global.window}`)
+        console.log(`window.$ is ${window.$}`)
+        console.log(`window.jQuery is ${window.jQuery}`)
+        const uiReducer = combineReducers({
+            app: appReducer,
+            footer: footerReducer,
+            header: headerReducer,
+            navigation: navigationReducer,
+            productDetails: productDetailsReducer,
+            productList: productListReducer
+        })
+
+        const reducer = combineReducers({
+            categories: categoryReducer,
+            ui: uiReducer,
+            products: productReducer,
+            integrationManager: imReducer,
+        })
+
+        const middlewares = [
+            thunk,
+        ]
+
+        const noop = (f) => f
+
+        const CURRENT_URL = 'currentURL'
+        const FETCHED_PATHS = 'fetchedPaths'
+
+        const initialState = ({ui: {app: fromJS({
+            [CURRENT_URL]: 'https://www.merlinspotions.com/eye-of-newt.html'
+        })}})
+        // .then((initialData) => addIMData(initialData, req.url))
+        const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
+        const renderProps = {
+            location: {},
+            components: [AppComponent],
+            history: {}
+        }
+
+        return waitForResolves(renderProps, createdStore)
+        .then(() => {
+            console.log(createdStore.getState())
+            return createdStore
+        })
+    })
 }
 
 
