@@ -61,28 +61,30 @@ const Navigation = (props) => {
 
     return (
         <Sheet className="t-navigation" open={isOpen} onDismiss={closeNavigation} maskOpacity={0.7} coverage="85%">
-            <Nav root={root.title ? root : null} path={path} onPathChange={onPathChange}>
-                <HeaderBar>
-                    <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
-                        <h2 className="u-text-family-header u-text-uppercase">
-                            <span className="u-text-weight-extra-light">Menu</span>
-                        </h2>
-                    </HeaderBarTitle>
+            {path &&
+                <Nav root={root.title ? root : null} path={path} onPathChange={onPathChange}>
+                    <HeaderBar>
+                        <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
+                            <h2 className="u-text-family-header u-text-uppercase">
+                                <span className="u-text-weight-extra-light">Menu</span>
+                            </h2>
+                        </HeaderBarTitle>
 
-                    <HeaderBarActions>
-                        <IconLabelButton iconName="close" label="close" onClick={closeNavigation} />
-                    </HeaderBarActions>
-                </HeaderBar>
+                        <HeaderBarActions>
+                            <IconLabelButton iconName="close" label="close" onClick={closeNavigation} />
+                        </HeaderBarActions>
+                    </HeaderBar>
 
-                <NavMenu itemFactory={itemFactory} />
+                    <NavMenu itemFactory={itemFactory} />
 
-                <div>
-                    <NavigationSocialIcons />
-                    <div className="t-navigation__copyright u-padding-md">
-                        <p>© 2017 Mobify Research & Development Inc. All rights reserved.</p>
+                    <div>
+                        <NavigationSocialIcons />
+                        <div className="t-navigation__copyright u-padding-md">
+                            <p>© 2017 Mobify Research & Development Inc. All rights reserved.</p>
+                        </div>
                     </div>
-                </div>
-            </Nav>
+                </Nav>
+            }
         </Sheet>
     )
 }
