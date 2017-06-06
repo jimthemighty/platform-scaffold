@@ -92,3 +92,7 @@ export const createTypedAction = (description, type, key) => createReduxAction(
 export const buildQueryString = (query) => {
     return query.replace(/ /g, '+')
 }
+
+export const validateFullName = (fullName) => {
+    return /\w+\s+\w+/.test(fullName)
+}

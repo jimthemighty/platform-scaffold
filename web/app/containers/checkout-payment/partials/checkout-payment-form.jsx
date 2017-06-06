@@ -7,6 +7,8 @@ import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
+import {validateFullName} from '../../../utils/utils'
+
 // Selectors
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
 import {getBillingInitialValues} from '../../../store/checkout/billing/selectors'
@@ -36,7 +38,7 @@ const validate = (values) => {
         'telephone'
     ]
 
-    if (values.name && !/\w+ \w+/.test(values.name)) {
+    if (values.name && !validateFullName(values.name)) {
         errors.name = 'Please enter a first and last name'
     }
 
