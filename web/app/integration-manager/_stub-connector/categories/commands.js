@@ -1,9 +1,13 @@
-import {receiveCategoryContents, receiveCategoryInformation} from '../../categories/results'
+import {receiveCategoryContents} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 
 export const initProductListPage = (url, routeName) => (dispatch) => {
-    const thumbnail = {src: '//via.placeholder.com/120x150'}
+    const thumbnail = {
+        src: '//via.placeholder.com/350x350',
+        alt: 'Product Image'
+    }
+
     const sharedData = {
         price: '$10.00',
         available: true,
@@ -44,7 +48,9 @@ export const initProductListPage = (url, routeName) => (dispatch) => {
     const pathKey = urlToPathKey(url)
 
     return new Promise((resolve) => {
+        // For more information on the shape of the expected data, see ../../products/types
         dispatch(receiveProductListProductData(exampleProductData))
+        // For more information on the shape of the expected data, see ../../categories/types
         dispatch(receiveCategoryContents(pathKey, exampleCategoryData))
         resolve()
     })

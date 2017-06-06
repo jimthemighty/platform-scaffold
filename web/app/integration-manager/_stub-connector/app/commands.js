@@ -5,6 +5,11 @@ import {
     setPageFetchError
 } from '../../results'
 
+/**
+ * When the user first lands on the site, the response from the desktop site is saved
+ * This function allows you to get that response
+ * You will only need to use this function if you're using HTML scraping as your back end
+ */
 const requestCapturedDoc = () => {
     return window.Progressive.capturedDocHTMLPromise.then((initialCapturedDocHTML) => {
         const body = new Blob([initialCapturedDocHTML], {type: 'text/html'})
@@ -21,6 +26,7 @@ let isInitialEntryToSite = true
 
 /**
  * This function is used to fetch data from a desktop page
+ * You will only need to use this function if you're using HTML scraping as your back end
  */
 export const fetchPageData = (url) => (dispatch) => {
     const request = isInitialEntryToSite ? requestCapturedDoc() : makeRequest(url)
