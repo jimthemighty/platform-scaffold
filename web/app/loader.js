@@ -1,4 +1,4 @@
-/* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED */
+/* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {isSamsungBrowser, isFirefoxBrowser} from 'progressive-web-sdk/dist/utils/utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
@@ -153,7 +153,7 @@ const attemptToInitializeApp = () => {
             // supported and loaded, and messaging is enabled, so we can add a
             // deferred function to load and initialize the Messaging client.
             deferredUntilLoadComplete.push(
-                () => loadAndInitMessagingClient(IS_PREVIEW, MESSAGING_SITE_ID)
+                () => loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
             )
         }
     }
