@@ -9,7 +9,6 @@ import * as ReduxForm from 'redux-form'
 
 import {isEmailAvailable, submitSignIn} from '../actions'
 import {getCustomerEmailRecognized, getEmailError} from '../selectors'
-import {getEmailAddress} from '../../../store/checkout/selectors'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
@@ -18,7 +17,7 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Link from 'progressive-web-sdk/dist/components/link'
 
 
-const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable, email}) => {
+const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable}) => {
     const passwordHint = (
         <Link className="u-color-brand" href="/customer/account/forgotpassword/">
             Forgot password
@@ -41,7 +40,7 @@ const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable,
                             onBlur: isEmailAvailable
                         }}
                     >
-                        <input type="email" value={email} noValidate placeholder="Email Address" />
+                        <input type="email" noValidate placeholder="Email Address" />
                     </ReduxForm.Field>
                 </FieldRow>
 
@@ -74,10 +73,6 @@ ShippingEmail.propTypes = {
     */
     customerEmailRecognized: React.PropTypes.bool,
     /**
-    * Retain user's Shipping email address
-    */
-    email: React.PropTypes.string,
-    /**
     * Checks if the users email address has an account associated with it
     */
     isEmailAvailable: React.PropTypes.func,
@@ -89,7 +84,6 @@ ShippingEmail.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     customerEmailRecognized: getCustomerEmailRecognized,
-    email: getEmailAddress,
     emailError: getEmailError
 })
 
