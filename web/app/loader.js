@@ -32,18 +32,20 @@ const attemptToInitializeApp = () => {
         return
     }
 
-    // Changing this to anything to do with Mobify Preview (i.e. Preview cookie,
-    // `preview` string in the URL) will incorrectly cause the worker loader to
-    // load the worker from a local development server
-    // See web/service-worker-loader.js
-    const IS_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
-
     const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
     const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
     const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
     const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
-    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_PREVIEW}&b=${cacheHashManifest.buildDate}`
+
+    /**
+     * This needs to be based on whether this is a CDN environment, rather than
+     * a preview environment. `web/service-worker-loader.js` will use this value
+     * to determine whether it should load from a local development server, or
+     * from the CDN.
+     */
+    const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}`
 
     window.Progressive = {
         AstroPromise: Promise.resolve({}),
