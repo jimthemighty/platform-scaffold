@@ -12,7 +12,7 @@ const removeUndefinedAddressKeys = (addressData) => {
     return addressData
 }
 
-const getNameValue = (firstname, lastname) =>
+export const getNameValue = (firstname, lastname) =>
       [firstname, lastname].filter((item) => item).join(' ')
 
 export const parseShippingInitialValues = (shippingFieldData) => {

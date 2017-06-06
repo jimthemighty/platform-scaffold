@@ -55,6 +55,8 @@ export const getEstimateShippingAddress = getFormAddressValues(ESTIMATE_FORM_NAM
 
 export const getShippingFormValues = getFormValues(SHIPPING_FORM_NAME)
 
+export const getShippingSavedAddressID = createSelector(getShippingFormValues, ({savedAddress}) => savedAddress)
+
 export const getShippingEstimateAddress = getFormAddressValues(SHIPPING_FORM_NAME)
 
 export const getPaymentBillingFormValues = getFormValues(PAYMENT_FORM_NAME)
