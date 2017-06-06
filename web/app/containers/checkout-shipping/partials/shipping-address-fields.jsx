@@ -49,7 +49,7 @@ const ShippingAddressFields = ({
                 <ReduxForm.Field
                     component={Field}
                     name="name"
-                    label="Full Name"
+                    label="First & Last Name"
                 >
                     <input type="text" noValidate />
                 </ReduxForm.Field>
