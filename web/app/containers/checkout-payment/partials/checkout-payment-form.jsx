@@ -22,6 +22,34 @@ import CreditCardForm from './credit-card-form'
 import BillingAddressForm from './billing-address-form'
 import OrderSummary from './order-summary'
 
+const REQUIRED_TEXT = 'Required'
+
+const validate = (values) => {
+    const errors = {}
+    const requiredFieldNames = [
+        'name',
+        'addressLine1',
+        'city',
+        'countryId',
+        'regionId',
+        'postcode',
+        'telephone'
+    ]
+
+    if (values.name && !/\w+ \w+/.test(values.name)) {
+        errors.name = 'Please enter a first and last name'
+    }
+
+    requiredFieldNames.forEach((fieldName) => {
+        if (!values[fieldName]) {
+            errors[fieldName] = REQUIRED_TEXT
+        }
+    })
+
+    return errors
+}
+
+
 const CheckoutPaymentForm = ({handleSubmit, submitPayment}) => {
     return (
         <Grid className="u-center-piece">
@@ -64,7 +92,8 @@ const mapDispatchToProps = {
 const CheckoutPaymentReduxForm = ReduxForm.reduxForm({
     form: PAYMENT_FORM_NAME,
     keepDirtyOnReinitialize: true,
-    enableReinitialize: true
+    enableReinitialize: true,
+    validate
 })(CheckoutPaymentForm)
 
 export default connect(
