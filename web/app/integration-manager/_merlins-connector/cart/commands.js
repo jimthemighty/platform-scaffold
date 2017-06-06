@@ -56,6 +56,11 @@ export const getCart = () => (dispatch) => {
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
     const product = getProductById(productId)(getState())
     const formInfo = getState().integrationManager.get(urlToPathKey(product.get('href')))
+
+    if (formInfo === undefined) {
+        return Promise.reject('There was an error with the addToCart form info')
+    }
+
     const formValues = {
         ...formInfo.get('hiddenInputs').toJS(),
         qty: quantity
