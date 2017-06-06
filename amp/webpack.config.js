@@ -58,7 +58,8 @@ module.exports = {
             }
         }),
         new webpack.ProvidePlugin({
-            fetch: 'node-fetch'
+            fetch: 'node-fetch',
+            URL: ['whatwg-url', 'URL']
         })
     ],
     devtool: 'sourcemap'

@@ -42,7 +42,7 @@ import {waitForResolves} from 'react-redux-resolve'
 import {CURRENT_URL} from '../../web/app/containers/app/constants'
 const PAGE_TITLE = 'pageTitle'
 
-export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js'])
+export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
 
 
 const initializeStore = (req) => {

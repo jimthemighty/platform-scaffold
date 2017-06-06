@@ -59,7 +59,8 @@
     "source-map-support": "0.4.15",
     "stylelint": "7.10.1",
     "susy": "^2.2.12",
-    "webpack": "2.5.1"
+    "webpack": "2.5.1",
+    "whatwg-url": "^5.0.0"
   },
   "scripts": {
     "add:component": "amp-sdk-add-component",
