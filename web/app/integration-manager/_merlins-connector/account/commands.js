@@ -33,6 +33,9 @@ export const initRegisterPage = (url) => (dispatch) => {
 const submitForm = (href, formValues, formSelector) => {
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
+        .catch((error) => {
+            throw new SubmissionError({_error: 'Failed to login due to network error.'})
+        })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             if (isFormResponseInvalid($response, formSelector)) {
@@ -42,12 +45,6 @@ const submitForm = (href, formValues, formSelector) => {
                 throw new SubmissionError(error)
             }
             return '/customer/account'
-        })
-        .catch((error) => {
-            if (error.name !== 'SubmissionError') {
-                throw new SubmissionError({_error: 'Failed to login due to network error.'})
-            }
-            throw error
         })
 }
 
