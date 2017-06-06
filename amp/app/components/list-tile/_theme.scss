@@ -1,0 +1,29 @@
+// List Tile theme
+// ===
+
+.amp-list-tile {
+    min-height: $tap-size;
+}
+
+
+// Content
+// ---
+
+.amp-list-tile__content {
+    padding: $unit*1.5;
+
+    &:nth-of-type(2n) {
+        padding-left: 0;
+    }
+}
+
+
+
+// Action
+// ---
+
+.amp-list-tile__action {
+    min-width: $tap-size;
+
+    text-align: center;
+}
