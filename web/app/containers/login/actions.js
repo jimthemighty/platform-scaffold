@@ -120,10 +120,9 @@ export const submitRegisterForm = (formValues) => (dispatch) => {
         firstname,
         lastname,
         email,
-        password,
-        password_confirmation
+        password
     } = formValues
 
-    return dispatch(registerUser(firstname, lastname, email, password, password_confirmation))
+    return dispatch(registerUser(firstname, lastname, email, password))
         .then(handleLoginSuccess)
 }
