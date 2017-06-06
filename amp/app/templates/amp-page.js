@@ -20,8 +20,8 @@ const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes}) => (
                 ${css}
             </style>
         </head>
-        <body id="root">
-            <div id="app">
+        <body>
+            <div id="root">
                 ${body}
             </div>
         </body>

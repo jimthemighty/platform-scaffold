@@ -1,0 +1,19 @@
+// Icon theme
+// ===
+
+.amp-icon {
+    &.amp--microscopic {
+        width: $sub-unit;
+        height: $sub-unit;
+    }
+
+    &.amp--gargantuan {
+        width: $unit*12;
+        height: $unit*12;
+    }
+
+    &.amp--colossal {
+        width: $unit*24;
+        height: $unit*24;
+    }
+}
