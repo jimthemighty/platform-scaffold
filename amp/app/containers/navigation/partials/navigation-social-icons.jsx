@@ -3,7 +3,7 @@ import React from 'react'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 
 const social = [
-    ['http://www.facebook.com/#TODO', '../../../../static/mobify.png', 'Facebook'],
+    ['http://www.facebook.com/#TODO', '../../../../static/facebook.svg', 'Facebook'],
     ['http://www.twitter.com/#TODO', '../../../../static/svg/twitter.svg', 'Twitter'],
     ['http://plus.google.com/#TODO', '../../../../static/svg/googleplus.svg', 'Google+'],
     ['http://www.youtube.com/#TODO', '../../../../static/svg/youtube.svg', 'Youtube'],
