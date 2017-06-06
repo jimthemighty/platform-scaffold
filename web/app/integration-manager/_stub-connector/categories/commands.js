@@ -47,11 +47,9 @@ export const initProductListPage = (url, routeName) => (dispatch) => {
 
     const pathKey = urlToPathKey(url)
 
-    return new Promise((resolve) => {
-        // For more information on the shape of the expected data, see ../../products/types
-        dispatch(receiveProductListProductData(exampleProductData))
-        // For more information on the shape of the expected data, see ../../categories/types
-        dispatch(receiveCategoryContents(pathKey, exampleCategoryData))
-        resolve()
-    })
+    // For more information on the shape of the expected data, see ../../products/types
+    dispatch(receiveProductListProductData(exampleProductData))
+    // For more information on the shape of the expected data, see ../../categories/types
+    dispatch(receiveCategoryContents(pathKey, exampleCategoryData))
+    return Promise.resolve()
 }

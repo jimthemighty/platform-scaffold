@@ -45,13 +45,11 @@ export const initProductDetailsPage = (url) => (dispatch) => {
         }
     }
 
-    return new Promise((resolve) => {
-        // For more information on the shape of the expected data, see ../../products/types
-        dispatch(receiveProductDetailsProductData(exampleData))
-        dispatch(receiveProductDetailsUIData(exampleUIData))
-        dispatch(receiveFormInfo(exampleFormData))
-        resolve()
-    })
+    // For more information on the shape of the expected data, see ../../products/types
+    dispatch(receiveProductDetailsProductData(exampleData))
+    dispatch(receiveProductDetailsUIData(exampleUIData))
+    dispatch(receiveFormInfo(exampleFormData))
+    return Promise.resolve()
 }
 
 export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => Promise.resolve()

@@ -74,12 +74,10 @@ export const initApp = () => (dispatch) => {
         }
     }
 
-    return new Promise((resolve) => {
-        // For more information on the shape of the expected data,
-        // see https://docs.mobify.com/progressive-web/latest/components/#!/Nav
-        dispatch(receiveNavigationData(exampleNavigationData))
-        dispatch(getCart())
-        dispatch(setCartURL('/checkout/cart/'))
-        resolve()
-    })
+    // For more information on the shape of the expected data,
+    // see https://docs.mobify.com/progressive-web/latest/components/#!/Nav
+    dispatch(receiveNavigationData(exampleNavigationData))
+    dispatch(getCart())
+    dispatch(setCartURL('/checkout/cart/'))
+    return Promise.resolve()
 }

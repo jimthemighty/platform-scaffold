@@ -14,10 +14,7 @@ export const initHomePage = (url) => (dispatch) => {
         }]
     }
 
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            dispatch(receiveHomeData(exampleData))
-            resolve()
-        })
-    })
+    // We need to receive the carousel data async for it to work correctly
+    return Promise.resolve()
+        .then(() => dispatch(receiveHomeData(exampleData)))
 }

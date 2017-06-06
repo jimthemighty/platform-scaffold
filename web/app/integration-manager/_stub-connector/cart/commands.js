@@ -33,12 +33,10 @@ export const getCart = () => (dispatch) => {
         }
     }
 
-    return new Promise((resolve) => {
-        // For more information on the shape of the expected data, see ../../cart/types
-        dispatch(receiveCartContents(exampleCartData))
-        dispatch(receiveCartProductData(exampleCartProducts))
-        resolve()
-    })
+    // For more information on the shape of the expected data, see ../../cart/types
+    dispatch(receiveCartContents(exampleCartData))
+    dispatch(receiveCartProductData(exampleCartProducts))
+    return Promise.resolve()
 }
 
 export const addToCart = (productId, quantity) => (dispatch) => Promise.resolve()
