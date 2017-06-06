@@ -69,7 +69,7 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
     return submitForm(LOGIN_POST_URL, formData, '.form-login')
 }
 
-export const registerUser = (firstname, lastname, email, password, confirmPassword, rememberMe) => (dispatch, getState) => {
+export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
 
@@ -78,7 +78,7 @@ export const registerUser = (firstname, lastname, email, password, confirmPasswo
         lastname,
         email,
         password,
-        password_confirmation: confirmPassword,
+        password_confirmation: password,
         form_key: formKey
     }
     if (rememberMe) {
