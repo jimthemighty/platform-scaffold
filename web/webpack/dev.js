@@ -31,6 +31,12 @@ mainConfig.plugins = mainConfig.plugins.concat([
     })
 ])
 
+loaderConfig.plugins = loaderConfig.plugins.concat([
+    new webpack.DefinePlugin({
+        DEBUG: true
+    })
+])
+
 workerConfig.plugins = workerConfig.plugins.concat([
     new webpack.DefinePlugin({
         DEBUG: true
