@@ -74,6 +74,10 @@ ShippingEmail.propTypes = {
     */
     customerEmailRecognized: React.PropTypes.bool,
     /**
+    * Retain user's Shipping email address
+    */
+    email: React.PropTypes.string,
+    /**
     * Checks if the users email address has an account associated with it
     */
     isEmailAvailable: React.PropTypes.func,
