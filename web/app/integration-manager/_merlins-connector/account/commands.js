@@ -6,6 +6,7 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
+import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
@@ -30,19 +31,27 @@ export const initRegisterPage = (url) => (dispatch) => {
         })
 }
 
+const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
+const clearMessageCookie = () => {
+    document.cookie = `${MAGENTO_MESSAGE_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+}
+const defaultErrorMessage = {text: 'Username or password is incorrect'}
+
 const submitForm = (href, formValues, formSelector) => {
+    clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
-        .catch((error) => {
+        .catch(() => {
             throw new SubmissionError({_error: 'Failed to login due to network error.'})
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             if (isFormResponseInvalid($response, formSelector)) {
-                const error = {
-                    _error: 'Username or password is incorrect'
-                }
-                throw new SubmissionError(error)
+                const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
+
+                throw new SubmissionError({
+                    _error: (messages[0] || defaultErrorMessage).text.replace(/\+/g, ' ')
+                })
             }
             return '/customer/account'
         })
