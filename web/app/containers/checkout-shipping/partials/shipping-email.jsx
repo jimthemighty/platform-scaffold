@@ -41,7 +41,7 @@ const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable,
                             onBlur: isEmailAvailable
                         }}
                     >
-                        <input type="email" value={email} noValidate placeholder="Email Address" />
+                        <input type="email" value={email ? email : ''} noValidate placeholder="Email Address" />
                     </ReduxForm.Field>
                 </FieldRow>
 
