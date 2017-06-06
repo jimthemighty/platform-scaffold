@@ -34,6 +34,12 @@ baseMainConfig.module.rules = baseMainConfig.module.rules.concat({
     ]
 })
 
+baseLoaderConfig.plugins = baseLoaderConfig.plugins.concat([
+    new webpack.DefinePlugin({
+        DEBUG: false
+    })
+])
+
 workerConfig.plugins = workerConfig.plugins.concat([
     new webpack.DefinePlugin({
         DEBUG: false
