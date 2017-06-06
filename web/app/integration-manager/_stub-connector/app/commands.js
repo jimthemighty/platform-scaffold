@@ -2,7 +2,8 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 import {
-    setPageFetchError
+    setPageFetchError,
+    receiveNavigationData
 } from '../../results'
 
 /**
@@ -51,4 +52,29 @@ export const fetchPageData = (url) => (dispatch) => {
         })
 }
 
-export const initApp = () => (dispatch) => Promise.resolve()
+export const initApp = () => (dispatch) => {
+    const exampleNavigationData = {
+        path: '/',
+        root: {
+            title: 'Root',
+            path: '/',
+            children: [{
+                title: 'Category 1',
+                path: '/potions.html'
+            }, {
+                title: 'Category 2',
+                path: '/books.html'
+            }, {
+                title: 'Category 3',
+                path: '/ingredients.html'
+            }]
+        }
+    }
+
+    return new Promise((resolve) => {
+        // For more information on the shape of the expected data,
+        // see https://docs.mobify.com/progressive-web/latest/components/#!/Nav
+        dispatch(receiveNavigationData(exampleNavigationData))
+        resolve()
+    })
+}
