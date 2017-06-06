@@ -3,6 +3,8 @@ import {receiveProductListProductData} from '../../products/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 
 export const initProductListPage = (url, routeName) => (dispatch) => {
+    console.log('[Stub Connector] Called initProductListPage stub')
+    
     const thumbnail = {
         src: '//via.placeholder.com/350x350',
         alt: 'Product Image'

@@ -56,6 +56,8 @@ export const fetchPageData = (url) => (dispatch) => {
 }
 
 export const initApp = () => (dispatch) => {
+    console.log('[Stub Connector] Called initApp stub')
+
     const exampleNavigationData = {
         path: '/',
         root: {

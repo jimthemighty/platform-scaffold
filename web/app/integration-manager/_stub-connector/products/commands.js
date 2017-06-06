@@ -3,6 +3,8 @@ import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {receiveFormInfo} from '../actions'
 
 export const initProductDetailsPage = (url) => (dispatch) => {
+    console.log('[Stub Connector] Called initProductDetailsPage stub')
+    
     const pathKey = urlToPathKey(url)
 
     const image = {
@@ -52,4 +54,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
     return Promise.resolve()
 }
 
-export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => Promise.resolve()
+export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => {
+    console.log('[Stub Connector] Called getProductVariantData stub')
+    return Promise.resolve()
+}
