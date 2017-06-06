@@ -106,7 +106,7 @@ const processCheckoutData = ($response) => (dispatch) => {
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+    // dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
 }
 
 const shippingDataSelector = createPropsSelector({
