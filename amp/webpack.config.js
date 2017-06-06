@@ -29,8 +29,16 @@ module.exports = {
             },
             {
                 test: /\.js(x?)$/,
+                exclude: /jsdom/,
                 use: [
-                    {loader: "imports-loader?window=>{location: {href: 'https://www.merlinspotions.com/eye-of-newt.html'}},window.Progressive=>{},navigator=>{userAgent: ''}"}
+                    {loader: "imports-loader?window=>{location: {href: 'https://www.merlinspotions.com/eye-of-newt.html'}},\
+                                             window.Progressive=>{},\
+                                             window.$=>function(params){return global.window.$(params);},\
+                                             document.createElement=>function(params){return global.window.document.createElement(params);},\
+                                             document.body.appendChild=>function(params){return global.window.document.body.appendChild(params);},\
+                                             window.Capture=>{},\
+                                             window.Capture.disable=>function(){return global.Capture.disable(arguments);},\
+                                             navigator=>{userAgent: ''}"}
                 ],
             },
             {
@@ -51,9 +59,6 @@ module.exports = {
         }),
         new webpack.ProvidePlugin({
             fetch: 'node-fetch'
-        }),
-        new webpack.ProvidePlugin({
-            $: 'jquery'
         })
     ],
     devtool: 'sourcemap'

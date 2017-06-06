@@ -15,6 +15,7 @@ import ampPackageJson from '../package.json'
 
 import thunk from 'redux-thunk'
 import {fromJS} from 'immutable'
+import CaptureDisable from './capturejs-disable'
 
 import Analytics from './components/analytics'
 import * as home from './containers/home/container'
@@ -64,6 +65,8 @@ const initializeStore = (req) => {
         }))
 
         global.window = window
+        global.Capture = {disable: (args) => { return CaptureDisable.apply(this, args) }}
+
         const uiReducer = combineReducers({
             app: appReducer,
             footer: footerReducer,
