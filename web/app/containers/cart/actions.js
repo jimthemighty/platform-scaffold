@@ -29,6 +29,7 @@ import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])
 export const setIsWishlistComplete = createAction('Set wishlist add complete', ['isWishlistAddComplete'])
 export const setTaxRequestPending = createAction('Set tax request pending', ['taxRequestPending'])
+export const setPromoSubmitting = createAction('Set Promo Submitting', ['promoSubmitting'])
 
 const shippingFormSelector = createPropsSelector({
     address: getEstimateShippingAddress,
@@ -112,6 +113,7 @@ export const updateItem = (itemId, itemQuantity) => (dispatch) => {
 }
 
 export const submitPromoCode = ({promo}) => (dispatch) => {
+    dispatch(setPromoSubmitting(true))
     dispatch(putPromoCode(promo))
         .catch(({message}) => {
             dispatch(addNotification(
@@ -119,6 +121,9 @@ export const submitPromoCode = ({promo}) => (dispatch) => {
                 message.includes(PROMO_ERROR) ? message : PROMO_ERROR,
                 true
             ))
+        })
+        .then(() => {
+            dispatch(setPromoSubmitting(false))
         })
 }
 

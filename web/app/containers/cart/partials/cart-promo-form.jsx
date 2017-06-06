@@ -5,15 +5,18 @@
 import React from 'react'
 import * as ReduxForm from 'redux-form'
 import {connect} from 'react-redux'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
+import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
 
 import {submitPromoCode} from '../actions'
+import {isPromoSubmitting} from '../selectors'
 
 const CartPromoForm = (props) => {
-    const {handleSubmit, submitPromoCode, disabled, submitting} = props
+    const {handleSubmit, submitPromoCode, disabled, submitting, isPromoSubmitting} = props
     return (
         <form onSubmit={handleSubmit(submitPromoCode)} noValidate>
             <FieldRow>
@@ -25,12 +28,17 @@ const CartPromoForm = (props) => {
                         noValidate
                     />
                 </ReduxForm.Field>
-
-                <Button type="submit"
-                    className="c--tertiary u-margin-0 u-text-uppercase"
-                    disabled={disabled || submitting}>
-                    Apply
-                </Button>
+                {isPromoSubmitting ?
+                    <Button className="c--tertiary u-margin-0">
+                        <InlineLoader className="pw--small" title="Submitting" />
+                    </Button>
+                :
+                    <Button type="submit"
+                        className="c--tertiary u-margin-0 u-text-uppercase"
+                        disabled={disabled || submitting}>
+                        Apply
+                    </Button>
+                }
             </FieldRow>
         </form>
     )
@@ -47,6 +55,8 @@ CartPromoForm.propTypes = {
      */
     handleSubmit: React.PropTypes.func,
 
+    isPromoSubmitting: React.PropTypes.bool,
+
     /**
      * Submits the promo code
      */
@@ -61,6 +71,10 @@ CartPromoForm.propTypes = {
 // Just return an empty error object for now
 const validate = () => ({})
 
+const mapStateToProps = createPropsSelector({
+    isPromoSubmitting
+})
+
 const mapDispatchToProps = {
     submitPromoCode
 }
@@ -71,6 +85,6 @@ const CartPromoReduxForm = ReduxForm.reduxForm({
 })(CartPromoForm)
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(CartPromoReduxForm)
