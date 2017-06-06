@@ -43,6 +43,10 @@ const validate = (values, props) => {
         errors.username = 'Enter a valid email address'
     }
 
+    if (values.name && !/\w+ \w+/.test(values.name)) {
+        errors.name = 'Please enter a first and last name'
+    }
+
     if (!props.isLoggedIn && !values.username) {
         errors.username = REQUIRED_TEXT
     }
