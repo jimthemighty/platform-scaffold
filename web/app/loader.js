@@ -1,5 +1,5 @@
 /* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED */
-import {getAssetUrl, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
+import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {isSamsungBrowser, isFirefoxBrowser} from 'progressive-web-sdk/dist/utils/utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
@@ -32,8 +32,12 @@ const attemptToInitializeApp = () => {
         return
     }
 
-    // This isn't accurate but does describe the case where the PR currently works
-    const IS_PREVIEW = /mobify-path=true/.test(document.cookie)
+    // Changing this to anything to do with Mobify Preview (i.e. Preview cookie,
+    // `preview` string in the URL) will incorrectly cause the worker loader to
+    // load the worker from a local development server
+    // See web/service-worker-loader.js
+    const IS_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+
     const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
     const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
