@@ -5,6 +5,7 @@
 import {CHECKOUT_CONFIRMATION_MODAL, CHECKOUT_CONFIRMATION_REGISTRATION_FAILED} from './constants'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import {SubmissionError} from 'redux-form'
 import {addNotification, removeAllNotifications} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import * as shippingSelectors from '../../store/checkout/shipping/selectors'
@@ -40,7 +41,15 @@ export const submitRegisterForm = () => {
             billingAddressData
         } = registrationFormSelector(getState())
 
-        return dispatch(registerUser(firstname, lastname, email, password, password_confirmation))
+        /* eslint-disable camelcase */
+        if (password !== password_confirmation) {
+            return Promise.reject(new SubmissionError({
+                password_confirmation: 'Passwords are not the same'
+            }))
+        }
+        /* eslint-enable camelcase */
+
+        return dispatch(registerUser(firstname, lastname, email, password))
             .then(() => {
                 dispatch(openModal(CHECKOUT_CONFIRMATION_MODAL))
                 return dispatch(updateShippingAddress(shippingData))
