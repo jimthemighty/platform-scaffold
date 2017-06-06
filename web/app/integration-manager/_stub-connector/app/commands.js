@@ -1,9 +1,12 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
+import {getCart} from '../cart/commands'
+
 import {
     setPageFetchError,
-    receiveNavigationData
+    receiveNavigationData,
+    setCartURL
 } from '../../results'
 
 /**
@@ -75,6 +78,8 @@ export const initApp = () => (dispatch) => {
         // For more information on the shape of the expected data,
         // see https://docs.mobify.com/progressive-web/latest/components/#!/Nav
         dispatch(receiveNavigationData(exampleNavigationData))
+        dispatch(getCart())
+        dispatch(setCartURL('/checkout/cart/'))
         resolve()
     })
 }
