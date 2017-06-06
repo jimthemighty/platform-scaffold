@@ -31,7 +31,7 @@ module.exports = {
                 test: /\.js(x?)$/,
                 exclude: /jsdom/,
                 use: [
-                    {loader: "imports-loader?window=>{location: {href: 'https://www.merlinspotions.com/eye-of-newt.html'}},\
+                    {loader: "imports-loader?window=>{location: {href: ''}},\
                                              window.Progressive=>{},\
                                              window.$=>function(params){return global.window.$(params);},\
                                              document.createElement=>function(params){return global.window.document.createElement(params);},\

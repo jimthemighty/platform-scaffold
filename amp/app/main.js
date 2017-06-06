@@ -44,6 +44,9 @@ const PAGE_TITLE = 'pageTitle'
 
 export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
 
+const getFullUrl = (req) => {
+    return `${ampPackageJson.siteUrl}${req.url}`
+}
 
 const initializeStore = (req) => {
     return jsdomEnv().then((window) => {
@@ -90,7 +93,7 @@ const initializeStore = (req) => {
         const noop = (f) => f
 
         const initialState = ({ui: {app: fromJS({
-            [CURRENT_URL]: `${ampPackageJson.siteUrl}${req.url}`,
+            [CURRENT_URL]: getFullUrl(req),
             [PAGE_TITLE]: 'Merlins AMP' // Fetch the page again and get title?
         })}})
 
@@ -127,7 +130,7 @@ const render = (req, res, store, component, css) => {
     const state = store.getState()
     const rendered = ampPage({
         title: state.ui.app.get(PAGE_TITLE),
-        canonicalURL: `${ampPackageJson.siteUrl}${req.url}`,
+        canonicalURL: getFullUrl(req),
         body,
         css,
         ampScriptIncludes: scripts.items().join('\n')

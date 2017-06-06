@@ -32,6 +32,7 @@
     "eslint-plugin-react": "6.10.3",
     "exports-loader": "^0.6.4",
     "git-rev-sync": "1.9.1",
+    "immutable": "^3.8.1",
     "imports-loader": "^0.7.1",
     "jest-cli": "19.0.2",
     "mobify-amp-sdk": "0.0.2",
@@ -53,14 +54,14 @@
     "react-redux-resolve": "^1.0.2",
     "redux": "3.6.0",
     "redux-actions": "2.0.1",
+    "redux-thunk": "^2.2.0",
     "reselect-immutable-helpers": "^1.2.2",
     "sass-lint": "1.10.2",
     "sass-loader": "6.0.5",
     "source-map-support": "0.4.15",
     "stylelint": "7.10.1",
     "susy": "^2.2.12",
-    "webpack": "2.5.1",
-    "whatwg-url": "^5.0.0"
+    "webpack": "2.5.1"
   },
   "scripts": {
     "add:component": "amp-sdk-add-component",
