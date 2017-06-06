@@ -1,19 +1,22 @@
 // Header
 // ===
 
-// @import the variables here
+$header-logo-width: 100px;
+$header-logo-height: 100px;
+
+
+// Root
+// ---
 //
-// 1. The expected height of the site HeaderBar (.t-header__bar)
-// 2. Ensure header bar appears above page content
+// 1. Ensure header bar appears above page content
 
 .t-header {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: $z2-depth; // 2
+    z-index: $z2-depth; // 1
 
     width: 100vw;
-    padding-top: $header-height; // 1
 
     box-shadow: $large-box-shadow;
 }
@@ -66,20 +69,6 @@
     .c-button__inner {
         padding: 0;
     }
-
-    [id*='logo-sparkle-1'],
-    [id*="logo-sparkle-2"] {
-        opacity: 0.3;
-
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    &.t--fade-sparkles {
-        [id*='logo-sparkle-1'],
-        [id*="logo-sparkle-2"] {
-            opacity: 1;
-        }
-    }
 }
 
 
@@ -87,8 +76,8 @@
 // ---
 
 .t-header__logo {
-    width: 67px;
-    height: 28px;
+    width: $header-logo-width;
+    height: $header-logo-height;
 }
 
 
