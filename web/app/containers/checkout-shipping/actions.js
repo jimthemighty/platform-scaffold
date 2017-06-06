@@ -128,13 +128,15 @@ export const isEmailAvailable = () => (dispatch, getState) => {
     const formValues = getShippingFormValues(getState())
 
     if (customCommands.isEmailAvailable) {
-        return dispatch(customCommands.isEmailAvailable(formValues.username))
-        .then((emailAvailable) => {
-            if (emailAvailable) {
-                return dispatch(onShippingEmailAvailable())
-            }
-            return dispatch(onShippingEmailRecognized())
-        })
+        if (formValues.username) {
+            return dispatch(customCommands.isEmailAvailable(formValues.username))
+            .then((emailAvailable) => {
+                if (emailAvailable) {
+                    return dispatch(onShippingEmailAvailable())
+                }
+                return dispatch(onShippingEmailRecognized())
+            })
+        }
     }
 
     return dispatch(onShippingEmailAvailable())
