@@ -1,4 +1,6 @@
-import {receiveCartContents, receiveCartTotals} from '../../cart/results'
+/* eslint-disable no-unused-vars */
+
+import {receiveCartContents} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
 
 export const initCartPage = (url, routeName) => (dispatch) => {
@@ -8,7 +10,7 @@ export const initCartPage = (url, routeName) => (dispatch) => {
 
 export const getCart = () => (dispatch) => {
     console.log('[Stub Connector] Called getCart stub')
-    
+
     const exampleCartData = {
         items: [{
             id: '1',
@@ -27,7 +29,7 @@ export const getCart = () => (dispatch) => {
         alt: 'Product 1'
     }
     const exampleCartProducts = {
-        ['/product1.html']: {
+        '/product1.html': {
             price: '$10.00',
             available: true,
             href: '/product1.html',

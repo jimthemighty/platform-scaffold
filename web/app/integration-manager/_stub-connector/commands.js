@@ -2,6 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+/* eslint-disable no-unused-vars */
+
 import * as accountCommands from './account/commands'
 import * as appCommands from './app/commands'
 import * as cartCommands from './cart/commands'

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 export const initLoginPage = (url, routeName) => (dispatch) => {
     console.log('[Stub Connector] Called initLoginPage stub')
     return Promise.resolve()

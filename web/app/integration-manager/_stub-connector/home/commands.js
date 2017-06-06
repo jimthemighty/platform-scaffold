@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
+
 import {receiveHomeData} from '../../results'
 
 export const initHomePage = (url) => (dispatch) => {
     console.log('[Stub Connector] Called initHomePage stub')
-    
+
     const exampleData = {
         banners: [{
             src: '//via.placeholder.com/400x200',

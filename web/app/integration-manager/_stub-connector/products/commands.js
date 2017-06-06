@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
+
 import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {receiveFormInfo} from '../actions'
 
 export const initProductDetailsPage = (url) => (dispatch) => {
     console.log('[Stub Connector] Called initProductDetailsPage stub')
-    
+
     const pathKey = urlToPathKey(url)
 
     const image = {

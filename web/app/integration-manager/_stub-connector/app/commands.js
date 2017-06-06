@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 

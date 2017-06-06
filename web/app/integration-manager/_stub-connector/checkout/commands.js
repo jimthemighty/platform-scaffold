@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 export const initCheckoutShippingPage = (url) => (dispatch) => {
     console.log('[Stub Connector] Called initCheckoutShippingPage stub')
     return Promise.resolve()
