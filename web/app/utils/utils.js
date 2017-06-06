@@ -38,7 +38,10 @@ export const getCookieValue = (cookieName) => {
 }
 
 export const splitFullName = (fullname) => {
-    const names = fullname.split(' ')
+    let names = fullname.trim().split(' ')
+
+    // filter out any empty strings
+    names = names.filter((name) => name)
 
     return {
         firstname: names.slice(0, 1).join(' '),
