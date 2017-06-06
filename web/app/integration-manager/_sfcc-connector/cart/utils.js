@@ -136,5 +136,8 @@ export const handleCartData = (basket) => (dispatch) => {
 export const createNewBasket = () => (dispatch) => {
     deleteBasketID()
     return requestCartData()
-        .then((basket) => dispatch(handleCartData(basket)))
+        .then((basket) => {
+            dispatch(handleCartData(basket))
+            return basket
+        })
 }

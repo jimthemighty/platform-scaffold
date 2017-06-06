@@ -4,24 +4,38 @@
 
 import {makeApiRequest, makeApiJsonRequest, getAuthTokenPayload} from '../utils'
 import {populateLocationsData} from '../checkout/utils'
-import {requestCartData, createBasket, handleCartData} from './utils'
+import {requestCartData, createBasket, handleCartData, createNewBasket} from './utils'
 
 export const getCart = () => (dispatch) =>
     requestCartData().then((basket) => dispatch(handleCartData(basket)))
 
 
+const addToCartRequest = (productId, quantity, basketId) => {
+    const requestBody = [{
+        product_id: productId,
+        quantity
+    }]
+    // Use makeApiRequest here instead of makeAPIJsonRequest so we can deal with errors ourselves
+    return makeApiRequest(`/baskets/${basketId}/items`, {method: 'POST', body: JSON.stringify(requestBody)})
+}
+
 export const addToCart = (productId, quantity) => (dispatch) => (
     createBasket()
+        .then((basket) => addToCartRequest(productId, quantity, basket.basket_id))
+        .then((response) => response.json())
         .then((basket) => {
-            const requestBody = [{
-                product_id: productId,
-                quantity
-            }]
+            if (basket.fault) {
+                if (basket.fault.type === 'InvalidCustomerException') {
+                    // the basket has expired create a new one and try adding to cart again
+                    return dispatch(createNewBasket())
+                        .then((basket) => addToCartRequest(productId, quantity, basket.basket_id))
+                }
+                throw new Error(basket.fault.message)
+            }
 
-            return makeApiJsonRequest(`/baskets/${basket.basket_id}/items`, requestBody, {method: 'POST'})
+            return dispatch(handleCartData(basket))
         })
         .catch(() => { throw new Error('Unable to add item to cart') })
-        .then((basket) => dispatch(handleCartData(basket)))
 )
 
 export const removeFromCart = (itemId) => (dispatch) => (
