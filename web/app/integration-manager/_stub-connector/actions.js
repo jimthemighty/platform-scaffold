@@ -9,3 +9,5 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 // by the app should go into ./results.js
 
 export const exampleAction = createAction('Some project-specific action')
+
+export const receiveFormInfo = createAction('Receive Form Info')
