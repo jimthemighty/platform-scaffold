@@ -3,7 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getTextFrom} from '../../../utils/parser-utils'
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 
 /* eslint-disable newline-per-chained-call */
 
@@ -72,8 +71,7 @@ const categoryProductsParser = ($, $html) => {
 
     const products = $
           .makeArray($html.find('.item.product-item'))
-          .map((product) => $(product).find('.product-item-link').attr('href'))
-          .map(urlToPathKey)
+          .map((product) => $(product).find('input[name="product"]').val())
 
     return {
         itemCount: $numItems.length > 0 ? parseInt($numItems.text(), 10) : 0,

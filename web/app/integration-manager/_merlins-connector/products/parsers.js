@@ -4,7 +4,6 @@
 
 import {extractMagentoJson} from '../../../utils/magento-utils'
 import {getTextFrom, parseTextLink, parseImage} from '../../../utils/parser-utils'
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 
 const UENC_REGEX = /\/uenc\/([^/,]+),*\//
 
@@ -95,10 +94,11 @@ export const productListParser = ($, $html) => {
     $products.each((_, product) => {
         const $product = $(product)
         const link = parseTextLink($product.find('.product-item-link'))
+        const productId = $product.find('input[name="product"]').val()
         const thumbnail = parseImage($product.find('.product-image-photo'))
         const available = $product.find('.stock.unavailable').length === 0
 
-        productMap[urlToPathKey(link.href)] = {
+        productMap[productId] = {
             id: $product.find('.price-box').length ? $product.find('.price-box').attr('data-product-id') : '',
             title: link.text,
             price: getTextFrom($product, '.price'),
