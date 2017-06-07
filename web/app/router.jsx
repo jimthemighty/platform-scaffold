@@ -19,7 +19,8 @@ import {initProductListPage} from './integration-manager/categories/commands'
 import {initProductDetailsPage} from './integration-manager/products/commands'
 import {initRegisterPage, initLoginPage} from './integration-manager/account/commands'
 import {initCheckoutShippingPage, initCheckoutPaymentPage, initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
-import {initPrivacyPage} from './integration-manager/custom/commands'
+import {customCommands} from './integration-manager/custom/commands'
+// import {initPrivacyPage} from './connector-extension/custom-commands'
 
 import {getURL} from './utils/utils'
 import {isRunningInAstro, pwaNavigate} from './utils/astro-integration'
@@ -49,7 +50,7 @@ const Router = ({store}) => (
                 <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initCartPage} />
                 <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initLoginPage} />
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initRegisterPage} />
-                <Route component={PrivacyPage} path="privacy-policy-cookie-restriction-mode" routeName="privacyPage" fetchAction={initPrivacyPage} />
+                <Route component={PrivacyPage} path="privacy-policy-cookie-restriction-mode" routeName="privacyPage" fetchAction={customCommands.initPrivacyPage} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initProductListPage} />

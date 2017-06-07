@@ -4,6 +4,7 @@
 
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest, makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {privacyPageParser} from './privacy-parser'
 
 export const isEmailAvailable = (email) => (dispatch) => {
     return makeJsonEncodedRequest(
@@ -24,8 +25,9 @@ const fetchPageData = (url) => (dispatch) => {
         .then((res) => {
             console.log('got response')
             const [$, $response] = res
-            // const isLoggedIn = parseLoginStatus($response)
-            // dispatch(setLoggedIn(isLoggedIn))
+            const data = privacyPageParser($, $response)
+            console.log('data')
+            console.log(data)
             // dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
             return res
         })
