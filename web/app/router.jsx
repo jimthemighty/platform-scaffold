@@ -97,6 +97,8 @@ const Router = ({store}) => (
                 <Route component={ProductList} path="*/mens*" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route component={ProductList} path="*/newarrivals*" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route component={ProductList} path="*/electronics*" routeName="productListPage" fetchAction={initProductListPage} />
+                <Route component={ProductList} path="*/gift-certificates*" routeName="productListPage" fetchAction={initProductListPage} />
+                <Route component={ProductList} path="*/top-seller*" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route component={ProductList} path="*/Search-Show?*" routeName="productListPage" fetchAction={initProductListPage} />
                 <Route
                     component={CheckoutShipping}

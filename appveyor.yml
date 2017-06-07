@@ -15,4 +15,8 @@ install:
 
 test_script:
   - pushd web && npm run smoke-test && popd
+
+artifacts:
+  - path: web\tests\screenshots
+    name: Screenshots
  
