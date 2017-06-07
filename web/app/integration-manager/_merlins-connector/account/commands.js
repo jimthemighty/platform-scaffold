@@ -35,7 +35,8 @@ const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
     document.cookie = `${MAGENTO_MESSAGE_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
 }
-const defaultErrorMessage = {text: 'Username or password is incorrect'}
+const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
+const EXISTING_ACCT_REGEX = /already an account/
 
 const submitForm = (href, formValues, formSelector) => {
     clearMessageCookie()
@@ -49,8 +50,18 @@ const submitForm = (href, formValues, formSelector) => {
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
 
+                if (messages.length === 0) {
+                    throw new SubmissionError({_error: DEFAULT_ERROR_TEXT})
+                }
+
+                let message = messages[0].text.replace(/\+/g, ' ')
+                // This message has HTML in it, just patch it up for now
+                if (EXISTING_ACCT_REGEX.test(message)) {
+                    message = `${message.split('.')[0]}.`
+                }
+
                 throw new SubmissionError({
-                    _error: (messages[0] || defaultErrorMessage).text.replace(/\+/g, ' ')
+                    _error: message
                 })
             }
             return '/customer/account'
