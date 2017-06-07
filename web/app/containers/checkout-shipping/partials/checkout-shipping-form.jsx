@@ -8,12 +8,12 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 import isEmail from 'validator/lib/isEmail'
 
+import {validateFullName} from '../../../utils/utils'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getInitialShippingAddress} from '../../../store/checkout/shipping/selectors'
 
 import {submitShipping} from '../actions'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
-import {fetchSavedShippingAddresses} from '../../../store/checkout/shipping/actions'
 
 import {Grid, GridSpan} from 'progressive-web-sdk/dist/components/grid'
 import ShippingAddress from './shipping-address'
@@ -33,7 +33,7 @@ const validate = (values, props) => {
         'postcode',
         'telephone'
     ]
-    const isSavedAddressSelected = !!values.saved_address
+    const isSavedAddressSelected = !!values.savedAddress
 
     if (isSavedAddressSelected) {
         // If user has chosen a saved address, no further validation necessary
@@ -42,6 +42,10 @@ const validate = (values, props) => {
 
     if (values.username && !isEmail(values.username)) {
         errors.username = 'Enter a valid email address'
+    }
+
+    if (values.name && !validateFullName(values.name)) {
+        errors.name = 'Please enter a first and last name'
     }
 
     if (!props.isLoggedIn && !values.username) {
@@ -67,8 +71,7 @@ class CheckoutShippingForm extends React.Component {
         return new Promise((resolve, reject) => {
             const errors = validate(values, this.props)
             if (!Object.keys(errors).length) {
-                this.props.submitShipping()
-                return resolve()
+                return this.props.submitShipping()
             }
             return reject(new ReduxForm.SubmissionError(errors))
         })
@@ -103,10 +106,6 @@ CheckoutShippingForm.propTypes = {
      */
     disabled: React.PropTypes.bool,
     /**
-     * Fetches the current user's saved addresses
-     */
-    fetchSavedAddresses: React.PropTypes.func,
-    /**
      * Redux-form internal
      */
     handleSubmit: React.PropTypes.func,
@@ -126,7 +125,6 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    fetchSavedAddresses: fetchSavedShippingAddresses,
     submitShipping
 }
 

@@ -38,7 +38,8 @@ export const parseCart = ({items, subtotal}) => /* Cart */ {
             href: product_url,
             quantity: qty,
             itemPrice: textFromFragment(product_price),
-            linePrice: productSubtotal(textFromFragment(product_price), qty)
+            linePrice: productSubtotal(textFromFragment(product_price), qty),
+            configureUrl: `/checkout/cart/configure/id/${item_id}/product_id/${product_id}/` // eslint-disable-line camelcase
         })),
         subtotal: textFromFragment(subtotal),
         orderTotal: textFromFragment(subtotal)

@@ -41,6 +41,7 @@ const config = {
             'lodash.keysin': path.resolve(process.cwd(), 'node_modules', 'lodash', 'keysIn'),
             'lodash.mapvalues': path.resolve(process.cwd(), 'node_modules', 'lodash', 'mapValues'),
             'lodash.throttle': path.resolve(process.cwd(), 'node_modules', 'lodash', 'throttle'),
+            react: path.resolve(process.cwd(), 'node_modules', 'react')
         }
     },
     plugins: [
