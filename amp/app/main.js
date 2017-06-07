@@ -61,6 +61,7 @@ const render = (req, res, store, component, css) => {
         <ampSDK.AmpContext declareDependency={scripts.add}>
             <Provider store={store}>
                 <App>
+                    <h1>foo</h1>
                     <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
                     {React.createElement(component, {}, null)}
                 </App>

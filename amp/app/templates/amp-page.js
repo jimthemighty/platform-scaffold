@@ -22,11 +22,7 @@ const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes}) => (
                 ${css}
             </style>
         </head>
-        <body>
-            <div id="root">
-                ${body}
-            </div>
-        </body>
+        ${body}
     </html>
     `
     /*eslint-enable */

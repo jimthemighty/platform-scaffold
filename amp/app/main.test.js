@@ -13,7 +13,7 @@ describe('Renders valid AMP', () => {
     })
 
     const validateAmp = (html) => {
-        expect(validator.validateString(html).status).toEqual('PASS')
+        expect(validator.validateString(html).errors).toEqual([])
     }
 
     const handle = (req) => {
