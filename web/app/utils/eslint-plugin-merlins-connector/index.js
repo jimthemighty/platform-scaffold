@@ -9,8 +9,7 @@ module.exports.rules = { // eslint-disable-line
                     ruleName = specifiers.imported.name
                 }
 
-                // 'configureConnector' name pending on https://github.com/mobify/platform-scaffold/pull/713
-                if (ruleName === 'configureConnector' && !/merlins/.test(node.source.value)) {
+                if (ruleName === 'initConnector' && !/merlins/.test(node.source.value)) {
                     context.report(node, 'Merlin\'s Connector should be left uncommented')
                 }
             }
