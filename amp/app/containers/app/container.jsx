@@ -3,14 +3,14 @@ import Header from '../header/container'
 import Footer from '../footer/container'
 import DangerousHTML from '../../components/dangerous-html'
 import SkipLinks from '../../components/skip-links'
+import Button from '../../components/button'
 import Navigation from '../navigation/container'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
 import {connect} from 'react-redux'
 
 const App = ({
-    children,
-    buttontest
+    children
 }) => {
 
     const skipLinksItems = [
@@ -46,9 +46,7 @@ const App = ({
                 <main id="app-main" className="u-flex" role="main">
                     {children}
 
-                    <DangerousHTML html={buttontest}>
-                        {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-                    </DangerousHTML>
+                    <Button id="some-id" on="tap:menu-sheet.toggle" class="ZOO-BOO">Open Menu</Button>
                 </main>
 
                 <div id="app-footer" className="u-flex-none">
@@ -67,7 +65,7 @@ App.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-    buttontest: '<button on="tap:menu-sheet.toggle">Button</button>'
+
 })
 
 export default connect(
