@@ -8,6 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 import isEmail from 'validator/lib/isEmail'
 
+import {validateFullName} from '../../../utils/utils'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getInitialShippingAddress} from '../../../store/checkout/shipping/selectors'
 
@@ -41,6 +42,10 @@ const validate = (values, props) => {
 
     if (values.username && !isEmail(values.username)) {
         errors.username = 'Enter a valid email address'
+    }
+
+    if (values.name && !validateFullName(values.name)) {
+        errors.name = 'Please enter a first and last name'
     }
 
     if (!props.isLoggedIn && !values.username) {

@@ -143,24 +143,19 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
     const savedAddress = formValues.savedAddress
     const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
 
-    // Format the shipping address
-    const {name} = formValues
-    const names = name.split(' ')
-    const newAddress = formValues
-
     const address = {
-        firstname: names.slice(0, -1).join(' '),
-        lastname: names.slice(-1).join(' '),
-        company: newAddress.company || '',
-        telephone: newAddress.telephone,
-        postcode: newAddress.postcode,
-        city: newAddress.city,
-        street: newAddress.addressLine2
-            ? [newAddress.addressLine1, newAddress.addressLine2]
-            : [newAddress.addressLine1],
-        regionId: newAddress.regionId,
-        region: newAddress.region,
-        countryId: newAddress.countryId,
+        firstname: formValues.firstname,
+        lastname: formValues.lastname,
+        company: formValues.company || '',
+        telephone: formValues.telephone,
+        postcode: formValues.postcode,
+        city: formValues.city,
+        street: formValues.addressLine2
+            ? [formValues.addressLine1, formValues.addressLine2]
+            : [formValues.addressLine1],
+        regionId: formValues.regionId,
+        region: formValues.region,
+        countryId: formValues.countryId,
         saveInAddressBook: true
     }
 
