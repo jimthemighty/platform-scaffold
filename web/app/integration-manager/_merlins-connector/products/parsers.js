@@ -98,6 +98,11 @@ export const productListParser = ($, $html) => {
         const thumbnail = parseImage($product.find('.product-image-photo'))
         const available = $product.find('.stock.unavailable').length === 0
 
+        // productId is undefined if the item is out of stock
+        if (!productId) {
+            return
+        }
+
         productMap[productId] = {
             id: $product.find('.price-box').length ? $product.find('.price-box').attr('data-product-id') : '',
             title: link.text,
