@@ -1,8 +1,17 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 const selectors = {
-    cartTemplateIdentifier: '.cart-container',
-    cartCheckout: 'button.checkout',
+    miniCart: '.qa-header__cart',
+    miniCartContent: '.t-mini-cart__content',
+    viewCart: '.t-mini-cart__content .c--tertiary',
+    cartTemplateIdentifier: '.t-cart.t--loaded',
+    cartCheckout: '.qa-cart__checkout',
     removeItem: '.qa-cart__remove-item',
-    emptyCart: '.t-cart__empty'
+    confirmRemove: '.t-cart__remove-item-confirmation-modal .c--secondary',
+    emptyCart: '.t-cart__empty',
+    emptyMiniCart: '.t-mini-cart__empty-content'
 }
 
 const Cart = function(browser) {
@@ -22,18 +31,28 @@ Cart.prototype.navigateToCheckout = function() {
 
 Cart.prototype.removeItems = function() {
     // Remove all items from the cart
+    const self = this
     this.browser
-        .log('Removing item')
-        .element('css selector', selectors.removeItem, (result) => {
+        .preview()
+        .log('Opening mini cart')
+        .waitForElementVisible(selectors.miniCart)
+        .click(selectors.miniCart)
+        .waitForElementVisible(selectors.miniCartContent)
+        .element('css selector', selectors.viewCart, (result) => {
             if (result.value && result.value.ELEMENT) {
                 self.browser
+                    .log('View cart')
+                    .waitForElementVisible(selectors.viewCart)
+                    .click(selectors.viewCart)
                     .log('Removing item from cart')
-                    .click(selectors.removeItem)
-                    .waitUntilMobified()
-                self.cleanUp()
+                    .execute(`document.querySelector('${selectors.removeItem}').click()`)
+                    .waitForElementVisible(selectors.confirmRemove)
+                    .execute(`document.querySelector('${selectors.confirmRemove}').click()`)
+                    .waitForAjaxCompleted()
+                self.removeItems()
             }
         })
-        .waitForElementVisible(selectors.emptyCart)
+        .waitForElementVisible(selectors.emptyMiniCart)
     return this
 }
 

@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 /* eslint-env jest */
 /* eslint-disable import/namespace */
 
@@ -24,7 +28,7 @@ test('renders the component class correctly', () => {
 })
 
 test('renders the title and price', () => {
-    const wrapper = shallow(<ProductDetailsHeading title="Potion of Healing" price="10gp" />)
+    const wrapper = shallow(<ProductDetailsHeading title="Potion of Healing" price="10gp" available="true" />)
 
     const titleElement = wrapper.find(`.${ROOT_CLASS}__title`)
     expect(titleElement.length).toBe(1)

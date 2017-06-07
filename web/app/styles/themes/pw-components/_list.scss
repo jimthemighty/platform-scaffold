@@ -1,15 +1,20 @@
-// List
+// List Theme
 // ===
 
+.pw-list,
 .c-list {
     // @TODO: Make this a c-list sub-component className
     > :not(:first-of-type),
+    > .pw-list-tile:not(:first-of-type),
     > .c-list-tile:not(:first-of-type) {
         border-top: 1px solid $neutral-15;
     }
 
-    &.c--borderless > :not(:first-of-type) {
-        margin-top: $unit;
-        border-top: 0;
+    &.pw--borderless,
+    &.c--borderless {
+        > :not(:first-of-type) {
+            margin-top: $unit;
+            border-top: 0;
+        }
     }
 }

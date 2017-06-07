@@ -1,4 +1,4 @@
-// Field
+// Field Theme
 // ---
 //
 // 1. Keep the original font color of the label instead of error color - as per design
@@ -27,12 +27,8 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
 
 // Label Wrap
 // ---
-//
-// 1. Position context so the child `pw-field__hint` can be absolutely positioned
 
 .pw-field__label-wrap {
-    position: relative; // 1
-
     display: flex;
     flex: 1 1 auto;
 }
@@ -46,10 +42,9 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
 .c-field__label,
 .pw-field__label {
     flex: 1 1 auto;
-    width: 100%;
     margin-bottom: $unit;
 
-    font-weight: 600;
+    font-weight: $semi-bold-font-weight;
     font-size: $font-size;
     line-height: 1em;
 }
@@ -61,7 +56,7 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
 .pw-field__hint {
     flex: 0 0 auto;
 
-    font-size: 12px;
+    font-size: $small-font-size;
 }
 
 
@@ -69,12 +64,13 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
 // ---
 
 .pw-field__caption {
-    @include text-quiet();
-
     padding-top: $unit/2;
 
-    font-size: 12px; // @TODO: Remove this line once text-quiet uses a $font-size-small var
-    line-height: 16px;
+    color: $neutral-50;
+    font-size: $small-font-size;
+    line-height: $small-line-height;
+
+    fill: $neutral-50;
 }
 
 
@@ -106,11 +102,9 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
 // ---
 //
 // 1. Align the caption with its checkbox or radio
-// 2. Positioned relative to the parent `pw-field__label-wrap` container
-// 3. Position the hint button to sit directly on top of the field input
-// 4. Margin no longer needed, since we know there is no input below it (the
+// 2. Margin no longer needed, since we know there is no input below it (the
 //    input is the checkbox/radio on the side in this state)
-// 5. Vertical center align the label to the radio
+// 3. Vertical center align the label to the radio
 
 .pw-field.pw--error {
     border-color: $error-color;
@@ -127,21 +121,20 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
 
     .c-field__label,
     .pw-field__label {
-        margin-bottom: 0; // 4
+        margin-bottom: 0; // 2
 
         font-weight: normal;
     }
 
     .pw-field__label-wrap {
-        margin-top: $sub-unit*1.5; // 5
+        margin-top: $sub-unit*1.5; // 3
     }
-}
 
-.pw-field.pw--overlayed-hint {
-    .pw-field__hint {
-        position: absolute; // 2
-        top: 100%; // 3
-        right: 0; // 3
+    &.pw--checked {
+        .c-field__label,
+        .pw-field__label {
+            font-weight: $semi-bold-font-weight;
+        }
     }
 }
 
@@ -175,7 +168,8 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
             pointer-events: none;
         }
 
-        &::before { // 3
+        &::before {
+            // 3
             content: '';
 
             position: absolute;

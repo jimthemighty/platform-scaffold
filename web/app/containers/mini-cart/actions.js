@@ -1,8 +1,12 @@
-import {getCart} from '../../store/cart/actions'
-import * as modalActions from '../../store/modals/actions'
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
+import {getCart} from '../../integration-manager/cart/commands'
+import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {MINI_CART_MODAL} from './constants'
 
 export const requestOpenMiniCart = () => (dispatch) => {
     dispatch(getCart())
-    dispatch(modalActions.openModal(MINI_CART_MODAL))
+    dispatch(openModal(MINI_CART_MODAL))
 }

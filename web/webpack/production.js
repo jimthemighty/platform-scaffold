@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 /* eslint-disable import/no-commonjs */
 /* eslint-env node */
 
@@ -15,7 +19,8 @@ const productionMainConfig = assign(baseMainConfig, {
     // Extend base config with production settings here
     plugins: [].concat(baseMainConfig.plugins, [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+            DEBUG: false
         })
     ])
 })
@@ -28,6 +33,12 @@ baseMainConfig.module.rules = baseMainConfig.module.rules.concat({
         /app/
     ]
 })
+
+baseLoaderConfig.plugins = baseLoaderConfig.plugins.concat([
+    new webpack.DefinePlugin({
+        DEBUG: false
+    })
+])
 
 workerConfig.plugins = workerConfig.plugins.concat([
     new webpack.DefinePlugin({

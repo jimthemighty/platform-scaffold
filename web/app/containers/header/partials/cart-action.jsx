@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
@@ -29,7 +33,7 @@ CartItemCounterBadge.propTypes = {
 
 const CartAction = ({innerButtonClassName, onClick, itemCount}) => (
     <HeaderBarActions>
-        <Button className="u-position-relative" innerClassName={innerButtonClassName} onClick={onClick}>
+        <Button className="u-position-relative qa-header__cart" innerClassName={innerButtonClassName} onClick={onClick}>
             <IconLabel label="Cart" iconName="cart" iconSize="medium" />
             <CartItemCounterBadge itemCount={itemCount} />
         </Button>

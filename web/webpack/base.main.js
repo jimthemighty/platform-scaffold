@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 /* eslint-disable import/no-commonjs */
 /* eslint-env node */
 
@@ -8,12 +12,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
+const webPackageJson = require('../package.json')   // eslint-disable-line import/no-extraneous-dependencies
+
 const analyzeBundle = process.env.MOBIFY_ANALYZE === 'true'
 
 const config = {
     devtool: 'cheap-source-map',
     entry: [
-        'whatwg-fetch',
         './app/main.jsx'
     ],
     output: {
@@ -36,12 +41,24 @@ const config = {
             'lodash.keysin': path.resolve(process.cwd(), 'node_modules', 'lodash', 'keysIn'),
             'lodash.mapvalues': path.resolve(process.cwd(), 'node_modules', 'lodash', 'mapValues'),
             'lodash.throttle': path.resolve(process.cwd(), 'node_modules', 'lodash', 'throttle'),
+            react: path.resolve(process.cwd(), 'node_modules', 'react')
         }
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: (module) => /node_modules/.test(module.resource)
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            // These dependencies are shared between several of the route chunks
+            async: 'common-dependencies',
+            minChunks: (module) => {
+                const context = module.context
+                const targets = [/progressive-web-sdk/]
+                return context &&
+                    context.indexOf('node_modules') >= 0 &&
+                    targets.find((target) => target.test(context))
+            }
         }),
         new ExtractTextPlugin({
             filename: '[name].css'
@@ -50,8 +67,11 @@ const config = {
             {from: 'app/static/', to: 'static/'}
         ]),
         new webpack.DefinePlugin({
-            PROJECT_SLUG: JSON.stringify(require('../package.json').projectSlug), // eslint-disable-line import/no-extraneous-dependencies
-            AJS_SLUG: JSON.stringify(require('../package.json').aJSSlug) // eslint-disable-line import/no-extraneous-dependencies
+            // This is defined as a boolean, not a string
+            MESSAGING_ENABLED: `${webPackageJson.messagingEnabled}`,
+            // These are defined as string constants
+            PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
+            AJS_SLUG: `'${webPackageJson.aJSSlug}'`
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
@@ -62,7 +82,7 @@ const config = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.js(x?)$/,
                 exclude: /node_modules(?!\/mobify-progressive-app-sdk)/,
                 loader: 'babel-loader',
                 options: {

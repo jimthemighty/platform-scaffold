@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import Immutable from 'immutable'
 
 export const getTextFrom = ($element, selector) => (
@@ -46,7 +50,7 @@ export const parseOption = ($option) => {
         key: value,
         value,
         selected: !!$option.attr('selected'),
-        text: $option.text()
+        text: $option.text().trim()
     }
 }
 

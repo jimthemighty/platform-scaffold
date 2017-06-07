@@ -1,11 +1,14 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
-import {onRouteChanged} from '../app/actions'
-
-// This is now a placeholder; it may be removed down the road.
+import {changeSelectedSort} from './actions'
+import {mergePayload} from '../../utils/reducer-utils'
 
 const productListReducer = handleActions({
-    [onRouteChanged]: /* istanbul ignore next */(state) => state
+    [changeSelectedSort]: mergePayload
 }, Immutable.Map())
 
 export default productListReducer

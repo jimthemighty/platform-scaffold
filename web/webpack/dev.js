@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 /* eslint-disable import/no-commonjs */
 
 const webpack = require('webpack')
@@ -21,7 +25,16 @@ mainConfig.module.rules = mainConfig.module.rules.concat({
 mainConfig.output.publicPath = `https://${ip.address()}:8443/`
 
 mainConfig.plugins = mainConfig.plugins.concat([
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+        DEBUG: true
+    })
+])
+
+loaderConfig.plugins = loaderConfig.plugins.concat([
+    new webpack.DefinePlugin({
+        DEBUG: true
+    })
 ])
 
 workerConfig.plugins = workerConfig.plugins.concat([

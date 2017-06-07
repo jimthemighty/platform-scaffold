@@ -1,8 +1,12 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import {handleActions} from 'redux-actions'
 import {fromJS} from 'immutable'
 import {mergePayload} from '../../utils/reducer-utils'
 
-import {receiveData} from './actions'
+import {receiveHomeData} from '../../integration-manager/results'
 
 const CATEGORY_PLACEHOLDER_COUNT = 6
 
@@ -12,5 +16,5 @@ const initialState = fromJS({
 })
 
 export default handleActions({
-    [receiveData]: mergePayload
+    [receiveHomeData]: mergePayload
 }, initialState)

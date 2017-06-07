@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 /* eslint-env jest */
 /* eslint-disable import/namespace */
 
@@ -6,7 +10,7 @@ import React from 'react'
 import * as AstroIntegration from '../../utils/astro-integration'
 
 import ConnectedLogin from './container'
-const Login = ConnectedLogin.WrappedComponent
+const Login = ConnectedLogin.WrappedComponent.WrappedComponent
 
 describe('The Login', () => {
     const originalIsRunningInAstro = AstroIntegration.isRunningInAstro

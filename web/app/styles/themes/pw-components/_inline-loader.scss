@@ -16,7 +16,7 @@
 
     transform: scale(1);
 
-    animation: inlineLoaderPulseAnimation 1s ease-in-out infinite;
+    animation: inline-loader-pulse 1s ease-in-out infinite;
 
     &::after {
         content: '';
@@ -30,5 +30,17 @@
 
     + .pw-inline-loader__loading-dot {
         margin-left: $unit;
+    }
+}
+
+
+// Modifier: white
+// ---
+
+.pw-inline-loader.pw--white {
+    .pw-inline-loader__loading-dot {
+        &::after {
+            background-color: $neutral-00;
+        }
     }
 }

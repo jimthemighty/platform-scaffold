@@ -1,24 +1,29 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import throttle from 'lodash.throttle'
+import {removePromoCode} from '../../cart/actions' // @TODO: figure out where this is coming from
 
 // Selectors
 import * as selectors from '../selectors'
 import * as cartSelectors from '../../../store/cart/selectors'
+import {getSelectedShippingRate, getSelectedShippingLabel} from '../../../store/checkout/shipping/selectors'
 
 // Actions
 import * as checkoutPaymentActions from '../actions'
 
 // Partials
 import PaymentProductItem from './payment-product-item'
+import CartPromoForm from '../../cart/partials/cart-promo-form'
 
 // SDK Components
 import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/accordion'
 import Button from 'progressive-web-sdk/dist/components/button'
-import Field from 'progressive-web-sdk/dist/components/field'
-import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
@@ -55,16 +60,26 @@ class OrderSummary extends React.Component {
 
     render() {
         const {
-            // cart,
             cartItems,
+            cartshippingRate,
+            discountAmount,
+            discountLabel,
             isFixedPlaceOrderShown,
+            orderTotal,
+            subtotal,
             summaryCount,
-            subtotalExclTax,
-            subtotalInclTax
+            shippingRate,
+            shippingLabel,
+            taxAmount,
+            removePromoCode,
+            submitPayment
         } = this.props
 
-        const cart = {
-        }
+        const removeButton = (
+            <Button innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal" onClick={removePromoCode}>
+                Remove Discount
+            </Button>
+        )
 
         return (
             <div className="t-checkout-payment__order-summary">
@@ -82,49 +97,62 @@ class OrderSummary extends React.Component {
                     <Ledger className="u-border-light-top">
                         <LedgerRow
                             label={`Subtotal (${summaryCount} items)`}
-                            value={subtotalExclTax}
+                            value={subtotal}
                         />
 
-                        {cart.shipping_rate &&
+                        {discountAmount ?
                             <LedgerRow
-                                label={`Shipping (${cart.shipping_rate_label})`}
-                                value={cart.shipping_rate}
+                                label={`Shipping (${shippingLabel})`}
+                                value={cartshippingRate}
+                            />
+                        :
+                            <LedgerRow
+                                label={`Shipping (${shippingLabel})`}
+                                value={shippingRate}
                             />
                         }
 
-                        {cart.promo_rate &&
+                        {taxAmount &&
                             <LedgerRow
-                                className="u-border-light-bottom"
-                                label={`Shipping (${cart.promo_rate_label})`}
-                                value={cart.promo_rate}
+                                className="u-flex-none u-border-0"
+                                label="Taxes"
+                                value={taxAmount}
                             />
+                        }
+
+                        {discountAmount && discountLabel &&
+                            <LedgerRow
+                                className="pw--sale"
+                                label={`Discount: ${discountLabel}`}
+                                labelAction={removeButton}
+                                value={discountAmount}
+                           />
                         }
                     </Ledger>
 
-                    {!cart.promo_rate &&
+                    {(!discountAmount || !discountLabel) &&
                         <Accordion>
                             <AccordionItem header="Promo code">
-                                <FieldRow>
-                                    <Field label="Enter discount code">
-                                        <input type="text" placeholder="Enter discount code" />
-                                        <Button className="c--tertiary">Apply</Button>
-                                    </Field>
-                                </FieldRow>
+                                <CartPromoForm />
                             </AccordionItem>
                         </Accordion>
                     }
 
-                    <Ledger className="u-margin-top-sm u-margin-bottom-sm">
+                    <Ledger>
                         <LedgerRow
                             label="Total"
                             isTotal={true}
-                            value={subtotalInclTax}
+                            value={orderTotal}
                         />
                     </Ledger>
 
                     {/* This is the statically positioned "Place Your Order" container */}
                     <div className="u-padding-end-md u-padding-start-md">
-                        <Button className="c--primary u-flex-none u-width-full u-text-all-caps" type="submit">
+                        <Button
+                            className="c--primary u-flex-none u-width-full u-text-uppercase"
+                            type="button"
+                            onClick={submitPayment}
+                        >
                             <Icon name="lock" />
                             Place Your Order
                         </Button>
@@ -137,13 +165,17 @@ class OrderSummary extends React.Component {
                         aria-hidden="true"
                     >
                         <div className="u-padding-md u-bg-color-neutral-00 u-text-align-center">
-                            <Button className="c--primary u-flex-none u-width-full u-text-all-caps" type="submit">
+                            <Button
+                                className="c--primary u-flex-none u-width-full u-text-uppercase"
+                                type="button"
+                                onClick={submitPayment}
+                            >
                                 <Icon name="lock" />
                                 Place Your Order
                             </Button>
 
                             <p className="u-margin-top-md">
-                                Total: <strong>{subtotalInclTax}</strong>
+                                Total: <strong>{orderTotal}</strong>
                             </p>
                         </div>
                     </div>
@@ -163,12 +195,25 @@ class OrderSummary extends React.Component {
 }
 
 OrderSummary.propTypes = {
-    cart: PropTypes.object,
-
     /**
      * Cart item data
      */
     cartItems: PropTypes.array,
+
+    /**
+     * Shipping rate calculated in cart
+     */
+    cartshippingRate: PropTypes.string,
+
+    /**
+     * Amount of the discount
+     */
+    discountAmount: PropTypes.string,
+
+    /**
+     * Label of the discount
+     */
+    discountLabel: PropTypes.string,
 
     /**
      * Whether the fixed 'Place Order' container displays
@@ -176,19 +221,44 @@ OrderSummary.propTypes = {
     isFixedPlaceOrderShown: PropTypes.bool,
 
     /**
-     * Subtotal excluding tax
+     * The total cost of the order
      */
-    subtotalExclTax: PropTypes.string,
+    orderTotal: PropTypes.string,
 
     /**
-     * Subtotal including tax
+     * Removes applied promo code
      */
-    subtotalInclTax: PropTypes.string,
+    removePromoCode: PropTypes.func,
+
+    /**
+     * Shipping rate label
+     */
+    shippingLabel: PropTypes.string,
+
+    /**
+     * Shipping rate amount calculated in shipping step
+     */
+    shippingRate: PropTypes.string,
+
+    /**
+     * Submits payment
+     */
+    submitPayment: PropTypes.func,
+
+    /**
+     * Total of all cart items (excluding shipping and taxes)
+     */
+    subtotal: PropTypes.string,
 
     /**
      * Total item count in cart
      */
     summaryCount: PropTypes.number,
+
+    /**
+     * Tax amount
+     */
+    taxAmount: PropTypes.string,
 
     /**
      * Handle scroll to toggle fixed 'Place Order' container
@@ -198,14 +268,22 @@ OrderSummary.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     cartItems: cartSelectors.getCartItems,
-    subtotalExclTax: cartSelectors.getSubtotalExcludingTax,
-    subtotalInclTax: cartSelectors.getSubtotalIncludingTax,
+    cartshippingRate: cartSelectors.getShippingAmount,
+    discountAmount: cartSelectors.getDiscountAmount,
+    discountLabel: cartSelectors.getDiscountLabel,
+    subtotal: cartSelectors.getSubtotal,
+    orderTotal: cartSelectors.getOrderTotal,
+    shippingRate: getSelectedShippingRate,
+    shippingLabel: getSelectedShippingLabel,
+    taxAmount: cartSelectors.getTax,
     summaryCount: cartSelectors.getCartSummaryCount,
     isFixedPlaceOrderShown: selectors.getIsFixedPlaceOrderShown
 })
 
 const mapDispatchToProps = {
-    toggleFixedPlaceOrder: checkoutPaymentActions.toggleFixedPlaceOrder
+    toggleFixedPlaceOrder: checkoutPaymentActions.toggleFixedPlaceOrder,
+    submitPayment: checkoutPaymentActions.submitPayment,
+    removePromoCode
 }
 
 export default connect(

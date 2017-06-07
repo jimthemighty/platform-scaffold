@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import Immutable from 'immutable'
 export const mergePayload = (state, {payload}) => state.mergeDeep(payload)
 
@@ -14,3 +18,5 @@ export const mergeSkipLists = (a, b) => {
     }
     return b
 }
+
+export const setCustomContent = (...customPath) => (state, {payload}) => state.setIn([...customPath, 'custom'], payload)

@@ -1,18 +1,71 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import {createSelector} from 'reselect'
 import {getForm} from '../selectors'
 
-export const getShippingForm = createSelector(getForm, (form) => form.shippingForm)
+import {
+    ADD_TO_CART_FORM_NAME,
+    CONFIRMATION_FORM_NAME,
+    ESTIMATE_FORM_NAME,
+    PAYMENT_FORM_NAME,
+    SHIPPING_FORM_NAME
+} from './constants'
 
-export const getShippingFormValues = createSelector(getShippingForm, (shippingForm) => { return shippingForm ? shippingForm.values : undefined })
+const getFormByKey = (formKey) => createSelector(
+    getForm,
+    (form) => { return form[formKey] ? form[formKey] : {} }
+)
+export const getFormValues = (formKey) => createSelector(
+    getFormByKey(formKey),
+    ({values}) => values || {}
+)
 
-export const getFormByKey = (formKey) => createSelector(getForm, (form) => { return form[formKey] ? form[formKey] : {} })
+export const getFormRegisteredFields = (formKey) => createSelector(
+    getFormByKey(formKey),
+    ({registeredFields}) => { return registeredFields ? registeredFields : [] }
+)
 
-export const getFormValues = (formKey) => createSelector(getFormByKey(formKey), ({values}) => values)
+export const isRegionFreeform = (formName) => createSelector(
+    getFormRegisteredFields(formName),
+    (fields) => fields.some(({name}) => name === 'region')
+)
 
-export const getFormRegisteredFields = (formKey) => createSelector(getFormByKey(formKey), ({registeredFields}) => { return registeredFields ? registeredFields : [] })
+export const getFormAddressValues = (formKey) => createSelector(
+    getFormValues(formKey),
+    isRegionFreeform(formKey),
+    ({countryId, regionId, region, postcode}, freeformRegion) => {
+        const address = {
+            countryId,
+            postcode
+        }
 
-export const getPaymentBillingForm = createSelector(getForm, (form) => form.paymentForm)
-export const getPaymentBillingFormValues = createSelector(getPaymentBillingForm, (paymentForm) => paymentForm.values)
+        if (freeformRegion) {
+            address.region = region
+        } else {
+            address.regionId = regionId
+        }
 
-export const getConfirmationForm = createSelector(getForm, (form) => form.confirmationForm)
-export const getConfirmationFormValues = createSelector(getConfirmationForm, (confirmationForm) => confirmationForm.values)
+        return address
+    }
+)
+
+export const getEstimateShippingAddress = getFormAddressValues(ESTIMATE_FORM_NAME)
+
+export const getShippingFormValues = getFormValues(SHIPPING_FORM_NAME)
+
+export const getShippingSavedAddressID = createSelector(getShippingFormValues, ({savedAddress}) => savedAddress)
+
+export const getShippingEstimateAddress = getFormAddressValues(SHIPPING_FORM_NAME)
+
+export const getPaymentBillingFormValues = getFormValues(PAYMENT_FORM_NAME)
+export const getPaymentBillingCCNumber = createSelector(getPaymentBillingFormValues, (form) => {
+    let num
+    if (form && 'ccnumber' in form) {
+        num = form.ccnumber
+    }
+    return num
+})
+export const getConfirmationFormValues = getFormValues(CONFIRMATION_FORM_NAME)
+export const getAddToCartFormValues = getFormValues(ADD_TO_CART_FORM_NAME)

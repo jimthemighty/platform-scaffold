@@ -1,3 +1,12 @@
+## 0.17.0 (June 6, 2017)
+- Introduce the [Integration Manager](https://docs.mobify.com/progressive-web/latest/guides/integration-manager/)
+- Rename all files containing JSX to have a .jsx file extension [#525](https://github.com/mobify/platform-scaffold/pull/525)
+- Fix PLP to successfully display no results message if there are no products [#525](https://github.com/mobify/platform-scaffold/pull/525)
+- Update SDK version to 0.15.0 [#627](https://github.com/mobify/platform-scaffold/pull/627)
+- Add `analyze-build` npm script [#575](https://github.com/mobify/platform-scaffold/pull/575)
+- Utility styles change: remove `!important`, wrap utility styles with id, and `@import` bottom of stylesheet file [#604](https://github.com/mobify/platform-scaffold/pull/604)
+- Add Messaging commands to `web/package.json` [#670](https://github.com/mobify/platform-scaffold/pull/670)
+
 ## 0.16.4 (May 18, 2017)
 - Fix lighthouse tests by ignoring certificate errors in Chrome
 

@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import Home from '../page-objects/home'
 
 let home
@@ -38,5 +42,11 @@ export default {
             .assert.attributeContains(home.selectors.skipToMain, 'href', skipLinkTargets.main)
             .assert.attributeContains(home.selectors.skipToNav, 'href', skipLinkTargets.nav)
             .assert.attributeContains(home.selectors.skipToFooter, 'href', skipLinkTargets.footer)
-    }
+    },
+
+    'Email field has email input type': (browser) => {
+        browser
+            .waitForElementVisible(`${home.selectors.email} [type="email"]`)
+            .assert.visible(`${home.selectors.email} [type="email"]`)
+    },
 }

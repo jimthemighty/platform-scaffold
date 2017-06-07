@@ -1,10 +1,17 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
+import {validateFullName} from '../../../utils/utils'
+
 // Selectors
-import {getShippingInitialValues} from '../../../store/checkout/shipping/selectors'
+import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
+import {getBillingInitialValues} from '../../../store/checkout/billing/selectors'
 
 // Actions
 import {submitPayment} from '../actions'
@@ -17,20 +24,47 @@ import CreditCardForm from './credit-card-form'
 import BillingAddressForm from './billing-address-form'
 import OrderSummary from './order-summary'
 
+const REQUIRED_TEXT = 'Required'
+
+const validate = (values) => {
+    const errors = {}
+    const requiredFieldNames = [
+        'name',
+        'addressLine1',
+        'city',
+        'countryId',
+        'regionId',
+        'postcode',
+        'telephone'
+    ]
+
+    if (values.name && !validateFullName(values.name)) {
+        errors.name = 'Please enter a first and last name'
+    }
+
+    requiredFieldNames.forEach((fieldName) => {
+        if (!values[fieldName]) {
+            errors[fieldName] = REQUIRED_TEXT
+        }
+    })
+
+    return errors
+}
+
+
 const CheckoutPaymentForm = ({handleSubmit, submitPayment}) => {
     return (
-        <form className="t-checkout-payment__form" onSubmit={handleSubmit(submitPayment)} noValidate>
-            <Grid className="u-center-piece">
-                <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
+        <Grid className="u-center-piece">
+            <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
+                <form className="t-checkout-payment__form" onSubmit={handleSubmit(submitPayment)} noValidate>
                     <CreditCardForm />
                     <BillingAddressForm />
-                </GridSpan>
-
-                <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
-                    <OrderSummary />
-                </GridSpan>
-            </Grid>
-        </form>
+                </form>
+            </GridSpan>
+            <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
+                <OrderSummary />
+            </GridSpan>
+        </Grid>
     )
 }
 
@@ -50,7 +84,7 @@ CheckoutPaymentForm.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    initialValues: getShippingInitialValues
+    initialValues: getBillingInitialValues
 })
 
 const mapDispatchToProps = {
@@ -58,7 +92,10 @@ const mapDispatchToProps = {
 }
 
 const CheckoutPaymentReduxForm = ReduxForm.reduxForm({
-    form: 'paymentForm'
+    form: PAYMENT_FORM_NAME,
+    keepDirtyOnReinitialize: true,
+    enableReinitialize: true,
+    validate
 })(CheckoutPaymentForm)
 
 export default connect(

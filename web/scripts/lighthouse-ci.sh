@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Run the Lighthouse test against the dev build with continuous integration.
 
-# Location to save the generated HTML report.
-OUTPUT_PATH=./lighthouse/audit-local.html
+# Location to save the generated report.
+OUTPUT_PATH=./lighthouse/audit-local
 # See package.json's siteUrl key.
 URL=${1-$npm_package_siteUrl}
 # Append Mobify Hash to the URL to force the Mobify Tag to load the local bundle.
@@ -25,19 +25,19 @@ mkdir -p $HOME/.pki/nssdb
 # Pass in a password
 certutil -d $HOME/.pki/nssdb -N --empty-password
 # Add self-signed SSL certificate
-certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n lighthouse/server.pem -i lighthouse/server.pem
+certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n dev-server/localhost.pem -i dev-server/localhost.pem
 
 npm run prod:build
-http-server --ssl --cors --p=8443 \
-	--key lighthouse/server.pem --cert lighthouse/server.pem build &
+npm run test:server &
 
 # --ignore-certificate-errors thanks to https://github.com/GoogleChrome/lighthouse/issues/559
 sleep 5
 lighthouse \
     --chrome-flags='--user-agent="MobifyPreview" --allow-insecure-localhost --ignore-certificate-errors' \
-    --output=html \
-    --output-path=${OUTPUT_PATH} \
-    --disable-device-emulation=true \
-    "${URL}${PREVIEW}"
+	--output json \
+	--output html \
+	--output-path ${OUTPUT_PATH} \
+	--disable-device-emulation=true \
+	"${URL}${PREVIEW}"
 
 node ./lighthouse/check-score.js

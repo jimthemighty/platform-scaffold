@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import Immutable from 'immutable'
 
 /**
@@ -33,7 +37,7 @@ export const getCheckoutConfigObject = ($html) => {
     return {}
 }
 
-export const getCheckoutEntityID = ($html) => {
+export const parseCheckoutEntityID = ($html) => {
     const configObject = getCheckoutConfigObject($html)
 
     return configObject && configObject.quoteData ? configObject.quoteData.entity_id : ''

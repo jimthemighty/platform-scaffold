@@ -1,149 +1,146 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-import {createAction} from '../../utils/utils'
+import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
+
+import {splitFullName} from '../../utils/utils'
+import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
+
 import {
-    UnwrappedCheckoutShipping
-} from '../templates'
-import checkoutShippingParser from './parsers/checkout-shipping'
-import {addNotification, fetchPage, removeAllNotifications, removeNotification} from '../app/actions'
-import {getCustomerEntityID} from '../../store/checkout/selectors'
-import {getIsLoggedIn} from '../app/selectors'
-import {getShippingFormValues} from '../../store/form/selectors'
-import {receiveCheckoutData} from '../../store/checkout/actions'
+    submitShipping as submitShippingCommand,
+    fetchShippingMethodsEstimate
+} from '../../integration-manager/checkout/commands'
+import {customCommands} from '../../integration-manager/custom/commands'
+import {login} from '../../integration-manager/account/commands'
 
-import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'
+import {getSelectedSavedShippingAddress} from '../../store/checkout/shipping/selectors'
+import {addNotification, removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 
-export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields')
-
+export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields (Shipping)')
+export const setCustomerEmailRecognized = createAction('Set Customer email Recognized', ['customerEmailRecognized'])
+export const setShowAddNewAddress = createAction('Setting the "Saved/New Address" field', ['showAddNewAddress'])
 export const receiveData = createAction('Receive Checkout Shipping Data')
-export const process = ({payload: {$, $response}}) => {
-    return receiveData(checkoutShippingParser($, $response))
+
+const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
+
+const onShippingEmailRecognized = () => (dispatch) => {
+    dispatch(setCustomerEmailRecognized(true))
+    dispatch(addNotification(
+        WELCOME_BACK_NOTIFICATION_ID,
+        'Welcome back! Sign in for a faster checkout or continue as a guest.',
+        true
+    ))
 }
 
+const onShippingEmailAvailable = () => (dispatch) => {
+    dispatch(removeNotification(WELCOME_BACK_NOTIFICATION_ID))
+    return dispatch(setCustomerEmailRecognized(false))
+}
 
-export const onShippingEmailRecognized = () => {
-    return (dispatch) => {
-        dispatch(receiveData({customerEmailRecognized: true}))
-        dispatch(addNotification({
-            content: `Welcome back! Sign in for a faster checkout or continue as a guest.`,
-            id: 'shippingWelcomeBackMessage',
-            showRemoveButton: true
-        }))
+export const onShippingLoginError = (errorMessage) =>
+    addNotification(
+        'shippingEmailError',
+        errorMessage,
+        true
+    )
+
+export const submitSignIn = () => (dispatch, getState) => {
+    const {
+        username,
+        password
+    } = getShippingFormValues(getState())
+    return dispatch(login(username, password, 'on'))
+        .catch((error) => dispatch(onShippingLoginError(error.message)))
+}
+
+const submitShippingSelector = createPropsSelector({
+    address: getSelectedSavedShippingAddress,
+    formValues: getShippingFormValues
+})
+
+export const submitShipping = () => (dispatch, getState) => {
+    const shippingSelections = submitShippingSelector(getState())
+    let formValues = shippingSelections.formValues
+    const savedAddress = shippingSelections.address
+    if (savedAddress) {
+        // Merge form values with the values we have for the selected saved address
+        formValues = {
+            ...formValues,
+            ...savedAddress
+        }
+        dispatch(setDefaultShippingAddressId(formValues.savedAddress))
     }
-}
-
-export const onShippingEmailNotRecognized = () => {
-    return (dispatch) => {
-        dispatch(removeNotification('shippingWelcomeBackMessage'))
-        dispatch(receiveData({customerEmailRecognized: false}))
+    const {
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
+        shippingMethodId,
+        username
+    } = formValues
+    const {firstname, lastname} = splitFullName(name)
+    const address = {
+        firstname,
+        lastname,
+        name,
+        company,
+        addressLine1,
+        addressLine2,
+        countryId,
+        city,
+        regionId,
+        postcode,
+        telephone,
     }
-}
 
-export const checkCustomerEmail = () => {
-    return (dispatch, getState) => {
-        const formValues = getShippingFormValues(getState())
-
-        makeJsonEncodedRequest('/rest/default/V1/customers/isEmailAvailable', {customerEmail: formValues.username}, {method: 'POST'})
-            .then((response) => response.text())
-            .then((responseText) => {
-                if (/false/.test(responseText)) {
-                    dispatch(onShippingEmailRecognized())
-                } else {
-                    dispatch(onShippingEmailNotRecognized())
-                }
+    if (username) {
+        dispatch(receiveUserEmail(username))
+    }
+    dispatch(receiveSelectedShippingMethod(shippingMethodId))
+    dispatch(receiveShippingAddress(address))
+    return dispatch(submitShippingCommand({...address, shippingMethodId}))
+        .then((paymentURL) => {
+            browserHistory.push({
+                pathname: paymentURL
             })
-    }
+        })
+        .catch(() => {
+            dispatch(addNotification(
+                'submitShippingError',
+                `Unable to save shipping information. Please, check input data.`,
+                true
+            ))
+        })
 }
 
-export const submitSignIn = () => {
-    return (dispatch, getState) => {
-        const {
-            username,
-            password
-        } = getShippingFormValues(getState())
-
-        // This data has to be sent via AJAX, it doesn't work with makeJsonEncodedRequest
-        // If we send this using makeRequest, fetch or makeJsonEncodedRequest we get back a 400 (bad request) error
-        // After comparing our request (using makeRequest, fetch or makeJsonEncodedRequest) to the desktop request (using AJAX)
-        // The only difference we could find is that the desktop request is sent via AJAX and therefor includes the header X-Requested-With: XMLHttpRequest
-        window.Progressive.$.ajax({
-            url: '/customer/ajax/login',
-            data: JSON.stringify({username, password, context: 'checkout'}),
-            method: 'POST',
-            success: (responseData) => {
-                dispatch(removeAllNotifications())
-                if (responseData.errors) {
-                    dispatch(addNotification({
-                        content: responseData.message,
-                        id: 'shippingEmailError',
-                        showRemoveButton: true
-                    }))
-                } else {
-                    // Refetch the page now that the user is logged in
-                    dispatch(fetchPage(window.location.href, UnwrappedCheckoutShipping, 'checkingShipping'))
-                }
+export const isEmailAvailable = () => (dispatch, getState) => {
+    const formValues = getShippingFormValues(getState())
+    if (customCommands.isEmailAvailable && formValues.username) {
+        return dispatch(customCommands.isEmailAvailable(formValues.username))
+        .then((emailAvailable) => {
+            if (emailAvailable) {
+                return dispatch(onShippingEmailAvailable())
             }
+            return dispatch(onShippingEmailRecognized())
         })
     }
+
+    return dispatch(onShippingEmailAvailable())
 }
 
-export const submitShipping = () => {
-    return (dispatch, getState) => {
-        const currentState = getState()
-        const {
-            name,
-            company,
-            addressLine1,
-            addressLine2,
-            country_id,
-            city,
-            username,
-            region_id,
-            region,
-            postcode,
-            telephone,
-            shipping_method
-        } = getShippingFormValues(currentState)
-        const entityID = getCustomerEntityID(currentState)
-        const isLoggedIn = getIsLoggedIn(currentState)
-        const names = name.split(' ')
-        const shippingSelections = shipping_method.split('_')
-        const address = {
-            firstname: names.slice(0, -1).join(' '),
-            lastname: names.slice(-1).join(' '),
-            company: company || '',
-            telephone,
-            postcode,
-            city,
-            street: addressLine2 ? [addressLine1, addressLine2] : [addressLine1],
-            regionId: region_id,
-            region,
-            countryId: country_id,
-            save_in_address_book: true
-        }
-        const addressInformation = {
-            addressInformation: {
-                shippingAddress: address,
-                billingAddress: {
-                    ...address,
-                    saveInAddressBook: false
-                },
-                shipping_carrier_code: shippingSelections[0],
-                shipping_method_code: shippingSelections[1]
-            }
-        }
-        const persistShippingURL = `/rest/default/V1/${isLoggedIn ? 'carts/mine' : `guest-carts/${entityID}`}/shipping-information`
-        dispatch(receiveCheckoutData({shipping: {address}, emailAddress: username}))
-        makeJsonEncodedRequest(persistShippingURL, addressInformation, {method: 'POST'})
-            .then((response) => response.json())
-            .then((responseJSON) => {
-                if (responseJSON.payment_methods) {
-                    // TO DO: send response data to the next container
-                    browserHistory.push({
-                        pathname: '/checkout/payment/'
-                    })
-                }
-            })
-    }
-}
+export const fetchShippingMethods = () => (dispatch, getState) => (
+    dispatch(
+        fetchShippingMethodsEstimate(getShippingEstimateAddress(getState()))
+    )
+)

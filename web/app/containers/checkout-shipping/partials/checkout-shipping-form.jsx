@@ -1,38 +1,60 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
+import isEmail from 'validator/lib/isEmail'
 
-import {getIsLoggedIn} from '../../app/selectors'
-import {getShippingInitialValues} from '../../../store/checkout/shipping/selectors'
+import {validateFullName} from '../../../utils/utils'
+import {getIsLoggedIn} from '../../../store/user/selectors'
+import {getInitialShippingAddress} from '../../../store/checkout/shipping/selectors'
 
 import {submitShipping} from '../actions'
-import {SHIPPING_FORM_NAME} from '../constants'
+import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
 
 import {Grid, GridSpan} from 'progressive-web-sdk/dist/components/grid'
-import ShippingAddressForm from './shipping-address'
+import ShippingAddress from './shipping-address'
 import ShippingEmail from './shipping-email'
 import ShippingMethod from './shipping-method'
 
-const validate = (values) => {
+const REQUIRED_TEXT = 'Required'
+
+const validate = (values, props) => {
     const errors = {}
     const requiredFieldNames = [
-        'username',
         'name',
         'addressLine1',
         'city',
-        'country_id',
-        'region_id',
+        'countryId',
+        'regionId',
         'postcode',
         'telephone'
     ]
-    if (values.username && !/^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.username)) {
+    const isSavedAddressSelected = !!values.savedAddress
+
+    if (isSavedAddressSelected) {
+        // If user has chosen a saved address, no further validation necessary
+        return errors
+    }
+
+    if (values.username && !isEmail(values.username)) {
         errors.username = 'Enter a valid email address'
+    }
+
+    if (values.name && !validateFullName(values.name)) {
+        errors.name = 'Please enter a first and last name'
+    }
+
+    if (!props.isLoggedIn && !values.username) {
+        errors.username = REQUIRED_TEXT
     }
 
     requiredFieldNames.forEach((fieldName) => {
         if (!values[fieldName]) {
-            errors[fieldName] = 'Required'
+            errors[fieldName] = REQUIRED_TEXT
         }
     })
 
@@ -47,10 +69,9 @@ class CheckoutShippingForm extends React.Component {
 
     onSubmit(values) {
         return new Promise((resolve, reject) => {
-            const errors = validate(values)
+            const errors = validate(values, this.props)
             if (!Object.keys(errors).length) {
-                this.props.submitShipping()
-                return resolve()
+                return this.props.submitShipping()
             }
             return reject(new ReduxForm.SubmissionError(errors))
         })
@@ -67,7 +88,7 @@ class CheckoutShippingForm extends React.Component {
                 <Grid className="u-center-piece">
                     <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
                         {!isLoggedIn && <ShippingEmail />}
-                        <ShippingAddressForm />
+                        <ShippingAddress />
                     </GridSpan>
 
                     <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
@@ -99,7 +120,7 @@ CheckoutShippingForm.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    initialValues: getShippingInitialValues,
+    initialValues: getInitialShippingAddress,
     isLoggedIn: getIsLoggedIn
 })
 

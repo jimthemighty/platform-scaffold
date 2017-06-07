@@ -1,8 +1,10 @@
 # Mobify Progressive Web Scaffold
 
+The quick start guide for using the scaffold can be found [here](https://docs.mobify.com/progressive-web/latest/guides/quick-start-guide/)
+
 ## Running npm scripts
 
-All the `npm` scripts listed below must be run from the `web` directory inside your project directory. 
+All the `npm` scripts listed below must be run from the `web` directory inside your project directory.
 
 Here's how to get a list of all the available npm scripts in the Progressive Web Scaffold:
 
@@ -138,8 +140,8 @@ npm run lint
 If this code style is a poor match for your pre-existing practices,
 there are two ways you can modify the linter configuration to suit
 your use case better. For small changes, you can add rules to the
-[`.eslintrc.yml`](./.eslintrc.yml) file in the `web` directory inside your project directory. 
-Rules specified in this file override rules in the Mobify standard; 
+[`.eslintrc.yml`](./.eslintrc.yml) file in the `web` directory inside your project directory.
+Rules specified in this file override rules in the Mobify standard;
 the following `rules` section adds an additional rule and disables an existing rule:
 
 ```yaml
@@ -178,7 +180,7 @@ npm run test:watch
 
 ## Automated end-to-end tests
 
-To verify that changes do not break the checkout flow:
+To verify that changes do not break the guest and registered checkout flows:
 
 ```
 npm run smoke-test
@@ -204,30 +206,10 @@ For CI builds, this command builds and serves the bundle for testing with Previe
 npm run test:pwa-ci
 ```
 
-## Developing against `develop` of the Progressive Web SDK
-
-If you are wanting to improve or add a library/component in the [Progressive Web SDK](https://github.com/mobify/progressive-web-sdk),
-you will need to clone the SDK (note: it is not open on Github).
-
-```
-git clone git@github.com:mobify/progressive-web-sdk.git
-cd progressive-web-sdk
-npm link
-npm install # REQUIRED!!
-npm run dev:build # Some assets required by the scaffold build are only created by this command (/dist/*)
-```
-
-Then navigate back to this directory and run:
-```
-cd ../platform-scaffold/web
-npm link progressive-web-sdk
-npm run dev
-```
-
 ## Analyze Bundle Size
 
 To visualize bundle script content, run:
 
 ```
-MOBIFY_ANALYZE=true npm run prod:build
+npm run analyze-build
 ```
