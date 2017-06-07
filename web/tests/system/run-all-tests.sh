@@ -2,14 +2,27 @@
 set -o pipefail
 set -o nounset
 
+
+if git rev-parse ; then
+    # Get the current branch on CircleCI or local
+    CURRENT_BRANCH=${CIRCLE_BRANCH:-$(git branch | grep "*" | awk '{ print $2 }')}
+    # If current branch is master, we eliminate preview because we're testing production'
+    if [ "$CURRENT_BRANCH" == "master" ]; then
+      echo "On production branch, test server not needed."
+      export TEST_PROFILE=production
+    fi
+else
+    CURRENT_BRANCH=develop
+fi
+
 #If the node total is 1, run all the tests sequentially. 
 if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
-  echo 'Running lint'
-  npm run lint
-  echo 'Running Unit Tests'
-  npm test -- --runInBand
-  echo 'Running Lighthouse Tests'
-  npm run test:pwa-ci
+  # echo 'Running lint'
+  # npm run lint
+  # echo 'Running Unit Tests'
+  # npm test -- --runInBand
+  # echo 'Running Lighthouse Tests'
+  # npm run test:pwa-ci
   echo 'Running End to End Tests'
   npm run test:e2e
 
