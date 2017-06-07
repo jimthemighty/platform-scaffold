@@ -7,10 +7,10 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getUenc, getCartBaseUrl} from '../selectors'
+import {getUenc, getCartBaseUrl, getFormInfoByPathKey} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
-import {receiveCartContents} from '../../cart/results'
+import {receiveCartContents, receiveCartTotals} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
 import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
 import {parseLocations} from '../checkout/parsers'
@@ -55,7 +55,15 @@ export const getCart = () => (dispatch) => {
 
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
     const product = getProductById(productId)(getState())
-    const formInfo = getState().integrationManager.get(urlToPathKey(product.get('href')))
+
+    const formInfo = getFormInfoByPathKey(urlToPathKey(product.get('href')))(getState())
+
+    const hiddenInputs = formInfo.get('hiddenInputs')
+
+    if (hiddenInputs === undefined) {
+        return Promise.reject('Add to cart failed, form info missing')
+    }
+
     const formValues = {
         ...formInfo.get('hiddenInputs').toJS(),
         qty: quantity
@@ -117,15 +125,16 @@ export const updateItemQuantity = (itemId, itemQuantity) => (dispatch) => {
 
 const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
 
-export const initCartPage = (url) => (dispatch) => {
+export const initCartPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            const shippingAddress = getShippingAddress(getState()).toJS()
             const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
 
             dispatch(receiveEntityID(parseCheckoutEntityID($response)))
             dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
 
-            return dispatch(fetchShippingMethodsEstimate({}))
+            return dispatch(fetchShippingMethodsEstimate(shippingAddress || {}))
         })
 }
 
@@ -163,9 +172,16 @@ const getCartTotals = (address, shippingMethod) => (dispatch, getState) => {
 
     return makeJsonEncodedRequest(`${cartBaseUrl}/totals-information`, requestData, {method: 'POST'})
         .then((response) => response.json())
-        .then((responseJSON) => dispatch(receiveCartContents(
-            parseCartTotals(responseJSON)
-        )))
+        .then((responseJSON) => {
+            const {
+                shipping,
+                discount,
+                subtotal,
+                tax,
+                orderTotal
+            } = parseCartTotals(responseJSON)
+            return dispatch(receiveCartTotals(shipping, discount, subtotal, tax, orderTotal))
+        })
 }
 
 export const fetchTaxEstimate = getCartTotals

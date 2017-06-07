@@ -38,10 +38,14 @@ export const getCookieValue = (cookieName) => {
 }
 
 export const splitFullName = (fullname) => {
-    const names = fullname.split(' ')
+    let names = fullname.trim().split(' ')
+
+    // filter out any empty strings
+    names = names.filter((name) => name)
+
     return {
-        firstname: names.slice(0, -1).join(' '),
-        lastname: names.slice(-1).join(' ')
+        firstname: names.slice(0, 1).join(' '),
+        lastname: names.slice(1).join(' ')
     }
 }
 
@@ -90,4 +94,8 @@ export const createTypedAction = (description, type, key) => createReduxAction(
 
 export const buildQueryString = (query) => {
     return query.replace(/ /g, '+')
+}
+
+export const validateFullName = (fullName) => {
+    return /\w+\s+\w+/.test(fullName)
 }

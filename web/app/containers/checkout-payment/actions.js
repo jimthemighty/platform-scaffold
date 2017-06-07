@@ -9,7 +9,7 @@ import {getEmailAddress} from '../../store/checkout/selectors'
 import {getShippingAddress} from '../../store/checkout/shipping/selectors'
 import {submitPayment as submitPaymentCommand} from '../../integration-manager/checkout/commands'
 import {splitFullName} from '../../utils/utils'
-import {receiveCheckoutData} from '../../integration-manager/checkout/results'
+import {receiveBillingAddress, receiveBillingSameAsShipping} from '../../integration-manager/checkout/results'
 
 export const receiveContents = createAction('Received CheckoutPayment Contents')
 export const toggleFixedPlaceOrder = createAction('Toggled the fixed "Place Order" container', ['isFixedPlaceOrderShown'])
@@ -21,7 +21,11 @@ export const setCvvType = createAction('Setting CVV type', ['cvvType'])
 export const submitPayment = () => (dispatch, getState) => {
     const currentState = getState()
     const billingFormValues = getPaymentBillingFormValues(currentState)
-    const billingIsSameAsShippingAddress = billingFormValues.billing_same_as_shipping
+    const billingSameAsShipping = billingFormValues.billingSameAsShipping
+
+    // Remove the billingSameAsShipping value from our formValues object
+    // so we don't store duplicate data in our app state
+    delete billingFormValues.billingSameAsShipping
 
     // Careful. This get's completely overwritten below
     let address = null
@@ -34,7 +38,7 @@ export const submitPayment = () => (dispatch, getState) => {
     }
 
 
-    if (billingIsSameAsShippingAddress) {
+    if (billingSameAsShipping) {
         address = {
             username: email,
             ...getShippingAddress(currentState).toJS(),
@@ -45,12 +49,14 @@ export const submitPayment = () => (dispatch, getState) => {
         address = {
             firstname,
             lastname,
+            username: email,
             ...billingFormValues,
         }
     }
 
-    dispatch(receiveCheckoutData({billing: {address}}))
-    return dispatch(submitPaymentCommand({...address, ...paymentInfo}))
+    dispatch(receiveBillingSameAsShipping(billingSameAsShipping))
+    dispatch(receiveBillingAddress(address))
+    return dispatch(submitPaymentCommand({...address, ...paymentInfo, billingSameAsShipping}))
         .then((url) => {
             browserHistory.push({
                 pathname: url

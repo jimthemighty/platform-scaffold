@@ -49,7 +49,7 @@ const ShippingAddressFields = ({
                 <ReduxForm.Field
                     component={Field}
                     name="name"
-                    label="Full Name"
+                    label="First & Last Name"
                 >
                     <input type="text" noValidate />
                 </ReduxForm.Field>
@@ -116,7 +116,7 @@ const ShippingAddressFields = ({
                 <ReduxForm.Field
                     component={Field}
                     name="postcode"
-                    label="Postal Code"
+                    label="Zip/Postal Code"
                     customEventHandlers={{
                         onBlur: fetchShippingMethods
                     }}
