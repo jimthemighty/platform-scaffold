@@ -48,13 +48,16 @@ export const initProductListPage = (url) => (dispatch) => {
         .then(() => makeApiRequest(makeCategorySearchURL(categoryID), {method: 'GET'}))
         .then((response) => response.json())
         .then(({hits, total}) => {
-            let productListData = []
-            let products = []
-
-            if (total > 0) {
-                productListData = parseProductListData(hits)
-                products = Object.keys(productListData)
+            if (total === 0) {
+                dispatch(receiveCategoryContents(urlToPathKey(url), {
+                    products: [],
+                    itemCount: total
+                }))
+                return
             }
+
+            const productListData = parseProductListData(hits)
+            const products = Object.keys(productListData)
 
             dispatch(receiveProductListProductData(productListData))
             dispatch(receiveCategoryContents(urlToPathKey(url), {
