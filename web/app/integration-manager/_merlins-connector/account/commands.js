@@ -6,6 +6,7 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
+import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
@@ -30,24 +31,40 @@ export const initRegisterPage = (url) => (dispatch) => {
         })
 }
 
+const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
+const clearMessageCookie = () => {
+    document.cookie = `${MAGENTO_MESSAGE_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+}
+const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
+const EXISTING_ACCT_REGEX = /already an account/
+
 const submitForm = (href, formValues, formSelector) => {
+    clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
+        .catch(() => {
+            throw new SubmissionError({_error: 'Failed to login due to network error.'})
+        })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             if (isFormResponseInvalid($response, formSelector)) {
-                const error = {
-                    _error: 'Username or password is incorrect'
+                const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
+
+                if (messages.length === 0) {
+                    throw new SubmissionError({_error: DEFAULT_ERROR_TEXT})
                 }
-                throw new SubmissionError(error)
+
+                let message = messages[0].text.replace(/\+/g, ' ')
+                // This message has HTML in it, just patch it up for now
+                if (EXISTING_ACCT_REGEX.test(message)) {
+                    message = `${message.split('.')[0]}.`
+                }
+
+                throw new SubmissionError({
+                    _error: message
+                })
             }
             return '/customer/account'
-        })
-        .catch((error) => {
-            if (error.name !== 'SubmissionError') {
-                throw new SubmissionError({_error: 'Failed to login due to network error.'})
-            }
-            throw error
         })
 }
 
@@ -69,7 +86,7 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
     return submitForm(LOGIN_POST_URL, formData, '.form-login')
 }
 
-export const registerUser = (firstname, lastname, email, password, confirmPassword, rememberMe) => (dispatch, getState) => {
+export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
 
@@ -78,7 +95,7 @@ export const registerUser = (firstname, lastname, email, password, confirmPasswo
         lastname,
         email,
         password,
-        password_confirmation: confirmPassword,
+        password_confirmation: password,
         form_key: formKey
     }
     if (rememberMe) {
