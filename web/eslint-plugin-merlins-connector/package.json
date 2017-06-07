@@ -1,0 +1,14 @@
+{
+  "name": "eslint-plugin-merlins-connector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^3.19.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

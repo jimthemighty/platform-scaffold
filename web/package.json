@@ -59,6 +59,7 @@
     "eslint-import-resolver-webpack": "0.8.1",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "2.2.3",
+    "eslint-plugin-merlins-connector": "file:eslint-plugin-merlins-connector",
     "eslint-plugin-react": "6.10.3",
     "exports-loader": "0.6.4",
     "express": "4.15.2",
