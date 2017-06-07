@@ -11,8 +11,9 @@ import {getIsLoggedIn} from '../../store/user/selectors'
 export const getIntegrationManager = ({integrationManager}) => integrationManager
 export const getCustomerEntityID = createGetSelector(getIntegrationManager, 'customerEntityID', '')
 export const getFormKey = createGetSelector(getIntegrationManager, 'formKey')
-export const getIMProductDetailsByPathKey = (pathKey) => createGetSelector(getIntegrationManager, pathKey, Immutable.Map())
-export const getUenc = (pathKey) => createGetSelector(getIMProductDetailsByPathKey(pathKey), 'uenc')
+export const getFormInfo = createGetSelector(getIntegrationManager, 'formInfo', Immutable.Map())
+export const getFormInfoByPathKey = (pathKey) => createGetSelector(getFormInfo, pathKey, Immutable.Map())
+export const getUenc = (pathKey) => createGetSelector(getFormInfoByPathKey(pathKey), 'uenc')
 
 export const getCartBaseUrl = createSelector(
     getIsLoggedIn,
