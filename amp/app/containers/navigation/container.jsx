@@ -23,8 +23,9 @@ const root = {title:"Store", path:"/", children:[
 
 
 const Navigation = (props) => {
+    const {id} = props
     return (
-        <Sheet id="menu-sheet" className="t-navigation">
+        <Sheet id={id} className="t-navigation">
             <Nav root={root} path="/"/>
             <NavigationSocialIcons />
 

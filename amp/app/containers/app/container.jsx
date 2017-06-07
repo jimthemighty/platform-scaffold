@@ -4,16 +4,12 @@ import Footer from '../footer/container'
 import DangerousHTML from '../../components/dangerous-html'
 import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
-import Sheet from '../../components/sheet'
 
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
 import {connect} from 'react-redux'
 
-const App = ({
-    children,
-    buttontest
-}) => {
+const App = ({children}) => {
 
     const skipLinksItems = [
         // Customize your list of SkipLinks here. These are necessary to
@@ -27,75 +23,44 @@ const App = ({
         {target: '#app-footer', label: 'Skip to footer'},
     ]
 
+    const navId = 'main-nav'
+
     return (
-        <div
-            id="app"
+        <body
+            id="root"
             className="t-app"
         >
+            <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
-            <Sheet id="menu-sheet" headerContent={<div>Header</div>} footerContent={<div>Footer</div>}>
-                <ul>
-                    <li><a href="/todo/">Home</a></li>
-                    <li><a href="/todo/">Sign in</a></li>
-                    <li><a href="/todo/">Potions</a></li>
-                    <li><a href="/todo/">Spellbooks</a></li>
-                    <li><a href="/todo/">Ingredients</a></li>
-                    <li><a href="/todo/">Supplies</a></li>
-                    <li><a href="/todo/">Charms</a></li>
-                    <li><a href="/todo/">New Arrivals</a></li>
-                    <DangerousHTML html={button}>
-                        {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-                    </DangerousHTML>
-                </ul>
-            </Sheet>
-
-            <DangerousHTML html={button}>
-                {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-            </DangerousHTML>
-
-            <DangerousHTML html={sprite}>
-                {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
-            </DangerousHTML>
+            <Navigation id={navId} />
+            <div dangerouslySetInnerHTML={{__html: `<button on="tap:${navId}.toggle">Button</button>`}} />
 
             <SkipLinks items={skipLinksItems} />
 
             <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
                 <div id="app-header" className="u-flex-none" role="banner">
                     <Header />
-
-                    <Navigation />
                 </div>
 
                 <main id="app-main" className="u-flex" role="main">
                     {children}
-
-                    <DangerousHTML html={buttontest}>
-                        {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-                    </DangerousHTML>
                 </main>
 
                 <div id="app-footer" className="u-flex-none">
                     <Footer />
                 </div>
             </div>
-        </div>
+        </body>
     )
 }
 
 
 App.propTypes = {
-    buttontest: PropTypes.string,
-    children: PropTypes.node,
-    /**
-     * The react-router history object
-     */
-    // history: PropTypes.object
+    children: PropTypes.node
 }
 
 
-const mapStateToProps = (state) => ({
-    buttontest: '<button on="tap:menu-sheet.toggle">Button</button>'
-})
+const mapStateToProps = (state) => ({})
 
 export default connect(
     mapStateToProps
