@@ -91,7 +91,7 @@ export const signOut = () => (dispatch) => (
 )
 
 export const handleCartExpiry = () => (dispatch) => {
-    // show notification, nav to homepage
+    // show notification, navigate to homepage
     dispatch(addNotification(
         'cartUpdateError',
         'Your cart has expired.',
