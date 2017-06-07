@@ -35,7 +35,6 @@ module.exports = {
                 'enabled': true,
                 'path': screenshotsPath,
                 'on_failure': true,
-                'on_error': true
             },
             'desiredCapabilities': {
                 'browserName': 'chrome',

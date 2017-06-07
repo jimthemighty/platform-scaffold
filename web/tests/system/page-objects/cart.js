@@ -4,6 +4,7 @@
 
 const selectors = {
     miniCart: '.qa-header__cart',
+    miniCartContent: '.t-mini-cart__content',
     viewCart: '.t-mini-cart__content .c--tertiary',
     cartTemplateIdentifier: '.t-cart.t--loaded',
     cartCheckout: '.qa-cart__checkout',
@@ -36,7 +37,7 @@ Cart.prototype.removeItems = function() {
         .log('Opening mini cart')
         .waitForElementVisible(selectors.miniCart)
         .click(selectors.miniCart)
-        .waitForAnimation()
+        .waitForElementVisible(selectors.miniCartContent)
         .element('css selector', selectors.viewCart, (result) => {
             if (result.value && result.value.ELEMENT) {
                 self.browser
@@ -47,8 +48,7 @@ Cart.prototype.removeItems = function() {
                     .execute(`document.querySelector('${selectors.removeItem}').click()`)
                     .waitForElementVisible(selectors.confirmRemove)
                     .execute(`document.querySelector('${selectors.confirmRemove}').click()`)
-                    .waitUntilMobified()
-                    .waitForElementVisible(selectors.emptyCart)
+                    .waitForAjaxCompleted()
                 self.removeItems()
             }
         })

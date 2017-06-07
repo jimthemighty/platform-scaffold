@@ -29,7 +29,8 @@ describe('submitRegisterForm', () => {
         form: {
             [CONFIRMATION_FORM_NAME]: {
                 values: {
-                    password: 'Test'
+                    password: 'Test',
+                    password_confirmation: 'Test'
                 }
             }
         }
