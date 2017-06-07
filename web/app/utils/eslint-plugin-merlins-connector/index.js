@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 module.exports.rules = { // eslint-disable-line
     'use-merlins': (context) => {
         return {
