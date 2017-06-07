@@ -41,7 +41,6 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
     return defaultVariant
 }
 
-/* eslint-enable camelcase */
 
 export const getProductHref = (productID) => `/s/${getSiteID()}/${productID}.html`
 
@@ -55,19 +54,18 @@ export const parseProductDetails = ({id, name, price, inventory, long_descriptio
         available: inventory.orderable,
         thumbnail: images[0],
         images,
-        initialValues: setInitialVariantValues(variants, id, variation_attributes),
-        variationCategories: parseVariationCategories(variation_attributes),
-        variants: variants.map(({product_id, variation_values}) => {
+        initialValues: variants ? setInitialVariantValues(variants, id, variation_attributes) : {},
+        variationCategories: variants ? parseVariationCategories(variation_attributes) : [],
+        variants: variants ? variants.map(({product_id, variation_values}) => {
             return {
                 id: product_id,
                 values: variation_values
             }
-        })
+        }) : []
     }
 }
 
 export const parseBasketContents = ({product_items, product_sub_total, product_total, order_total}) => {
-    /* eslint-disable camelcase */
     let summary_count = 0
     const items = product_items ? product_items.map(({item_id, product_name, product_id, base_price, quantity}) => {
         summary_count += quantity
@@ -94,10 +92,12 @@ export const parseBasketContents = ({product_items, product_sub_total, product_t
     }
 }
 
+/* eslint-enable camelcase */
+
 export const getCurrentProductID = (url) => {
     let productID
 
-    let productIDMatch = /(\d+).html/.exec(url)
+    let productIDMatch = /\/([^/]+).html/.exec(url)
 
     if (productIDMatch) {
         productID = productIDMatch[1]

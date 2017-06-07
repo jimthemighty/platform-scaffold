@@ -21,8 +21,25 @@ import {
     setLoggedIn
 } from '../../results'
 
-export const fetchPageData = (url) => (dispatch) => (
-    makeRequest(url)
+const requestCapturedDoc = () => {
+    return window.Progressive.capturedDocHTMLPromise.then((initialCapturedDocHTML) => {
+        const body = new Blob([initialCapturedDocHTML], {type: 'text/html'})
+        const capturedDocResponse = new Response(body, {
+            status: 200,
+            statusText: 'OK'
+        })
+
+        return Promise.resolve(capturedDocResponse)
+    })
+}
+
+let isInitialEntryToSite = true
+
+export const fetchPageData = (url) => (dispatch) => {
+    const request = isInitialEntryToSite ? requestCapturedDoc() : makeRequest(url)
+    isInitialEntryToSite = false
+
+    return request
         .then(jqueryResponse)
         .then((res) => {
             const [$, $response] = res
@@ -39,7 +56,7 @@ export const fetchPageData = (url) => (dispatch) => (
                 dispatch(setPageFetchError(error.message))
             }
         })
-)
+}
 
 export const initApp = () => (dispatch) => {
     // Use the pre-existing form_key if it already exists
