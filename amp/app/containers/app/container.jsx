@@ -63,10 +63,6 @@ const App = ({
 App.propTypes = {
     buttontest: PropTypes.string,
     children: PropTypes.node,
-    /**
-     * The react-router history object
-     */
-    // history: PropTypes.object
 }
 
 
