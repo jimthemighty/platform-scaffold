@@ -272,6 +272,8 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         .then((responseJSON) => {
             // Looks like when it is successful, the responseJSON is a number
             if (/^\d+$/.test(responseJSON)) {
+                // reset isInitialized flag in shippingAddress
+                dispatch(receiveShippingAddress({isInitialized: false}))
                 return '/checkout/onepage/success/'
             } else {
                 throw new Error(responseJSON.message)
