@@ -71,8 +71,9 @@ const categoryProductsParser = ($, $html) => {
 
     const productIds = $
           .makeArray($html.find('.item.product-item'))
-          .map((product) => $(product).find('input[name="product"]').val())
-          .filter((productId) => productId !== undefined)
+          .map((product) => {
+              return $(product).find('.price-box').length ? $(product).find('.price-box').attr('data-product-id') : ''
+          })
 
     return {
         itemCount: $numItems.length > 0 ? parseInt($numItems.text(), 10) : 0,
