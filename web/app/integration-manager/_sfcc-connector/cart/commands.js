@@ -17,12 +17,12 @@ const addToCartRequest = (productId, quantity, basketId) => {
     }]
     // Use makeApiRequest here instead of makeAPIJsonRequest so we can deal with errors ourselves
     return makeApiRequest(`/baskets/${basketId}/items`, {method: 'POST', body: JSON.stringify(requestBody)})
+        .then((response) => response.json())
 }
 
 export const addToCart = (productId, quantity) => (dispatch) => (
     createBasket()
         .then((basket) => addToCartRequest(productId, quantity, basket.basket_id))
-        .then((response) => response.json())
         .then((basket) => {
             if (basket.fault) {
                 if (basket.fault.type === 'InvalidCustomerException') {
@@ -32,9 +32,9 @@ export const addToCart = (productId, quantity) => (dispatch) => (
                 }
                 throw new Error(basket.fault.message)
             }
-
-            return dispatch(handleCartData(basket))
+            return basket
         })
+        .then((basket) => dispatch(handleCartData(basket)))
         .catch(() => { throw new Error('Unable to add item to cart') })
 )
 
