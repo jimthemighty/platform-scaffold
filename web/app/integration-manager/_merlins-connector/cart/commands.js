@@ -61,7 +61,7 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
     const hiddenInputs = formInfo.get('hiddenInputs')
 
     if (hiddenInputs === undefined) {
-        Promise.reject('Add to cart failed, form info missing')
+        return Promise.reject('Add to cart failed, form info missing')
     }
 
     const formValues = {
