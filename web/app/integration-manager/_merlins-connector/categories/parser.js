@@ -69,13 +69,13 @@ export const priceFilterParser = ($, $html) => {
 const categoryProductsParser = ($, $html) => {
     const $numItems = $html.find('#toolbar-amount .toolbar-number').first()
 
-    const products = $
+    const productIds = $
           .makeArray($html.find('.item.product-item'))
           .map((product) => $(product).find('input[name="product"]').val())
 
     return {
         itemCount: $numItems.length > 0 ? parseInt($numItems.text(), 10) : 0,
-        products
+        products: productIds
     }
 }
 
