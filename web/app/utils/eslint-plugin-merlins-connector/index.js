@@ -9,8 +9,8 @@ module.exports.rules = { // eslint-disable-line
                 const specifiers = node.specifiers[0] // always array of length 1
                 let ruleName
 
-                if (specifiers.imported) {
-                    ruleName = specifiers.imported.name
+                if (specifiers.local) {
+                    ruleName = specifiers.local.name
                 }
 
                 if (ruleName === 'initConnector' && !/merlins/.test(node.source.value)) {
