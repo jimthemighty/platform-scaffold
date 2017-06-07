@@ -99,14 +99,20 @@ export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
     }
 }
 
+const isInitializedSelector = createPropsSelector({
+    isInitialized: shippingSelectors.getIsInitialized
+})
 
-const processShippingData = ($response) => (dispatch) => {
+const processShippingData = ($response) => (dispatch, getState) => {
     dispatch(receiveEntityID(parseCheckoutEntityID($response)))
     const magentoFieldData = extractMagentoShippingStepData($response)
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+    const {isInitialized} = isInitializedSelector(getState())
+    if (!isInitialized) {
+        dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+    }
 }
 
 const processPaymentData = ($response) => (dispatch) => {
@@ -124,7 +130,7 @@ const shippingDataSelector = createPropsSelector({
 
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
-        .then(([$, $response]) => dispatch(processShippingData($response)))  // eslint-disable-line no-unused-vars
+        .then(([$, $response]) => dispatch(processShippingData($response, getState)))  // eslint-disable-line no-unused-vars
         .then(() => {
             const {
                 isLoggedIn,
