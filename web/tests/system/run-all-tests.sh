@@ -2,7 +2,6 @@
 set -o pipefail
 set -o nounset
 
-
 if git rev-parse ; then
     # Get the current branch on CircleCI or local
     CURRENT_BRANCH=${CIRCLE_BRANCH:-$(git branch | grep "*" | awk '{ print $2 }')}
