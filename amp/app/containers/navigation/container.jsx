@@ -27,11 +27,14 @@ const Navigation = (props) => {
     return (
         <Sheet id={id} className="t-navigation">
             <Nav root={root} path="/"/>
+
             <NavigationSocialIcons />
 
             <div className="t-navigation__copyright u-padding-md">
                 <p>© 2017 Mobify Research & Development Inc. All rights reserved.</p>
             </div>
+
+            <div dangerouslySetInnerHTML={{__html: `<button on="tap:${id}.toggle">Toggle Nav</button>`}} />
         </Sheet>
     )
 }

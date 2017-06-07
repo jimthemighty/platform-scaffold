@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import Header from '../header/container'
 import Footer from '../footer/container'
-import DangerousHTML from '../../components/dangerous-html'
 import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
 
@@ -26,14 +25,11 @@ const App = ({children}) => {
     const navId = 'main-nav'
 
     return (
-        <body
-            id="root"
-            className="t-app"
-        >
+        <body id="root" className="t-app">
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
             <Navigation id={navId} />
-            <div dangerouslySetInnerHTML={{__html: `<button on="tap:${navId}.toggle">Button</button>`}} />
+            <div dangerouslySetInnerHTML={{__html: `<button on="tap:${navId}.toggle">Toggle Nav</button>`}} />
 
             <SkipLinks items={skipLinksItems} />
 

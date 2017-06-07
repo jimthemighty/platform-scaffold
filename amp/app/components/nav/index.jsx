@@ -42,6 +42,7 @@ const Nav = ({root, path, itemFactory, className}) => {
         <div className={classes}>
             {children.map(child => {
                 const props = {
+                    key: child.path,
                     href: child.path,
                     title: child.title,
                     selected: child.path === selected.path
