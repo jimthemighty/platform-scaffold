@@ -99,7 +99,7 @@ const initializeStore = (req) => {
         const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
         const renderProps = {
             location: {},
-            components: [AppComponent],
+            components: [App],
             history: {}
         }
 

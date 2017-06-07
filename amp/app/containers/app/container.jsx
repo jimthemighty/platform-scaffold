@@ -9,41 +9,58 @@ import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
-import {onRouteChanged} from '../../../../web/app/containers/app/actions'
-import {resolve} from 'react-redux-resolve'
 
-@resolve(({dispatch, getState}) => {
+const resolver = (({dispatch, getState}) => {
     return dispatch(initProductDetailsPage(getState().ui.app.get(CURRENT_URL)))
 })
 class App extends React.Component {
+    componentDidMount() {
+        resolver({
+            dispatch: this.context.store.dispatch,
+            getState: this.context.store.getState
+        })
+
+        if (super.componentDidMount) {
+            super.componentDidMount()
+        }
+    }
+
     render() {
         const {
             children,
         } = this.props
 
-	return (
-    <div
-        id="app"
-        className="t-app"
-    >
-        <DangerousHTML html={sprite}>
-            {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
-        </DangerousHTML>
+        return (
+            <div
+                id="app"
+                className="t-app"
+            >
+                <DangerousHTML html={sprite}>
+                    {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
+                </DangerousHTML>
 
-        <Icon name="user" title="User" />
+                <Icon name="user" title="User" />
 
-        <Header />
+                <Header />
 
-        {children}
+                {children}
 
-        <Footer />
-    </div>
-	)
+                <Footer />
+            </div>
+        )
+    }
 }
-}
+
+App.resolves = [resolver]
+
 
 App.propTypes = {
     children: PropTypes.node
 }
+
+App.contextTypes = {
+    store: PropTypes.object.isRequired
+}
+
 
 export default connect()(App)

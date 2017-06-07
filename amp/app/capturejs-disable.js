@@ -1,23 +1,24 @@
 // From https://github.com/mobify/capturejs/blob/master/src/capture.js
 
-const Utils = {};
+const Utils = {}
 Utils.keys = function(obj) {
-    var result = [];
-    for (var key in obj) {
-        if (obj.hasOwnProperty(key))
-            result.push(key);
+    const result = []
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            result.push(key)
+        }
     }
-    return result;
-};
+    return result
+}
 
 // Map of all attributes we should disable (to prevent resources from downloading)
 const disablingMap = {
-    img:    ['src', 'srcset'],
+    img: ['src', 'srcset'],
     source: ['src', 'srcset'],
     iframe: ['src'],
     script: ['src', 'type'],
-    link:   ['href'],
-    style:  ['media'],
+    link: ['href'],
+    style: ['media'],
 }
 
 const openingScriptRe = /(<script[\s\S]*?>)/gi
@@ -28,24 +29,25 @@ const tagDisablers = {
     script: ' type="text/mobify-script"'
 }
 
-const affectedTagRe = new RegExp('<(' + Utils.keys(disablingMap).join('|') + ')([\\s\\S]*?)>', 'gi');
-const attributeDisablingRes = {};
-const attributesToEnable = {};
+const affectedTagRe = new RegExp(`<(${Utils.keys(disablingMap).join('|')})([\\s\\S]*?)>`, 'gi')
+const attributeDisablingRes = {}
+const attributesToEnable = {}
 
 // Populate `attributesToEnable` and `attributeDisablingRes`.
 for (const tagName in disablingMap) {
-    if (!disablingMap.hasOwnProperty(tagName)) continue;
-    var targetAttributes = disablingMap[tagName];
+    if (!disablingMap.hasOwnProperty(tagName)) {
+        continue
+    }
 
-    targetAttributes.forEach(function(value) {
-        attributesToEnable[value] = true;
-    });
+    const targetAttributes = disablingMap[tagName]
+
+    targetAttributes.forEach((value) => {
+        attributesToEnable[value] = true
+    })
 
     // <space><attr>='...'|"..."
     attributeDisablingRes[tagName] = new RegExp(
-        '\\s+((?:'
-        + targetAttributes.join('|')
-        + ")\\s*=\\s*(?:('|\")[\\s\\S]+?\\2))", 'gi');
+        `\\s+((?:${targetAttributes.join('|')})\\s*=\\s*(?:('|")[\\s\\S]+?\\2))`, 'gi')
 }
 
 /**
@@ -55,34 +57,38 @@ for (const tagName in disablingMap) {
  * Not declared on the prototype so it can be used as a static method.
  */
 const captureDisable = function(htmlStr, prefix) {
-    var self = this;
     // Disables all attributes in disablingMap by prepending prefix
-    var disableAttributes = (function(){
+    const disableAttributes = (() => {
         return function(whole, tagName, tail) {
-            const lowercaseTagName = tagName.toLowerCase();
-            return '<' + lowercaseTagName + (tagDisablers[lowercaseTagName] || '')
-                + tail.replace(attributeDisablingRes[lowercaseTagName], ' ' + prefix + '$1') + '>';
+            const lowercaseTagName = tagName.toLowerCase()
+            return `<${lowercaseTagName}${(tagDisablers[lowercaseTagName] || '')}
+                ${tail.replace(attributeDisablingRes[lowercaseTagName], ` ${prefix}$1`)}>`
         }
-    })();
+    })()
 
-    var splitRe = /(<!--[\s\S]*?-->)|(?=<\/script)/i;
-    var tokens = htmlStr.split(splitRe);
-    var ret = tokens.map(function(fragment) {
-                var parsed
+    const splitRe = /(<!--[\s\S]*?-->)|(?=<\/script)/i
+    const tokens = htmlStr.split(splitRe)
+    const ret = tokens.map((fragment) => {
+        // Fragment may be empty or just a comment, no need to escape those.
+        if (!fragment) {
+            return ''
+        }
 
-                // Fragment may be empty or just a comment, no need to escape those.
-                if (!fragment) return '';
-                if (/^<!--/.test(fragment)) return fragment;
+        if (/^<!--/.test(fragment)) {
+            return fragment
+        }
 
-                // Disable before and the <script> itself.
-                // parsed = [before, <script>, script contents]
-                parsed = fragment.split(openingScriptRe);
-                parsed[0] = parsed[0].replace(affectedTagRe, disableAttributes);
-                if (parsed[1]) parsed[1] = parsed[1].replace(affectedTagRe, disableAttributes);
-                return parsed;
-            });
+        // Disable before and the <script> itself.
+        // parsed = [before, <script>, script contents]
+        const parsed = fragment.split(openingScriptRe)
+        parsed[0] = parsed[0].replace(affectedTagRe, disableAttributes)
+        if (parsed[1]) {
+            parsed[1] = parsed[1].replace(affectedTagRe, disableAttributes)
+        }
+        return parsed
+    })
 
-    return [].concat.apply([], ret).join('');
+    return [].concat(...ret).join('')
 }
 
 export default captureDisable
