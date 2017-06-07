@@ -141,3 +141,22 @@ export const createNewBasket = () => (dispatch) => {
             return basket
         })
 }
+
+export const isCartExpired = ({fault}) => {
+    if (fault) {
+        if (fault.type === 'InvalidCustomerException') {
+            return true
+        }
+        throw new Error(fault.message)
+    }
+    return false
+}
+
+export const checkAndHandleCartExpiry = (basket) => (dispatch) => {
+    if (isCartExpired(basket)) {
+        return dispatch(createNewBasket())
+            .then((basket) => dispatch(handleCartData(basket)))
+            .then(() => { throw new Error('Your cart has expired.') })
+    }
+    return basket
+}
