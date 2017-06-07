@@ -8,26 +8,85 @@ import {getApiEndPoint, getRequestHeaders} from './config'
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
 
+const setCookieValue = (keyName, value) => {
+    document.cookie = `${keyName}=${value}`
+}
+
+const getCookieValue = (keyName) => {
+    const cookieRegex = new RegExp(`${keyName}=([^;]+);`)
+    const cookieMatch = cookieRegex.exec(document.cookie)
+
+    return cookieMatch ? cookieMatch[1] : ''
+}
+
+const removeCookieValue = (keyName) => {
+    document.cookie = `${keyName}=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+}
+
+// sessionStorage detection as seen in such great libraries as Modernizr
+// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/sessionstorage.js
+let cachedSessionStorageSupport
+const supportsSessionStorage = () => {
+    if (cachedSessionStorageSupport !== undefined) {
+        return cachedSessionStorageSupport
+    }
+    const mod = 'modernizr'
+    try {
+        sessionStorage.setItem(mod, mod)
+        sessionStorage.removeItem(mod)
+        cachedSessionStorageSupport = true
+    } catch (e) {
+        cachedSessionStorageSupport = false
+    }
+    return cachedSessionStorageSupport
+}
+
+const setItemInBrowserStorage = (keyName, value) => {
+    // Use session storage if it's supported
+    if (supportsSessionStorage()) {
+        window.sessionStorage.setItem(keyName, value)
+    } else {
+        // Use Cookies otherwise
+        setCookieValue(keyName, value)
+    }
+}
+
+const getItemFromBrowserStorage = (keyName) => {
+    if (supportsSessionStorage()) {
+        return window.sessionStorage.getItem(keyName)
+    }
+
+    return getCookieValue(keyName)
+}
+
+const removeItemFromBrowserStorage = (keyName) => {
+    if (supportsSessionStorage()) {
+        window.sessionStorage.removeItem(keyName)
+    } else {
+        removeCookieValue(keyName)
+    }
+}
+
 export const storeAuthToken = (authorization) => {
     if (authorization) {
-        window.sessionStorage.setItem(AUTH_KEY_NAME, authorization)
+        setItemInBrowserStorage(AUTH_KEY_NAME, authorization)
     }
 }
 
 export const getAuthToken = () => {
-    return window.sessionStorage.getItem(AUTH_KEY_NAME)
+    return getItemFromBrowserStorage(AUTH_KEY_NAME)
 }
 
 export const deleteAuthToken = () => {
-    window.sessionStorage.removeItem(AUTH_KEY_NAME)
+    removeItemFromBrowserStorage(AUTH_KEY_NAME)
 }
 
 export const deleteBasketID = () => {
-    window.sessionStorage.removeItem(BASKET_KEY_NAME)
+    removeItemFromBrowserStorage(BASKET_KEY_NAME)
 }
 
 export const getBasketID = () => {
-    return window.sessionStorage.getItem(BASKET_KEY_NAME)
+    return getItemFromBrowserStorage(BASKET_KEY_NAME)
 }
 
 export const storeBasketID = (basketID) => {
@@ -35,7 +94,7 @@ export const storeBasketID = (basketID) => {
         throw new Error('Storing basketID that is undefined!!')
     }
 
-    window.sessionStorage.setItem(BASKET_KEY_NAME, basketID)
+    setItemInBrowserStorage(BASKET_KEY_NAME, basketID)
 }
 
 export const getAuthTokenPayload = (authToken) => {

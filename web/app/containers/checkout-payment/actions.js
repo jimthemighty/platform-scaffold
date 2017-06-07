@@ -49,6 +49,7 @@ export const submitPayment = () => (dispatch, getState) => {
         address = {
             firstname,
             lastname,
+            username: email,
             ...billingFormValues,
         }
     }
