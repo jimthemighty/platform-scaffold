@@ -36,7 +36,9 @@ const requestCapturedDoc = () => {
 let isInitialEntryToSite = true
 
 export const fetchPageData = (url) => (dispatch) => {
-    const request = isInitialEntryToSite ? requestCapturedDoc() : makeRequest(url)
+    const request = isInitialEntryToSite && window.Progressive.capturedDocHTMLPromise
+                    ? requestCapturedDoc() : makeRequest(url)
+
     isInitialEntryToSite = false
 
     return request
