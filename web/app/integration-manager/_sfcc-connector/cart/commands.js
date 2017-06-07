@@ -10,6 +10,16 @@ export const getCart = () => (dispatch) =>
     requestCartData().then((basket) => dispatch(handleCartData(basket)))
 
 
+const isCartExpired = ({fault}) => {
+    if (fault) {
+        if (fault.type === 'InvalidCustomerException') {
+            return true
+        }
+        throw new Error(fault.message)
+    }
+    return false
+}
+
 const addToCartRequest = (productId, quantity, basketId) => {
     const requestBody = [{
         product_id: productId,
@@ -24,13 +34,12 @@ export const addToCart = (productId, quantity) => (dispatch) => (
     createBasket()
         .then((basket) => addToCartRequest(productId, quantity, basket.basket_id))
         .then((basket) => {
-            if (basket.fault) {
-                if (basket.fault.type === 'InvalidCustomerException') {
-                    // the basket has expired create a new one and try adding to cart again
-                    return dispatch(createNewBasket())
-                        .then((basket) => addToCartRequest(productId, quantity, basket.basket_id))
-                }
-                throw new Error(basket.fault.message)
+            const cartExpired = isCartExpired(basket)
+
+            if (cartExpired) {
+                // the basket has expired create a new one and try adding to cart again
+                return dispatch(createNewBasket())
+                    .then((basket) => addToCartRequest(productId, quantity, basket.basket_id))
             }
             return basket
         })
@@ -38,22 +47,41 @@ export const addToCart = (productId, quantity) => (dispatch) => (
         .catch(() => { throw new Error('Unable to add item to cart') })
 )
 
+const createNewBasketWithError = () => (dispatch) => {
+    return dispatch(createNewBasket())
+        .then((basket) => dispatch(handleCartData(basket)))
+        .then(() => { throw new Error('Your cart has expired.') })
+}
+
 export const removeFromCart = (itemId) => (dispatch) => (
     createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {method: 'DELETE'}))
         .then((response) => {
-            if (response.ok) {
-                return response.json()
+            return response.json()
+        })
+        .then((basket) => {
+            const cartExpired = isCartExpired(basket)
+
+            if (cartExpired) {
+                return dispatch(createNewBasketWithError())
             }
-            throw new Error('Unable to remove item')
+            return basket
         })
         .then((basket) => dispatch(handleCartData(basket)))
 )
 
 export const updateItemQuantity = (itemId, quantity) => (dispatch) => (
     createBasket()
-        .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {quantity}, {method: 'PATCH'}))
-        .catch(() => { throw new Error('Unable to update item') })
+        .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {method: 'PATCH', body: JSON.stringify({quantity})}))
+        .then((response) => response.json())
+        .then((basket) => {
+            const cartExpired = isCartExpired(basket)
+
+            if (cartExpired) {
+                return dispatch(createNewBasketWithError())
+            }
+            return basket
+        })
         .then((basket) => dispatch(handleCartData(basket)))
 )
 
