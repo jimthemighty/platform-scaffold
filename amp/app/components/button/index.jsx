@@ -90,7 +90,8 @@ class Button extends React.Component {
         const buttonAttrText = Object.keys(buttonAttrs).reduce((result, key) => {
             return buttonAttrs[key] ? `${key}=${buttonAttrs[key]} ${result}` : result
         }, '')
-        const buttontest = `<button ${buttonAttrText} type=${type}><div class="${innerClass}">${children}</div></button>`
+
+        const buttonOutput = `<button ${buttonAttrText} type=${type}><div class="${innerClass}">${children}</div></button>`
 
         if (href) {
             return (
@@ -101,7 +102,7 @@ class Button extends React.Component {
         } else {
             return (
                 // Output DangerousHTML because with React cannot output custom attributes
-                <DangerousHTML html={buttontest}>
+                <DangerousHTML html={buttonOutput}>
                     {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
                 </DangerousHTML>
             )
