@@ -89,12 +89,15 @@ export const pdpAddToCartFormParser = ($, $html) => {
 }
 
 export const productListParser = ($, $html) => {
-    const $products = $html.find('.item.product-item')
+    const $products = $html
+        .find('.item.product-item')
+        .filter((_, product) => $(product).find('.price-box').length > 0)
+
     const productMap = {}
     $products.each((_, product) => {
         const $product = $(product)
         const link = parseTextLink($product.find('.product-item-link'))
-        const productId = $product.find('.price-box').length ? $product.find('.price-box').attr('data-product-id') : ''
+        const productId = $product.find('.price-box').attr('data-product-id')
         const thumbnail = parseImage($product.find('.product-image-photo'))
         const available = $product.find('.stock.unavailable').length === 0
 
