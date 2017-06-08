@@ -242,8 +242,12 @@ const attemptToInitializeApp = () => {
 
     const shouldDocWrite = true // TODO: this should be false when network is 2G.
 
-    // loadingPromises is an Array of Promises that are created when
-    // we load scripts asynchronously.
+    // The following scripts are loaded async via document.write, in order
+    // for the browser to increase the priority of these scripts. If the scripts
+    // are loaded async, the browser will not consider them high priority and
+    // queue them while waiting for other high priority resources to finish
+    // loading. This delay can go all the way up to 5 seconds on a Moto G4 on a
+    // 3G connection.
     loadScript({
         id: 'progressive-web-vendor',
         src: getAssetUrl('vendor.js'),
