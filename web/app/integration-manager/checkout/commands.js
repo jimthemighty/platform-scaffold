@@ -49,9 +49,9 @@ export const submitPayment = (formValues) => connector.submitPayment(formValues)
 /**
  * Fetches shipping methods estimates for the given checkout stage
  * @function
- * @param {string} formName The stage's form name to estimate shipping on
+ * @param {object} inputAddress The address to estimate shipping for
  */
-export const fetchShippingMethodsEstimate = (formName) => connector.fetchShippingMethodsEstimate(formName)
+export const fetchShippingMethodsEstimate = (inputAddress) => connector.fetchShippingMethodsEstimate(inputAddress)
 
 /**
  * Updates the registered customer's billing and shipping addresses using the
