@@ -31,8 +31,8 @@ export const receiveData = createAction('Receive Checkout Shipping Data')
 
 const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
 
-export const initShippingPage = () => (dispatch) => (
-    dispatch(initCheckoutShippingPage())
+export const initShippingPage = (url, routeName) => (dispatch) => (
+    dispatch(initCheckoutShippingPage(url, routeName))
         .catch((error) => {
             const message = error.message
             if (message.includes('expired')) {

@@ -19,8 +19,8 @@ export const toggleCompanyAptField = createAction('Toggled the "Company" and "Ap
 export const toggleNewAddressFields = createAction('Toggled new address fields', ['newShippingAddressIsEnabled'])
 export const setCvvType = createAction('Setting CVV type', ['cvvType'])
 
-export const initPaymentPage = () => (dispatch) => (
-    dispatch(initCheckoutPaymentPage())
+export const initPaymentPage = (url, routeName) => (dispatch) => (
+    dispatch(initCheckoutPaymentPage(url, routeName))
         .catch((error) => {
             const message = error.message
             if (message.includes('expired')) {
