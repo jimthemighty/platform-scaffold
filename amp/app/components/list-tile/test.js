@@ -18,7 +18,7 @@ test('ListTile renders without errors', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<ListTile />)
 
-    expect(wrapper.hasClass('c-list-tile')).toBe(true)
+    expect(wrapper.hasClass('amp-list-tile')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {
@@ -59,11 +59,11 @@ test('renders the StartAction in the primary container', () => {
 test('includeEndActionInPrimary={false} moves endAction to the primary container', () => {
     const wrapper = mount(<ListTile includeEndActionInPrimary={false} endAction={<div className="end-action">End Action Test</div>} />)
 
-    expect(wrapper.find('.c-list-tile__primary .end-action').length).toBe(0)
+    expect(wrapper.find('.amp-list-tile__primary .end-action').length).toBe(0)
 })
 
 test('endAction is in the primary container if includeEndActionInPrimary={false} is not set', () => {
     const wrapper = mount(<ListTile endAction={<div className="end-action">End Action Test</div>} />)
 
-    expect(wrapper.find('.c-list-tile__primary .end-action').length).toBe(1)
+    expect(wrapper.find('.amp-list-tile__primary-list-tile__primary .end-action').length).toBe(1)
 })
