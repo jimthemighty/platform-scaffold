@@ -36,7 +36,7 @@ const Nav = ({root, path, itemFactory, className}) => {
     const expanded = isLeaf ? selectedParent : selected
     const children = expanded.children || []
 
-    const classes = classNames('a-nav', 'c-nav', {}, className)
+    const classes = classNames('amp-nav', {}, className)
 
     return (
         <div className={classes}>

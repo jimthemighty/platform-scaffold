@@ -7,8 +7,15 @@
 // Components
 // ---
 
+// @TODO: figure out what to do with styles that include in APP container, dont want to duplicate style in page
+
 @import '../../components/skip-links/base';
 @import '../../components/skip-links/theme';
 
 @import '../../components/list-tile/base';
 @import '../../components/list-tile/theme';
+
+@import '../../components/nav/base';
+
+@import '../../components/nav-item/base';
+@import '../../components/nav-item/theme';

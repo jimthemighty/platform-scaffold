@@ -1,12 +1,28 @@
 ```js
 // JS import
-import NavItem from '../components/nav-item'
+import NavItem from 'mobify-amp-sdk/dist/components/nav-item'
 
 // SCSS import
-@import '../components/nav-item/base';
+@import 'node_modules/mobify-amp-sdk/dist/components/nav-item/base';
 ```
 
 
 ## Example Usage
 
-    <NavItem text="Hear me roar!" />
+Without children
+
+    <NavItem title="Home page" path="/" />
+
+Selected
+
+    <NavItem title="Home page" path="/" selected />
+
+With `hasChild`, `beforeContent`, `childIcon` and `content` props
+
+    <NavItem
+        path="/"
+        beforeContent={<Icon name="user" />}
+        content="Customer Service"
+        hasChild={true}
+        childIcon={<Icon name="chevron-right" />}
+        />

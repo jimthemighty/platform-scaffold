@@ -29,6 +29,7 @@ const App = ({children}) => {
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
             <Navigation id={navId} />
+
             <div dangerouslySetInnerHTML={{__html: `<button on="tap:${navId}.toggle">Toggle Nav</button>`}} />
 
             <SkipLinks items={skipLinksItems} />

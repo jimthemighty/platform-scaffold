@@ -1,12 +1,12 @@
 ```js
 // JS import
-import Nav from '../components/nav'
+import Nav from 'mobify-amp-sdk/dist/components/nav'
 
 // SCSS import
-@import '../components/nav/base';
+@import 'mobify-amp-sdk/dist/components/nav/base';
 ```
 
 
 ## Example Usage
-
+    @TODO add example
     <Nav text="Hear me roar!" />
