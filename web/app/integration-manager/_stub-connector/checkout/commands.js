@@ -4,18 +4,18 @@
 
 /* eslint-disable no-unused-vars */
 
-export const initCheckoutShippingPage = (url) => (dispatch) => {
-    console.log('[Stub Connector] Called initCheckoutShippingPage stub with arguments:', url)
+export const initCheckoutShippingPage = (url, routeName) => (dispatch) => {
+    console.log('[Stub Connector] Called initCheckoutShippingPage stub with arguments:', url, routeName)
     return Promise.resolve()
 }
 
-export const initCheckoutPaymentPage = (url) => (dispatch) => {
-    console.log('[Stub Connector] Called initCheckoutPaymentPage stub with arguments:', url)
+export const initCheckoutPaymentPage = (url, routeName) => (dispatch) => {
+    console.log('[Stub Connector] Called initCheckoutPaymentPage stub with arguments:', url, routeName)
     return Promise.resolve()
 }
 
-export const initCheckoutConfirmationPage = (url) => (dispatch) => {
-    console.log('[Stub Connector] Called initCheckoutConfirmationPage stub with arguments:', url)
+export const initCheckoutConfirmationPage = (url, routeName) => (dispatch) => {
+    console.log('[Stub Connector] Called initCheckoutConfirmationPage stub with arguments:', url, routeName)
     return Promise.resolve()
 }
 
