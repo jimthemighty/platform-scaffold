@@ -32,11 +32,8 @@
 @import '../../components/sheet/base';
 @import '../../components/sheet/theme';
 
-@import '../../components/icon/base';
-@import '../../components/icon/theme';
-
 @import '../../components/button/base';
-@import '../../components/button/theme';
+@import '../../styles/themes/amp-components/button'; // TODO: dont move to SDK
 
 
 // AMP Components
