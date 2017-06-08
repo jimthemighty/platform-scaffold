@@ -81,9 +81,10 @@ export const removeFromCart = (ItemId) => (dispatch, getState) => {
  * @param itemID {string} The cart item ID to update
  * @param newItemID {string} The cart item ID to update
  */
-export const updateCartItem = (itemId, productId, quantity) => (dispatch) => {
+export const updateCartItem = (itemId, productId, quantity) => (dispatch, getState) => {
     return dispatch(connector.updateCartItem(itemId, productId, quantity)).then((cart) => {
-        // need dispatch cart analytics for updating cart item? potentially removeCart old + addCart new??
+        dispatchCartAnalytics(EVENT_ACTION.removeFromCart, dispatch, getState, itemId)
+        dispatchCartAnalytics(EVENT_ACTION.addToCart, dispatch, getState, productId)
         return cart
     })
 }
