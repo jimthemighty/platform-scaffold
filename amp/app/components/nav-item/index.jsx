@@ -11,16 +11,12 @@ const NavItem = (props) => {
         title,
         className,
         childIcon,
-        beforeContent: beforeContentProp,
-        content: contentProp,
+        beforeContent,
+        content,
         hasChild,
         href,
     } = props
 
-
-    const before = beforeContentProp
-    const content = contentProp || title
-    const after = hasChild ? childIcon : null
     const classes = classNames('a-nav-item', 'c-nav-item', {
         'a--has-child c--has-child': hasChild,
         'a--selected c--selected': selected,
@@ -29,19 +25,18 @@ const NavItem = (props) => {
     return (
         <ListTile
             className={classes}
-            startAction={before}
-            endAction={after}
+            startAction={beforeContent}
+            endAction={hasChild ? childIcon : undefined}
             href={href}
             includeEndActionInPrimary
         >
-            {content}
+            {content || title}
         </ListTile>
     )
 }
 
 NavItem.defaultProps = {
-    navigate: /* istanbul ignore next */() => null,
-    childIcon: '>',
+    childIcon: '>'
 }
 
 

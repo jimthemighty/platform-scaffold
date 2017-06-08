@@ -45,7 +45,8 @@ const Nav = ({root, path, itemFactory, className}) => {
                     key: child.path,
                     href: child.path,
                     title: child.title,
-                    selected: child.path === selected.path
+                    selected: child.path === selected.path,
+                    hasChild: !isLeaf
                 }
                 const type = child.type
                 return itemFactory(type, props)
