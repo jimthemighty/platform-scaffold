@@ -74,6 +74,11 @@ NavItem.propTypes = {
     hasChild: React.PropTypes.bool,
 
     /**
+     * The URL the NavItem links to
+     */
+    href: React.PropTypes.string,
+
+    /**
      * Indicates whether the item is currently selected.
      */
     selected: React.PropTypes.bool,

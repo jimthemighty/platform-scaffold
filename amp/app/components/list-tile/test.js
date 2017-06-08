@@ -46,14 +46,6 @@ test('renders a Link as primary if an href is present', () => {
     expect(wrapper.find(Link).prop('href')).toBe('/mens-handbags')
 })
 
-test('does not render a link as primary if no href is present', () => {
-    const wrapper = mount(<ListTile />)
-
-    const primary = wrapper.find('.amp-list-tile__primary')
-    expect(primary.length).toBe(1)
-    expect(primary.type()).toBe('div')
-    expect(primary.prop('role')).toBe('button')
-})
 
 test('renders the StartAction in the primary container', () => {
     const startAction = (<div className="test">Start Action</div>)

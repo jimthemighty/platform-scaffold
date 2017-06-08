@@ -40,7 +40,7 @@ const Nav = ({root, path, itemFactory, className}) => {
 
     return (
         <div className={classes}>
-            {children.map(child => {
+            {children.map((child) => {
                 const props = {
                     key: child.path,
                     href: child.path,
@@ -59,7 +59,36 @@ const defaultItemFactory = (type, props) => {
 }
 
 Nav.defaultProps = {
-    itemFactory: defaultItemFactory
+    itemFactory: defaultItemFactory,
+    path: '/',
+    root: {title: '', path: '/'},
+}
+
+Nav.propTypes = {
+    /**
+     * Extra classes for the element
+     */
+    className: React.PropTypes.string,
+
+    /**
+     * Factory function to render menu items for display
+     */
+    itemFactory: React.PropTypes.func,
+
+    /**
+     * The currently selected path in the navigation.
+     */
+    path: React.PropTypes.string,
+
+    /**
+     * The structure of the navigation as a JS object
+     */
+    root: React.PropTypes.shape({
+        title: React.PropTypes.string.isRequired,
+        path: React.PropTypes.string.isRequired,
+        type: React.PropTypes.string,
+        children: React.PropTypes.array
+    })
 }
 
 export default Nav

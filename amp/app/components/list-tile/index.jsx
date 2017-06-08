@@ -37,7 +37,7 @@ const ListTile = ({
     includeEndActionInPrimary
 }) => {
 
-    const classes = classNames('amp-list-tile', {
+    const classes = classNames('amp-list-tile', 'c-list-tile', {
         'amp--is-anchor': !!href
     }, className)
 
