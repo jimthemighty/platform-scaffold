@@ -28,7 +28,7 @@ export const login = (username, password, rememberMe) => (dispatch) => {
     console.log('[Stub Connector] Called login stub with parameters:', username, password, rememberMe)
     dispatch(setLoggedIn(true))
 
-    // This promise should resolve to the location of the account page
+    // This promise should resolve to the URL of the account page
     // to redirect the user to.
     return Promise.resolve()
 }

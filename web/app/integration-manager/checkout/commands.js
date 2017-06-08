@@ -36,6 +36,11 @@ export const initCheckoutConfirmationPage = (url, routeName) => connector.initCh
  * Submits the shipping stage of the checkout flow.
  * @function
  * @param {object} formValues All of the values from the shipping form (see store/checkout/constants:SHIPPING_FORM_NAME)
+ * @return {Promise} Resolves to the URL to redirect to for
+ *                   payment. This is often controlled by the
+ *                   backend/connector. If the connector returns a
+ *                   valid URL from this command, the app will
+ *                   navigate to the URL.
  */
 export const submitShipping = (formValues) => connector.submitShipping(formValues)
 
@@ -43,6 +48,11 @@ export const submitShipping = (formValues) => connector.submitShipping(formValue
  * Submits the payment stage of the checkout flow.
  * @function
  * @param {object} formValues All of the values from the payment form (see store/checkout/constants:PAYMENT_FORM_NAME)
+ * @return {Promise} Resolves to the URL to redirect to for
+ *                   confirmation. This is often controlled by the
+ *                   backend/connector. If the connector returns a
+ *                   valid URL from this command, the app will
+ *                   navigate to the URL.
  */
 export const submitPayment = (formValues) => connector.submitPayment(formValues)
 
