@@ -18,7 +18,10 @@ module.exports = {
         ajv: 'commonjs ajv'
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json']
+        extensions: ['.js', '.jsx', '.json'],
+        alias: {
+            jquery: path.join(__dirname, '../web/app/static/js/jquery.min.js')
+        }
     },
     module: {
         rules: [
@@ -33,11 +36,11 @@ module.exports = {
                 use: [
                     {loader: "imports-loader?window=>{location: {href: ''}},\
                                              window.Progressive=>{},\
-                                             window.$=>function(params){return global.window.$(params);},\
+                                             window.$=>(...args) => { return global.window.jQuery(...args) },\
                                              document.createElement=>function(params){return global.window.document.createElement(params);},\
                                              document.body.appendChild=>function(params){return global.window.document.body.appendChild(params);},\
                                              window.Capture=>{},\
-                                             window.Capture.disable=>function(){return global.Capture.disable(arguments);},\
+                                             window.Capture.disable=>(...args) => global.Capture.disable(...args),\
                                              navigator=>{userAgent: ''}"}
                 ],
             },

@@ -2,6 +2,8 @@
 import AmpHtmlValidator from 'amphtml-validator'
 import httpMocks from 'node-mocks-http'
 import events from 'events'
+import jquery from '../../web/app/static/js/jquery.min.js'
+import fetch from 'node-fetch'
 
 import app from './main'
 
@@ -9,6 +11,9 @@ describe('Renders valid AMP', () => {
     let validator
 
     beforeAll(() => {
+        window.Progressive = {}
+        window.$ = jquery
+        global.fetch = fetch
         return AmpHtmlValidator.getInstance().then((v) => { validator = v })
     })
 

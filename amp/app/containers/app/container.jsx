@@ -4,15 +4,16 @@ import Header from '../header/container'
 import Footer from '../footer/container'
 import DangerousHTML from '../../components/dangerous-html'
 import Icon from '../../components/icon'
+import Sheet from '../../components/sheet'
 
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
-import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
 
 const resolver = (({dispatch, getState}) => {
-    return dispatch(initProductDetailsPage(getState().ui.app.get(CURRENT_URL)))
+    return dispatch(getState().ui.app.get('dataInitFunction')(getState().ui.app.get(CURRENT_URL)))
 })
+
 class App extends React.Component {
     componentDidMount() {
         resolver({
@@ -30,11 +31,33 @@ class App extends React.Component {
             children,
         } = this.props
 
+        const button = '<button on="tap:menu-sheet.toggle">Button</button>'
         return (
-            <div
-                id="app"
+            <body
+                id="root"
                 className="t-app"
             >
+
+                <Sheet id="menu-sheet" headerContent={<div>Header</div>} footerContent={<div>Footer</div>}>
+                    <ul>
+                        <li><a href="/todo/">Home</a></li>
+                        <li><a href="/todo/">Sign in</a></li>
+                        <li><a href="/todo/">Potions</a></li>
+                        <li><a href="/todo/">Spellbooks</a></li>
+                        <li><a href="/todo/">Ingredients</a></li>
+                        <li><a href="/todo/">Supplies</a></li>
+                        <li><a href="/todo/">Charms</a></li>
+                        <li><a href="/todo/">New Arrivals</a></li>
+                        <DangerousHTML html={button}>
+                            {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+                        </DangerousHTML>
+                    </ul>
+                </Sheet>
+
+                <DangerousHTML html={button}>
+                    {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+                </DangerousHTML>
+
                 <DangerousHTML html={sprite}>
                     {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
                 </DangerousHTML>
@@ -46,7 +69,7 @@ class App extends React.Component {
                 {children}
 
                 <Footer />
-            </div>
+            </body>
         )
     }
 }

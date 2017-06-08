@@ -15,7 +15,7 @@ import ampPackageJson from '../package.json'
 
 import thunk from 'redux-thunk'
 import {fromJS} from 'immutable'
-import CaptureDisable from './capturejs-disable'
+import captureDisable from './capturejs-disable'
 
 import Analytics from './components/analytics'
 import * as home from './containers/home/container'
@@ -26,20 +26,25 @@ import App from './containers/app/container'
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
 
-import {reducer as imReducer} from '../../web/app/integration-manager/reducer'
 
 const jsdom = Promise.promisifyAll(_jsdom)
+
+import {waitForResolves} from 'react-redux-resolve'
 
 // DO NOT USE! Merlins Connector is an example connector that is for demo only
 import {Connector} from '../../web/app/integration-manager/_merlins-connector'
 // import {Connector} from './integration-manager/_sfcc-connector'
 
+
 import {registerConnector} from '../../web/app/integration-manager'
-
-import {waitForResolves} from 'react-redux-resolve'
-
+import {reducer as imReducer} from '../../web/app/integration-manager/reducer'
 import {CURRENT_URL} from '../../web/app/containers/app/constants'
+import {initHomePage} from '../../web/app/integration-manager/home/commands'
+import {initProductDetailsPage} from '../../web/app/integration-manager/products/commands'
+import {initProductListPage} from '../../web/app/integration-manager/categories/commands'
+
 const PAGE_TITLE = 'pageTitle'
+const DATA_INIT_FUNCTION = 'dataInitFunction'
 
 export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
 
@@ -47,11 +52,15 @@ const getFullUrl = (req) => {
     return `${ampPackageJson.siteUrl}${req.url}`
 }
 
-const initializeStore = (req) => {
+const initializeStore = (req, dataInitFunction) => {
     return jsdomEnv().then((window) => {
+        // TODO: Convert to imports, make sure that works
+        // TODO: Move all of this out to another file
         const appReducer = require('../../web/app/containers/app/reducer').default
         const footerReducer = require('../../web/app/containers/footer/reducer').default
         const headerReducer = require('../../web/app/containers/header/reducer').default
+        const homeReducer = require('../../web/app/containers/home/reducer').default
+
         const navigationReducer = require('../../web/app/containers/navigation/reducer').default
         const productDetailsReducer = require('../../web/app/containers/product-details/reducer').default
         const productListReducer = require('../../web/app/containers/product-list/reducer').default
@@ -67,12 +76,13 @@ const initializeStore = (req) => {
         }))
 
         global.window = window
-        global.Capture = {disable: (args) => { return CaptureDisable.apply(this, args) }}
+        global.Capture = {disable: (...args) => captureDisable(...args)}
 
         const uiReducer = combineReducers({
             app: appReducer,
             footer: footerReducer,
             header: headerReducer,
+            home: homeReducer,
             navigation: navigationReducer,
             productDetails: productDetailsReducer,
             productList: productListReducer
@@ -93,7 +103,8 @@ const initializeStore = (req) => {
 
         const initialState = ({ui: {app: fromJS({
             [CURRENT_URL]: getFullUrl(req),
-            [PAGE_TITLE]: 'Merlins AMP' // Fetch the page again and get title?
+            [PAGE_TITLE]: 'Merlins AMP', // Fetch the page again and get title?
+            [DATA_INIT_FUNCTION]: dataInitFunction
         })}})
 
         const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
@@ -137,19 +148,19 @@ const render = (req, res, store, component, css) => {
 
 
 const productDetailsPage = (req, res, next) => {
-    initializeStore(req)
+    initializeStore(req, initProductDetailsPage)
         .then((store) => render(req, res, store, productDetails.default, productDetails.styles))
         .catch(next)
 }
 
 const productListPage = (req, res, next) => {
-    initializeStore(req)
+    initializeStore(req, initProductListPage)
         .then((store) => render(req, res, store, productList.default, productList.styles))
         .catch(next)
 }
 
 const homePage = (req, res, next) => {
-    initializeStore(req)
+    initializeStore(req, initHomePage)
         .then((store) => render(req, res, store, home.default, home.styles))
         .catch(next)
 }

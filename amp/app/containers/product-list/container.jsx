@@ -4,11 +4,15 @@ import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import containerStyles from './container.scss'
 
+import {createPropsSelector} from 'reselect-immutable-helpers'
+import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
+import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
+
 const containerClass = 't-product-list'
 
 const ProductList = ({
-    links,
-    title
+    numItems,
+    /* products*/
 }) => (
     <div className={containerClass}>
         <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
@@ -17,28 +21,20 @@ const ProductList = ({
         </AmpLightbox>
         <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
 
-        <h1>{title}</h1>
-        {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
+        <h1>Number of items: {numItems}</h1>
     </div>
 )
 
 ProductList.propTypes = {
-    /**
-     * An array of links
-     */
-    links: PropTypes.array,
-    /**
-     * A title
-     */
-    title: PropTypes.string
+    products: PropTypes.array.isRequired,
+    numItems: PropTypes.number
 }
 
 ProductList.templateName = 'plp'
 
-const mapStateToProps = (state) => ({
-    links: state.links,
-    title: `ProductList! - ${state.title}` || '',
-    className: containerClass
+const mapStateToProps = createPropsSelector({
+    numItems: getCategoryItemCount,
+    products: getFilteredAndSortedListProducts
 })
 
 
