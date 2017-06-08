@@ -3,10 +3,7 @@ import Header from '../header/container'
 import Footer from '../footer/container'
 import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
-
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
-
-import {connect} from 'react-redux'
 
 const App = ({children}) => {
 
@@ -61,8 +58,4 @@ App.propTypes = {
 }
 
 
-const mapStateToProps = (state) => ({})
-
-export default connect(
-    mapStateToProps
-)(App)
+export default App
