@@ -125,7 +125,7 @@ class App extends React.Component {
                     {isRunningInAstro && <NativeConnector />}
 
                     {messagingEnabled && [
-                        <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={0} />,
+                        <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
                         <DefaultAsk key="ask" showOnPageCount={1} />
                     ]}
 
