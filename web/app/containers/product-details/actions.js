@@ -67,26 +67,9 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     dispatch(addToCartStarted())
 
     const isInCheckout = /configure/.test(window.location.pathname)
+    const itemId = window.location.pathname.match(/(?:\/id\/)(.*?)(?:\/product_id\/)/)
 
-    // isInCheckout potentially should be in redux store ??
-    // if a user is editing a product that should be available in the state
-    if (isInCheckout) {
-        const itemId = window.location.pathname.match(/(?:\/id\/)(.*?)(?:\/product_id\/)/)[1]
-
-        return dispatch(updateCartItem(itemId, productId, qty))
-            .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
-            .catch((error) => {
-                console.error('Error adding to cart', error)
-                return dispatch(addNotification(
-                    'addToCartError',
-                    'Unable to add item to the cart.',
-                    true
-                ))
-            })
-            .then(() => dispatch(addToCartComplete()))
-    }
-
-    return dispatch(addToCart(productId, qty))
+    return dispatch(isInCheckout ? addToCart(productId, qty) : updateCartItem(itemId[1], productId, qty))
         .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
         .catch((error) => {
             console.error('Error adding to cart', error)
