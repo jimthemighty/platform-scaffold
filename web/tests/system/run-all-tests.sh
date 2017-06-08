@@ -17,13 +17,13 @@ fi
 
 #If the node total is 1, run all the tests sequentially. 
 if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
-  # echo 'Running lint'
+  echo 'Running lint'
   npm run lint
-  # echo 'Running Unit Tests'
+  echo 'Running Unit Tests'
   npm test -- --runInBand
   echo 'Starting Lighthouse Tests.'
   npm run test:pwa-ci
-  # echo 'Running End to End Tests'
+  echo 'Running End to End Tests'
   npm run test:e2e
 
 else
