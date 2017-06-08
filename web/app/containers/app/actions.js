@@ -102,7 +102,7 @@ export const cartExpired = () => (dispatch) => {
     ))
 }
 
-export const handleCartExpiry = (error) => (dispatch) => {
+export const handleCartExpiryError = (error) => (dispatch) => {
     if (error.message.includes('expired')) {
         return dispatch(cartExpired())
     }

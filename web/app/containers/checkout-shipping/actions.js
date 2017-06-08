@@ -18,7 +18,7 @@ import {
 } from '../../integration-manager/checkout/commands'
 import {customCommands} from '../../integration-manager/custom/commands'
 import {login} from '../../integration-manager/account/commands'
-import {handleCartExpiry} from '../app/actions'
+import {handleCartExpiryError} from '../app/actions'
 
 import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'
 import {getSelectedSavedShippingAddress} from '../../store/checkout/shipping/selectors'
@@ -33,7 +33,7 @@ const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
 
 export const initShippingPage = (url, routeName) => (dispatch) => (
     dispatch(initCheckoutShippingPage(url, routeName))
-        .catch((error) => dispatch(handleCartExpiry(error)))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
 )
 
 const onShippingEmailRecognized = () => (dispatch) => {
@@ -122,9 +122,9 @@ export const submitShipping = () => (dispatch, getState) => {
                 pathname: paymentURL
             })
         })
-        .catch((error) => dispatch(handleCartExpiry(error)))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
         // second catch block is to catch any non-cart
-        // expiry error messages that handleCartExpiry might throw
+        // expiry error messages that handleCartExpiryError might throw
         .catch(() => (
             dispatch(addNotification(
                 'submitShippingError',
@@ -152,5 +152,5 @@ export const fetchShippingMethods = () => (dispatch, getState) => (
     dispatch(
         fetchShippingMethodsEstimate(getShippingEstimateAddress(getState()))
     )
-    .catch((error) => dispatch(handleCartExpiry(error)))
+    .catch((error) => dispatch(handleCartExpiryError(error)))
 )

@@ -9,7 +9,7 @@ import {getEmailAddress} from '../../store/checkout/selectors'
 import {getShippingAddress} from '../../store/checkout/shipping/selectors'
 import {submitPayment as submitPaymentCommand, initCheckoutPaymentPage} from '../../integration-manager/checkout/commands'
 import {splitFullName} from '../../utils/utils'
-import {handleCartExpiry} from '../app/actions'
+import {handleCartExpiryError} from '../app/actions'
 import {receiveBillingAddress, receiveBillingSameAsShipping} from '../../integration-manager/checkout/results'
 
 export const receiveContents = createAction('Received CheckoutPayment Contents')
@@ -21,7 +21,7 @@ export const setCvvType = createAction('Setting CVV type', ['cvvType'])
 
 export const initPaymentPage = (url, routeName) => (dispatch) => (
     dispatch(initCheckoutPaymentPage(url, routeName))
-        .catch((error) => dispatch(handleCartExpiry(error)))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
 )
 
 export const submitPayment = () => (dispatch, getState) => {
@@ -68,5 +68,5 @@ export const submitPayment = () => (dispatch, getState) => {
                 pathname: url
             })
         })
-        .catch((error) => dispatch(handleCartExpiry(error)))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
 }
