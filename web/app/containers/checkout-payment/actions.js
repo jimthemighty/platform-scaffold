@@ -74,4 +74,11 @@ export const submitPayment = () => (dispatch, getState) => {
                 pathname: url
             })
         })
+        .catch((error) => {
+            const message = error.message
+            if (message.includes('expired')) {
+                return dispatch(handleCartExpiry())
+            }
+            throw error
+        })
 }
