@@ -7,12 +7,12 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
-import {getItemQuantity} from './selectors'
+import {getItemQuantity, getCartItemFromConfigureURL} from './selectors'
 import {getCurrentPathKey, getCartURL} from '../app/selectors'
 import {getSelectedProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from '../../store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
-import {addToCart} from '../../integration-manager/cart/commands'
+import {addToCart, updateCartItem} from '../../integration-manager/cart/commands'
 import {getProductVariantData} from '../../integration-manager/products/commands'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
@@ -65,6 +65,17 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     }
 
     dispatch(addToCartStarted())
+
+    const isInCheckout = /configure/.test(window.location.pathname)
+    if (isInCheckout) {
+        const {id} = getCartItemFromConfigureURL(getStore())
+
+        return dispatch(updateCartItem(id, productId, qty))
+            .then(() => {
+
+            })
+    }
+
     return dispatch(addToCart(productId, qty))
         .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
         .catch((error) => {

@@ -36,6 +36,20 @@ export const removeFromCart = (itemId) => (dispatch) => (
         .then((basket) => dispatch(handleCartData(basket)))
 )
 
+export const updateCartItem = (itemId, productId, quantity) => (dispatch) => (
+    createBasket()
+        .then((basket) => {
+            const requestBody = [{
+                product_id: productId,
+                quantity
+            }]
+
+            return makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, requestBody, {method: 'PATCH'})
+        })
+        .catch(() => { throw new Error('Unable to update item') })
+        .then((basket) => dispatch(handleCartData(basket)))
+)
+
 export const updateItemQuantity = (itemId, quantity) => (dispatch) => (
     createBasket()
         .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {quantity}, {method: 'PATCH'}))
