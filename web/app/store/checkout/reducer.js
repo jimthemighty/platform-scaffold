@@ -5,31 +5,26 @@
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
 import {mergePayload, setCustomContent} from '../../utils/reducer-utils'
-import {receiveSavedShippingAddresses} from './actions'
 import * as integrationManagerResults from '../../integration-manager/checkout/results'
-import {setDefaultShippingAddressId} from './shipping/actions'
 
 const checkoutReducer = handleActions({
-    [receiveSavedShippingAddresses]: mergePayload,
+    [integrationManagerResults.receiveSavedShippingAddresses]: mergePayload,
     [integrationManagerResults.receiveCheckoutLocations]: mergePayload,
-    [integrationManagerResults.receiveBillingInitialValues]: mergePayload,
-    [integrationManagerResults.receiveShippingInitialValues]: mergePayload,
-    [integrationManagerResults.receiveCheckoutData]: mergePayload,
+    [integrationManagerResults.receiveBillingAddress]: mergePayload,
+    [integrationManagerResults.receiveShippingAddress]: mergePayload,
     [integrationManagerResults.receiveUserEmail]: mergePayload,
     [integrationManagerResults.receiveCheckoutCustomContent]: mergePayload,
+    [integrationManagerResults.receiveSelectedShippingMethod]: mergePayload,
+    [integrationManagerResults.receiveBillingSameAsShipping]: mergePayload,
     [integrationManagerResults.receiveLocationsCustomContent]: setCustomContent('locations'),
-    [integrationManagerResults.receiveShippingCustomContent]: setCustomContent('shipping'),
-    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shipping', 'address'),
-    [integrationManagerResults.receiveBillingCustomContent]: setCustomContent('billing'),
-    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billing', 'address'),
-    [integrationManagerResults.receivePaymentCustomContent]: setCustomContent('payment'),
-    [integrationManagerResults.receivePaymentAddressCustomContent]: setCustomContent('payment', 'address'),
+    [integrationManagerResults.receiveShippingAddressCustomContent]: setCustomContent('shippingAddress'),
+    [integrationManagerResults.receiveBillingAddressCustomContent]: setCustomContent('billingAddress'),
     [integrationManagerResults.receiveShippingMethods]: (state, {payload}) => (
         // Using `set` here will make sure the list in the store is
         // correctly truncated.
         state.set('shippingMethods', Immutable.fromJS(payload))
     ),
-    [setDefaultShippingAddressId]: mergePayload
+    [integrationManagerResults.setDefaultShippingAddressId]: mergePayload
 }, Immutable.Map())
 
 export default checkoutReducer

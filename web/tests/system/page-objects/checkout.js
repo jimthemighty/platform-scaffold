@@ -96,8 +96,6 @@ Checkout.prototype.fillShippingInfo = function() {
         .clearValue(selectors.name)
         .clearValue(selectors.address)
         .clearValue(selectors.city)
-        .clearValue(selectors.country)
-        .clearValue(selectors.state)
         .clearValue(selectors.postCode)
         .clearValue(selectors.phone)
 

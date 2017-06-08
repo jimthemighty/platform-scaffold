@@ -8,8 +8,7 @@ export const parseShippingAddressFromBasket = (basketData) => {
             email
         },
         shipments: [{
-            shipping_address,
-            shipping_method
+            shipping_address
         }]
     } = basketData
 
@@ -26,8 +25,7 @@ export const parseShippingAddressFromBasket = (basketData) => {
             city: shipping_address.city,
             regionId: shipping_address.state_code,
             postcode: shipping_address.postal_code,
-            telephone: shipping_address.phone,
-            shipping_method: shipping_method ? shipping_method.id : undefined
+            telephone: shipping_address.phone
         }
     } else {
         initialValues = {
