@@ -22,7 +22,7 @@ if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   # echo 'Running Unit Tests'
   npm test -- --runInBand
   echo 'Starting Lighthouse Tests.'
-  ./tests/system/run-lighthouse.sh
+  npm run test:pwa-ci
   # echo 'Running End to End Tests'
   npm run test:e2e
 
@@ -35,7 +35,7 @@ else
     #Assign the first node to running lighthouse Tests
     if [ $CIRCLE_NODE_INDEX -eq 0 ]; then
       echo 'Running Lighthouse Test'
-      ./tests/system/run-lighthouse.sh
+      npm run test:pwa-ci
     fi
 
     # The other cirlce_node_index worker will run the rest of the tests
