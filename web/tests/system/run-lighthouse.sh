@@ -3,9 +3,9 @@ set -o pipefail
 set -o nounset
 
 if [ $TEST_PROFILE == "production" ]; then
-    echo "Running Lighthouse agaisnt Production."
+    echo "Running Lighthouse against Production."
     npm run test:pwa-prod
 else
-    echo "Running Lighthouse agaisnt Local."
+    echo "Running Lighthouse against Local."
     npm run test:pwa-ci
 fi
