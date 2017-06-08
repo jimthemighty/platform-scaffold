@@ -141,17 +141,14 @@ const setupMessagingClient = (serviceWorkerSupported) => {
     window.Mobify.WebPush = window.Mobify.WebPush || {}
     window.Mobify.WebPush.PWAClient = {}
 
-    // Add a deferred function that will asynchronously update
-    // the Messaging worker version data.
-    deferredUntilLoadComplete.push(updateMessagingSWVersion)
+    // Update the Messaging worker version data.
+    updateMessagingSWVersion()
 
     if (messagingEnabled) {
         // We know we're not running in Astro, that the service worker is
-        // supported and loaded, and messaging is enabled, so we can add a
-        // deferred function to load and initialize the Messaging client.
-        deferredUntilLoadComplete.push(
-            () => loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
-        )
+        // supported and loaded, and messaging is enabled, so we can load
+        // and initialize the Messaging client.
+        loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
     }
 }
 
@@ -186,11 +183,6 @@ const attemptToInitializeApp = () => {
             enabled: messagingEnabled
         }
     }
-
-    // An array of functions that will be called when all the scripts
-    // loaded by this function are done. They are only executed if all
-    // the key scripts load and initialize successfully.
-    const deferredUntilLoadComplete = []
 
     initCacheManifest(cacheHashManifest)
     triggerAppStartEvent()
@@ -240,7 +232,7 @@ const attemptToInitializeApp = () => {
 
     asyncInitApp()
 
-    const shouldDocWrite = true // TODO: this should be false when network is 2G.
+    const loadScriptsSynchronously = true // TODO: this should be false when network is 2G.
 
     // The following scripts are loaded async via document.write, in order
     // for the browser to increase the priority of these scripts. If the scripts
@@ -251,27 +243,31 @@ const attemptToInitializeApp = () => {
     loadScript({
         id: 'progressive-web-vendor',
         src: getAssetUrl('vendor.js'),
-        docwrite: shouldDocWrite
+        docwrite: loadScriptsSynchronously,
+        isAsync: false
     })
 
     loadScript({
         id: 'progressive-web-main',
         src: getAssetUrl('main.js'),
-        docwrite: shouldDocWrite
+        docwrite: loadScriptsSynchronously
     })
 
     loadScript({
         id: 'progressive-web-jquery',
         src: getAssetUrl('static/js/jquery.min.js'),
-        docwrite: shouldDocWrite
+        docwrite: loadScriptsSynchronously
     })
 
     window.Progressive.capturedDocHTMLPromise = new Promise((resolve) => {
+        // The reason we bound this to window is because the "onload" method below
+        // is added to the document via document.write, this "onload" is toString'ed,
+        // meaning it doesn't have accessed to closure variables.
         window.captureResolve = resolve
         loadScript({
             id: 'progressive-web-capture',
             src: CAPTURING_CDN,
-            docwrite: shouldDocWrite,
+            docwrite: loadScriptsSynchronously,
             onload: () => {
                 window.Capture.init((capture) => {
                     // NOTE: by this time, the captured doc has changed a little
@@ -291,11 +287,6 @@ const attemptToInitializeApp = () => {
         }).then(() => window.Astro)
 
     }
-    // Promise.all(loadingPromises)
-    //     .then(
-    //         // Execute any deferred functions
-    //         () => deferredUntilLoadComplete.forEach((def) => { def() })
-    //     )
 
     // Attempt to load the worker.
     (('serviceWorker' in navigator)
@@ -303,9 +294,7 @@ const attemptToInitializeApp = () => {
         : Promise.resolve(false)
     ).then((serviceWorkerSupported) => {
 
-        // Set up the Messaging client integration - this must be
-        // done now, but the work is deferred until after script
-        // loading is complete.
+        // Set up the Messaging client integration
         setupMessagingClient(serviceWorkerSupported)
     })
 
