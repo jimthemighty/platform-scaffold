@@ -24,6 +24,7 @@ const App = ({children}) => {
 
     const navId = 'main-nav'
 
+    // Important note: dont remove or rename "app" in body ID because we need this ID to work with sharing styles.
     return (
         <body id="app" className="t-app">
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
