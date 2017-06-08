@@ -13,10 +13,12 @@ import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod,
 
 import {
     submitShipping as submitShippingCommand,
-    fetchShippingMethodsEstimate
+    fetchShippingMethodsEstimate,
+    initCheckoutShippingPage
 } from '../../integration-manager/checkout/commands'
 import {customCommands} from '../../integration-manager/custom/commands'
 import {login} from '../../integration-manager/account/commands'
+import {handleCartExpiry} from '../app/actions'
 
 import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'
 import {getSelectedSavedShippingAddress} from '../../store/checkout/shipping/selectors'
@@ -28,6 +30,18 @@ export const setShowAddNewAddress = createAction('Setting the "Saved/New Address
 export const receiveData = createAction('Receive Checkout Shipping Data')
 
 const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
+
+export const initShippingPage = () => (dispatch) => (
+    dispatch(initCheckoutShippingPage())
+        .catch((error) => {
+            debugger
+            const message = error.message
+            if (message.includes('expired')) {
+                return dispatch(handleCartExpiry())
+            }
+            throw error
+        })
+)
 
 const onShippingEmailRecognized = () => (dispatch) => {
     dispatch(setCustomerEmailRecognized(true))

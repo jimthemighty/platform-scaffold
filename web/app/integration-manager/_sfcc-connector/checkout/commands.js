@@ -38,6 +38,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
 
 export const initCheckoutShippingPage = () => (dispatch) => {
     return requestCartData()
+        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
         .then((basket) => {
             const {
                 customer_info: {
