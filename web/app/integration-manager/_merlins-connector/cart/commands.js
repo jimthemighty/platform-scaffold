@@ -77,6 +77,11 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
         .then(() => dispatch(getCart()))
 }
 
+
+export const updateCartItem = (itemId, productId, quantity) => (dispatch) => (
+    dispatch(addToCart(productId, quantity))
+)
+
 /**
  * Remove an item from the users cart
  *
