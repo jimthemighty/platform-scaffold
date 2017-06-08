@@ -12,7 +12,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from '../../integration-manager/account/commands'
-import {setPageFetchError, setLoggedIn} from '../../integration-manager/results'
+import {setPageFetchError} from '../../integration-manager/results'
 
 import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
@@ -83,7 +83,6 @@ export const signOut = () => (dispatch) => (
     dispatch(logout()).then(() => {
         // Desktop's message includes 'redirect to home page' message
         // so we'll just hardcode a message instead
-        dispatch(setLoggedIn(false))
         dispatch(addNotification(
             'signedOutNotification',
             'You are now signed out'
