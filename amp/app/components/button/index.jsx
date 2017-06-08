@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import Link from '../link'
 import Icon from '../icon'
-import DangerousHTML from '../dangerous-html'
 
 /**
  * A styleable, accessible `<button>` component for [Mobify’s Progressive Web SDK](#).
@@ -43,14 +42,9 @@ class Button extends React.Component {
         const textClass = classNames('amp-button__text', {
             'u-visually-hidden': !showIconText
         })
-        const linkAttrs = {
-            href, id, disabled, name, value, role,
-            className: classes
-        }
-
-        const buttonAttrs = {
+        const attrs = {
             href, id, on, disabled, name, value, role,
-            class: classes
+            className: classes
         }
 
         let children
@@ -72,39 +66,24 @@ class Button extends React.Component {
             children = text || this.props.children
         }
 
-        // Add all aria attributes for <a> element
+        // Add all aria attributes
         Object.keys(this.props).forEach((key) => {
             if (/^aria-/.test(key)) {
-                linkAttrs[key] = this.props[key]
+                attrs[key] = this.props[key]
             }
         })
-
-        // Add all aria attributes for <button> element
-        Object.keys(this.props).forEach((key) => {
-            if (/^aria-/.test(key)) {
-                buttonAttrs[key] = this.props[key]
-            }
-        })
-
-        // Combine all button attributes into a string to use DangerousHTML
-        const buttonAttrText = Object.keys(buttonAttrs).reduce((result, key) => {
-            return buttonAttrs[key] ? `${key}=${buttonAttrs[key]} ${result}` : result
-        }, '')
-
-        const buttonOutput = `<button ${buttonAttrText} type=${type}><div class="${innerClass}">${children}</div></button>`
 
         if (href) {
             return (
-                <Link {...linkAttrs} openInNewTab={openInNewTab}>
+                <Link {...attrs} openInNewTab={openInNewTab}>
                     <div className={innerClass}>{children}</div>
                 </Link>
             )
         } else {
             return (
-                // Output DangerousHTML because with React cannot output custom attributes
-                <DangerousHTML html={buttonOutput}>
-                    {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-                </DangerousHTML>
+                <button is {...attrs} type={type}>
+                    <div className={innerClass}>{children}</div>
+                </button>
             )
         }
     }
