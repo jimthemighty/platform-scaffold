@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {SubmissionError} from 'redux-form'
-import {createBasket, handleCartData, requestCartData, createNewBasket} from '../cart/utils'
+import {createBasket, handleCartData, requestCartData, createNewBasket, checkAndHandleCartExpiry} from '../cart/utils'
 import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
@@ -19,6 +19,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
         .then((response) => response.json())
+        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
         .then(({applicable_shipping_methods}) => {
             const shippingMethods = applicable_shipping_methods
                   .map(({name, description, price, id}) => ({
