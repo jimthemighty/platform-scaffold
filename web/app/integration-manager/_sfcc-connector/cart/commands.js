@@ -7,15 +7,7 @@ import {populateLocationsData} from '../checkout/utils'
 import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, checkAndHandleCartExpiry} from './utils'
 
 export const getCart = () => (dispatch) =>
-    requestCartData()
-        .then((basket) => {
-            if (isCartExpired(basket)) {
-                // the basket has expired create a new one and try adding to cart again
-                return dispatch(createNewBasket())
-            }
-            return basket
-        })
-        .then((basket) => dispatch(handleCartData(basket)))
+    requestCartData().then((basket) => dispatch(handleCartData(basket)))
 
 
 const addToCartRequest = (productId, quantity, basketId) => {
