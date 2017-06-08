@@ -21,13 +21,7 @@ export const setCvvType = createAction('Setting CVV type', ['cvvType'])
 
 export const initPaymentPage = (url, routeName) => (dispatch) => (
     dispatch(initCheckoutPaymentPage(url, routeName))
-        .catch((error) => {
-            const message = error.message
-            if (message.includes('expired')) {
-                return dispatch(handleCartExpiry())
-            }
-            throw error
-        })
+        .catch((error) => dispatch(handleCartExpiry(error)))
 )
 
 export const submitPayment = () => (dispatch, getState) => {
@@ -74,11 +68,5 @@ export const submitPayment = () => (dispatch, getState) => {
                 pathname: url
             })
         })
-        .catch((error) => {
-            const message = error.message
-            if (message.includes('expired')) {
-                return dispatch(handleCartExpiry())
-            }
-            throw error
-        })
+        .catch((error) => dispatch(handleCartExpiry(error)))
 }

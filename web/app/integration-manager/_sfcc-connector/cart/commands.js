@@ -4,7 +4,7 @@
 
 import {makeApiRequest, makeApiJsonRequest, getAuthTokenPayload} from '../utils'
 import {populateLocationsData} from '../checkout/utils'
-import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, checkAndHandleCartExpiry} from './utils'
+import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, updateExpiredCart} from './utils'
 
 export const getCart = () => (dispatch) =>
     requestCartData().then((basket) => dispatch(handleCartData(basket)))
@@ -40,7 +40,7 @@ export const removeFromCart = (itemId) => (dispatch) => (
     createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {method: 'DELETE'}))
         .then((response) => response.json())
-        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => dispatch(handleCartData(basket)))
 )
 
@@ -48,7 +48,7 @@ export const updateItemQuantity = (itemId, quantity) => (dispatch) => (
     createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {method: 'PATCH', body: JSON.stringify({quantity})}))
         .then((response) => response.json())
-        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => dispatch(handleCartData(basket)))
 )
 

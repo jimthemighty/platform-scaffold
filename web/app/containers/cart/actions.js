@@ -19,7 +19,7 @@ import {
     putPromoCode,
     deletePromoCode
 } from '../../integration-manager/cart/commands'
-import {handleCartExpiry} from '../app/actions'
+import {cartExpired} from '../app/actions'
 import {getDiscountCode} from '../../store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
@@ -46,7 +46,7 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
             const message = error.message
 
             if (message.includes('expired')) {
-                return dispatch(handleCartExpiry())
+                return dispatch(cartExpired())
             }
             return dispatch(addNotification(
                 'taxError',
@@ -63,7 +63,7 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
 const cartUpdateError = (error) => (dispatch) => {
     const message = error.message
     if (message.includes('expired')) {
-        return dispatch(handleCartExpiry())
+        return dispatch(cartExpired())
     }
     return dispatch(addNotification(
         'cartUpdateError',

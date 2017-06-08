@@ -33,13 +33,7 @@ const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
 
 export const initShippingPage = (url, routeName) => (dispatch) => (
     dispatch(initCheckoutShippingPage(url, routeName))
-        .catch((error) => {
-            const message = error.message
-            if (message.includes('expired')) {
-                return dispatch(handleCartExpiry())
-            }
-            throw error
-        })
+        .catch((error) => dispatch(handleCartExpiry(error)))
 )
 
 const onShippingEmailRecognized = () => (dispatch) => {
@@ -128,17 +122,15 @@ export const submitShipping = () => (dispatch, getState) => {
                 pathname: paymentURL
             })
         })
-        .catch((error) => {
-            const message = error.message
-            if (message.includes('expired')) {
-                return dispatch(handleCartExpiry())
-            }
-            return dispatch(addNotification(
+        .catch((error) => dispatch(handleCartExpiry(error)))
+        // second catch block is to catch any non-cart
+        // expiry error messages that handleCartExpiry might throw
+        .catch(() => (
+            dispatch(addNotification(
                 'submitShippingError',
                 `Unable to save shipping information. Please, check input data.`,
                 true
-            ))
-        })
+            ))))
 }
 
 export const isEmailAvailable = () => (dispatch, getState) => {
@@ -160,10 +152,5 @@ export const fetchShippingMethods = () => (dispatch, getState) => (
     dispatch(
         fetchShippingMethodsEstimate(getShippingEstimateAddress(getState()))
     )
-    .catch((error) => {
-        if (error.message.includes('expired')) {
-            return dispatch(handleCartExpiry())
-        }
-        throw error
-    })
+    .catch((error) => dispatch(handleCartExpiry(error)))
 )

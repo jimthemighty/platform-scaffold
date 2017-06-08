@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {SubmissionError} from 'redux-form'
-import {createBasket, handleCartData, requestCartData, createNewBasket, checkAndHandleCartExpiry} from '../cart/utils'
+import {createBasket, handleCartData, requestCartData, createNewBasket, updateExpiredCart} from '../cart/utils'
 import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
@@ -19,7 +19,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
         .then((response) => response.json())
-        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then(({applicable_shipping_methods}) => {
             const shippingMethods = applicable_shipping_methods
                   .map(({name, description, price, id}) => ({
@@ -38,7 +38,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
 
 export const initCheckoutShippingPage = () => (dispatch) => {
     return requestCartData()
-        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => {
             const {
                 customer_info: {
@@ -84,7 +84,7 @@ export const initCheckoutConfirmationPage = () => () => Promise.resolve()
 export const initCheckoutPaymentPage = () => (dispatch) => {
     dispatch(populateLocationsData())
     return requestCartData()
-        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => {
             const shippingMethod = basket.shipments[0].shipping_method
             const addressData = parseShippingAddressFromBasket(basket)
@@ -131,7 +131,7 @@ const setShippingMethod = (formValues, basket) => () => (
 export const submitShipping = (formValues) => (dispatch) => (
     createBasket()
         .then((basket) => dispatch(setCustomerNameAndEmail(formValues, basket)))
-        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => dispatch(setShippingAddress(formValues, basket)))
         .then((basket) => dispatch(setShippingMethod(formValues, basket)))
         .catch((error) => {
@@ -208,7 +208,7 @@ const setPaymentMethod = (formValues, order) => () => {
 export const submitPayment = (formValues) => (dispatch) => {
     return createBasket()
         .then((basket) => dispatch(addPaymentMethod(formValues, basket)))
-        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => dispatch(setBillingAddress(formValues, basket)))
         .then((basket) => dispatch(createOrder(basket)))
         .then((order) => dispatch(setPaymentMethod(formValues, order)))
