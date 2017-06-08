@@ -74,6 +74,7 @@ const categoryProductsParser = ($, $html) => {
           .map((product) => {
               return $(product).find('.price-box').length ? $(product).find('.price-box').attr('data-product-id') : ''
           })
+          .filter((id) => id.length > 0)
 
     return {
         itemCount: $numItems.length > 0 ? parseInt($numItems.text(), 10) : 0,
