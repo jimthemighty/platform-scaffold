@@ -24,9 +24,11 @@ const App = ({children}) => {
 
     const navId = 'main-nav'
 
-    // Important note: dont remove or rename "app" in body ID because we need this ID to work with sharing styles.
+    // Important note: dont remove or rename "app" in body ID because we need this ID to work with sharing styles from PWA.
+    const appId = 'app'
+
     return (
-        <body id="app" className="t-app">
+        <body id={appId} className="t-app">
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
             <Navigation id={navId} />
