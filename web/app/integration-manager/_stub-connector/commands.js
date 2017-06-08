@@ -13,12 +13,12 @@ import * as homeCommands from './home/commands'
 import * as productsCommands from './products/commands'
 
 export const submitNewsletter = (formData) => (dispatch) => {
-    console.log('[Stub Connector] Called submitNewsletter stub with arguments', formData)
+    console.log('[Stub Connector] Called submitNewsletter stub with arguments:', formData)
 
     return Promise.resolve()
 }
 export const getSearchSuggestions = (query) => (dispatch) => {
-    console.log('[Stub Connector] Called getSearchSuggestions stub with arguments', query)
+    console.log('[Stub Connector] Called getSearchSuggestions stub with arguments:', query)
 
     return Promise.resolve()
 }
