@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Sheet from '../../components/sheet'
+import Button from '../../components/button'
 import Nav from '../../components/nav'
 import NavMenu from '../../components/nav-menu'
 import NavigationSocialIcons from './partials/navigation-social-icons'
@@ -26,11 +27,14 @@ const root = {title: 'Store', path: '/', children: [
 
 const Navigation = (props) => {
     const {id} = props
+    const foo = `tap:${id}.toggle`
+
     return (
         <Sheet id={id} className="t-navigation">
             <Nav>
                 <h1>Header Bar here</h1>
-                <div dangerouslySetInnerHTML={{__html: `<button on="tap:${id}.toggle">Toggle Nav</button>`}} />
+
+                <Button icon="close" title="Toggle Nav" on={foo} showIconText />
 
                 <NavMenu root={root} path="/" />
 
