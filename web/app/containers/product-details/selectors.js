@@ -41,6 +41,8 @@ export const getAddToCartDisabled = createSelector(
 
 export const getItemQuantity = createGetSelector(getSelectedProductDetails, 'itemQuantity')
 
+// if "isInConfigure" is a key in the Redux store, the itemID currently being edited should be in the redux store
+// instead of reading window.location
 export const getCartItemFromConfigureURL = createSelector(getCartItems, (cart) => cart.toJS().find((item) => item.configureUrl === window.location.pathname))
 
 export const getProductDetailsBreadcrumbs = createGetSelector(
