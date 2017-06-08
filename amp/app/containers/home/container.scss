@@ -21,14 +21,14 @@
 
 @import '../../components/header-bar/base';
 @import '../../components/header-bar/theme';
-@import '../../components/amp-lightbox/base';
-@import '../../components/amp-lightbox/theme';
-
-@import '../../components/sheet/base';
-@import '../../components/sheet/theme';
-
 @import '../../components/icon/base';
 @import '../../components/icon/theme';
+@import '../../components/icon-label/base';
+@import '../../components/icon-label/theme';
+@import '../../components/amp-lightbox/base';
+@import '../../components/amp-lightbox/theme';
+@import '../../components/sheet/base';
+@import '../../components/sheet/theme';
 
 
 // AMP Components
@@ -46,13 +46,6 @@
 
 @import '../../styles/themes/amp-components/amp-image';
 @import '../../styles/themes/amp-components/price';
-
-
-// SDK Components
-// ---
-
-@import '../../../../web/node_modules/progressive-web-sdk/dist/components/icon-label/base';
-@import '../../../../web/node_modules/progressive-web-sdk/dist/components/icon-label/theme';
 
 
 // Template style

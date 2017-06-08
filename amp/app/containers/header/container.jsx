@@ -1,23 +1,29 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 
-import HeaderBar from '../../components/header-bar/'
+import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import {HeaderBar, HeaderBarTitle} from '../../components/header-bar'
 import IconLabel from '../../components/icon-label'
 import Link from '../../components/link'
-// import Search from 'progressive-web-sdk/dist/components/search'
-// import HeaderTitle from './partials/header-title'
 
 const Header = () => {
-    //
-    // const searchIcon = <Icon name="search" title="Submit search" />
-    // const clearIcon = <Icon name="close" title="Clear search field" />
-
     return (
         <header className="t-header" id="header">
             <HeaderBar>
-                <IconLabel iconName="menu" label="menu" size="" />
-                <IconLabel label="search" />
-                <IconLabel label="stores" />
-                <IconLabel label="cart" />
+                <Link href="www.merlinspotions.com" className="t-header__link amp-header-bar__action" role="navigation">
+                    <IconLabel iconName="menu" label="Menu" iconSize="medium" />
+                </Link>
+                <Link href="www.merlinspotions.com" className="t-header__link amp-header-bar__action">
+                    <IconLabel iconName="search" label="Search" iconSize="medium" />
+                </Link>
+                <HeaderBarTitle href="/">
+                    <AmpImage src="/static/svg/logo.svg" width="67" height="28" layout="fixed" />
+                </HeaderBarTitle>
+                <Link href="www.merlinspotions.com" className="t-header__link amp-header-bar__action">
+                    <IconLabel iconName="store" label="Stores" iconSize="medium" />
+                </Link>
+                <Link href="www.merlinspotions.com" className="t-header__link amp-header-bar__action">
+                    <IconLabel iconName="cart" label="Cart" iconSize="medium" />
+                </Link>
             </HeaderBar>
         </header>
     )
