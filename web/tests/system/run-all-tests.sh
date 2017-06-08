@@ -12,6 +12,7 @@ if git rev-parse ; then
     fi
 else
     CURRENT_BRANCH=develop
+    export TEST_PROFILE=local
 fi
 
 #If the node total is 1, run all the tests sequentially. 
