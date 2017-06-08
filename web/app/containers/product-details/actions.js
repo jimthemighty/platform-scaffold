@@ -73,6 +73,8 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     if (isInCheckout) {
         const {id} = getCartItemFromConfigureURL(getStore())
 
+        // not very DRY from the addToCart dispatch below,
+        // need to refactor to re-use the thens & catches
         return dispatch(updateCartItem(id, productId, qty))
             .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
             .catch((error) => {
