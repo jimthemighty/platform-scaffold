@@ -7,8 +7,28 @@
 // Components
 // ---
 
+// @TODO: figure out what to do with styles that include in APP container, dont want to duplicate style in page
+// @TODO: change path to SDK
+
+@import '../../components/icon/base';
+@import '../../styles/themes/amp-components/icon'; // TODO: dont move to SDK
+
 @import '../../components/skip-links/base';
 @import '../../components/skip-links/theme';
 
 @import '../../components/list-tile/base';
-@import '../../components/list-tile/theme';
+@import '../../styles/themes/amp-components/list-tile'; // TODO: dont move to SDK
+
+@import '../../components/nav/base';
+@import '../../styles/themes/amp-components/nav'; // TODO: dont move to SDK
+
+@import '../../components/nav-menu/base';
+@import '../../styles/themes/amp-components/nav-menu'; // TODO: dont move to SDK
+
+@import '../../components/nav-item/base';
+@import '../../styles/themes/amp-components/nav-item'; // TODO: dont move to SDK
+
+// Navigation style
+// ---
+
+@import '../navigation/navigation';

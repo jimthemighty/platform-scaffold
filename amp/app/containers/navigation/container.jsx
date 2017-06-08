@@ -2,10 +2,12 @@ import React from 'react'
 
 import Sheet from '../../components/sheet'
 import Nav from '../../components/nav'
+import NavMenu from '../../components/nav-menu'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 
 
 const root = {title: 'Store', path: '/', children: [
+    {title: 'Sign In', path: '/sign-in/'},
     {title: 'Men\'s Clothing', path: '/mens-clothing/', children: [
         {title: 'Casual Shirts', path: '/mens-clothing/casual-shirts/'},
         {title: 'Coats and Jackets', path: '/mens-clothing/coats-and-jackets/'},
@@ -26,15 +28,19 @@ const Navigation = (props) => {
     const {id} = props
     return (
         <Sheet id={id} className="t-navigation">
-            <Nav root={root} path="/" />
+            <Nav>
+                <h1>Header Bar here</h1>
+                <div dangerouslySetInnerHTML={{__html: `<button on="tap:${id}.toggle">Toggle Nav</button>`}} />
 
-            <NavigationSocialIcons />
+                <NavMenu root={root} path="/" />
 
-            <div className="t-navigation__copyright u-padding-md">
-                <p>© 2017 Mobify Research & Development Inc. All rights reserved.</p>
-            </div>
-
-            <div dangerouslySetInnerHTML={{__html: `<button on="tap:${id}.toggle">Toggle Nav</button>`}} />
+                <div>
+                    <NavigationSocialIcons />
+                    <div className="t-navigation__copyright u-padding-md">
+                        <p>© 2017 Mobify Research & Development Inc. All rights reserved.</p>
+                    </div>
+                </div>
+            </Nav>
         </Sheet>
     )
 }
