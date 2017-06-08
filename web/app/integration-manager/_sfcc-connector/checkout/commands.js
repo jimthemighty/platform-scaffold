@@ -105,11 +105,11 @@ const setCustomerNameAndEmail = (formValues, basket) => () => {
         customer_id: customerID
     }
 
-    return makeApiJsonRequest(
+    return makeApiRequest(
         `/baskets/${basket.basket_id}/customer`,
-        requestBody,
-        {method: 'PUT'}
+        {method: 'PUT', body: JSON.stringify(requestBody)}
     )
+    .then((response) => response.json())
 }
 
 const setShippingAddress = (formValues, basket) => () => (
@@ -131,9 +131,15 @@ const setShippingMethod = (formValues, basket) => () => (
 export const submitShipping = (formValues) => (dispatch) => (
     createBasket()
         .then((basket) => dispatch(setCustomerNameAndEmail(formValues, basket)))
+        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
         .then((basket) => dispatch(setShippingAddress(formValues, basket)))
         .then((basket) => dispatch(setShippingMethod(formValues, basket)))
-        .catch(() => { throw new SubmissionError({_error: 'Unable to save shipping data'}) })
+        .catch((error) => {
+            if (error.message.includes('expired')) {
+                throw error
+            }
+            throw new SubmissionError({_error: 'Unable to save shipping data'})
+        })
         .then((basket) => {
             dispatch(handleCartData(basket))
             return getPaymentURL()
@@ -151,11 +157,11 @@ const addPaymentMethod = (formValues, basket) => (dispatch, getState) => {
         }
     }
 
-    return makeApiJsonRequest(
+    return makeApiRequest(
         `/baskets/${basket.basket_id}/payment_instruments`,
-        requestBody,
-        {method: 'POST'}
+        {method: 'POST', body: JSON.stringify(requestBody)}
     )
+    .then((response) => response.json())
 }
 
 const setBillingAddress = (formValues, basket) => () => {
@@ -202,6 +208,7 @@ const setPaymentMethod = (formValues, order) => () => {
 export const submitPayment = (formValues) => (dispatch) => {
     return createBasket()
         .then((basket) => dispatch(addPaymentMethod(formValues, basket)))
+        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
         .then((basket) => dispatch(setBillingAddress(formValues, basket)))
         .then((basket) => dispatch(createOrder(basket)))
         .then((order) => dispatch(setPaymentMethod(formValues, order)))

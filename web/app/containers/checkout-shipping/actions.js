@@ -128,8 +128,12 @@ export const submitShipping = () => (dispatch, getState) => {
                 pathname: paymentURL
             })
         })
-        .catch(() => {
-            dispatch(addNotification(
+        .catch((error) => {
+            const message = error.message
+            if (message.includes('expired')) {
+                return dispatch(handleCartExpiry())
+            }
+            return dispatch(addNotification(
                 'submitShippingError',
                 `Unable to save shipping information. Please, check input data.`,
                 true
@@ -156,4 +160,10 @@ export const fetchShippingMethods = () => (dispatch, getState) => (
     dispatch(
         fetchShippingMethodsEstimate(getShippingEstimateAddress(getState()))
     )
+    .catch((error) => {
+        if (error.message.includes('expired')) {
+            return dispatch(handleCartExpiry())
+        }
+        throw error
+    })
 )
