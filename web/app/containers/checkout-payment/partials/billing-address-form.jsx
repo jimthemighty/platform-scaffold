@@ -99,7 +99,7 @@ class BillingAddressForm extends React.Component {
                     {(newShippingAddressIsEnabled || !hasShippingAddress) &&
                         <div className="u-padding-md u-padding-top-lg u-padding-bottom-lg u-border-light-top">
                             <FieldRow>
-                                <ReduxForm.Field component={Field} name="name" label="Full name">
+                                <ReduxForm.Field component={Field} name="name" label="First & Last name">
                                     <input type="text" noValidate />
                                 </ReduxForm.Field>
                             </FieldRow>

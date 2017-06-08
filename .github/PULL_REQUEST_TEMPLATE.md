@@ -6,6 +6,9 @@
 ## Changes
 - (change1)
 
+## Todos
+- [ ] (if applicable) analytics events instrumented to measure impact of change
+
 ## How to test-drive this PR
 - (necessary config changes)
 - Run `npm run dev`
