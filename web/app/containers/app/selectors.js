@@ -15,7 +15,6 @@ export const getCurrentPathKey = createSelector(getCurrentUrl, urlToPathKey)
 
 // This will need to become more complicated when we handle more types of errors,
 // but will do for now
-export const getFetchError = createGetSelector(getApp, 'fetchError')
 export const getFetchedPaths = createGetSelector(getApp, FETCHED_PATHS)
 export const hasFetchedCurrentPath = createHasSelector(getFetchedPaths, getCurrentPathKey)
 
