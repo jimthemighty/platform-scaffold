@@ -7,7 +7,9 @@ import {populateLocationsData} from '../checkout/utils'
 import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, checkAndHandleCartExpiry} from './utils'
 
 export const getCart = () => (dispatch) =>
-    requestCartData().then((basket) => dispatch(handleCartData(basket)))
+    requestCartData()
+        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
+        .then((basket) => dispatch(handleCartData(basket)))
 
 
 const addToCartRequest = (productId, quantity, basketId) => {
