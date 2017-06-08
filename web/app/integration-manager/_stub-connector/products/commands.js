@@ -61,6 +61,6 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 }
 
 export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => {
-    console.log('[Stub Connector] Called getProductVariantData stub')
+    console.log('[Stub Connector] Called getProductVariantData stub with arguments', variationSelections, variants, categoryIds)
     return Promise.resolve()
 }
