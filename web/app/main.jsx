@@ -26,8 +26,8 @@ import Stylesheet from './stylesheet.scss' // eslint-disable-line no-unused-vars
 
 
 // DO NOT USE! Merlins Connector is an example connector that is for demo only
-// import initConnector from './init-merlins-connector'
-import initConnector from './init-sfcc-connector'
+import initConnector from './init-merlins-connector'
+// import initConnector from './init-sfcc-connector'
 
 initConnector()
 
