@@ -6,7 +6,7 @@ if git rev-parse ; then
     # Get the current branch on CircleCI or local
     CURRENT_BRANCH=${CIRCLE_BRANCH:-$(git branch | grep "*" | awk '{ print $2 }')}
     # If current branch is master, we eliminate preview because we're testing production'
-    if [ "$CURRENT_BRANCH" == "test-on-production" ]; then
+    if [ "$CURRENT_BRANCH" == "master" ]; then
       echo "On production branch, test server not needed."
       export TEST_PROFILE=production
     fi
