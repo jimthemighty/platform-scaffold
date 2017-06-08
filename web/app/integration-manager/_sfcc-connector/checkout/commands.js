@@ -84,6 +84,7 @@ export const initCheckoutConfirmationPage = () => () => Promise.resolve()
 export const initCheckoutPaymentPage = () => (dispatch) => {
     dispatch(populateLocationsData())
     return requestCartData()
+        .then((basket) => dispatch(checkAndHandleCartExpiry(basket)))
         .then((basket) => {
             const shippingMethod = basket.shipments[0].shipping_method
             const addressData = parseShippingAddressFromBasket(basket)

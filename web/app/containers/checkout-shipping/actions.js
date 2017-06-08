@@ -34,7 +34,6 @@ const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
 export const initShippingPage = () => (dispatch) => (
     dispatch(initCheckoutShippingPage())
         .catch((error) => {
-            debugger
             const message = error.message
             if (message.includes('expired')) {
                 return dispatch(handleCartExpiry())
