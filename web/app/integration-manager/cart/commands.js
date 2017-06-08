@@ -79,7 +79,7 @@ export const removeFromCart = (ItemId) => (dispatch, getState) => {
  * Removes an item from the cart
  * @function
  * @param itemID {string} The cart item ID to update
- * @param newItemID {string} The cart item ID to update
+ * @param productId {string} The new product ID to replace cart item
  */
 export const updateCartItem = (itemId, productId, quantity) => (dispatch, getState) => {
     return dispatch(connector.updateCartItem(itemId, productId, quantity)).then((cart) => {
