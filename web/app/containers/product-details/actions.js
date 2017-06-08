@@ -7,7 +7,7 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
-import {getItemQuantity, getCartItemFromConfigureURL} from './selectors'
+import {getItemQuantity} from './selectors'
 import {getCurrentPathKey, getCartURL} from '../app/selectors'
 import {getSelectedProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from '../../store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
@@ -71,11 +71,9 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     // isInCheckout potentially should be in redux store ??
     // if a user is editing a product that should be available in the state
     if (isInCheckout) {
-        const {id} = getCartItemFromConfigureURL(getStore())
+        const itemId = window.location.pathname.match(/(?:\/id\/)(.*?)(?:\/product_id\/)/)[1]
 
-        // not very DRY from the addToCart dispatch below,
-        // need to refactor to re-use the thens & catches
-        return dispatch(updateCartItem(id, productId, qty))
+        return dispatch(updateCartItem(itemId, productId, qty))
             .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
             .catch((error) => {
                 console.error('Error adding to cart', error)
