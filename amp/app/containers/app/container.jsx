@@ -25,11 +25,12 @@ const App = ({children}) => {
     const navId = 'main-nav'
 
     return (
-        <body id="root" className="t-app">
+        <body id="app" className="t-app">
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
             <Navigation id={navId} />
 
+            {/* TODO REMOVE TOGGLE NAV WHEN ADD HEADER */}
             <div dangerouslySetInnerHTML={{__html: `<button on="tap:${navId}.toggle">Toggle Nav</button>`}} />
 
             <SkipLinks items={skipLinksItems} />
