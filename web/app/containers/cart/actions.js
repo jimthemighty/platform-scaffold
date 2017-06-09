@@ -42,18 +42,14 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
     dispatch(setTaxRequestPending(true))
     dispatch(fetchShippingMethodsEstimate(address))
         .then(() => dispatch(fetchTaxEstimate(address, shippingMethod.id)))
-        .catch((error) => {
-            const message = error.message
-
-            if (message.includes('expired')) {
-                return dispatch(cartExpired())
-            }
-            return dispatch(addNotification(
+        .catch((error) => dispatch(handleCartExpiryError(error)))
+        .catch(() => (
+            dispatch(addNotification(
                 'taxError',
                 'Unable to calculate tax and/or shipping.',
                 true
             ))
-        })
+        ))
         .then(() => {
             dispatch(closeModal(CART_ESTIMATE_SHIPPING_MODAL))
             dispatch(setTaxRequestPending(false))
