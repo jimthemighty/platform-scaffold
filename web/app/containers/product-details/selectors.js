@@ -22,13 +22,13 @@ export const getProductDetails = createSelector(getUi, ({productDetails}) => pro
 
 export const getSelectedProductDetails = createGetSelector(
     getProductDetails,
-    appSelectors.getCurrentProductID,
+    appSelectors.getIdFromPathKey,
     Immutable.Map()
 )
 
 export const getProductDetailsContentsLoaded = createHasSelector(
     getProductDetails,
-    appSelectors.getCurrentProductID
+    appSelectors.getIdFromPathKey
 )
 
 export const getAddToCartInProgress = createGetSelector(getProductDetails, 'addToCartInProgress', false)
