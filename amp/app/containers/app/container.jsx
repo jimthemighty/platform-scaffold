@@ -8,10 +8,11 @@ import Sheet from '../../components/sheet'
 
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
+import {DATA_INIT_FUNCTION} from '../../data-integration/constants'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 const resolver = (({dispatch, getState}) => {
-    return dispatch(getState().ui.app.get('dataInitFunction')(getState().ui.app.get(CURRENT_URL)))
+    return dispatch(getState().ui.app.get(DATA_INIT_FUNCTION)(getState().ui.app.get(CURRENT_URL)))
 })
 
 class App extends React.Component {
