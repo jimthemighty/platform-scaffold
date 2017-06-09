@@ -122,9 +122,7 @@ export const submitPromoCode = ({promo}) => (dispatch) => {
                 true
             ))
         })
-        .then(() => {
-            dispatch(setPromoSubmitting(false))
-        })
+        .then(() => dispatch(setPromoSubmitting(false)))
 }
 
 export const removePromoCode = () => (dispatch, getState) => {
