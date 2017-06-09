@@ -14,7 +14,8 @@ export const getCurrentUrl = createGetSelector(getApp, CURRENT_URL)
 export const getCurrentPathKey = createSelector(getCurrentUrl, urlToPathKey)
 
 export const getCurrentProductID = createSelector(getCurrentPathKey, (pathKey) => {
-    return pathKey ? pathKey.match(/(?:2017refresh\/)(.*?)(?:\.html)/)[1] : ''
+    const pathKeyMatch = pathKey.match(/(?:2017refresh|product_id\/)(.*?)(?:\/|.html\/)/)
+    return pathKey ? pathKeyMatch[1] : ''
 })
 
 // This will need to become more complicated when we handle more types of errors,
