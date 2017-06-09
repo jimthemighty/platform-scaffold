@@ -12,8 +12,9 @@ const containerClass = 't-product-list'
 
 const ProductList = ({
     numItems,
-    /* products*/
+    products
 }) => (
+
     <div className={containerClass}>
         <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
         <AmpLightbox id="my-lightbox">
@@ -22,6 +23,15 @@ const ProductList = ({
         <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
 
         <h1>Number of items: {numItems}</h1>
+        {
+            products.map((prod) =>
+                <div key={prod.id}>
+                    <h2>{prod.title}</h2>
+                    <AmpImage src={prod.thumbnail.src} width="240" height="300" layout="fixed" />
+                    <p>{prod.price}</p>
+                </div>
+            )
+        }
     </div>
 )
 
