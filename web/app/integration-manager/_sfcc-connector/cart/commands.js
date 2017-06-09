@@ -42,12 +42,32 @@ export const removeFromCart = (itemId) => (dispatch) => (
         .then((basket) => dispatch(handleCartData(basket)))
 )
 
-export const updateItemQuantity = (itemId, quantity) => (dispatch) => (
-    createBasket()
-        .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {quantity}, {method: 'PATCH'}))
-        .then((basket) => dispatch(updateExpiredCart(basket)))
-        .then((basket) => dispatch(handleCartData(basket)))
-)
+
+export const updateCartItem = (itemId, quantity, productId) => (dispatch) => {
+    const requestBody = {
+        quantity
+    }
+
+    if (productId) {
+        requestBody.product_id = productId
+    }
+
+    return createBasket()
+            .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, requestBody, {method: 'PATCH'}))
+            .then((basket) => {
+                if (isCartExpired(basket)) {
+                    // the basket has expired create a new one and try adding to cart again
+                    return dispatch(createNewBasket())
+                        .then(() => addToCart(productId, quantity))
+                }
+                return basket
+            })
+            .catch(() => { throw new Error('Unable to update item') })
+            .then((basket) => dispatch(handleCartData(basket)))
+}
+
+
+export const updateItemQuantity = (itemId, quantity) => (dispatch) => dispatch(updateCartItem(itemId, quantity))
 
 export const initCartPage = () => (dispatch) => Promise.resolve(dispatch(populateLocationsData()))
 
