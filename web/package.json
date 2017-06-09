@@ -117,6 +117,7 @@
     "clean:svgs": "svgo --enable='removeUselessStrokeAndFill' -f ./app/static/svg/sprite-source",
     "clean:images": "imagemin-power -v --recursive --plugin=pngquant \"./app/static/img/**/*\" --out-dir=.",
     "messaging:certificate": "sdk-messaging certificate",
+    "messaging:testmessage": "sdk-messaging testmessage",
     "messaging:upload": "sdk-messaging upload",
     "copyright:lint": "copyright 'app/!(vendor|static)/!(docs)/**/*.js?(x)' 'worker/**/*.js?(x)' 'tests/**/*.js?(x)' 'webpack/**/*.js?(x)' 'service-worker-loader.js'",
     "copyright:fix": "copyright --fix --update 'app/!(vendor|static)/!(docs)/**/*.js?(x)' 'worker/**/*.js?(x)' 'tests/**/*.js?(x)' 'webpack/**/*.js?(x)' 'service-worker-loader.js'",
