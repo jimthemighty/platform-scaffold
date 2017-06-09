@@ -5,87 +5,85 @@ import Icon from '../icon'
 
 /**
  * A styleable, accessible `<button>` component for [Mobify’s Progressive Web SDK](#).
- */
-class Button extends React.Component {
-    render() {
-        const {
-            // Values
-            href,
-            icon,
-            iconSize,
-            iconClassName,
-            innerClassName,
-            showIconText,
-            text,
-            title,
-            type,
+*/
+const Button = (props) => {
+    const {
+        // Values
+        href,
+        icon,
+        iconSize,
+        iconClassName,
+        innerClassName,
+        showIconText,
+        text,
+        title,
+        type,
 
-            // Attributes
-            id,
-            className,
-            disabled,
-            name,
-            value,
-            role,
-            openInNewTab,
-            on
-        } = this.props
+        // Attributes
+        id,
+        className,
+        disabled,
+        name,
+        value,
+        role,
+        openInNewTab,
+        on
+    } = props
 
-        const classes = classNames('amp-button', {
-            'amp--anchor c--anchor': !!href,
-            'amp--icon-only c--icon-only': !!icon && !this.props.children
-        }, className)
-        const innerClass = classNames('amp-button__inner', innerClassName)
-        const iconClass = classNames('amp-button__icon', iconClassName, {
-            'amp--has-siblings c--has-siblings': this.props.children || (title && showIconText)
-        })
-        const textClass = classNames('amp-button__text', {
-            'u-visually-hidden': !showIconText
-        })
-        const attrs = {
-            href, id, on, disabled, name, value, role,
-            class: classes, is: true
-        }
+    const classes = classNames('amp-button', {
+        'amp--anchor c--anchor': !!href,
+        'amp--icon-only c--icon-only': !!icon && !props.children
+    }, className)
+    const innerClass = classNames('amp-button__inner', innerClassName)
+    const iconClass = classNames('amp-button__icon', iconClassName, {
+        'amp--has-siblings c--has-siblings': props.children || (title && showIconText)
+    })
+    const textClass = classNames('amp-button__text', {
+        'u-visually-hidden': !showIconText
+    })
+    const attrs = {
+        href, id, on, disabled, name, value, role,
+        className: classes
+    }
 
-        let children
+    let children
 
-        if (icon) {
-            children = [
-                <Icon className={iconClass} size={iconSize} name={icon} key="autoicon" />,
-                title && <span className={textClass} key="autotitle">{title}</span>
-            ]
+    if (icon) {
+        children = [
+            <Icon className={iconClass} size={iconSize} name={icon} key="autoicon" />,
+            title && <span className={textClass} key="autotitle">{title}</span>
+        ]
 
-            if (typeof this.props.children === 'string') {
-                children.push(this.props.children)
-            } else {
-                children.push(
-                    ...(this.props.children || [])
-                )
-            }
+        if (typeof props.children === 'string') {
+            children.push(props.children)
         } else {
-            children = text || this.props.children
-        }
-
-        // Add all aria attributes
-        Object.keys(this.props).forEach((key) => {
-            if (/^aria-/.test(key)) {
-                attrs[key] = this.props[key]
-            }
-        })
-
-        if (href) {
-            return (
-                <Link {...attrs} openInNewTab={openInNewTab}>
-                    <div className={innerClass}>{children}</div>
-                </Link>
-            )
-        } else {
-            return (
-                <button {...attrs} type={type}>
-                    <div className={innerClass}>{children}</div>
-                </button>
+            children.push(
+                ...(props.children || [])
             )
         }
+    } else {
+        children = text || props.children
+    }
+
+    // Add all aria attributes
+    Object.keys(props).forEach((key) => {
+        if (/^aria-/.test(key)) {
+            attrs[key] = props[key]
+        }
+    })
+
+    if (href) {
+        return (
+            <Link {...attrs} openInNewTab={openInNewTab}>
+                <div className={innerClass}>{children}</div>
+            </Link>
+        )
+    } else {
+        return (
+            <button is {...attrs} type={type}>
+                <div className={innerClass}>{children}</div>
+            </button>
+        )
     }
 }
 
