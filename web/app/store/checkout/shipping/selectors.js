@@ -6,7 +6,7 @@ import {createSelector} from 'reselect'
 import Immutable from 'immutable'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getCheckout} from '../../selectors'
-import {getShippingMethods} from '../selectors'
+import {getShippingMethods, getEmailAddress} from '../selectors'
 import {getShippingSavedAddressID} from '../../form/selectors'
 
 export const getShipping = createGetSelector(getCheckout, 'shipping', Immutable.Map())
@@ -28,11 +28,13 @@ export const getSelectedShippingMethodValue = createGetSelector(getCheckout, 'se
 
 export const getInitialShippingAddress = createSelector(
     getCheckout,
+    getEmailAddress,
     getShippingAddress,
     getSelectedSavedAddressId,
     getSelectedShippingMethodValue,
-    (checkout, address, savedAddressId, shippingMethodId) => {
+    (checkout, email, address, savedAddressId, shippingMethodId) => {
         address = address.set('shippingMethodId', shippingMethodId)
+                    .set('username', email)
         if (savedAddressId) {
             return address.set('savedAddress', `${savedAddressId}`)
         }
@@ -80,5 +82,6 @@ export const getCountryId = createGetSelector(getShippingAddress, 'countryId')
 
 export const getCity = createGetSelector(getShippingAddress, 'city')
 
-export const getShippingAddressCustomContent = createGetSelector(getShippingAddress, 'custom')
+export const getIsInitialized = createGetSelector(getShippingAddress, 'isInitialized')
 
+export const getShippingAddressCustomContent = createGetSelector(getShippingAddress, 'custom')

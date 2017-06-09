@@ -9,15 +9,15 @@ import {getCategoryTitle, getCategoryParentTitle, getCategoryParentHref} from '.
 import {getProductListContentsLoaded} from '../selectors'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 
-import Link from 'progressive-web-sdk/dist/components/link'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import Image from 'progressive-web-sdk/dist/components/image'
+import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 
 const ProductListHeader = ({title, contentsLoaded, parentName, parentHref}) => (
     <div className="u-flexbox u-align-bottom">
         <div className="u-flex u-padding-top-lg u-padding-bottom-lg u-padding-start-md">
             <div className="t-product-list__breadcrumb">
-                <Link href={parentHref} className="u-text-size-small">{parentName}</Link>
+                <Breadcrumbs items={[{text: parentName, href: parentHref}]} />
             </div>
             <div className="u-margin-top-md">
                 {contentsLoaded ?
