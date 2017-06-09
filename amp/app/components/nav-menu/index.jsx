@@ -40,16 +40,18 @@ const NavMenu = ({root, path, itemFactory, className}) => {
 
     return (
         <div className={classes}>
-            {children.map((child) => {
-                const props = {
-                    key: child.path,
-                    href: child.path,
-                    title: child.title,
-                    selected: child.path === selected.path
-                }
-                const type = child.type
-                return itemFactory(type, props)
-            })}
+            <div className="amp-nav-menu__panel">
+                {children.map((child) => {
+                    const props = {
+                        key: child.path,
+                        href: child.path,
+                        title: child.title,
+                        selected: child.path === selected.path
+                    }
+                    const type = child.type
+                    return itemFactory(type, props)
+                })}
+            </div>
         </div>
     )
 }
