@@ -99,14 +99,24 @@ export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
     }
 }
 
-
-const processCheckoutData = ($response) => (dispatch) => {
+const processShippingData = ($response) => (dispatch, getState) => {
     dispatch(receiveEntityID(parseCheckoutEntityID($response)))
     const magentoFieldData = extractMagentoShippingStepData($response)
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+    const isInitialized = shippingSelectors.getIsInitialized(getState())
+    if (!isInitialized) {
+        dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+    }
+}
+
+const processPaymentData = ($response) => (dispatch) => {
+    dispatch(receiveEntityID(parseCheckoutEntityID($response)))
+    const magentoFieldData = extractMagentoShippingStepData($response)
+          .getIn(['children', 'shipping-address-fieldset', 'children'])
+
+    dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
 }
 
 const shippingDataSelector = createPropsSelector({
@@ -116,7 +126,7 @@ const shippingDataSelector = createPropsSelector({
 
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
-        .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
+        .then(([$, $response]) => dispatch(processShippingData($response)))  // eslint-disable-line no-unused-vars
         .then(() => {
             const {
                 isLoggedIn,
@@ -206,7 +216,7 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
             const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
             dispatch(receiveBillingSameAsShipping(true))
             dispatch(receiveBillingAddress(addressData))
-            return dispatch(processCheckoutData($response))
+            return dispatch(processPaymentData($response))
         })
 }
 
@@ -262,6 +272,8 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         .then((responseJSON) => {
             // Looks like when it is successful, the responseJSON is a number
             if (/^\d+$/.test(responseJSON)) {
+                // reset isInitialized flag in shippingAddress
+                dispatch(receiveShippingAddress({isInitialized: false}))
                 return '/checkout/onepage/success/'
             } else {
                 throw new Error(responseJSON.message)
