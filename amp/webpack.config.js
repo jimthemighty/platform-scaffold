@@ -18,10 +18,7 @@ module.exports = {
         ajv: 'commonjs ajv'
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json'],
-        alias: {
-            jquery: path.join(__dirname, '../web/app/static/js/jquery.min.js')
-        }
+        extensions: ['.js', '.jsx', '.json']
     },
     module: {
         rules: [
@@ -36,7 +33,7 @@ module.exports = {
                 use: [
                     {loader: "imports-loader?window=>{location: {href: ''}},\
                                              window.Progressive=>{},\
-                                             window.$=>(...args) => { return global.window.jQuery(...args) },\
+                                             window.$=>(...args) => { return global.window.jQuery(...args) }; window.$.makeArray=(...args) => { return global.window.jQuery.makeArray(...args)},\
                                              document.createElement=>function(params){return global.window.document.createElement(params);},\
                                              document.body.appendChild=>function(params){return global.window.document.body.appendChild(params);},\
                                              window.Capture=>{},\
