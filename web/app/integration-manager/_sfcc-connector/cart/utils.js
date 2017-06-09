@@ -152,7 +152,9 @@ export const isCartExpired = ({fault}) => {
     return false
 }
 
-export const checkAndHandleCartExpiry = (basket) => (dispatch) => {
+// Check if the users cart has expired, if it has create a new one and throw an error
+// otherwise return the cart object
+export const updateExpiredCart = (basket) => (dispatch) => {
     if (isCartExpired(basket)) {
         return dispatch(createNewBasket())
             .then((basket) => dispatch(handleCartData(basket)))

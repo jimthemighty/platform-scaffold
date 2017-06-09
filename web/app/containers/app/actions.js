@@ -87,7 +87,7 @@ export const signOut = () => (dispatch) => (
     })
 )
 
-export const handleCartExpiry = () => (dispatch) => {
+export const cartExpired = () => (dispatch) => {
     // navigate to homepage, show notification
     browserHistory.push({
         pathname: '/'
@@ -97,4 +97,11 @@ export const handleCartExpiry = () => (dispatch) => {
         'Your cart has expired.',
         true
     ))
+}
+
+export const handleCartExpiryError = (error) => (dispatch) => {
+    if (error.message.includes('expired')) {
+        return dispatch(cartExpired())
+    }
+    throw error
 }
