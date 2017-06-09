@@ -42,14 +42,26 @@ export const removeFromCart = (itemId) => (dispatch) => (
         .then((basket) => dispatch(handleCartData(basket)))
 )
 
-/* eslint-disable camelcase */
-export const updateCartItem = (itemId, product_id, quantity) => (dispatch) => (
-    createBasket()
-        .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {product_id, quantity}, {method: 'PATCH'}))
-        .catch(() => { throw new Error('Unable to update item') })
-        .then((basket) => dispatch(handleCartData(basket)))
-)
-/* eslint-enable camelcase */
+
+export const updateCartItem = (itemId, productId, quantity) => (dispatch) => {
+    const requestBody = {
+        product_id: productId,
+        quantity
+    }
+    return createBasket()
+            .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, requestBody, {method: 'PATCH'}))
+            .then((basket) => {
+                if (isCartExpired(basket)) {
+                    // the basket has expired create a new one and try adding to cart again
+                    return dispatch(createNewBasket())
+                        .then(() => addToCart(productId, quantity))
+                }
+                return basket
+            })
+            .catch(() => { throw new Error('Unable to update item') })
+            .then((basket) => dispatch(handleCartData(basket)))
+}
+
 
 export const updateItemQuantity = (itemId, quantity) => (dispatch) => (
     createBasket()
