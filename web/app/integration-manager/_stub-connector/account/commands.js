@@ -41,6 +41,9 @@ export const logout = () => (dispatch) => {
 
 export const registerUser = (firstname, lastname, email, password) => (dispatch) => {
     console.log('[Stub Connector] Called registerUser stub with parameters:', firstname, lastname, email, password)
+
+    // This promise should resolve to the URL of the account page
+    // to redirect the user to.
     return Promise.resolve()
 }
 
