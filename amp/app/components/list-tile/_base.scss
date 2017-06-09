@@ -8,6 +8,8 @@
 .amp-list-tile {
     display: flex;
     align-items: center;
+
+    min-height: $tap-size;
 }
 
 
