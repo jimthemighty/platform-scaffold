@@ -206,18 +206,14 @@ export const makeApiJsonRequest = (path, body, options) => {
         ...options,
         body: JSON.stringify(body)
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(response.statusText)
-            }
-            return response.json()
-        })
-        .then((responseJSON) => {
-            if (responseJSON.fault) {
-                throw new Error(responseJSON.fault.message)
-            }
-            return responseJSON
-        })
+        .then((response) => response.json())
+}
+
+export const checkForResponseFault = (responseJSON) => {
+    if (responseJSON.fault) {
+        throw new Error(responseJSON.fault.message)
+    }
+    return responseJSON
 }
 
 export const makeUnAuthenticatedApiRequest = (path, options) => {
