@@ -9,13 +9,8 @@ import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
-import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
-
-import thunk from 'redux-thunk'
-import {fromJS} from 'immutable'
-import captureDisable from './capturejs-disable'
 
 import Analytics from './components/analytics'
 import * as home from './containers/home/container'
@@ -26,25 +21,17 @@ import App from './containers/app/container'
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
 
+import {createConnectedStore} from './data-integration/connectedStore'
+import {PAGE_TITLE} from './data-integration/constants'
+
+import {initHomePage} from '../../web/app/integration-manager/home/commands'
+import {initProductDetailsPage} from '../../web/app/integration-manager/products/commands'
+import {initProductListPage} from '../../web/app/integration-manager/categories/commands'
 
 const jsdom = Promise.promisifyAll(_jsdom)
 
 import {waitForResolves} from 'react-redux-resolve'
 
-// DO NOT USE! Merlins Connector is an example connector that is for demo only
-import {Connector} from '../../web/app/integration-manager/_merlins-connector'
-// import {Connector} from './integration-manager/_sfcc-connector'
-
-
-import {registerConnector} from '../../web/app/integration-manager'
-import {reducer as imReducer} from '../../web/app/integration-manager/reducer'
-import {CURRENT_URL} from '../../web/app/containers/app/constants'
-import {initHomePage} from '../../web/app/integration-manager/home/commands'
-import {initProductDetailsPage} from '../../web/app/integration-manager/products/commands'
-import {initProductListPage} from '../../web/app/integration-manager/categories/commands'
-
-const PAGE_TITLE = 'pageTitle'
-const DATA_INIT_FUNCTION = 'dataInitFunction'
 
 export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
 
@@ -54,60 +41,8 @@ const getFullUrl = (req) => {
 
 const initializeStore = (req, dataInitFunction) => {
     return jsdomEnv().then((window) => {
-        // TODO: Convert to imports, make sure that works
-        // TODO: Move all of this out to another file
-        const appReducer = require('../../web/app/containers/app/reducer').default
-        const footerReducer = require('../../web/app/containers/footer/reducer').default
-        const headerReducer = require('../../web/app/containers/header/reducer').default
-        const homeReducer = require('../../web/app/containers/home/reducer').default
+        const createdStore = createConnectedStore(window, getFullUrl(req), dataInitFunction)
 
-        const navigationReducer = require('../../web/app/containers/navigation/reducer').default
-        const productDetailsReducer = require('../../web/app/containers/product-details/reducer').default
-        const productListReducer = require('../../web/app/containers/product-list/reducer').default
-
-        const categoryReducer = require('../../web/app/store/categories/reducer').default
-        const productReducer = require('../../web/app/store/products/reducer').default
-
-        // This is okay to pass to both SFCC and Merlin's connectors,
-        // as Merlin's doesn't need a configuration object
-        registerConnector(Connector({
-            siteID: '2017refresh',
-            clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93'
-        }))
-
-        global.window = window
-        global.Capture = {disable: (...args) => captureDisable(...args)}
-
-        const uiReducer = combineReducers({
-            app: appReducer,
-            footer: footerReducer,
-            header: headerReducer,
-            home: homeReducer,
-            navigation: navigationReducer,
-            productDetails: productDetailsReducer,
-            productList: productListReducer
-        })
-
-        const reducer = combineReducers({
-            categories: categoryReducer,
-            ui: uiReducer,
-            products: productReducer,
-            integrationManager: imReducer,
-        })
-
-        const middlewares = [
-            thunk,
-        ]
-
-        const noop = (f) => f
-
-        const initialState = ({ui: {app: fromJS({
-            [CURRENT_URL]: getFullUrl(req),
-            [PAGE_TITLE]: 'Merlins AMP', // Fetch the page again and get title?
-            [DATA_INIT_FUNCTION]: dataInitFunction
-        })}})
-
-        const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
         const renderProps = {
             location: {},
             components: [App],
