@@ -15,49 +15,50 @@ const resolver = (({dispatch, getState}) => {
     return dispatch(getState().ui.app.get(DATA_INIT_FUNCTION)(getState().ui.app.get(CURRENT_URL)))
 })
 
-const button = '<button on="tap:menu-sheet.toggle">Button</button>'
-
 const App = ({
     children
-}) => (
-    <body
-        id="root"
-        className="t-app"
-    >
+}) => {
+    const button = '<button on="tap:menu-sheet.toggle">Button</button>'
+    return (
+        <body
+            id="root"
+            className="t-app"
+        >
 
-        <Sheet id="menu-sheet" headerContent={<div>Header</div>} footerContent={<div>Footer</div>}>
-            <ul>
-                <li><a href="/todo/">Home</a></li>
-                <li><a href="/todo/">Sign in</a></li>
-                <li><a href="/todo/">Potions</a></li>
-                <li><a href="/todo/">Spellbooks</a></li>
-                <li><a href="/todo/">Ingredients</a></li>
-                <li><a href="/todo/">Supplies</a></li>
-                <li><a href="/todo/">Charms</a></li>
-                <li><a href="/todo/">New Arrivals</a></li>
-                <DangerousHTML html={button}>
-                    {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-                </DangerousHTML>
-            </ul>
-        </Sheet>
+            <Sheet id="menu-sheet" headerContent={<div>Header</div>} footerContent={<div>Footer</div>}>
+                <ul>
+                    <li><a href="/todo/">Home</a></li>
+                    <li><a href="/todo/">Sign in</a></li>
+                    <li><a href="/todo/">Potions</a></li>
+                    <li><a href="/todo/">Spellbooks</a></li>
+                    <li><a href="/todo/">Ingredients</a></li>
+                    <li><a href="/todo/">Supplies</a></li>
+                    <li><a href="/todo/">Charms</a></li>
+                    <li><a href="/todo/">New Arrivals</a></li>
+                    <DangerousHTML html={button}>
+                        {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+                    </DangerousHTML>
+                </ul>
+            </Sheet>
 
-        <DangerousHTML html={button}>
-            {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
-        </DangerousHTML>
+            <DangerousHTML html={button}>
+                {(htmlObj) => <div dangerouslySetInnerHTML={htmlObj} />}
+            </DangerousHTML>
 
-        <DangerousHTML html={sprite}>
-            {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
-        </DangerousHTML>
+            <DangerousHTML html={sprite}>
+                {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
+            </DangerousHTML>
 
-        <Icon name="user" title="User" />
+            <Icon name="user" title="User" />
 
-        <Header />
+            <Header />
 
-        {children}
+            {children}
 
-        <Footer />
-    </body>
-)
+            <Footer />
+        </body>
+    )
+}
 
 App.resolves = [resolver]
 
