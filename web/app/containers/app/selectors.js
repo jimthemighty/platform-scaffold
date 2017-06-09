@@ -14,7 +14,7 @@ export const getCurrentUrl = createGetSelector(getApp, CURRENT_URL)
 export const getCurrentPathKey = createSelector(getCurrentUrl, urlToPathKey)
 
 export const getCurrentProductID = createSelector(getCurrentPathKey, (pathKey) => {
-    const pathKeyMatch = pathKey.match(/(?:2017refresh|product_id\/)(.*?)(?:\/|.html\/)/)
+    const pathKeyMatch = pathKey.match(/(?:2017refresh|product_id\/)(.*?)(?:\/|\.html\/)/)
     return pathKey ? pathKeyMatch[1] : ''
 })
 
