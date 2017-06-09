@@ -2,9 +2,9 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {makeApiRequest, makeApiJsonRequest, getAuthTokenPayload} from '../utils'
+import {makeApiRequest, makeApiJsonRequest, getAuthTokenPayload, checkForResponseFault} from '../utils'
 import {populateLocationsData} from '../checkout/utils'
-import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, updateExpiredCart} from './utils'
+import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, updateExpiredCart, } from './utils'
 
 export const getCart = () => (dispatch) =>
     requestCartData().then((basket) => dispatch(handleCartData(basket)))
@@ -15,9 +15,7 @@ const addToCartRequest = (productId, quantity, basketId) => {
         product_id: productId,
         quantity
     }]
-    // Use makeApiRequest here instead of makeAPIJsonRequest so we can deal with errors ourselves
-    return makeApiRequest(`/baskets/${basketId}/items`, {method: 'POST', body: JSON.stringify(requestBody)})
-        .then((response) => response.json())
+    return makeApiJsonRequest(`/baskets/${basketId}/items`, requestBody, {method: 'POST'})
 }
 
 export const addToCart = (productId, quantity) => (dispatch) => (
@@ -46,8 +44,7 @@ export const removeFromCart = (itemId) => (dispatch) => (
 
 export const updateItemQuantity = (itemId, quantity) => (dispatch) => (
     createBasket()
-        .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {method: 'PATCH', body: JSON.stringify({quantity})}))
-        .then((response) => response.json())
+        .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {quantity}, {method: 'PATCH'}))
         .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => dispatch(handleCartData(basket)))
 )
@@ -75,6 +72,7 @@ export const addToWishlist = (productId) => (dispatch) => {
                 NEW_WISHILIST_PAYLOAD,
                 {method: 'POST'}
             )
+            .then(checkForResponseFault)
         })
         .then(({id}) => {
             const requestBody = {
@@ -88,6 +86,7 @@ export const addToWishlist = (productId) => (dispatch) => {
                 requestBody,
                 {method: 'POST'}
             )
+            .then(checkForResponseFault)
         })
         .catch(() => { throw new Error('Unable to add item to wishlist.') })
 }

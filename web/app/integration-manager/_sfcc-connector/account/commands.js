@@ -6,7 +6,7 @@ import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {setRegisterLoaded, setSigninLoaded} from '../../account/results'
 import {setLoggedIn} from '../../results'
 import {createOrderAddressObject} from '../checkout/utils'
-import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
+import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 
 import {getHomeURL, getApiEndPoint, getRequestHeaders} from '../config'
@@ -81,6 +81,7 @@ export const login = (username, password) => (dispatch) => {
                 basketContents.product_items,
                 {method: 'POST'}
             )
+            .then(checkForResponseFault)
         })
         .then((basket) => dispatch(handleCartData(basket)))
         .then(() => {
@@ -150,6 +151,7 @@ const addAddress = (formValues, addressName) => {
         address_id: addressName
     }
     return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
+        .then(checkForResponseFault)
         .catch(() => { throw Error('Unable to save address') })
 }
 

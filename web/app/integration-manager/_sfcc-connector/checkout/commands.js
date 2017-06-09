@@ -4,7 +4,7 @@
 
 import {SubmissionError} from 'redux-form'
 import {createBasket, handleCartData, requestCartData, createNewBasket, updateExpiredCart} from '../cart/utils'
-import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
+import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload, checkForResponseFault} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
@@ -105,11 +105,11 @@ const setCustomerNameAndEmail = (formValues, basket) => () => {
         customer_id: customerID
     }
 
-    return makeApiRequest(
+    return makeApiJsonRequest(
         `/baskets/${basket.basket_id}/customer`,
-        {method: 'PUT', body: JSON.stringify(requestBody)}
+        requestBody,
+        {method: 'PUT'}
     )
-    .then((response) => response.json())
 }
 
 const setShippingAddress = (formValues, basket) => () => (
@@ -118,6 +118,7 @@ const setShippingAddress = (formValues, basket) => () => (
         createOrderAddressObject(formValues),
         {method: 'PUT'}
     )
+    .then(checkForResponseFault)
 )
 
 const setShippingMethod = (formValues, basket) => () => (
@@ -126,6 +127,7 @@ const setShippingMethod = (formValues, basket) => () => (
         {id: formValues.shippingMethodId},
         {method: 'PUT'}
     )
+    .then(checkForResponseFault)
 )
 
 export const submitShipping = (formValues) => (dispatch) => (
@@ -157,11 +159,11 @@ const addPaymentMethod = (formValues, basket) => (dispatch, getState) => {
         }
     }
 
-    return makeApiRequest(
+    return makeApiJsonRequest(
         `/baskets/${basket.basket_id}/payment_instruments`,
-        {method: 'POST', body: JSON.stringify(requestBody)}
+        requestBody,
+        {method: 'POST'}
     )
-    .then((response) => response.json())
 }
 
 const setBillingAddress = (formValues, basket) => () => {
@@ -176,6 +178,7 @@ const setBillingAddress = (formValues, basket) => () => {
         createOrderAddressObject(formValues),
         {method: 'PUT'}
     )
+    .then(checkForResponseFault)
 }
 
 const createOrder = (basket) => () => makeApiJsonRequest('/orders', basket, {method: 'POST'})
