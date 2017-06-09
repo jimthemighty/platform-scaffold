@@ -5,7 +5,8 @@ import Icon from '../icon'
 
 /**
  * A styleable, accessible `<button>` component for [Mobify’s Progressive Web SDK](#).
-*/
+ */
+
 const Button = (props) => {
     const {
         // Values
@@ -43,7 +44,7 @@ const Button = (props) => {
     })
     const attrs = {
         href, id, on, disabled, name, value, role,
-        className: classes
+        class: classes, is: true
     }
 
     let children
