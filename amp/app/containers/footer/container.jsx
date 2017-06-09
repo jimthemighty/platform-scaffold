@@ -1,10 +1,15 @@
 import React from 'react'
 
+import FooterNewsletterSubscription from './partials/footer-newsletter-subscription'
+import FooterNavigation from './partials/footer-navigation'
 
-const Footer = () => (
-    <div id="footer">
-        <h1>Footer</h1>
-    </div>
-)
+const Footer = () => {
+    return (
+        <footer className="t-footer">
+            <FooterNewsletterSubscription />
+            <FooterNavigation />
+        </footer>
+    )
+}
 
 export default Footer

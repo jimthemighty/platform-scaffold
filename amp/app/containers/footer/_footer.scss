@@ -1,0 +1,34 @@
+// Footer
+// ===
+
+
+// Root
+// ---
+
+.t-footer {
+    //
+}
+
+
+// Navigation
+// ---
+
+.t-footer__navigation {
+    background-color: $brand-color;
+
+    color: #fff;
+}
+
+
+// Navigation Link
+// ---
+
+.t-footer__navigation-link {
+    display: inline-block;
+    margin-right: $unit;
+    margin-left: $unit;
+    padding-bottom: $unit;
+
+    color: #fff;
+    font-size: $small-font-size;
+}
