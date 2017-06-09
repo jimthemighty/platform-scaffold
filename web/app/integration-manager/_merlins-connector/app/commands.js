@@ -12,10 +12,10 @@ import {receiveFormKey} from '../actions'
 import {CHECKOUT_SHIPPING_URL, CART_URL} from '../config'
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
+import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {
     receiveNavigationData,
-    setPageFetchError,
     setCheckoutShippingURL,
     setCartURL,
     setLoggedIn

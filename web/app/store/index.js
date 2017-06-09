@@ -12,6 +12,7 @@ import cartReducer from './cart/reducer'
 import categoryReducer from './categories/reducer'
 import modalReducer from 'progressive-web-sdk/dist/store/modals/reducer'
 import notificationsReducer from 'progressive-web-sdk/dist/store/notifications/reducer'
+import offlineReducer from 'progressive-web-sdk/dist/store/offline/reducer'
 import productReducer from './products/reducer'
 import checkoutReducer from './checkout/reducer'
 import {reducer as imReducer} from '../integration-manager/reducer'
@@ -41,6 +42,7 @@ const configureStore = (initialState) => {
         notifications: notificationsReducer,
         products: productReducer,
         checkout: checkoutReducer,
+        offline: offlineReducer,
         integrationManager: imReducer,
         form: formReducer
     })
