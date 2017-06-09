@@ -51,7 +51,7 @@ const submitCartFormSelector = createPropsSelector({
 
 export const submitCartForm = (formValues) => (dispatch, getStore) => {
     const {productId, qty, variations} = submitCartFormSelector(getStore())
-    const isInCheckout = /configure/.test(window.location.pathname)
+    const isUpdatingCart = /configure/.test(window.location.pathname)
     const itemId = window.location.pathname.match(/(?:\/id\/)(.*?)(?:\/product_id\/)/)
 
     if (variations) {
@@ -68,7 +68,7 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
 
     dispatch(addToCartStarted())
 
-    return dispatch(isInCheckout ? updateCartItem(itemId[1], productId, qty) : addToCart(productId, qty))
+    return dispatch(isUpdatingCart ? updateCartItem(itemId[1], productId, qty) : addToCart(productId, qty))
         .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
         .catch((error) => {
             console.error('Error adding to cart', error)
