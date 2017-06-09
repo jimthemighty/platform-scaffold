@@ -13,7 +13,7 @@ import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 const NewsletterForm = ({handleSubmit, disabled, submitting, onSubmit}) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <FieldRow>
+            <FieldRow className="u-align-top">
                 <ReduxForm.Field component={Field} name="email">
                     <input
                         type="email"
