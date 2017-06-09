@@ -68,7 +68,7 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
 
     dispatch(addToCartStarted())
 
-    return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], productId, qty) : addToCart(productId, qty))
+    return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], qty, productId) : addToCart(productId, qty))
         .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
         .catch((error) => {
             console.error('Error adding to cart', error)
