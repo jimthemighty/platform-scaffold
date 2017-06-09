@@ -12,9 +12,11 @@ export const getApp = createSelector(getUi, ({app}) => app)
 
 export const getCurrentUrl = createGetSelector(getApp, CURRENT_URL)
 export const getCurrentPathKey = createSelector(getCurrentUrl, urlToPathKey)
+
 export const getCurrentProductID = createSelector(getCurrentPathKey, (pathKey) => {
     return pathKey.match(/(?:2017refresh\/)(.*?)(?:\.html)/)[1]
 })
+
 // This will need to become more complicated when we handle more types of errors,
 // but will do for now
 export const getFetchError = createGetSelector(getApp, 'fetchError')
