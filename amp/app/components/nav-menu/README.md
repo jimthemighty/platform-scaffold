@@ -8,5 +8,10 @@ import Nav from 'mobify-amp-sdk/dist/components/nav'
 
 
 ## Example Usage
-    @TODO add example
-    <Nav text="Hear me roar!" />
+    const root = {title: 'Store', path: '/', children: [
+        {title: 'Footwear', path: '/footwear/'},
+        {title: 'Accessories', path: '/accessories/'},
+        {title: 'My Account', path: '/my-account/', type: 'custom'}
+    ]}
+
+    <NavMenu root={root} path="/" />
