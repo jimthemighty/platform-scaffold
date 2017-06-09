@@ -19,7 +19,7 @@ import {
     putPromoCode,
     deletePromoCode
 } from '../../integration-manager/cart/commands'
-import {handleCartExpiry} from '../app/actions'
+import {cartExpired, handleCartExpiryError} from '../app/actions'
 import {getDiscountCode} from '../../store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
@@ -42,18 +42,14 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
     dispatch(setTaxRequestPending(true))
     dispatch(fetchShippingMethodsEstimate(address))
         .then(() => dispatch(fetchTaxEstimate(address, shippingMethod.id)))
-        .catch((error) => {
-            const message = error.message
-
-            if (message.includes('expired')) {
-                return dispatch(handleCartExpiry())
-            }
-            return dispatch(addNotification(
+        .catch((error) => dispatch(handleCartExpiryError(error)))
+        .catch(() => (
+            dispatch(addNotification(
                 'taxError',
                 'Unable to calculate tax and/or shipping.',
                 true
             ))
-        })
+        ))
         .then(() => {
             dispatch(closeModal(CART_ESTIMATE_SHIPPING_MODAL))
             dispatch(setTaxRequestPending(false))
@@ -63,7 +59,7 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
 const cartUpdateError = (error) => (dispatch) => {
     const message = error.message
     if (message.includes('expired')) {
-        return dispatch(handleCartExpiry())
+        return dispatch(cartExpired())
     }
     return dispatch(addNotification(
         'cartUpdateError',
