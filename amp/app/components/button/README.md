@@ -68,29 +68,3 @@ import Button from 'mobify-amp-sdk/dist/components/button'
         <Button className="amp--google-plus" icon="social-google-plus" title="Google Plus" />
         <Button className="amp--yelp" icon="social-yelp" title="Yelp" />
     </div>
-
-*Set in progress state to a button*
-
-    initialState = {
-        addingToCart: false
-    };
-
-    const simulateAddingToCart = () => {
-        // Adding to cart
-        setState({addingToCart: true})
-
-        // Re-enable button after item has been added to cart
-        setTimeout(() => {
-            setState({addingToCart: false})
-        }, 2000)
-    };
-
-    <Button
-        disabled={state.addingToCart}
-    >
-        {state.addingToCart ?
-            <InlineLoader text="Adding to cart" />
-        :
-            <span>Add to Cart</span>
-        }
-    </Button>
