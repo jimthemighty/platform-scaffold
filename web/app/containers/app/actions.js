@@ -34,8 +34,6 @@ export const onRouteChanged = createActionWithAnalytics(
     (currentURL, routeName) => (new Page({[Page.TEMPLATENAME]: routeName}))
 )
 
-export {clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
-
 /**
  * Make a separate request that is intercepted by the worker. The worker will
  * return a JSON object where `{offline: true}` if the request failed, which we
