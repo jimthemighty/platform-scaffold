@@ -43,11 +43,15 @@ export const removeFromCart = (itemId) => (dispatch) => (
 )
 
 
-export const updateCartItem = (itemId, productId, quantity) => (dispatch) => {
+export const updateCartItem = (itemId, quantity, productId) => (dispatch) => {
     const requestBody = {
-        product_id: productId,
         quantity
     }
+
+    if (productId) {
+        requestBody.product_id = productId
+    }
+
     return createBasket()
             .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, requestBody, {method: 'PATCH'}))
             .then((basket) => {
@@ -63,12 +67,7 @@ export const updateCartItem = (itemId, productId, quantity) => (dispatch) => {
 }
 
 
-export const updateItemQuantity = (itemId, quantity) => (dispatch) => (
-    createBasket()
-        .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/items/${itemId}`, {quantity}, {method: 'PATCH'}))
-        .then((basket) => dispatch(updateExpiredCart(basket)))
-        .then((basket) => dispatch(handleCartData(basket)))
-)
+export const updateItemQuantity = (itemId, quantity) => (dispatch) => dispatch(updateCartItem(itemId, quantity))
 
 export const initCartPage = () => (dispatch) => Promise.resolve(dispatch(populateLocationsData()))
 

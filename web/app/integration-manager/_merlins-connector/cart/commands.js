@@ -78,7 +78,7 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
 }
 
 
-export const updateCartItem = (itemId, productId, quantity) => (dispatch) => (
+export const updateCartItem = (itemId, quantity, productId) => (dispatch) => (
     // merlin's uses the standard addToCart to update cart items
     dispatch(addToCart(productId, quantity))
 )
