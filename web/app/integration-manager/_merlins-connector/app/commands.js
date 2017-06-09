@@ -36,6 +36,8 @@ const requestCapturedDoc = () => {
 let isInitialEntryToSite = true
 
 export const fetchPageData = (url) => (dispatch) => {
+    // AMP builds do not run in a browser and thus capturedDocHTMLPromise will
+    // not be defined, so request the page normally
     const request = isInitialEntryToSite && window.Progressive.capturedDocHTMLPromise
                     ? requestCapturedDoc() : makeRequest(url)
 
