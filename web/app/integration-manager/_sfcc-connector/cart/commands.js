@@ -4,7 +4,7 @@
 
 import {makeApiRequest, makeApiJsonRequest, getAuthTokenPayload, checkForResponseFault} from '../utils'
 import {populateLocationsData} from '../checkout/utils'
-import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, updateExpiredCart, } from './utils'
+import {requestCartData, createBasket, handleCartData, createNewBasket, isCartExpired, updateExpiredCart} from './utils'
 
 export const getCart = () => (dispatch) =>
     requestCartData().then((basket) => dispatch(handleCartData(basket)))
