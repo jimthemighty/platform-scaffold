@@ -1,11 +1,12 @@
 import React, {PropTypes} from 'react'
 import Button from '../../../components/button'
-import Field from 'progressive-web-sdk/dist/components/field'
+import Field from '../../../components/field'
 import FieldRow from '../../..//components/field-row'
 
 const NewsletterForm = ({disabled, submitting}) => {
     return (
-        <form noValidate>
+        // TODO add amp-form
+        <form method="GET" action="TODO" target="_top">
             <FieldRow>
                 <Field name="email">
                     <input
