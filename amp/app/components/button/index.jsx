@@ -44,7 +44,7 @@ const Button = (props) => {
     })
     const attrs = {
         href, id, on, disabled, name, value, role,
-        class: classes, is: true
+        className: classes, is: true
     }
 
     let children
