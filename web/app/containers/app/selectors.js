@@ -7,7 +7,7 @@ import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi} from '../../store/selectors'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {getFetchedPages} from 'progressive-web-sdk/dist/store/offline/selectors'
-import {CURRENT_URL, FETCHED_PATHS} from './constants'
+import {CURRENT_URL} from './constants'
 
 export const getApp = createSelector(getUi, ({app}) => app)
 

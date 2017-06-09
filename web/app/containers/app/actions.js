@@ -34,7 +34,6 @@ export const onRouteChanged = createActionWithAnalytics(
     (currentURL, routeName) => (new Page({[Page.TEMPLATENAME]: routeName}))
 )
 
-export const setFetchedPage = createAction('Set fetched page', ['url'])
 export {clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 /**
