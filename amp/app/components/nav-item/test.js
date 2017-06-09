@@ -73,10 +73,3 @@ test('renders the contents of the className prop if present', () => {
     const wrapper = shallow(<NavItem className={name} />)
     expect(wrapper.hasClass(name)).toBe(true)
 })
-
-test('invokes the navigate callback on click by default', () => {
-    const spy = jest.fn()
-    const wrapper = shallow(<NavItem content="title" navigate={spy} />)
-    wrapper.simulate('click', new MouseEvent('click'))
-    expect(spy.mock.calls.length).toBe(1)
-})
