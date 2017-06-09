@@ -13,7 +13,7 @@ const App = ({
     const button = '<button on="tap:menu-sheet.toggle">Button</button>'
     return (
         <body
-            id="root"
+            id="app"
             className="t-app"
         >
 
