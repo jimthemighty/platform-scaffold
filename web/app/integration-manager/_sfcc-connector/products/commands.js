@@ -19,14 +19,15 @@ export const initProductDetailsPage = (url) => (dispatch) => {
                 ...parseProductDetails(responseJSON),
                 href: productPathKey
             }
+            const productId = productDetailsData.id
             const productDetailsMap = {
-                [productPathKey]: productDetailsData
+                [productId]: productDetailsData
             }
             productDetailsData.variants.forEach(({id}) => {
-                productDetailsMap[getProductHref(id)] = productDetailsData
+                productDetailsMap[id] = productDetailsData
             })
             dispatch(receiveProductDetailsProductData(productDetailsMap))
-            dispatch(receiveProductDetailsUIData({[productPathKey]: {itemQuantity: responseJSON.step_quantity}}))
+            dispatch(receiveProductDetailsUIData({[productId]: {itemQuantity: responseJSON.step_quantity}}))
 
             // since the pathname will always be master, the productHref will
             // only === pathname when landing on master page

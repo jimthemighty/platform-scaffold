@@ -7,9 +7,9 @@ import Immutable from 'immutable'
 import {createGetSelector} from 'reselect-immutable-helpers'
 
 import {getProducts} from '../selectors'
-import {getCurrentPathKey} from '../../containers/app/selectors'
+import {getCurrentProductID} from '../../containers/app/selectors'
 
-export const getSelectedProduct = createGetSelector(getProducts, getCurrentPathKey, Immutable.Map())
+export const getSelectedProduct = createGetSelector(getProducts, getCurrentProductID, Immutable.Map())
 
 export const getSelectedProductId = createGetSelector(getSelectedProduct, 'id')
 export const getProductTitle = createGetSelector(getSelectedProduct, 'title')
