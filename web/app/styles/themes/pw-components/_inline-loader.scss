@@ -44,3 +44,13 @@
         }
     }
 }
+
+
+// Modifier: small (10px)
+// ---
+
+.pw-inline-loader.pw--small {
+    .pw-inline-loader__loading-dot {
+        width: $sub-unit*2.5;
+    }
+}
