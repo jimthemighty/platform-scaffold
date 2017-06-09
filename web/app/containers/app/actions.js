@@ -5,6 +5,7 @@
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
 import {EVENT_ACTION, Page} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
@@ -88,3 +89,22 @@ export const signOut = () => (dispatch) => (
         ))
     })
 )
+
+export const cartExpired = () => (dispatch) => {
+    // navigate to homepage, show notification
+    browserHistory.push({
+        pathname: '/'
+    })
+    dispatch(addNotification(
+        'cartUpdateError',
+        'Your cart has expired.',
+        true
+    ))
+}
+
+export const handleCartExpiryError = (error) => (dispatch) => {
+    if (error.message.includes('expired')) {
+        return dispatch(cartExpired())
+    }
+    throw error
+}

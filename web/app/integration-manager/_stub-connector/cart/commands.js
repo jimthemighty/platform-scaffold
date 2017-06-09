@@ -8,7 +8,7 @@ import {receiveCartContents} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
 
 export const initCartPage = (url, routeName) => (dispatch) => {
-    console.log('[Stub Connector] Called initCartPage stub')
+    console.log('[Stub Connector] Called initCartPage stub with arguments:', url, routeName)
     return Promise.resolve()
 }
 
@@ -51,36 +51,36 @@ export const getCart = () => (dispatch) => {
 }
 
 export const addToCart = (productId, quantity) => (dispatch) => {
-    console.log('[Stub Connector] Called addToCart stub')
+    console.log('[Stub Connector] Called addToCart stub with arguments:', productId, quantity)
     return Promise.resolve()
 }
 
 export const removeFromCart = (itemID) => (dispatch) => {
-    console.log('[Stub Connector] Called removeFromCart stub')
+    console.log('[Stub Connector] Called removeFromCart stub with arguments:', itemID)
     return Promise.resolve()
 }
 
 export const updateItemQuantity = (itemID, quantity) => (dispatch) => {
-    console.log('[Stub Connector] Called updateItemQuantity stub')
+    console.log('[Stub Connector] Called updateItemQuantity stub with arguments:', itemID, quantity)
     return Promise.resolve()
 }
 
 export const addToWishlist = (productId, productURL) => (dispatch) => {
-    console.log('[Stub Connector] Called addToWishlist stub')
+    console.log('[Stub Connector] Called addToWishlist stub with arguments:', productId, productURL)
     return Promise.resolve()
 }
 
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch) => {
-    console.log('[Stub Connector] Called fetchTaxEstimate stub')
+    console.log('[Stub Connector] Called fetchTaxEstimate stub with arguments:', address, shippingMethod)
     return Promise.resolve()
 }
 
 export const putPromoCode = (couponCode) => (dispatch) => {
-    console.log('[Stub Connector] Called putPromoCode stub')
+    console.log('[Stub Connector] Called putPromoCode stub with arguments:', couponCode)
     return Promise.resolve()
 }
 
 export const deletePromoCode = (couponCode) => (dispatch) => {
-    console.log('[Stub Connector] Called deletePromoCode stub')
+    console.log('[Stub Connector] Called deletePromoCode stub with arguments:', couponCode)
     return Promise.resolve()
 }
