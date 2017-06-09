@@ -19,7 +19,7 @@ import {
     putPromoCode,
     deletePromoCode
 } from '../../integration-manager/cart/commands'
-import {cartExpired} from '../app/actions'
+import {cartExpired, handleCartExpiryError} from '../app/actions'
 import {getDiscountCode} from '../../store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
