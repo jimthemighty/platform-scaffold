@@ -26,6 +26,7 @@ import NativeConnector from '../native-connector/container'
 import * as appActions from '../app/actions'
 import * as selectors from './selectors'
 import {getNotifications} from '../../store/selectors'
+import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selectors'
 
 import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging-controller'
 import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
@@ -199,7 +200,7 @@ App.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     notifications: getNotifications,
-    fetchError: selectors.getFetchError,
+    fetchError: getPageFetchError,
     hasFetchedCurrentPath: selectors.hasFetchedCurrentPath,
     sprite: selectors.getSvgSprite,
     hideApp: selectors.getHideApp

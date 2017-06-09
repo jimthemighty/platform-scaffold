@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {onRouteChanged, checkIfOffline, setFetchedPage} from './containers/app/actions'
+import {onRouteChanged, checkIfOffline} from './containers/app/actions'
 import {removeAllNotifications} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {incrementPageCount} from 'progressive-web-sdk/dist/store/push-messaging/actions'
+import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {trigger as astroTrigger} from './utils/astro-integration'
 
