@@ -65,5 +65,5 @@ test('includeEndActionInPrimary={false} moves endAction to the primary container
 test('endAction is in the primary container if includeEndActionInPrimary={false} is not set', () => {
     const wrapper = mount(<ListTile endAction={<div className="end-action">End Action Test</div>} />)
 
-    expect(wrapper.find('.amp-list-tile__primary-list-tile__primary .end-action').length).toBe(1)
+    expect(wrapper.find('.amp-list-tile__primary .end-action').length).toBe(1)
 })
