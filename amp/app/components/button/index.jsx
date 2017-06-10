@@ -44,7 +44,7 @@ const Button = (props) => {
     })
     const attrs = {
         href, id, on, disabled, name, value, role,
-        className: classes, is: true
+        className: classes
     }
 
     let children
@@ -81,7 +81,7 @@ const Button = (props) => {
         )
     } else {
         return (
-            <button is {...attrs} type={type}>
+            <button {...attrs} type={type}>
                 <div className={innerClass}>{children}</div>
             </button>
         )
