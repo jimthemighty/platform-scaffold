@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+/* global MESSAGING_ENABLED */
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
 import React, {PropTypes} from 'react'
@@ -26,6 +27,9 @@ import * as appActions from '../app/actions'
 import * as selectors from './selectors'
 import {getNotifications} from '../../store/selectors'
 import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selectors'
+
+import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging-controller'
+import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 
 import NotificationManager from '../../components/notification-manager'
 
@@ -104,6 +108,8 @@ class App extends React.Component {
 
         const appClassNames = classNames('t-app', `t-app--${routeProps.routeName}`)
 
+        const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
+
         return (
             <div
                 id="app"
@@ -117,9 +123,12 @@ class App extends React.Component {
                 <SkipLinks items={skipLinksItems} />
 
                 <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
-                    {isRunningInAstro &&
-                        <NativeConnector />
-                    }
+                    {isRunningInAstro && <NativeConnector />}
+
+                    {messagingEnabled && [
+                        <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
+                        <DefaultAsk key="ask" showOnPageCount={1} />
+                    ]}
 
                     <div id="app-header" className="u-flex-none" role="banner">
                         <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />

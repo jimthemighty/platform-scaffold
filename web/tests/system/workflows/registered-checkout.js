@@ -8,12 +8,14 @@ import ProductList from '../page-objects/product-list'
 import ProductDetails from '../page-objects/product-details'
 import Cart from '../page-objects/cart'
 import Checkout from '../page-objects/checkout'
+import PushMessaging from '../page-objects/push-messaging'
 
 let home
 let productList
 let productDetails
 let cart
 let checkout
+let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
@@ -27,6 +29,7 @@ export default {
         productDetails = new ProductDetails(browser)
         cart = new Cart(browser)
         checkout = new Checkout(browser)
+        pushMessaging = new PushMessaging(browser)
     },
 
     after: (browser) => {
@@ -41,6 +44,8 @@ export default {
             .preview()
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
+
+        pushMessaging.dismissDefaultAsk()
     },
 
     'Checkout - Registered - Navigate from Home to ProductList': (browser) => {
