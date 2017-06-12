@@ -28,6 +28,8 @@ export const initProductDetailsPage = (url) => (dispatch) => {
                 productDetailsMap[id] = productDetailsData
             })
 
+            // need to dispatch this on PLP click of item
+            // to fix page transition / request delay
             dispatch(receiveCurrentProduct(productDetailsData))
             dispatch(receiveProductDetailsProductData(productDetailsMap))
             dispatch(receiveProductDetailsUIData({[id]: {itemQuantity: responseJSON.step_quantity}}))

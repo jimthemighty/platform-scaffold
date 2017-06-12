@@ -16,7 +16,6 @@ export const getCurrentPathKey = createSelector(getCurrentUrl, urlToPathKey)
 
 export const hasFetchedCurrentPath = createHasSelector(getFetchedPages, getCurrentPathKey)
 
-
 export const getSvgSprite = createGetSelector(getApp, 'sprite')
 export const getHideApp = createGetSelector(getApp, 'hideApp')
 
