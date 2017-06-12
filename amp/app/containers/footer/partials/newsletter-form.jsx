@@ -17,7 +17,7 @@ const NewsletterForm = ({disabled, submitting}) => {
 
                 <Button
                     type="submit"
-                    className="c--tertiary u-margin-0 u-text-uppercase"
+                    className="amp--tertiary u-margin-0 u-text-uppercase"
                     disabled={submitting || disabled}>
                     Submit
                 </Button>
