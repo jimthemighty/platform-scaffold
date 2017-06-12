@@ -91,4 +91,24 @@ const captureDisable = function(htmlStr, prefix) {
     return [].concat(...ret).join('')
 }
 
-export default captureDisable
+export const jqueryResponse = (window) => (response) => response.text()
+.then((responseText) => {
+    const transformedText = captureDisable(responseText, 'x-')
+
+    const iframe = window.document.createElement('iframe')
+    iframe.style.display = 'none'
+    window.document.body.appendChild(iframe)
+
+    const doc = iframe.contentDocument
+    doc.open()
+    doc.write(transformedText)
+    doc.close()
+
+    window.setTimeout(() => {
+        iframe.remove()
+    }, 0)
+
+    const jQueryObject = window.$(doc.documentElement)
+
+    return [window.$, jQueryObject]
+})

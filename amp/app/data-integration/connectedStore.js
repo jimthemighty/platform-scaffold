@@ -20,34 +20,12 @@ import productListReducer from '../../../web/app/containers/product-list/reducer
 import categoryReducer from '../../../web/app/store/categories/reducer'
 import productReducer from '../../../web/app/store/products/reducer'
 
-import captureDisable from './capturejs-disable'
+import {jqueryResponse} from './capturejs'
 import {PAGE_TITLE, DATA_INIT_FUNCTION} from './constants'
 
 export const createConnectedStore = (window, fullUrl, dataInitFunction) => {
-    const jqueryResponse = (response) => response.text()
-    .then((responseText) => {
-        const transformedText = captureDisable(responseText, 'x-')
-
-        const iframe = window.document.createElement('iframe')
-        iframe.style.display = 'none'
-        window.document.body.appendChild(iframe)
-
-        const doc = iframe.contentDocument
-        doc.open()
-        doc.write(transformedText)
-        doc.close()
-
-        window.setTimeout(() => {
-            iframe.remove()
-        }, 0)
-
-        const jQueryObject = window.$(doc.documentElement)
-
-        return [window.$, jQueryObject]
-    })
-
     registerConnector(Connector({
-        jqueryResponse
+        jqueryResponse: jqueryResponse(window)
     }))
 
     const uiReducer = combineReducers({
