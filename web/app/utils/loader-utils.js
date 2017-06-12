@@ -65,7 +65,16 @@ const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-
  * or init fails, the Promise is rejected.
  */
 export const loadAndInitMessagingClient = (debug, siteId) => {
-    window.Progressive.MessagingClientInitPromise = loadScriptAsPromise({
+    // Creating an early promise that users of the Messaging Client can
+    // chain means they don't need to poll for its existence
+    let clientInitResolver
+    let clientInitRejecter
+    window.Progressive.MessagingClientInitPromise = new Promise((resolve, reject) => {
+        clientInitResolver = resolve
+        clientInitRejecter = reject
+    })
+
+    return () => loadScriptAsPromise({
         id: 'progressive-web-messaging-client',
         src: MESSAGING_PWA_CLIENT_PATH,
         rejectOnError: true
@@ -81,10 +90,11 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
             return messagingClient.init({
                 debug,
                 siteId
-            })
+            }).then(clientInitResolver)
         })
         .catch((error) => {
-            console.log(`Error loading ${MESSAGING_PWA_CLIENT_PATH}: ${error}`)
+            console.error(`Error loading ${MESSAGING_PWA_CLIENT_PATH}:`, error)
+            clientInitRejecter(error)
             throw error
         })
 }
