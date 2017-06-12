@@ -7,13 +7,6 @@ import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
-import {DATA_INIT_FUNCTION} from '../../data-integration/constants'
-import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
-
-const resolver = (({dispatch, getState}) => {
-    return dispatch(getState().ui.app.get(DATA_INIT_FUNCTION)(getState().ui.app.get(CURRENT_URL)))
-})
-
 const App = ({children}) => {
 
     const skipLinksItems = [
@@ -63,15 +56,9 @@ const App = ({children}) => {
     )
 }
 
-App.resolves = [resolver]
-
 
 App.propTypes = {
     children: PropTypes.node
-}
-
-App.contextTypes = {
-    store: PropTypes.object.isRequired
 }
 
 

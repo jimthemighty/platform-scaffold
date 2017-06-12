@@ -6,6 +6,8 @@ import containerStyles from './container.scss'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getProductDescription, getProductTitle, getProductImages} from '../../../../web/app/store/products/selectors'
+import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
+import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 const containerClass = 't-product-details'
 
@@ -35,6 +37,10 @@ ProductDetails.propTypes = {
     })).isRequired,
     title: PropTypes.string.isRequired
 }
+
+ProductDetails.resolves = [({dispatch, getState}) => {
+    return dispatch(initProductDetailsPage(getState().ui.app.get(CURRENT_URL)))
+}]
 
 ProductDetails.templateName = 'pdp'
 

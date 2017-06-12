@@ -13,11 +13,9 @@ ReactInjection.DOMProperty.injectDOMPropertyConfig({
 
 import process from 'process'
 import path from 'path'
-import Promise from 'bluebird'
 import express from 'express'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
@@ -31,41 +29,13 @@ import App from './containers/app/container'
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
 
-import {createConnectedStore} from './data-integration/connectedStore'
+import {initializeStore} from './data-integration/connectedStore'
 import {PAGE_TITLE} from './data-integration/constants'
 
-import {initHomePage} from '../../web/app/integration-manager/home/commands'
-import {initProductDetailsPage} from '../../web/app/integration-manager/products/commands'
-import {initProductListPage} from '../../web/app/integration-manager/categories/commands'
-
-const jsdom = Promise.promisifyAll(_jsdom)
-
-import {waitForResolves} from 'react-redux-resolve'
-
-
-export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
 
 const getFullUrl = (req) => {
     return `${ampPackageJson.siteUrl}${req.url}`
 }
-
-const initializeStore = (req, dataInitFunction) => {
-    return jsdomEnv().then((window) => {
-        const createdStore = createConnectedStore(window, getFullUrl(req), dataInitFunction)
-
-        const renderProps = {
-            location: {},
-            components: [App],
-            history: {}
-        }
-
-        return waitForResolves(renderProps, createdStore)
-        .then(() => {
-            return createdStore
-        })
-    })
-}
-
 
 const render = (req, res, store, component, css) => {
     const scripts = new ampSDK.Set()
@@ -93,19 +63,19 @@ const render = (req, res, store, component, css) => {
 
 
 const productDetailsPage = (req, res, next) => {
-    initializeStore(req, initProductDetailsPage)
+    initializeStore(getFullUrl(req), productDetails.default)
         .then((store) => render(req, res, store, productDetails.default, productDetails.styles))
         .catch(next)
 }
 
 const productListPage = (req, res, next) => {
-    initializeStore(req, initProductListPage)
+    initializeStore(getFullUrl(req), productList.default)
         .then((store) => render(req, res, store, productList.default, productList.styles))
         .catch(next)
 }
 
 const homePage = (req, res, next) => {
-    initializeStore(req, initHomePage)
+    initializeStore(getFullUrl(req), home.default)
         .then((store) => render(req, res, store, home.default, home.styles))
         .catch(next)
 }

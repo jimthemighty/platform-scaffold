@@ -7,6 +7,8 @@ import containerStyles from './container.scss'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
 import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
+import {initProductListPage} from '../../../../web/app/integration-manager/categories/commands'
+import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 const containerClass = 't-product-list'
 
@@ -39,6 +41,10 @@ ProductList.propTypes = {
     products: PropTypes.array.isRequired,
     numItems: PropTypes.number
 }
+
+ProductList.resolves = [({dispatch, getState}) => {
+    return dispatch(initProductListPage(getState().ui.app.get(CURRENT_URL)))
+}]
 
 ProductList.templateName = 'plp'
 

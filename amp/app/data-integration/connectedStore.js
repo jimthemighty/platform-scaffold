@@ -1,6 +1,9 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
+import {waitForResolves} from 'react-redux-resolve'
 import thunk from 'redux-thunk'
 import {fromJS} from 'immutable'
+import Promise from 'bluebird'
+import _jsdom from 'jsdom'
 
 // DO NOT USE! Merlins Connector is an example connector that is for demo only
 import {Connector} from '../../../web/app/integration-manager/_merlins-connector'
@@ -21,41 +24,57 @@ import categoryReducer from '../../../web/app/store/categories/reducer'
 import productReducer from '../../../web/app/store/products/reducer'
 
 import {jqueryResponse} from './capturejs'
-import {PAGE_TITLE, DATA_INIT_FUNCTION} from './constants'
+import {PAGE_TITLE} from './constants'
 
-export const createConnectedStore = (window, fullUrl, dataInitFunction) => {
-    registerConnector(Connector({
-        jqueryResponse: jqueryResponse(window)
-    }))
+const jsdom = Promise.promisifyAll(_jsdom)
 
-    const uiReducer = combineReducers({
-        app: appReducer,
-        footer: footerReducer,
-        header: headerReducer,
-        home: homeReducer,
-        navigation: navigationReducer,
-        productDetails: productDetailsReducer,
-        productList: productListReducer
+export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
+
+export const initializeStore = (fullUrl, container) => {
+    return jsdomEnv().then((window) => {
+        registerConnector(Connector({
+            jqueryResponse: jqueryResponse(window)
+        }))
+
+        const uiReducer = combineReducers({
+            app: appReducer,
+            footer: footerReducer,
+            header: headerReducer,
+            home: homeReducer,
+            navigation: navigationReducer,
+            productDetails: productDetailsReducer,
+            productList: productListReducer
+        })
+
+        const reducer = combineReducers({
+            categories: categoryReducer,
+            ui: uiReducer,
+            products: productReducer,
+            integrationManager: imReducer,
+        })
+
+        const middlewares = [
+            thunk,
+        ]
+
+        const noop = (f) => f
+
+        const initialState = ({ui: {app: fromJS({
+            [CURRENT_URL]: fullUrl,
+            [PAGE_TITLE]: 'Merlins AMP' // Fetch the page again and get title?
+        })}})
+
+        const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
+
+        const renderProps = {
+            location: {},
+            components: [container],
+            history: {}
+        }
+
+        return waitForResolves(renderProps, createdStore)
+        .then(() => {
+            return createdStore
+        })
     })
-
-    const reducer = combineReducers({
-        categories: categoryReducer,
-        ui: uiReducer,
-        products: productReducer,
-        integrationManager: imReducer,
-    })
-
-    const middlewares = [
-        thunk,
-    ]
-
-    const noop = (f) => f
-
-    const initialState = ({ui: {app: fromJS({
-        [CURRENT_URL]: fullUrl,
-        [PAGE_TITLE]: 'Merlins AMP', // Fetch the page again and get title?
-        [DATA_INIT_FUNCTION]: dataInitFunction
-    })}})
-
-    return createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
 }
