@@ -12,78 +12,61 @@ import HeaderBar from 'amp-sdk/dist/components/header-bar/'
 ### With an image link title
 
         <HeaderBar>
-            <Link>
-                <IconLabel iconName="menu" label="Menu" iconSize="" />
-            </Link>
-
-            <Link>
-                <IconLabel iconName="search" label="Search" iconSize="" />
-            </Link>
-
-            <HeaderBarTitle href="http://www.mobify.com">
-                <img src="https://cdn-www.mobify.com/wp-content/themes/sparkjoy-mobify-v8/library/images/logo-mobify-white.png" alt="Mobify Logo" height="28" />
+            <Button className="t-header__link amp-header-bar__action" on={openNav}>
+                <IconLabel iconName="menu" label="Menu" iconSize="medium" />
+            </Button>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="search" label="Search" iconSize="medium" />
+            </Button>
+            <HeaderBarTitle href="/">
+                <AmpImage src="/static/svg/logo.svg" width="67" height="28" layout="fixed" />
             </HeaderBarTitle>
-
-            <Link>
-                <IconLabel iconName="cart" label="Cart" iconSize="" />
-            </Link>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="store" label="Stores" iconSize="medium" />
+            </Button>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="cart" label="Cart" iconSize="medium" />
+            </Button>
         </HeaderBar>
 
 ### With a title text link
 
         <HeaderBar>
-            <Link>
-                <IconLabel iconName="menu" label="Menu" iconSize="" />
-            </Link>
-
-            <Link>
-                <IconLabel iconName="search" label="Search" iconSize="" />
-            </Link>
-
-            <HeaderBarTitle href="http://www.mobify.com">
+            <Button className="t-header__link amp-header-bar__action" on={openNav}>
+                <IconLabel iconName="menu" label="Menu" iconSize="medium" />
+            </Button>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="search" label="Search" iconSize="medium" />
+            </Button>
+            <HeaderBarTitle href="/">
                 Title Link
             </HeaderBarTitle>
-
-            <Link>
-                <IconLabel iconName="cart" label="Cart" iconSize="" />
-            </Link>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="store" label="Stores" iconSize="medium" />
+            </Button>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="cart" label="Cart" iconSize="medium" />
+            </Button>
         </HeaderBar>
 
 ### With a static title
 
         <HeaderBar>
-            <Link>
-                <IconLabel iconName="menu" label="Menu" iconSize="" />
-            </Link>
-
-            <Link>
-                <IconLabel iconName="search" label="Search" iconSize="" />
-            </Link>
-
+            <Button className="t-header__link amp-header-bar__action" on={openNav}>
+                <IconLabel iconName="menu" label="Menu" iconSize="medium" />
+            </Button>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="search" label="Search" iconSize="medium" />
+            </Button>
             <HeaderBarTitle>
-                Title Link
+                Title
             </HeaderBarTitle>
-
-            <Link>
-                <IconLabel iconName="cart" label="Cart" iconSize="" />
-            </Link>
-        </HeaderBar>
-
-### Custom content in title
-
-        <HeaderBar>
-            <HeaderBarTitle className="u-h4">
-                <div className="u-flexbox u-align-center u-width-full">
-                    <Link href="http://www.mobify.com" className="u-flex">
-                        <img className="u-align-middle" src="https://cdn-www.mobify.com/wp-content/themes/sparkjoy-mobify-v8/library/images/logo-mobify-white.png" alt="Mobify Logo" height="28" />
-                    </Link>
-
-                    <div className="u-flex-none">
-                        <span className="u-align-middle">Secure Checkout</span>
-                        <Icon className="u-margin-start u-align-middle" name="lock" size="medium" />
-                    </div>
-                </div>
-            </HeaderBarTitle>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="store" label="Stores" iconSize="medium" />
+            </Button>
+            <Button className="t-header__link amp-header-bar__action">
+                <IconLabel iconName="cart" label="Cart" iconSize="medium" />
+            </Button>
         </HeaderBar>
 
 ### Dialog header bar
