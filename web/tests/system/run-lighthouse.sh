@@ -9,8 +9,8 @@ if git rev-parse ; then
     if [ "$CURRENT_BRANCH" == "master" ]; then
         echo "Running lighthouse on Production"
         npm run test:pwa-prod
+    else 
+        echo "Running lighthouse on LocalCI"
+        npm run test:pwa-ci
     fi
-else
-    echo "Running lighthouse on Local"
-    npm run test:pwa-ci
 fi
