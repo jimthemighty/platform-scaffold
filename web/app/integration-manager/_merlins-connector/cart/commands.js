@@ -20,7 +20,6 @@ import {fetchPageData} from '../app/commands'
 import {parseCart, parseCartProducts, parseCartTotals} from './parser'
 import {parseCheckoutEntityID, extractMagentoJson} from '../../../utils/magento-utils'
 import {ADD_TO_WISHLIST_URL, PROMO_ERROR} from '../../../containers/cart/constants'
-import {getProductById} from '../../../store/products/selectors'
 
 const LOAD_CART_SECTION_URL = '/customer/section/load/?sections=cart%2Cmessages&update_section_id=true'
 const REMOVE_CART_ITEM_URL = '/checkout/sidebar/removeItem/'

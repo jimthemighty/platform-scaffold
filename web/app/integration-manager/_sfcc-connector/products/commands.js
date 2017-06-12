@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
-import {setCurrentURL, setCurrentProductId} from '../../results'
+import {setCurrentURL, receiveCurrentProductId} from '../../results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
 import {parseProductDetails, getCurrentProductID, getProductHref, getInitialSelectedVariant} from '../parsers'
@@ -30,7 +30,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 
             // need to dispatch this on PLP click of item
             // to fix page transition / request delay
-            dispatch(setCurrentProductId(id))
+            dispatch(receiveCurrentProductId(id))
             dispatch(receiveProductDetailsProductData(productDetailsMap))
             dispatch(receiveProductDetailsUIData({[id]: {itemQuantity: responseJSON.step_quantity}}))
 
