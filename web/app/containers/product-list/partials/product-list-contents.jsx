@@ -68,7 +68,7 @@ const ProductListContents = ({
     contentsLoaded,
     products,
     openModal,
-    setProduct,
+    setCurrentProduct,
     sortChange,
     routeName
 }) => (
@@ -143,7 +143,7 @@ const ProductListContents = ({
             </div>
 
             {(products.length > 0 || !contentsLoaded) ?
-                <ResultList products={products} setProduct={setProduct} />
+                <ResultList products={products} setCurrentProduct={setCurrentProduct} />
             :
                 <NoResultsList routeName={routeName} />
             }
@@ -160,7 +160,7 @@ ProductListContents.propTypes = {
     numItems: PropTypes.number,
     openModal: PropTypes.func,
     routeName: PropTypes.string,
-    setProduct: PropTypes.func,
+    setCurrentProduct: PropTypes.func,
     sortChange: PropTypes.func
 }
 
