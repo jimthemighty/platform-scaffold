@@ -10,9 +10,9 @@ const fs = require('fs')
 let fileName
 
 if (fs.existsSync('reports/audit-local.html')) {
-    fileName = 'audit-local.html'
+    fileName = 'audit-local'
 } else {
-    fileName = 'audit-prod.html'
+    fileName = 'audit-prod'
 }
 
 const checkLighthouse = function(htmlReport) {
@@ -41,7 +41,7 @@ const checkTTI = function(jsonResults) {
     console.log(`${JSON.stringify(jsonResults.audits['total-byte-weight'].extendedInfo.value.results)}`)
 }
 
-const htmlReport = fs.readFileSync(`lighthouse/reports/${fileName}`, 'utf8')
+const htmlReport = fs.readFileSync(`lighthouse/reports/${fileName}.html`, 'utf8')
 const jsonResults = JSON.parse(fs.readFileSync(`lighthouse/reports/${fileName}.report.json`, 'utf8'))
 
 checkTTI(htmlReport)
