@@ -14,12 +14,6 @@ export const getApp = createSelector(getUi, ({app}) => app)
 export const getCurrentUrl = createGetSelector(getApp, CURRENT_URL)
 export const getCurrentPathKey = createSelector(getCurrentUrl, urlToPathKey)
 
-export const getIdFromPathKey = createSelector(getCurrentPathKey, (pathKey) => {
-    // this is required since we are no longer keying products off of path key
-    const pathKeyMatch = pathKey.match(/(?:2017refresh|product_id\/)(.*?)(?:\/|.html\/)/)
-    return pathKey ? pathKeyMatch[1] : ''
-})
-
 export const hasFetchedCurrentPath = createHasSelector(getFetchedPages, getCurrentPathKey)
 
 

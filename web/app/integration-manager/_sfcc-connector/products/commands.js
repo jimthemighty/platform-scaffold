@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
+import {receiveProductDetailsProductData, receiveProductDetailsUIData, receiveCurrentProduct} from '../../products/results'
 import {setCurrentURL} from '../../results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
@@ -19,15 +19,18 @@ export const initProductDetailsPage = (url) => (dispatch) => {
                 ...parseProductDetails(responseJSON),
                 href: productPathKey
             }
-            const productId = productDetailsData.id
+            const {id} = productDetailsData
+
             const productDetailsMap = {
-                [productId]: productDetailsData
+                [id]: productDetailsData
             }
             productDetailsData.variants.forEach(({id}) => {
                 productDetailsMap[id] = productDetailsData
             })
+
+            dispatch(receiveCurrentProduct(productDetailsData))
             dispatch(receiveProductDetailsProductData(productDetailsMap))
-            dispatch(receiveProductDetailsUIData({[productId]: {itemQuantity: responseJSON.step_quantity}}))
+            dispatch(receiveProductDetailsUIData({[id]: {itemQuantity: responseJSON.step_quantity}}))
 
             // since the pathname will always be master, the productHref will
             // only === pathname when landing on master page

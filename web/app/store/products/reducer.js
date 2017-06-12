@@ -8,7 +8,8 @@ import {mergePayload} from '../../utils/reducer-utils'
 import {
     receiveProductDetailsProductData,
     receiveProductListProductData,
-    receiveCartProductData
+    receiveCartProductData,
+    receiveCurrentProduct
 } from '../../integration-manager/products/results'
 
 const initialState = Immutable.Map()
@@ -18,7 +19,8 @@ const mergeWithoutOverwriting = (state, {payload}) => state.mergeDeepWith((prev,
 const productReducer = handleActions({
     [receiveProductDetailsProductData]: mergePayload,
     [receiveProductListProductData]: mergeWithoutOverwriting,
-    [receiveCartProductData]: mergeWithoutOverwriting
+    [receiveCartProductData]: mergeWithoutOverwriting,
+    [receiveCurrentProduct]: mergePayload
 }, initialState)
 
 export default productReducer
