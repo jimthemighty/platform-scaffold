@@ -14,6 +14,7 @@ import {setSigninLoaded, setRegisterLoaded} from '../../account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
+import {setLoggedIn} from '../../results'
 
 import {isFormResponseInvalid} from './parsers/parsers'
 
@@ -122,7 +123,10 @@ export const navigateToSection = (router, routes, sectionName) => {
 export const logout = () => (dispatch) => (
     makeRequest('/customer/account/logout/')
         // Don't wait for the cart to do everything else
-        .then(() => { dispatch(getCart()) })
+        .then(() => {
+            dispatch(getCart())
+            dispatch(setLoggedIn(false))
+        })
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active
         .then(() => fetchPageData(window.location.href))

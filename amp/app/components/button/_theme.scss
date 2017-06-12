@@ -1,0 +1,166 @@
+// Button theme
+// ===
+
+.amp-button {
+    min-width: $tap-size;
+    min-height: $tap-size;
+    padding: $unit*1.5;
+
+    background: $primary-action-color;
+
+    color: $neutral-00;
+    font-weight: bold;
+    text-align: center;
+
+    &:active,
+    &:focus {
+        background: $dark-primary-action-color;
+
+        color: $neutral-00;
+    }
+}
+
+
+// Inner
+// ---
+
+.amp-button__inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+// Icon
+// ---
+
+.amp-button__icon {
+    flex: 0 0 auto;
+}
+
+
+// Themes: Secondary
+// ---
+
+.amp-button.amp--secondary {
+    background: $secondary-action-color;
+
+    color: $neutral-00;
+
+    &:active,
+    &:focus {
+        background: $dark-secondary-action-color;
+
+        color: $neutral-00;
+    }
+}
+
+
+// Themes: Tertiary
+// ---
+
+.amp-button.amp--tertiary {
+    border: $border;
+
+    background: $neutral-00;
+
+    color: $secondary-brand-color;
+
+    &:active,
+    &:focus {
+        background: $neutral-10;
+
+        color: $secondary-brand-color;
+    }
+}
+
+
+// Themes: Blank
+// ---
+
+.amp-button.amp--blank {
+    background: transparent;
+
+    color: inherit;
+
+    &:active,
+    &:focus {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+
+// Themes: Link
+// ---
+//
+// Allow button elements to resemble as an inline link element
+
+.amp-button.amp--link {
+    min-width: initial;
+    min-height: initial;
+    padding: 0;
+
+    background: none;
+
+    color: $link-color;
+    font-weight: normal;
+}
+
+
+// State: Disabled button
+// ---
+
+.amp-button[disabled] {
+    background: $disabled-button-background-color;
+
+    .amp-button__icon {
+        color: $tertiary-brand-color;
+    }
+}
+
+
+// State: Button icon has siblings
+// ---
+
+.amp-button__icon.amp--has-siblings {
+    margin-right: $sub-unit*3;
+}
+
+
+// Social Themes
+// ---
+
+// Facebook
+.amp-button.amp--facebook {
+    background: $facebook-color;
+}
+
+// Twitter
+.amp-button.amp--twitter {
+    background: $twitter-color;
+}
+
+// Instagram
+.amp-button.amp--instagram {
+    background: $instagram-color;
+}
+
+// Pinterest
+.amp-button.amp--pinterest {
+    background: $pinterest-color;
+}
+
+// Youtube
+.amp-button.amp--youtube {
+    background: $youtube-color;
+}
+
+// Google Plus
+.amp-button.amp--google-plus {
+    background: $google-plus-color;
+}
+
+// Yelp
+.amp-button.amp--yelp {
+    background: $yelp-color;
+}

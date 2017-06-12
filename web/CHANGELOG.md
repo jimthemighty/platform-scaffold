@@ -1,4 +1,5 @@
-## To be released
+## 0.17.0 (June 6, 2017)
+- Introduce the [Integration Manager](https://docs.mobify.com/progressive-web/latest/guides/integration-manager/)
 - Rename all files containing JSX to have a .jsx file extension [#525](https://github.com/mobify/platform-scaffold/pull/525)
 - Fix PLP to successfully display no results message if there are no products [#525](https://github.com/mobify/platform-scaffold/pull/525)
 - Update SDK version to 0.15.0 [#627](https://github.com/mobify/platform-scaffold/pull/627)
