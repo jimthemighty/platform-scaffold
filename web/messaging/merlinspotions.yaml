@@ -39,4 +39,4 @@ config:
     welcome_message_text: "Thank you! We're super excited to have you here and tell you all the latest and greatest!"
 
     # Default here should be the default_url
-    welcome_message_url: "http://www.merlinspotions.com/?utm_source=mobify&utm_medium=webpush"
+    welcome_message_url: "https://www.merlinspotions.com/?utm_source=mobify&utm_medium=webpush"
