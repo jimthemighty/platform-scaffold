@@ -8,8 +8,8 @@ import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {receiveFormInfo} from '../actions'
 
-export const initProductDetailsPage = (url) => (dispatch) => {
-    console.log('[Stub Connector] Called initProductDetailsPage stub')
+export const initProductDetailsPage = (url, routeName) => (dispatch) => {
+    console.log('[Stub Connector] Called initProductDetailsPage stub with arguments:', url, routeName)
 
     const pathKey = urlToPathKey(url)
 
@@ -61,6 +61,6 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 }
 
 export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => {
-    console.log('[Stub Connector] Called getProductVariantData stub')
+    console.log('[Stub Connector] Called getProductVariantData stub with arguments:', variationSelections, variants, categoryIds)
     return Promise.resolve()
 }

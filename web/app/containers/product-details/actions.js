@@ -12,7 +12,7 @@ import {getCurrentPathKey, getCartURL} from '../app/selectors'
 import {getSelectedProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from '../../store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
-import {addToCart} from '../../integration-manager/cart/commands'
+import {addToCart, updateCartItem} from '../../integration-manager/cart/commands'
 import {getProductVariantData} from '../../integration-manager/products/commands'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
@@ -51,6 +51,8 @@ const submitCartFormSelector = createPropsSelector({
 
 export const submitCartForm = (formValues) => (dispatch, getStore) => {
     const {productId, qty, variations} = submitCartFormSelector(getStore())
+    const path = window.location.pathname
+    const itemIdMatch = path.match(/\/id\/(.*?)\/product_id\//)
 
     if (variations) {
         const errors = {}
@@ -65,7 +67,8 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     }
 
     dispatch(addToCartStarted())
-    return dispatch(addToCart(productId, qty))
+
+    return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], qty, productId) : addToCart(productId, qty))
         .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
         .catch((error) => {
             console.error('Error adding to cart', error)

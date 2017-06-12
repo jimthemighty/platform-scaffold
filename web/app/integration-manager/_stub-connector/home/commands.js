@@ -6,8 +6,8 @@
 
 import {receiveHomeData} from '../../results'
 
-export const initHomePage = (url) => (dispatch) => {
-    console.log('[Stub Connector] Called initHomePage stub')
+export const initHomePage = (url, routeName) => (dispatch) => {
+    console.log('[Stub Connector] Called initHomePage stub with arguments:', url, routeName)
 
     const exampleData = {
         banners: [{
