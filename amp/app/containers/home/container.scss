@@ -2,13 +2,24 @@
 
 // Globals
 // ===
+//
+// @TODO: Add some information here
 
 @import '../../styles/global';
+
+
+// App Styles
+// ===
+//
+// @TODO: Add some information here
+
+@import '../app/base';
+
 
 // Components
 // ===
 //
-// Import all components used on container
+// @TODO: Add some information here
 
 // Local Containers
 // ---
@@ -18,7 +29,10 @@
 // Local Components
 // ---
 //
+// @TODO: Add some information here
 
+@import '../../components/button/base';
+@import '../../styles/themes/amp-components/button'; // TODO: dont move to SDK
 @import '../../components/header-bar/base';
 @import '../../components/header-bar/theme';
 @import '../../components/icon/base';
@@ -33,9 +47,12 @@
 
 // AMP Components
 // ---
+//
+// @TODO: Add some information here
 
 // AMP SDK Base Styles from mobify-amp-sdk
 // ---
+// @TODO: Add some information here
 
 @import '../../../node_modules/mobify-amp-sdk/src/components/amp-image/base';
 @import '../../../node_modules/mobify-amp-sdk/src/components/price/base';
@@ -43,6 +60,7 @@
 
 // AMP SDK Custom Styles
 // ---
+// @TODO: Add some information here
 
 @import '../../styles/themes/amp-components/amp-image';
 @import '../../styles/themes/amp-components/price';
@@ -50,5 +68,6 @@
 
 // Template style
 // ===
+// @TODO: Add some information here
 
 @import 'home';
