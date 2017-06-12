@@ -6,7 +6,6 @@
 
 import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
 import {receiveCurrentProductId} from '../../results'
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {receiveFormInfo} from '../actions'
 
 export const initProductDetailsPage = (url, routeName) => (dispatch) => {
