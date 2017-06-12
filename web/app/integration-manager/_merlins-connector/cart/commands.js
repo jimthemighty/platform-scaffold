@@ -54,10 +54,7 @@ export const getCart = () => (dispatch) => {
 }
 
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
-    const product = getProductById(productId)(getState())
-
-    const formInfo = getFormInfoById(product.get('id'))(getState())
-
+    const formInfo = getFormInfoById(productId)(getState())
     const hiddenInputs = formInfo.get('hiddenInputs')
 
     if (hiddenInputs === undefined) {

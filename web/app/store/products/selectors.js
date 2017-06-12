@@ -10,25 +10,25 @@ import {getProducts, getUi} from '../selectors'
 
 const getApp = createSelector(getUi, ({app}) => app)
 
-export const getSelectedProductId = createGetSelector(getApp, 'currentProduct')
+export const getCurrentProductId = createGetSelector(getApp, 'currentProduct')
 
-export const getSelectedProduct = createGetSelector(getProducts, getSelectedProductId, Immutable.Map())
-export const getProductTitle = createGetSelector(getSelectedProduct, 'title')
-export const getProductPrice = createGetSelector(getSelectedProduct, 'price')
-export const getProductDescription = createGetSelector(getSelectedProduct, 'description')
-export const getProductImages = createGetSelector(getSelectedProduct, 'images', Immutable.List())
-export const getProductThumbnail = createGetSelector(getSelectedProduct, 'thumbnail', Immutable.Map())
-export const getProductAvailability = createGetSelector(getSelectedProduct, 'available')
-export const getProductCustomContent = createGetSelector(getSelectedProduct, 'custom')
+export const getCurrentProduct = createGetSelector(getProducts, getCurrentProductId, Immutable.Map())
+export const getProductTitle = createGetSelector(getCurrentProduct, 'title')
+export const getProductPrice = createGetSelector(getCurrentProduct, 'price')
+export const getProductDescription = createGetSelector(getCurrentProduct, 'description')
+export const getProductImages = createGetSelector(getCurrentProduct, 'images', Immutable.List())
+export const getProductThumbnail = createGetSelector(getCurrentProduct, 'thumbnail', Immutable.Map())
+export const getProductAvailability = createGetSelector(getCurrentProduct, 'available')
+export const getProductCustomContent = createGetSelector(getCurrentProduct, 'custom')
 
-export const getProductVariationCategories = createGetSelector(getSelectedProduct, 'variationCategories', Immutable.List())
+export const getProductVariationCategories = createGetSelector(getCurrentProduct, 'variationCategories', Immutable.List())
 
 export const getProductVariationCategoryIds = createSelector(
     getProductVariationCategories,
     (categories) => categories.map((category) => category.get('id'))
 )
-export const getProductVariants = createGetSelector(getSelectedProduct, 'variants')
-export const getProductInitialValues = createGetSelector(getSelectedProduct, 'initialValues')
+export const getProductVariants = createGetSelector(getCurrentProduct, 'variants')
+export const getProductInitialValues = createGetSelector(getCurrentProduct, 'initialValues')
 
 // NOTE: These get-something-ByPathKey selectors should only be used within actions/commands
 // Using them within a component will break the performance optimizations selectors normally give us

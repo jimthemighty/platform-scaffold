@@ -6,7 +6,7 @@ import {createSelector} from 'reselect'
 import Immutable from 'immutable'
 import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi} from '../../store/selectors'
-import {getSelectedProductId} from '../../store/products/selectors'
+import {getCurrentProductId} from '../../store/products/selectors'
 
 const PLACEHOLDER_BREADCRUMBS = Immutable.fromJS([
     {
@@ -22,13 +22,13 @@ export const getProductDetails = createSelector(getUi, ({productDetails}) => pro
 
 export const getSelectedProductDetails = createGetSelector(
     getProductDetails,
-    getSelectedProductId,
+    getCurrentProductId,
     Immutable.Map()
 )
 
 export const getProductDetailsContentsLoaded = createHasSelector(
     getProductDetails,
-    getSelectedProductId
+    getCurrentProductId
 )
 
 export const getAddToCartInProgress = createGetSelector(getProductDetails, 'addToCartInProgress', false)
