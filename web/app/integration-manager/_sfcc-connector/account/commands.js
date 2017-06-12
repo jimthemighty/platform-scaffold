@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded} from '../../account/results'
+import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from '../../results'
 import {createOrderAddressObject} from '../checkout/utils'
 import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'

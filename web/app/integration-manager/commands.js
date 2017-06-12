@@ -8,7 +8,7 @@ import {register as registerCategories} from './categories/commands'
 import {register as registerCart} from './cart/commands'
 import {register as registerApp} from './app/commands'
 import {register as registerCheckout} from './checkout/commands'
-import {register as registerAccount} from './account/commands'
+import {register as registerAccount} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {register as registerCustomCommands} from './custom/commands'
 
 

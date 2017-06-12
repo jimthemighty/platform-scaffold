@@ -17,7 +17,7 @@ import {
     initCheckoutShippingPage
 } from '../../integration-manager/checkout/commands'
 import {customCommands} from '../../integration-manager/custom/commands'
-import {login} from '../../integration-manager/account/commands'
+import {login} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {handleCartExpiryError} from '../app/actions'
 
 import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'

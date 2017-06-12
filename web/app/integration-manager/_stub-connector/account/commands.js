@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {setRegisterLoaded, setSigninLoaded} from '../../account/results'
+import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from '../../results'
 
 /* eslint-disable no-unused-vars */

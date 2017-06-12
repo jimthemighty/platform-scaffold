@@ -11,7 +11,7 @@ import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 
-import {logout} from '../../integration-manager/account/commands'
+import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
