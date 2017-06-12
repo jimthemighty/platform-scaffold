@@ -16,7 +16,6 @@ export const register = (commands) => {
  */
 export const initProductDetailsPage = (url, routeName) => connector.initProductDetailsPage(url, routeName)
 
-
 /**
  * Called when the user selects a product variation. This provides a
  * hook so that the connector can take some action if needed.

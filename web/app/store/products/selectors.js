@@ -34,7 +34,4 @@ export const getProductDetailsByPathKey = (pathKey) => createGetSelector(getProd
 export const getProductThumbnailByPathKey = (pathKey) => createGetSelector(getProductDetailsByPathKey(pathKey), 'thumbnail', Immutable.Map())
 export const getProductThumbnailSrcByPathKey = (pathKey) => createGetSelector(getProductThumbnailByPathKey(pathKey), 'img')
 
-export const getProductById = (productId) => createSelector(
-    getProducts,
-    (products) => products.find((product) => product.get('id') === productId)
-)
+export const getProductById = (productId) => createGetSelector(getProducts, productId, Immutable.Map())

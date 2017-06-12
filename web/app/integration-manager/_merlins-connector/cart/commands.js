@@ -7,7 +7,7 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getUenc, getCartBaseUrl, getFormInfoByPathKey} from '../selectors'
+import {getUenc, getCartBaseUrl, getFormInfoById} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
 import {receiveCartContents, receiveCartTotals} from '../../cart/results'
@@ -56,7 +56,7 @@ export const getCart = () => (dispatch) => {
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
     const product = getProductById(productId)(getState())
 
-    const formInfo = getFormInfoByPathKey(urlToPathKey(product.get('href')))(getState())
+    const formInfo = getFormInfoById(product.get('id'))(getState())
 
     const hiddenInputs = formInfo.get('hiddenInputs')
 

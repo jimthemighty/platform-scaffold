@@ -6,7 +6,8 @@ import {receiveFormInfo} from '../actions'
 
 import {fetchPageData} from '../app/commands'
 
-import {receiveProductDetailsProductData, receiveProductDetailsUIData, receiveCurrentProduct} from '../../products/results'
+import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
+import {setCurrentProductId} from '../../results'
 import {productDetailsParser, productDetailsUIParser, pdpAddToCartFormParser} from './parsers'
 
 export const initProductDetailsPage = (url) => (dispatch) => {
@@ -23,7 +24,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 
             const {id} = productDetailsData
 
-            dispatch(receiveCurrentProduct(id))
+            dispatch(setCurrentProductId(id))
             dispatch(receiveProductDetailsUIData({[id]: productDetailsUIParser($, $response)}))
             dispatch(receiveProductDetailsProductData({[id]: productDetailsData}))
             dispatch(receiveFormInfo({[id]: pdpAddToCartFormParser($, $response)}))

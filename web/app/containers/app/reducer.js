@@ -8,7 +8,7 @@ import {mergePayload} from '../../utils/reducer-utils'
 
 import * as appActions from './actions'
 
-import {setCheckoutShippingURL, setCartURL, setCurrentURL} from '../../integration-manager/results'
+import {setCheckoutShippingURL, setCartURL, setCurrentURL, setCurrentProductId} from '../../integration-manager/results'
 import {CURRENT_URL} from './constants'
 
 export const initialState = fromJS({
@@ -21,6 +21,7 @@ export default handleActions({
     [setCheckoutShippingURL]: mergePayload,
     [setCartURL]: mergePayload,
     [setCurrentURL]: mergePayload,
+    [setCurrentProductId]: mergePayload,
 
     [appActions.onRouteChanged]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,

@@ -26,9 +26,3 @@ export const receiveCartProductData = createTypedAction(
     'Receive Cart product data',
     Products
 )
-
-export const receiveCurrentProduct = createTypedAction(
-    'Receive current product ID',
-    ProductID,
-    ['currentProduct']
-)
