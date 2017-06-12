@@ -4,7 +4,6 @@
 
 import * as Runtypes from 'runtypes'
 import {Products, ProductUIData} from './types'
-import {ProductID} from '../types'
 import {createTypedAction} from '../../utils/utils'
 
 export const receiveProductDetailsUIData = createTypedAction(
