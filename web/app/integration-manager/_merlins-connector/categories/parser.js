@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {getTextFrom} from '../../../utils/parser-utils'
+import {getTextFrom, parseProductID} from '../../../utils/parser-utils'
 
 /* eslint-disable newline-per-chained-call */
 
@@ -71,10 +71,7 @@ const categoryProductsParser = ($, $html) => {
 
     const productIds = $
           .makeArray($html.find('.item.product-item'))
-          .map((product) => {
-              return $(product).find('.price-box').length ? $(product).find('.price-box').attr('data-product-id') : ''
-          })
-          .filter((id) => id.length > 0)
+          .map((product) => parseProductID($(product)))
 
     return {
         itemCount: $numItems.length > 0 ? parseInt($numItems.text(), 10) : 0,

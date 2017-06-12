@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {extractMagentoJson} from '../../../utils/magento-utils'
-import {getTextFrom, parseTextLink, parseImage} from '../../../utils/parser-utils'
+import {getTextFrom, parseTextLink, parseImage, parseProductID} from '../../../utils/parser-utils'
 
 const UENC_REGEX = /\/uenc\/([^/,]+),*\//
 
@@ -89,15 +89,13 @@ export const pdpAddToCartFormParser = ($, $html) => {
 }
 
 export const productListParser = ($, $html) => {
-    const $products = $html
-        .find('.item.product-item')
-        .filter((_, product) => $(product).find('.price-box').length > 0)
+    const $products = $html.find('.item.product-item')
 
     const productMap = {}
     $products.each((_, product) => {
         const $product = $(product)
         const link = parseTextLink($product.find('.product-item-link'))
-        const productId = $product.find('.price-box').attr('data-product-id')
+        const productId = parseProductID($product)
         const thumbnail = parseImage($product.find('.product-image-photo'))
         const available = $product.find('.stock.unavailable').length === 0
 

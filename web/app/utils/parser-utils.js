@@ -60,3 +60,9 @@ export const parseSelect = ($, $select) => {
         options: $.makeArray($select.children()).map((item) => parseOption($(item)))
     }
 }
+
+export const parseProductID = ($product) => {
+    const $wishlist = $product.find('.towishlist')
+    const productData = JSON.parse($wishlist.attr('data-post'))
+    return productData.data.product
+}
