@@ -99,14 +99,24 @@ export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
     }
 }
 
-
-const processCheckoutData = ($response) => (dispatch) => {
+const processShippingData = ($response) => (dispatch, getState) => {
     dispatch(receiveEntityID(parseCheckoutEntityID($response)))
     const magentoFieldData = extractMagentoShippingStepData($response)
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+    const isInitialized = shippingSelectors.getIsInitialized(getState())
+    if (!isInitialized) {
+        dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+    }
+}
+
+const processPaymentData = ($response) => (dispatch) => {
+    dispatch(receiveEntityID(parseCheckoutEntityID($response)))
+    const magentoFieldData = extractMagentoShippingStepData($response)
+          .getIn(['children', 'shipping-address-fieldset', 'children'])
+
+    dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
 }
 
 const shippingDataSelector = createPropsSelector({
@@ -116,7 +126,7 @@ const shippingDataSelector = createPropsSelector({
 
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
-        .then(([$, $response]) => dispatch(processCheckoutData($response)))  // eslint-disable-line no-unused-vars
+        .then(([$, $response]) => dispatch(processShippingData($response)))  // eslint-disable-line no-unused-vars
         .then(() => {
             const {
                 isLoggedIn,
@@ -143,24 +153,19 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
     const savedAddress = formValues.savedAddress
     const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
 
-    // Format the shipping address
-    const {name} = formValues
-    const names = name.split(' ')
-    const newAddress = formValues
-
     const address = {
-        firstname: names.slice(0, -1).join(' '),
-        lastname: names.slice(-1).join(' '),
-        company: newAddress.company || '',
-        telephone: newAddress.telephone,
-        postcode: newAddress.postcode,
-        city: newAddress.city,
-        street: newAddress.addressLine2
-            ? [newAddress.addressLine1, newAddress.addressLine2]
-            : [newAddress.addressLine1],
-        regionId: newAddress.regionId,
-        region: newAddress.region,
-        countryId: newAddress.countryId,
+        firstname: formValues.firstname,
+        lastname: formValues.lastname,
+        company: formValues.company || '',
+        telephone: formValues.telephone,
+        postcode: formValues.postcode,
+        city: formValues.city,
+        street: formValues.addressLine2
+            ? [formValues.addressLine1, formValues.addressLine2]
+            : [formValues.addressLine1],
+        regionId: formValues.regionId,
+        region: formValues.region,
+        countryId: formValues.countryId,
         saveInAddressBook: true
     }
 
@@ -211,7 +216,7 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
             const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
             dispatch(receiveBillingSameAsShipping(true))
             dispatch(receiveBillingAddress(addressData))
-            return dispatch(processCheckoutData($response))
+            return dispatch(processPaymentData($response))
         })
 }
 
@@ -267,6 +272,8 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
         .then((responseJSON) => {
             // Looks like when it is successful, the responseJSON is a number
             if (/^\d+$/.test(responseJSON)) {
+                // reset isInitialized flag in shippingAddress
+                dispatch(receiveShippingAddress({isInitialized: false}))
                 return '/checkout/onepage/success/'
             } else {
                 throw new Error(responseJSON.message)

@@ -34,6 +34,8 @@ export const openSignIn = () => {
 export const continueShopping = () => {
     if (isRunningInAstro) {
         trigger('continue:clicked')
+    } else {
+        browserHistory.push('/')
     }
 }
 

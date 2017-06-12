@@ -7,8 +7,9 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getPaymentBillingFormValues} from '../../store/form/selectors'
 import {getEmailAddress} from '../../store/checkout/selectors'
 import {getShippingAddress} from '../../store/checkout/shipping/selectors'
-import {submitPayment as submitPaymentCommand} from '../../integration-manager/checkout/commands'
+import {submitPayment as submitPaymentCommand, initCheckoutPaymentPage} from '../../integration-manager/checkout/commands'
 import {splitFullName} from '../../utils/utils'
+import {handleCartExpiryError} from '../app/actions'
 import {receiveBillingAddress, receiveBillingSameAsShipping} from '../../integration-manager/checkout/results'
 
 export const receiveContents = createAction('Received CheckoutPayment Contents')
@@ -17,6 +18,11 @@ export const toggleCardInputRadio = createAction('Toggled the card method radio 
 export const toggleCompanyAptField = createAction('Toggled the "Company" and "Apt #" fields (Payment)', ['isCompanyOrAptShown'])
 export const toggleNewAddressFields = createAction('Toggled new address fields', ['newShippingAddressIsEnabled'])
 export const setCvvType = createAction('Setting CVV type', ['cvvType'])
+
+export const initPaymentPage = (url, routeName) => (dispatch) => (
+    dispatch(initCheckoutPaymentPage(url, routeName))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
+)
 
 export const submitPayment = () => (dispatch, getState) => {
     const currentState = getState()
@@ -49,6 +55,7 @@ export const submitPayment = () => (dispatch, getState) => {
         address = {
             firstname,
             lastname,
+            username: email,
             ...billingFormValues,
         }
     }
@@ -61,4 +68,5 @@ export const submitPayment = () => (dispatch, getState) => {
                 pathname: url
             })
         })
+        .catch((error) => dispatch(handleCartExpiryError(error)))
 }

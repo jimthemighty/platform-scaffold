@@ -18,7 +18,9 @@ import {initCartPage} from './integration-manager/cart/commands'
 import {initProductListPage} from './integration-manager/categories/commands'
 import {initProductDetailsPage} from './integration-manager/products/commands'
 import {initRegisterPage, initLoginPage} from './integration-manager/account/commands'
-import {initCheckoutShippingPage, initCheckoutPaymentPage, initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
+import {initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
+import {initShippingPage} from './containers/checkout-shipping/actions'
+import {initPaymentPage} from './containers/checkout-payment/actions'
 
 import {getURL} from './utils/utils'
 import {isRunningInAstro, pwaNavigate} from './utils/astro-integration'
@@ -65,7 +67,7 @@ const Router = ({store}) => (
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
                     headerHasSignIn
-                    fetchAction={initCheckoutShippingPage}
+                    fetchAction={initShippingPage}
                 />
                 {/*
                     The URL for the payment page on desktop is /checkout/#payment,
@@ -80,7 +82,7 @@ const Router = ({store}) => (
                     routeName="checkout-payment"
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
-                    fetchAction={initCheckoutPaymentPage}
+                    fetchAction={initPaymentPage}
                 />
                 <Route
                     component={CheckoutConfirmation}
@@ -107,7 +109,7 @@ const Router = ({store}) => (
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
                     headerHasSignIn
-                    fetchAction={initCheckoutShippingPage}
+                    fetchAction={initShippingPage}
                 />
                 <Route
                     component={CheckoutPayment}
@@ -115,7 +117,7 @@ const Router = ({store}) => (
                     routeName="checkout-payment"
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
-                    fetchAction={initCheckoutPaymentPage}
+                    fetchAction={initPaymentPage}
                 />
                 <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initLoginPage} />
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initCartPage} />

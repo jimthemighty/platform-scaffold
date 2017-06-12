@@ -3,8 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {SubmissionError} from 'redux-form'
-import {createBasket, handleCartData, requestCartData, createNewBasket} from '../cart/utils'
-import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload} from '../utils'
+import {createBasket, handleCartData, requestCartData, createNewBasket, updateExpiredCart} from '../cart/utils'
+import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload, checkForResponseFault} from '../utils'
 import {getOrderTotal} from '../../../store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
@@ -19,6 +19,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
     return createBasket()
         .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/shipments/me/shipping_methods`, {method: 'GET'}))
         .then((response) => response.json())
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then(({applicable_shipping_methods}) => {
             const shippingMethods = applicable_shipping_methods
                   .map(({name, description, price, id}) => ({
@@ -37,6 +38,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
 
 export const initCheckoutShippingPage = () => (dispatch) => {
     return requestCartData()
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => {
             const {
                 customer_info: {
@@ -82,6 +84,7 @@ export const initCheckoutConfirmationPage = () => () => Promise.resolve()
 export const initCheckoutPaymentPage = () => (dispatch) => {
     dispatch(populateLocationsData())
     return requestCartData()
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => {
             const shippingMethod = basket.shipments[0].shipping_method
             const addressData = parseShippingAddressFromBasket(basket)
@@ -115,6 +118,7 @@ const setShippingAddress = (formValues, basket) => () => (
         createOrderAddressObject(formValues),
         {method: 'PUT'}
     )
+    .then(checkForResponseFault)
 )
 
 const setShippingMethod = (formValues, basket) => () => (
@@ -123,14 +127,21 @@ const setShippingMethod = (formValues, basket) => () => (
         {id: formValues.shippingMethodId},
         {method: 'PUT'}
     )
+    .then(checkForResponseFault)
 )
 
 export const submitShipping = (formValues) => (dispatch) => (
     createBasket()
         .then((basket) => dispatch(setCustomerNameAndEmail(formValues, basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => dispatch(setShippingAddress(formValues, basket)))
         .then((basket) => dispatch(setShippingMethod(formValues, basket)))
-        .catch(() => { throw new SubmissionError({_error: 'Unable to save shipping data'}) })
+        .catch((error) => {
+            if (error.message.includes('expired')) {
+                throw error
+            }
+            throw new SubmissionError({_error: 'Unable to save shipping data'})
+        })
         .then((basket) => {
             dispatch(handleCartData(basket))
             return getPaymentURL()
@@ -167,6 +178,7 @@ const setBillingAddress = (formValues, basket) => () => {
         createOrderAddressObject(formValues),
         {method: 'PUT'}
     )
+    .then(checkForResponseFault)
 }
 
 const createOrder = (basket) => () => makeApiJsonRequest('/orders', basket, {method: 'POST'})
@@ -199,6 +211,7 @@ const setPaymentMethod = (formValues, order) => () => {
 export const submitPayment = (formValues) => (dispatch) => {
     return createBasket()
         .then((basket) => dispatch(addPaymentMethod(formValues, basket)))
+        .then((basket) => dispatch(updateExpiredCart(basket)))
         .then((basket) => dispatch(setBillingAddress(formValues, basket)))
         .then((basket) => dispatch(createOrder(basket)))
         .then((order) => dispatch(setPaymentMethod(formValues, order)))

@@ -87,6 +87,9 @@ const handleLoginSuccess = (href) => {
     }
     // This is only here because there is no account page in the PWA right now
     // Once we've added one we should user browserHistory to navigate to the account page after successfully logging in
+    if (!href) {
+        return
+    }
     if (isReactRoute(href)) {
         browserHistory.push({pathname: href})
     } else {
@@ -120,10 +123,9 @@ export const submitRegisterForm = (formValues) => (dispatch) => {
         firstname,
         lastname,
         email,
-        password,
-        password_confirmation
+        password
     } = formValues
 
-    return dispatch(registerUser(firstname, lastname, email, password, password_confirmation))
+    return dispatch(registerUser(firstname, lastname, email, password))
         .then(handleLoginSuccess)
 }

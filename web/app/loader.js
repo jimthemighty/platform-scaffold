@@ -1,5 +1,5 @@
-/* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED */
-import {getAssetUrl, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
+/* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
+import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {isSamsungBrowser, isFirefoxBrowser} from 'progressive-web-sdk/dist/utils/utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
@@ -32,14 +32,20 @@ const attemptToInitializeApp = () => {
         return
     }
 
-    // This isn't accurate but does describe the case where the PR currently works
-    const IS_PREVIEW = /mobify-path=true/.test(document.cookie)
     const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
     const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
     const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
     const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
-    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_PREVIEW}&b=${cacheHashManifest.buildDate}`
+
+    /**
+     * This needs to be based on whether this is a CDN environment, rather than
+     * a preview environment. `web/service-worker-loader.js` will use this value
+     * to determine whether it should load from a local development server, or
+     * from the CDN.
+     */
+    const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}`
 
     window.Progressive = {
         AstroPromise: Promise.resolve({}),
@@ -148,9 +154,7 @@ const attemptToInitializeApp = () => {
             // We know we're not running in Astro, that the service worker is
             // supported and loaded, and messaging is enabled, so we can add a
             // deferred function to load and initialize the Messaging client.
-            deferredUntilLoadComplete.push(
-                () => loadAndInitMessagingClient(IS_PREVIEW, MESSAGING_SITE_ID)
-            )
+            deferredUntilLoadComplete.push(loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID))
         }
     }
 
