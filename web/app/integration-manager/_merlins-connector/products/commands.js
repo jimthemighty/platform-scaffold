@@ -23,7 +23,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 
             const {id} = productDetailsData
 
-            dispatch(receiveCurrentProduct(productDetailsData))
+            dispatch(receiveCurrentProduct(id))
             dispatch(receiveProductDetailsUIData({[id]: productDetailsUIParser($, $response)}))
             dispatch(receiveProductDetailsProductData({[id]: productDetailsData}))
             dispatch(receiveFormInfo({[id]: pdpAddToCartFormParser($, $response)}))
@@ -33,4 +33,3 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 
 export const getProductVariantData = () => (dispatch) => Promise.resolve()
 
-export const setCurrentSelectedProduct = (product) => (dispatch) => dispatch(receiveCurrentProduct(product))

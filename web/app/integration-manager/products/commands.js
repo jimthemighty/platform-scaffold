@@ -26,10 +26,3 @@ export const initProductDetailsPage = (url, routeName) => connector.initProductD
  * @param {object} categoryIds The list of product variation category IDs
  */
 export const getProductVariantData = (variationSelections, variants, categoryIds) => connector.getProductVariantData(variationSelections, variants, categoryIds)
-
-/**
- * Sets the current selected product in the app's state
- * @function
- * @param {object} product The url of the current page
- */
-export const setCurrentSelectedProduct = (product) => connector.setCurrentSelectedProduct(product)

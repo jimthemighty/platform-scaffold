@@ -3,7 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import * as Runtypes from 'runtypes'
-import {Products, Product, ProductUIData} from './types'
+import {Products, ProductUIData} from './types'
+import {ProductID} from '../types'
 import {createTypedAction} from '../../utils/utils'
 
 export const receiveProductDetailsUIData = createTypedAction(
@@ -27,7 +28,7 @@ export const receiveCartProductData = createTypedAction(
 )
 
 export const receiveCurrentProduct = createTypedAction(
-    'Receive Product Details UI data',
-    Product,
+    'Receive current product ID',
+    ProductID,
     ['currentProduct']
 )

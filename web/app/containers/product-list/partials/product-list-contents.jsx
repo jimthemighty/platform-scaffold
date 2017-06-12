@@ -27,7 +27,13 @@ const emptySearchText = 'Your search returned no results. Please check your spel
 
 const ResultList = ({products, setProduct}) => (
     <List className="c--borderless">
-        {products.map((product, idx) => <ProductTile onClick={() => setProduct(product)} key={product ? product.id : idx} {...product} />)}
+        {products.map((product, idx) => (
+            <ProductTile
+                onClick={product ? () => setProduct(product.id) : null}
+                key={product ? product.id : idx}
+                {...product}
+            />
+        ))}
     </List>
 )
 

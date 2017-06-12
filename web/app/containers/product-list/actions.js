@@ -4,7 +4,7 @@
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getCurrentPathKey} from '../app/selectors'
-import {setCurrentSelectedProduct} from '../../integration-manager/products/commands'
+import {receiveCurrentProduct} from '../../integration-manager/products/results'
 
 export const changeSelectedSort = createAction('Change Selected Sort Order')
 
@@ -14,4 +14,4 @@ export const changeSort = (sort) => (dispatch, getState) => {
     }))
 }
 
-export const setCurrentProduct = (product) => (dispatch) => dispatch(setCurrentSelectedProduct(product))
+export const setCurrentProduct = (id) => (dispatch) => dispatch(receiveCurrentProduct(id))

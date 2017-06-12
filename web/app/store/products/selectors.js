@@ -8,9 +8,9 @@ import {createGetSelector} from 'reselect-immutable-helpers'
 
 import {getProducts} from '../selectors'
 
-export const getSelectedProduct = createGetSelector(getProducts, 'currentProduct', Immutable.Map())
+export const getSelectedProductId = createGetSelector(getProducts, 'currentProduct', Immutable.Map())
 
-export const getSelectedProductId = createGetSelector(getSelectedProduct, 'id')
+export const getSelectedProduct = createGetSelector(getProducts, getSelectedProductId, Immutable.Map())
 export const getProductTitle = createGetSelector(getSelectedProduct, 'title')
 export const getProductPrice = createGetSelector(getSelectedProduct, 'price')
 export const getProductDescription = createGetSelector(getSelectedProduct, 'description')
