@@ -11,7 +11,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {PRODUCT_LIST_FILTER_MODAL} from '../constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
-import {changeSort} from '../actions'
+import {changeSort, setCurrentProduct} from '../actions'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import List from 'progressive-web-sdk/dist/components/list'
@@ -25,14 +25,15 @@ import ProductTile from '../../../components/product-tile'
 const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
 
-const ResultList = ({products}) => (
+const ResultList = ({products, setProduct}) => (
     <List className="c--borderless">
-        {products.map((product, idx) => <ProductTile key={product ? product.id : idx} {...product} />)}
+        {products.map((product, idx) => <ProductTile onClick={() => setProduct(product)} key={product ? product.id : idx} {...product} />)}
     </List>
 )
 
 ResultList.propTypes = {
-    products: PropTypes.array
+    products: PropTypes.array,
+    setProduct: PropTypes.func
 }
 
 const NoResultsList = ({routeName}) => (
@@ -61,6 +62,7 @@ const ProductListContents = ({
     contentsLoaded,
     products,
     openModal,
+    setProduct,
     sortChange,
     routeName
 }) => (
@@ -135,7 +137,7 @@ const ProductListContents = ({
             </div>
 
             {(products.length > 0 || !contentsLoaded) ?
-                <ResultList products={products} />
+                <ResultList products={products} setProduct={setProduct} />
             :
                 <NoResultsList routeName={routeName} />
             }
@@ -152,6 +154,7 @@ ProductListContents.propTypes = {
     numItems: PropTypes.number,
     openModal: PropTypes.func,
     routeName: PropTypes.string,
+    setProduct: PropTypes.func,
     sortChange: PropTypes.func
 }
 
@@ -166,6 +169,7 @@ const mapDispatchToProps = {
     clearFilters: () => changeFilterTo(null),
     openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL),
     sortChange: changeSort,
+    setProduct: setCurrentProduct
 }
 
 

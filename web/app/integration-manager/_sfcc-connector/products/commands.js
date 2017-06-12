@@ -63,3 +63,5 @@ export const getProductVariantData = (variationSelections, variants, categoryIds
 
     return Promise.resolve()
 }
+
+export const setCurrentSelectedProduct = (product) => (dispatch) => dispatch(receiveCurrentProduct(product))

@@ -32,3 +32,5 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 }
 
 export const getProductVariantData = () => (dispatch) => Promise.resolve()
+
+export const setCurrentSelectedProduct = (product) => (dispatch) => dispatch(receiveCurrentProduct(product))
