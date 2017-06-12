@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import Button from '../../../components/button'
 import Field from '../../../components/field'
 import FieldRow from '../../..//components/field-row'
