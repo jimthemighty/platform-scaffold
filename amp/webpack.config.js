@@ -29,15 +29,9 @@ module.exports = {
             },
             {
                 test: /\.js(x?)$/,
-                exclude: /jsdom/,
+                include: /progressive-web-sdk/,
                 use: [
                     {loader: "imports-loader?window=>{location: {href: ''}},\
-                                             window.Progressive=>{},\
-                                             window.$=>(...args) => { return global.window.jQuery(...args) }; window.$.makeArray=(...args) => { return global.window.jQuery.makeArray(...args)},\
-                                             document.createElement=>(...args) => global.window.document.createElement(...args),\
-                                             document.body.appendChild=>(...args) => global.window.document.body.appendChild(...args),\
-                                             window.Capture=>{},\
-                                             window.Capture.disable=>(...args) => global.Capture.disable(...args),\
                                              navigator=>{userAgent: ''}"}
                 ],
             },

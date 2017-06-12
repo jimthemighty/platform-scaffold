@@ -24,15 +24,31 @@ import captureDisable from './capturejs-disable'
 import {PAGE_TITLE, DATA_INIT_FUNCTION} from './constants'
 
 export const createConnectedStore = (window, fullUrl, dataInitFunction) => {
-    // This is okay to pass to both SFCC and Merlin's connectors,
-    // as Merlin's doesn't need a configuration object
-    registerConnector(Connector({
-        siteID: '2017refresh',
-        clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93'
-    }))
+    const jqueryResponse = (response) => response.text()
+    .then((responseText) => {
+        const transformedText = captureDisable(responseText, 'x-')
 
-    global.window = window
-    global.Capture = {disable: (...args) => captureDisable(...args)}
+        const iframe = window.document.createElement('iframe')
+        iframe.style.display = 'none'
+        window.document.body.appendChild(iframe)
+
+        const doc = iframe.contentDocument
+        doc.open()
+        doc.write(transformedText)
+        doc.close()
+
+        window.setTimeout(() => {
+            iframe.remove()
+        }, 0)
+
+        const jQueryObject = window.$(doc.documentElement)
+
+        return [window.$, jQueryObject]
+    })
+
+    registerConnector(Connector({
+        jqueryResponse
+    }))
 
     const uiReducer = combineReducers({
         app: appReducer,

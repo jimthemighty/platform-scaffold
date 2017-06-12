@@ -2,14 +2,13 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 import {getCart} from '../cart/commands'
 import {parseLoginStatus} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-import {CHECKOUT_SHIPPING_URL, CART_URL} from '../config'
+import {CHECKOUT_SHIPPING_URL, CART_URL, getJQueryResponse} from '../config'
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
@@ -35,16 +34,18 @@ const requestCapturedDoc = () => {
 
 let isInitialEntryToSite = true
 
+const runningInBrowser = () => typeof window !== 'undefined' && window.Progressive
+
 export const fetchPageData = (url) => (dispatch) => {
-    // AMP builds do not run in a browser and thus capturedDocHTMLPromise will
-    // not be defined, so request the page normally
-    const request = isInitialEntryToSite && window.Progressive.capturedDocHTMLPromise
-                    ? requestCapturedDoc() : makeRequest(url)
+    // AMP builds do not run in a browser and thus window will not be defined,
+    // so request the page normally
+    const request = isInitialEntryToSite &&
+                    runningInBrowser() ? requestCapturedDoc() : makeRequest(url)
 
     isInitialEntryToSite = false
 
     return request
-        .then(jqueryResponse)
+        .then(getJQueryResponse())
         .then((res) => {
             const [$, $response] = res
             const isLoggedIn = parseLoginStatus($response)

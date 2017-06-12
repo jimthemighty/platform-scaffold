@@ -12,7 +12,7 @@ import {setCheckoutShippingURL, setCartURL, setCurrentURL} from '../../integrati
 import {CURRENT_URL} from './constants'
 
 export const initialState = fromJS({
-    [CURRENT_URL]: window.location.href,
+    [CURRENT_URL]: typeof window !== 'undefined' ? window.location.href : '',
     sprite: '',
     hideApp: true
 })

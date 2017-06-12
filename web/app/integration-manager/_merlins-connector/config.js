@@ -14,3 +14,5 @@ let config = {} // eslint-disable-line
 export const registerConfig = (cfg) => {
     config = cfg
 }
+
+export const getJQueryResponse = () => config.jqueryResponse
