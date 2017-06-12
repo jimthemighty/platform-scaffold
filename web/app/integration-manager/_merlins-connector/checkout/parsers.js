@@ -27,7 +27,8 @@ export const parseShippingInitialValues = (shippingFieldData) => {
         countryId: fieldData.country_id.value,
         regionId: fieldData.region_id.value,
         postcode: fieldData.postcode.value,
-        telephone: fieldData.telephone.value
+        telephone: fieldData.telephone.value,
+        isInitialized: true
     }
 
     // Remove undefined keys to prevent valid content being overriden in the store
