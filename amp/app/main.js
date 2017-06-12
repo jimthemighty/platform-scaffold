@@ -1,6 +1,16 @@
 import sourceMapSupport from 'source-map-support'
 sourceMapSupport.install()
 
+import ReactInjection from 'react-dom/lib/ReactInjection'
+
+// Whitelist the 'on' attribute, frequently used with AMP. This must be done once,
+// before any rendering happens.
+ReactInjection.DOMProperty.injectDOMPropertyConfig({
+    isCustomAttribute: (attributeName) => (
+        ['on'].indexOf(attributeName) >= 0
+    )
+})
+
 import process from 'process'
 import path from 'path'
 import Promise from 'bluebird'
@@ -22,7 +32,6 @@ import App from './containers/app/container'
 
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
-
 
 
 
