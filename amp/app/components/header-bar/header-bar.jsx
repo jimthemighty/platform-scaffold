@@ -15,7 +15,7 @@ const HeaderBar = ({className, children}) => {
 HeaderBar.propTypes = {
     // The contents of the header bar
     children: PropTypes.node.isRequired,
-    // Any additional classes you wish to apple to the root element
+    // Any additional classes you wish to apply to the root element
     className: PropTypes.string,
 }
 
