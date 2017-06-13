@@ -27,6 +27,7 @@ import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getCartItems} from '../../../store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
 import {prepareEstimateAddress} from '../utils'
@@ -161,7 +162,6 @@ export const initCheckoutConfirmationPage = (url) => (dispatch) => {
 }
 
 export const submitShipping = (formValues) => (dispatch, getState) => {
-    debugger;
     const savedAddress = formValues.savedAddress
     const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
 
@@ -202,7 +202,8 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             shipping_method_code: shippingSelections[1]
         }
     }
-    const cartBaseUrl = getCartBaseUrl(getState())
+    const state = getState()
+    const cartBaseUrl = getCartBaseUrl(state)
     const persistShippingURL = `${cartBaseUrl}/shipping-information`
     return makeJsonEncodedRequest(persistShippingURL, addressData, {method: 'POST'})
         .then((response) => {
@@ -215,8 +216,9 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             if (!responseJSON.payment_methods) {
                 throw new SubmissionError({_error: 'Unable to save shipping address'})
             }
-
-            dispatch(receiveCartContents(parseCartTotals(responseJSON.totals)))
+            const cartItems = getCartItems(state).toJS()
+            const cartTotals = parseCartTotals(responseJSON.totals)
+            dispatch(receiveCartContents({items: cartItems, ...cartTotals}))
             return PAYMENT_URL
         })
 }

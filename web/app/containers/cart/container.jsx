@@ -16,6 +16,7 @@ import Image from 'progressive-web-sdk/dist/components/image'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
+import {getIsLoggedIn} from '../../store/user/selectors'
 import EstimateShippingReduxForm from './partials/cart-estimate-shipping'
 
 import CartWishlistModal from './partials/cart-wishlist'
@@ -39,7 +40,7 @@ export const continueShopping = () => {
     }
 }
 
-const EmptyCartContents = ({hide}) => {
+const EmptyCartContents = ({hide, isLoggedIn}) => {
     const emptyCartClassnames = classNames('t-cart__empty u-flexbox u-flex u-direction-column u-align-center u-justify-center', {
         'u-visually-hidden': hide,
         't--hide': hide,
@@ -61,10 +62,13 @@ const EmptyCartContents = ({hide}) => {
                     <p className="u-padding-top u-padding-start-lg u-padding-end-lg u-text-align-center u-margin-bottom-lg">
                         Your shopping cart is empty. Sign in to retrieve saved items or continue shopping.
                     </p>
-                    <Button className="c--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg" onClick={openSignIn}>
-                        <Icon name="User" />
-                        Sign In
-                    </Button>
+
+                    {!isLoggedIn &&
+                        <Button className="c--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg" onClick={openSignIn}>
+                            <Icon name="User" />
+                            Sign In
+                        </Button>
+                    }
 
                     <Button className="c--tertiary u-text-uppercase u-h5 u-width-full" onClick={continueShopping}>
                         Continue Shopping
@@ -87,7 +91,8 @@ class Cart extends React.Component {
     render() {
         const {
             cartLoaded,
-            hasItems
+            hasItems,
+            isLoggedIn
         } = this.props
         const isCartEmptyAndLoaded = !hasItems && cartLoaded
         const templateClassnames = classNames('t-cart u-bg-color-neutral-10', {
@@ -99,7 +104,7 @@ class Cart extends React.Component {
                 <Grid className="u-center-piece">
                     {!isCartEmptyAndLoaded && <CartItems onContinueShopping={continueShopping} onOpenSignIn={openSignIn} />}
 
-                    <EmptyCartContents hide={!isCartEmptyAndLoaded} />
+                    <EmptyCartContents hide={!isCartEmptyAndLoaded} isLoggedIn={isLoggedIn} />
                 </Grid>
 
                 <EstimateShippingReduxForm />
@@ -113,12 +118,14 @@ class Cart extends React.Component {
 Cart.propTypes = {
     cartLoaded: PropTypes.bool,
     hasItems: PropTypes.bool,
+    isLoggedIn: PropTypes.bool,
     removeItemID: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
     cartLoaded: getCartLoaded,
-    hasItems: getCartHasItems
+    hasItems: getCartHasItems,
+    isLoggedIn: getIsLoggedIn
 })
 
 export default template(connect(mapStateToProps)(Cart))

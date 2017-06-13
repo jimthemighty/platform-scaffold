@@ -62,17 +62,7 @@ export const parseCartTotals = ({
           ? base_grand_total
           : subtotal_incl_tax
     /* eslint-enable camelcase */
-
     return {
-        shipping: {
-            // label // => this value is either blank or set when a shipping method is chosen
-            amount: formatMerlinsMoney(shipping_amount)
-        },
-        discount: {
-            label: coupon_code,
-            code: coupon_code,
-            amount: formatMerlinsMoney(discount_amount, true)
-        },
         subtotal: formatMerlinsMoney(subtotal),
         tax: formatMerlinsMoney(tax_amount),
         orderTotal: formatMerlinsMoney(orderTotal)
