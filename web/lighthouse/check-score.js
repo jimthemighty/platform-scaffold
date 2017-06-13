@@ -44,8 +44,8 @@ const checkTTI = function(jsonResults) {
     console.log(`${JSON.stringify(jsonResults.audits['total-byte-weight'].extendedInfo.value.results)}`)
 }
 
-const htmlReport = fs.readFileSync(`lighthouse/${fileName}.report.html`, 'utf8')
 const jsonResults = JSON.parse(fs.readFileSync(`lighthouse/${fileName}.report.json`, 'utf8'))
+const htmlReport = fs.readFileSync(`lighthouse/${fileName}.report.html`, 'utf8')
 
 checkTTI(jsonResults)
 checkLighthouse(htmlReport)
