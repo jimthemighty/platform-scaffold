@@ -36,16 +36,16 @@ else
     if [ $CIRCLE_NODE_INDEX -eq 0 ]; then
       echo 'Running Lighthouse Test'
       ./tests/system/run-lighthouse.sh
-    fi
-
-    # The other cirlce_node_index worker will run the rest of the tests
-    if [ $CIRCLE_NODE_INDEX -gt 0 ]; then
+      
       echo 'Running Lint'
       npm run lint
     
       echo 'Running Unit Tests'
       npm test -- --runInBand
-    
+    fi
+
+    # The other cirlce_node_index worker will run the rest of the tests
+    if [ $CIRCLE_NODE_INDEX -gt 0 ]; then    
       echo 'Running End to End Tests'
       #If we have nodes > 2, it will be part of the division to run another test:e2e
       i=0
