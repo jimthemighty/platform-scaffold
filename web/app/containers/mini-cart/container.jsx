@@ -64,15 +64,32 @@ MiniCartMain.propTypes = {
 }
 
 
-const MiniCart = ({hasItems, cartLoaded, isOpen, closeMiniCart, checkoutShippingURL}) => {
-    return (
-        <Sheet className="t-mini-cart" open={isOpen} onDismiss={closeMiniCart} maskOpacity={0.7} effect="slide-right" coverage="85%">
-            <MiniCartHeader closeMiniCart={closeMiniCart} />
+const MiniCart = ({
+    hasItems,
+    cartLoaded,
+    isOpen,
+    closeMiniCart,
+    checkoutShippingURL
+}) => (
+    <Sheet
+        className="t-mini-cart"
+        open={isOpen}
+        onDismiss={closeMiniCart}
+        maskOpacity={0.7}
+        effect="slide-right"
+        coverage="85%"
+    >
+        <MiniCartHeader closeMiniCart={closeMiniCart} />
 
-            {cartLoaded && <MiniCartMain hasItems={hasItems} closeMiniCart={closeMiniCart} checkoutShippingURL={checkoutShippingURL} />}
-        </Sheet>
-    )
-}
+        {cartLoaded &&
+            <MiniCartMain
+                hasItems={hasItems}
+                closeMiniCart={closeMiniCart}
+                checkoutShippingURL={checkoutShippingURL}
+            />
+        }
+    </Sheet>
+)
 
 MiniCart.propTypes = {
     cartLoaded: PropTypes.bool,
