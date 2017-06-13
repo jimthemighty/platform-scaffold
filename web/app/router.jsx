@@ -15,7 +15,7 @@ import CheckoutFooter from './containers/checkout-footer/container'
 
 import {initHomePage} from './integration-manager/home/commands'
 import {initCartPage} from './integration-manager/cart/commands'
-import {initProductListPage} from './integration-manager/categories/commands'
+import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 import {initProductDetailsPage} from './integration-manager/products/commands'
 import {initRegisterPage, initLoginPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
