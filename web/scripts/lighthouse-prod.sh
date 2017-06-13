@@ -7,8 +7,8 @@ URL=${1-$npm_package_siteUrl}
 lighthouse \
 	--view \
 	--output json \
-	--output=html \
-	--output-path=$OUTPUT_PATH \
+	--output html \
+	--output-path $OUTPUT_PATH \
 	$URL
 
 node ./lighthouse/check-score.js
