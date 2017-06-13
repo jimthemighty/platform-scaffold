@@ -15,6 +15,7 @@ dependencies:
             pwd: web
             background: true
         - ./scripts/wait-for-dependencies.sh:
+            pwd: web
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
         #- npm install:
         #    pwd: native
