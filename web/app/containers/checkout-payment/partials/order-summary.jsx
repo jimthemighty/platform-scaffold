@@ -93,10 +93,7 @@ class OrderSummary extends React.Component {
                 {isLoading ?
                     <InlineLoader />
                 :
-                [
-                    <Icon key="" name="lock" />,
-                    'Place Your Order'
-                ]
+                    [<Icon key="" name="lock" />, 'Place Your Order']
                 }
             </Button>
         )
