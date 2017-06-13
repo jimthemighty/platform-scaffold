@@ -1,0 +1,26 @@
+// IconLabel
+// ===
+
+// IconLabel root
+// ---
+
+.amp-icon-label {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+}
+
+
+// Sub components
+// ---
+//
+
+.amp-icon-label__label {
+    display: block;
+    margin-top: $sub-unit;
+
+    font-size: 8px;
+    line-height: 1em;
+}
