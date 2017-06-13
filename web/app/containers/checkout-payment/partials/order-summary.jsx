@@ -83,6 +83,24 @@ class OrderSummary extends React.Component {
             </Button>
         )
 
+        const PlaceOrderButton = (
+            <Button
+                className="c--primary u-flex-none u-width-full u-text-uppercase"
+                type="button"
+                onClick={submitPayment}
+                disabled={isLoading}
+            >
+                {isLoading ?
+                    <InlineLoader />
+                :
+                [
+                    <Icon key="" name="lock" />,
+                    'Place Your Order'
+                ]
+                }
+            </Button>
+        )
+
         return (
             <div className="t-checkout-payment__order-summary">
                 <div className="t-checkout-payment__title u-padding-top-lg u-padding-bottom-md">
@@ -150,26 +168,7 @@ class OrderSummary extends React.Component {
 
                     {/* This is the statically positioned "Place Your Order" container */}
                     <div className="u-padding-end-md u-padding-start-md">
-                        {isLoading ?
-                            <Button
-                                className="c--primary u-flex-none u-width-full u-text-uppercase"
-                                type="button"
-                                onClick={submitPayment}
-                                disabled={isLoading}
-                            >
-                                <InlineLoader />
-                            </Button>
-                        :
-                            <Button
-                                className="c--primary u-flex-none u-width-full u-text-uppercase"
-                                type="button"
-                                onClick={submitPayment}
-                                disabled={isLoading}
-                            >
-                                <Icon name="lock" />
-                                Place Your Order
-                            </Button>
-                        }
+                        {PlaceOrderButton}
                     </div>
 
                     {/* This is the FIXED positioned "Place Your Order" container */}
@@ -179,26 +178,7 @@ class OrderSummary extends React.Component {
                         aria-hidden="true"
                     >
                         <div className="u-padding-md u-bg-color-neutral-00 u-text-align-center">
-                            {isLoading ?
-                                <Button
-                                    className="c--primary u-flex-none u-width-full u-text-uppercase"
-                                    type="button"
-                                    onClick={submitPayment}
-                                    disabled={isLoading}
-                                >
-                                    <InlineLoader />
-                                </Button>
-                            :
-                                <Button
-                                    className="c--primary u-flex-none u-width-full u-text-uppercase"
-                                    type="button"
-                                    onClick={submitPayment}
-                                    disabled={isLoading}
-                                >
-                                    <Icon name="lock" />
-                                    Place Your Order
-                                </Button>
-                            }
+                            {PlaceOrderButton}
                             <p className="u-margin-top-md">
                                 Total: <strong>{orderTotal}</strong>
                             </p>
