@@ -1,12 +1,12 @@
 import React from 'react'
 import Button from '../../../components/button'
+import AmpForm from '../../../components/amp-form'
 import Field from '../../../components/field'
 import FieldRow from '../../..//components/field-row'
 
 const NewsletterForm = ({disabled, submitting}) => {
     return (
-        // TODO add amp-form
-        <form method="GET" action="TODO" target="_top">
+        <AmpForm method="GET" action="TODO" target="_top">
             <FieldRow>
                 <Field name="email">
                     <input
@@ -22,7 +22,7 @@ const NewsletterForm = ({disabled, submitting}) => {
                     Submit
                 </Button>
             </FieldRow>
-        </form>
+        </AmpForm>
     )
 }
 

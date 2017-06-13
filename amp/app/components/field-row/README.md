@@ -1,5 +1,6 @@
 ```js
 // JS import
+import AmpForm from 'mobify-amp-sdk/dist/components/amp-form'
 import FieldRow from 'mobify-amp-sdk/dist/components/field-row'
 
 // SCSS import
@@ -9,7 +10,7 @@ import FieldRow from 'mobify-amp-sdk/dist/components/field-row'
 
 ## Example Usage
 
-    <form>
+    <AmpForm>
         <FieldRow>
             <Field label="Credit Card Number">
                 <input type="number" name="cc-number"/>
@@ -23,4 +24,4 @@ import FieldRow from 'mobify-amp-sdk/dist/components/field-row'
                 <input type="number" name="cvv" maxLength={3} />
             </Field>
         </FieldRow>
-    </form>
+    </AmpForm>
