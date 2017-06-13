@@ -95,7 +95,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {zipCode &&
+                    {(zipCode !== null && zipCode !== undefined) &&
                         <LedgerRow
                             label={`Shipping (${selectedShippingLabel})`}
                             value={selectedShippingRate}
