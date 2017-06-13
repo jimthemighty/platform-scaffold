@@ -110,9 +110,11 @@ const homePage = (req, res, next) => {
 const onLambda = process.env.hasOwnProperty('AWS_LAMBDA_FUNCTION_NAME')
 
 const app = express()
-const logger = morgan(onLambda ? 'short' : 'dev')
 
-app.use(logger)
+if (process.env.NODE_ENV !== 'test') {
+    app.use(morgan(onLambda ? 'short' : 'dev'))
+}
+
 app.get('/', homePage)
 app.get('/potions.html', productListPage)
 app.get('/books.html', productListPage)
