@@ -14,9 +14,9 @@ dependencies:
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
             pwd: web
             background: 
-        - ./scripts/add-signed-cert.sh:
+        - ./scripts/add-signed-cert.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
             pwd: web
-            background: web
+            background: 
         - ./scripts/wait-for-dependencies.sh:
             pwd: web
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
