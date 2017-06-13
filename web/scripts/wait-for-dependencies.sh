@@ -6,4 +6,4 @@ echo "npm prod:build is complete"
 
 echo "Waiting for dev server to become active"
 while ! nc -z localhost 8443; do sleep 2; done
-echo "Waiting for dev server is now active"
+echo "8443 dev server is now active"
