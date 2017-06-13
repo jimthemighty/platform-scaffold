@@ -1,80 +1,63 @@
 ```js
 // JS import
-import HeaderBar from 'amp-sdk/dist/components/header-bar/'
+import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'mobify-amp-sdk/dist/components/header-bar'
 
 // SCSS import
-@import '../components/header-bar/base';
+@import 'node_modules/mobify-amp-sdk/dist/components/header-bar/base';
 ```
 
 
 ## Example Usage
 
-### With an image link title
-
         <HeaderBar>
-            <Button className="t-header__link amp-header-bar__action" on={openNav}>
-                <IconLabel iconName="menu" label="Menu" iconSize="medium" />
-            </Button>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="search" label="Search" iconSize="medium" />
-            </Button>
-            <HeaderBarTitle href="/">
-                <AmpImage src="/static/svg/logo.svg" width="67" height="28" layout="fixed" />
-            </HeaderBarTitle>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="store" label="Stores" iconSize="medium" />
-            </Button>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="cart" label="Cart" iconSize="medium" />
-            </Button>
-        </HeaderBar>
+            <HeaderBarActions>
+                Menu
+            </HeaderBarActions>
 
-### With a title text link
+            <HeaderBarActions>
+                Search
+            </HeaderBarActions>
 
-        <HeaderBar>
-            <Button className="t-header__link amp-header-bar__action" on={openNav}>
-                <IconLabel iconName="menu" label="Menu" iconSize="medium" />
-            </Button>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="search" label="Search" iconSize="medium" />
-            </Button>
-            <HeaderBarTitle href="/">
-                Title Link
-            </HeaderBarTitle>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="store" label="Stores" iconSize="medium" />
-            </Button>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="cart" label="Cart" iconSize="medium" />
-            </Button>
-        </HeaderBar>
-
-### With a static title
-
-        <HeaderBar>
-            <Button className="t-header__link amp-header-bar__action" on={openNav}>
-                <IconLabel iconName="menu" label="Menu" iconSize="medium" />
-            </Button>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="search" label="Search" iconSize="medium" />
-            </Button>
             <HeaderBarTitle>
-                Title
+                Logo
             </HeaderBarTitle>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="store" label="Stores" iconSize="medium" />
-            </Button>
-            <Button className="t-header__link amp-header-bar__action">
-                <IconLabel iconName="cart" label="Cart" iconSize="medium" />
-            </Button>
+
+            <HeaderBarActions>
+                Stores
+            </HeaderBarActions>
+
+            <HeaderBarActions>
+                Cart
+            </HeaderBarActions>
         </HeaderBar>
 
-### Dialog header bar
+## Example With Buttons and Icons for Actions and Image for Title
+        <HeaderBar>
+            <HeaderBarActions>
+                <Button className="t-header__actions-button">
+                    <IconLabel iconName="menu" label="MENU" />
+                </Button>
+            </HeaderBarActions>
 
-        <HeaderBar className="c--dialog">
-            <HeaderBarTitle>
-                Dialog title
+            <HeaderBarActions>
+                <Button className="t-header__actions-button">
+                    <IconLabel iconName="search" label="SEARCH" />
+                </Button>
+            </HeaderBarActions>
+
+            <HeaderBarTitle href="http://www.mobify.com">
+                <AmpImage src="https://www.mobify.com/wp-content/uploads/logo-mobify-white.png" width="67" height="28" layout="fixed" />
             </HeaderBarTitle>
 
-            <Button className="c--blank u-link-color" icon="close" title="Close" />
+            <HeaderBarActions>
+                <Button className="t-header__actions-button">
+                    <IconLabel iconName="location" label="STORES" />
+                </Button>
+            </HeaderBarActions>
+
+            <HeaderBarActions>
+                <Button className="t-header__actions-button">
+                    <IconLabel iconName="cart" label="CART" />
+                </Button>
+            </HeaderBarActions>
         </HeaderBar>
