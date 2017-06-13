@@ -50,7 +50,14 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
         .then((shippingMethods) => {
             dispatch(receiveShippingMethods(shippingMethods))
             dispatch(receiveShippingAddress({
-                postcode: address.postcode,
+                // Required Address runtypes not available during
+                // tax estimations -- set them empty for now.
+                firstname: '',
+                lastname: '',
+                addressLine1: '',
+                city: '',
+                telephone: '',
+                postcode: address.postcode || '',
                 countryId: address.country_id,
                 region: address.region,
                 regionId: address.regionId
@@ -105,9 +112,13 @@ const processShippingData = ($response) => (dispatch, getState) => {
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    const isInitialized = shippingSelectors.getIsInitialized(getState())
+    const state = getState()
+    const isInitialized = shippingSelectors.getIsInitialized(state)
     if (!isInitialized) {
-        dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+        const initialData = parseShippingInitialValues(magentoFieldData)
+        const currentAddress = shippingSelectors.getShippingAddress(state).toJS()
+
+        dispatch(receiveShippingAddress({...currentAddress, ...initialData}))
     }
 }
 
@@ -150,6 +161,7 @@ export const initCheckoutConfirmationPage = (url) => (dispatch) => {
 }
 
 export const submitShipping = (formValues) => (dispatch, getState) => {
+    debugger;
     const savedAddress = formValues.savedAddress
     const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
 
