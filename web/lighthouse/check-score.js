@@ -9,9 +9,9 @@ const fs = require('fs')
 
 let fileName
 
-if (fs.existsSync('lighthouse/audit-local.html')) {
+if (fs.existsSync('lighthouse/audit-local.report.html')) {
     fileName = 'audit-local'
-} else if (fs.existsSync('lighthouse/audit-prod.html')){
+} else if (fs.existsSync('lighthouse/audit-prod.report.html')){
     fileName = 'audit-prod'
 } else {
 	console.log('Error Lighthouse report not found.')
@@ -44,7 +44,7 @@ const checkTTI = function(jsonResults) {
     console.log(`${JSON.stringify(jsonResults.audits['total-byte-weight'].extendedInfo.value.results)}`)
 }
 
-const htmlReport = fs.readFileSync(`lighthouse/${fileName}.html`, 'utf8')
+const htmlReport = fs.readFileSync(`lighthouse/${fileName}.report.html`, 'utf8')
 const jsonResults = JSON.parse(fs.readFileSync(`lighthouse/${fileName}.report.json`, 'utf8'))
 
 checkTTI(htmlReport)
