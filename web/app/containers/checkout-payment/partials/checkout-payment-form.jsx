@@ -35,7 +35,11 @@ const validate = (values) => {
         'countryId',
         'regionId',
         'postcode',
-        'telephone'
+        'telephone',
+        'ccexpiry',
+        'ccname',
+        'ccnumber',
+        'cvv'
     ]
 
     if (values.name && !validateFullName(values.name)) {
@@ -51,21 +55,43 @@ const validate = (values) => {
     return errors
 }
 
+class CheckoutPaymentForm extends React.Component {
+    constructor(props) {
+        super(props)
+        this.onSubmit = this.onSubmit.bind(this)
+    }
 
-const CheckoutPaymentForm = ({handleSubmit, submitPayment}) => {
-    return (
-        <Grid className="u-center-piece">
-            <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
-                <form className="t-checkout-payment__form" onSubmit={handleSubmit(submitPayment)} noValidate>
-                    <CreditCardForm />
-                    <BillingAddressForm />
-                </form>
-            </GridSpan>
-            <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
-                <OrderSummary />
-            </GridSpan>
-        </Grid>
-    )
+    onSubmit(values) {
+        debugger;
+        return new Promise((resolve, reject) => {
+            const errors = validate(values)
+            if (!Object.keys(errors).length) {
+                this.props.submitPayment()
+                return resolve()
+            }
+            return reject(new ReduxForm.SubmissionError(errors))
+        })
+    }
+
+    render() {
+        const {
+            handleSubmit
+        } = this.props
+
+        return (
+            <Grid className="u-center-piece">
+                <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
+                    <form className="t-checkout-payment__form" onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                        <CreditCardForm />
+                        <BillingAddressForm />
+                    </form>
+                </GridSpan>
+                <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
+                    <OrderSummary submitPayment={handleSubmit(this.onSubmit)}/>
+                </GridSpan>
+            </Grid>
+        )
+    }
 }
 
 CheckoutPaymentForm.propTypes = {
