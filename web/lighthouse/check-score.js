@@ -47,7 +47,7 @@ const checkTTI = function(jsonResults) {
 const htmlReport = fs.readFileSync(`lighthouse/${fileName}.report.html`, 'utf8')
 const jsonResults = JSON.parse(fs.readFileSync(`lighthouse/${fileName}.report.json`, 'utf8'))
 
-checkTTI(htmlReport)
-checkLighthouse(jsonResults)
+checkTTI(jsonResults)
+checkLighthouse(htmlReport)
 
 
