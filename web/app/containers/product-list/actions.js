@@ -14,4 +14,4 @@ export const changeSort = (sort) => (dispatch, getState) => {
     }))
 }
 
-export const setCurrentProductId = (id) => (dispatch) => dispatch(receiveCurrentProductId(id))
+export const setCurrentProductId = (id) => receiveCurrentProductId(id)
