@@ -16,6 +16,7 @@ import path from 'path'
 import Promise from 'bluebird'
 import fetch from 'node-fetch'
 import express from 'express'
+import morgan from 'morgan'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import _jsdom from 'jsdom'
@@ -106,7 +107,13 @@ const homePage = (req, res, next) => {
         .catch(next)
 }
 
+const onLambda = process.env.hasOwnProperty('AWS_LAMBDA_FUNCTION_NAME')
+
 const app = express()
+
+if (process.env.NODE_ENV !== 'test') {
+    app.use(morgan(onLambda ? 'short' : 'dev'))
+}
 
 app.get('/', homePage)
 app.get('/potions.html', productListPage)
@@ -121,12 +128,9 @@ app.get('*.html', productDetailsPage)
 app.use('/static', express.static(path.resolve('./app/static')))
 
 
-
-const onLambda = process.env.hasOwnProperty('AWS_LAMBDA_FUNCTION_NAME')
-
-
 if (!onLambda && require.main === module) {
-    app.listen(3000, () => console.log('Example app listening on port 3000!'))
+    const port = 3000
+    app.listen(port, () => console.log(`AMP server listening on port ${port}!`))
 }
 
 
