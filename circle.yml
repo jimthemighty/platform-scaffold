@@ -9,7 +9,7 @@ dependencies:
         - mkdir $CIRCLE_ARTIFACTS/logs
         - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
             background: true
-        - ./scripts/add-signed-cert.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
+        - ./scripts/add-self-signed-cert.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
             pwd: web
             background: true
         - npm install:
