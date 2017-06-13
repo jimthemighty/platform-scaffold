@@ -13,6 +13,7 @@ import {handleCartExpiryError} from '../app/actions'
 import {receiveBillingAddress, receiveBillingSameAsShipping} from '../../integration-manager/checkout/results'
 
 export const receiveContents = createAction('Received CheckoutPayment Contents')
+export const toggleLoadingState = createAction('Toggled the spinner inside of "Place Order" button', ['isLoading'])
 export const toggleFixedPlaceOrder = createAction('Toggled the fixed "Place Order" container', ['isFixedPlaceOrderShown'])
 export const toggleCardInputRadio = createAction('Toggled the card method radio input', ['isNewCardInputSelected'])
 export const toggleCompanyAptField = createAction('Toggled the "Company" and "Apt #" fields (Payment)', ['isCompanyOrAptShown'])
@@ -25,6 +26,7 @@ export const initPaymentPage = (url, routeName) => (dispatch) => (
 )
 
 export const submitPayment = () => (dispatch, getState) => {
+    dispatch(toggleLoadingState(true))
     const currentState = getState()
     const billingFormValues = getPaymentBillingFormValues(currentState)
     const billingSameAsShipping = billingFormValues.billingSameAsShipping
@@ -64,9 +66,13 @@ export const submitPayment = () => (dispatch, getState) => {
     dispatch(receiveBillingAddress(address))
     return dispatch(submitPaymentCommand({...address, ...paymentInfo, billingSameAsShipping}))
         .then((url) => {
+            dispatch(toggleLoadingState(false))
             browserHistory.push({
                 pathname: url
             })
         })
-        .catch((error) => dispatch(handleCartExpiryError(error)))
+        .catch((error) => {
+            dispatch(toggleLoadingState(false))
+            return dispatch(handleCartExpiryError(error))
+        })
 }
