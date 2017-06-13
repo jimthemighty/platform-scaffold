@@ -31,8 +31,7 @@ module.exports = {
                 test: /\.js(x?)$/,
                 include: /progressive-web-sdk/,
                 use: [
-                    {loader: "imports-loader?window=>{location: {href: ''}},\
-                                             navigator=>{userAgent: ''}"}
+                    {loader: "imports-loader?window=>{location: {href: ''}}"}
                 ],
             },
             {
