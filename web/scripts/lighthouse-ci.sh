@@ -27,8 +27,8 @@ certutil -d $HOME/.pki/nssdb -N --empty-password
 # Add self-signed SSL certificate
 certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n dev-server/localhost.pem -i dev-server/localhost.pem
 
-npm run prod:build
-npm run test:server &
+yarn run prod:build
+yarn run test:server &
 
 # --ignore-certificate-errors thanks to https://github.com/GoogleChrome/lighthouse/issues/559
 sleep 5
