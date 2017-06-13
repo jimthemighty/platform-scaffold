@@ -1,15 +1,19 @@
 // Icon Label Theme
 // ===
 
-// Icon Label
+.amp-icon-label {
+    line-height: 0;
+}
+
+
+// Label
 // ---
-//
-// 1. 10px
 
 .amp-icon-label__label {
-    margin-top: $sub-unit;
+    margin-top: $unit/2;
 
-    font-size: $small-font-size - 2; // 1
-    line-height: $tiny-line-height;
-    letter-spacing: 0.5px;
+    font-size: 11px;
+    line-height: $unit*1.5;
+    letter-spacing: 0;
+    text-transform: lowercase;
 }

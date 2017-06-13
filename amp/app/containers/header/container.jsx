@@ -14,12 +14,12 @@ const Header = (props) => {
         <header className="t-header">
             <HeaderBar>
                 <HeaderBarActions>
-                    <Button innerClassName="t-header__actions-button" on={openNav}>
+                    <Button innerClassName="u-padding-0" on={openNav}>
                         <IconLabel iconName="menu" label="Menu" iconSize="medium" />
                     </Button>
                 </HeaderBarActions>
                 <HeaderBarActions>
-                    <Button innerClassName="t-header__actions-button">
+                    <Button innerClassName="u-padding-0">
                         <IconLabel iconName="search" label="Search" iconSize="medium" />
                     </Button>
                 </HeaderBarActions>
@@ -27,12 +27,12 @@ const Header = (props) => {
                     <AmpImage src="/static/svg/logo.svg" width="67" height="28" layout="fixed" />
                 </HeaderBarTitle>
                 <HeaderBarActions>
-                    <Button innerClassName="t-header__actions-button">
+                    <Button innerClassName="u-padding-0">
                         <IconLabel iconName="store" label="Stores" iconSize="medium" />
                     </Button>
                 </HeaderBarActions>
                 <HeaderBarActions>
-                    <Button innerClassName="t-header__actions-button">
+                    <Button innerClassName="u-padding-0">
                         <IconLabel iconName="cart" label="Cart" iconSize="medium" />
                     </Button>
                 </HeaderBarActions>
