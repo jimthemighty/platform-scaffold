@@ -3,6 +3,11 @@
 //
 // Styles that include in App container
 
+// Containers/Partials
+// ---
+
+@import '../../containers/header/header';
+
 
 // Components
 // ---
@@ -10,11 +15,17 @@
 // @TODO: figure out what to do with styles that include in APP container, dont want to duplicate style in page
 // @TODO: change path to SDK
 
+@import '../../components/button/base';
+@import '../../styles/themes/amp-components/button'; // TODO: dont move to SDK
+
+@import '../../components/header-bar/base';
+@import '../../styles/themes/amp-components/header-bar'; // NOTE: don't move to SDK
+
 @import '../../components/icon/base';
 @import '../../styles/themes/amp-components/icon'; // TODO: dont move to SDK
 
-@import '../../components/skip-links/base';
-@import '../../components/skip-links/theme';
+@import '../../components/icon-label/base';
+@import '../../styles/themes/amp-components/icon-label'; // NOTE: don't move to SDK
 
 @import '../../components/list-tile/base';
 @import '../../styles/themes/amp-components/list-tile'; // TODO: dont move to SDK
@@ -22,11 +33,14 @@
 @import '../../components/nav/base';
 @import '../../styles/themes/amp-components/nav'; // TODO: dont move to SDK
 
+@import '../../components/nav-item/base';
+@import '../../styles/themes/amp-components/nav-item'; // TODO: dont move to SDK
+
 @import '../../components/nav-menu/base';
 @import '../../styles/themes/amp-components/nav-menu'; // TODO: dont move to SDK
 
-@import '../../components/nav-item/base';
-@import '../../styles/themes/amp-components/nav-item'; // TODO: dont move to SDK
+@import '../../components/skip-links/base';
+@import '../../components/skip-links/theme';
 
 // Navigation style
 // ---

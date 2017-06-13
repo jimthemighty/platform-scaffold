@@ -41,7 +41,5 @@ compiler.watch(watchConfig, (err, stats) => {
         serverProcess.kill();
     }
 
-    serverProcess = spawn('node', [path.resolve(__dirname, '..', 'build', 'main.js')]);
-    serverProcess.stdout.on('data', data => console.log(data.toString()));
-    serverProcess.stderr.on('data', data => console.error(data.toString()));
+    serverProcess = spawn('node', [path.resolve(__dirname, '..', 'build', 'main.js')], {stdio: 'inherit'});
 });

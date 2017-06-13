@@ -1,0 +1,31 @@
+// AMP Header
+// ===
+
+$header-logo-width: 100px;
+$header-logo-height: 100px;
+
+
+// Root
+// ---
+//
+// 1. Ensure header bar appears above page content
+
+.t-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $z2-depth; // 1
+
+    width: 100vw;
+
+    box-shadow: $large-box-shadow;
+}
+
+
+// Logo
+// ---
+
+.t-header__logo {
+    width: $header-logo-width;
+    height: $header-logo-height;
+}
