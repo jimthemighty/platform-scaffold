@@ -9,14 +9,14 @@ dependencies:
         - mkdir $CIRCLE_ARTIFACTS/logs
         - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
             background: true
+        - ./scripts/add-signed-cert.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
+            pwd: web
+            background: true
         - npm install:
             pwd: web
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
             pwd: web
-            background: 
-        - ./scripts/add-signed-cert.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
-            pwd: web
-            background: 
+            background: true
         - ./scripts/wait-for-dependencies.sh:
             pwd: web
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
