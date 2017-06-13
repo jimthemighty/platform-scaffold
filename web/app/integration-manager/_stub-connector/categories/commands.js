@@ -24,19 +24,19 @@ export const initProductListPage = (url, routeName) => (dispatch) => {
     }
 
     const exampleProductData = {
-        '/product1.html': {
+        '1': { // eslint-disable-line
             id: '1',
             title: 'Product 1',
             href: '/product1.html',
             ...sharedData
         },
-        '/product2.html': {
+        '2': { // eslint-disable-line
             id: '2',
             title: 'Product 2',
             href: '/product2.html',
             ...sharedData
         },
-        '/product3.html': {
+        '3': { // eslint-disable-line
             id: '3',
             title: 'Product 3',
             href: '/product3.html',
@@ -47,9 +47,9 @@ export const initProductListPage = (url, routeName) => (dispatch) => {
     const exampleCategoryData = {
         itemCount: 3,
         products: [
-            '/product1.html',
-            '/product2.html',
-            '/product3.html'
+            '1',
+            '2',
+            '3'
         ]
     }
 
