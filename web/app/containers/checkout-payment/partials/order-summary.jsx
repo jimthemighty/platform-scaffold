@@ -28,6 +28,7 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
 import List from 'progressive-web-sdk/dist/components/list'
+import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
 
 class OrderSummary extends React.Component {
     constructor(props) {
@@ -64,6 +65,7 @@ class OrderSummary extends React.Component {
             cartshippingRate,
             discountAmount,
             discountLabel,
+            isLoading,
             isFixedPlaceOrderShown,
             orderTotal,
             subtotal,
@@ -148,14 +150,26 @@ class OrderSummary extends React.Component {
 
                     {/* This is the statically positioned "Place Your Order" container */}
                     <div className="u-padding-end-md u-padding-start-md">
-                        <Button
-                            className="c--primary u-flex-none u-width-full u-text-uppercase"
-                            type="button"
-                            onClick={submitPayment}
-                        >
-                            <Icon name="lock" />
-                            Place Your Order
-                        </Button>
+                        {isLoading ?
+                            <Button
+                                className="c--primary u-flex-none u-width-full u-text-uppercase"
+                                type="button"
+                                onClick={submitPayment}
+                                disabled={isLoading}
+                            >
+                                <InlineLoader />
+                            </Button>
+                        :
+                            <Button
+                                className="c--primary u-flex-none u-width-full u-text-uppercase"
+                                type="button"
+                                onClick={submitPayment}
+                                disabled={isLoading}
+                            >
+                                <Icon name="lock" />
+                                Place Your Order
+                            </Button>
+                        }
                     </div>
 
                     {/* This is the FIXED positioned "Place Your Order" container */}
@@ -165,15 +179,26 @@ class OrderSummary extends React.Component {
                         aria-hidden="true"
                     >
                         <div className="u-padding-md u-bg-color-neutral-00 u-text-align-center">
-                            <Button
-                                className="c--primary u-flex-none u-width-full u-text-uppercase"
-                                type="button"
-                                onClick={submitPayment}
-                            >
-                                <Icon name="lock" />
-                                Place Your Order
-                            </Button>
-
+                            {isLoading ?
+                                <Button
+                                    className="c--primary u-flex-none u-width-full u-text-uppercase"
+                                    type="button"
+                                    onClick={submitPayment}
+                                    disabled={isLoading}
+                                >
+                                    <InlineLoader />
+                                </Button>
+                            :
+                                <Button
+                                    className="c--primary u-flex-none u-width-full u-text-uppercase"
+                                    type="button"
+                                    onClick={submitPayment}
+                                    disabled={isLoading}
+                                >
+                                    <Icon name="lock" />
+                                    Place Your Order
+                                </Button>
+                            }
                             <p className="u-margin-top-md">
                                 Total: <strong>{orderTotal}</strong>
                             </p>
@@ -219,6 +244,11 @@ OrderSummary.propTypes = {
      * Whether the fixed 'Place Order' container displays
      */
     isFixedPlaceOrderShown: PropTypes.bool,
+
+    /**
+     * Whether the spinner displays for 'Place Order' button
+     */
+    isLoading: PropTypes.bool,
 
     /**
      * The total cost of the order
@@ -277,7 +307,8 @@ const mapStateToProps = createPropsSelector({
     shippingLabel: getSelectedShippingLabel,
     taxAmount: cartSelectors.getTax,
     summaryCount: cartSelectors.getCartSummaryCount,
-    isFixedPlaceOrderShown: selectors.getIsFixedPlaceOrderShown
+    isFixedPlaceOrderShown: selectors.getIsFixedPlaceOrderShown,
+    isLoading: selectors.getIsLoading
 })
 
 const mapDispatchToProps = {
