@@ -4,7 +4,8 @@
 
 import {mount, shallow} from 'enzyme'
 import React from 'react'
-import {noop} from '../../utils/utils'
+
+const noop = () => undefined
 
 import Field from './index'
 
@@ -28,14 +29,9 @@ test('does not render an \'undefined\' class with no className', () => {
 })
 
 test('renders the contents of the className prop if present', () => {
-    [
-        'test',
-        'test another'
-    ].forEach((name) => {
-        const wrapper = shallow(<Field className={name}><input type="checkbox" /></Field>)
-
-        expect(wrapper.hasClass(name)).toBe(true)
-    })
+    const name = 'name'
+    const wrapper = shallow(<Field className={name}><input type="checkbox" /></Field>)
+    expect(wrapper.hasClass(name)).toBe(true)
 })
 
 test('passes the idForLabel prop to the label', () => {
