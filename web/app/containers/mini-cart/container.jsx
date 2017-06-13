@@ -6,6 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
+import throttle from 'lodash.throttle'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
@@ -16,9 +17,12 @@ import {MINI_CART_MODAL} from './constants'
 import {stripEvent} from '../../utils/utils'
 import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
 import {getCheckoutShippingURL} from '../app/selectors'
+import {requestCartContent} from './actions'
 
 import MiniCartHeader from './partials/mini-cart-header'
 import MiniCartProductList from './partials/mini-cart-product-list'
+
+const SCROLL_CHECK_INTERVAL = 200
 
 const MiniCartEmpty = () => (
     <div className="t-mini-cart__empty-content u-flexbox u-flex u-direction-column">
@@ -64,40 +68,65 @@ MiniCartMain.propTypes = {
 }
 
 
-const MiniCart = ({
-    hasItems,
-    cartLoaded,
-    isOpen,
-    closeMiniCart,
-    checkoutShippingURL
-}) => (
-    <Sheet
-        className="t-mini-cart"
-        open={isOpen}
-        onDismiss={closeMiniCart}
-        maskOpacity={0.7}
-        effect="slide-right"
-        coverage="85%"
-    >
-        <MiniCartHeader closeMiniCart={closeMiniCart} />
+class MiniCart extends React.Component {
+    constructor(props) {
+        super(props)
 
-        {cartLoaded &&
-            <MiniCartMain
-                hasItems={hasItems}
-                closeMiniCart={closeMiniCart}
-                checkoutShippingURL={checkoutShippingURL}
-            />
-        }
-    </Sheet>
-)
+        this.handleScroll = throttle(this.handleScroll.bind(this), SCROLL_CHECK_INTERVAL)
+    }
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll)
+    }
+
+    handleScroll() {
+        this.props.requestCartContent()
+        window.removeEventListener('scroll', this.handleScroll)
+    }
+
+    render() {
+        const {
+            hasItems,
+            cartLoaded,
+            isOpen,
+            closeMiniCart,
+            checkoutShippingURL
+        } = this.props
+
+        return (
+            <Sheet
+                className="t-mini-cart"
+                open={isOpen}
+                onDismiss={closeMiniCart}
+                maskOpacity={0.7}
+                effect="slide-right"
+                coverage="85%"
+            >
+                <MiniCartHeader closeMiniCart={closeMiniCart} />
+
+                {cartLoaded &&
+                    <MiniCartMain
+                        hasItems={hasItems}
+                        closeMiniCart={closeMiniCart}
+                        checkoutShippingURL={checkoutShippingURL}
+                    />
+                }
+            </Sheet>
+        )
+    }
+}
 
 MiniCart.propTypes = {
     cartLoaded: PropTypes.bool,
     checkoutShippingURL: PropTypes.string,
     closeMiniCart: PropTypes.func,
-    getCart: PropTypes.func,
     hasItems: PropTypes.bool,
     isOpen: PropTypes.bool,
+    requestCartContent: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
@@ -108,7 +137,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL))
+    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL)),
+    requestCartContent
 }
 
 export default connect(
