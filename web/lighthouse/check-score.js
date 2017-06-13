@@ -23,7 +23,8 @@ if (fs.existsSync('lighthouse/audit-local.report.html')) {
 }
 
 /**
-* Traverse the build folder and verify the bundle size. CDN will not compress files larger * than 2MB.
+* Traverse the build folder and verify the bundle size. CDN will not compress 
+* files larger than 2MB.
 */
 let options = {
     listeners: {
