@@ -16,8 +16,8 @@ if [ "$CURRENT_BRANCH" != "master" ]; then
     # Kill background processes when this script exits.
     trap 'kill $(jobs -p)' EXIT
     echo "Running Test Server."
-    yarn run prod:build
-    yarn run test:server
+    npm run prod:build
+    npm run test:server
 else
     echo "On production branch, test server not needed."
 fi

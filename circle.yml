@@ -7,8 +7,9 @@ dependencies:
         - "native/node_modules"
     pre:
         - mkdir $CIRCLE_ARTIFACTS/logs
-        - ./web/scripts/install-google-chrome-stable.sh
         - ./web/scripts/install-yarn.sh
+        - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
+            background: true
         - yarn install:
             pwd: web
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
