@@ -9,6 +9,7 @@ dependencies:
         - mkdir $CIRCLE_ARTIFACTS/logs
         - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
             background: true
+        - ./web/scripts/install-yarn.sh
         - yarn install:
             pwd: web
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
