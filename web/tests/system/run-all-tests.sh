@@ -18,13 +18,13 @@ fi
 #If the node total is 1, run all the tests sequentially. 
 if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   echo 'Running lint'
-  yarn run lint
+  npm run lint
   echo 'Running Unit Tests'
-  yarn test -- --runInBand
+  npm test -- --runInBand
   echo 'Starting Lighthouse Tests.'
-  yarn run test:pwa-ci
+  npm run test:pwa-ci
   echo 'Running End to End Tests'
-  yarn run test:e2e
+  npm run test:e2e
 
 else
   #If the node total is greater than 1 
@@ -41,10 +41,10 @@ else
     # The other cirlce_node_index worker will run the rest of the tests
     if [ $CIRCLE_NODE_INDEX -gt 0 ]; then
       echo 'Running Lint'
-      yarn run lint
+      npm run lint
     
       echo 'Running Unit Tests'
-      yarn test -- --runInBand
+      npm test -- --runInBand
     
       echo 'Running End to End Tests'
       #If we have nodes > 2, it will be part of the division to run another test:e2e
@@ -52,7 +52,7 @@ else
       for testfile in $(find ./tests/system/workflows/ -name '*.js'| sort); do
         if [ $(expr $i % $(expr $CIRCLE_NODE_TOTAL - 1)) -eq $(expr $CIRCLE_NODE_INDEX - 1) ]; then
           echo 'Running test: ' ${testfile}
-          yarn run test:e2e --test ${testfile}
+          npm run test:e2e --test ${testfile}
         fi
         ((i=i+1))
       done
