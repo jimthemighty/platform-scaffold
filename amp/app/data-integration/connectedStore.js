@@ -13,7 +13,7 @@ import {registerConnector} from '../../../web/app/integration-manager'
 import {reducer as imReducer} from '../../../web/app/integration-manager/reducer'
 import {CURRENT_URL} from '../../../web/app/containers/app/constants'
 
-import appReducer from '../../../web/app/containers/app/reducer'
+import appReducer from './app-reducer'
 import footerReducer from '../../../web/app/containers/footer/reducer'
 import headerReducer from '../../../web/app/containers/header/reducer'
 import homeReducer from '../../../web/app/containers/home/reducer'
