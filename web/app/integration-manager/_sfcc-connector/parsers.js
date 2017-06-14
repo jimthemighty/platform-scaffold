@@ -176,3 +176,7 @@ export const parseSearchSuggestions = ({product_suggestions}) => {
 
     return suggestions
 }
+
+export const parseSearchResults = ({hits}) => {
+    return hits
+}

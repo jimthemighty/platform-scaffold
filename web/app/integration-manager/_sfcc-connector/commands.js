@@ -12,7 +12,8 @@ import * as accountCommands from './account/commands'
 
 import {makeApiRequest} from './utils'
 import {receiveSearchSuggestions} from '../results'
-import {parseSearchSuggestions} from './parsers'
+import {receiveSearchResults} from '../categories/results'
+import {parseSearchSuggestions, parseSearchResults} from './parsers'
 
 export const getSearchSuggestions = (query) => (dispatch) => {
     // SFCC API requires min length of 3
@@ -26,7 +27,10 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const submitSearch = (query) => (dispatch) => {
-    return query
+    const searchUrl = `/product_search?q=${query}&expand=availability,images,prices`
+    return makeApiRequest(searchUrl)
+        .then((response) => response.json())
+        .then((responseJSON) => dispatch(receiveSearchResults(parseSearchResults(responseJSON))))
 }
 
 export default {
