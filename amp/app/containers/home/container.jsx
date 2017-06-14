@@ -16,7 +16,7 @@ const Home = ({
     title
 }) => (
     <div className={containerClass}>
-        <AmpImage src={staticURL("mobify.png")} width="252" height="64" layout="fixed" />
+        <AmpImage src={staticURL('mobify.png')} width="252" height="64" layout="fixed" />
 
         <h1>{title}</h1>
         {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}

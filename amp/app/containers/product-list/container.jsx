@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import containerStyles from './container.scss'
+import {staticURL} from '../../utils'
 
 const containerClass = 't-product-list'
 
@@ -15,7 +16,7 @@ const ProductList = ({
         <AmpLightbox id="my-lightbox">
             <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
         </AmpLightbox>
-        <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
+        <AmpImage src={staticURL('mobify.png')} width="252" height="64" layout="fixed" />
 
         <h1>{title}</h1>
         {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}

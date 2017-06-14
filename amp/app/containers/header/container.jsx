@@ -5,6 +5,8 @@ import Button from '../../components/button'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabel from '../../components/icon-label'
 
+import {staticURL} from '../../utils'
+
 const Header = (props) => {
 
     const {navId} = props
@@ -24,7 +26,7 @@ const Header = (props) => {
                     </Button>
                 </HeaderBarActions>
                 <HeaderBarTitle href="/">
-                    <AmpImage src="/static/svg/logo.svg" width="67" height="28" layout="fixed" />
+                    <AmpImage src={staticURL('svg/logo.svg')} width="67" height="28" layout="fixed" />
                 </HeaderBarTitle>
                 <HeaderBarActions>
                     <Button innerClassName="u-padding-0">
