@@ -6,6 +6,14 @@
 @import '../../styles/global';
 
 
+// App Styles
+// ===
+//
+// @TODO: Add some information here
+
+@import '../app/base';
+
+
 // Components
 // ===
 //
@@ -15,8 +23,7 @@
 // ---
 //
 
-@import '../../components/amp-lightbox/base';
-@import '../../components/amp-lightbox/theme';
+@import '../../components/breadcrumbs/base';
 
 
 // AMP Components
@@ -29,11 +36,15 @@
 @import '../../../node_modules/mobify-amp-sdk/src/components/price/base';
 
 
+
+
+
 // AMP SDK Custom Styles
 // ---
 
-@import '../../styles/themes/amp-components/amp-image';
-@import '../../styles/themes/amp-components/price';
+@import '../../styles/themes/amp-components/breadcrumbs'; // TODO: dont move to SDK
+
+@import '../../styles/themes/amp-components/nav-menu'; // TODO: dont move to SDK
 
 
 // Template style
