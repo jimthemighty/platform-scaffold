@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import Header from '../header/container'
 import Footer from '../footer/container'
-import Button from '../../components/button'
 import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
@@ -30,11 +29,6 @@ const App = ({children}) => {
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
             <Navigation id={navId} />
-
-            <Button icon="cart" title="Hidden text!" on="click=trigger:whatever" />
-
-            {/* TODO REMOVE TOGGLE NAV WHEN ADD HEADER */}
-            <div dangerouslySetInnerHTML={{__html: `<button on="tap:${navId}.toggle">Toggle Nav</button>`}} />
 
             <SkipLinks items={skipLinksItems} />
 

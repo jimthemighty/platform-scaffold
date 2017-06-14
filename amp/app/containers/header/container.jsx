@@ -14,31 +14,33 @@ const Header = (props) => {
 
     return (
         <header className="t-header">
-            <HeaderBar>
-                <HeaderBarActions>
-                    <Button innerClassName="u-padding-0" on={openNav}>
-                        <IconLabel iconName="menu" label="Menu" iconSize="medium" />
-                    </Button>
-                </HeaderBarActions>
-                <HeaderBarActions>
-                    <Button innerClassName="u-padding-0">
-                        <IconLabel iconName="search" label="Search" iconSize="medium" />
-                    </Button>
-                </HeaderBarActions>
-                <HeaderBarTitle href="/">
+            <div className="t-header__bar">
+                <HeaderBar>
+                    <HeaderBarActions>
+                        <Button innerClassName="u-padding-0" on={openNav}>
+                            <IconLabel iconName="menu" label="Menu" iconSize="medium" />
+                        </Button>
+                    </HeaderBarActions>
+                    <HeaderBarActions>
+                        <Button innerClassName="u-padding-0">
+                            <IconLabel iconName="search" label="Search" iconSize="medium" />
+                        </Button>
+                    </HeaderBarActions>
+                    <HeaderBarTitle href="/">
                     <AmpImage src={staticURL('svg/logo.svg')} width="67" height="28" layout="fixed" />
-                </HeaderBarTitle>
-                <HeaderBarActions>
-                    <Button innerClassName="u-padding-0">
-                        <IconLabel iconName="store" label="Stores" iconSize="medium" />
-                    </Button>
-                </HeaderBarActions>
-                <HeaderBarActions>
-                    <Button innerClassName="u-padding-0">
-                        <IconLabel iconName="cart" label="Cart" iconSize="medium" />
-                    </Button>
-                </HeaderBarActions>
-            </HeaderBar>
+                    </HeaderBarTitle>
+                    <HeaderBarActions>
+                        <Button innerClassName="u-padding-0">
+                            <IconLabel iconName="store" label="Stores" iconSize="medium" />
+                        </Button>
+                    </HeaderBarActions>
+                    <HeaderBarActions>
+                        <Button innerClassName="u-padding-0">
+                            <IconLabel iconName="cart" label="Cart" iconSize="medium" />
+                        </Button>
+                    </HeaderBarActions>
+                </HeaderBar>
+            </div>
         </header>
     )
 }
