@@ -39,6 +39,11 @@ let options = {
         },
         errors: function (root, nodeStatsArray, next) {
             next();
+        },
+        end: function() {
+            if (failure === false) {
+                console.log(`Success! All build files are below 2MB.`)
+            }
         }
     }
 }
