@@ -7,7 +7,6 @@ import {createAction} from 'redux-actions'
 import {typecheck, createTypedAction} from '../../utils/utils'
 import {CategoryID} from '../types'
 import {CategoryInfo, CategoryContents, Categories} from './types'
-import {Products} from '../products/types'
 
 export const receiveCategoryInformation = createAction(
     'Receive Category Information',

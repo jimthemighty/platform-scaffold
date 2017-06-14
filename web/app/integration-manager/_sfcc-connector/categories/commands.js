@@ -41,8 +41,8 @@ const extractCategoryId = (url) => {
 }
 
 export const initProductListPage = (url) => (dispatch) => {
-    const categoryID = extractCategoryId(url)
     let searchUrl
+    const categoryID = extractCategoryId(url)
 
     if (/catalogsearch/.test(url)) {
         const queryString = categoryID.match(/\?q=\+(.*)/)[1]
