@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import {staticURL} from '../../utils'
+import {staticURL} from '../../../utils'
 
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Breadcrumbs from '../../../components/breadcrumbs'
@@ -19,10 +19,11 @@ const ProductListHeader = ({title, parentName, parentHref}) => (
             <AmpImage
                 className="u-flex-none u-padding-end u-padding-bottom-sm"
                 alt="Heading logo"
-                height="60px"
-                width="60px"
-                src={staticURL(`/static/img/categories/${title.trim().replace(/\s+/g, '-')
+                height="60"
+                width="60"
+                src={staticURL(`/img/categories/${title.trim().replace(/\s+/g, '-')
                 .toLowerCase()}@2x.png`)}
+                layout="fixed"
             />
         }
     </div>
