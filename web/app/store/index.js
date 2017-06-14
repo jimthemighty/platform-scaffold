@@ -6,7 +6,7 @@ import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import Immutable from 'immutable'
 
-import rootReducer from '../containers/reducers'
+import uiReducer from '../containers/reducers'
 import userReducer from './user/reducer'
 import cartReducer from './cart/reducer'
 import categoryReducer from './categories/reducer'
@@ -37,7 +37,7 @@ const configureStore = (initialState) => {
     const reducer = combineReducers({
         categories: categoryReducer,
         cart: cartReducer,
-        ui: rootReducer,
+        ui: uiReducer,
         user: userReducer,
         modals: modalReducer,
         notifications: notificationsReducer,
