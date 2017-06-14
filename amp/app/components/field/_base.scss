@@ -1,0 +1,112 @@
+// Field
+// ===
+//
+// Field is a wrapper for form fields. It is responsible for control the size
+// and spacing of the form field itself, its label, and the optional text label.
+// The field component is also responsible for apply states, such as errors.
+
+$field__error-color: red;
+
+
+.amp-field {
+    flex: 1 1 auto;
+}
+
+
+// Field Inner
+// ---
+
+.amp-field__inner {
+    display: flex;
+
+    &.amp--stack {
+        flex-flow: column;
+    }
+}
+
+// Field: Input
+// ---
+//
+// This container is for the actual form inputs itself. It is required in order
+// to achieve the necessary layout inside of the parent `.amp-field__inner` wrap.
+
+.amp-field__input {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+
+// Field: Label
+// ---
+//
+// This container is for the input label. Click on this should select it's
+// respective input.
+
+.amp-field__label {
+    width: 100%;
+}
+
+
+// Label Wrap
+// ---
+//
+// 1. Position context so the child `amp-field__hint` can be absolutely positioned
+
+.amp-field__label-wrap {
+    position: relative; // 1
+
+    flex: 0 1 auto;
+
+    &.amp--end {
+        order: 1;
+    }
+}
+
+
+// Field: Error
+// ---
+
+.amp-field__error,
+%amp-field__error {
+    color: $field__error-color;
+}
+
+
+// Modifier: Check-radio field
+// ---
+
+.amp-field.amp--is-check-radio {
+    .amp-field__input {
+        flex: 0 0 auto;
+    }
+}
+
+
+// Modifier: Error Field
+// ---
+
+.amp-field.amp--error {
+    .amp-field__label-wrap {
+        color: $field__error-color;
+    }
+
+    input,
+    .amp-field__input > * {
+        border-color: $field__error-color;
+    }
+}
+
+
+// Modifier: Overlayed Hint
+// ---
+//
+// 1. Positioned relative to the parent `amp-field__label-wrap` container
+// 2. Position the hint button to sit directly on top of the field input
+
+.amp-field.amp--overlayed-hint {
+    .amp-field__hint {
+        position: absolute; // 1
+        top: 100%; // 2
+        right: 0; // 2
+    }
+}
