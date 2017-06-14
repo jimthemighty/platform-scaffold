@@ -27,7 +27,7 @@ const Header = (props) => {
                         </Button>
                     </HeaderBarActions>
                     <HeaderBarTitle href="/">
-                    <AmpImage src={staticURL('svg/logo.svg')} width="67" height="28" layout="fixed" />
+                        <AmpImage src={staticURL('svg/logo.svg')} width="67" height="28" layout="fixed" />
                     </HeaderBarTitle>
                     <HeaderBarActions>
                         <Button innerClassName="u-padding-0">
