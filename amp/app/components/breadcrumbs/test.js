@@ -58,32 +58,6 @@ test('wraps breadcrumb item content in a link if the href prop is passed', () =>
     expect(link.length).toBe(1)
 })
 
-test('wraps breadcrumb item content in a link if the onClick prop is passed', () => {
-    const items = [
-        {
-            text: 'Home',
-            onClick: () => {}
-        }
-    ]
-    const wrapper = mount(<Breadcrumbs items={items} />)
-    const link = wrapper.find('.amp-breadcrumbs__item a')
-
-    expect(link.length).toBe(1)
-})
-
-test('onClick prop is passed to a link', () => {
-    const items = [
-        {
-            text: 'Home',
-            onClick: () => {}
-        }
-    ]
-    const wrapper = mount(<Breadcrumbs items={items} />)
-    const link = wrapper.find('.amp-breadcrumbs__item a')
-
-    expect(link.props().onClick).toBeDefined()
-})
-
 test('does not wrap breadcrumb item content in a link if the href prop is not passed', () => {
     const items = [
         {
