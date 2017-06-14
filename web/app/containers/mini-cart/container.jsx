@@ -21,8 +21,6 @@ import {requestCartContent} from './actions'
 import MiniCartHeader from './partials/mini-cart-header'
 import MiniCartProductList from './partials/mini-cart-product-list'
 
-const SCROLL_CHECK_INTERVAL = 200
-
 const MiniCartEmpty = () => (
     <div className="t-mini-cart__empty-content u-flexbox u-flex u-direction-column">
         <Image
