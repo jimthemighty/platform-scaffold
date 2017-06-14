@@ -27,9 +27,3 @@ export const receiveCategory = createTypedAction(
     'Receive Category data',
     Categories
 )
-
-export const receiveSearchResults = createTypedAction(
-    'Receive product list of search results',
-    Products,
-    ['searchResults']
-)

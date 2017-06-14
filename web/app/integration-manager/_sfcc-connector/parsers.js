@@ -176,13 +176,3 @@ export const parseSearchSuggestions = ({product_suggestions}) => {
 
     return suggestions
 }
-
-export const parseSearchResults = ({hits}) => hits.map(({product_id, product_name, price, link, orderable}) => {
-    return {
-        id: product_id,
-        title: product_name,
-        price: price.toString(),
-        href: link,
-        available: orderable
-    }
-})

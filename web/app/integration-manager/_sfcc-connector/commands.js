@@ -12,8 +12,7 @@ import * as accountCommands from './account/commands'
 
 import {makeApiRequest} from './utils'
 import {receiveSearchSuggestions} from '../results'
-import {receiveSearchResults} from '../categories/results'
-import {parseSearchSuggestions, parseSearchResults} from './parsers'
+import {parseSearchSuggestions} from './parsers'
 import {buildQueryString} from '../../utils/utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {SUGGESTION_URL} from './config'
@@ -30,13 +29,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const submitSearch = (query) => (dispatch) => {
-    const searchUrl = `/product_search?q=${query}&expand=availability,images,prices`
-    return makeApiRequest(searchUrl)
-        .then((response) => response.json())
-        .then((responseJSON) => {
-            dispatch(receiveSearchResults(parseSearchResults(responseJSON)))
-            browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
-        })
+    browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
 }
 
 export default {
