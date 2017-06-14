@@ -11,6 +11,7 @@ import {getCartURL} from '../../app/selectors'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import List from 'progressive-web-sdk/dist/components/list'
+import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import ProductItem from '../../../components/product-item'
 
 import * as selectors from '../../../store/cart/selectors'
@@ -29,6 +30,32 @@ const SUBTOTAL_CLASSES = classNames(
 
 /* eslint-disable camelcase */
 
+const productListClasses = 'u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end'
+
+const PlaceholderProduct = () => (
+    <ProductItem
+        className={productListClasses}
+        title={<SkeletonText lines={2} />}
+        image={<Image src="" alt="Image is loading" width="64px" height="64px" />}
+    />
+)
+
+export const PlaceholderMiniCart = () => (
+    <div className="u-padding-md">
+        {/**
+          * Button placeholder to take up as much space as the real "View and
+          * edit cart" button in `MiniCartProductList`
+          */}
+        <div style={{height: '44px'}} />
+
+        <List>
+            <PlaceholderProduct />
+            <PlaceholderProduct />
+            <PlaceholderProduct />
+        </List>
+    </div>
+)
+
 const MiniCartProductList = ({items, orderTotal, cartURL}) => {
     return (
         <div className="u-padding-md">
@@ -42,7 +69,7 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
                     const alt = product.thumbnail ? product.thumbnail.alt : ''
                     return (
                         <ProductItem
-                            className="u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end"
+                            className={productListClasses}
                             title={<h2 className="u-h3">{product.name}</h2>}
                             price={itemPrice}
                             key={product.id}

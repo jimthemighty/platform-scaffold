@@ -12,14 +12,14 @@ import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {MINI_CART_MODAL} from './constants'
+import {MINI_CART_MODAL, MINI_CART_CONTENT_CLASSES} from './constants'
 import {stripEvent} from '../../utils/utils'
 import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
 import {getCheckoutShippingURL} from '../app/selectors'
 import {requestCartContent} from './actions'
 
 import MiniCartHeader from './partials/mini-cart-header'
-import MiniCartProductList from './partials/mini-cart-product-list'
+import MiniCartProductList, {PlaceholderMiniCart} from './partials/mini-cart-product-list'
 
 const MiniCartEmpty = () => (
     <div className="t-mini-cart__empty-content u-flexbox u-flex u-direction-column">
@@ -40,7 +40,7 @@ const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
     const buttonClasses = 'c--primary u-width-full u-text-uppercase'
 
     return (
-        <div className="t-mini-cart__content u-flexbox u-direction-column u-padding-md">
+        <div className={MINI_CART_CONTENT_CLASSES}>
             {hasItems ? <MiniCartProductList /> : <MiniCartEmpty />}
 
             <div className="u-padding-top-lg u-flex-none">
@@ -105,12 +105,16 @@ class MiniCart extends React.Component {
             >
                 <MiniCartHeader closeMiniCart={closeMiniCart} />
 
-                {cartLoaded &&
+                {cartLoaded ?
                     <MiniCartMain
                         hasItems={hasItems}
                         closeMiniCart={closeMiniCart}
                         checkoutShippingURL={checkoutShippingURL}
                     />
+                :
+                    <div className={MINI_CART_CONTENT_CLASSES}>
+                        <PlaceholderMiniCart />
+                    </div>
                 }
             </Sheet>
         )
