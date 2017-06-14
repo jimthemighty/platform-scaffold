@@ -25,7 +25,10 @@ const App = ({children}) => {
     const appId = 'app'
 
     return (
-        <body id={appId} className="t-app">
+        <body
+            id={appId}
+            className="t-app"
+        >
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
             <Navigation id={navId} />

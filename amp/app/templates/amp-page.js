@@ -1,5 +1,3 @@
-
-
 const ampPage = ({title, canonicalURL, body, css, ampScriptIncludes}) => (
     /*eslint-disable */
     `
