@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {register as registerHome} from './home/commands'
+import {register as registerHome} from 'progressive-web-sdk/dist/integration-manager/home/commands'
 import {register as registerProducts} from './products/commands'
 import {register as registerCategories} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 import {register as registerCart} from './cart/commands'
