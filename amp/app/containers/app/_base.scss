@@ -42,6 +42,12 @@
 @import '../../components/skip-links/base';
 @import '../../components/skip-links/theme';
 
+@import '../../components/field/base';
+@import '../../styles/themes/amp-components/field'; // TODO: dont move to SDK
+
+@import '../../components/field-row/base';
+@import '../../styles/themes/amp-components/field-row'; // TODO: dont move to SDK
+
 // Navigation style
 // ---
 

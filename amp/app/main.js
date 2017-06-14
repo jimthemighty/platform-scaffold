@@ -7,7 +7,7 @@ import ReactInjection from 'react-dom/lib/ReactInjection'
 // before any rendering happens.
 ReactInjection.DOMProperty.injectDOMPropertyConfig({
     isCustomAttribute: (attributeName) => (
-        ['on'].indexOf(attributeName) >= 0
+        ['on'].indexOf(attributeName) >= 0 || attributeName.match('-')
     )
 })
 
