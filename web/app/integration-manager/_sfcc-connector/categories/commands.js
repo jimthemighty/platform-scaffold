@@ -7,11 +7,10 @@ import {makeApiRequest} from '../utils'
 import {receiveCategoryContents, receiveCategoryInformation} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import {parseProductListData} from '../parsers'
-
 import {getCategoryPath} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}`
+const makeCategorySearchURL = (id, query) => `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}`
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
@@ -43,9 +42,17 @@ const extractCategoryId = (url) => {
 
 export const initProductListPage = (url) => (dispatch) => {
     const categoryID = extractCategoryId(url)
+    let searchUrl
+
+    if (/catalogsearch/.test(url)) {
+        const queryString = categoryID.match(/\?q=\+(.*)/)[1]
+        searchUrl = makeCategorySearchURL('', queryString)
+    } else {
+        searchUrl = makeCategorySearchURL(categoryID, '')
+    }
 
     return dispatch(fetchCategoryInfo(categoryID))
-        .then(() => makeApiRequest(makeCategorySearchURL(categoryID), {method: 'GET'}))
+        .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
         .then((response) => response.json())
         .then(({hits, total}) => {
             if (total === 0) {

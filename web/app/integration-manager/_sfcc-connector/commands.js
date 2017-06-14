@@ -14,6 +14,9 @@ import {makeApiRequest} from './utils'
 import {receiveSearchSuggestions} from '../results'
 import {receiveSearchResults} from '../categories/results'
 import {parseSearchSuggestions, parseSearchResults} from './parsers'
+import {buildQueryString} from '../../utils/utils'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
+import {SUGGESTION_URL} from './config'
 
 export const getSearchSuggestions = (query) => (dispatch) => {
     // SFCC API requires min length of 3
@@ -30,7 +33,10 @@ export const submitSearch = (query) => (dispatch) => {
     const searchUrl = `/product_search?q=${query}&expand=availability,images,prices`
     return makeApiRequest(searchUrl)
         .then((response) => response.json())
-        .then((responseJSON) => dispatch(receiveSearchResults(parseSearchResults(responseJSON))))
+        .then((responseJSON) => {
+            dispatch(receiveSearchResults(parseSearchResults(responseJSON)))
+            browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
+        })
 }
 
 export default {
