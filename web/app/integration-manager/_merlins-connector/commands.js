@@ -6,7 +6,8 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {receiveSearchSuggestions} from '../results'
 import {buildQueryString} from '../../utils/utils'
 import {parseSearchSuggestions} from './parsers'
-
+import {SUGGESTION_URL} from './constants'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import * as homeCommands from './home/commands'
 import * as productsCommands from './products/commands'
 import * as categoriesCommands from './categories/commands'
@@ -32,6 +33,10 @@ export const getSearchSuggestions = (query) => (dispatch) => {
     return makeRequest(queryURL)
         .then((response) => response.json())
         .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
+}
+
+export const submitSearch = (query) => (dispatch) => {
+    browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
 }
 
 export default {

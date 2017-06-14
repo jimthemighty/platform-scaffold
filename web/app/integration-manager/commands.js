@@ -34,3 +34,5 @@ export const submitNewsletter = (...args) => connector.submitNewsletter(...args)
 
 /** @function */
 export const getSearchSuggestions = (...args) => connector.getSearchSuggestions(...args)
+
+export const submitSearch = (searchQuery) => connector.submitSearch(searchQuery)

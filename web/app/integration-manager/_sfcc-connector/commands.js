@@ -25,6 +25,9 @@ export const getSearchSuggestions = (query) => (dispatch) => {
         .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
 }
 
+export const submitSearch = (query) => (dispatch) => {
+    return query
+}
 
 export default {
     home: homeCommands,
