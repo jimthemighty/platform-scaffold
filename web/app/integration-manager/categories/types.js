@@ -15,7 +15,8 @@ export const CategoryInfo = Runtypes.Record({
     // Top-level categories have parentId = null
     parentId: Nullable(CategoryID),
 }).And(Runtypes.Optional({
-    icon: Runtypes.Union(IconID, Image)
+    icon: Runtypes.Union(IconID, Image),
+    description: Text
 }))
 
 export const CategoryContents = Runtypes.Record({
