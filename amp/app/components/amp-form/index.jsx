@@ -10,7 +10,7 @@ const AmpForm = ({
     children,
     ...props
 }) => {
-    const classes = classNames('c-amp-form', {}, className)
+    const classes = classNames('c-amp-form', className)
     return (
         <form className={classes} {...props}>
             {children}
