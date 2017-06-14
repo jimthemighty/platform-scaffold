@@ -1,3 +1,7 @@
+/*
+ * Our own app reducer, because AMP only needs `setCurrentURL` and the web
+ * version ends up including code that relies on `window` to exist.
+*/
 import {handleActions} from 'redux-actions'
 import {fromJS} from 'immutable'
 import {mergePayload} from '../../../web/app/utils/reducer-utils'
