@@ -33,7 +33,7 @@ let options = {
             let fileStat = fs.statSync(filePath)
             if (fileStat.size > 2000000) {
                 failure = true
-                console.log(`${filePath} is ${fileStat.size} bytes. It must be less than 2MB to get gzipped on the CDN.`)
+                console.log(chalk.red(`${filePath} is ${fileStat.size} bytes. It must be less than 2MB to get gzipped on the CDN.`))
             }
             next()
         },
@@ -44,6 +44,7 @@ let options = {
 }
 
 if (fs.existsSync('build')) {
+    console.log(`Verifying individual file sizes in the build...`)
     walk.walkSync('build', options);
 } else {
     console.log(`Run 'npm prod:build' to generate a build.`)
@@ -74,6 +75,7 @@ const checkLighthouse = function(htmlReport) {
 */
 const checkTTI = function(jsonResults) {
     console.log(`Time to interactive: ${jsonResults.audits['time-to-interactive'].displayValue}`)
+    console.log(`Analyzing total bundle size...`)
     console.log(`${jsonResults.audits['total-byte-weight'].displayValue}`)
 }
 
