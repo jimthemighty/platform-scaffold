@@ -1,21 +1,20 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import AmpLightbox from '../../components/amp-lightbox'
-import containerStyles from './container.scss'
 
-const containerClass = 't-product-list'
+// import components
+
+// import partials
+import ProductListHeader from './partials/product-list-header'
+
+// import container styles
+import containerStyles from './container.scss'
 
 const ProductList = ({
     links,
     title
 }) => (
-    <div className={containerClass}>
-        <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
-        <AmpLightbox id="my-lightbox">
-            <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
-        </AmpLightbox>
-        <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
+    <div className="t-product-list">
+        <ProductListHeader />
 
         <h1>{title}</h1>
         {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
@@ -37,8 +36,7 @@ ProductList.templateName = 'plp'
 
 const mapStateToProps = (state) => ({
     links: state.links,
-    title: `ProductList! - ${state.title}` || '',
-    className: containerClass
+    title: `ProductList! - ${state.title}` || ''
 })
 
 
