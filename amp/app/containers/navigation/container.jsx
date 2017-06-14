@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 
 import Sheet from '../../components/sheet'
-import Button from '../../components/button'
 import Nav from '../../components/nav'
 import NavMenu from '../../components/nav-menu'
+import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
+import IconLabelButton from '../../components/icon-label-button'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 
 
@@ -27,14 +28,22 @@ const root = {title: 'Store', path: '/', children: [
 
 const Navigation = (props) => {
     const {id} = props
-    const foo = `tap:${id}.toggle`
+    const closeNav = `tap:${id}.toggle`
 
     return (
         <Sheet id={id} className="t-navigation">
             <Nav>
-                <h1>Header Bar here</h1>
+                <HeaderBar>
+                    <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
+                        <h2 className="u-text-family-header u-text-uppercase">
+                            <span className="u-text-weight-extra-light">Menu</span>
+                        </h2>
+                    </HeaderBarTitle>
 
-                <Button icon="close" title="Toggle Nav" on={foo} showIconText />
+                    <HeaderBarActions>
+                        <IconLabelButton iconName="close" label="close" on={closeNav} />
+                    </HeaderBarActions>
+                </HeaderBar>
 
                 <NavMenu root={root} path="/" />
 
@@ -50,7 +59,7 @@ const Navigation = (props) => {
 }
 
 Navigation.propTypes = {
-    id: React.PropTypes.string
+    id: PropTypes.string
 }
 
 export default Navigation
