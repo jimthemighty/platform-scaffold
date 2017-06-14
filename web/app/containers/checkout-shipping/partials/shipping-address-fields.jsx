@@ -22,6 +22,7 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ShippingAddressFields = ({
     fetchShippingMethods,
@@ -51,7 +52,7 @@ const ShippingAddressFields = ({
                     name="name"
                     label="First & Last Name"
                 >
-                    <input type="text" noValidate />
+                    <input type="text" noValidate data-analytics-name={UI_NAME.customerName}/>
                 </ReduxForm.Field>
             </FieldRow>
 
@@ -62,7 +63,7 @@ const ShippingAddressFields = ({
                     label="Address"
                     caption={!isCompanyOrAptShown && addCompanyButton}
                 >
-                    <input type="text" noValidate />
+                    <input type="text" noValidate data-analytics-name={UI_NAME.address}/>
                 </ReduxForm.Field>
             </FieldRow>
 
@@ -77,6 +78,7 @@ const ShippingAddressFields = ({
                             type="text"
                             noValidate
                             placeholder="Optional"
+                            data-analytics-name={UI_NAME.company}
                         />
                     </ReduxForm.Field>
 
@@ -89,6 +91,7 @@ const ShippingAddressFields = ({
                             type="text"
                             noValidate
                             placeholder="Optional"
+                            data-analytics-name={UI_NAME.additionalAddressInfo}
                         />
                     </ReduxForm.Field>
                 </FieldRow>
@@ -100,7 +103,7 @@ const ShippingAddressFields = ({
                     name="city"
                     label="City"
                 >
-                    <input type="text" noValidate />
+                    <input type="text" noValidate data-analytics-name={UI_NAME.city} />
                 </ReduxForm.Field>
             </FieldRow>
 
@@ -121,7 +124,7 @@ const ShippingAddressFields = ({
                         onBlur: fetchShippingMethods
                     }}
                 >
-                    <input type="text" noValidate />
+                    <input type="text" noValidate data-analytics-name={UI_NAME.postcode} />
                 </ReduxForm.Field>
             </FieldRow>
 
@@ -133,7 +136,7 @@ const ShippingAddressFields = ({
                     caption="In case we need to contact you about your order"
                     normalize={normalizePhone}
                 >
-                    <input type="tel" noValidate />
+                    <input type="tel" noValidate data-analytics-name={UI_NAME.phone} />
                 </ReduxForm.Field>
             </FieldRow>
         </div>

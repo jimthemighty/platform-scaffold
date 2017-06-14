@@ -33,14 +33,14 @@ LoginFieldLabel.propTypes = {
     label: PropTypes.string
 }
 
-export const LoginField = ({label, type, forgotPassword, name, tooltip}) => (
+export const LoginField = ({label, type, forgotPassword, name, tooltip, analyticsName}) => (
     <FieldRow>
         <ReduxFormField
             name={name}
             label={<LoginFieldLabel label={label} forgotPassword={forgotPassword} />}
             component={Field}
             >
-            <input type={type} />
+            <input type={type} data-analytics-name={analyticsName} />
         </ReduxFormField>
 
         {tooltip}
@@ -51,6 +51,7 @@ LoginField.propTypes = {
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    analyticsName: PropTypes.string.isRequired,
     forgotPassword: PropTypes.object,
     tooltip: PropTypes.node
 }

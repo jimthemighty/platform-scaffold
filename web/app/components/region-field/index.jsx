@@ -7,6 +7,8 @@ import classNames from 'classnames'
 import * as ReduxForm from 'redux-form'
 import Field from 'progressive-web-sdk/dist/components/field'
 
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
 /**
  * A field for selecting/entering a region for an address.
  *
@@ -43,7 +45,7 @@ const RegionField = ({
             name="regionId"
             label="State/Province"
         >
-            <select>
+            <select data-analytics-name={UI_NAME.region}>
                 <option value={null}>Please select a region, state, or province</option>
                 {regions.map(({label, id}) => (
                     <option value={id} key={`${id}-${label}`}>

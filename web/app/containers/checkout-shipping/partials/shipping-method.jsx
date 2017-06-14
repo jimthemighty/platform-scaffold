@@ -14,6 +14,7 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import ShippingMethodLabel from './shipping-method-label'
 
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ShippingMethod = ({shippingMethods}) => (
     <div className="t-checkout-shipping__shipping-method">
@@ -31,7 +32,7 @@ const ShippingMethod = ({shippingMethods}) => (
                         value={id}
                         label={<ShippingMethodLabel label={label} info={info} cost={cost} />}
                     >
-                        <input type="radio" noValidate />
+                        <input type="radio" noValidate data-analytics-name={UI_NAME.shippingMethod} />
                     </ReduxForm.Field>
                 </FieldRow>
             ))}

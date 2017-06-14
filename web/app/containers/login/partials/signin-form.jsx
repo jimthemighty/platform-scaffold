@@ -17,6 +17,8 @@ import {LoginField, RememberMeTooltip} from './common'
 
 const FORGOT_PASSWORD_PATH = '/customer/account/forgotpassword'
 
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
 class SignInForm extends React.Component {
     constructor(props) {
         super(props)
@@ -49,6 +51,7 @@ class SignInForm extends React.Component {
                         label="Email"
                         name="username"
                         type="email"
+                        analyticsName={UI_NAME.email}
                         />
 
                     <LoginField
@@ -56,6 +59,7 @@ class SignInForm extends React.Component {
                         name="password"
                         type="password"
                         forgotPassword={{href: FORGOT_PASSWORD_PATH}}
+                        analyticsName={UI_NAME.passowrd}
                         />
 
                     <LoginField
@@ -63,6 +67,7 @@ class SignInForm extends React.Component {
                         name="persistent_remember_me"
                         type="checkbox"
                         tooltip={<RememberMeTooltip />}
+                        analyticsName={UI_NAME.remember}
                         />
 
                     <FieldRow>
@@ -70,6 +75,7 @@ class SignInForm extends React.Component {
                             className="c--primary u-width-full"
                             type="submit"
                             disabled={submitting || !isFormLoaded}
+                            data-analytics-name={UI_NAME.login}
                         >
                             <span className="u-text-uppercase">Login</span>
                         </Button>
