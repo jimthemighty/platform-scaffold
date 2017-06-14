@@ -3,7 +3,10 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
-import {receiveCategoryContents, receiveCategoryInformation} from '../../categories/results'
+import {
+    receiveCategoryContents,
+    receiveCategoryInformation
+} from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser} from './parser'
 import {productListParser} from '../products/parsers'

@@ -4,7 +4,7 @@
 
 /* eslint-disable no-unused-vars */
 
-import {receiveCategoryContents} from '../../categories/results'
+import {receiveCategoryContents} from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 
