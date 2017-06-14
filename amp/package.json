@@ -1,6 +1,7 @@
 {
   "cloudSlug": "merlinspotions-2",
   "gaAccount": "UA-76264428-1",
+  "siteUrl": "https://www.merlinspotions.com",
   "dependencies": {
     "aws-serverless-express": "3.0.0",
     "encoding": "0.1.12",
@@ -29,6 +30,8 @@
     "eslint-plugin-jsx-a11y": "2.2.3",
     "eslint-plugin-react": "6.10.3",
     "git-rev-sync": "1.9.1",
+    "immutable": "^3.8.1",
+    "imports-loader": "^0.7.1",
     "jest-cli": "19.0.2",
     "mobify-amp-sdk": "0.0.2",
     "mobify-code-style": "2.8.3",
@@ -46,8 +49,11 @@
     "react-addons-transition-group": "15.4.2",
     "react-dom": "15.4.2",
     "react-redux": "5.0.3",
+    "react-redux-resolve": "^1.0.2",
     "redux": "3.6.0",
     "redux-actions": "2.0.1",
+    "redux-thunk": "^2.2.0",
+    "reselect-immutable-helpers": "^1.2.2",
     "sass-lint": "1.10.2",
     "sass-loader": "6.0.5",
     "source-map-support": "0.4.15",

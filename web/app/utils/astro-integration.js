@@ -4,7 +4,7 @@
 
 import isRunningIn from '../vendor/astro-detect'
 
-export const isRunningInAstro = isRunningIn.app()
+export const isRunningInAstro = typeof window !== 'undefined' && isRunningIn.app()
 
 /**
  * Triggers an event into the native Astro app.

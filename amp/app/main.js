@@ -13,15 +13,11 @@ ReactInjection.DOMProperty.injectDOMPropertyConfig({
 
 import process from 'process'
 import path from 'path'
-import Promise from 'bluebird'
-import fetch from 'node-fetch'
 import express from 'express'
 import morgan from 'morgan'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import _jsdom from 'jsdom'
 import {Provider} from 'react-redux'
-import {createStore} from 'redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
 
@@ -34,35 +30,13 @@ import App from './containers/app/container'
 import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
 
+import {initializeStore} from './data-integration/connectedStore'
+import {PAGE_TITLE} from './data-integration/constants'
 
 
-const jsdom = Promise.promisifyAll(_jsdom)
-
-
-const base = 'https://www.merlinspotions.com'
-
-export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js'])
-
-export const parse = (window, html) => {
-    const $ = window.$
-    const $html = $(html)
-    return {
-        links: $.map($html.find('a'), (el) => $(el).text()),
-        title: $html.find('h1').text()
-    }
+const getFullUrl = (req) => {
+    return `${ampPackageJson.siteUrl}${req.url}`
 }
-
-
-/**
- * This could be either an HTML-scraper or an integration manager call.
- */
-const initializeStore = (req) => {
-    const noopReducer = (state) => state
-    return Promise.all([jsdomEnv(), fetch(base + req.url).then((res) => res.text())])
-    .then(([window, html]) => parse(window, html))
-    .then((initialData) => createStore(noopReducer, initialData))
-}
-
 
 const render = (req, res, store, component, css) => {
     const scripts = new ampSDK.Set()
@@ -79,8 +53,8 @@ const render = (req, res, store, component, css) => {
     )
     const state = store.getState()
     const rendered = ampPage({
-        title: state.title,
-        canonicalURL: req.url,
+        title: state.ui.app.get(PAGE_TITLE),
+        canonicalURL: getFullUrl(req),
         body,
         css,
         ampScriptIncludes: scripts.items().join('\n')
@@ -90,19 +64,19 @@ const render = (req, res, store, component, css) => {
 
 
 const productDetailsPage = (req, res, next) => {
-    initializeStore(req)
+    initializeStore(getFullUrl(req), productDetails.default)
         .then((store) => render(req, res, store, productDetails.default, productDetails.styles))
         .catch(next)
 }
 
 const productListPage = (req, res, next) => {
-    initializeStore(req)
+    initializeStore(getFullUrl(req), productList.default)
         .then((store) => render(req, res, store, productList.default, productList.styles))
         .catch(next)
 }
 
 const homePage = (req, res, next) => {
-    initializeStore(req)
+    initializeStore(getFullUrl(req), home.default)
         .then((store) => render(req, res, store, home.default, home.styles))
         .catch(next)
 }
