@@ -135,6 +135,7 @@ export const submitShipping = () => (dispatch, getState) => {
 
 export const isEmailAvailable = () => (dispatch, getState) => {
     const formValues = getShippingFormValues(getState())
+
     if (customCommands.isEmailAvailable && formValues.username) {
         return dispatch(customCommands.isEmailAvailable(formValues.username))
         .then((emailAvailable) => {

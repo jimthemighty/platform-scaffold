@@ -154,9 +154,7 @@ const attemptToInitializeApp = () => {
             // We know we're not running in Astro, that the service worker is
             // supported and loaded, and messaging is enabled, so we can add a
             // deferred function to load and initialize the Messaging client.
-            deferredUntilLoadComplete.push(
-                () => loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
-            )
+            deferredUntilLoadComplete.push(loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID))
         }
     }
 
@@ -203,6 +201,11 @@ const attemptToInitializeApp = () => {
         loadAsset('meta', {
             name: 'theme-color',
             content: '#4e439b'
+        })
+
+        loadAsset('meta', {
+            name: 'charset',
+            content: 'utf-8'
         });
 
         // Attempt to load the worker.

@@ -23,6 +23,7 @@ export const getCategoryTitle = createGetSelector(getSelectedCategory, 'title')
 export const getCategoryParentID = createGetSelector(getSelectedCategory, 'parentId', null)
 export const getCategorySearchTerm = createGetSelector(getSelectedCategory, 'searchTerm')
 export const getCategoryCustomContent = createGetSelector(getSelectedCategory, 'custom')
+export const getCategoryDescription = createGetSelector(getSelectedCategory, 'description')
 
 export const getCategoryParent = createSelector(
     getCategories,

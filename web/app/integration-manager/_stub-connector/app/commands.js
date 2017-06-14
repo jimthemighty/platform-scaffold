@@ -6,11 +6,11 @@
 
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {getCart} from '../cart/commands'
 
 import {
-    setPageFetchError,
     receiveNavigationData,
     setCartURL
 } from '../../results'
