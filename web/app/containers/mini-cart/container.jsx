@@ -6,7 +6,6 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
-import throttle from 'lodash.throttle'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
@@ -72,7 +71,7 @@ class MiniCart extends React.Component {
     constructor(props) {
         super(props)
 
-        this.handleScroll = throttle(this.handleScroll.bind(this), SCROLL_CHECK_INTERVAL)
+        this.handleScroll = this.handleScroll.bind(this)
     }
 
     componentDidMount() {
