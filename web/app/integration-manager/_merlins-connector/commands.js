@@ -6,7 +6,6 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {receiveSearchSuggestions} from '../results'
 import {buildQueryString} from '../../utils/utils'
 import {parseSearchSuggestions} from './parsers'
-import {SUGGESTION_URL} from './constants'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import * as homeCommands from './home/commands'
 import * as productsCommands from './products/commands'
@@ -15,6 +14,8 @@ import * as cartCommands from './cart/commands'
 import * as appCommands from './app/commands'
 import * as checkoutCommands from './checkout/commands'
 import * as accountCommands from './account/commands'
+
+const SUGGESTION_URL = '/catalogsearch/result/?q=+'
 
 export const submitNewsletter = (formData) => {
     return makeFormEncodedRequest('/newsletter/subscriber/new/', formData, {method: 'POST'})
@@ -48,5 +49,6 @@ export default {
     app: appCommands,
     account: accountCommands,
     submitNewsletter,
-    getSearchSuggestions
+    getSearchSuggestions,
+    submitSearch
 }

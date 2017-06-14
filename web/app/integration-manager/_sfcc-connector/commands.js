@@ -37,5 +37,6 @@ export default {
     app: appCommands,
     checkout: checkoutCommands,
     account: accountCommands,
-    getSearchSuggestions
+    getSearchSuggestions,
+    submitSearch
 }
