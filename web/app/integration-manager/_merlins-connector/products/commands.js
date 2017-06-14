@@ -7,7 +7,10 @@ import {receiveFormInfo} from '../actions'
 
 import {fetchPageData} from '../app/commands'
 
-import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
+import {
+    receiveProductDetailsProductData,
+    receiveProductDetailsUIData
+} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {productDetailsParser, productDetailsUIParser, pdpAddToCartFormParser} from './parsers'
 
 export const initProductDetailsPage = (url) => (dispatch) => {

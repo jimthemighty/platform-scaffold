@@ -2,7 +2,10 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
+import {
+    receiveProductDetailsProductData,
+    receiveProductDetailsUIData
+} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {setCurrentURL} from '../../results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'

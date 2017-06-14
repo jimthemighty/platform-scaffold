@@ -7,7 +7,7 @@ import {
     receiveCategoryContents,
     receiveCategoryInformation
 } from 'progressive-web-sdk/dist/integration-manager/categories/results'
-import {receiveProductListProductData} from '../../products/results'
+import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser} from './parser'
 import {productListParser} from '../products/parsers'
 import {fetchPageData} from '../app/commands'
