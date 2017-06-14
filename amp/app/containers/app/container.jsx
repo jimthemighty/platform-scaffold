@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import Header from '../header/container'
 import Footer from '../footer/container'
-import Button from '../../components/button'
 import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
