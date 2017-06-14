@@ -7,6 +7,7 @@ import {receiveCategoryContents, receiveCategoryInformation} from '../../categor
 import {receiveProductListProductData} from '../../products/results'
 import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser} from './parser'
 import {productListParser} from '../products/parsers'
+import {getTextFrom} from '../../../utils/parser-utils'
 import {fetchPageData} from '../app/commands'
 
 export const initProductListPage = (url) => (dispatch) => {
@@ -26,7 +27,8 @@ export const initProductListPage = (url) => (dispatch) => {
                 parentId: null,
                 filters: priceFilterParser($, $response),
                 title,
-                searchTerm: searchTermMatch ? searchTermMatch[0] : null
+                searchTerm: searchTermMatch ? searchTermMatch[0] : null,
+                description: getTextFrom($response, '#text, .category-description')
             }))
             dispatch(receiveCategoryContents(pathKey, categoryProductsParser($, $response)))
         })
