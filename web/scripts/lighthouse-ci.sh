@@ -18,7 +18,6 @@ PREVIEW=#mobify-override\&mobify-path=true\&mobify-url=https://localhost:8443/lo
 # See min_lighthouse_score in package.json
 
 # --ignore-certificate-errors thanks to https://github.com/GoogleChrome/lighthouse/issues/559
-./scripts/wait-for-dependencies.sh
 lighthouse \
     --chrome-flags='--user-agent="MobifyPreview" --allow-insecure-localhost --ignore-certificate-errors' \
 	--output json \
