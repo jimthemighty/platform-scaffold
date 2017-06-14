@@ -158,3 +158,17 @@ export const parseProductListData = (products) => {
     })
     return productListData
 }
+
+export const parseSearchSuggestions = ({product_suggestions}) => {
+    const {products} = product_suggestions // eslint-disable-line
+    const numResults = products.length
+
+    const suggestions = products.map((suggestion) => {
+        return {
+            href: suggestion.link,
+            children: suggestion.product_name,
+            endAction: `${numResults} result${numResults > 1 ? 's' : ''}`
+        }
+    })
+    return suggestions
+}
