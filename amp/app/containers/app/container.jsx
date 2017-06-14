@@ -43,7 +43,7 @@ const App = ({children}) => {
 
             <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
                 <div id="app-header" className="u-flex-none" role="banner">
-                    <Header />
+                    <Header navId={navId} />
                 </div>
 
                 <main id="app-main" className="u-flex" role="main">
