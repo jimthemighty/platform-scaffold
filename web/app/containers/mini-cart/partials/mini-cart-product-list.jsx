@@ -37,20 +37,24 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
             </Button>
 
             <List>
-                {items.map(({product, itemPrice, linePrice, quantity}) =>
-                    <ProductItem
-                        className="u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end"
-                        title={<h2 className="u-h3">{product.name}</h2>}
-                        price={itemPrice}
-                        key={product.id}
-                        image={<Image src={product.thumbnail.src} alt={product.thumbnail.alt} width="64px" height="64px" />}
+                {items.map(({product, itemPrice, linePrice, quantity}) => {
+                    const src = product.thumbnail ? product.thumbnail.src : ''
+                    const alt = product.thumbnail ? product.thumbnail.alt : ''
+                    return (
+                        <ProductItem
+                            className="u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end"
+                            title={<h2 className="u-h3">{product.name}</h2>}
+                            price={itemPrice}
+                            key={product.id}
+                            image={<Image src={src} alt={alt} width="64px" height="64px" />}
                         >
-                        <div>
-                            <p className="u-margin-bottom-sm">Qty: {quantity}</p>
-                            <p>Sub-Total: {linePrice}</p>
-                        </div>
-                    </ProductItem>
-                )}
+                            <div>
+                                <p className="u-margin-bottom-sm">Qty: {quantity}</p>
+                                <p>Sub-Total: {linePrice}</p>
+                            </div>
+                        </ProductItem>
+                    )
+                })}
             </List>
 
             <div className={SUBTOTAL_CLASSES}>
