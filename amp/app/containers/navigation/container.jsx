@@ -5,11 +5,12 @@ import Nav from '../../components/nav'
 import NavMenu from '../../components/nav-menu'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabelButton from '../../components/icon-label-button'
+import ListTile from '../../components/list-tile'
+import Icon from '../../components/icon'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 
 
 const root = {title: 'Store', path: '/', children: [
-    {title: 'Sign In', path: '/sign-in/'},
     {title: 'Men\'s Clothing', path: '/mens-clothing/', children: [
         {title: 'Casual Shirts', path: '/mens-clothing/casual-shirts/'},
         {title: 'Coats and Jackets', path: '/mens-clothing/coats-and-jackets/'},
@@ -45,7 +46,17 @@ const Navigation = (props) => {
                     </HeaderBarActions>
                 </HeaderBar>
 
-                <NavMenu root={root} path="/" />
+                <ListTile
+                    href="/sign-in/"
+                    className="u-bg-color-neutral-10"
+                    startAction={
+                        <Icon className="t-navigation__sign-in-icon" name="user" title="User" />
+                    }
+                >
+                    Sign In
+                </ListTile>
+
+                <NavMenu root={root} />
 
                 <div>
                     <NavigationSocialIcons />
