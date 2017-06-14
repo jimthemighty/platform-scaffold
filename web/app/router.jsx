@@ -7,7 +7,7 @@ import {Provider} from 'react-redux'
 // Containers
 import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
-import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails} from './containers/templates'
+import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails, StartersKit} from './containers/templates'
 // We build this into the app so we can load the home page right away
 import Home from './containers/home/container'
 import CheckoutHeader from './containers/checkout-header/container'
@@ -60,6 +60,8 @@ const Router = ({store}) => (
                 {/* Careful. The routeName on this 'configure' route is used to change how the ProductDetails component renders */}
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initProductDetailsPage} />
                 <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initProductDetailsPage} />
+                <Route component={StartersKit} path="starters-kit" routeName="startersKit" fetchAction={initProductListPage} />
+
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"

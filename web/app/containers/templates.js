@@ -34,3 +34,4 @@ export const CheckoutShipping = PWALoadable(() => import('./checkout-shipping/co
 export const Login = PWALoadable(() => import('./login/container'))
 export const ProductDetails = PWALoadable(() => import('./product-details/container'))
 export const ProductList = PWALoadable(() => import('./product-list/container'))
+export const StartersKit = PWALoadable(() => import('./starters-kit/container'))
