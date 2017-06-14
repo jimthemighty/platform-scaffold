@@ -15,10 +15,11 @@ import {receiveSearchSuggestions} from '../results'
 import {parseSearchSuggestions} from './parsers'
 
 export const getSearchSuggestions = (query) => (dispatch) => {
+    // SFCC API requires min length of 3
     if (query.length < 3) {
         return dispatch(receiveSearchSuggestions(null))
     }
-    const queryURL = `/search_suggestion?q=${query}` // &count={Integer}&currency={String}&locale={String}
+    const queryURL = `/search_suggestion?q=${query}`
     return makeApiRequest(queryURL)
         .then((response) => response.json())
         .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
