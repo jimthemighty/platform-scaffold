@@ -8,15 +8,11 @@ import * as ampSDK from '../../amp-sdk'
 const AmpForm = ({
     className,
     children,
-    action,
-    target,
-    method,
-    ...extra
+    ...props
 }) => {
     const classes = classNames('c-amp-form', {}, className)
-
     return (
-        <form className={classes} action={action} target={target} method={method} {...extra}>
+        <form className={classes} {...props}>
             {children}
         </form>
     )
@@ -25,10 +21,6 @@ const AmpForm = ({
 
 AmpForm.propTypes = {
     /**
-     * The form action
-     */
-    action: PropTypes.string,
-    /**
      * The children of the form
      */
     children: PropTypes.node,
@@ -36,14 +28,6 @@ AmpForm.propTypes = {
      * Adds values to the `class` attribute of the root element
      */
     className: PropTypes.string,
-    /**
-     * The form method
-     */
-    method: PropTypes.string,
-    /**
-     * The form target
-     */
-    target: PropTypes.string
 }
 
 

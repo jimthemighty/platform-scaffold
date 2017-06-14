@@ -6,12 +6,13 @@ import FieldRow from '../../..//components/field-row'
 
 const NewsletterForm = ({disabled, submitting}) => {
     return (
-        <AmpForm method="GET" action="TODO" target="_top">
+        <AmpForm method="POST" action-xhr="https://www.merlinspotions.com/newsletter/subscriber/new/" target="_top">
             <FieldRow>
-                <Field name="email">
+                <Field>
                     <input
                         type="email"
                         placeholder="Enter your email..."
+                        name="email"
                     />
                 </Field>
 
