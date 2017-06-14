@@ -205,7 +205,7 @@ const attemptToInitializeApp = () => {
 
         loadAsset('meta', {
             name: 'charset',
-            content: 'UTF-8'
+            content: 'utf-8'
         });
 
         // Attempt to load the worker.
