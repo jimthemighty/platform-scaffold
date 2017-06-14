@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+import {staticURL} from '../../utils'
 
 // import components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
@@ -15,7 +16,7 @@ const Home = ({
     title
 }) => (
     <div className={containerClass}>
-        <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
+        <AmpImage src={staticURL("mobify.png")} width="252" height="64" layout="fixed" />
 
         <h1>{title}</h1>
         {links.map((linkText, i) => <p key={i}>{ linkText }</p>)}
