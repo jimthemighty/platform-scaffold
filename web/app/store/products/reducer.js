@@ -9,7 +9,7 @@ import {
     receiveProductDetailsProductData,
     receiveProductListProductData,
     receiveCartProductData
-} from '../../integration-manager/products/results'
+} from 'progressive-web-sdk/dist/integration-manager/products/results'
 
 const initialState = Immutable.Map()
 

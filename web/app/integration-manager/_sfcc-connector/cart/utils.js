@@ -4,7 +4,7 @@
 
 import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID} from '../utils'
 import {getCartItems} from '../../../store/cart/selectors'
-import {receiveCartProductData} from '../../products/results'
+import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {receiveCartContents} from '../../cart/results'
 
 import {getProductById, getProductThumbnailSrcByPathKey, getProductThumbnailByPathKey} from '../../../store/products/selectors'

@@ -5,7 +5,7 @@
 /* eslint-disable no-unused-vars */
 
 import {receiveCartContents} from '../../cart/results'
-import {receiveCartProductData} from '../../products/results'
+import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 
 export const initCartPage = (url, routeName) => (dispatch) => {
     console.log('[Stub Connector] Called initCartPage stub with arguments:', url, routeName)

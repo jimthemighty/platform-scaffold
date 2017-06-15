@@ -4,7 +4,10 @@
 
 /* eslint-disable no-unused-vars */
 
-import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
+import {
+    receiveProductDetailsProductData,
+    receiveProductDetailsUIData
+} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {receiveFormInfo} from '../actions'
 
