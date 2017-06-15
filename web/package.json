@@ -107,7 +107,8 @@
   },
   "config": {
     "sdk_generator_version": 2,
-    "min_lighthouse_score": 80
+    "min_lighthouse_score": 80,
+    "file_size_limit": 20000000
   },
   "scripts": {
     "add:component": "sdk-generate component",
