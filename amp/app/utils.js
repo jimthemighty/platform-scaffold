@@ -20,6 +20,6 @@ export const staticURL = (path) => (process.env.STATIC_URL || '/static/') + path
  *   https://www.example.com/potions.html -> https://www.example.com/potions.html
  *
  */
-export const pathFromURL = (url) => (
-    url.startsWith(packagejson.siteUrl) ? url.substring(packagejson.siteUrl.length) : url
-)
+export const pathFromURL = (url) => {
+    return url.startsWith(packagejson.siteUrl) ? url.substring(packagejson.siteUrl.length) : url
+}

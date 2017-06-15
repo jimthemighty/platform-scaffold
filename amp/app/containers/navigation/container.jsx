@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import packagejson from '../../../package.json'
 
 import Sheet from '../../components/sheet'
 import Nav from '../../components/nav'
@@ -17,20 +18,30 @@ import URL from 'url'
 const pathnameMatch = (url, pathname) => Boolean(url && URL.parse(url).pathname === pathname)
 
 
-const itemFactory = (type, props) => {
-    if (pathnameMatch(props.href, '/customer/account/login/')) {
-        return <SignInListItem {...props} />
+const canonicalURL = (localURL) => {
+    const canonical = URL.parse(packagejson.siteUrl)
+    const local = URL.parse(localURL)
+    local.protocol = canonical.protocol
+    local.hostname = canonical.hostname
+    return URL.format(local)
+}
+
+
+const itemFactory = (type, componentProps) => {
+    // Login has a special nav item and directs to the main site.
+    if (pathnameMatch(componentProps.href, '/customer/account/login/')) {
+        return <SignInListItem {...componentProps} href={canonicalURL(componentProps.href)} />
     }
-    return <NavItem {...props} />
+    return <NavItem {...componentProps} />
 }
 
 
 const SignInListItem = (props) => (
     <NavItem {...props}
-         className="u-bg-color-neutral-10"
-         beforeContent={
+        className="u-bg-color-neutral-10"
+        beforeContent={
             <Icon className="t-navigation__sign-in-icon" name="user" title="User" />
-         }
+        }
     />
 )
 
@@ -69,8 +80,8 @@ const Navigation = (props) => {
 
 Navigation.propTypes = {
     id: PropTypes.string,
-    root: PropTypes.object,
-    path: PropTypes.string
+    path: PropTypes.string,
+    root: PropTypes.object
 }
 
 const mapStateToProps = createPropsSelector({
