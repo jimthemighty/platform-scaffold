@@ -9,7 +9,7 @@ import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
 // Containers
 import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
-import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails} from './containers/templates'
+import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails, MyProductDetails} from './containers/templates'
 
 // We build this into the app so we can load the home page right away
 import Home from './containers/home/container'
@@ -71,7 +71,7 @@ const Router = ({store}) => (
                 <Route component={ProductList} path="catalogsearch/result/*" routeName="searchResultPage" fetchAction={initPage(initProductListPage)} />
                 {/* Careful. The routeName on this 'configure' route is used to change how the ProductDetails component renders */}
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
-                <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
+                <Route component={MyProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"
