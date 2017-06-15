@@ -6,17 +6,8 @@ dependencies:
         - "web/node_modules"
         - "native/node_modules"
     pre:
-        - mkdir $CIRCLE_ARTIFACTS/logs
-        - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
-            background: true
-        - ./scripts/add-self-signed-cert.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
+        - ./web/scripts/setup-ci-env.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
             pwd: web
-            background: true
-        - npm install:
-            pwd: web
-        - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
-            pwd: web
-            background: true
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
         #- npm install:
         #    pwd: native
