@@ -3,10 +3,11 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import fs from 'fs'
-import path from 'path'
-import walk from 'walk'
-import chalk from 'chalk'
+/* eslint-disable import/no-commonjs */
+const fs = require('fs')
+const path = require('path')
+const walk = require('walk')
+const chalk = require('chalk')
 
 // A number denoting maximum file size in bytes.
 const FILE_SIZE_LIMIT = parseInt(process.env.file_size_limit || process.env.npm_package_config_file_size_limit)
