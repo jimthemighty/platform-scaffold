@@ -32,6 +32,7 @@ import * as ampSDK from './amp-sdk'
 
 import {initializeStore} from './data-integration/connectedStore'
 import {PAGE_TITLE} from './data-integration/constants'
+import {fontServe} from './templates/font-serve'
 
 
 const getFullUrl = (req) => {
@@ -57,7 +58,8 @@ const render = (req, res, store, component, css) => {
         canonicalURL: getFullUrl(req),
         body,
         css,
-        ampScriptIncludes: scripts.items().join('\n')
+        ampScriptIncludes: scripts.items().join('\n'),
+        fontServe: fontServe()
     })
     res.send(rendered)
 }

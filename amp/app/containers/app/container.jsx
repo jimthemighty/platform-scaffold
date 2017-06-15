@@ -5,6 +5,7 @@ import Button from '../../components/button'
 import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
+import * as ampSDK from '../../amp-sdk'
 
 const App = ({children}) => {
 
