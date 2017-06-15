@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import containerStyles from './container.scss'
+import {staticURL} from '../../utils'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
@@ -22,7 +23,7 @@ const ProductList = ({
         <AmpLightbox id="my-lightbox">
             <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
         </AmpLightbox>
-        <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
+        <AmpImage src={staticURL('mobify.png')} width="252" height="64" layout="fixed" />
 
         <h1>Number of items: {numItems}</h1>
         {
