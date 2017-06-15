@@ -11,6 +11,7 @@ import {getCartURL} from '../../app/selectors'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import List from 'progressive-web-sdk/dist/components/list'
+import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import ProductItem from '../../../components/product-item'
 
 import * as selectors from '../../../store/cart/selectors'
@@ -29,6 +30,32 @@ const SUBTOTAL_CLASSES = classNames(
 
 /* eslint-disable camelcase */
 
+const productListClasses = 'u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end'
+
+const PlaceholderProduct = () => (
+    <ProductItem
+        className={productListClasses}
+        title={<SkeletonText lines={2} />}
+        image={<Image src="" alt="Image is loading" width="64px" height="64px" />}
+    />
+)
+
+export const PlaceholderMiniCart = () => (
+    <div className="u-padding-md">
+        {/**
+          * Button placeholder to take up as much space as the real "View and
+          * edit cart" button in `MiniCartProductList`
+          */}
+        <div style={{height: '44px'}} />
+
+        <List>
+            <PlaceholderProduct />
+            <PlaceholderProduct />
+            <PlaceholderProduct />
+        </List>
+    </div>
+)
+
 const MiniCartProductList = ({items, orderTotal, cartURL}) => {
     return (
         <div className="u-padding-md">
@@ -37,20 +64,24 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
             </Button>
 
             <List>
-                {items.map(({product, itemPrice, linePrice, quantity}) =>
-                    <ProductItem
-                        className="u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end"
-                        title={<h2 className="u-h3">{product.name}</h2>}
-                        price={itemPrice}
-                        key={product.id}
-                        image={<Image src={product.thumbnail.src} alt={product.thumbnail.alt} width="64px" height="64px" />}
+                {items.map(({product, itemPrice, linePrice, quantity}) => {
+                    const src = product.thumbnail ? product.thumbnail.src : ''
+                    const alt = product.thumbnail ? product.thumbnail.alt : ''
+                    return (
+                        <ProductItem
+                            className={productListClasses}
+                            title={<h2 className="u-h3">{product.name}</h2>}
+                            price={itemPrice}
+                            key={product.id}
+                            image={<Image src={src} alt={alt} width="64px" height="64px" />}
                         >
-                        <div>
-                            <p className="u-margin-bottom-sm">Qty: {quantity}</p>
-                            <p>Sub-Total: {linePrice}</p>
-                        </div>
-                    </ProductItem>
-                )}
+                            <div>
+                                <p className="u-margin-bottom-sm">Qty: {quantity}</p>
+                                <p>Sub-Total: {linePrice}</p>
+                            </div>
+                        </ProductItem>
+                    )
+                })}
             </List>
 
             <div className={SUBTOTAL_CLASSES}>
