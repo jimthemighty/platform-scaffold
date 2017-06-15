@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
 import IconLabelButton from '../../../components/icon-label-button'
-import {OFFLINE_MODAL} from '../constants'
+import {OFFLINE_MODAL} from '../../../components/modal-manager/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
 /**

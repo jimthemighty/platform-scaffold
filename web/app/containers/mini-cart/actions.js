@@ -4,7 +4,7 @@
 
 import {getCart} from '../../integration-manager/cart/commands'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {MINI_CART_MODAL} from './constants'
+import {MINI_CART_MODAL} from '../../components/modal-manager/constants'
 
 export const requestOpenMiniCart = () => (dispatch) => {
     dispatch(getCart())

@@ -8,7 +8,6 @@ import template from '../../template'
 
 import CheckoutConfirmationSplash from './partials/checkout-confirmation-splash'
 import CheckoutConfirmationDetails from './partials/checkout-confirmation-details'
-import CheckoutConfirmationModal from './partials/checkout-confirmation-modal'
 import CheckoutConfirmationQuestions from './partials/checkout-confirmation-questions'
 
 import {trigger} from '../../utils/astro-integration'
@@ -24,7 +23,6 @@ class CheckoutConfirmation extends React.Component {
                 <CheckoutConfirmationSplash />
                 <CheckoutConfirmationDetails />
                 <CheckoutConfirmationQuestions />
-                <CheckoutConfirmationModal />
             </div>
         )
     }

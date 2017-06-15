@@ -20,8 +20,6 @@ import SkipLinks from 'progressive-web-sdk/dist/components/skip-links'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import Header from '../../containers/header/container'
 import Footer from '../../containers/footer/container'
-import MiniCart from '../../containers/mini-cart/container'
-import Navigation from '../../containers/navigation/container'
 import NativeConnector from '../native-connector/container'
 import * as appActions from '../app/actions'
 import * as selectors from './selectors'
@@ -31,6 +29,7 @@ import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selector
 import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging-controller'
 import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 
+import ModalManager from '../../components/modal-manager'
 import NotificationManager from '../../components/notification-manager'
 
 import {registerPreloadCallbacks} from '../templates'
@@ -38,7 +37,7 @@ import {registerPreloadCallbacks} from '../templates'
 // Offline support
 import Offline from '../offline/container'
 import OfflineBanner from '../offline/partials/offline-banner'
-import OfflineModal from '../offline/partials/offline-modal'
+
 
 class App extends React.Component {
     constructor(props) {
@@ -138,8 +137,6 @@ class App extends React.Component {
                             fetchError && hasFetchedCurrentPath && <OfflineBanner />
                         }
 
-                        <OfflineModal reload={reload} />
-
                         {notifications &&
                             <NotificationManager
                                 notifications={notifications}
@@ -147,9 +144,6 @@ class App extends React.Component {
                             />
                         }
 
-                        <Navigation history={history} />
-
-                        <MiniCart />
                     </div>
 
                     {
@@ -169,6 +163,7 @@ class App extends React.Component {
                             <Offline reload={reload} location={children.props.location} route={routeProps} />
                     }
                 </div>
+                <ModalManager history={history} reload={reload} />
             </div>
         )
     }

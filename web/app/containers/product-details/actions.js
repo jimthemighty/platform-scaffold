@@ -16,7 +16,7 @@ import {addToCart, updateCartItem} from '../../integration-manager/cart/commands
 import {getProductVariantData} from '../../integration-manager/products/commands'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from './constants'
+import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../components/modal-manager/constants'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 

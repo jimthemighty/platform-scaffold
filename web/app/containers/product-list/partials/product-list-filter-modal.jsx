@@ -5,7 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {PRODUCT_LIST_FILTER_MODAL} from '../constants'
+import {PRODUCT_LIST_FILTER_MODAL} from '../../../components/modal-manager/constants'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
