@@ -21,6 +21,8 @@ if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   npm run lint
   echo 'Running Unit Tests'
   npm test -- --runInBand
+  echo 'Verify built files sizes'
+  node tests/system/verify-build-size.js
   echo 'Starting Lighthouse Tests.'
   ./tests/system/run-lighthouse.sh
   echo 'Running End to End Tests'
@@ -45,6 +47,9 @@ else
     
       echo 'Running Unit Tests'
       npm test -- --runInBand
+
+      echo 'Verify built files sizes'
+      node tests/system/verify-build-size.js
     
       echo 'Running End to End Tests'
       #If we have nodes > 2, it will be part of the division to run another test:e2e
