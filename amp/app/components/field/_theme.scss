@@ -1,0 +1,105 @@
+// Field theme
+// ===
+
+// Label Wrap
+// ---
+
+.amp-field__label-wrap {
+    display: flex;
+    align-items: baseline;
+
+    &:not(.amp--end) {
+        margin-bottom: $unit;
+    }
+
+    &.amp--end {
+        margin-top: $sub-unit;
+        margin-left: $unit*1.5;
+    }
+}
+
+
+// Label
+// ---
+
+.amp-field__label {
+    flex: 0 0 auto;
+}
+
+
+// Hint
+// ---
+
+.amp-field__hint {
+    flex: 1 1 auto;
+    margin-left: $unit;
+
+    color: $neutral-50;
+    font-size: $small-font-size;
+    line-height: $small-line-height;
+    text-align: right;
+}
+
+
+// Caption
+// ---
+
+.amp-field__caption {
+    margin-top: $sub-unit;
+
+    color: $neutral-50;
+    font-size: $small-font-size;
+    line-height: $small-line-height;
+}
+
+
+// Errors
+// ---
+
+.amp-field__error {
+    margin-top: $sub-unit;
+
+    color: $error-color;
+    font-size: $small-font-size;
+    line-height: $small-line-height;
+}
+
+
+// Modifier: Error field
+// ---
+
+.amp-field.amp--error {
+    .amp-field__label {
+        color: $error-color;
+    }
+
+    input,
+    select,
+    .amp-field__input > * {
+        border-color: $error-color;
+
+        &:focus,
+        &:active {
+            border-color: $error-color;
+
+            box-shadow: 0 0 4px 0 $error-color;
+        }
+    }
+}
+
+
+// Modifier: Check/Radio field
+// ---
+//
+// 1. Align the caption/error message with label
+
+.amp-field.amp--is-check-radio {
+    .amp-field__label {
+        font-weight: normal;
+    }
+
+    .amp-field__error,
+    .amp-field__caption {
+        margin-left: $unit*4.5; // 1
+    }
+}
