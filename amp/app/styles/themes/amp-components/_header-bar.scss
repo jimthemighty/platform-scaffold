@@ -1,12 +1,10 @@
 // Header Bar Theme
 // ===
 
-$header-bar__min-height: $tap-size + $unit; // 52px
-
 .amp-header-bar {
-    min-height: $header-bar__min-height;
+    padding: $unit/2;
 
-    background: $brand-color;
+    background-color: $brand-color;
 
     color: $neutral-00;
 }
@@ -14,20 +12,9 @@ $header-bar__min-height: $tap-size + $unit; // 52px
 
 // Title
 // ---
-//
-// 1. `c-header-bar__title` can be an <a> element. We'll inherit the same
-//    text color specified in the parent `c-header-bar`
 
 .amp-header-bar__title {
-    padding: $unit*1.5;
-
-    color: inherit; // 1
-
-    &:first-child {
-        justify-content: flex-start;
-
-        text-align: left;
-    }
+    line-height: 0;
 }
 
 
@@ -35,5 +22,15 @@ $header-bar__min-height: $tap-size + $unit; // 52px
 // ---
 
 .amp-header-bar__actions {
-    margin: $sub-unit;
+    justify-content: center;
+    min-width: $tap-size;
+    min-height: $tap-size;
+
+    color: currentColor;
+    text-transform: lowercase;
+
+    &:focus,
+    &:active {
+        color: currentColor;
+    }
 }
