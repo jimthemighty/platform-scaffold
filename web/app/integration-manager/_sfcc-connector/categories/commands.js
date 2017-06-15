@@ -48,7 +48,8 @@ export const initProductListPage = (url) => (dispatch) => {
     const path = urlToPathKey(url)
 
     if (/catalogsearch/.test(path)) {
-        const searchQuery = path.match(/\?q=\+(.*)/)[1]
+        const searchQueryMatch = path.match(/\?q=\+(.*)/)
+        const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         searchUrl = makeCategorySearchURL('', searchQuery)
 
         dispatch(receiveCategoryInformation(path, {

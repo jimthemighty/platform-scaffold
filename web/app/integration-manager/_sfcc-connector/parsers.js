@@ -167,7 +167,9 @@ export const parseSearchSuggestions = ({product_suggestions}) => {
     }
 
     const suggestions = products.map((suggestion) => {
-        const productId = suggestion.link.match(/products\/(.*?)\?/)[1]
+        const productIdMatch = suggestion.link.match(/products\/(.*?)\?/)
+        const productId = productIdMatch ? productIdMatch[1] : ''
+
         return {
             href: getProductHref(productId),
             children: suggestion.product_name
