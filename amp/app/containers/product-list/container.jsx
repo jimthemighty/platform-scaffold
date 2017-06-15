@@ -1,9 +1,10 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import AmpLightbox from '../../components/amp-lightbox'
+
+import List from '../../components/list'
+import ProductTile from '../../components/product-tile'
+
 import containerStyles from './container.scss'
-import {staticURL} from '../../utils'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
@@ -19,24 +20,28 @@ const ProductList = ({
 }) => (
 
     <div className={containerClass}>
-        <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
-        <AmpLightbox id="my-lightbox">
-            <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
-        </AmpLightbox>
-        <AmpImage src={staticURL('mobify.png')} width="252" height="64" layout="fixed" />
-
-        <h1>Number of items: {numItems}</h1>
-        {
-            products.map((prod) =>
-                <div key={prod.id}>
-                    <h2>{prod.title}</h2>
-                    <AmpImage src={prod.thumbnail.src} width="240" height="300" layout="fixed" />
-                    <p>{prod.price}</p>
-                </div>
-            )
-        }
+        <div className="t-product-list__container">
+            <p className="t-product-list__num-results">{numItems} Results</p>
+            <List>
+                {
+                    products.map((prod) =>
+                        <ProductTile
+                            href="/"
+                            key={prod.id}
+                            price={prod.price}
+                            thumbnail={{
+                                alt: prod.title,
+                                src: prod.thumbnail.src
+                            }}
+                            title={prod.title}
+                        />
+                    )
+                }
+            </List>
+        </div>
     </div>
 )
+
 
 ProductList.propTypes = {
     products: PropTypes.array.isRequired,
