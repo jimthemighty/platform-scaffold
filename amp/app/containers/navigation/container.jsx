@@ -1,4 +1,6 @@
 import React, {PropTypes} from 'react'
+import {connect} from 'react-redux'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import Sheet from '../../components/sheet'
 import Nav from '../../components/nav'
@@ -8,27 +10,11 @@ import IconLabelButton from '../../components/icon-label-button'
 import ListTile from '../../components/list-tile'
 import Icon from '../../components/icon'
 import NavigationSocialIcons from './partials/navigation-social-icons'
-
-
-const root = {title: 'Store', path: '/', children: [
-    {title: 'Men\'s Clothing', path: '/mens-clothing/', children: [
-        {title: 'Casual Shirts', path: '/mens-clothing/casual-shirts/'},
-        {title: 'Coats and Jackets', path: '/mens-clothing/coats-and-jackets/'},
-        {title: 'Jeans', path: '/mens-clothing/jeans/'},
-        {title: 'Polos', path: '/mens-clothing/polos/'},
-        {title: 'Shorts', path: '/mens-clothing/shorts/'},
-    ]},
-    {title: 'Footwear', path: '/footwear/'},
-    {title: 'Accessories', path: '/accessories/'},
-    {title: 'For the Home', path: '/for-the-home/'},
-    {title: 'My Account', path: '/my-account/', type: 'custom'},
-    {title: 'Wish List', path: '/wish-list/', type: 'custom'},
-    {title: 'Gift Registry', path: '/gift-registry/', type: 'custom'},
-]}
+import {getNavigationRoot, getPath} from './selectors'
 
 
 const Navigation = (props) => {
-    const {id} = props
+    const {id, root, path} = props
     const closeNav = `tap:${id}.toggle`
 
     return (
@@ -56,7 +42,7 @@ const Navigation = (props) => {
                     Sign In
                 </ListTile>
 
-                <NavMenu root={root} />
+                <NavMenu root={root} path={path} />
 
                 <div>
                     <NavigationSocialIcons />
@@ -70,7 +56,14 @@ const Navigation = (props) => {
 }
 
 Navigation.propTypes = {
-    id: PropTypes.string
+    id: PropTypes.string,
+    root: PropTypes.object,
+    path: PropTypes.string
 }
 
-export default Navigation
+const mapStateToProps = createPropsSelector({
+    root: getNavigationRoot,
+    path: getPath
+})
+
+export default connect(mapStateToProps)(Navigation)
