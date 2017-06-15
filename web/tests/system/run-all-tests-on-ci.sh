@@ -21,6 +21,7 @@ if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   npm run lint
   echo 'Running Unit Tests'
   npm test -- --runInBand
+  ./scripts/wait-for-dependencies.sh
   echo 'Verify built files sizes'
   npm run test:build-size
   echo 'Starting Lighthouse Tests.'
@@ -36,18 +37,19 @@ else
 
     #Assign the first node to running lighthouse Tests
     if [ $CIRCLE_NODE_INDEX -eq 0 ]; then
+      echo 'Running Lint'
+      npm run lint     
+      ./scripts/wait-for-dependencies.sh
       echo 'Running Lighthouse Test'
       ./tests/system/run-lighthouse.sh
     fi
 
     # The other cirlce_node_index worker will run the rest of the tests
     if [ $CIRCLE_NODE_INDEX -gt 0 ]; then
-      echo 'Running Lint'
-      npm run lint
-    
       echo 'Running Unit Tests'
       npm test -- --runInBand
 
+      ./scripts/wait-for-dependencies.sh
       echo 'Verify built files sizes'
       npm run test:build-size
     
