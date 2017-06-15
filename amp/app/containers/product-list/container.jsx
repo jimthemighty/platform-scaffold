@@ -8,6 +8,7 @@ import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 // Partials
 import ProductListHeader from './partials/product-list-header'
+import ProductListContents from './partials/product-list-contents'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
@@ -21,6 +22,8 @@ const ProductList = ({
 }) => (
     <div className="t-product-list">
         <ProductListHeader />
+
+        <ProductListContents routeName={routeName} />
 
         <h1>Number of items: {numItems}</h1>
         {
