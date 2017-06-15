@@ -33,7 +33,7 @@ export const getCart = () => (dispatch) => {
         alt: 'Product 1'
     }
     const exampleCartProducts = {
-        '/product1.html': {
+        '1': { // eslint-disable-line
             price: '$10.00',
             available: true,
             href: '/product1.html',
