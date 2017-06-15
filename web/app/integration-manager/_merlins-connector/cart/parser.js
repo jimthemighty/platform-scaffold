@@ -2,7 +2,6 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {textFromFragment, productSubtotal, getHighResImage, formatMerlinsMoney} from '../utils'
 
 export const parseCartProducts = ({items}) => { /* Products */
@@ -24,13 +23,13 @@ export const parseCartProducts = ({items}) => { /* Products */
 
     const productMap = {}
     products.forEach((product) => {
-        productMap[urlToPathKey(product.href)] = product
+        productMap[product.id] = product
     })
 
     return productMap
 }
 
-export const parseCart = ({items, subtotal}) => /* Cart */ {
+export const parseCart = ({items, subtotal}) => { /* Cart */
     return {
         items: items.map(({item_id, product_id, product_url, qty, product_price}) => ({
             id: item_id,
