@@ -6,7 +6,7 @@ dependencies:
         - "web/node_modules"
         - "native/node_modules"
     pre:
-        - ./web/scripts/setup-ci-env.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
+        - ./web/scripts/setup-ci-env.sh:
             pwd: web
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
         #- npm install:
