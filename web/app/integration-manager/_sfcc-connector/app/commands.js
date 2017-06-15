@@ -5,7 +5,6 @@
 import * as utils from '../utils'
 import {receiveNavigationData, setLoggedIn, setCheckoutShippingURL, setCartURL} from '../../results'
 import {receiveUserEmail} from '../../checkout/results'
-import {getCart} from '../cart/commands'
 import {parseCategories} from '../parsers'
 
 import {getSignInURL, getCheckoutShippingURL, getCartURL} from '../config'
@@ -65,7 +64,6 @@ export const initApp = () => (dispatch) => {
                     })
             }
 
-            dispatch(setLoggedIn(false))
-            return dispatch(getCart())
+            return dispatch(setLoggedIn(false))
         })
 }
