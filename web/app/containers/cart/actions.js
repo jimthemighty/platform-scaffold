@@ -12,6 +12,7 @@ import {
     PROMO_ERROR
 } from './constants'
 import {
+    getCart,
     removeFromCart,
     updateItemQuantity,
     addToWishlist,
@@ -36,6 +37,10 @@ const shippingFormSelector = createPropsSelector({
     address: getEstimateShippingAddress,
     shippingMethod: getSelectedShippingMethod
 })
+
+export const requestCartContent = () => (dispatch) => {
+    dispatch(getCart())
+}
 
 export const submitEstimateShipping = () => (dispatch, getState) => {
     const {address, shippingMethod} = shippingFormSelector(getState())

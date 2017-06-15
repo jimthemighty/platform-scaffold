@@ -12,6 +12,12 @@ dependencies:
             background: true
         - yarn install:
             pwd: web
+            background: true
+        - ./scripts/add-self-signed-cert-on-ci.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
+            pwd: web
+            background: true
+        - npm install:
+            pwd: web
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
             pwd: web
             background: true
@@ -20,7 +26,7 @@ dependencies:
         #    pwd: native
 test:
     override:
-        - ./tests/system/run-all-tests.sh:
+        - ./tests/system/run-all-tests-on-ci.sh:
             pwd: web
             parallel: true
     post:

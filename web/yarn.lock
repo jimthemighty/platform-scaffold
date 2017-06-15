@@ -7508,8 +7508,13 @@ progress@^1.1.8, progress@~1.1.8:
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
 
 progressive-web-sdk@~0.15.3:
+<<<<<<< HEAD
   version "0.15.4"
   resolved "https://registry.yarnpkg.com/progressive-web-sdk/-/progressive-web-sdk-0.15.4.tgz#bc2163b37b52486c770c88a2fe7d58fadb14f11b"
+=======
+  version "0.15.3"
+  resolved "https://registry.yarnpkg.com/progressive-web-sdk/-/progressive-web-sdk-0.15.3.tgz#58d94576ef1cc1fcbb01499263425d2c6b6bde6e"
+>>>>>>> d8b2f974c3461c3503deff372297ed631036906b
   dependencies:
     archiver "1.3.0"
     babel-runtime "6.23.0"

@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {getItemQuantity} from './selectors'
 import {getCurrentPathKey, getCartURL} from '../app/selectors'
-import {getSelectedProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from '../../store/products/selectors'
+import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from '../../store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
 import {addToCart, updateCartItem} from '../../integration-manager/cart/commands'
@@ -44,7 +44,7 @@ export const goToCheckout = () => (dispatch, getState) => {
 }
 
 const submitCartFormSelector = createPropsSelector({
-    productId: getSelectedProductId,
+    productId: getCurrentProductId,
     qty: getItemQuantity,
     variations: getProductVariationCategories
 })
