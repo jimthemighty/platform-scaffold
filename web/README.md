@@ -208,6 +208,13 @@ npm run test:pwa-ci
 
 ## Analyze Bundle Size
 
+Set a maximum file size for built assets by specifying a value for `file_size_limit` in `package.json`. To verify that the contents of `build` are not over this size limit:
+
+```
+npm run prod:build
+npm run test:build-size
+```
+
 To visualize bundle script content, run:
 
 ```
