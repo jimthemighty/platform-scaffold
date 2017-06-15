@@ -51,14 +51,14 @@ export const initProductListPage = (url) => (dispatch) => {
         const searchQueryMatch = path.match(/\?q=\+(.*)/)
         const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         searchUrl = makeCategorySearchURL('', searchQuery)
+        const searchTerm = buildSearchTerm(searchQuery)
 
         dispatch(receiveCategoryInformation(path, {
-            id: '',
+            id: searchQuery,
             href: path,
-            searchTerm: buildSearchTerm(searchQuery),
-            description: '',
-            title: '',
-            parentId: ''
+            searchTerm,
+            title: `Search results for ${searchTerm}`,
+            parentId: null
         }))
 
     } else {
