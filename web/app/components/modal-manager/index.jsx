@@ -51,7 +51,6 @@ const ModalManager = (props) => {
 }
 
 ModalManager.propTypes = {
-    close: PropTypes.func,
     history: PropTypes.object,
     isOpen: PropTypes.object,
     reload: PropTypes.func
