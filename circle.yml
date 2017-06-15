@@ -19,6 +19,9 @@ test:
     post:
        - cp -R lighthouse/* $CIRCLE_ARTIFACTS:
            pwd: web
+       - cp -R logs/* $CIRCLE_ARTIFACTS:
+           pwd: web
+
 experimental:
     notify:
         branches:
