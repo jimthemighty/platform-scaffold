@@ -12,8 +12,7 @@ const ProductItem = ({
     className,
     image,
     price,
-    title,
-    customWidth
+    title
 }) => {
     const classes = classNames('amp-product-item', 'u-flexbox', 'u-direction-row-reverse', className)
 
@@ -43,7 +42,7 @@ const ProductItem = ({
 
 
             {image &&
-                <div className="u-padding-end u-flex-none" style={{width: customWidth}}>
+                <div className="u-padding-end u-flex-none">
                     {image}
                 </div>
             }
@@ -74,12 +73,7 @@ ProductItem.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Designates the custom width that accepets valid css units
-     */
-    customWidth: PropTypes.string,
-
-    /**
-     * Image of the product. Usually an `<img />` tag or `<Image />` component
+     * Image of the product. An `<AMPImage />` component.
      */
     image: PropTypes.node,
 
