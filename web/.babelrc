@@ -11,6 +11,9 @@
       "regenerator": false
     }]
   ],
+  "ignore": [
+    "*/vendor/astro-client.js"
+  ],
   "env": {
     "test": {
       "plugins": [
