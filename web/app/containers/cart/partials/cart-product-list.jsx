@@ -198,6 +198,7 @@ CartProductList.propTypes = {
     isLoggedIn: PropTypes.bool,
     items: PropTypes.array,
     openRemoveItemModal: PropTypes.func,
+    setCurrentProduct: PropTypes.func,
     summaryCount: PropTypes.number,
     onOpenSignIn: PropTypes.func,
     onSaveLater: PropTypes.func,
