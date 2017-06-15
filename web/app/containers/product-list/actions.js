@@ -13,5 +13,3 @@ export const changeSort = (sort) => (dispatch, getState) => {
         [getCurrentPathKey(getState())]: {sort}
     }))
 }
-
-export const setCurrentProductId = (id) => receiveCurrentProductId(id)
