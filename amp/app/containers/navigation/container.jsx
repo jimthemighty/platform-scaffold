@@ -5,12 +5,34 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import Sheet from '../../components/sheet'
 import Nav from '../../components/nav'
 import NavMenu from '../../components/nav-menu'
+import NavItem from '../../components/nav-item'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabelButton from '../../components/icon-label-button'
-import ListTile from '../../components/list-tile'
 import Icon from '../../components/icon'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 import {getNavigationRoot, getPath} from './selectors'
+import URL from 'url'
+
+
+const pathnameMatch = (url, pathname) => Boolean(url && URL.parse(url).pathname === pathname)
+
+
+const itemFactory = (type, props) => {
+    if (pathnameMatch(props.href, '/customer/account/login/')) {
+        return <SignInListItem {...props} />
+    }
+    return <NavItem {...props} />
+}
+
+
+const SignInListItem = (props) => (
+    <NavItem {...props}
+         className="u-bg-color-neutral-10"
+         beforeContent={
+            <Icon className="t-navigation__sign-in-icon" name="user" title="User" />
+         }
+    />
+)
 
 
 const Navigation = (props) => {
@@ -32,17 +54,7 @@ const Navigation = (props) => {
                     </HeaderBarActions>
                 </HeaderBar>
 
-                <ListTile
-                    href="/sign-in/"
-                    className="u-bg-color-neutral-10"
-                    startAction={
-                        <Icon className="t-navigation__sign-in-icon" name="user" title="User" />
-                    }
-                >
-                    Sign In
-                </ListTile>
-
-                <NavMenu root={root} path={path} />
+                <NavMenu root={root} path={path} itemFactory={itemFactory} />
 
                 <div>
                     <NavigationSocialIcons />
