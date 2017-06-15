@@ -16,6 +16,7 @@ const makeCategorySearchURL = (id, query) => `/product_search?expand=availabilit
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     const parentId = parent_category_id !== 'root' ? parent_category_id : null
     const path = getCategoryPath(id)
+
     dispatch(receiveCategoryInformation(path, {
         id,
         title: name,
@@ -28,6 +29,8 @@ const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     }
 }
 /* eslint-enable camelcase, no-use-before-define */
+
+const buildSearchTerm = (query) => query.replace(/\+/g, ' ').trim()
 
 const fetchCategoryInfo = (id) => (dispatch) => (
     makeApiRequest(makeCategoryURL(id), {method: 'GET'})
@@ -42,17 +45,28 @@ const extractCategoryId = (url) => {
 
 export const initProductListPage = (url) => (dispatch) => {
     let searchUrl
-    const categoryID = extractCategoryId(url)
+    const path = urlToPathKey(url)
 
-    if (/catalogsearch/.test(url)) {
-        const queryString = categoryID.match(/\?q=\+(.*)/)[1]
-        searchUrl = makeCategorySearchURL('', queryString)
+    if (/catalogsearch/.test(path)) {
+        const searchQuery = path.match(/\?q=\+(.*)/)[1]
+        searchUrl = makeCategorySearchURL('', searchQuery)
+
+        dispatch(receiveCategoryInformation(path, {
+            id: '',
+            href: path,
+            searchTerm: buildSearchTerm(searchQuery),
+            description: '',
+            title: '',
+            parentId: ''
+        }))
+
     } else {
+        const categoryID = extractCategoryId(url)
         searchUrl = makeCategorySearchURL(categoryID, '')
+        dispatch(fetchCategoryInfo(categoryID))
     }
 
-    return dispatch(fetchCategoryInfo(categoryID))
-        .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
+    return makeApiRequest(searchUrl, {method: 'GET'})
         .then((response) => response.json())
         .then(({hits, total}) => {
             if (total === 0) {
