@@ -7,7 +7,7 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getUenc, getCartBaseUrl, getFormInfoByPathKey} from '../selectors'
+import {getUenc, getCartBaseUrl, getFormInfoByProductId} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
 import {receiveCartContents, receiveCartTotals} from '../../cart/results'
@@ -20,7 +20,6 @@ import {fetchPageData} from '../app/commands'
 import {parseCart, parseCartProducts, parseCartTotals} from './parser'
 import {parseCheckoutEntityID, extractMagentoJson} from '../../../utils/magento-utils'
 import {ADD_TO_WISHLIST_URL, PROMO_ERROR} from '../../../containers/cart/constants'
-import {getProductById} from '../../../store/products/selectors'
 
 const LOAD_CART_SECTION_URL = '/customer/section/load/?sections=cart%2Cmessages&update_section_id=true'
 const REMOVE_CART_ITEM_URL = '/checkout/sidebar/removeItem/'
@@ -54,10 +53,7 @@ export const getCart = () => (dispatch) => {
 }
 
 export const addToCart = (productId, quantity) => (dispatch, getState) => {
-    const product = getProductById(productId)(getState())
-
-    const formInfo = getFormInfoByPathKey(urlToPathKey(product.get('href')))(getState())
-
+    const formInfo = getFormInfoByProductId(productId)(getState())
     const hiddenInputs = formInfo.get('hiddenInputs')
 
     if (hiddenInputs === undefined) {
