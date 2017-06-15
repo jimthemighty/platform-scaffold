@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
 echo "Waiting for Chrome to finish installing"
-application="Google Chrome"
-while [ "$application" != "$(google-chrome --version | awk '{print $1, $2}')" ]; do sleep 2; done
+baseline="59"
+google-chrome --version
+while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | awk '{print $3}')" ]; 
+    do google-chrome --version 
+    echo "still updating chrome..."
+    sleep 2; done
 echo "Chrome installed"
 
 echo "Waiting for npm prod:build to complete"
