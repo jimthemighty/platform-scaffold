@@ -22,13 +22,8 @@ const ProductList = ({
 }) => (
 
     <div className={containerClass}>
-        <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
-        <AmpLightbox id="my-lightbox">
-            <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
-        </AmpLightbox>
-        <AmpImage src="/static/mobify.png" width="252" height="64" layout="fixed" />
         <div className="t-product-list__container">
-            <p className="t-product-list__num-results">Number of items: {numItems}</p>
+            <p className="t-product-list__num-results">{numItems} Results</p>
             <List>
                 {
                     products.map((prod) =>

@@ -34,11 +34,6 @@ const App = ({children}) => {
 
             <Navigation id={navId} />
 
-            <Button icon="cart" title="Hidden text!" on="click=trigger:whatever" />
-
-            {/* TODO REMOVE TOGGLE NAV WHEN ADD HEADER */}
-            <div dangerouslySetInnerHTML={{__html: `<button on="tap:${navId}.toggle">Toggle Nav</button>`}} />
-
             <SkipLinks items={skipLinksItems} />
 
             <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
@@ -46,7 +41,7 @@ const App = ({children}) => {
                     <Header navId={navId} />
                 </div>
 
-                <main id="app-main" className="u-flex" role="main">
+                <main id="app-main" className="t-app__main u-flex" role="main">
                     {children}
                 </main>
 
