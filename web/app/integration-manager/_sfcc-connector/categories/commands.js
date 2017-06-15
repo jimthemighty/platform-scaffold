@@ -7,7 +7,7 @@ import {makeApiRequest} from '../utils'
 import {receiveCategoryContents, receiveCategoryInformation} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import {parseProductListData} from '../parsers'
-import {getCategoryPath} from '../config'
+import {getCategoryPath, SUGGESTION_URL} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
 const makeCategorySearchURL = (id, query) => `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}`
@@ -47,7 +47,7 @@ export const initProductListPage = (url) => (dispatch) => {
     let searchUrl
     const path = urlToPathKey(url)
 
-    if (/catalogsearch/.test(path)) {
+    if (path.includes(SUGGESTION_URL)) {
         const searchQueryMatch = path.match(/\?q=\+(.*)/)
         const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         searchUrl = makeCategorySearchURL('', searchQuery)
