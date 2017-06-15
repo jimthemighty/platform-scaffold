@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import containerStyles from './container.scss'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
 import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
@@ -8,12 +10,6 @@ import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 // Partials
 import ProductListHeader from './partials/product-list-header'
-
-// Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-
-// Container styles
-import containerStyles from './container.scss'
 
 const ProductList = ({
     numItems,

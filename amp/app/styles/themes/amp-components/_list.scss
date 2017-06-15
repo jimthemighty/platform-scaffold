@@ -1,0 +1,18 @@
+// List Theme
+// ===
+
+.amp-list {
+    &.amp--borderless {
+        > :not(:first-of-type) {
+            margin-top: $unit;
+            border-top: 0;
+        }
+    }
+}
+
+
+.amp-list__item {
+    &:not(:first-of-type) {
+        border-top: 1px solid $neutral-15;
+    }
+}
