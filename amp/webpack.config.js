@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const fs = require('fs');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
@@ -29,6 +28,13 @@ module.exports = {
                 loader: 'babel-loader?cacheDirectory=true'
             },
             {
+                test: /\.js(x?)$/,
+                include: /progressive-web-sdk/,
+                use: [
+                    {loader: "imports-loader?window=>{location: {href: ''}}"}
+                ],
+            },
+            {
                 test: /\.scss$/,
                 use: [
                     {loader: 'css-loader?-autoprefixer&-url', options: {minimize : true}},
@@ -55,6 +61,10 @@ module.exports = {
                     })
                 ]
             }
+        }),
+        new webpack.ProvidePlugin({
+            fetch: 'node-fetch',
+            URL: ['whatwg-url', 'URL']
         })
     ],
     devtool: 'sourcemap'
