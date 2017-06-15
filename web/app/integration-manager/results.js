@@ -15,3 +15,4 @@ export const receiveOrderConfirmationContents = createAction('Receive Order Conf
 export const receiveSearchSuggestions = createAction('Receive search suggestions')
 export const setCurrentURL = createAction('Set Current URL', ['currentURL'])
 export const receiveUserCustomContent = createAction('Receive User Custom Content', ['custom'])
+export const setURL = createAction('Set URL', ['name', 'url'])

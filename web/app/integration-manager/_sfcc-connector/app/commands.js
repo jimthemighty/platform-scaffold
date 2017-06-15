@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import * as utils from '../utils'
-import {receiveNavigationData, setLoggedIn, setCheckoutShippingURL, setCartURL} from '../../results'
+import {receiveNavigationData, setLoggedIn, setURL} from '../../results'
 import {receiveUserEmail} from '../../checkout/results'
 import {parseCategories} from '../parsers'
 
@@ -53,8 +53,8 @@ export const initApp = () => (dispatch) => {
         .then(() => dispatch(fetchNavigationData()))
         .then(() => {
             const customerData = utils.getCustomerData(utils.getAuthToken())
-            dispatch(setCheckoutShippingURL(getCheckoutShippingURL()))
-            dispatch(setCartURL(getCartURL()))
+            dispatch(setURL('checkoutShipping', getCheckoutShippingURL()))
+            dispatch(setURL('cart', getCartURL()))
             if (!customerData.guest) {
                 dispatch(setLoggedIn(true))
                 return utils.makeApiRequest(`/customers/${customerData.customer_id}`, {method: 'GET'})

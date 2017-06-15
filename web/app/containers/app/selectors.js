@@ -19,5 +19,8 @@ export const hasFetchedCurrentPath = createHasSelector(getFetchedPages, getCurre
 export const getSvgSprite = createGetSelector(getApp, 'sprite')
 export const getHideApp = createGetSelector(getApp, 'hideApp')
 
-export const getCheckoutShippingURL = createGetSelector(getApp, 'checkoutShippingURL')
-export const getCartURL = createGetSelector(getApp, 'cartURL')
+export const getURLs = createGetSelector(getApp, 'urls')
+export const getURL = (name) => createGetSelector(getURLs, name)
+
+export const getCartURL = getURL('cart')
+export const getCheckoutShippingURL = getURL('checkoutShipping')
