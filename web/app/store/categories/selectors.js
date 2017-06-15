@@ -48,5 +48,5 @@ export const getCategoryParentHref = createGetSelector(
 export const getCategoryProducts = createSelector(
     getProducts,
     getCategoryProductIds,
-    (products, productIds) => productIds.map((path) => products.get(path))
+    (products, productIds) => productIds.map((id) => products.get(id))
 )
