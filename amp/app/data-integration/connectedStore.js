@@ -15,11 +15,10 @@ import {CURRENT_URL} from '../../../web/app/containers/app/constants'
 
 import appReducer from './app-reducer'
 import footerReducer from '../../../web/app/containers/footer/reducer'
-import headerReducer from '../../../web/app/containers/header/reducer'
 import homeReducer from '../../../web/app/containers/home/reducer'
 import navigationReducer from '../../../web/app/containers/navigation/reducer'
-import productDetailsReducer from '../../../web/app/containers/product-details/reducer'
 import productListReducer from '../../../web/app/containers/product-list/reducer'
+import productDetailsReducer from './product-details-reducer'
 import categoryReducer from '../../../web/app/store/categories/reducer'
 import productReducer from '../../../web/app/store/products/reducer'
 
@@ -39,7 +38,6 @@ export const initializeStore = (fullUrl, container) => {
         const uiReducer = combineReducers({
             app: appReducer,
             footer: footerReducer,
-            header: headerReducer,
             home: homeReducer,
             navigation: navigationReducer,
             productDetails: productDetailsReducer,
@@ -50,7 +48,7 @@ export const initializeStore = (fullUrl, container) => {
             categories: categoryReducer,
             ui: uiReducer,
             products: productReducer,
-            integrationManager: imReducer,
+            integrationManager: imReducer
         })
 
         const middlewares = [
