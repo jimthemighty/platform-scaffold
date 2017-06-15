@@ -34,7 +34,7 @@ const options = {
         },
         end: () => {
             if (failure === false) {
-                console.log(`Success! All build files are below the size threshold.`)
+                console.log(chalk.green(`Success! All build files are below the size threshold.`))
             } else {
                 console.log(chalk.red(`Run 'npm run analyze-build' to see what is contributing to large files.`))
             }
@@ -44,7 +44,6 @@ const options = {
 
 if (fs.existsSync('build')) {
     console.log(`Verifying individual file sizes in the build are less than ${FILE_SIZE_LIMIT} bytes...`)
-    console.log(process.env.npm_package_config_file_size_limit)
     walk.walkSync('build', options)
 } else {
     console.log(`Run 'npm prod:build' to generate a build.`)
