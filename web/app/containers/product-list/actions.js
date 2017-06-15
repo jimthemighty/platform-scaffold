@@ -4,7 +4,6 @@
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getCurrentPathKey} from '../app/selectors'
-import {receiveCurrentProductId} from '../../integration-manager/results'
 
 export const changeSelectedSort = createAction('Change Selected Sort Order')
 
