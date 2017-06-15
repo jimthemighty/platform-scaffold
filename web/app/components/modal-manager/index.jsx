@@ -6,7 +6,6 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getModals} from 'progressive-web-sdk/dist/store/modals/selectors'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
 import * as MODAL from './constants'
 import Navigation from '../../containers/navigation/container'
@@ -33,44 +32,22 @@ const modals = {
     [MODAL.REMEMBER_ME_MODAL]: <RememberMeModal />
 }
 
-class ModalManager extends React.Component {
-    constructor(props) {
-        super(props)
-
-        this.renderOpenedModal = this.renderOpenedModal.bind(this)
-    }
-
-    componentWillMount() {
-        // register all modals in redux store, isOpen is initialized to false for all modals
-        // probably will move this to sdk, action: regitserModals()
-
-        // Object.keys(modals).forEach((modal) => {
-        //    this.props.close(modal)
-        // })
-    }
-
-    renderOpenedModal() {
-        const {isOpen} = this.props
-        let openedModal
-        for (const modal in isOpen) {
-            if (isOpen[modal]) {
-                openedModal = modals[modal]
-            }
+const ModalManager = (props) => {
+    const {history, reload, isOpen} = props
+    let openedModal
+    for (const modal in isOpen) {
+        if (isOpen[modal]) {
+            openedModal = modals[modal]
         }
-        return openedModal
     }
 
-    render() {
-        const {history, reload} = this.props
-        const openedModal = this.renderOpenedModal()
-        return (
-            <div>
-                <Navigation history={history} />
-                <OfflineModal reload={reload} />
-                {openedModal}
-            </div>
-        )
-    }
+    return (
+        <div>
+            <Navigation history={history} />
+            <OfflineModal reload={reload} />
+            {openedModal}
+        </div>
+    )
 }
 
 ModalManager.propTypes = {
@@ -84,11 +61,6 @@ const mapStateToProps = createPropsSelector({
     isOpen: getModals
 })
 
-const mapDispatchToProps = {
-    close: (modal) => closeModal(modal)
-}
-
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )(ModalManager)
