@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import AmpLightbox from '../../components/amp-lightbox'
 import List from '../../components/list'
 import ProductTile from '../../components/product-tile'
 

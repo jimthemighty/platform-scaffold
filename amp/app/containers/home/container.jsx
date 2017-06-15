@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
 // import components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Link from '../../components/link'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
