@@ -34,7 +34,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
         .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
 }
 
-export const submitSearch = (query) => (dispatch) => {
+export const searchProducts = (query) => (dispatch) => {
     browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
 }
 
@@ -48,5 +48,5 @@ export default {
     account: accountCommands,
     submitNewsletter,
     getSearchSuggestions,
-    submitSearch
+    searchProducts
 }
