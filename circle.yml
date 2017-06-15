@@ -9,7 +9,7 @@ dependencies:
         - mkdir $CIRCLE_ARTIFACTS/logs
         - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
             background: true
-        - ./scripts/add-self-signed-cert.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
+        - ./scripts/add-self-signed-cert-on-ci.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
             pwd: web
             background: true
         - npm install:
@@ -22,7 +22,7 @@ dependencies:
         #    pwd: native
 test:
     override:
-        - ./tests/system/run-all-tests.sh:
+        - ./tests/system/run-all-tests-on-ci.sh:
             pwd: web
             parallel: true
     post:
