@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
+import {staticURL} from '../../utils'
 import containerStyles from './container.scss'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
@@ -21,6 +22,7 @@ const ProductDetails = ({
         <AmpLightbox id="my-lightbox">
             <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
         </AmpLightbox>
+        <AmpImage src={staticURL('mobify.png')} width="252" height="64" layout="fixed" />
 
         <h1>{title}</h1>
         <p>{description}</p>
@@ -50,9 +52,8 @@ const mapStateToProps = createPropsSelector({
     title: getProductTitle
 })
 
+export const styles = containerStyles.toString()
 
 export default connect(
     mapStateToProps
 )(ProductDetails)
-
-export const styles = containerStyles.toString()
