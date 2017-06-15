@@ -1,0 +1,8 @@
+// AMP Product Tile Theme
+// ===
+//
+
+.amp-product-tile + .amp-product-tile {
+    margin-top: $unit;
+    border-top: 0;
+}

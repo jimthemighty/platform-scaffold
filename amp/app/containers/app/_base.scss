@@ -6,8 +6,10 @@
 // Containers/Partials
 // ---
 
-@import '../../containers/header/header';
-
+@import 'app';
+@import '../footer/footer';
+@import '../header/header';
+@import '../navigation/navigation';
 
 // Components
 // ---
@@ -23,6 +25,13 @@
 
 @import '../../components/icon/base';
 @import '../../styles/themes/amp-components/icon'; // TODO: dont move to SDK
+
+@import '../../components/field/base';
+@import '../../styles/themes/amp-components/field'; // TODO: dont move to SDK
+
+@import '../../components/field-row/base';
+@import '../../components/field-row/theme';
+@import '../../styles/themes/amp-components/field-row'; // TODO: dont move to SDK
 
 @import '../../components/icon-label/base';
 @import '../../styles/themes/amp-components/icon-label'; // NOTE: don't move to SDK
@@ -42,20 +51,5 @@
 @import '../../components/skip-links/base';
 @import '../../components/skip-links/theme';
 
-@import '../../components/field/base';
-@import '../../styles/themes/amp-components/field'; // TODO: dont move to SDK
-
-@import '../../components/field-row/base';
-@import '../../components/field-row/theme';
-@import '../../styles/themes/amp-components/field-row'; // TODO: dont move to SDK
-
-@import '../footer/footer';
-
-
 @import '../../components/sheet/base';
 @import '../../components/sheet/theme';
-
-// Navigation style
-// ---
-
-@import '../navigation/navigation';

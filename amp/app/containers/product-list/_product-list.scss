@@ -1,6 +1,15 @@
 // ProductList
 // ===
 
-.t-product-list {
-    border: 1px solid red;
+.t-product-list__container {
+    padding: 0 $unit $unit*2;
+
+    background-color: $background-color;
+    box-shadow: $inset-box-shadow;
+}
+
+.t-product-list__num-results {
+    padding: $unit*1.5;
+
+    font-size: $font-size + 1;
 }
