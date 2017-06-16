@@ -7,16 +7,20 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import template from '../../template'
 
+import Button from 'progressive-web-sdk/dist/components/button'
 import Carousel from 'progressive-web-sdk/dist/components/carousel'
 import CarouselItem from 'progressive-web-sdk/dist/components/carousel/carousel-item'
 import Image from 'progressive-web-sdk/dist/components/image'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
+
 import {getProductTitle, getProductDescription, getProductImages} from '../../store/products/selectors'
+
+import {addProductToCart} from './actions'
 
 const containerClass = 't-my-product-details'
 const titleClass = `${containerClass}__title`
 
-const MyProductDetails = ({description, images, title}) => {
+const MyProductDetails = ({description, images, onAddToCart, title}) => {
     return (
         <div className={containerClass}>
             <h1 className={titleClass}>{title}</h1>
@@ -37,6 +41,7 @@ const MyProductDetails = ({description, images, title}) => {
             :
                 <SkeletonBlock height="100px" />
             }
+            <Button className="c--primary" onClick={onAddToCart}>Add to Cart</Button>
         </div>
     )
 }
@@ -44,13 +49,18 @@ const MyProductDetails = ({description, images, title}) => {
 MyProductDetails.propTypes = {
     description: PropTypes.string,
     images: PropTypes.array,
-    title: PropTypes.string
+    title: PropTypes.string,
+    onAddToCart: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
-    title: getProductTitle,
     description: getProductDescription,
-    images: getProductImages
+    images: getProductImages,
+    title: getProductTitle
 })
 
-export default template(connect(mapStateToProps, null)(MyProductDetails))
+const mapDispatchToProps = {
+    onAddToCart: addProductToCart
+}
+
+export default template(connect(mapStateToProps, mapDispatchToProps)(MyProductDetails))
