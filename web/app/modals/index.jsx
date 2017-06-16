@@ -9,7 +9,7 @@ import {getModals} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import * as MODAL from './constants'
 import Navigation from '../containers/navigation/container'
-import MiniCart from '../containers/mini-cart/container'
+import MiniCart from './mini-cart/container'
 import ProductDetailsItemAddedModal from './product-details-item-added-modal'
 import CartEstimateShippingModal from './cart-estimate-shipping'
 import CartWishlistModal from './cart-wishlist'
