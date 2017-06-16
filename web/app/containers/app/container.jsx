@@ -30,7 +30,7 @@ import {getModals} from 'progressive-web-sdk/dist/store/modals/selectors'
 import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging-controller'
 import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 
-import ModalManager from '../../components/modal-manager'
+import ModalManager from '../../modals'
 import NotificationManager from '../../components/notification-manager'
 
 import {registerPreloadCallbacks} from '../templates'

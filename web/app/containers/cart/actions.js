@@ -8,7 +8,7 @@ import {fetchShippingMethodsEstimate} from '../../integration-manager/checkout/c
 import {
     PROMO_ERROR
 } from './constants'
-import {CART_ESTIMATE_SHIPPING_MODAL, CART_WISHLIST_MODAL, CART_REMOVE_ITEM_MODAL} from '../../components/modal-manager/constants'
+import {CART_ESTIMATE_SHIPPING_MODAL, CART_WISHLIST_MODAL, CART_REMOVE_ITEM_MODAL} from '../../modals/constants'
 import {
     removeFromCart,
     updateItemQuantity,

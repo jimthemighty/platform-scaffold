@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import React from 'react'
-import {CHECKOUT_CONFIRMATION_MODAL} from '../../../components/modal-manager/constants'
+import {CHECKOUT_CONFIRMATION_MODAL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'

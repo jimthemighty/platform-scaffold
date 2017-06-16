@@ -17,7 +17,7 @@ import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/s
 import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {OFFLINE_MODAL} from '../../components/modal-manager/constants'
+import {OFFLINE_MODAL} from '../../modals/constants'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])

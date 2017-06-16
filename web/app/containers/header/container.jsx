@@ -11,7 +11,7 @@ import classnames from 'classnames'
 import * as headerActions from './actions'
 import * as miniCartActions from '../mini-cart/actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {NAVIGATION_MODAL} from '../../components/modal-manager/constants'
+import {NAVIGATION_MODAL} from '../../modals/constants'
 import * as selectors from './selectors'
 import {getCartSummaryCount} from '../../store/cart/selectors'
 

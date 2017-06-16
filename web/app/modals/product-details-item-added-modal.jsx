@@ -10,7 +10,7 @@ import {stripEvent} from '../../../utils/utils'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getProductThumbnail, getProductTitle, getProductPrice} from '../../../store/products/selectors'
 import * as productDetailsActions from '../actions'
-import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../../components/modal-manager/constants'
+import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
 import Button from 'progressive-web-sdk/dist/components/button'

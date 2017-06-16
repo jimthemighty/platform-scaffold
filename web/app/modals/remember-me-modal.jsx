@@ -12,7 +12,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 
-import {REMEMBER_ME_MODAL} from '../../../components/modal-manager/constants'
+import {REMEMBER_ME_MODAL} from './constants'
 
 
 const RememberMeModalHeader = ({closeModal}) => (
