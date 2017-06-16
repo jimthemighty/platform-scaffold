@@ -47,10 +47,6 @@ const ProductList = ({
 
 ProductList.propTypes = {
     products: PropTypes.array.isRequired,
-    /**
-     * An array of links
-     */
-    links: PropTypes.array,
     numItems: PropTypes.number,
     /**
      * A title
