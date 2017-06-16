@@ -5,17 +5,17 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import * as selectors from '../selectors'
-import {stripEvent} from '../../../utils/utils'
+import * as selectors from '../../containers/product-details/selectors'
+import {stripEvent} from '../../utils/utils'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
-import {getProductThumbnail, getProductTitle, getProductPrice} from '../../../store/products/selectors'
-import * as productDetailsActions from '../actions'
-import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from './constants'
+import {getProductThumbnail, getProductTitle, getProductPrice} from '../../store/products/selectors'
+import * as productDetailsActions from '../../containers/product-details/actions'
+import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
-import ProductItem from '../../../components/product-item'
+import ProductItem from '../../components/product-item'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 
 const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout}) => (

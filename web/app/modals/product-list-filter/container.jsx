@@ -5,17 +5,17 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {PRODUCT_LIST_FILTER_MODAL} from './constants'
+import {PRODUCT_LIST_FILTER_MODAL} from '../constants'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {changeFilterTo} from '../../../store/categories/actions'
+import {changeFilterTo} from '../../store/categories/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
-import * as selectors from '../selectors'
+import * as selectors from '../../containers/product-list/selectors'
 
 import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/accordion'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
-import IconLabelButton from '../../../components/icon-label-button'
+import IconLabelButton from '../../components/icon-label-button'
 
 const FILTER_QUERY = 'filter_is_open'
 
