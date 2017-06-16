@@ -6,7 +6,6 @@
 // Containers/Partials
 // ---
 
-@import 'app';
 @import '../footer/footer';
 @import '../header/header';
 @import '../navigation/navigation';
@@ -30,7 +29,6 @@
 @import '../../styles/themes/amp-components/field'; // TODO: dont move to SDK
 
 @import '../../components/field-row/base';
-@import '../../components/field-row/theme';
 @import '../../styles/themes/amp-components/field-row'; // TODO: dont move to SDK
 
 @import '../../components/icon-label/base';

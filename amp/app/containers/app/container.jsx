@@ -40,7 +40,7 @@ const App = ({children}) => {
                     <Header navId={navId} />
                 </div>
 
-                <main id="app-main" className="t-app__main u-flex" role="main">
+                <main id="app-main" className="u-flex" role="main">
                     {children}
                 </main>
 

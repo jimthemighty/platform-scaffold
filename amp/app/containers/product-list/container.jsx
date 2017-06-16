@@ -1,10 +1,9 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+import containerStyles from './container.scss'
 
 import List from '../../components/list'
 import ProductTile from '../../components/product-tile'
-
-import containerStyles from './container.scss'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
@@ -12,15 +11,18 @@ import {getCategoryItemCount} from '../../../../web/app/store/categories/selecto
 import {initProductListPage} from '../../../../web/app/integration-manager/categories/commands'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-const containerClass = 't-product-list'
+// Partials
+import ProductListHeader from './partials/product-list-header'
 
 const ProductList = ({
     numItems,
     products
 }) => (
 
-    <div className={containerClass}>
-        <div className="t-product-list__container">
+    <div className="t-product-list">
+        <ProductListHeader />
+
+        <div className="t-product-list__container u-padding-end u-padding-bottom-lg u-padding-start">
             <p className="t-product-list__num-results">{numItems} Results</p>
             <List>
                 {
@@ -58,7 +60,6 @@ const mapStateToProps = createPropsSelector({
     numItems: getCategoryItemCount,
     products: getFilteredAndSortedListProducts
 })
-
 
 export default connect(
     mapStateToProps
