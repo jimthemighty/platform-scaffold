@@ -42,7 +42,7 @@ const ModalManager = (props) => {
     }
 
     return (
-        <div>
+        <div className="m-modal-manager">
             <OfflineModal reload={reload} />
             {openedModal}
         </div>
