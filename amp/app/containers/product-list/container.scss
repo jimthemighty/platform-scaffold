@@ -7,11 +7,14 @@
 
 @import '../../styles/global';
 
-// @TODO MOVE TO APP CONTAINER
-@import '../footer/footer';
 
-@import '../../components/field-row/theme';
-@import '../../styles/themes/amp-components/field-row'; // TODO: dont move to SDK
+// App Styles
+// ===
+//
+// @TODO: Add some information here
+
+@import '../app/base';
+
 
 // App Styles
 // ===
@@ -43,10 +46,7 @@
 //
 // @TODO: Add some information here
 
-@import '../../components/amp-lightbox/base';
-@import '../../components/amp-lightbox/theme';
-@import '../../components/sheet/base';
-@import '../../components/sheet/theme';
+@import '../../components/breadcrumbs/base';
 
 
 // AMP Components
@@ -69,6 +69,7 @@
 @import '../../styles/themes/amp-components/amp-image';
 @import '../../styles/themes/amp-components/price';
 @import '../../styles/themes/amp-components/product-tile';
+@import '../../styles/themes/amp-components/breadcrumbs'; // TODO: dont move to SDK
 
 
 // Template style

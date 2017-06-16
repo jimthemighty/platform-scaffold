@@ -1,6 +1,7 @@
 import process from 'process'
 import packagejson from '../package.json'
 
+
 /**
  * Prepend the static URL to a static asset path. The path must be relative to
  * the 'static' directory, eg.
