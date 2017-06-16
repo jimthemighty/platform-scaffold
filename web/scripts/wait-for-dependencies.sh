@@ -7,12 +7,12 @@ while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | a
     do google-chrome --version 
     echo "still updating chrome..."
     sleep 2; done
-echo "Chrome installed\n"
+printf "Chrome installed\n"
 
 echo "Waiting for npm prod:build to complete"
 while [ ! -f build/loader.js ]; do sleep 2; done
-echo "npm prod:build is complete\n"
+printf "npm prod:build is complete\n"
 
 echo "Waiting for test server to become active"
 while ! nc -z localhost 8443; do sleep 2; done
-echo "8443 test server is now active"
+printf "8443 test server is now active\n"
