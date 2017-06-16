@@ -3,10 +3,8 @@
 
 mkdir logs
 printf "\nInstall Chrome: "
-nohup bash -c "./scripts/install-google-chrome-stable.sh &> logs/installChrome.log &"
+nohup bash -c "./scripts/update-chrome-accept-cert-ci.sh &> logs/apt-get.log &"
 printf "\nNPM Install: "
 npm install
-printf "\nAccept Cert: "
-nohup bash -c "./scripts/add-self-signed-cert-on-ci.sh &> logs/addSignedCert.log &"
 printf "\nStart Test Server: "
 nohup bash -c "./tests/system/start-test-server.sh &> logs/startTestServer.log &"
