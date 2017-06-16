@@ -3,13 +3,10 @@
 
 ## Development Guidelines
 
-We had a bit of back-and-forth about how AMP relates to the PWA and
-decided on these guidelines.
-
 ### Naming conventions
 
-The UI Kit is our spec for building mobile sites. We will follow its naming
-conventions.
+The [UI Kit](https://github.com/mobify/progressive-mobile-ui-kit) is our spec for
+building mobile  sites. We will follow its naming conventions.
 
 If the UI Kit contains a Sheet, we will add one to each SDK. These will
 not be identical, but instead be our best effort to implement the spec in
