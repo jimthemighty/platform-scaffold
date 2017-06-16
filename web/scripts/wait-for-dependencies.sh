@@ -3,9 +3,11 @@
 echo "Waiting for Chrome to finish installing"
 baseline="59"
 google-chrome --version
+counter=0
 while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | awk '{print $3}')" ]; 
     do google-chrome --version 
     echo "still updating chrome..."
+    cat logs/installChrome.log
     sleep 2; done
 printf "Chrome installed\n"
 
