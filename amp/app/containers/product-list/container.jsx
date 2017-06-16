@@ -47,11 +47,7 @@ const ProductList = ({
 
 ProductList.propTypes = {
     products: PropTypes.array.isRequired,
-    numItems: PropTypes.number,
-    /**
-     * A title
-     */
-    title: PropTypes.string
+    numItems: PropTypes.number
 }
 
 ProductList.resolves = [({dispatch, getState}) => {
