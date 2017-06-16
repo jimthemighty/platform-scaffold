@@ -2,8 +2,8 @@
 #Install all dependencies on circleci
 
 mkdir logs
-printf "\nInstall Chrome: "
-nohup bash -c "./scripts/install-google-chrome-stable.sh &> logs/installChrome.log &"
+# printf "\nInstall Chrome: "
+# nohup bash -c "./scripts/install-google-chrome-stable.sh &> logs/installChrome.log &"
 printf "\nAccept Cert: "
 nohup bash -c "./scripts/add-self-signed-cert-on-ci.sh &> logs/addSignedCert.log &"
 printf "\nNPM Install: "
