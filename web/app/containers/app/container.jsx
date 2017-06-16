@@ -25,7 +25,7 @@ import Navigation from '../../containers/navigation/container'
 import NativeConnector from '../native-connector/container'
 import * as appActions from '../app/actions'
 import * as selectors from './selectors'
-import {hasFetchedCurrentPath} from '../../store/app/selectors'
+import {hasFetchedCurrentPath} from 'progressive-web-sdk/dist/store/app/selectors'
 import {getNotifications} from '../../store/selectors'
 import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selectors'
 

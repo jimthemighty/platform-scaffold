@@ -16,7 +16,7 @@ import pushMessagingReducer from 'progressive-web-sdk/dist/store/push-messaging/
 import offlineReducer from 'progressive-web-sdk/dist/store/offline/reducer'
 import productReducer from './products/reducer'
 import checkoutReducer from './checkout/reducer'
-import appReducer from './app/reducer'
+import appReducer from 'progressive-web-sdk/dist/store/app/reducer'
 import {reducer as imReducer} from '../integration-manager/reducer'
 import {reducer as formReducer} from 'redux-form'
 

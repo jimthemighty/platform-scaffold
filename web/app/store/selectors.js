@@ -10,4 +10,3 @@ export const getCart = ({cart}) => cart
 export const getNotifications = ({notifications}) => notifications
 export const getCheckout = ({checkout}) => checkout
 export const getForm = ({form}) => form
-export const getApp = ({app}) => app

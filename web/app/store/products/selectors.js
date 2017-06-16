@@ -6,7 +6,8 @@ import {createSelector} from 'reselect'
 import Immutable from 'immutable'
 import {createGetSelector} from 'reselect-immutable-helpers'
 
-import {getProducts, getApp} from '../selectors'
+import {getProducts} from '../selectors'
+import {getApp} from 'progressive-web-sdk/dist/store/app/selectors'
 
 export const getCurrentProductId = createGetSelector(getApp, 'currentProduct')
 
