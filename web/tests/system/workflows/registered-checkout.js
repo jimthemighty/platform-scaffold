@@ -44,8 +44,6 @@ export default {
             .preview()
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
-
-        pushMessaging.dismissDefaultAsk()
     },
 
     'Checkout - Registered - Navigate from Home to ProductList': (browser) => {
@@ -53,6 +51,10 @@ export default {
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
             .assert.visible(productList.selectors.productListTemplateIdentifier)
+
+        // This is the second page view, the DefaultAsk should be visible and
+        // dismissable by this point.
+        pushMessaging.dismissDefaultAsk()
     },
 
     'Checkout - Registered - Navigate from ProductList to ProductDetails': (browser) => {
