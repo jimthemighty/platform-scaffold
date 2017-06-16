@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#Install all dependencies
+#Install all dependencies on circleci
 
 mkdir logs
 printf "\nInstall Chrome: "
