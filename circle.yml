@@ -17,8 +17,7 @@ dependencies:
         - ./scripts/add-self-signed-cert-on-ci.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
             pwd: web
             background: true
-        - yarn install:
-            pwd: web
+        - yarn install
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
             pwd: web
             background: true
