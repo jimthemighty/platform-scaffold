@@ -7,12 +7,6 @@
 
 @import '../../styles/global';
 
-// @TODO MOVE TO APP CONTAINER
-@import '../footer/footer';
-
-@import '../../components/field-row/theme';
-@import '../../styles/themes/amp-components/field-row'; // TODO: dont move to SDK
-
 // App Styles
 // ===
 //
@@ -37,8 +31,6 @@
 
 @import '../../components/amp-lightbox/base';
 @import '../../components/amp-lightbox/theme';
-@import '../../components/sheet/base';
-@import '../../components/sheet/theme';
 
 
 // AMP Components
@@ -65,5 +57,3 @@
 // Template style
 // ===
 // @TODO: Add some information here
-
-@import 'home';

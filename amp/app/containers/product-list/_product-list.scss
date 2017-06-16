@@ -1,6 +1,27 @@
-// ProductList
+// Product List
 // ===
 
 .t-product-list {
-    border: 1px solid red;
+    //
+}
+
+
+// Container
+// ---
+//
+// 1. Ensure the box-shadow at bottom of container is visible
+
+.t-product-list__container {
+    background-color: $background-color;
+    box-shadow: $inset-box-shadow; // 1
+}
+
+
+// TEMP STYLE - TODO REMOVE THIS STYLE WHEN ADD FILTER BUTTONS
+// ---
+
+.t-product-list__num-results {
+    padding: $unit*1.5;
+
+    font-size: $font-size + 1;
 }

@@ -1,4 +1,7 @@
 import React, {PropTypes} from 'react'
+import {connect} from 'react-redux'
+import {createPropsSelector} from 'reselect-immutable-helpers'
+import {getCategoryTitle, getCategoryParentTitle, getCategoryParentHref} from '../../../../../web/app/store/categories/selectors'
 import {staticURL} from '../../../utils'
 
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
@@ -29,17 +32,16 @@ const ProductListHeader = ({title, parentName, parentHref}) => (
     </div>
 )
 
-ProductListHeader.defaultProps = {
-    title: 'potions',
-    parentName: 'Home',
-    parentHref: '#'
-}
-
 ProductListHeader.propTypes = {
-    contentsLoaded: PropTypes.bool,
     parentHref: PropTypes.string,
     parentName: PropTypes.string,
     title: PropTypes.string
 }
 
-export default ProductListHeader
+const mapStateToProps = createPropsSelector({
+    parentHref: getCategoryParentHref,
+    parentName: getCategoryParentTitle,
+    title: getCategoryTitle
+})
+
+export default connect(mapStateToProps)(ProductListHeader)

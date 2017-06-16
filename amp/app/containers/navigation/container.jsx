@@ -1,42 +1,71 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
+import {connect} from 'react-redux'
+import {createPropsSelector} from 'reselect-immutable-helpers'
+import packagejson from '../../../package.json'
 
 import Sheet from '../../components/sheet'
-import Button from '../../components/button'
 import Nav from '../../components/nav'
 import NavMenu from '../../components/nav-menu'
+import NavItem from '../../components/nav-item'
+import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
+import IconLabelButton from '../../components/icon-label-button'
+import Icon from '../../components/icon'
 import NavigationSocialIcons from './partials/navigation-social-icons'
+import {getNavigationRoot, getPath} from './selectors'
+import URL from 'url'
 
 
-const root = {title: 'Store', path: '/', children: [
-    {title: 'Sign In', path: '/sign-in/'},
-    {title: 'Men\'s Clothing', path: '/mens-clothing/', children: [
-        {title: 'Casual Shirts', path: '/mens-clothing/casual-shirts/'},
-        {title: 'Coats and Jackets', path: '/mens-clothing/coats-and-jackets/'},
-        {title: 'Jeans', path: '/mens-clothing/jeans/'},
-        {title: 'Polos', path: '/mens-clothing/polos/'},
-        {title: 'Shorts', path: '/mens-clothing/shorts/'},
-    ]},
-    {title: 'Footwear', path: '/footwear/'},
-    {title: 'Accessories', path: '/accessories/'},
-    {title: 'For the Home', path: '/for-the-home/'},
-    {title: 'My Account', path: '/my-account/', type: 'custom'},
-    {title: 'Wish List', path: '/wish-list/', type: 'custom'},
-    {title: 'Gift Registry', path: '/gift-registry/', type: 'custom'},
-]}
+const pathnameMatch = (url, pathname) => Boolean(url && URL.parse(url).pathname === pathname)
+
+
+const canonicalURL = (localURL) => {
+    const canonical = URL.parse(packagejson.siteUrl)
+    const local = URL.parse(localURL)
+    local.protocol = canonical.protocol
+    local.hostname = canonical.hostname
+    return URL.format(local)
+}
+
+
+const itemFactory = (type, componentProps) => {
+    // Login has a special nav item and directs to the main site.
+    if (pathnameMatch(componentProps.href, '/customer/account/login/')) {
+        return <SignInListItem {...componentProps} href={canonicalURL(componentProps.href)} />
+    }
+    return <NavItem {...componentProps} />
+}
+
+
+const SignInListItem = (props) => (
+    <NavItem {...props}
+        className="u-bg-color-neutral-10"
+        beforeContent={
+            <Icon className="t-navigation__sign-in-icon" name="user" title="User" />
+        }
+    />
+)
 
 
 const Navigation = (props) => {
-    const {id} = props
-    const foo = `tap:${id}.toggle`
+    const {id, root, path} = props
+    const closeNav = `tap:${id}.toggle`
 
     return (
         <Sheet id={id} className="t-navigation">
             <Nav>
-                <h1>Header Bar here</h1>
+                <HeaderBar>
+                    <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
+                        <h2 className="u-text-family-header u-text-uppercase">
+                            <span className="u-text-weight-extra-light">Menu</span>
+                        </h2>
+                    </HeaderBarTitle>
 
-                <Button icon="close" title="Toggle Nav" on={foo} showIconText />
+                    <HeaderBarActions>
+                        <IconLabelButton iconName="close" label="close" on={closeNav} />
+                    </HeaderBarActions>
+                </HeaderBar>
 
-                <NavMenu root={root} path="/" />
+                <NavMenu root={root} path={path} itemFactory={itemFactory} />
 
                 <div>
                     <NavigationSocialIcons />
@@ -50,7 +79,14 @@ const Navigation = (props) => {
 }
 
 Navigation.propTypes = {
-    id: React.PropTypes.string
+    id: PropTypes.string,
+    path: PropTypes.string,
+    root: PropTypes.object
 }
 
-export default Navigation
+const mapStateToProps = createPropsSelector({
+    root: getNavigationRoot,
+    path: getPath
+})
+
+export default connect(mapStateToProps)(Navigation)

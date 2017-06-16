@@ -2,8 +2,26 @@
 
 // Globals
 // ===
+//
+// @TODO: Add some information here
 
 @import '../../styles/global';
+
+
+// App Styles
+// ===
+//
+// @TODO: Add some information here
+
+@import '../app/base';
+
+
+// App Styles
+// ===
+//
+// @TODO: Add some information here
+
+@import '../app/base';
 
 
 // App Styles
@@ -17,37 +35,45 @@
 // Components
 // ===
 //
-// Import all components used on container
+// @TODO: Add some information here
+
+// Local Containers
+// ---
+
 
 // Local Components
 // ---
 //
+// @TODO: Add some information here
 
 @import '../../components/breadcrumbs/base';
 
 
 // AMP Components
 // ---
+//
+// @TODO: Add some information here
 
 // AMP SDK Base Styles from mobify-amp-sdk
 // ---
+// @TODO: Add some information here
 
 @import '../../../node_modules/mobify-amp-sdk/src/components/amp-image/base';
 @import '../../../node_modules/mobify-amp-sdk/src/components/price/base';
 
 
-
-
-
 // AMP SDK Custom Styles
 // ---
+// @TODO: Add some information here
 
+@import '../../styles/themes/amp-components/amp-image';
+@import '../../styles/themes/amp-components/price';
+@import '../../styles/themes/amp-components/product-tile';
 @import '../../styles/themes/amp-components/breadcrumbs'; // TODO: dont move to SDK
-
-@import '../../styles/themes/amp-components/nav-menu'; // TODO: dont move to SDK
 
 
 // Template style
 // ===
+// @TODO: Add some information here
 
 @import 'product-list';
