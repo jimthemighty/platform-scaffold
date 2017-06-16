@@ -22,7 +22,7 @@ const ProductList = ({
     <div className="t-product-list">
         <ProductListHeader />
 
-        <div className="t-product-list__container">
+        <div className="t-product-list__container u-padding-end u-padding-bottom-lg u-padding-start">
             <p className="t-product-list__num-results">{numItems} Results</p>
             <List>
                 {

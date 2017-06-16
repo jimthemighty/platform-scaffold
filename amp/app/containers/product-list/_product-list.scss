@@ -1,12 +1,24 @@
-// ProductList
+// Product List
 // ===
 
-.t-product-list__container {
-    padding: 0 $unit $unit*2;
-
-    background-color: $background-color;
-    box-shadow: $inset-box-shadow;
+.t-product-list {
+    //
 }
+
+
+// Container
+// ---
+//
+// 1. Ensure the box-shadow at bottom of container is visible
+
+.t-product-list__container {
+    background-color: $background-color;
+    box-shadow: $inset-box-shadow; // 1
+}
+
+
+// TEMP STYLE
+// ---
 
 .t-product-list__num-results {
     padding: $unit*1.5;
