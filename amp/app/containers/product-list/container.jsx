@@ -28,7 +28,7 @@ const ProductList = ({
                 {
                     products.map((prod) =>
                         <ProductTile
-                            href="/"
+                            href={prod.href}
                             key={prod.id}
                             price={prod.price}
                             thumbnail={{

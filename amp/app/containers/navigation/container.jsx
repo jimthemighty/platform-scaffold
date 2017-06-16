@@ -28,11 +28,11 @@ const canonicalURL = (localURL) => {
 
 
 const itemFactory = (type, componentProps) => {
-    // Login has a special nav item and directs to the main site.
+    // Login has a special nav item
     if (pathnameMatch(componentProps.href, '/customer/account/login/')) {
         return <SignInListItem {...componentProps} href={canonicalURL(componentProps.href)} />
     }
-    return <NavItem {...componentProps} />
+    return <NavItem {...componentProps} href={canonicalURL(componentProps.href)} />
 }
 
 
