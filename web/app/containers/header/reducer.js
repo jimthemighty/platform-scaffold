@@ -5,7 +5,7 @@
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
 import * as headerActions from './actions'
-import {receiveSearchSuggestions} from '../../integration-manager/results'
+import {receiveSearchSuggestions} from 'progressive-web-sdk/dist/integration-manager/results'
 import {mergePayload} from '../../utils/reducer-utils'
 
 export const initialState = Immutable.fromJS({

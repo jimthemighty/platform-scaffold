@@ -8,7 +8,7 @@ import {mergePayload} from '../../utils/reducer-utils'
 
 import * as appActions from './actions'
 
-import {setCheckoutShippingURL, setCartURL, setCurrentURL, receiveCurrentProductId} from '../../integration-manager/results'
+import {setCheckoutShippingURL, setCartURL, setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {CURRENT_URL} from './constants'
 
 export const initialState = fromJS({

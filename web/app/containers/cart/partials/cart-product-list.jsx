@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {openRemoveItemModal, saveToWishlist, updateItem} from '../actions'
-import {receiveCurrentProductId} from '../../../integration-manager/results'
+import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import {getCartItems, getCartSummaryCount} from '../../../store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'

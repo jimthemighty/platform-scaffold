@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {receiveSearchSuggestions} from '../results'
+import {receiveSearchSuggestions} from 'progressive-web-sdk/dist/integration-manager/results'
 import {buildQueryString} from '../../utils/utils'
 import {parseSearchSuggestions} from './parsers'
 
