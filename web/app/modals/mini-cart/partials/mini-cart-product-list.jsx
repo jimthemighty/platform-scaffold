@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import classNames from 'classnames'
-import {getCartURL} from '../../app/selectors'
+import {getCartURL} from '../../../containers/app/selectors'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
