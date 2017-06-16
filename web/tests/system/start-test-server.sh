@@ -15,9 +15,9 @@ if git rev-parse ; then
     fi
 fi
 
-echo "Running tests against local build."
 # Kill background processes when this script exits.
-trap 'kill $(jobs -p)' EXIT
-echo "Running Test Server."
+trap 'kill $(jobs -pr)' EXIT
+echo "Building project"
 npm run prod:build
+echo "Running Test Server."
 npm run test:server
