@@ -94,12 +94,9 @@ export default {
             .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
     },
 
-    'Checkout - Registered - Fill out Shipping Info form': (browser) => {
-        checkout.fillShippingInfo()
-        browser
-            // Phone field should have numeric input type
-            .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
-            .assert.valueContains(checkout.selectors.address, checkout.userData.address)
+    'Checkout - Registered - Choose shipping info': (browser) => {
+        checkout.chooseShippingInfo()
+        browser.waitForElementVisible(`${checkout.selectors.addressListOption} .c--checked`)
     },
 
     'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {

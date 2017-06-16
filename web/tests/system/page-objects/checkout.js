@@ -17,6 +17,8 @@ const selectors = {
     state: '[name*="region"]',
     postCode: 'input[name*="code"]',
     phone: 'input[name*="phone"]',
+    addressListOption: '.t-checkout-shipping__shipping-address .pw-field-row',
+    shippingMethod: '.t-checkout-shipping__shipping-method .c--checked',
     continueToPayment: '.qa-checkout__continue-to-payment',
 
     paymentTemplate: '.t-app--checkingPayment',
@@ -75,7 +77,9 @@ Checkout.prototype.continueAsRegistered = function() {
         .setValue(selectors.password, userData.password)
         .waitForElementVisible(selectors.signIn)
         .click(selectors.signIn)
-        .waitUntilMobified()
+        // Workaround. The login experience is currently not ideal.
+        .pause(3000)
+        .refresh()
     return this
 }
 
@@ -110,10 +114,20 @@ Checkout.prototype.fillShippingInfo = function() {
     return this
 }
 
+Checkout.prototype.chooseShippingInfo = function() {
+    // For registered users who have a list of shipping addresses to choose
+    this.browser
+        .log('Choose shipping address')
+        .waitForElementVisible(selectors.addressListOption)
+        .click(selectors.addressListOption)
+        .waitForElementVisible(selectors.shippingMethod)
+    return this
+}
+
 Checkout.prototype.fillPaymentInfo = function() {
     // Fill out Payment Infos form fields
     this.browser
-        .log('Fill out Payment Infos form fields')
+        .log('Fill out Payment Info form fields')
         .waitForElementVisible(selectors.creditCardName)
         .clearValue(selectors.creditCardName)
         .clearValue(selectors.creditCardNumber)

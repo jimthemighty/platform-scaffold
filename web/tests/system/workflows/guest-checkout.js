@@ -87,6 +87,8 @@ export default {
     'Checkout - Guest - Fill out Guest Checkout Shipping Info form': (browser) => {
         checkout.fillShippingInfo()
         browser
+            // Phone field should have numeric input type
+            .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
             .waitForElementVisible(checkout.selectors.address)
             .assert.valueContains(checkout.selectors.address, checkout.userData.address)
     },
