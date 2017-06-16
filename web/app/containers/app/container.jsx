@@ -25,6 +25,7 @@ import * as appActions from '../app/actions'
 import * as selectors from './selectors'
 import {getNotifications} from '../../store/selectors'
 import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selectors'
+import {getModals} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging-controller'
 import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
@@ -84,7 +85,8 @@ class App extends React.Component {
             notifications,
             removeNotification,
             sprite,
-            hideApp
+            hideApp,
+            isModalOpen
         } = this.props
 
         const routeProps = children.props.route
@@ -109,6 +111,14 @@ class App extends React.Component {
 
         const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
+        let hideModalBackground = 'false'
+
+        for (const modal in isModalOpen) {
+            if (isModalOpen[modal]) {
+                hideModalBackground = 'true'
+            }
+        }
+
         return (
             <div
                 id="app"
@@ -118,50 +128,50 @@ class App extends React.Component {
                 <DangerousHTML html={sprite}>
                     {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
                 </DangerousHTML>
+                <div aria-hidden={hideModalBackground}>
+                    <SkipLinks items={skipLinksItems} />
+                    <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
+                        {isRunningInAstro && <NativeConnector />}
 
-                <SkipLinks items={skipLinksItems} />
+                        {messagingEnabled && [
+                            <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
+                            <DefaultAsk key="ask" showOnPageCount={1} />
+                        ]}
 
-                <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
-                    {isRunningInAstro && <NativeConnector />}
+                        <div id="app-header" className="u-flex-none" role="banner">
+                            <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
 
-                    {messagingEnabled && [
-                        <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
-                        <DefaultAsk key="ask" showOnPageCount={1} />
-                    ]}
+                            {
+                                // Only display banner when we are offline and have content to show
+                                fetchError && hasFetchedCurrentPath && <OfflineBanner />
+                            }
 
-                    <div id="app-header" className="u-flex-none" role="banner">
-                        <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
+                            {notifications &&
+                                <NotificationManager
+                                    notifications={notifications}
+                                    actions={{removeNotification}}
+                                />
+                            }
+
+                        </div>
 
                         {
-                            // Only display banner when we are offline and have content to show
-                            fetchError && hasFetchedCurrentPath && <OfflineBanner />
-                        }
+                            // Display main content if we have no network errors or
+                            // if we've already got the content in the store
+                            (!fetchError || hasFetchedCurrentPath) ?
+                                <div>
+                                    <main id="app-main" className="u-flex" role="main">
+                                        {this.props.children}
+                                    </main>
 
-                        {notifications &&
-                            <NotificationManager
-                                notifications={notifications}
-                                actions={{removeNotification}}
-                            />
-                        }
-
-                    </div>
-
-                    {
-                        // Display main content if we have no network errors or
-                        // if we've already got the content in the store
-                        (!fetchError || hasFetchedCurrentPath) ?
-                            <div>
-                                <main id="app-main" className="u-flex" role="main">
-                                    {this.props.children}
-                                </main>
-
-                                <div id="app-footer" className="u-flex-none">
-                                    <CurrentFooter />
+                                    <div id="app-footer" className="u-flex-none">
+                                        <CurrentFooter />
+                                    </div>
                                 </div>
-                            </div>
-                        :
-                            <Offline reload={reload} location={children.props.location} route={routeProps} />
-                    }
+                            :
+                                <Offline reload={reload} location={children.props.location} route={routeProps} />
+                        }
+                    </div>
                 </div>
                 <ModalManager history={history} reload={reload} />
             </div>
@@ -184,6 +194,7 @@ App.propTypes = {
     * Calls a command in the integration manager that initializes some app data
     */
     initApp: PropTypes.func,
+    isModalOpen: PropTypes.object,
     notifications: PropTypes.array,
     removeNotification: PropTypes.func,
     /**
@@ -197,6 +208,7 @@ const mapStateToProps = createPropsSelector({
     notifications: getNotifications,
     fetchError: getPageFetchError,
     hasFetchedCurrentPath: selectors.hasFetchedCurrentPath,
+    isModalOpen: getModals,
     sprite: selectors.getSvgSprite,
     hideApp: selectors.getHideApp
 })

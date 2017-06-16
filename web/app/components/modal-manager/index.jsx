@@ -20,8 +20,8 @@ import OfflineModal from '../../containers/offline/partials/offline-modal'
 import ProductListFilterModal from '../../containers/product-list/partials/product-list-filter-modal'
 
 const modals = {
-    // [MODAL.NAVIGATION_MODAL]: <Navigation />
-    // [MODAL.OFFLINE_MODAL]: <OfflineModal />
+    [MODAL.NAVIGATION_MODAL]: <Navigation />,
+    // [MODAL.OFFLINE_MODAL]: <OfflineModal />,
     [MODAL.MINI_CART_MODAL]: <MiniCart />,
     [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: <ProductDetailsItemAddedModal />,
     [MODAL.PRODUCT_LIST_FILTER_MODAL]: <ProductListFilterModal />,
@@ -33,7 +33,7 @@ const modals = {
 }
 
 const ModalManager = (props) => {
-    const {history, reload, isOpen} = props
+    const {reload, isOpen} = props
     let openedModal
     for (const modal in isOpen) {
         if (isOpen[modal]) {
@@ -43,7 +43,6 @@ const ModalManager = (props) => {
 
     return (
         <div>
-            <Navigation history={history} />
             <OfflineModal reload={reload} />
             {openedModal}
         </div>
@@ -51,7 +50,6 @@ const ModalManager = (props) => {
 }
 
 ModalManager.propTypes = {
-    history: PropTypes.object,
     isOpen: PropTypes.object,
     reload: PropTypes.func
 }
