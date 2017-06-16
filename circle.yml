@@ -1,14 +1,16 @@
 machine:
+    node:
+        version: 6.9.2
     environment:
         PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
+        
 dependencies:
     cache_directories:
-        - ~/.cache/yarn
         - "web/node_modules"
-        # - "native/node_modules"
+        - "native/node_modules"
+        - ~/.cache/yarn
     pre:
         - mkdir $CIRCLE_ARTIFACTS/logs
-        # - ./web/scripts/install-yarn.sh
         - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
             background: true
         - ./scripts/add-self-signed-cert-on-ci.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
