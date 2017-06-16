@@ -34,7 +34,7 @@ RememberMeModalHeader.propTypes = {
 
 const RememberMeModal = ({closeModal, modalOpen}) => (
     <Sheet
-        className="t-login__remember-me-modal"
+        className="m-login__remember-me-modal"
         open={modalOpen}
         onDismiss={closeModal}
         effect="slide-bottom"
@@ -44,7 +44,7 @@ const RememberMeModal = ({closeModal, modalOpen}) => (
             Check "Remember Me" to access your shopping cart on this computer even if you are not signed in.
         </div>
 
-        <div className="t-login__remember-me-button u-padding-md">
+        <div className="m-login__remember-me-button u-padding-md">
             <Button
                 className="c-button c--secondary u-text-uppercase u-margin-top-lg u-width-full"
                 onClick={closeModal}

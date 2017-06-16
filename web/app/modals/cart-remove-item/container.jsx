@@ -19,7 +19,7 @@ import Image from 'progressive-web-sdk/dist/components/image'
 const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem}) => {
     return (
         <Sheet
-            className="pw--no-shadow t-cart__remove-item-confirmation-modal"
+            className="pw--no-shadow m-cart__remove-item-confirmation-modal"
             open={isOpen}
             onDismiss={closeModal}
             maskOpacity={0.7}

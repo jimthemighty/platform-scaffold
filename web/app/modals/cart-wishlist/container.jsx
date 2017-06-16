@@ -105,7 +105,7 @@ CartWishlistLoggedIn.propTypes = {
 const CartWishlistModal = ({closeModal, isOpen, isComplete, isLoggedIn}) => {
     return (
         <Sheet
-            className="pw--no-shadow t-cart__wishlist-modal"
+            className="pw--no-shadow m-cart__wishlist-modal"
             open={isOpen}
             onDismiss={() => {
                 closeModal()

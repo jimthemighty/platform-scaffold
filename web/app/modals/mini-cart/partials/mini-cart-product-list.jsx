@@ -16,7 +16,7 @@ import ProductItem from '../../../components/product-item'
 import * as selectors from '../../../store/cart/selectors'
 
 const SUBTOTAL_CLASSES = classNames(
-    't-mini-cart__subtotal',
+    'm-mini-cart__subtotal',
 
     'u-flexbox',
     'u-justify-between',

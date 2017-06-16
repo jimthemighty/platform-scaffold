@@ -31,7 +31,7 @@ class ProductListFilterModal extends React.Component {
 
         return (
             <Sheet
-                className="t-product-list__filter-modal"
+                className="m-product-list__filter-modal"
                 open={isOpen}
                 onDismiss={closeModal}
                 maskOpacity={0.7}
@@ -62,7 +62,7 @@ class ProductListFilterModal extends React.Component {
                                 jsx-a11y/onclick-has-role,
                                 jsx-a11y/no-static-element-interactions */}
                             <div
-                                className="t-product-list__filter-modal-items"
+                                className="m-product-list__filter-modal-items"
                                 role="presentation"
                             >
                                 {kinds.map(({count, label, query}) =>

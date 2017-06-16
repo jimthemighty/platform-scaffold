@@ -19,7 +19,7 @@ import ProductItem from '../../components/product-item'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 
 const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout}) => (
-    <Sheet open={open} onDismiss={onDismiss} effect="slide-bottom" className="t-product-details__item-added-modal" coverage="50%" shrinkToContent>
+    <Sheet open={open} onDismiss={onDismiss} effect="slide-bottom" className="m-product-details__item-added-modal" coverage="50%" shrinkToContent>
         {/* Modal header */}
         <div className="u-flex-none u-border-bottom">
             <div className="u-flexbox u-align-center">
@@ -27,9 +27,9 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
                     Product Added to Cart
                 </h1>
 
-                <div className="t-product-details__item-added-modal-close u-flexbox u-flex-none u-align-center u-justify-center">
+                <div className="m-product-details__item-added-modal-close u-flexbox u-flex-none u-align-center u-justify-center">
                     <Button className="u-text-uppercase" onClick={onDismiss}>
-                        <Icon name="close" title="Close" className="t-product-details__item-added-modal-icon" />
+                        <Icon name="close" title="Close" className="m-product-details__item-added-modal-icon" />
                     </Button>
                 </div>
             </div>

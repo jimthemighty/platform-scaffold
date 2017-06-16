@@ -21,7 +21,7 @@ import MiniCartHeader from './partials/mini-cart-header'
 import MiniCartProductList from './partials/mini-cart-product-list'
 
 const MiniCartEmpty = () => (
-    <div className="t-mini-cart__empty-content u-flexbox u-flex u-direction-column">
+    <div className="m-mini-cart__empty-content u-flexbox u-flex u-direction-column">
         <Image
             className="u-margin-bottom-md"
             height="140px"
@@ -29,7 +29,7 @@ const MiniCartEmpty = () => (
             alt="Illustrated upside-down top hat with a bug flying out"
             src={getAssetUrl(`static/img/cart/empty-cart@2x.png`)} />
 
-        <p className="t-mini-cart__empty-message u-text-align-center">
+        <p className="m-mini-cart__empty-message u-text-align-center">
             You have no items in your shopping cart.
         </p>
     </div>
@@ -39,7 +39,7 @@ const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
     const buttonClasses = 'c--primary u-width-full u-text-uppercase'
 
     return (
-        <div className="t-mini-cart__content u-flexbox u-direction-column u-padding-md">
+        <div className="m-mini-cart__content u-flexbox u-direction-column u-padding-md">
             {hasItems ? <MiniCartProductList /> : <MiniCartEmpty />}
 
             <div className="u-padding-top-lg u-flex-none">
@@ -66,7 +66,7 @@ MiniCartMain.propTypes = {
 
 const MiniCart = ({hasItems, cartLoaded, isOpen, closeMiniCart, checkoutShippingURL}) => {
     return (
-        <Sheet className="t-mini-cart" open={isOpen} onDismiss={closeMiniCart} maskOpacity={0.7} effect="slide-right" coverage="85%">
+        <Sheet className="m-mini-cart" open={isOpen} onDismiss={closeMiniCart} maskOpacity={0.7} effect="slide-right" coverage="85%">
             <MiniCartHeader closeMiniCart={closeMiniCart} />
 
             {cartLoaded && <MiniCartMain hasItems={hasItems} closeMiniCart={closeMiniCart} checkoutShippingURL={checkoutShippingURL} />}

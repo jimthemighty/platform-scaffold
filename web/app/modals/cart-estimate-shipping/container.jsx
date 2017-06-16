@@ -27,7 +27,7 @@ import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
 
 export const CartEstimateShippingModal = ({closeModal, isOpen, stateProvinces, submitEstimateShipping, isTaxRequestPending, handleSubmit}) => {
     return (
-        <Sheet className="t-cart__estimate-shipping-modal" open={isOpen} onDismiss={closeModal} maskOpacity={0.7} effect="slide-right" coverage="85%">
+        <Sheet className="m-cart__estimate-shipping-modal" open={isOpen} onDismiss={closeModal} maskOpacity={0.7} effect="slide-right" coverage="85%">
             <HeaderBar>
                 <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
                     <h1 className="u-h4 u-text-family-header u-text-uppercase">

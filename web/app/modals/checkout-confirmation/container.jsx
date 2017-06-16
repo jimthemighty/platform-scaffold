@@ -22,9 +22,9 @@ const CheckoutConfirmationModal = (props) => {
     } = props
 
     return (
-        <div className="t-checkout-confirmation__temp">
+        <div className="m-checkout-confirmation__temp">
             <Sheet
-                className="t-checkout-confirmation__account-created-modal pw--no-shadow"
+                className="m-checkout-confirmation__account-created-modal pw--no-shadow"
                 open={isOpen}
                 onDismiss={closeCheckoutConfirmationModal}
                 maskOpacity={0.7}

@@ -49,7 +49,7 @@ test('renders without errors', () => {
     expect(wrapper.length).toBe(1)
 })
 
-const ROOT_CLASS = 't-cart__estimate-shipping-modal'
+const ROOT_CLASS = 'm-cart__estimate-shipping-modal'
 
 test('renders the component class correctly', () => {
     const wrapper = shallow(<CartEstimateShippingModal {...testProps} />)

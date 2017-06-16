@@ -21,7 +21,7 @@ test('renders without errors with one item', () => {
     expect(wrapper.length).toBe(1)
 })
 
-const ROOT_CLASS = 't-cart__wishlist-modal'
+const ROOT_CLASS = 'm-cart__wishlist-modal'
 
 test('renders the component class correctly', () => {
     const wrapper = shallow(<CartWishlistModal />)
