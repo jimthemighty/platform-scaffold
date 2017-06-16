@@ -19,7 +19,7 @@ printf "Chrome installed\n"
 
 echo "Waiting for npm prod:build to complete"
 while [ ! -f build/loader.js ]; do
-    if [[ "$counter" -gt 10 ]]; then
+    if [[ "$counter" -gt 40 ]]; then
         cat logs/startTestServer.log
         echo 'Build Failed.'
         exit 1
