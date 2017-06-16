@@ -7,9 +7,20 @@
 
 import worker from 'progressive-web-sdk/dist/worker/main'
 
+const precacheUrls = [
+    'cart.js',
+    'checkout-confirmation.js',
+    'checkout-payment.js',
+    'checkout-shipping.js',
+    'login.js',
+    'product-details.js',
+    'product-list.js'
+]
+
 const workerParams = worker({
     slug: PROJECT_SLUG,
-    isDebug: DEBUG
+    isDebug: DEBUG,
+    precacheUrls
 })
 
 // Load the Messaging worker code if we're not running under Astro

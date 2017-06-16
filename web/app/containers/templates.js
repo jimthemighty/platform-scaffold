@@ -21,7 +21,7 @@ const PWALoadable = (loader) => {
 
 export const registerPreloadCallbacks = () => {
     loadableList.forEach((loadable) => {
-        requestIdleCallback(() => loadable.preload())
+        requestIdleCallback(loadable.preload)
     })
 }
 

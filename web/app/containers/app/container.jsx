@@ -57,9 +57,11 @@ class App extends React.Component {
             }
         })
 
-        // Lazy load other containers when browser is at the end of frame
-        // to prevent jank
-        registerPreloadCallbacks()
+        // When a service worker is not available for this, lazy load other
+        // containers when browser is at the end of frame to prevent jank.
+        if (!navigator.serviceWorker) {
+            registerPreloadCallbacks()
+        }
     }
 
     hidePreloaderWhenCSSIsLoaded() {
