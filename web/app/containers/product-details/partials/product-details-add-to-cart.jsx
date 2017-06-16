@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as selectors from '../selectors'
-import {getProductInitialValues, getProductAvailability} from '../../../store/products/selectors'
+import {getProductInitialValues, getProductAvailability} from 'progressive-web-sdk/dist/store/products/selectors'
 import * as actions from '../actions'
 
 import ProductDetailsVariations from './product-details-variations'

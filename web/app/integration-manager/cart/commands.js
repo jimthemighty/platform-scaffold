@@ -5,7 +5,7 @@
 import {createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 import {EVENT_ACTION, Product, ShoppingList} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getCartSummaryCount, getSubtotal} from '../../store/cart/selectors'
-import {getProductById} from '../../store/products/selectors'
+import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 
 let connector = {}
 

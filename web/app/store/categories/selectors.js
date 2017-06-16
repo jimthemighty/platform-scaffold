@@ -5,7 +5,8 @@
 import Immutable from 'immutable'
 import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
-import {getCategories, getProducts} from '../selectors'
+import {getCategories} from '../selectors'
+import {getProducts} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getCurrentPathKey} from 'progressive-web-sdk/dist/store/app/selectors'
 import {PLACEHOLDER} from '../../containers/app/constants'
 

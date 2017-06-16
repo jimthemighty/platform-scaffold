@@ -5,7 +5,8 @@
 import Immutable from 'immutable'
 import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
-import {getCart, getProducts} from '../selectors'
+import {getCart} from '../selectors'
+import {getProducts} from 'progressive-web-sdk/dist/store/products/selectors'
 
 export const getCartCustomContent = createGetSelector(getCart, 'custom')
 
