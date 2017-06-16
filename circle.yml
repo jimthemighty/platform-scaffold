@@ -1,7 +1,6 @@
 machine:
     pre:
-        - ./scripts/install-google-chrome-stable.sh &> installChrome.log:
-            background: true
+        - ./scripts/install-google-chrome-stable.sh:
             pwd: web    
     node:
         version: 6.9.2
