@@ -33,7 +33,7 @@ printf "npm prod:build is complete\n"
 
 echo "Waiting for test server to become active"
 while ! nc -z localhost 8443; do 
-if [[ "$counter" -gt 10 ]]; then
+if [[ "$counter" -gt 50 ]]; then
         cat logs/startTestServer.log
         echo 'Starting Server Failed.'
         exit 1
