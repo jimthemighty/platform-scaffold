@@ -82,7 +82,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeCheckoutConfirmationModal: stripEvent(() => closeModal(CHECKOUT_CONFIRMATION_MODAL)),
+    closeCheckoutConfirmationModal: stripEvent(() => closeModal(CHECKOUT_CONFIRMATION_MODAL, UI_NAME.createAccountConfirmation)),
 }
 
 export default connect(

@@ -17,6 +17,7 @@ import {getProductVariantData} from '../../integration-manager/products/commands
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from './constants'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 
@@ -33,7 +34,7 @@ export const addToCartStarted = createAction('Add to cart started')
 export const addToCartComplete = createAction('Add to cart complete')
 
 export const goToCheckout = () => (dispatch, getState) => {
-    dispatch(closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL))
+    dispatch(closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
     if (isRunningInAstro) {
         // If we're running in Astro, we want to dismiss open the cart modal,
         // otherwise, navigating is taken care of by the button press
@@ -69,7 +70,7 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     dispatch(addToCartStarted())
 
     return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], qty, productId) : addToCart(productId, qty))
-        .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
+        .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart)))
         .catch((error) => {
             console.error('Error adding to cart', error)
             return dispatch(addNotification(

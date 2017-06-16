@@ -18,6 +18,7 @@ import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {OFFLINE_MODAL} from '../offline/constants'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
@@ -52,7 +53,7 @@ export const checkIfOffline = () => (dispatch) => {
                 dispatch(setPageFetchError('Network failure, using worker cache'))
             } else {
                 dispatch(clearPageFetchError())
-                dispatch(closeModal(OFFLINE_MODAL))
+                dispatch(closeModal(OFFLINE_MODAL, UI_NAME.offline))
             }
         })
         .catch((error) => {

@@ -14,6 +14,7 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
 import {withRouter} from 'progressive-web-sdk/dist/routing'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import IconLabelButton from '../../components/icon-label-button'
 import {AccountNavItem, NavItemWithOnClick} from '../../components/nav-item'
@@ -118,7 +119,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeNavigation: () => closeModal(NAVIGATION_MODAL),
+    closeNavigation: () => closeModal(NAVIGATION_MODAL, UI_NAME.menu),
     setNavigationPath,
     logoutAction: signOut
 }

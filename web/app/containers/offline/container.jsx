@@ -7,6 +7,7 @@ import template from '../../template'
 
 import DangerousHTML from 'progressive-web-sdk/dist/components/dangerous-html'
 import Button from 'progressive-web-sdk/dist/components/button'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import offlineCloud from '../../static/svg/offline-cloud.svg'
 
@@ -25,7 +26,13 @@ const Offline = ({
             <p>Fiddlesticks! We couldn't load the</p>
             <p>next page on this connection.</p>
             <p>Please try again.</p>
-            <Button className="c--tertiary u-width-full u-text-uppercase u-margin-top-lg" onClick={reload}>Retry</Button>
+            <Button
+                className="c--tertiary u-width-full u-text-uppercase u-margin-top-lg"
+                onClick={reload}
+                data-analytics-name={UI_NAME.retryConnection}
+            >
+                Retry
+            </Button>
         </div>
     )
 }

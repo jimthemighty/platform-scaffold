@@ -19,6 +19,7 @@ import Image from 'progressive-web-sdk/dist/components/image'
 // import Icon from 'progressive-web-sdk/dist/components/icon'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Field from 'progressive-web-sdk/dist/components/field'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import ProductTile from '../../../components/product-tile'
 
@@ -79,6 +80,7 @@ const ProductListContents = ({
                         className="u-color-brand"
                         icon="trash"
                         onClick={clearFilters}
+                        data-analytics-name={UI_NAME.clearFilters}
                     >
                         Clear
                     </Button>
@@ -102,6 +104,7 @@ const ProductListContents = ({
                                             onClick={openModal}
                                             disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
                                             id="filterButton"
+                                            data-analytics-name={UI_NAME.showFilters}
                                         >
                                             Filter
                                         </Button>
@@ -164,7 +167,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     clearFilters: () => changeFilterTo(null),
-    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL),
+    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
     sortChange: changeSort,
 }
 

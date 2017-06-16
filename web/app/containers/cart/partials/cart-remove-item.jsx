@@ -96,7 +96,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(CART_REMOVE_ITEM_MODAL),
+    closeModal: () => closeModal(CART_REMOVE_ITEM_MODAL, UI_NAME.removeItem),
     removeItem
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CartRemoveItemModal)

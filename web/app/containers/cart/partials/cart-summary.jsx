@@ -179,7 +179,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    onCalculateClick: () => openModal(CART_ESTIMATE_SHIPPING_MODAL),
+    onCalculateClick: () => openModal(CART_ESTIMATE_SHIPPING_MODAL, UI_NAME.estimateShipping),
     removePromoCode
 }
 

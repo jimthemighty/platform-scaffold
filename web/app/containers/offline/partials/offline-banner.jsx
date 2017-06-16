@@ -8,6 +8,7 @@ import {connect} from 'react-redux'
 import IconLabelButton from '../../../components/icon-label-button'
 import {OFFLINE_MODAL} from '../constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 /**
  * A banner displayed at the top of the page to let users know they are offline.
@@ -31,7 +32,7 @@ OfflineBanner.propTypes = {
 }
 
 const mapDispatchToProps = {
-    openModal: () => openModal(OFFLINE_MODAL)
+    openModal: () => openModal(OFFLINE_MODAL, UI_NAME.offline)
 }
 
 export default connect(null, mapDispatchToProps)(OfflineBanner)

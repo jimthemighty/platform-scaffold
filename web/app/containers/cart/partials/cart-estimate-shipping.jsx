@@ -111,7 +111,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(CART_ESTIMATE_SHIPPING_MODAL),
+    closeModal: () => closeModal(CART_ESTIMATE_SHIPPING_MODAL, UI_NAME.estimateShipping),
     submitEstimateShipping
 }
 

@@ -16,6 +16,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
 import IconLabelButton from '../../../components/icon-label-button'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const FILTER_QUERY = 'filter_is_open'
 
@@ -75,6 +76,7 @@ class ProductListFilterModal extends React.Component {
                                             changeFilter(query)
                                             closeModal()
                                         }}
+                                        data-analytics-name={UI_NAME.showFilters}
                                     >
                                         <div>
                                             <span className="u-color-brand">{label}</span> <span className="u-color-neutral-40">({count})</span>
@@ -124,8 +126,8 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     changeFilter: changeFilterTo,
-    closeModal: () => closeModal(PRODUCT_LIST_FILTER_MODAL),
-    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL)
+    closeModal: () => closeModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
+    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters)
 }
 
 export default connect(

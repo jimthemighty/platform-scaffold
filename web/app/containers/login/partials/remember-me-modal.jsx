@@ -11,6 +11,7 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {REMEMBER_ME_MODAL} from '../constants'
 
@@ -65,7 +66,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(REMEMBER_ME_MODAL)
+    closeModal: () => closeModal(REMEMBER_ME_MODAL, UI_NAME.remember)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RememberMeModal)

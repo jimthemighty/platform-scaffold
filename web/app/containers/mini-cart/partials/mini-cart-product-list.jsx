@@ -12,6 +12,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import List from 'progressive-web-sdk/dist/components/list'
 import ProductItem from '../../../components/product-item'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import * as selectors from '../../../store/cart/selectors'
 
@@ -32,7 +33,11 @@ const SUBTOTAL_CLASSES = classNames(
 const MiniCartProductList = ({items, orderTotal, cartURL}) => {
     return (
         <div className="u-padding-md">
-            <Button href={cartURL} className="c--tertiary u-width-full u-margin-bottom u-text-capitalize">
+            <Button
+                href={cartURL}
+                className="c--tertiary u-width-full u-margin-bottom u-text-capitalize"
+                data-analytics-name={UI_NAME.goToCart}
+            >
                 View and edit cart
             </Button>
 

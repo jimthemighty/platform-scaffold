@@ -152,7 +152,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(CART_WISHLIST_MODAL),
+    closeModal: () => closeModal(CART_WISHLIST_MODAL, UI_NAME.wishlist),
     setIsWishlistComplete
 }
 
