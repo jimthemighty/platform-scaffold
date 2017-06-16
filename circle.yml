@@ -13,11 +13,11 @@ dependencies:
         # - ./web/scripts/install-yarn.sh
         - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
             background: true
-        # - yarn install
         - ./scripts/add-self-signed-cert-on-ci.sh &> $CIRCLE_ARTIFACTS/logs/addSignedCert.log:
             pwd: web
             background: true
-        - yarn install
+        - npm install:
+            pwd: web
         - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
             pwd: web
             background: true
