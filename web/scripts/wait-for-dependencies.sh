@@ -5,7 +5,6 @@ baseline="59"
 google-chrome --version
 counter=0
 while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | awk '{print $3}')" ]; do 
-    google-chrome --version 
     echo "still updating chrome..."
     if [ "$counter" -gt 10 ]; then
         cat logs/installChrome.log
@@ -35,7 +34,7 @@ printf "npm prod:build is complete\n"
 
 
 echo "Waiting for test server to become active"
-counter 0
+counter=0
 while ! nc -z localhost 8443; do 
 if [ "$counter" -gt 10 ]; then
         cat logs/startTestServer.log
