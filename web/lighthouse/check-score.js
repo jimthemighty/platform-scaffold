@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
-const path = require('path')
-const walk = require('walk')
 const chalk = require('chalk')
 
 /**
@@ -15,44 +13,11 @@ let failure = false
 
 if (fs.existsSync('lighthouse/audit-local.report.html')) {
     fileName = 'audit-local'
-} else if (fs.existsSync('lighthouse/audit-prod.report.html')){
+} else if (fs.existsSync('lighthouse/audit-prod.report.html')) {
     fileName = 'audit-prod'
 } else {
     console.log('Error Lighthouse report not found.')
-    process.exit(0);
-}
-
-/**
-* Traverse the build folder and verify the bundle size. CDN will not compress 
-* files larger than 2MB.
-*/
-let options = {
-    listeners: {
-        file: function (root, fileStats, next) {
-            let filePath = path.join(root, fileStats.name)
-            let fileStat = fs.statSync(filePath)
-            if (fileStat.size > 2000000) {
-                failure = true
-                console.log(chalk.red(`${filePath} is ${fileStat.size} bytes. It must be less than 2MB to get gzipped on the CDN.`))
-            }
-            next()
-        },
-        errors: function (root, nodeStatsArray, next) {
-            next();
-        },
-        end: function() {
-            if (failure === false) {
-                console.log(`Success! All build files are below 2MB.`)
-            }
-        }
-    }
-}
-
-if (fs.existsSync('build')) {
-    console.log(`Verifying individual file sizes in the build...`)
-    walk.walkSync('build', options);
-} else {
-    console.log(`Run 'npm prod:build' to generate a build.`)
+    process.exit(0)
 }
 
 /**
