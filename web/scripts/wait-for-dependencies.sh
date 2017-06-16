@@ -12,7 +12,7 @@ while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | a
         echo 'installing Chrome Failed.'
         exit 1
     else
-        counter=$(counter+1)
+        counter=$((counter+1))
         sleep 2
     fi
 done
@@ -20,19 +20,18 @@ printf "Chrome installed\n"
 google-chrome --version
 
 echo "Waiting for npm prod:build to complete"
+counter=0
 while [ ! -f build/loader.js ]; do
-    if [ "$counter" -gt 10 ]; then
+    if [[ "$counter" -gt 10 ]]; then
         cat logs/startTestServer.log
         echo 'Build Failed.'
         exit 1
     else
-        counter=$(counter+1)
+        counter=$((counter+1))
         sleep 2
     fi
 done 
-sleep 2; done
 printf "npm prod:build is complete\n"
-counter=0
 
 
 echo "Waiting for test server to become active"
@@ -43,7 +42,7 @@ if [ "$counter" -gt 10 ]; then
         echo 'Starting Server Failed.'
         exit 1
     else
-        counter=$(counter+1)
+        counter=$((counter+1))
         sleep 2
     fi 
 done
