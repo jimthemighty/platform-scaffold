@@ -84,7 +84,7 @@ export default {
             .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
             .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
             // Email field should have email input type
-            .waitForElementVisible(`${checkout.selectors.registeredEmail}[type="email"]`)
+            .waitForElementVisible(`${checkout.selectors.email}[type="email"]`)
     },
 
     'Checkout - Registered - Continue to Registered Checkout': (browser) => {
@@ -99,17 +99,20 @@ export default {
         browser
             // Phone field should have numeric input type
             .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
-            .waitForElementVisible(checkout.selectors.lastShippingInfo)
+            .assert.valueContains(checkout.selectors.address, checkout.userData.address)
     },
 
-    'Checkout - Registered - Fill out Registered Checkout Payment Details form': () => {
+    'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {
         checkout.continueToPayment()
+        checkout.fillPaymentInfo()
+        browser
+            .waitForElementVisible(checkout.selectors.cvv)
+            .assert.valueContains(checkout.selectors.cvv, checkout.userData.cvv)
     },
 
     'Checkout - Registered - Verify Submit Order button is visible': (browser) => {
         browser
-            .waitForElementVisible(checkout.selectors.submitOrder)
-            .assert.visible(checkout.selectors.submitOrder)
+            .waitForElementVisible(checkout.selectors.placeOrder)
+            .assert.visible(checkout.selectors.placeOrder)
     }
-
 }
