@@ -6,8 +6,7 @@ import {createSelector} from 'reselect'
 import Immutable from 'immutable'
 import {createGetSelector} from 'reselect-immutable-helpers'
 
-import {getProducts} from '../selectors'
-import {getApp} from '../../containers/app/selectors'
+import {getProducts, getApp} from '../selectors'
 
 export const getCurrentProductId = createGetSelector(getApp, 'currentProduct')
 

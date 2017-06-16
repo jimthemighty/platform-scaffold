@@ -16,6 +16,7 @@ import pushMessagingReducer from 'progressive-web-sdk/dist/store/push-messaging/
 import offlineReducer from 'progressive-web-sdk/dist/store/offline/reducer'
 import productReducer from './products/reducer'
 import checkoutReducer from './checkout/reducer'
+import appReducer from './app/reducer'
 import {reducer as imReducer} from '../integration-manager/reducer'
 import {reducer as formReducer} from 'redux-form'
 
@@ -35,6 +36,7 @@ const configureStore = (initialState) => {
         analytics(({type, payload}, state) => analyticsManager.distribute(type, payload, state))
     ]
     const reducer = combineReducers({
+        app: appReducer,
         categories: categoryReducer,
         cart: cartReducer,
         ui: rootReducer,

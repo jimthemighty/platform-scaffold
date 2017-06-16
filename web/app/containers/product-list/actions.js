@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {getCurrentPathKey} from '../app/selectors'
+import {getCurrentPathKey} from '../../store/app/selectors'
 
 export const changeSelectedSort = createAction('Change Selected Sort Order')
 

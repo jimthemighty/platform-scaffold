@@ -25,6 +25,7 @@ import Navigation from '../../containers/navigation/container'
 import NativeConnector from '../native-connector/container'
 import * as appActions from '../app/actions'
 import * as selectors from './selectors'
+import {hasFetchedCurrentPath} from '../../store/app/selectors'
 import {getNotifications} from '../../store/selectors'
 import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selectors'
 
@@ -201,7 +202,7 @@ App.propTypes = {
 const mapStateToProps = createPropsSelector({
     notifications: getNotifications,
     fetchError: getPageFetchError,
-    hasFetchedCurrentPath: selectors.hasFetchedCurrentPath,
+    hasFetchedCurrentPath,
     sprite: selectors.getSvgSprite,
     hideApp: selectors.getHideApp
 })

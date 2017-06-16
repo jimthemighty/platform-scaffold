@@ -4,17 +4,16 @@
 
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
-import {EVENT_ACTION, Page} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
-import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
+import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
-import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
+import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {OFFLINE_MODAL} from '../offline/constants'
@@ -22,17 +21,6 @@ import {OFFLINE_MODAL} from '../offline/constants'
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
 
-/**
- * Action dispatched when the route changes
- * @param {string} currentURL - what's currently shown in the address bar
- * @param {string} routeName - Template name for analytic
- */
-export const onRouteChanged = createActionWithAnalytics(
-    'On route changed',
-    [CURRENT_URL],
-    EVENT_ACTION.pageview,
-    (currentURL, routeName) => (new Page({[Page.TEMPLATENAME]: routeName}))
-)
 
 /**
  * Make a separate request that is intercepted by the worker. The worker will

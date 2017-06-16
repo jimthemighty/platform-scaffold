@@ -8,16 +8,15 @@ import {mergePayload} from '../../utils/reducer-utils'
 
 import * as appActions from './actions'
 
-import {setCheckoutShippingURL, setCartURL} from 'progressive-web-sdk/dist/integration-manager/results'
+import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
+import {CURRENT_URL} from './constants'
 
 export const initialState = fromJS({
-    sprite: '',
-    hideApp: true
+    [CURRENT_URL]: window.location.href
 })
 
 export default handleActions({
-    [setCheckoutShippingURL]: mergePayload,
-    [setCartURL]: mergePayload,
-    [appActions.updateSvgSprite]: mergePayload,
-    [appActions.toggleHideApp]: mergePayload
+    [setCurrentURL]: mergePayload,
+    [receiveCurrentProductId]: mergePayload,
+    [appActions.onRouteChanged]: mergePayload,
 }, initialState)
