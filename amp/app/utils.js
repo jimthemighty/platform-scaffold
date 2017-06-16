@@ -16,7 +16,7 @@ export const staticURL = (path) => (process.env.STATIC_URL || '/static/') + path
  *
  * Examples:
  *
- *   https://www.merlinspoitions.com/potions.html -> /potions.html
+ *   https://www.merlinspotions.com/potions.html -> /potions.html
  *   https://www.example.com/potions.html -> https://www.example.com/potions.html
  *
  */
