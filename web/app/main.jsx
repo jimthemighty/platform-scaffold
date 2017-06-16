@@ -33,7 +33,6 @@ const initConnector = require(WEBPACK_CONNECTOR_NAME).default // eslint-disable-
 
 initConnector()
 
-
 initCacheManifest(cacheHashManifest)
 
 const store = configureStore()
