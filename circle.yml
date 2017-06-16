@@ -4,7 +4,7 @@ machine:
 dependencies:
     cache_directories:
         - "web/node_modules"
-        - "native/node_modules"
+        # - "native/node_modules"
     pre:
         - ./scripts/setup-ci-env.sh:
             pwd: web
@@ -13,15 +13,12 @@ dependencies:
         #    pwd: native
 test:
     override:
-        - ./tests/system/run-all-tests.sh:
+        - ./tests/system/run-all-tests-on-ci.sh:
             pwd: web
             parallel: true
     post:
-       - cp -R lighthouse/* $CIRCLE_ARTIFACTS:
-           pwd: web
-       - cp -R logs/* $CIRCLE_ARTIFACTS:
-           pwd: web
-
+        - ./scripts/upload-artifacts-ci.sh:
+            pwd: web
 experimental:
     notify:
         branches:

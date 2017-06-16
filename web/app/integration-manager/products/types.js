@@ -30,7 +30,7 @@ const Variant = Runtypes.Record({
     values: Runtypes.Dictionary(VariationCategoryID, Identifier)
 })
 
-const Product = Runtypes.Record({
+export const Product = Runtypes.Record({
     id: ProductID,
     title: Text,
     price: Money,

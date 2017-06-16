@@ -16,7 +16,7 @@ if git rev-parse ; then
 fi
 
 # Kill background processes when this script exits.
-trap 'kill $(jobs -pr)' EXIT
+# trap 'kill $(jobs -pr)' EXIT
 echo "Building project"
 npm run prod:build
 echo "Running Test Server."

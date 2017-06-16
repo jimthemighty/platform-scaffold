@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
-import {setCurrentURL} from '../../results'
+import {setCurrentURL, receiveCurrentProductId} from '../../results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
 import {parseProductDetails, getCurrentProductID, getProductHref, getInitialSelectedVariant} from '../parsers'
@@ -19,14 +19,20 @@ export const initProductDetailsPage = (url) => (dispatch) => {
                 ...parseProductDetails(responseJSON),
                 href: productPathKey
             }
+            const {id} = productDetailsData
+
             const productDetailsMap = {
-                [productPathKey]: productDetailsData
+                [id]: productDetailsData
             }
             productDetailsData.variants.forEach(({id}) => {
-                productDetailsMap[getProductHref(id)] = productDetailsData
+                productDetailsMap[id] = productDetailsData
             })
+
+            // need to dispatch this on PLP click of item
+            // to fix page transition / request delay
+            dispatch(receiveCurrentProductId(id))
             dispatch(receiveProductDetailsProductData(productDetailsMap))
-            dispatch(receiveProductDetailsUIData({[productPathKey]: {itemQuantity: responseJSON.step_quantity}}))
+            dispatch(receiveProductDetailsUIData({[id]: {itemQuantity: responseJSON.step_quantity}}))
 
             // since the pathname will always be master, the productHref will
             // only === pathname when landing on master page

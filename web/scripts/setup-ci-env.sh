@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
-#Install all depenecies
+#Install all dependencies
+
 mkdir logs
-./scripts/install-google-chrome-stable.sh > logs/installChrome.log 2>&1 &
-./scripts/add-self-signed-cert.sh > logs/addSignedCert.log 2>&1 &
+echo "\nInstall Chrome"
+nohup bash -c "./scripts/install-google-chrome-stable.sh &> logs/installChrome.log &"
+echo "\nAccept Cert"
+nohup bash -c "./scripts/add-self-signed-cert-on-ci.sh &> logs/addSignedCert.log &"
+echo "\nNPM Install"
 npm install
-./tests/system/start-test-server.sh > logs/startTestServer.log 2>&1 &
+echo "\nInstall Chrome"
+nohup bash -c "./tests/system/start-test-server.sh &> logs/startTestServer.log &"
