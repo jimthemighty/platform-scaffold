@@ -14,6 +14,48 @@ const parseCarouselItems = (magentoObject) => {
     return carouselSetup.toJS()
 }
 
+const parseVariationCategories = (magentoObject) => {
+    const optionList = magentoObject
+            .getIn(['#product_addtocart_form', 'configurable', 'spConfig', 'attributes'])
+            .toJS()
+
+    return Object.keys(optionList).map((key) => optionList[key])
+}
+
+const parseVariantIds = (variationCategories) => variationCategories
+                                                .map((category) => category.options)
+                                                .reduce((a, b) => a.concat(b))
+                                                .reduce((a, b) => a.products && b.products ? a.products.concat(b.products) : a) //eslint-disable-line
+                                                .sort()
+
+
+const buildVariantFromId = (id, variationCategories) => {
+    return {
+        attributes: variationCategories.map((category) => {
+            const selectedCategory = category.options.find((option) => option.products.find((product) => product === id)) // lol
+            return {
+                id: category.id,
+                code: category.code,
+                label: category.label,
+                values: {
+                    id: selectedCategory.id,
+                    label: selectedCategory.label,
+                }
+            }
+        })
+    }
+}
+
+const buildVariants = (magentoObject, variationCategories) => {
+    const variantIds = parseVariantIds(variationCategories)
+    const variants = {}
+    variantIds.forEach((id) => {
+        variants[id] = buildVariantFromId(id, variationCategories)
+    })
+
+    return variants
+}
+
 const carouselItemsToImages = (carouselItems) => {
     return carouselItems.map(({img, isMain, full, thumb, caption}) => ({
         alt: '',
@@ -40,6 +82,13 @@ export const productDetailsParser = ($, $html) => {
     const magentoObject = extractMagentoJson($html)
     const carouselItems = parseCarouselItems(magentoObject)
     const images = carouselItemsToImages(carouselItems)
+    const variationCategories = parseVariationCategories(magentoObject)
+    const variants = buildVariants(magentoObject, variationCategories)
+
+    // keys are different on SFCC & merlins (options vs values)
+    variationCategories.forEach((category) => {
+        category.values = category.options
+    })
 
     return {
         id: $mainContent.find('#product_addtocart_form input[name="product"]').val(),
@@ -48,6 +97,8 @@ export const productDetailsParser = ($, $html) => {
         description: getTextFrom($mainContent, '.product.info.detailed .product.attibute.description p'),
         available: getAvailabilityFrom($mainContent),
         images,
+        variants,
+        variationCategories,
         thumbnail: images[0]
     }
 }

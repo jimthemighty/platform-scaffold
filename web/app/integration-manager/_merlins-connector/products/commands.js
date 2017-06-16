@@ -17,9 +17,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 
             const productDetailsData = {
                 ...productDetailsParser($, $response),
-                href: url,
-                variationCategories: [],
-                variants: []
+                href: url
             }
 
             const {id} = productDetailsData
