@@ -48,10 +48,10 @@ export const LoginField = ({label, type, forgotPassword, name, tooltip, analytic
 )
 
 LoginField.propTypes = {
+    analyticsName: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    analyticsName: PropTypes.string.isRequired,
     forgotPassword: PropTypes.object,
     tooltip: PropTypes.node
 }

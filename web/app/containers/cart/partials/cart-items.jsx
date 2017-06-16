@@ -13,6 +13,7 @@ import {GridSpan} from 'progressive-web-sdk/dist/components/grid'
 import Button from 'progressive-web-sdk/dist/components/button'
 import CartProductList from './cart-product-list'
 import CartSummary from './cart-summary'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CartItems = ({hasItems, onContinueShopping, onOpenSignIn}) => {
     const summaryClassnames = classNames('t-cart__summary-wrapper', {
@@ -29,7 +30,11 @@ const CartItems = ({hasItems, onContinueShopping, onOpenSignIn}) => {
                 <CartSummary />
 
                 <div className="u-padding-md u-padding-top-lg u-padding-bottom-lg">
-                    <Button className="c--tertiary u-width-full u-text-uppercase" onClick={onContinueShopping}>
+                    <Button
+                        className="c--tertiary u-width-full u-text-uppercase"
+                        onClick={onContinueShopping}
+                        data-analytics-name={UI_NAME.continueShopping}
+                    >
                         Continue Shopping
                     </Button>
                 </div>

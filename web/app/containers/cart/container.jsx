@@ -22,6 +22,7 @@ import CartWishlistModal from './partials/cart-wishlist'
 import CartRemoveItemModal from './partials/cart-remove-item'
 import CartItems from './partials/cart-items'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const openSignIn = () => {
     if (isRunningInAstro) {
@@ -61,12 +62,20 @@ const EmptyCartContents = ({hide}) => {
                     <p className="u-padding-top u-padding-start-lg u-padding-end-lg u-text-align-center u-margin-bottom-lg">
                         Your shopping cart is empty. Sign in to retrieve saved items or continue shopping.
                     </p>
-                    <Button className="c--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg" onClick={openSignIn}>
+                    <Button
+                        className="c--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg"
+                        onClick={openSignIn}
+                        data-analytics-name={UI_NAME.goToSignIn}
+                    >
                         <Icon name="User" />
                         Sign In
                     </Button>
 
-                    <Button className="c--tertiary u-text-uppercase u-h5 u-width-full" onClick={continueShopping}>
+                    <Button
+                        className="c--tertiary u-text-uppercase u-h5 u-width-full"
+                        onClick={continueShopping}
+                        data-analytics-name={UI_NAME.continueShopping}
+                    >
                         Continue Shopping
                     </Button>
                 </div>

@@ -21,6 +21,7 @@ import List from 'progressive-web-sdk/dist/components/list'
 import ProductItem from '../../../components/product-item'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const productItemClassNames = 'u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end'
 
@@ -110,6 +111,7 @@ class CartProductItem extends React.Component {
                         className="u-text-size-small u-color-brand u-flex-none u-text-letter-spacing-normal"
                         innerClassName="c--no-min-width u-padding-start-0 u-padding-bottom-0"
                         href={configureUrl}
+                        data-analytics-name={UI_NAME.editItem}
                         >
                         Edit
                     </Button>
@@ -118,6 +120,7 @@ class CartProductItem extends React.Component {
                         className="u-text-size-small u-color-brand u-padding-start-0 u-padding-end-0 u-text-letter-spacing-normal"
                         innerClassName="u-padding-bottom-0 u-padding-start-0"
                         onClick={this.saveForLater}
+                        data-analytics-name={UI_NAME.saveItem}
                         >
                         Save for Later
                     </Button>
@@ -126,6 +129,7 @@ class CartProductItem extends React.Component {
                         className="u-text-size-small u-color-brand u-text-letter-spacing-normal qa-cart__remove-item"
                         innerClassName="u-padding-end-0 u-padding-bottom-0 u-padding-start-0"
                         onClick={this.removeItem}
+                        data-analytics-name={UI_NAME.removeItem}
                         >
                         Remove
                     </Button>
@@ -164,7 +168,11 @@ const CartProductList = ({items, isLoggedIn, summaryCount, onSaveLater, onUpdate
                         Cart {summaryCount > 0 && <span className="u-text-weight-light">({summaryCount} Items)</span>}
                     </h1>
                     {!isLoggedIn &&
-                        <Button className="u-flex-none u-color-brand u-text-letter-spacing-normal" onClick={onOpenSignIn}>
+                        <Button
+                            className="u-flex-none u-color-brand u-text-letter-spacing-normal"
+                            onClick={onOpenSignIn}
+                            data-analytics-name={UI_NAME.goToSignIn}
+                        >
                             <Icon name="user" />
                             Sign in
                         </Button>

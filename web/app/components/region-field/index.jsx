@@ -34,7 +34,7 @@ const RegionField = ({
                 name="region"
                 label="Region"
             >
-                <input type="text" noValidate />
+                <input type="text" noValidate data-analytics-name={UI_NAME.region} />
             </ReduxForm.Field>
         )
     }

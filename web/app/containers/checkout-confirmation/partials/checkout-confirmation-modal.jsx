@@ -14,6 +14,7 @@ import {stripEvent} from '../../../utils/utils'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CheckoutConfirmationModal = (props) => {
     const {
@@ -53,6 +54,7 @@ const CheckoutConfirmationModal = (props) => {
                     <Button
                         className="c--tertiary u-width-full u-text-uppercase"
                         onClick={closeCheckoutConfirmationModal}
+                        data-analytics-name={UI_NAME.confirmation}
                     >
                         Ok
                     </Button>

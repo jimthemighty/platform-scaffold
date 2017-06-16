@@ -21,7 +21,6 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
-
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ShippingAddressFields = ({
@@ -36,6 +35,7 @@ const ShippingAddressFields = ({
             className="c--is-anchor"
             innerClassName="c--no-min-height u-padding-0"
             onClick={handleShowCompanyAndApt}
+            data-analytics-name={UI_NAME.showMoreAddressFields}
         >
             <span className="u-color-brand u-text-letter-spacing-normal u-text-size-small">
                 Add company or apt #
@@ -52,7 +52,7 @@ const ShippingAddressFields = ({
                     name="name"
                     label="First & Last Name"
                 >
-                    <input type="text" noValidate data-analytics-name={UI_NAME.customerName}/>
+                    <input type="text" noValidate data-analytics-name={UI_NAME.customerName} />
                 </ReduxForm.Field>
             </FieldRow>
 
@@ -63,7 +63,7 @@ const ShippingAddressFields = ({
                     label="Address"
                     caption={!isCompanyOrAptShown && addCompanyButton}
                 >
-                    <input type="text" noValidate data-analytics-name={UI_NAME.address}/>
+                    <input type="text" noValidate data-analytics-name={UI_NAME.address} />
                 </ReduxForm.Field>
             </FieldRow>
 
