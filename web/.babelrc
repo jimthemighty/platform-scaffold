@@ -16,6 +16,10 @@
   ],
   "env": {
     "test": {
+      "presets": [
+        "es2015",
+        "react"
+      ],
       "plugins": [
         "dynamic-import-node"
       ]
