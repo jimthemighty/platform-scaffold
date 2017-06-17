@@ -147,12 +147,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-<<<<<<< HEAD
-    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL, UI_NAME.miniCart))
-=======
-    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL)),
+    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL, UI_NAME.miniCart)),
     requestCartContent
->>>>>>> origin/develop
 }
 
 export default connect(
