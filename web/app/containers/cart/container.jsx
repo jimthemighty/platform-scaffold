@@ -18,6 +18,7 @@ import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
 import EstimateShippingReduxForm from './partials/cart-estimate-shipping'
 
+import {requestCartContent} from './actions'
 import CartWishlistModal from './partials/cart-wishlist'
 import CartRemoveItemModal from './partials/cart-remove-item'
 import CartItems from './partials/cart-items'
@@ -91,6 +92,7 @@ EmptyCartContents.propTypes = {
 class Cart extends React.Component {
     componentDidMount() {
         trigger('checkout:disable-alert')
+        this.props.requestCartContent()
     }
 
     render() {
@@ -122,7 +124,8 @@ class Cart extends React.Component {
 Cart.propTypes = {
     cartLoaded: PropTypes.bool,
     hasItems: PropTypes.bool,
-    removeItemID: PropTypes.string
+    removeItemID: PropTypes.string,
+    requestCartContent: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
@@ -130,4 +133,8 @@ const mapStateToProps = createPropsSelector({
     hasItems: getCartHasItems
 })
 
-export default template(connect(mapStateToProps)(Cart))
+const mapDispatchToProps = {
+    requestCartContent
+}
+
+export default template(connect(mapStateToProps, mapDispatchToProps)(Cart))

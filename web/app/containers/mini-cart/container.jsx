@@ -12,14 +12,15 @@ import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {MINI_CART_MODAL} from './constants'
+import {MINI_CART_MODAL, MINI_CART_CONTENT_CLASSES} from './constants'
 import {stripEvent} from '../../utils/utils'
 import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
 import {getCheckoutShippingURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {requestCartContent} from './actions'
 
 import MiniCartHeader from './partials/mini-cart-header'
-import MiniCartProductList from './partials/mini-cart-product-list'
+import MiniCartProductList, {PlaceholderMiniCart} from './partials/mini-cart-product-list'
 
 const MiniCartEmpty = () => (
     <div className="t-mini-cart__empty-content u-flexbox u-flex u-direction-column">
@@ -40,7 +41,7 @@ const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
     const buttonClasses = 'c--primary u-width-full u-text-uppercase'
 
     return (
-        <div className="t-mini-cart__content u-flexbox u-direction-column u-padding-md">
+        <div className={MINI_CART_CONTENT_CLASSES}>
             {hasItems ? <MiniCartProductList /> : <MiniCartEmpty />}
 
             <div className="u-padding-top-lg u-flex-none">
@@ -73,23 +74,69 @@ MiniCartMain.propTypes = {
 }
 
 
-const MiniCart = ({hasItems, cartLoaded, isOpen, closeMiniCart, checkoutShippingURL}) => {
-    return (
-        <Sheet className="t-mini-cart" open={isOpen} onDismiss={closeMiniCart} maskOpacity={0.7} effect="slide-right" coverage="85%">
-            <MiniCartHeader closeMiniCart={closeMiniCart} />
+class MiniCart extends React.Component {
+    constructor(props) {
+        super(props)
 
-            {cartLoaded && <MiniCartMain hasItems={hasItems} closeMiniCart={closeMiniCart} checkoutShippingURL={checkoutShippingURL} />}
-        </Sheet>
-    )
+        this.handleScroll = this.handleScroll.bind(this)
+    }
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.handleScroll)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll)
+    }
+
+    handleScroll() {
+        this.props.requestCartContent()
+        window.removeEventListener('scroll', this.handleScroll)
+    }
+
+    render() {
+        const {
+            hasItems,
+            cartLoaded,
+            isOpen,
+            closeMiniCart,
+            checkoutShippingURL
+        } = this.props
+
+        return (
+            <Sheet
+                className="t-mini-cart"
+                open={isOpen}
+                onDismiss={closeMiniCart}
+                maskOpacity={0.7}
+                effect="slide-right"
+                coverage="85%"
+            >
+                <MiniCartHeader closeMiniCart={closeMiniCart} />
+
+                {cartLoaded ?
+                    <MiniCartMain
+                        hasItems={hasItems}
+                        closeMiniCart={closeMiniCart}
+                        checkoutShippingURL={checkoutShippingURL}
+                    />
+                :
+                    <div className={MINI_CART_CONTENT_CLASSES}>
+                        <PlaceholderMiniCart />
+                    </div>
+                }
+            </Sheet>
+        )
+    }
 }
 
 MiniCart.propTypes = {
     cartLoaded: PropTypes.bool,
     checkoutShippingURL: PropTypes.string,
     closeMiniCart: PropTypes.func,
-    getCart: PropTypes.func,
     hasItems: PropTypes.bool,
     isOpen: PropTypes.bool,
+    requestCartContent: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
@@ -100,7 +147,12 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
+<<<<<<< HEAD
     closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL, UI_NAME.miniCart))
+=======
+    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL)),
+    requestCartContent
+>>>>>>> origin/develop
 }
 
 export default connect(

@@ -27,10 +27,10 @@ export const registerPreloadCallbacks = () => {
 
 // These are on the old model and need to be wrapped here
 // rather than in container.js to avoid circular imports
-export const Cart = PWALoadable(() => import('./cart/container'))
-export const CheckoutConfirmation = PWALoadable(() => import('./checkout-confirmation/container'))
-export const CheckoutPayment = PWALoadable(() => import('./checkout-payment/container'))
-export const CheckoutShipping = PWALoadable(() => import('./checkout-shipping/container'))
-export const Login = PWALoadable(() => import('./login/container'))
-export const ProductDetails = PWALoadable(() => import('./product-details/container'))
-export const ProductList = PWALoadable(() => import('./product-list/container'))
+export const Cart = PWALoadable(() => import('./cart/container' /* webpackChunkName: "cart" */))
+export const CheckoutConfirmation = PWALoadable(() => import('./checkout-confirmation/container' /* webpackChunkName: "checkout-confirmation" */))
+export const CheckoutPayment = PWALoadable(() => import('./checkout-payment/container' /* webpackChunkName: "checkout-payment" */))
+export const CheckoutShipping = PWALoadable(() => import('./checkout-shipping/container' /* webpackChunkName: "checkout-shipping" */))
+export const Login = PWALoadable(() => import('./login/container' /* webpackChunkName: "login" */))
+export const ProductDetails = PWALoadable(() => import('./product-details/container' /* webpackChunkName: "product-details" */))
+export const ProductList = PWALoadable(() => import('./product-list/container' /* webpackChunkName: "product-list" */))

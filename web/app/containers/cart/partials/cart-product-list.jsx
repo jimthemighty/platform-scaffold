@@ -7,6 +7,8 @@ import {connect} from 'react-redux'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {openRemoveItemModal, saveToWishlist, updateItem} from '../actions'
+import {receiveCurrentProductId} from '../../../integration-manager/results'
+
 import {getCartItems, getCartSummaryCount} from '../../../store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 
@@ -75,7 +77,8 @@ class CartProductItem extends React.Component {
             product,
             quantity,
             itemPrice,
-            linePrice
+            linePrice,
+            setCurrentProduct
         } = this.props
 
         return (
@@ -112,6 +115,7 @@ class CartProductItem extends React.Component {
                         innerClassName="c--no-min-width u-padding-start-0 u-padding-bottom-0"
                         href={configureUrl}
                         data-analytics-name={UI_NAME.editItem}
+                        onClick={() => setCurrentProduct(product.id)}
                         >
                         Edit
                     </Button>
@@ -153,11 +157,13 @@ CartProductItem.propTypes = {
     product: PropTypes.object, /* Product */
     productId: PropTypes.string,
     quantity: PropTypes.number,
+    setCurrentProduct: PropTypes.func,
     onQtyChange: PropTypes.func,
     onSaveLater: PropTypes.func
+
 }
 
-const CartProductList = ({items, isLoggedIn, summaryCount, onSaveLater, onUpdateItemQuantity, openRemoveItemModal, onOpenSignIn}) => {
+const CartProductList = ({items, isLoggedIn, summaryCount, onSaveLater, onUpdateItemQuantity, openRemoveItemModal, onOpenSignIn, setCurrentProduct}) => {
     const isCartEmpty = items.length === 0
 
     return (
@@ -185,6 +191,7 @@ const CartProductList = ({items, isLoggedIn, summaryCount, onSaveLater, onUpdate
                 {items.map((item) => (
                     <CartProductItem {...item}
                         cartItemId={item.id}
+                        setCurrentProduct={setCurrentProduct}
                         key={item.id}
                         onQtyChange={onUpdateItemQuantity}
                         onSaveLater={onSaveLater}
@@ -199,6 +206,7 @@ CartProductList.propTypes = {
     isLoggedIn: PropTypes.bool,
     items: PropTypes.array,
     openRemoveItemModal: PropTypes.func,
+    setCurrentProduct: PropTypes.func,
     summaryCount: PropTypes.number,
     onOpenSignIn: PropTypes.func,
     onSaveLater: PropTypes.func,
@@ -214,7 +222,8 @@ const mapStateToProps = createPropsSelector({
 const mapDispatchToProps = {
     onUpdateItemQuantity: updateItem,
     onSaveLater: saveToWishlist,
-    openRemoveItemModal
+    openRemoveItemModal,
+    setCurrentProduct: receiveCurrentProductId
 }
 
 export default connect(

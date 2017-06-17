@@ -11,3 +11,7 @@ export const requestOpenMiniCart = () => (dispatch) => {
     dispatch(getCart())
     dispatch(openModal(MINI_CART_MODAL, UI_NAME.miniCart))
 }
+
+export const requestCartContent = () => (dispatch) => {
+    dispatch(getCart())
+}
