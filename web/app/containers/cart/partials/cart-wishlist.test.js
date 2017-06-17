@@ -4,7 +4,7 @@
 
 /* eslint-env jest */
 import React from 'react'
-import ConnectedCartWishlistModal from './cart-wishlist'
+import ConnectedCartWishlistModal from '../../../modals/cart-wishlist/container.jsx'
 import {mount, shallow} from 'enzyme'
 
 const CartWishlistModal = ConnectedCartWishlistModal.WrappedComponent
