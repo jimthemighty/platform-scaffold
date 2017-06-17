@@ -100,14 +100,15 @@
     "text-loader": "0.0.1",
     "validator": "7.0.0",
     "walk": "2.3.9",
-    "webpack": "2.3.3",
+    "webpack": "2.6.1",
     "webpack-bundle-analyzer": "2.3.1",
     "webpack-dev-server": "1.16.2",
     "webpack-hot-middleware": "2.13.0"
   },
   "config": {
     "sdk_generator_version": 2,
-    "min_lighthouse_score": 80
+    "min_lighthouse_score": 80,
+    "file_size_limit": 2000000
   },
   "scripts": {
     "add:component": "sdk-generate component",
@@ -134,6 +135,7 @@
     "smoke-test": "bash ./tests/system/smoke-test.sh",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
+    "test:build-size": "node tests/system/verify-build-size.js",
     "test:e2e": "node ./node_modules/nightwatch/bin/runner.js -c ./tests/system/nightwatch-config.js --suiteRetries 1",
     "test:pwa-prod": "bash ./scripts/lighthouse-prod.sh",
     "test:pwa-ci": "bash ./scripts/lighthouse-ci.sh",
