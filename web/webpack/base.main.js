@@ -23,7 +23,8 @@ const config = {
     ],
     output: {
         path: path.resolve(process.cwd(), 'build'),
-        filename: '[name].js'
+        filename: '[name].js',
+        chunkFilename: '[name].js'
     },
     resolve: {
         extensions: ['.js', '.jsx', '.json'],

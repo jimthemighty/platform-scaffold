@@ -11,6 +11,7 @@ branches:
   only:
     - master
     - develop
+    - hotfix-tests-on-windows
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -25,4 +26,4 @@ test_script:
 artifacts:
   - path: web\tests\screenshots
     name: Screenshots
- 
+
