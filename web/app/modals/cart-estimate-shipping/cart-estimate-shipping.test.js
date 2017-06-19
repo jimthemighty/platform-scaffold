@@ -5,8 +5,8 @@
 /* eslint-env jest */
 import Immutable from 'immutable'
 import React from 'react'
-import ConnectedEstimateShippingReduxForm, {CartEstimateShippingModal} from '../../../modals/cart-estimate-shipping/container.jsx'
-import CountrySelect from '../../../components/country-select'
+import ConnectedEstimateShippingReduxForm, {CartEstimateShippingModal} from './container.jsx'
+import CountrySelect from '../../components/country-select'
 import RegionField from '../../../components/region-field'
 import {Field} from 'redux-form'
 import {Provider} from 'react-redux'

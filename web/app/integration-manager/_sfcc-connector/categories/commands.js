@@ -17,7 +17,7 @@ const makeCategorySearchURL = (id) => `/product_search?expand=availability,image
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     const parentId = parent_category_id !== 'root' ? parent_category_id : null
     const path = getCategoryPath(id)
-    dispatch(receiveCategoryInformation(path, {
+    dispatch(receiveCategoryInformation(id, {
         id,
         title: name,
         href: path,

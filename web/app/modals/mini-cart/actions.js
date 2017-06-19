@@ -10,3 +10,7 @@ export const requestOpenMiniCart = () => (dispatch) => {
     dispatch(getCart())
     dispatch(openModal(MINI_CART_MODAL))
 }
+
+export const requestCartContent = () => (dispatch) => {
+    dispatch(getCart())
+}

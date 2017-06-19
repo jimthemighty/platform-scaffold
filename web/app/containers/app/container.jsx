@@ -135,12 +135,11 @@ class App extends React.Component {
 
                         {messagingEnabled && [
                             <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
-                            <DefaultAsk key="ask" showOnPageCount={1} />
+                            <DefaultAsk key="ask" showOnPageCount={2} />
                         ]}
 
                         <div id="app-header" className="u-flex-none" role="banner">
                             <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
-
                             {
                                 // Only display banner when we are offline and have content to show
                                 fetchError && hasFetchedCurrentPath && <OfflineBanner />

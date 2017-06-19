@@ -10,6 +10,7 @@ import {
 } from './constants'
 import {CART_ESTIMATE_SHIPPING_MODAL, CART_WISHLIST_MODAL, CART_REMOVE_ITEM_MODAL} from '../../modals/constants'
 import {
+    getCart,
     removeFromCart,
     updateItemQuantity,
     addToWishlist,
@@ -34,6 +35,10 @@ const shippingFormSelector = createPropsSelector({
     address: getEstimateShippingAddress,
     shippingMethod: getSelectedShippingMethod
 })
+
+export const requestCartContent = () => (dispatch) => {
+    dispatch(getCart())
+}
 
 export const submitEstimateShipping = () => (dispatch, getState) => {
     const {address, shippingMethod} = shippingFormSelector(getState())
