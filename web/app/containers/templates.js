@@ -34,3 +34,15 @@ export const CheckoutShipping = PWALoadable(() => import('./checkout-shipping/co
 export const Login = PWALoadable(() => import('./login/container' /* webpackChunkName: "login" */))
 export const ProductDetails = PWALoadable(() => import('./product-details/container' /* webpackChunkName: "product-details" */))
 export const ProductList = PWALoadable(() => import('./product-list/container' /* webpackChunkName: "product-list" */))
+
+// A list of filenames that we want to be prefetched by the browser
+// these filenames come from the chunk names defined above.
+export const prefetchFilenames = [
+    'cart.js',
+    'checkout-confirmation.js',
+    'checkout-payment.js',
+    'checkout-shipping.js',
+    'login.js',
+    'product-details.js',
+    'product-list.js'
+]
