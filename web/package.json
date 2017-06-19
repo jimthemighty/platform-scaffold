@@ -133,7 +133,6 @@
     "styleguide": "styleguidist --config webpack/styleguide.config.js server",
     "save-credentials": "sdk-save-credentials",
     "smoke-test": "bash ./tests/system/smoke-test.sh",
-    "start": "sdk-get-routes && sdk-create-hash-manifest && node ./dev-server/index.js",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
     "test:build-size": "node tests/system/verify-build-size.js",
