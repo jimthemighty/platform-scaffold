@@ -8,7 +8,7 @@ import {handleActions} from 'redux-actions'
 import * as productDetailsActions from './actions'
 import {receiveProductDetailsUIData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 
-import {mergePayload} from '../../utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 
 const reducer = handleActions({
     [productDetailsActions.addToCartStarted]: (state) => state.set('addToCartInProgress', true),

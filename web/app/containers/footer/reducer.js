@@ -7,7 +7,7 @@ import {handleActions} from 'redux-actions'
 import * as footerActions from './actions'
 import * as constants from './constants'
 
-import {mergePayload} from '../../utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 
 export const initialState = Immutable.fromJS({
     signupStatus: constants.SIGNUP_NOT_ATTEMPTED

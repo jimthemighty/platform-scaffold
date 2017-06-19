@@ -4,7 +4,7 @@
 
 import {handleActions} from 'redux-actions'
 import {fromJS} from 'immutable'
-import {mergePayload} from '../../utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 
 import {receiveHomeData} from 'progressive-web-sdk/dist/integration-manager/results'
 
