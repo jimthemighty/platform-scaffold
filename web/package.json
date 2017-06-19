@@ -136,7 +136,7 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
     "test:build-size": "node tests/system/verify-build-size.js",
-    "test:e2e": "NODE_ENV=test node ./node_modules/nightwatch/bin/runner.js -c ./tests/system/nightwatch-config.js --suiteRetries 1",
+    "test:e2e": "cross-env NODE_ENV=test node ./node_modules/nightwatch/bin/runner.js -c ./tests/system/nightwatch-config.js --suiteRetries 1",
     "test:pwa-prod": "bash ./scripts/lighthouse-prod.sh",
     "test:pwa-ci": "bash ./scripts/lighthouse-ci.sh",
     "test:pwa-local": "bash ./scripts/lighthouse-local.sh",
