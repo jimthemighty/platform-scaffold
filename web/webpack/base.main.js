@@ -16,6 +16,10 @@ const webPackageJson = require('../package.json')   // eslint-disable-line impor
 
 const analyzeBundle = process.env.MOBIFY_ANALYZE === 'true'
 
+const connectorArg = process.argv.find((arg) => webPackageJson.connectors[arg])
+
+const connector = webPackageJson.connectors[connectorArg]
+
 const config = {
     devtool: 'cheap-source-map',
     entry: [
@@ -72,7 +76,8 @@ const config = {
             MESSAGING_ENABLED: `${webPackageJson.messagingEnabled}`,
             // These are defined as string constants
             PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
-            AJS_SLUG: `'${webPackageJson.aJSSlug}'`
+            AJS_SLUG: `'${webPackageJson.aJSSlug}'`,
+            WEBPACK_CONNECTOR_NAME: JSON.stringify(connector.path)
         }),
         new webpack.LoaderOptionsPlugin({
             options: {

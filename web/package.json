@@ -4,6 +4,16 @@
   "aJSSlug": "merlinspotions-2",
   "messagingSiteId": "merlinspotions",
   "messagingEnabled": true,
+  "connectors": {
+    "mp": {
+      "path": "./init-merlins-connector",
+      "port": 8443
+    },
+    "sfcc": {
+      "path": "./init-sfcc-connector",
+      "port": 8444
+    }
+  },
   "repository": {
     "type": "git",
     "url": "http://github.com/mobify/platform-scaffold"
@@ -133,6 +143,7 @@
     "styleguide": "styleguidist --config webpack/styleguide.config.js server",
     "save-credentials": "sdk-save-credentials",
     "smoke-test": "bash ./tests/system/smoke-test.sh",
+    "start": "sdk-get-routes && sdk-create-hash-manifest && node ./dev-server/index.js",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
     "test:build-size": "node tests/system/verify-build-size.js",
