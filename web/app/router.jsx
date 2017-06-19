@@ -21,7 +21,7 @@ import {initCartPage} from 'progressive-web-sdk/dist/integration-manager/cart/co
 import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {initRegisterPage, initLoginPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
-import {initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
+import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
 import {initPaymentPage} from './containers/checkout-payment/actions'
 

@@ -4,7 +4,7 @@
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {fetchShippingMethodsEstimate} from '../../integration-manager/checkout/commands'
+import {fetchShippingMethodsEstimate} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {
     CART_ESTIMATE_SHIPPING_MODAL,
     CART_REMOVE_ITEM_MODAL,
