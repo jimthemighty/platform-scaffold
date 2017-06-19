@@ -7,6 +7,7 @@ import {makeApiRequest} from '../utils'
 import {receiveCategoryContents, receiveCategoryInformation} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import {parseProductListData} from '../parsers'
+
 import {getCategoryPath, SUGGESTION_URL} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
