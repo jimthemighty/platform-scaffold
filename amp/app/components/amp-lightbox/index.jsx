@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import * as ampSDK from '../../amp-sdk'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * An AMP lightbox
@@ -22,7 +22,4 @@ AmpLightbox.propTypes = {
     id: PropTypes.string
 }
 
-export default ampSDK.ampComponent(
-    AmpLightbox,
-    '<script async custom-element="amp-lightbox" src="https://cdn.ampproject.org/v0/amp-lightbox-0.1.js"></script>'
-)
+export default ampComponent(AmpLightbox)

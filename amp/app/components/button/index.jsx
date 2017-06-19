@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import Link from '../link'
 import Icon from '../icon'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * A styleable, accessible `<button>` component for [Mobify’s Progressive Web SDK](#).
@@ -190,4 +191,4 @@ Button.propTypes = {
     value: PropTypes.string
 }
 
-export default Button
+export default ampComponent(Button)

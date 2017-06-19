@@ -5,6 +5,8 @@ import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
+import {ampComponent} from '../../amp-sdk'
+
 const App = ({children}) => {
 
     const skipLinksItems = [
@@ -58,4 +60,4 @@ App.propTypes = {
 }
 
 
-export default App
+export default ampComponent(App)

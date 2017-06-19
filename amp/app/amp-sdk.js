@@ -11,21 +11,28 @@ const noop = () => undefined
 
 
 /**
- * Higher-order component that records the wrapped component's dependency
- * on an external script if it is rendered.
- *
+ * Higher-order component that tracks calls to a component's render() method.
  * This only makes sense for server-side rendering.
  */
-export const ampComponent = (WrappedComponent, scriptInclude) => {
+export const ampComponent = (WrappedComponent) => {
     const AmpComponent = (props, context) => {
-        const declareDependency = context.declareDependency || noop
-        declareDependency(scriptInclude)
+        const trackRender = context.trackRender || noop
+        trackRender(AmpComponent)
         return <WrappedComponent {...props} />
     }
     AmpComponent.displayName = `AmpComponent(${getDisplayName(WrappedComponent)})`
 
+    // TODO: Proper fix
+    if (WrappedComponent.templateName) {
+        AmpComponent.templateName = WrappedComponent.templateName
+    }
+
+    if (WrappedComponent.resolves) {
+        AmpComponent.resolves = WrappedComponent.resolves
+    }
+
     AmpComponent.contextTypes = {
-        declareDependency: React.PropTypes.func
+        trackRender: React.PropTypes.func
     }
 
     return AmpComponent
@@ -37,7 +44,7 @@ export const ampComponent = (WrappedComponent, scriptInclude) => {
  */
 export class AmpContext extends React.Component {
     getChildContext() {
-        return {declareDependency: this.props.declareDependency}
+        return {trackRender: this.props.trackRender}
     }
     render() {
         return this.props.children
@@ -46,26 +53,9 @@ export class AmpContext extends React.Component {
 
 AmpContext.propTypes = {
     children: React.PropTypes.element,
-    declareDependency: React.PropTypes.func
+    trackRender: React.PropTypes.func
 }
 
 AmpContext.childContextTypes = {
-    declareDependency: React.PropTypes.func
-}
-
-
-export class Set {
-    constructor() {
-        this.obj = {}
-        this.add = this.add.bind(this)
-        this.items = this.items.bind(this)
-    }
-
-    add(item) {
-        this.obj[item] = true
-    }
-
-    items() {
-        return Object.keys(this.obj)
-    }
+    trackRender: React.PropTypes.func
 }

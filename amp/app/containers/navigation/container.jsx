@@ -13,6 +13,7 @@ import Icon from '../../components/icon'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 import {getNavigationRoot, getPath} from './selectors'
 import URL from 'url'
+import {ampComponent} from '../../amp-sdk'
 
 
 const pathnameMatch = (url, pathname) => Boolean(url && URL.parse(url).pathname === pathname)
@@ -89,4 +90,6 @@ const mapStateToProps = createPropsSelector({
     path: getPath
 })
 
-export default connect(mapStateToProps)(Navigation)
+export default ampComponent(
+    connect(mapStateToProps)(Navigation)
+)

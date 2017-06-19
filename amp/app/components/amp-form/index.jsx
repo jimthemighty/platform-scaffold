@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import * as ampSDK from '../../amp-sdk'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * A form component that automatically includes the required amp-form script.
@@ -31,7 +31,4 @@ AmpForm.propTypes = {
 }
 
 
-export default ampSDK.ampComponent(
-    AmpForm,
-    '<script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>'
-)
+export default ampComponent(AmpForm)

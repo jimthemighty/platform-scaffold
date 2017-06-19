@@ -9,10 +9,8 @@ import {getHomeCategories} from '../../../../web/app/containers/home/selectors'
 import {initHomePage} from '../../../../web/app/integration-manager/home/commands'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-// import container styles
-import containerStyles from './container.scss'
-
 const containerClass = 't-home'
+import {ampComponent} from '../../amp-sdk'
 
 const Home = ({
     categories
@@ -39,8 +37,6 @@ const mapStateToProps = createPropsSelector({
 })
 
 
-export default connect(
-    mapStateToProps
-)(Home)
-
-export const styles = containerStyles.toString()
+export default ampComponent(
+    connect(mapStateToProps)(Home)
+)
