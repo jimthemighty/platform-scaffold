@@ -8,7 +8,7 @@ import Immutable from 'immutable'
 
 import rootReducer from '../containers/reducers'
 import userReducer from './user/reducer'
-import cartReducer from './cart/reducer'
+import cartReducer from 'progressive-web-sdk/dist/store/cart/reducer'
 import categoryReducer from './categories/reducer'
 import modalReducer from 'progressive-web-sdk/dist/store/modals/reducer'
 import notificationsReducer from 'progressive-web-sdk/dist/store/notifications/reducer'

@@ -13,7 +13,7 @@ import * as miniCartActions from '../mini-cart/actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {NAVIGATION_MODAL} from '../navigation/constants'
 import * as selectors from './selectors'
-import {getCartSummaryCount} from '../../store/cart/selectors'
+import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
 
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'

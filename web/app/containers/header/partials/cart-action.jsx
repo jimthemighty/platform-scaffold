@@ -10,7 +10,7 @@ import Badge from 'progressive-web-sdk/dist/components/badge'
 import Button from 'progressive-web-sdk/dist/components/button'
 import IconLabel from 'progressive-web-sdk/dist/components/icon-label'
 import {HeaderBarActions} from 'progressive-web-sdk/dist/components/header-bar'
-import {getCartSummaryCount} from '../../../store/cart/selectors'
+import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
 
 const CartItemCounterBadge = ({itemCount}) => {
     // `undefined` is not greater than 0

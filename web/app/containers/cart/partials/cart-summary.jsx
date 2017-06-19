@@ -5,7 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import * as cartSelectors from '../../../store/cart/selectors'
+import * as cartSelectors from 'progressive-web-sdk/dist/store/cart/selectors'
 import {CART_ESTIMATE_SHIPPING_MODAL} from '../constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {getSelectedShippingLabel, getPostcode} from '../../../store/checkout/shipping/selectors'

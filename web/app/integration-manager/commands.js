@@ -5,7 +5,7 @@
 import {register as registerHome} from 'progressive-web-sdk/dist/integration-manager/home/commands'
 import {register as registerProducts} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {register as registerCategories} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
-import {register as registerCart} from './cart/commands'
+import {register as registerCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {register as registerApp} from './app/commands'
 import {register as registerCheckout} from './checkout/commands'
 import {register as registerAccount} from 'progressive-web-sdk/dist/integration-manager/account/commands'

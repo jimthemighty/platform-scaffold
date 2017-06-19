@@ -3,9 +3,9 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID} from '../utils'
-import {getCartItems} from '../../../store/cart/selectors'
+import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCartContents} from '../../cart/results'
+import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 
 import {getProductById, getProductThumbnailSrcById, getProductThumbnailById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from '../parsers'

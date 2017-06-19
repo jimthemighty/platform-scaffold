@@ -4,7 +4,7 @@
 
 /* eslint-disable no-unused-vars */
 
-import {receiveCartContents} from '../../cart/results'
+import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 
 export const initCartPage = (url, routeName) => (dispatch) => {
