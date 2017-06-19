@@ -12,7 +12,7 @@ import classNames from 'classnames'
 import WebFont from 'webfontloader'
 import {isRunningInAstro} from '../../utils/astro-integration'
 
-import {initApp} from '../../integration-manager/app/commands'
+import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 
 import {hidePreloader} from 'progressive-web-sdk/dist/preloader'
 import DangerousHTML from 'progressive-web-sdk/dist/components/dangerous-html'
