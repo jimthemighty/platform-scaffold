@@ -1,6 +1,6 @@
 {
   "presets": [
-    "es2015",
+    ["es2015", {"modules": false}],
     "react"
   ],
   "plugins": [
@@ -11,8 +11,15 @@
       "regenerator": false
     }]
   ],
+  "ignore": [
+    "*/vendor/astro-client.js"
+  ],
   "env": {
     "test": {
+      "presets": [
+        "es2015",
+        "react"
+      ],
       "plugins": [
         "dynamic-import-node"
       ]
