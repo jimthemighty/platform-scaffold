@@ -19,8 +19,8 @@ import IconLabelButton from '../../components/icon-label-button'
 import {AccountNavItem, NavItemWithOnClick} from '../../components/nav-item'
 import * as selectors from './selectors'
 import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from './constants'
-import {NAVIGATION_MODAL} from '../../modals/constants'
-import {signOut} from '../app/actions'
+import {NAVIGATION_MODAL} from '../constants'
+import {signOut} from '../../containers/app/actions'
 import {setNavigationPath} from './actions'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 
@@ -61,7 +61,7 @@ const Navigation = (props) => {
     }
 
     return (
-        <Sheet className="t-navigation" open={isOpen} onDismiss={closeNavigation} maskOpacity={0.7} coverage="85%">
+        <Sheet className="m-navigation" open={isOpen} onDismiss={closeNavigation} maskOpacity={0.7} coverage="85%">
             {path &&
                 <Nav root={root.title ? root : null} path={path} onPathChange={onPathChange}>
                     <HeaderBar>
@@ -80,7 +80,7 @@ const Navigation = (props) => {
 
                     <div>
                         <NavigationSocialIcons />
-                        <div className="t-navigation__copyright u-padding-md">
+                        <div className="m-navigation__copyright u-padding-md">
                             <p>© 2017 Mobify Research & Development Inc. All rights reserved.</p>
                         </div>
                     </div>

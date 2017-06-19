@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getModals} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import * as MODAL from './constants'
-import Navigation from '../containers/navigation/container'
+import Navigation from './navigation/container'
 import MiniCart from './mini-cart/container'
 import ProductDetailsItemAddedModal from './product-details-item-added/container'
 import CartEstimateShippingModal from './cart-estimate-shipping/container'

@@ -15,10 +15,10 @@ const social = [
 
 const NavigationSocialIcons = () => {
     return (
-        <div className="t-navigation__social">
+        <div className="m-navigation__social">
             <div className="u-flexbox u-justify-center">
                 {social.map(([url, icon, title]) =>
-                    <a href={url} className="t-navigation__social-link" key={url}>
+                    <a href={url} className="m-navigation__social-link" key={url}>
                         <Image
                             src={getAssetUrl(icon)}
                             alt={title}
