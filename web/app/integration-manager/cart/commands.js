@@ -56,8 +56,8 @@ const dispatchCartAnalytics = (action, dispatch, getState, id) => {
  * @param productId {string} The product's ID
  * @param quantity {number} The quantity to add
  */
-export const addToCart = (productId, quantity) => (dispatch, getState) => {
-    return dispatch(connector.addToCart(productId, quantity)).then((cart) => {
+export const addToCart = (productId, quantity, variantId) => (dispatch, getState) => {
+    return dispatch(connector.addToCart(productId, quantity, variantId)).then((cart) => {
         dispatchCartAnalytics(EVENT_ACTION.addToCart, dispatch, getState, productId)
         return cart
     })

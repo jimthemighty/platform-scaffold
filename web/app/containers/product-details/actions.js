@@ -9,7 +9,12 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {getItemQuantity} from './selectors'
 import {getCurrentPathKey, getCartURL} from '../app/selectors'
-import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from '../../store/products/selectors'
+import {
+    getCurrentProductId,
+    getProductVariants,
+    getProductVariationCategories,
+    getProductVariationCategoryIds
+} from '../../store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
 import {addToCart, updateCartItem} from '../../integration-manager/cart/commands'
@@ -46,17 +51,26 @@ export const goToCheckout = () => (dispatch, getState) => {
 const submitCartFormSelector = createPropsSelector({
     productId: getCurrentProductId,
     qty: getItemQuantity,
-    variations: getProductVariationCategories
+    variationCategories: getProductVariationCategories,
+    variants: getProductVariants
 })
 
+const getProductFromFormValues = (formValues, variants) => {
+    return variants.find((variant) => {
+        return variant.values.every((value) => {
+            return formValues[value.slug] === value.values.id
+        })
+    })
+}
+
 export const submitCartForm = (formValues) => (dispatch, getStore) => {
-    const {productId, qty, variations} = submitCartFormSelector(getStore())
+    const {productId, qty, variationCategories, variants} = submitCartFormSelector(getStore())
     const path = window.location.pathname
     const itemIdMatch = path.match(/\/id\/(.*?)\/product_id\//)
 
-    if (variations) {
+    if (variationCategories) {
         const errors = {}
-        variations.forEach(({id, label}) => {
+        variationCategories.forEach(({id, label}) => {
             if (!formValues[id]) {
                 errors[id] = `Please select a ${label}`
             }
@@ -67,8 +81,9 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     }
 
     dispatch(addToCartStarted())
+    const variant = getProductFromFormValues(formValues, variants)
 
-    return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], qty, productId) : addToCart(productId, qty))
+    return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], qty, productId) : addToCart(productId, qty, variant))
         .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL)))
         .catch((error) => {
             console.error('Error adding to cart', error)

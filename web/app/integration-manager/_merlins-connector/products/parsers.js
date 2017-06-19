@@ -14,16 +14,33 @@ const parseCarouselItems = (magentoObject) => {
     return carouselSetup.toJS()
 }
 
+
 const parseVariationCategories = (magentoObject) => {
     const optionList = magentoObject
             .getIn(['#product_addtocart_form', 'configurable', 'spConfig', 'attributes'])
             .toJS()
 
-    return Object.keys(optionList).map((key) => optionList[key])
+    return Object.keys(optionList).map((key) => {
+        const option = optionList[key]
+        const {code, id, label, options} = option
+        const values = options.map((option) => {
+            return {
+                label: option.label,
+                value: option.id,
+                products: option.products
+            }
+        })
+        return {
+            id: code,
+            slug: id,
+            label,
+            values
+        }
+    })
 }
 
 const parseVariantIds = (variationCategories) => variationCategories
-                                                .map((category) => category.options)
+                                                .map((category) => category.values)
                                                 .reduce((a, b) => a.concat(b))
                                                 .reduce((a, b) => a.products && b.products ? a.products.concat(b.products) : a) //eslint-disable-line
                                                 .sort()
@@ -31,14 +48,16 @@ const parseVariantIds = (variationCategories) => variationCategories
 
 const buildVariantFromId = (id, variationCategories) => {
     return {
-        attributes: variationCategories.map((category) => {
-            const selectedCategory = category.options.find((option) => option.products.find((product) => product === id)) // lol
+        id,
+        values: variationCategories.map((category) => {
+            const selectedCategory = category.values.find((option) => option.products.find((product) => product === id)) // lol
+
             return {
-                id: category.id,
-                code: category.code,
+                id: category.slug,
+                slug: category.id,
                 label: category.label,
                 values: {
-                    id: selectedCategory.id,
+                    id: selectedCategory.value,
                     label: selectedCategory.label,
                 }
             }
@@ -48,12 +67,7 @@ const buildVariantFromId = (id, variationCategories) => {
 
 const buildVariants = (magentoObject, variationCategories) => {
     const variantIds = parseVariantIds(variationCategories)
-    const variants = {}
-    variantIds.forEach((id) => {
-        variants[id] = buildVariantFromId(id, variationCategories)
-    })
-
-    return variants
+    return variantIds.map((id) => buildVariantFromId(id, variationCategories))
 }
 
 const carouselItemsToImages = (carouselItems) => {
@@ -84,11 +98,6 @@ export const productDetailsParser = ($, $html) => {
     const images = carouselItemsToImages(carouselItems)
     const variationCategories = parseVariationCategories(magentoObject)
     const variants = buildVariants(magentoObject, variationCategories)
-
-    // keys are different on SFCC & merlins (options vs values)
-    variationCategories.forEach((category) => {
-        category.values = category.options
-    })
 
     return {
         id: $mainContent.find('#product_addtocart_form input[name="product"]').val(),
