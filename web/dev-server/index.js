@@ -5,17 +5,22 @@ const fs = require('fs')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const config = require('../webpack/dev.js')
-const webPackageJson = require('../package.json')   // eslint-disable-line import/no-extraneous-dependencies
 
 const addMiddleware = require('./middlewares/frontendMiddleware')
 const logger = require('./logger')
 
-const connectorArg = process.argv.find((arg) => webPackageJson.connectors[arg])
+let connectorPort
 
-const connector = webPackageJson.connectors[connectorArg]
+if (process.argv.find((arg) => arg === 'sfcc')) {
+    connectorPort = 8080
+} else if (process.argv.find((arg) => arg === 'mp')) {
+    connectorPort = 8443
+} else {
+    connectorPort = 8443
+}
 
 const argv = require('minimist')(process.argv.slice(2))
-const port = argv.port || process.env.PORT || connector.port
+const port = argv.port || process.env.PORT || connectorPort
 
 const compiler = webpack(config)
 
