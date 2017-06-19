@@ -54,3 +54,22 @@ We imagine partners will
      the PWA, swapping components and fixing compatibility issues.
 
   4) Integration Manager / Connector code will be usable unmodified.
+
+
+## Custom Domains
+
+Mobify has purchased the domain `amp-mobify.com` which we will use to provide clients
+with readable URLs for in-development projects. Mobify will set up two environments
+for each client:
+
+    [client].amp-mobify.com           // Production
+    [client]-staging.amp-mobify.com   // Staging
+
+Clients will be able to go live with the `[client].amp-mobify.com` URL, but ideally
+would configure their DNS records and provide SSL certificates that would allow
+us to serve AMP content from `amp.[client-domain.com]`.
+
+This this is possible, but it is a manual configuration step. See
+
+  - [Custom domains](http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html)
+  - [Requesting certificates](http://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request.html)
