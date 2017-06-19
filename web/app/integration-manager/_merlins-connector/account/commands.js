@@ -14,7 +14,7 @@ import {setSigninLoaded, setRegisterLoaded} from 'progressive-web-sdk/dist/integ
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
-import {setLoggedIn} from '../../results'
+import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import {isFormResponseInvalid} from './parsers/parsers'
 

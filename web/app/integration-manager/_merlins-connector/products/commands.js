@@ -9,7 +9,7 @@ import {
     receiveProductDetailsProductData,
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCurrentProductId} from '../../results'
+import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {productDetailsParser, productDetailsUIParser, pdpAddToCartFormParser} from './parsers'
 
 export const initProductDetailsPage = (url) => (dispatch) => {

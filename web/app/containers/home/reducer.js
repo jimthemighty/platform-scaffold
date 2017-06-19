@@ -6,7 +6,7 @@ import {handleActions} from 'redux-actions'
 import {fromJS} from 'immutable'
 import {mergePayload} from '../../utils/reducer-utils'
 
-import {receiveHomeData} from '../../integration-manager/results'
+import {receiveHomeData} from 'progressive-web-sdk/dist/integration-manager/results'
 
 const CATEGORY_PLACEHOLDER_COUNT = 6
 

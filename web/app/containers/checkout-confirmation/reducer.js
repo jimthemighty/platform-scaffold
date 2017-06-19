@@ -7,7 +7,7 @@ import Immutable from 'immutable'
 import * as checkoutConfirmationActions from './actions'
 import {realReceiveCheckoutConfirmationData} from '../../integration-manager/checkout/results'
 import {mergePayload} from '../../utils/reducer-utils'
-import {receiveOrderConfirmationContents} from '../../integration-manager/results'
+import {receiveOrderConfirmationContents} from 'progressive-web-sdk/dist/integration-manager/results'
 
 export default handleActions({
     [receiveOrderConfirmationContents]: mergePayload,

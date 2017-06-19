@@ -18,7 +18,7 @@ import {
     setCheckoutShippingURL,
     setCartURL,
     setLoggedIn
-} from '../../results'
+} from 'progressive-web-sdk/dist/integration-manager/results'
 
 const requestCapturedDoc = () => {
     return window.Progressive.capturedDocHTMLPromise.then((initialCapturedDocHTML) => {
