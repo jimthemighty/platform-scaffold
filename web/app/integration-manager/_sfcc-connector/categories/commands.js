@@ -17,12 +17,14 @@ const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     const parentId = parent_category_id !== 'root' ? parent_category_id : null
     const path = getCategoryPath(id)
 
-    dispatch(receiveCategoryInformation(id, {
-        id,
-        title: name,
-        href: path,
-        parentId
-    }))
+    if (id) {
+        dispatch(receiveCategoryInformation(id, {
+            id,
+            title: name,
+            href: path,
+            parentId
+        }))
+    }
 
     if (parentId) {
         dispatch(fetchCategoryInfo(parentId))
@@ -46,6 +48,7 @@ const extractCategoryId = (url) => {
 export const initProductListPage = (url) => (dispatch) => {
     let searchUrl
     const path = urlToPathKey(url)
+    const categoryID = extractCategoryId(url)
 
     if (path.includes(SUGGESTION_URL)) {
         const searchQueryMatch = path.match(/\?q=\+(.*)/)
@@ -61,14 +64,12 @@ export const initProductListPage = (url) => (dispatch) => {
             title: `Search results for ${searchTerm}`,
             parentId: null
         }))
-
     } else {
-        const categoryID = extractCategoryId(url)
         searchUrl = makeCategorySearchURL(categoryID, '')
-        dispatch(fetchCategoryInfo(categoryID))
     }
 
-    return makeApiRequest(searchUrl, {method: 'GET'})
+    return dispatch(fetchCategoryInfo(categoryID))
+        .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
         .then((response) => response.json())
         .then(({hits, total}) => {
             if (total === 0) {
