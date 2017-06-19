@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 const fs = require('fs')
 const chalk = require('chalk')
@@ -12,11 +15,7 @@ let failure = false
 
 if (fs.existsSync('tests/system/test-scripts/lighthouse/audit-local.report.html')) {
     fileName = 'audit-local'
-<<<<<<< HEAD:web/tests/system/test-scripts/lighthouse/check-score.js
-} else if (fs.existsSync('tests/system/test-scripts/lighthouse/audit-prod.report.html')){
-=======
 } else if (fs.existsSync('lighthouse/audit-prod.report.html')) {
->>>>>>> 06ffd633b0c74b95513f4edac1f9a80705528ab4:web/lighthouse/check-score.js
     fileName = 'audit-prod'
 } else {
     console.log('Error Lighthouse report not found.')
