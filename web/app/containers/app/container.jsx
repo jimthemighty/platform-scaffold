@@ -78,7 +78,6 @@ class App extends React.Component {
     render() {
         const {
             children,
-            history,
             fetchError,
             fetchPage,
             hasFetchedCurrentPath,
@@ -128,8 +127,10 @@ class App extends React.Component {
                 <DangerousHTML html={sprite}>
                     {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
                 </DangerousHTML>
+
                 <div aria-hidden={hideModalBackground}>
                     <SkipLinks items={skipLinksItems} />
+
                     <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
                         {isRunningInAstro && <NativeConnector />}
 
@@ -172,7 +173,8 @@ class App extends React.Component {
                         }
                     </div>
                 </div>
-                <ModalManager history={history} reload={reload} />
+
+                <ModalManager reload={reload} />
             </div>
         )
     }
