@@ -33,7 +33,7 @@ import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 
 import NotificationManager from '../../components/notification-manager'
 
-import {prefetchChunks} from '../templates'
+import {prefetchTemplateChunks} from '../templates'
 
 
 // Offline support
@@ -61,7 +61,7 @@ class App extends React.Component {
         // Prefetch & cache code-splitted chunks when the browser is
         // at the end of frame to allow for quick page transitions
         // and graceful failure when offline.
-        prefetchChunks()
+        prefetchTemplateChunks()
     }
 
     hidePreloaderWhenCSSIsLoaded() {

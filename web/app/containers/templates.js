@@ -32,7 +32,7 @@ const prefetchFilenames = [
     'product-list.js'
 ]
 
-export const prefetchChunks = () => {
+export const prefetchTemplateChunks = () => {
     prefetchFilenames
         .map((filename) => `${getBuildOrigin()}${filename}`)
         .forEach((link) => prefetchLink({href: link}))
