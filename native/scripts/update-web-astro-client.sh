@@ -22,4 +22,4 @@ if [ ! -e "$ROOT/node_modules/mobify-progressive-app-sdk/dist/astro-client.js" ]
 fi
 
 cp -f "$ROOT/node_modules/mobify-progressive-app-sdk/dist/astro-client.js" ../web/app/vendor/astro-client.js
-cp -f "$ROOT/node_modules/mobify-progressive-app-sdk/dist/astro-detect.js" ../web/app/vendor/astro-detect.js
+cp -f "$ROOT/node_modules/mobify-progressive-app-sdk/dist/es6/astro-detect.js" ../web/app/vendor/astro-detect.js
