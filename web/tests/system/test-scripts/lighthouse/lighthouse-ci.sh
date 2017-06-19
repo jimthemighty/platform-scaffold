@@ -26,4 +26,4 @@ lighthouse \
 	--disable-device-emulation=true \
 	"${URL}${PREVIEW}"
 
-node tests/system/test-scripts/lighthouse/check-score.js
+node tests/system/test-scripts/check-lighthouse-score.js
