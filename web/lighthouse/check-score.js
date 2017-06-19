@@ -12,7 +12,7 @@ let failure = false
 
 if (fs.existsSync('lighthouse/audit-local.report.html')) {
     fileName = 'audit-local'
-} else if (fs.existsSync('lighthouse/audit-prod.report.html')){
+} else if (fs.existsSync('lighthouse/audit-prod.report.html')) {
     fileName = 'audit-prod'
 } else {
     console.log('Error Lighthouse report not found.')
