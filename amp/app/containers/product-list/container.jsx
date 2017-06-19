@@ -10,17 +10,15 @@ import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 // Partials
 import ProductListHeader from './partials/product-list-header'
 import ProductListContents from './partials/product-list-contents'
-import ProductListFilterModal from './partials/product-list-filter-modal'
 
 const ProductList = () => {
-    const filterModalId = 'filter-modal'
+    const filterSheetId = 'filter-sheet'
 
     return (
         <div className="t-product-list">
             <ProductListHeader />
 
-            <ProductListContents sheetId={filterModalId} /> {/* TODO FIX HOW TO WORK WITH route name eg. <ProductListContents routeName={routeName} /> */}
-            <ProductListFilterModal sheetId={filterModalId} />
+            <ProductListContents sheetId={filterSheetId} /> {/* TODO FIX HOW TO WORK WITH route name eg. <ProductListContents routeName={routeName} /> */}
         </div>
     )
 }

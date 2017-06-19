@@ -3,6 +3,7 @@ import Header from '../header/container'
 import Footer from '../footer/container'
 import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
+import ProductListFilterModal from '../product-list/partials/product-list-filter-modal'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
 const App = ({children}) => {
@@ -19,10 +20,12 @@ const App = ({children}) => {
         {target: '#app-footer', label: 'Skip to footer'},
     ]
 
-    const navId = 'main-nav'
-
     // Important note: dont remove or rename "app" in body ID because we need this ID to work with sharing styles from PWA.
     const appId = 'app'
+
+    // IDs for Sheet components
+    const navId = 'main-nav'
+    const filterSheetId = 'filter-sheet'
 
     return (
         <body
@@ -31,7 +34,9 @@ const App = ({children}) => {
         >
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
+            {/* Place all <Sheet> components here so it will pass AMP validator: "The <amp-sidebar> should be a direct child of the <body>." */}
             <Navigation id={navId} />
+            <ProductListFilterModal sheetId={filterSheetId} />
 
             <SkipLinks items={skipLinksItems} />
 
