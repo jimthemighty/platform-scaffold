@@ -31,14 +31,3 @@ export const registerCustom = (commands) => {
 
 /** @function */
 export const submitNewsletter = (...args) => connector.submitNewsletter(...args)
-
-/** @function */
-export const getSearchSuggestions = (...args) => connector.getSearchSuggestions(...args)
-
-/**
- * Submits a search for products
- * @function
- * @param {String} searchQuery product's ID
- */
-
-export const searchProducts = (searchQuery) => connector.searchProducts(searchQuery)

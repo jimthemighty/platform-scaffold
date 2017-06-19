@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {getSearchSuggestions} from '../../integration-manager/commands'
+import {getSearchSuggestions} from '../../integration-manager/app/commands'
 
 export const toggleHeader = createAction('Toggled the header', ['isCollapsed'])
 

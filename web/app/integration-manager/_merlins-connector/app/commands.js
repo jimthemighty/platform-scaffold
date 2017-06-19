@@ -4,17 +4,20 @@
 
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
-import {parseLoginStatus} from './parser'
+import {parseLoginStatus, parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-import {CHECKOUT_SHIPPING_URL, CART_URL} from '../config'
-import {getCookieValue} from '../../../utils/utils'
+import {CHECKOUT_SHIPPING_URL, CART_URL, QUERY_URL, SUGGESTION_URL} from '../config'
+import {getCookieValue, buildQueryString} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
+
 import {
     receiveNavigationData,
+    receiveSearchSuggestions,
     setCheckoutShippingURL,
     setCartURL,
     setLoggedIn
@@ -56,6 +59,24 @@ export const fetchPageData = (url) => (dispatch) => {
             }
         })
 }
+
+export const getSearchSuggestions = (query) => (dispatch) => {
+    // Mimic desktop behaviour, only make request search when query is 2 characters or more.
+    // Empty list if less than 2 characters
+    if (query.length < 2) {
+        return dispatch(receiveSearchSuggestions(null))
+    }
+
+    const queryURL = `${QUERY_URL}${buildQueryString(query)}&_=${Date.now()}`
+    return makeRequest(queryURL)
+        .then((response) => response.json())
+        .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
+}
+
+export const searchProducts = (query) => (dispatch) => {
+    browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
+}
+
 
 export const initApp = () => (dispatch) => {
     // Use the pre-existing form_key if it already exists
