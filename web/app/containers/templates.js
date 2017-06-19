@@ -6,23 +6,36 @@
 // involving the containers and the app actions.
 import Loadable from 'react-loadable'
 
+import {getBuildOrigin} from 'progressive-web-sdk/dist/asset-utils'
 import ContainerPlaceholder from '../components/container-placeholder'
 import {requestIdleCallback} from '../utils/utils'
+import {prefetchLink} from '../utils/loader-utils'
 
-const loadableList = []
+
 const PWALoadable = (loader) => {
     const loadable = Loadable({
         loader,
         LoadingComponent: ContainerPlaceholder
     })
-    loadableList.push(loadable)
     return loadable
 }
 
-export const registerPreloadCallbacks = () => {
-    loadableList.forEach((loadable) => {
-        requestIdleCallback(loadable.preload)
-    })
+// A list of filenames that we want to be prefetched by the browser
+// these filenames come from the chunk names defined below.
+const prefetchFilenames = [
+    'cart.js',
+    'checkout-confirmation.js',
+    'checkout-payment.js',
+    'checkout-shipping.js',
+    'login.js',
+    'product-details.js',
+    'product-list.js'
+]
+
+export const prefetchChunks = () => {
+    prefetchFilenames
+        .map((filename) => `${getBuildOrigin()}${filename}`)
+        .forEach((link) => prefetchLink({href: link}))
 }
 
 // These are on the old model and need to be wrapped here
@@ -34,15 +47,3 @@ export const CheckoutShipping = PWALoadable(() => import('./checkout-shipping/co
 export const Login = PWALoadable(() => import('./login/container' /* webpackChunkName: "login" */))
 export const ProductDetails = PWALoadable(() => import('./product-details/container' /* webpackChunkName: "product-details" */))
 export const ProductList = PWALoadable(() => import('./product-list/container' /* webpackChunkName: "product-list" */))
-
-// A list of filenames that we want to be prefetched by the browser
-// these filenames come from the chunk names defined above.
-export const prefetchFilenames = [
-    'cart.js',
-    'checkout-confirmation.js',
-    'checkout-payment.js',
-    'checkout-shipping.js',
-    'login.js',
-    'product-details.js',
-    'product-list.js'
-]

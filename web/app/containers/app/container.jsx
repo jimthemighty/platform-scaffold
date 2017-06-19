@@ -14,7 +14,6 @@ import {isRunningInAstro} from '../../utils/astro-integration'
 
 import {initApp} from '../../integration-manager/app/commands'
 
-import {getBuildOrigin} from 'progressive-web-sdk/dist/asset-utils'
 import {hidePreloader} from 'progressive-web-sdk/dist/preloader'
 import DangerousHTML from 'progressive-web-sdk/dist/components/dangerous-html'
 import SkipLinks from 'progressive-web-sdk/dist/components/skip-links'
@@ -34,7 +33,7 @@ import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 
 import NotificationManager from '../../components/notification-manager'
 
-import {prefetchFilenames, registerPreloadCallbacks} from '../templates'
+import {prefetchChunks} from '../templates'
 
 
 // Offline support
@@ -59,37 +58,10 @@ class App extends React.Component {
             }
         })
 
-        // When a service worker is not available for this, lazy load other
-        // containers when browser is at the end of frame to prevent jank.
-        // if (!navigator.serviceWorker) {
-        //     registerPreloadCallbacks()
-        // }
-
-        const prefetchLink = ({href}) => {
-            const link = document.createElement('link')
-
-            // Setting UTF-8 as our encoding ensures that certain strings (i.e.
-            // Japanese text) are not improperly converted to something else. We
-            // do this on the vendor scripts also just in case any libs we
-            // import have localized strings in them.
-            link.charset = 'utf-8'
-            link.href = href
-            link.rel = 'prefetch'
-
-            document.getElementsByTagName('head')[0].appendChild(link)
-        }
-
-        const prefetchLinks = () => {
-            const links = prefetchFilenames.map((filename) => {
-                return `${getBuildOrigin()}${filename}`
-            })
-
-            links.forEach((link) => {
-                prefetchLink({href: link})
-            })
-        }
-
-        prefetchLinks()
+        // Prefetch & cache code-splitted chunks when the browser is
+        // at the end of frame to allow for quick page transitions
+        // and graceful failure when offline.
+        prefetchChunks()
     }
 
     hidePreloaderWhenCSSIsLoaded() {
