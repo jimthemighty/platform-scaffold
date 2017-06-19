@@ -1,3 +1,9 @@
+# This script has two steps:
+# 1) Install the latest stable version of Chrome: https://circleci.com/docs/build-image-trusty/#google-chrome
+# 2) Add a self-signed SSL Certificate to allow working with Mobify Preview
+
+# The installation steps are grouped together to prevent two instances of apt-get running at the same time
+
 # Install the latest stable version of Chrome.
 # https://circleci.com/docs/build-image-trusty/#google-chrome
 
