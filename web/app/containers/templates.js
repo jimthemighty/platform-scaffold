@@ -8,9 +8,7 @@ import Loadable from 'react-loadable'
 
 import {getBuildOrigin} from 'progressive-web-sdk/dist/asset-utils'
 import ContainerPlaceholder from '../components/container-placeholder'
-import {requestIdleCallback} from '../utils/utils'
 import {prefetchLink} from '../utils/loader-utils'
-
 
 const PWALoadable = (loader) => {
     const loadable = Loadable({
