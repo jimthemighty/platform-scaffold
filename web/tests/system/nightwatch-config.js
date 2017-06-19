@@ -30,7 +30,7 @@ module.exports = {
             'end_session_on_fail': false,
             'silent': true,
             'output': true,
-            'exclude': ['page-objects'],
+            'exclude': ['page-objects', 'test-scripts'],
             'screenshots': {
                 'enabled': true,
                 'path': screenshotsPath,
