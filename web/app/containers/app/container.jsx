@@ -201,7 +201,6 @@ App.propTypes = {
     isModalOpen: PropTypes.object,
     notifications: PropTypes.array,
     removeNotification: PropTypes.func,
-    shouldFetchPage: PropTypes.bool,
     /**
      * The SVG icon sprite needed in order for all Icons to work
      */
