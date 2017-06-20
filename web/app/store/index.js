@@ -6,6 +6,7 @@ import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import Immutable from 'immutable'
 
+import accountReducer from './account/reducer'
 import rootReducer from '../containers/reducers'
 import userReducer from './user/reducer'
 import cartReducer from './cart/reducer'
@@ -35,6 +36,7 @@ const configureStore = (initialState) => {
         analytics(({type, payload}, state) => analyticsManager.distribute(type, payload, state))
     ]
     const reducer = combineReducers({
+        account: accountReducer,
         categories: categoryReducer,
         cart: cartReducer,
         ui: rootReducer,

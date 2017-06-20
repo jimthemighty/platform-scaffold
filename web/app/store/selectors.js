@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+export const getAccount = ({account}) => account
 export const getUi = ({ui}) => ui
 export const getUser = ({user}) => user
 export const getCategories = ({categories}) => categories

@@ -6,6 +6,7 @@
 
 import {combineReducers} from 'redux'
 
+import account from './account/reducer'
 import app from './app/reducer'
 import cart from './cart/reducer'
 import checkoutConfirmation from './checkout-confirmation/reducer'
@@ -22,6 +23,7 @@ import productList from './product-list/reducer'
 
 
 const uiReducer = combineReducers({
+    account,
     app,
     cart,
     checkoutConfirmation,

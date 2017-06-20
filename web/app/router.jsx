@@ -9,13 +9,14 @@ import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
 // Containers
 import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
-import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails, MyProductDetails} from './containers/templates'
+import {Account, Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails, MyProductDetails} from './containers/templates'
 
 // We build this into the app so we can load the home page right away
 import Home from './containers/home/container'
 import CheckoutHeader from './containers/checkout-header/container'
 import CheckoutFooter from './containers/checkout-footer/container'
 
+import {customCommands} from './integration-manager/custom/commands'
 import {initHomePage} from './integration-manager/home/commands'
 import {initCartPage} from './integration-manager/cart/commands'
 import {initProductListPage} from './integration-manager/categories/commands'
@@ -62,6 +63,7 @@ const Router = ({store}) => (
                 <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initPage(initCartPage)} />
                 <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initPage(initRegisterPage)} />
+                <Route component={Account} path="customer/account" routeName="account" fetchAction={initPage(customCommands.initAccountPage)} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />

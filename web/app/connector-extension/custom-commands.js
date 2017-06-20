@@ -3,6 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import * as accountCommands from './account/custom-commands'
 
 export const isEmailAvailable = (email) => (dispatch) => {
     return makeJsonEncodedRequest(
@@ -15,3 +16,5 @@ export const isEmailAvailable = (email) => (dispatch) => {
             return /true/.test(responseText)
         })
 }
+
+export const initAccountPage = accountCommands.initAccountPage

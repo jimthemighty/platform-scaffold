@@ -27,6 +27,7 @@ export const registerPreloadCallbacks = () => {
 
 // These are on the old model and need to be wrapped here
 // rather than in container.js to avoid circular imports
+export const Account = PWALoadable(() => import('./account/container'))
 export const Cart = PWALoadable(() => import('./cart/container'))
 export const CheckoutConfirmation = PWALoadable(() => import('./checkout-confirmation/container'))
 export const CheckoutPayment = PWALoadable(() => import('./checkout-payment/container'))
