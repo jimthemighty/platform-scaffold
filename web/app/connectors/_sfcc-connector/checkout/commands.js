@@ -12,7 +12,13 @@ import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from '../../results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
 import {getSelectedShippingMethodValue} from '../../../store/checkout/shipping/selectors'
-import {receiveShippingMethods, receiveShippingAddress, receiveBillingAddress, receiveSelectedShippingMethod, receiveBillingSameAsShipping} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
+import {
+    receiveShippingMethods,
+    receiveShippingAddress,
+    receiveBillingAddress,
+    receiveSelectedShippingMethod,
+    receiveBillingSameAsShipping
+} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, getState) => {
     const selectedShippingMethodId = getSelectedShippingMethodValue(getState())
