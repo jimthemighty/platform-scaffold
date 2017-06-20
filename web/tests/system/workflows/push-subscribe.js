@@ -30,7 +30,7 @@ export default {
             .assert.visible(home.selectors.wrapper)
     },
 
-    'Push Subscribe - Navigate and Accept Default Ask': (browser) => {
+    'Push Subscribe - Navigate and Accept Default Ask': () => {
         home.navigateToProductList(PRODUCT_LIST_INDEX)
 
         // This is the second page view, the DefaultAsk should be visible
