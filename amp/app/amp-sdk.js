@@ -2,17 +2,17 @@
  * Code that might be good to move into the AMP-SDK repository...
  */
 import React from 'react'
+import hoistNonReactStatics from 'hoist-non-react-statics'
 
-const getDisplayName = (Component) => (
-    Component.displayName || Component.name || 'Component'
-)
+const getDisplayName = (Component) => Component.displayName || Component.name || 'Component'
 
 const noop = () => undefined
 
 
 /**
- * Higher-order component that tracks calls to a component's render() method.
- * This only makes sense for server-side rendering.
+ * Higher-order component that tracks calls to components' render() methods on
+ * the server-side so that script/css dependencies can be included on the page,
+ * as needed.
  */
 export const ampComponent = (WrappedComponent) => {
     const AmpComponent = (props, context) => {
@@ -21,26 +21,17 @@ export const ampComponent = (WrappedComponent) => {
         return <WrappedComponent {...props} />
     }
     AmpComponent.displayName = `AmpComponent(${getDisplayName(WrappedComponent)})`
-
-    // TODO: Proper fix
-    if (WrappedComponent.templateName) {
-        AmpComponent.templateName = WrappedComponent.templateName
-    }
-
-    if (WrappedComponent.resolves) {
-        AmpComponent.resolves = WrappedComponent.resolves
-    }
-
     AmpComponent.contextTypes = {
         trackRender: React.PropTypes.func
     }
-
-    return AmpComponent
+    return hoistNonReactStatics(AmpComponent, WrappedComponent)  // connect() does this too
 }
 
 
 /**
- * Wraps the AMP app and shares context, ie. to enable tracking js-dependencies.
+ * Root component for an AMP application. Exposes the `trackRender` function
+ * through context which is used to embed script/css dependencies for rendered
+ * components.
  */
 export class AmpContext extends React.Component {
     getChildContext() {

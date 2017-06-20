@@ -9,7 +9,6 @@ import BreadcrumbsTheme from '../components/breadcrumbs/_theme.scss'
 
 import Button from '../components/button/index'
 import ButtonBase from '../components/button/_base.scss'
-import ButtonTheme from '../components/button/_theme.scss'
 
 import Field from '../components/field/index'
 import FieldBase from '../components/field/_base.scss'
@@ -90,7 +89,7 @@ const styles = new Map()
 
 styles.set(AmpLightbox, [AmpLightboxBase, AmpLightboxTheme])
 styles.set(Breadcrumbs, [BreadcrumbsBase, BreadcrumbsTheme])
-styles.set(Button, [ButtonBase, ButtonTheme])
+styles.set(Button, [ButtonBase])
 styles.set(Field, [FieldBase, FieldTheme])
 styles.set(FieldRow, [FieldRowBase, FieldRowTheme])
 styles.set(HeaderBar, [HeaderBarBase, HeaderBarTheme])
