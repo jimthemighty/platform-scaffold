@@ -1,15 +1,18 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import * as selectors from '../../../../../web/app/containers/product-list/selectors'
-import {staticURL} from '../../../utils'
-import {getCategoryItemCount} from '../../../../../web/app/store/categories/selectors'
 
+// Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Button from '../../../components/button'
 import Field from '../../../components/field'
 import List from '../../../components/list'
 import ProductTile from '../../../components/product-tile'
+
+// Selectors
+import * as selectors from '../../../../../web/app/containers/product-list/selectors'
+import {staticURL} from '../../../utils'
+import {getCategoryItemCount} from '../../../../../web/app/store/categories/selectors'
 
 const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
@@ -57,7 +60,6 @@ const NoResultsList = ({routeName}) => (
 NoResultsList.propTypes = {
     routeName: PropTypes.string
 }
-
 
 const ProductListContents = (props) => {
     const {sheetId, products, routeName, activeFilters} = props
@@ -118,7 +120,6 @@ const ProductListContents = (props) => {
     )
 }
 
-
 ProductListContents.propTypes = {
     products: PropTypes.array.isRequired,
     activeFilters: PropTypes.array,
@@ -127,12 +128,10 @@ ProductListContents.propTypes = {
     sheetId: PropTypes.string
 }
 
-
 const mapStateToProps = createPropsSelector({
     activeFilters: selectors.getActiveFilters,
     numItems: getCategoryItemCount,
     products: selectors.getFilteredAndSortedListProducts
 })
-
 
 export default connect(mapStateToProps)(ProductListContents)

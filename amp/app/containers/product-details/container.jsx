@@ -1,23 +1,28 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import AmpLightbox from '../../components/amp-lightbox'
-import {staticURL} from '../../utils'
-import containerStyles from './container.scss'
-
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getProductDescription, getProductTitle, getProductImages} from '../../../../web/app/store/products/selectors'
-import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-const containerClass = 't-product-details'
+// Components
+import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import AmpLightbox from '../../components/amp-lightbox'
+
+// Selectors
+import {getProductDescription, getProductTitle, getProductImages} from '../../../../web/app/store/products/selectors'
+import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
+
+// Utils
+import {staticURL} from '../../utils'
+
+// Container Styles
+import containerStyles from './container.scss'
 
 const ProductDetails = ({
     description,
     images,
     title
 }) => (
-    <div className={containerClass}>
+    <div className="t-product-details">
         <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
         <AmpLightbox id="my-lightbox">
             <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />

@@ -1,15 +1,19 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import containerStyles from './container.scss'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+
+// Partials
+import ProductListHeader from './partials/product-list-header'
+import ProductListContents from './partials/product-list-contents'
+
+// Selectors
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
 import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
 import {initProductListPage} from '../../../../web/app/integration-manager/categories/commands'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-// Partials
-import ProductListHeader from './partials/product-list-header'
-import ProductListContents from './partials/product-list-contents'
+// Container Styles
+import containerStyles from './container.scss'
 
 const ProductList = () => {
     const filterSheetId = 'filter-sheet'

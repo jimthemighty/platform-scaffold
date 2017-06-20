@@ -1,7 +1,12 @@
 import React from 'react'
+
+// Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+
+// Utils
 import {staticURL} from '../../../utils'
 
+// Social Icons
 const social = [
     ['http://www.facebook.com/#TODO', staticURL('svg/facebook.svg'), 'Facebook'],
     ['http://www.twitter.com/#TODO', staticURL('svg/twitter.svg'), 'Twitter'],

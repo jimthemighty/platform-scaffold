@@ -1,10 +1,12 @@
 import React, {PropTypes} from 'react'
 
+// Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Button from '../../components/button'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabel from '../../components/icon-label'
 
+// Utils
 import {staticURL} from '../../utils'
 
 const Header = (props) => {

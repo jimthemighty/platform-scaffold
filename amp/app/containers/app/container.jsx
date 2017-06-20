@@ -1,10 +1,14 @@
 import React, {PropTypes} from 'react'
+import sprite from '../../static/svg/sprite-dist/sprite.svg'
+
+// Partials
 import Header from '../header/container'
 import Footer from '../footer/container'
-import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
 import ProductListFilterModal from '../product-list/partials/product-list-filter-modal'
-import sprite from '../../static/svg/sprite-dist/sprite.svg'
+
+// Components
+import SkipLinks from '../../components/skip-links'
 
 const App = ({children}) => {
 
@@ -57,10 +61,8 @@ const App = ({children}) => {
     )
 }
 
-
 App.propTypes = {
     children: PropTypes.node
 }
-
 
 export default App

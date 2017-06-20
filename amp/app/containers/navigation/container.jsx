@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import URL from 'url'
 import packagejson from '../../../package.json'
 
+// Components
 import Sheet from '../../components/sheet'
 import Nav from '../../components/nav'
 import NavMenu from '../../components/nav-menu'
@@ -10,13 +12,14 @@ import NavItem from '../../components/nav-item'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabelButton from '../../components/icon-label-button'
 import Icon from '../../components/icon'
-import NavigationSocialIcons from './partials/navigation-social-icons'
-import {getNavigationRoot, getPath} from './selectors'
-import URL from 'url'
 
+// Partials
+import NavigationSocialIcons from './partials/navigation-social-icons'
+
+// Selectors
+import {getNavigationRoot, getPath} from './selectors'
 
 const pathnameMatch = (url, pathname) => Boolean(url && URL.parse(url).pathname === pathname)
-
 
 const canonicalURL = (localURL) => {
     const canonical = URL.parse(packagejson.siteUrl)
@@ -26,7 +29,6 @@ const canonicalURL = (localURL) => {
     return URL.format(local)
 }
 
-
 const itemFactory = (type, componentProps) => {
     // Login has a special nav item
     if (pathnameMatch(componentProps.href, '/customer/account/login/')) {
@@ -34,7 +36,6 @@ const itemFactory = (type, componentProps) => {
     }
     return <NavItem {...componentProps} href={canonicalURL(componentProps.href)} />
 }
-
 
 const SignInListItem = (props) => (
     <NavItem {...props}
@@ -44,7 +45,6 @@ const SignInListItem = (props) => (
         }
     />
 )
-
 
 const Navigation = (props) => {
     const {id, root, path} = props

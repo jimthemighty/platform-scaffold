@@ -1,23 +1,22 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-// import components
+// Components
 import Link from '../../components/link'
 
+// Selectors
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getHomeCategories} from '../../../../web/app/containers/home/selectors'
 import {initHomePage} from '../../../../web/app/integration-manager/home/commands'
-import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-// import container styles
+// Container Styles
 import containerStyles from './container.scss'
-
-const containerClass = 't-home'
 
 const Home = ({
     categories
 }) => (
-    <div className={containerClass}>
+    <div className="t-home">
         <h1>'Home: Categories'</h1>
         {categories.map(({title, path, isCategoryLink}, i) => <p key={i}>{ title }</p>)}
         <Link href="https://www.merlinspotions.com">To Merlinspotions.com</Link>
@@ -37,7 +36,6 @@ Home.templateName = 'home'
 const mapStateToProps = createPropsSelector({
     categories: getHomeCategories
 })
-
 
 export default connect(
     mapStateToProps
