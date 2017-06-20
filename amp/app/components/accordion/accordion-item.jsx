@@ -30,19 +30,16 @@ class AccordionItem extends React.Component {
             openIconName,
             closeIconName,
             iconSize,
-            iconPosition,
-            isOpen
+            iconPosition
         } = this.props
 
-        const classes = classNames('amp-accordion__item', {
-            'amp-accordion--is-open': shown
-        }, className)
+        const classes = classNames('amp-accordion__item', className)
 
         const headerId = `accordion__header-${this.id}`
 
         const HeadingTag = `h${headingLevel}`
 
-        const expandedItem = isOpen ? 'true' : null
+        const expandedItem = shown ? 'true' : null
 
         return (
             <section className={classes} expanded={expandedItem} id={this.itemId} ref={(el) => { this._container = el }}>
@@ -117,11 +114,6 @@ AccordionItem.propTypes = {
      * Passes a custom className to the Accordion Item's icon
      */
     iconSize: PropTypes.string,
-
-    /**
-     *
-     */
-    isOpen: PropTypes.boolean,
 
     /**
      * The name of the icon shown in the header
