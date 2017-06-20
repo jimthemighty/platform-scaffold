@@ -90,7 +90,7 @@ class OrderSummary extends React.Component {
 
         const PlaceOrderButton = (
             <Button
-                className="c--primary u-flex-none u-width-full u-text-uppercase"
+                className="c--primary u-flex-none u-width-full u-text-uppercase qa-checkout__place-order"
                 type="button"
                 onClick={submitPayment}
                 disabled={isLoading}

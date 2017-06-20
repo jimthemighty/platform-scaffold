@@ -86,16 +86,24 @@ export default {
 
     'Checkout - Guest - Fill out Guest Checkout Shipping Info form': (browser) => {
         checkout.fillShippingInfo()
-        browser.waitForElementVisible(checkout.selectors.lastShippingInfo)
-    },
-
-    'Checkout - Guest - Fill out Guest Checkout Payment Details form': () => {
-        checkout.continueToPayment()
-    },
-
-    'Checkout - Guest - Verify Submit Order button is visible': (browser) => {
         browser
-            .waitForElementVisible(checkout.selectors.submitOrder)
-            .assert.visible(checkout.selectors.submitOrder)
+            // Phone field should have numeric input type
+            .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
+            .waitForElementVisible(checkout.selectors.address)
+            .assert.valueContains(checkout.selectors.address, checkout.userData.address)
+    },
+
+    'Checkout - Guest - Fill out Guest Checkout Payment Details form': (browser) => {
+        checkout.continueToPayment()
+        checkout.fillPaymentInfo()
+        browser
+            .waitForElementVisible(checkout.selectors.cvv)
+            .assert.valueContains(checkout.selectors.cvv, checkout.userData.cvv)
+    },
+
+    'Checkout - Guest - Verify Place Your Order button is visible': (browser) => {
+        browser
+            .waitForElementVisible(checkout.selectors.placeOrder)
+            .assert.visible(checkout.selectors.placeOrder)
     }
 }
