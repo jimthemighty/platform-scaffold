@@ -33,7 +33,8 @@ import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 
 import NotificationManager from '../../components/notification-manager'
 
-import {registerPreloadCallbacks} from '../templates'
+import {prefetchTemplateChunks} from '../templates'
+
 
 // Offline support
 import Offline from '../offline/container'
@@ -57,9 +58,10 @@ class App extends React.Component {
             }
         })
 
-        // Lazy load other containers when browser is at the end of frame
-        // to prevent jank
-        registerPreloadCallbacks()
+        // Prefetch & cache code-splitted chunks when the browser is
+        // at the end of frame to allow for quick page transitions
+        // and graceful failure when offline.
+        prefetchTemplateChunks()
     }
 
     hidePreloaderWhenCSSIsLoaded() {
@@ -127,7 +129,7 @@ class App extends React.Component {
 
                     {messagingEnabled && [
                         <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
-                        <DefaultAsk key="ask" showOnPageCount={1} />
+                        <DefaultAsk key="ask" showOnPageCount={2} />
                     ]}
 
                     <div id="app-header" className="u-flex-none" role="banner">

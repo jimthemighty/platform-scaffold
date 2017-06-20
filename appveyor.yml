@@ -25,4 +25,4 @@ test_script:
 artifacts:
   - path: web\tests\screenshots
     name: Screenshots
- 
+
