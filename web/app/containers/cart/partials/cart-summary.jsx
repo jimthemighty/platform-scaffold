@@ -65,7 +65,7 @@ const CartSummary = ({
             onClick={onCalculateClick}
             data-analytics-name={UI_NAME.calculateTax}
         >
-            Calculate <Icon name="chevron-right"/>
+            Calculate <Icon name="chevron-right" />
         </Button>
     )
 
