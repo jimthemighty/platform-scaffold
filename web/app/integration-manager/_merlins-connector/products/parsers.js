@@ -32,8 +32,8 @@ const parseVariationCategories = (magentoObject) => {
         })
 
         return {
-            id: code,
-            slug: id,
+            id,
+            slug: code,
             label,
             values
         }
@@ -43,18 +43,20 @@ const parseVariationCategories = (magentoObject) => {
 const parseVariantIds = (variationCategories) => variationCategories
                                                 .map((category) => category.values)
                                                 .reduce((a, b) => a.concat(b))
-                                                .reduce((a, b) => a.products && b.products ? a.products.concat(b.products) : a) //eslint-disable-line
+                                                .reduce((a, b) => {
+                                                    return a.products && b.products ? a.products.concat(b.products) : a
+                                                })
 
 
 const buildVariantFromId = (id, variationCategories) => {
     return {
         id,
         values: variationCategories.map((category) => {
-            const selectedCategory = category.values.find((option) => option.products.find((product) => product === id)) // lol
+            const selectedCategory = category.values.find((option) => option.products.find((product) => product === id))
 
             return {
-                id: category.slug,
-                slug: category.id,
+                id: category.id,
+                slug: category.slug,
                 label: category.label,
                 selected: {
                     id: selectedCategory.value,

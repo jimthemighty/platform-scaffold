@@ -14,11 +14,11 @@ import Field from 'progressive-web-sdk/dist/components/field'
 
 const ProductDetailsVariations = ({variations, onVariationChange}) => (
     <div className={variations.length > 0 && 'u-margin-top-lg'}>
-        {variations.map(({id, label, values = []}) => (
+        {variations.map(({id, slug, label, values = []}) => (
             <FieldRow key={id}>
                 <ReduxForm.Field
                     label={label}
-                    name={id}
+                    name={slug}
                     component={Field}
                     className="pw--has-select"
                     customEventHandlers={{onChange: onVariationChange}}
