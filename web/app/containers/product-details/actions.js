@@ -8,8 +8,9 @@ import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {getItemQuantity} from './selectors'
-import {getCurrentPathKey, getCartURL} from '../app/selectors'
-import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from '../../store/products/selectors'
+import {getCartURL} from '../app/selectors'
+import {getCurrentPathKey} from 'progressive-web-sdk/dist/store/app/selectors'
+import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
 import {addToCart, updateCartItem} from '../../integration-manager/cart/commands'

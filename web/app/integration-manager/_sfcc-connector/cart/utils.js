@@ -7,7 +7,7 @@ import {getCartItems} from '../../../store/cart/selectors'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {receiveCartContents} from '../../cart/results'
 
-import {getProductById, getProductThumbnailSrcById, getProductThumbnailById} from '../../../store/products/selectors'
+import {getProductById, getProductThumbnailSrcById, getProductThumbnailById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from '../parsers'
 import {parseCartProducts, parseCartContents} from './parsers'
 
