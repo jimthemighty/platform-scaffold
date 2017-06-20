@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 
-
 const Nav = ({
     children,
     className
@@ -14,7 +13,6 @@ const Nav = ({
         </div>
     )
 }
-
 
 Nav.propTypes = {
     /**

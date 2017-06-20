@@ -1,16 +1,12 @@
-/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
-/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-
 
 /**
  * A link that supports extra analytics-related attributes. It can take the link
  * text/content either as child elements or as a `text` prop.
  * If no href is passed, the link is rendered with a `#` href.
  */
+
 const Link = ({
     children,
     className,

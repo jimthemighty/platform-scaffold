@@ -18,7 +18,6 @@ const AmpForm = ({
     )
 }
 
-
 AmpForm.propTypes = {
     /**
      * The children of the form
@@ -29,7 +28,6 @@ AmpForm.propTypes = {
      */
     className: PropTypes.string,
 }
-
 
 export default ampSDK.ampComponent(
     AmpForm,

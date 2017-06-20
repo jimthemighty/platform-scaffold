@@ -1,5 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
+
+// Components
 import NavItem from '../nav-item'
 
 /**
@@ -9,6 +11,7 @@ import NavItem from '../nav-item'
  *
  * for each NavItem in the navigation tree.
  */
+
 const mapNodes = (root) => {
     const inner = (node, parent = undefined, map = {}) => {
         parent = parent || node      // Root is its own parent
@@ -26,7 +29,6 @@ const mapNodes = (root) => {
     }
     return root === undefined ? {} : inner(root)
 }
-
 
 const NavMenu = ({root, path, itemFactory, className}) => {
     const nodes = mapNodes(root)
