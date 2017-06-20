@@ -89,11 +89,11 @@ class CartProductItem extends React.Component {
                 >
 
                 <div className="u-margin-bottom-sm">
-                    {options.map((option) => (
+                    {options ? options.map((option) => (
                         <p key={option.option_value} className="u-color-neutral-50">
                             {option.label} - {option.value}
                         </p>
-                    ))}
+                    )) : null}
                 </div>
 
                 <FieldRow className="u-align-bottom">
