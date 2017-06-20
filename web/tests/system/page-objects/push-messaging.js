@@ -25,7 +25,6 @@ PushMessaging.prototype.dismissDefaultAsk = function() {
                     .waitForElementNotPresent(selectors.dismissButton)
             }
         })
-
     return this
 }
 
@@ -42,7 +41,6 @@ PushMessaging.prototype.acceptDefaultAsk = function() {
                     .waitForElementNotPresent(selectors.yesPlease)
             }
         })
-
     return this
 }
 
