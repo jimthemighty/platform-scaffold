@@ -58,7 +58,7 @@ const submitCartFormSelector = createPropsSelector({
 const getProductFromFormValues = (formValues, variants) => {
     return variants.find((variant) => {
         return variant.values.every((value) => {
-            return formValues[value.id] === value.selected.id
+            return formValues[value.slug] === value.selected.id
         })
     })
 }
@@ -70,9 +70,9 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
 
     if (variationCategories) {
         const errors = {}
-        variationCategories.forEach(({id, label}) => {
-            if (!formValues[id]) {
-                errors[id] = `Please select a ${label}`
+        variationCategories.forEach(({slug, label}) => {
+            if (!formValues[slug]) {
+                errors[slug] = `Please select a ${label}`
             }
         })
         if (Object.keys(errors).length > 0) {
