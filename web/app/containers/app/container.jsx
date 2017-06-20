@@ -21,7 +21,7 @@ import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/a
 import Header from '../../containers/header/container'
 import Footer from '../../containers/footer/container'
 import NativeConnector from '../native-connector/container'
-import * as appActions from '../app/actions'
+import * as appActions from './actions'
 import * as selectors from './selectors'
 import {getNotifications} from '../../store/selectors'
 import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selectors'
@@ -62,6 +62,12 @@ class App extends React.Component {
         registerPreloadCallbacks()
     }
 
+    getChildContext() {
+        const {children, fetchPage} = this.props
+        const routeProps = children.props.route
+        return {reload: () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)}
+    }
+
     hidePreloaderWhenCSSIsLoaded() {
         if (window.Progressive.stylesheetLoaded) {
             hidePreloader()
@@ -79,20 +85,17 @@ class App extends React.Component {
         const {
             children,
             fetchError,
-            fetchPage,
             hasFetchedCurrentPath,
             notifications,
             removeNotification,
             sprite,
             hideApp,
-            isModalOpen
+            isModalOpen,
         } = this.props
 
         const routeProps = children.props.route
         const CurrentHeader = routeProps.Header || Header
         const CurrentFooter = routeProps.Footer || Footer
-
-        const reload = () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)
 
         const skipLinksItems = [
             // Customize your list of SkipLinks here. These are necessary to
@@ -169,12 +172,12 @@ class App extends React.Component {
                                     </div>
                                 </div>
                             :
-                                <Offline reload={reload} location={children.props.location} route={routeProps} />
+                                <Offline location={children.props.location} route={routeProps} />
                         }
                     </div>
                 </div>
 
-                <ModalManager reload={reload} />
+                <ModalManager />
             </div>
         )
     }
@@ -198,11 +201,16 @@ App.propTypes = {
     isModalOpen: PropTypes.object,
     notifications: PropTypes.array,
     removeNotification: PropTypes.func,
+    shouldFetchPage: PropTypes.bool,
     /**
      * The SVG icon sprite needed in order for all Icons to work
      */
     sprite: PropTypes.string,
-    toggleHideApp: PropTypes.func,
+    toggleHideApp: PropTypes.func
+}
+
+App.childContextTypes = {
+    reload: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({

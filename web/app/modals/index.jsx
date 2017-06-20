@@ -21,7 +21,7 @@ import ProductListFilterModal from './product-list-filter/container'
 
 const modals = {
     [MODAL.NAVIGATION_MODAL]: <Navigation />,
-    // [MODAL.OFFLINE_MODAL]: <OfflineModal />,
+    [MODAL.OFFLINE_MODAL]: <OfflineModal />,
     [MODAL.MINI_CART_MODAL]: <MiniCart />,
     [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: <ProductDetailsItemAddedModal />,
     [MODAL.PRODUCT_LIST_FILTER_MODAL]: <ProductListFilterModal />,
@@ -33,7 +33,7 @@ const modals = {
 }
 
 const ModalManager = (props) => {
-    const {reload, isOpen} = props
+    const {isOpen} = props
     let openedModal
     for (const modal in isOpen) {
         if (isOpen[modal]) {
@@ -43,15 +43,13 @@ const ModalManager = (props) => {
 
     return (
         <div className="m-modal-manager">
-            <OfflineModal reload={reload} />
             {openedModal}
         </div>
     )
 }
 
 ModalManager.propTypes = {
-    isOpen: PropTypes.object,
-    reload: PropTypes.func
+    isOpen: PropTypes.object
 }
 
 const mapStateToProps = createPropsSelector({

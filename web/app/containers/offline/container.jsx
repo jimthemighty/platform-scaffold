@@ -14,9 +14,8 @@ import offlineCloud from '../../static/svg/offline-cloud.svg'
  * UI to be shown instead of the page contents while offline and no
  * contents are available.
  */
-const Offline = ({
-    reload
-}) => {
+const Offline = (props, context) => {
+    const {reload} = context
     return (
         <div className="t-offline">
             <DangerousHTML html={offlineCloud}>
@@ -30,12 +29,11 @@ const Offline = ({
     )
 }
 
-
-Offline.propTypes = {
+Offline.contextTypes = {
     /**
      * Method that attempts to fetch the page again
      */
-    reload: PropTypes.func.isRequired
+    reload: PropTypes.func
 }
 
 export default template(Offline)

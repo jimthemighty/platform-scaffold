@@ -10,14 +10,13 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 
 import {OFFLINE_MODAL} from '../constants'
-import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 
-const OfflineModal = ({
-    closeModal,
-    isOpen,
-    reload
-}) => {
+const OfflineModal = (props, context) => {
+    const {closeModal, isOpen} = props
+    const {reload} = context
+
     return (
         <Sheet open={isOpen} onDismiss={closeModal} maskOpacity={0.7} effect="modal-center" shrinkToContent>
             <div className="u-padding-md u-text-align-center">
@@ -38,8 +37,14 @@ const OfflineModal = ({
 
 OfflineModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
-    isOpen: PropTypes.bool.isRequired,
-    reload: PropTypes.func.isRequired
+    isOpen: PropTypes.bool.isRequired
+}
+
+OfflineModal.contextTypes = {
+    /**
+     * Method that attempts to fetch the page again
+     */
+    reload: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
@@ -47,7 +52,6 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    openModal: () => openModal(OFFLINE_MODAL),
     closeModal: () => closeModal(OFFLINE_MODAL)
 }
 
