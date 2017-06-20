@@ -9,7 +9,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {splitFullName} from '../../utils/utils'
-import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
+import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 import {
     submitShipping as submitShippingCommand,

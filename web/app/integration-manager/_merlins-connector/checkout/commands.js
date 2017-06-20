@@ -19,7 +19,7 @@ import {
     receiveShippingMethods,
     receiveSelectedShippingMethod,
     receiveBillingSameAsShipping
-} from './../../checkout/results'
+} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 import {fetchPageData} from '../app/commands'
 import {getCustomerEntityID, getCartBaseUrl} from '../selectors'

@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {STATES} from './constants'
-import {receiveCheckoutLocations} from './../../checkout/results'
+import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 export const populateLocationsData = () => receiveCheckoutLocations({
     countries: [{
