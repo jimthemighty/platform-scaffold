@@ -5,7 +5,7 @@
 import {textFromFragment, productSubtotal, getHighResImage, formatMerlinsMoney} from '../utils'
 
 export const parseCartProducts = ({items}) => { /* Products */
-    const products = items.map(({product_id, product_name, product_url, product_price, product_image, options}) => ({
+    const products = items.map(({product_id, product_name, product_url, product_price, product_image}) => ({
         id: product_id,
         title: product_name,
         href: product_url,
@@ -18,7 +18,6 @@ export const parseCartProducts = ({items}) => { /* Products */
                 height: '300px'
             }
         },
-        options,
         available: true
     }))
 
@@ -32,10 +31,11 @@ export const parseCartProducts = ({items}) => { /* Products */
 
 export const parseCart = ({items, subtotal}) => { /* Cart */
     return {
-        items: items.map(({item_id, product_id, product_url, qty, product_price}) => ({
+        items: items.map(({item_id, product_id, product_url, qty, product_price, options}) => ({
             id: item_id,
             productId: product_id,
             href: product_url,
+            options,
             quantity: qty,
             itemPrice: textFromFragment(product_price),
             linePrice: productSubtotal(textFromFragment(product_price), qty),
