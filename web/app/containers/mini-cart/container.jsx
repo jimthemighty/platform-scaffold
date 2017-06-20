@@ -14,7 +14,7 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {MINI_CART_MODAL, MINI_CART_CONTENT_CLASSES} from './constants'
 import {stripEvent} from '../../utils/utils'
-import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
+import {getCartLoaded, getCartHasItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getCheckoutShippingURL} from '../app/selectors'
 import {requestCartContent} from './actions'
 

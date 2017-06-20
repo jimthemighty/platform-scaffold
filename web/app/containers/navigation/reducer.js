@@ -5,7 +5,7 @@
 import {handleActions} from 'redux-actions'
 import Immutable from 'immutable'
 import {receiveNavigationData, setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-import {mergePayload} from '../../utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 import {setNavigationPath} from './actions'
 import {LOGGED_IN_NAV, GUEST_NAV} from './constants'
 

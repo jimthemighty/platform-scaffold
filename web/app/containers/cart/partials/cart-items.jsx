@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import classNames from 'classnames'
 
-import {getCartHasItems} from '../../../store/cart/selectors'
+import {getCartHasItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 
 import {GridSpan} from 'progressive-web-sdk/dist/components/grid'
 import Button from 'progressive-web-sdk/dist/components/button'

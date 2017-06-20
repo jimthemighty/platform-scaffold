@@ -19,9 +19,9 @@ import {
     fetchTaxEstimate,
     putPromoCode,
     deletePromoCode
-} from '../../integration-manager/cart/commands'
+} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {cartExpired, handleCartExpiryError} from '../app/actions'
-import {getDiscountCode} from '../../store/cart/selectors'
+import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'

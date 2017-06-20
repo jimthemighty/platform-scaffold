@@ -14,7 +14,7 @@ import List from 'progressive-web-sdk/dist/components/list'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import ProductItem from '../../../components/product-item'
 
-import * as selectors from '../../../store/cart/selectors'
+import * as selectors from 'progressive-web-sdk/dist/store/cart/selectors'
 
 const SUBTOTAL_CLASSES = classNames(
     't-mini-cart__subtotal',

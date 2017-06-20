@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {handleActions} from 'redux-actions'
-import {mergePayload} from '../../utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 import {receiveFormInfo, receiveEntityID, receiveFormKey} from './actions'
 
 import Immutable from 'immutable'

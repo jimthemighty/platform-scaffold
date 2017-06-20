@@ -13,7 +13,7 @@ import {getCurrentPathKey} from 'progressive-web-sdk/dist/store/app/selectors'
 import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
-import {addToCart, updateCartItem} from '../../integration-manager/cart/commands'
+import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {getProductVariantData} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'

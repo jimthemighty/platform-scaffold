@@ -5,7 +5,7 @@
 import * as Runtypes from 'runtypes'
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 import {EVENT_ACTION, Transaction, Product} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {getCartItems, getOrderTotal, getTax} from '../../store/cart/selectors'
+import {getCartItems, getOrderTotal, getTax} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {createTypedAction} from '../../utils/utils'
 import {LocationList, ShippingMethods, Address} from './types'
 

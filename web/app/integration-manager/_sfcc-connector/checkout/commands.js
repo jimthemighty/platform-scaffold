@@ -5,7 +5,7 @@
 import {SubmissionError} from 'redux-form'
 import {createBasket, handleCartData, requestCartData, createNewBasket, updateExpiredCart} from '../cart/utils'
 import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload, checkForResponseFault} from '../utils'
-import {getOrderTotal} from '../../../store/cart/selectors'
+import {getOrderTotal} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
