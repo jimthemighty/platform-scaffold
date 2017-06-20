@@ -10,7 +10,6 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getUenc, getCartBaseUrl, getFormInfoByProductId} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
-import {getProductVariants} from '../../../store/products/selectors'
 import {receiveCartContents, receiveCartTotals} from '../../cart/results'
 import {receiveCartProductData} from '../../products/results'
 import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
@@ -69,8 +68,8 @@ export const addToCart = (productId, quantity, variant) => (dispatch, getState) 
 
     variant.values.forEach((value) => {
         const superAttribute = value.id
-        const selectedSuper = value.values.id
-        formValues[`super_attribute[${superAttribute}]`] = selectedSuper
+        const selectedSuper = value.selected.id
+        formValues[`super_attribute[${superAttribute}]`] = parseInt(selectedSuper)
     })
 
     return submitForm(

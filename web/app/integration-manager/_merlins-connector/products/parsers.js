@@ -30,6 +30,7 @@ const parseVariationCategories = (magentoObject) => {
                 products: option.products
             }
         })
+
         return {
             id: code,
             slug: id,
@@ -43,7 +44,6 @@ const parseVariantIds = (variationCategories) => variationCategories
                                                 .map((category) => category.values)
                                                 .reduce((a, b) => a.concat(b))
                                                 .reduce((a, b) => a.products && b.products ? a.products.concat(b.products) : a) //eslint-disable-line
-                                                .sort()
 
 
 const buildVariantFromId = (id, variationCategories) => {
@@ -56,7 +56,7 @@ const buildVariantFromId = (id, variationCategories) => {
                 id: category.slug,
                 slug: category.id,
                 label: category.label,
-                values: {
+                selected: {
                     id: selectedCategory.value,
                     label: selectedCategory.label,
                 }

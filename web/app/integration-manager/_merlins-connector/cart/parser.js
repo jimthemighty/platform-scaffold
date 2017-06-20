@@ -5,7 +5,7 @@
 import {textFromFragment, productSubtotal, getHighResImage, formatMerlinsMoney} from '../utils'
 
 export const parseCartProducts = ({items}) => { /* Products */
-    const products = items.map(({product_id, product_name, product_url, product_price, product_image}) => ({
+    const products = items.map(({product_id, product_name, product_url, product_price, product_image, options}) => ({
         id: product_id,
         title: product_name,
         href: product_url,
@@ -18,6 +18,7 @@ export const parseCartProducts = ({items}) => { /* Products */
                 height: '300px'
             }
         },
+        options,
         available: true
     }))
 

@@ -87,6 +87,12 @@ class CartProductItem extends React.Component {
                 image={<ProductImage {...product.thumbnail} />}
                 >
 
+                {product.options.map((option) => (
+                    <p key={option.option_value} className="u-color-neutral-50">
+                        {option.label} - {option.value}
+                    </p>
+                ))}
+
                 <FieldRow className="u-align-bottom">
                     <Field label="Quantity" idFor={`quantity-${cartItemId}`}>
                         <Stepper
