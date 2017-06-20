@@ -10,6 +10,7 @@ import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/s
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {OFFLINE_MODAL} from '../offline/constants'
 import {OFFLINE_ASSET_URL} from './constants'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 let realFetch
 beforeAll(() => {
@@ -94,6 +95,6 @@ test('checkIfOffline clears offline modal and page fetch errors when it receives
 
             expect(fakeDispatch).toHaveBeenCalledTimes(2)
             expect(fakeDispatch.mock.calls[0][0]).toEqual(clearPageFetchError())
-            expect(fakeDispatch.mock.calls[1][0]).toEqual(closeModal(OFFLINE_MODAL, 'offline'))
+            expect(fakeDispatch.mock.calls[1][0]).toEqual(closeModal(OFFLINE_MODAL, UI_NAME.offline))
         })
 })
