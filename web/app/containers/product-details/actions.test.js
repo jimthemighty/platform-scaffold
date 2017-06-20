@@ -57,7 +57,7 @@ describe('Add to Cart', () => {
         const submitCartFormThunk = submitCartForm()
 
         return submitCartFormThunk(mockDispatch, getStore).then(() => {
-            expect(mockDispatch).toHaveBeenCalledWith(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL))
+            expect(mockDispatch).toHaveBeenCalledWith(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, 'add_to_cart'))
         })
     })
 
