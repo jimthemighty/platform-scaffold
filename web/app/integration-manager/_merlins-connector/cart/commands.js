@@ -66,9 +66,10 @@ export const addToCart = (productId, quantity, variant) => (dispatch, getState) 
         qty: quantity
     }
 
-    variant.values.forEach((value) => {
-        const superAttribute = value.id
-        const selectedSuper = value.selected.id
+    Object.keys(variant.values).forEach((key) => {
+        const superAttribute = variant.attributeIds[key]
+        const selectedSuper = variant.values[key]
+
         formValues[`super_attribute[${superAttribute}]`] = parseInt(selectedSuper)
     })
 

@@ -56,10 +56,8 @@ const submitCartFormSelector = createPropsSelector({
 })
 
 const getProductFromFormValues = (formValues, variants) => {
-    return variants.find((variant) => {
-        return variant.values.every((value) => {
-            return formValues[value.slug] === value.selected.id
-        })
+    return variants.find(({values}) => {
+        return Object.keys(formValues).every((key) => formValues[key] === values[key])
     })
 }
 

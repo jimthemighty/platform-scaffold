@@ -49,22 +49,19 @@ const parseVariantIds = (variationCategories) => variationCategories
 
 
 const buildVariantFromId = (id, variationCategories) => {
-    return {
+    const variant = {
         id,
-        values: variationCategories.map((category) => {
-            const selectedCategory = category.values.find((option) => option.products.find((product) => product === id))
-
-            return {
-                id: category.id,
-                slug: category.slug,
-                label: category.label,
-                selected: {
-                    id: selectedCategory.value,
-                    label: selectedCategory.label,
-                }
-            }
-        })
+        values: {},
+        attributeIds: {}
     }
+
+    variationCategories.forEach((category) => {
+        const selectedCategory = category.values.find((option) => option.products.find((product) => product === id))
+        variant.values[category.slug] = selectedCategory.value
+        variant.attributeIds[category.slug] = category.id
+    })
+
+    return variant
 }
 
 const buildVariants = (magentoObject, variationCategories) => {
