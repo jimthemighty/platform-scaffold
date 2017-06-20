@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
-import {validateFullName} from '../../../utils/utils'
+import {validateFullName, validateCCExpiry, validateCCNumber} from '../../../utils/utils'
 
 // Selectors
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
@@ -25,6 +25,7 @@ import BillingAddressForm from './billing-address-form'
 import OrderSummary from './order-summary'
 
 const REQUIRED_TEXT = 'Required'
+const INVALID_TEXT = 'Invalid Input'
 
 const validate = (values) => {
     const errors = {}
@@ -52,6 +53,14 @@ const validate = (values) => {
         }
     })
 
+    if (values.ccexpiry && !validateCCExpiry(values.ccexpiry)) {
+        errors.ccexpiry = INVALID_TEXT
+    }
+
+    if (values.cvv && values.cvv.length !== 3) {
+        errors.cvv = INVALID_TEXT
+    }
+
     return errors
 }
 
@@ -62,7 +71,6 @@ class CheckoutPaymentForm extends React.Component {
     }
 
     onSubmit(values) {
-        debugger;
         return new Promise((resolve, reject) => {
             const errors = validate(values)
             if (!Object.keys(errors).length) {

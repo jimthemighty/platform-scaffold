@@ -99,3 +99,28 @@ export const buildQueryString = (query) => {
 export const validateFullName = (fullName) => {
     return /\w+\s+\w+/.test(fullName)
 }
+
+/**
+ * Checks to see if a credit card has expired given the expiry date.
+ *
+ * @param ccExpiry {string} expects a numeric string with the format "mmyy"
+ */
+export const validateCCExpiry = (ccExpiry) => {
+    // Expects 'mmyy' format
+    if (ccExpiry.length !== 4) {
+        return false
+    }
+    const today = new Date()
+    const thisMonth = today.getMonth() + 1 // month indexing begins at 0
+    const thisYear = today.getFullYear() % 100
+    const expMonth = parseInt(ccExpiry.substring(0, 2))
+    const expYear = parseInt(ccExpiry.substring(2))
+
+    if (thisYear > expYear) {
+        return false
+    } else if (thisYear === expYear && expMonth < thisMonth) {
+        return false
+    } else {
+        return true
+    }
+}

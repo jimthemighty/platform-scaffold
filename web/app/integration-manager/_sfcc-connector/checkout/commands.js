@@ -50,10 +50,20 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                 }]
             } = basket
 
-            let initialValues
+            // Ensure required properties for Address runtype are present
+            let initialValues = {
+                countryId: 'us',
+                name: '',
+                firstname: '',
+                lastname: '',
+                addressLine1: '',
+                postcode: '',
+                telephone: ''
+            }
             /* eslint-disable camelcase */
             if (shipping_address) {
                 initialValues = {
+                    ...initialValues,
                     username: email,
                     name: shipping_address.full_name,
                     company: shipping_address.company_name,
@@ -65,11 +75,8 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                     postcode: shipping_address.postal_code,
                     telephone: shipping_address.phone
                 }
-            } else {
-                initialValues = {
-                    countryId: 'us'
-                }
             }
+
             dispatch(receiveSelectedShippingMethod(shipping_method ? shipping_method.id : undefined))
             dispatch(receiveShippingAddress(initialValues))
             /* eslint-enable camelcase */
