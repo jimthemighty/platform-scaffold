@@ -10,10 +10,10 @@ if git rev-parse ; then
     # Get the current branch on CircleCI or local
     CURRENT_BRANCH=${CIRCLE_BRANCH:-$(git branch | grep "*" | awk '{ print $2 }')}
     if [ "$CURRENT_BRANCH" == "master" ]; then
-        echo "Running lighthouse on Production"
+        echo "Running Lighthouse against Production"
         npm run test:pwa-prod
     else 
-        echo "Running lighthouse on LocalCI"
-        npm run test:pwa-ci
+        echo "Running Lighthouse with Preview"
+        npm run test:pwa-preview
     fi
 fi
