@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Location to save the generated HTML report.
-OUTPUT_PATH=./reports/audit-local.html
+OUTPUT_PATH=tests/system/test-scripts/lighthouse/reports/audit-local.html
 # See package.json's siteUrl key.
 URL=${1-$npm_package_siteUrl}
 # Append Mobify Hash to the URL to force the Mobify Tag to load the local bundle.
