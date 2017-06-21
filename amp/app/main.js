@@ -35,8 +35,7 @@ import {PAGE_TITLE} from './data-integration/constants'
 
 
 import globalStyles from './styles/global.scss'
-import styles from './config/styles'
-import scripts from './config/scripts'
+import styles from './styles'
 
 const fonts = [
     '<link href="https://fonts.googleapis.com/css?family=Oswald:200,400" rel="stylesheet">'
@@ -65,7 +64,7 @@ const render = (req, res, store, component) => {
     const styleIncludes = [globalStyles]
 
     components.forEach((component) => {
-        Array.prototype.push.apply(scriptIncludes, scripts.get(component) || [])
+        Array.prototype.push.apply(scriptIncludes, component.scripts || [])
         Array.prototype.push.apply(styleIncludes, styles.get(component) || [])
     })
 
@@ -74,7 +73,7 @@ const render = (req, res, store, component) => {
         title: state.ui.app.get(PAGE_TITLE),
         canonicalURL: getFullUrl(req),
         body,
-        css: styleIncludes.map(x => x.toString().trim()).join('\n\n\n'),
+        css: styleIncludes.map(x => x.toString().trim()).join('\n'),
         scriptIncludes: scriptIncludes.join('\n'),
         fontIncludes: fonts.join('\n')
     })

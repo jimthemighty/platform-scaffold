@@ -22,4 +22,8 @@ AmpLightbox.propTypes = {
     id: PropTypes.string
 }
 
+AmpLightbox.scripts = [
+    '<script async custom-element="amp-lightbox" src="https://cdn.ampproject.org/v0/amp-lightbox-0.1.js"></script>'
+]
+
 export default ampComponent(AmpLightbox)

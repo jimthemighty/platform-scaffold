@@ -31,4 +31,8 @@ AmpForm.propTypes = {
 }
 
 
+AmpForm.scripts = [
+    '<script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>'
+]
+
 export default ampComponent(AmpForm)
