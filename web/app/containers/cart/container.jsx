@@ -82,6 +82,7 @@ const EmptyCartContents = ({hide, isLoggedIn}) => {
 
 EmptyCartContents.propTypes = {
     hide: PropTypes.bool,
+    isLoggedIn: PropTypes.bool
 }
 
 class Cart extends React.Component {

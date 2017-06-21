@@ -27,7 +27,6 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
                       cost: `$${price.toFixed(2)}`,
                       id
                   }))
-
             dispatch(receiveShippingAddress({
                 ...inputAddress
             })) // set initial values for the shipping form
@@ -58,8 +57,10 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                 lastname: '',
                 addressLine1: '',
                 postcode: '',
-                telephone: ''
+                telephone: '',
+                city: ''
             }
+
             /* eslint-disable camelcase */
             if (shipping_address) {
                 initialValues = {
@@ -78,11 +79,12 @@ export const initCheckoutShippingPage = () => (dispatch) => {
             }
 
             dispatch(receiveSelectedShippingMethod(shipping_method ? shipping_method.id : undefined))
-            dispatch(receiveShippingAddress(initialValues))
             /* eslint-enable camelcase */
-            return dispatch(populateLocationsData())
+            dispatch(receiveShippingAddress(initialValues))
+            dispatch(populateLocationsData())
+            return initialValues
         })
-        .then(() => dispatch(fetchShippingMethodsEstimate()))
+        .then((initialValues) => dispatch(fetchShippingMethodsEstimate(initialValues)))
 }
 
 // We don't need to fetch any data for this page

@@ -164,4 +164,5 @@ const EstimateShippingReduxForm = ReduxForm.reduxForm({
     form: ESTIMATE_FORM_NAME
 })(CartEstimateShippingModal)
 
+export {CartEstimateShippingModal}
 export default connect(mapStateToProps, mapDispatchToProps)(EstimateShippingReduxForm)

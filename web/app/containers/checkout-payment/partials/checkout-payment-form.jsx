@@ -57,6 +57,10 @@ const validate = (values) => {
         errors.ccexpiry = INVALID_TEXT
     }
 
+    if (values.ccnumber && !validateCCNumber(values.ccnumber)) {
+        errors.ccnumber = INVALID_TEXT
+    }
+
     if (values.cvv && values.cvv.length !== 3) {
         errors.cvv = INVALID_TEXT
     }
@@ -95,7 +99,7 @@ class CheckoutPaymentForm extends React.Component {
                     </form>
                 </GridSpan>
                 <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
-                    <OrderSummary submitPayment={handleSubmit(this.onSubmit)}/>
+                    <OrderSummary submitPayment={handleSubmit(this.onSubmit)} />
                 </GridSpan>
             </Grid>
         )

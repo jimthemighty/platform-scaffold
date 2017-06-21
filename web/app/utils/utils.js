@@ -124,3 +124,7 @@ export const validateCCExpiry = (ccExpiry) => {
         return true
     }
 }
+
+export const validateCCNumber = () => {
+    return true
+}
