@@ -27,6 +27,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
                       cost: `$${price.toFixed(2)}`,
                       id
                   }))
+
             dispatch(receiveShippingAddress({
                 ...inputAddress
             })) // set initial values for the shipping form
@@ -67,6 +68,8 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                     ...initialValues,
                     username: email,
                     name: shipping_address.full_name,
+                    firstname: shipping_address.first_name,
+                    lastname: shipping_address.last_name,
                     company: shipping_address.company_name,
                     addressLine1: shipping_address.address1,
                     addressLine2: shipping_address.address2,
