@@ -83,20 +83,26 @@ export const fetchCartItemImages = () => (dispatch, getState) => {
 
                 return makeApiRequest(`/products/${productId}/images?all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
                     .then((response) => response.json())
-                    .then(({image_groups, name, short_description}) => {
-                        const product = getProductById(productId)(currentState).toJS()
+                    .then(({image_groups, name, page_title, short_description}) => {
+                        const productHref = getProductHref(productId)
+                        const product = {
+                            id: productId,
+                            title: page_title,
+                            available: true,
+                            href: productHref,
+                            price: '',
+                            ...getProductById(productId)(currentState).toJS()
+                        }
 
                         const thumbnail = image_groups.find((group) => group.view_type === thumbnailViewType)
                         if (thumbnail) {
                             product.thumbnail = imageFromJson(thumbnail.images[0], name, short_description)
                         }
-
                         const largeGroup = image_groups.find((group) => group.view_type === largeViewType)
                         if (largeGroup) {
                             product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
                         }
-
-                        updatedProducts[getProductHref(productId)] = product
+                        updatedProducts[productHref] = product
                     })
             })
     )
