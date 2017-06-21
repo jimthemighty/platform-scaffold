@@ -36,7 +36,7 @@ const ProductListFilterModal = (props) => {
                 </HeaderBarActions>
             </HeaderBar>
 
-            <Accordion initialOpenItems={[1]}>
+            <Accordion initialOpenItems={[0]}>
                 {filters.map(({label, ruleset, kinds}) =>
                     <AccordionItem header={label} key={ruleset} className="u-padding-0">
                         {/* disabling a11y lints because the below handler is
