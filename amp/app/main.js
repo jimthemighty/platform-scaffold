@@ -37,7 +37,10 @@ import {PAGE_TITLE} from './data-integration/constants'
 import globalStyles from './styles/global.scss'
 import styles from './config/styles'
 import scripts from './config/scripts'
-import fonts from './config/fonts'
+
+const fonts = [
+    '<link href="https://fonts.googleapis.com/css?family=Oswald:200,400" rel="stylesheet">'
+]
 
 
 const getFullUrl = (req) => {
@@ -71,7 +74,7 @@ const render = (req, res, store, component) => {
         title: state.ui.app.get(PAGE_TITLE),
         canonicalURL: getFullUrl(req),
         body,
-        css: styleIncludes.join('\n'),
+        css: styleIncludes.map(x => x.toString().trim()).join('\n\n\n'),
         scriptIncludes: scriptIncludes.join('\n'),
         fontIncludes: fonts.join('\n')
     })
