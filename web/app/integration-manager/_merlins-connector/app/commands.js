@@ -5,17 +5,16 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
-import {getCart} from '../cart/commands'
 import {parseLoginStatus} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
 import {CHECKOUT_SHIPPING_URL, CART_URL} from '../config'
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
+import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {
     receiveNavigationData,
-    setPageFetchError,
     setCheckoutShippingURL,
     setCartURL,
     setLoggedIn
@@ -64,6 +63,5 @@ export const initApp = () => (dispatch) => {
     dispatch(receiveFormKey(formKey))
 
     dispatch(setCheckoutShippingURL(CHECKOUT_SHIPPING_URL))
-    dispatch(setCartURL(CART_URL))
-    return dispatch(getCart())
+    return dispatch(setCartURL(CART_URL))
 }

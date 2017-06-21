@@ -4,10 +4,13 @@ import React, {PropTypes} from 'react'
 import {Router as SDKRouter, Route, IndexRoute} from 'progressive-web-sdk/dist/routing'
 import {Provider} from 'react-redux'
 
+import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
+
 // Containers
 import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
 import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails} from './containers/templates'
+
 // We build this into the app so we can load the home page right away
 import Home from './containers/home/container'
 import CheckoutHeader from './containers/checkout-header/container'
@@ -18,7 +21,11 @@ import {initCartPage} from './integration-manager/cart/commands'
 import {initProductListPage} from './integration-manager/categories/commands'
 import {initProductDetailsPage} from './integration-manager/products/commands'
 import {initRegisterPage, initLoginPage} from './integration-manager/account/commands'
-import {initCheckoutShippingPage, initCheckoutPaymentPage, initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
+import {initCheckoutConfirmationPage} from './integration-manager/checkout/commands'
+import {initShippingPage} from './containers/checkout-shipping/actions'
+import {initPaymentPage} from './containers/checkout-payment/actions'
+
+import {checkIfOffline} from './containers/app/actions'
 
 import {getURL} from './utils/utils'
 import {isRunningInAstro, pwaNavigate} from './utils/astro-integration'
@@ -40,24 +47,31 @@ if (isRunningInAstro) {
     }
 }
 
+const initPage = (initAction) => (url, routeName) => (dispatch) => {
+    return dispatch(initAction(url, routeName))
+        .then(() => dispatch(setFetchedPage(url)))
+        .catch((error) => console.error(`Error executing fetch action for ${routeName}`, error))
+        .then(() => dispatch(checkIfOffline()))
+}
+
 const Router = ({store}) => (
     <Provider store={store}>
         <SDKRouter>
             <Route path="/" component={App} onChange={OnChange}>
-                <IndexRoute component={Home} routeName="home" fetchAction={initHomePage} />
-                <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initCartPage} />
-                <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initLoginPage} />
-                <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initRegisterPage} />
-                <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="supplies.html" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="new-arrivals.html" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="charms.html" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="catalogsearch/result/*" routeName="searchResultPage" fetchAction={initProductListPage} />
+                <IndexRoute component={Home} routeName="home" fetchAction={initPage(initHomePage)} />
+                <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initPage(initCartPage)} />
+                <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initPage(initLoginPage)} />
+                <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initPage(initRegisterPage)} />
+                <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="supplies.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="new-arrivals.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="charms.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="catalogsearch/result/*" routeName="searchResultPage" fetchAction={initPage(initProductListPage)} />
                 {/* Careful. The routeName on this 'configure' route is used to change how the ProductDetails component renders */}
-                <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initProductDetailsPage} />
-                <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initProductDetailsPage} />
+                <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
+                <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"
@@ -65,7 +79,7 @@ const Router = ({store}) => (
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
                     headerHasSignIn
-                    fetchAction={initCheckoutShippingPage}
+                    fetchAction={initPage(initShippingPage)}
                 />
                 {/*
                     The URL for the payment page on desktop is /checkout/#payment,
@@ -80,7 +94,7 @@ const Router = ({store}) => (
                     routeName="checkout-payment"
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
-                    fetchAction={initCheckoutPaymentPage}
+                    fetchAction={initPage(initPaymentPage)}
                 />
                 <Route
                     component={CheckoutConfirmation}
@@ -88,18 +102,18 @@ const Router = ({store}) => (
                     routeName="checkout-confirmation"
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
-                    fetchAction={initCheckoutConfirmationPage}
+                    fetchAction={initPage(initCheckoutConfirmationPage)}
                 />
 
                 {/* SFCC Connector routes */}
-                <Route component={Home} path="*/Home-Show*" routeName="home" fetchAction={initHomePage} />
-                <Route component={ProductList} path="*/womens*" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="*/mens*" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="*/newarrivals*" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="*/electronics*" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="*/gift-certificates*" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="*/top-seller*" routeName="productListPage" fetchAction={initProductListPage} />
-                <Route component={ProductList} path="*/Search-Show?*" routeName="productListPage" fetchAction={initProductListPage} />
+                <Route component={Home} path="*/Home-Show*" routeName="home" fetchAction={initPage(initHomePage)} />
+                <Route component={ProductList} path="*/womens*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="*/mens*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="*/newarrivals*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="*/electronics*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="*/gift-certificates*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="*/top-seller*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="*/Search-Show?*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="*/COShipping-Start*"
@@ -107,7 +121,7 @@ const Router = ({store}) => (
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
                     headerHasSignIn
-                    fetchAction={initCheckoutShippingPage}
+                    fetchAction={initPage(initShippingPage)}
                 />
                 <Route
                     component={CheckoutPayment}
@@ -115,10 +129,10 @@ const Router = ({store}) => (
                     routeName="checkout-payment"
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
-                    fetchAction={initCheckoutPaymentPage}
+                    fetchAction={initPage(initPaymentPage)}
                 />
-                <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initLoginPage} />
-                <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initCartPage} />
+                <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initPage(initLoginPage)} />
+                <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 
                 <Route
                     component={CheckoutConfirmation}
@@ -126,7 +140,7 @@ const Router = ({store}) => (
                     routeName="checkout-confirmation"
                     Header={CheckoutHeader}
                     Footer={CheckoutFooter}
-                    fetchAction={initCheckoutConfirmationPage}
+                    fetchAction={initPage(initCheckoutConfirmationPage)}
                 />
 
             </Route>

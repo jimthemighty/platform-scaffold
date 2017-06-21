@@ -12,6 +12,7 @@ import {
     PROMO_ERROR
 } from './constants'
 import {
+    getCart,
     removeFromCart,
     updateItemQuantity,
     addToWishlist,
@@ -19,6 +20,7 @@ import {
     putPromoCode,
     deletePromoCode
 } from '../../integration-manager/cart/commands'
+import {cartExpired, handleCartExpiryError} from '../app/actions'
 import {getDiscountCode} from '../../store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
@@ -29,11 +31,16 @@ import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])
 export const setIsWishlistComplete = createAction('Set wishlist add complete', ['isWishlistAddComplete'])
 export const setTaxRequestPending = createAction('Set tax request pending', ['taxRequestPending'])
+export const setPromoSubmitting = createAction('Set Promo Submitting', ['promoSubmitting'])
 
 const shippingFormSelector = createPropsSelector({
     address: getEstimateShippingAddress,
     shippingMethod: getSelectedShippingMethod
 })
+
+export const requestCartContent = () => (dispatch) => {
+    dispatch(getCart())
+}
 
 export const submitEstimateShipping = () => (dispatch, getState) => {
     const {address, shippingMethod} = shippingFormSelector(getState())
@@ -41,15 +48,30 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
     dispatch(setTaxRequestPending(true))
     dispatch(fetchShippingMethodsEstimate(address))
         .then(() => dispatch(fetchTaxEstimate(address, shippingMethod.id)))
-        .catch(() => dispatch(addNotification(
-            'taxError',
-            'Unable to calculate tax and/or shipping.',
-            true
-        )))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
+        .catch(() => (
+            dispatch(addNotification(
+                'taxError',
+                'Unable to calculate tax and/or shipping.',
+                true
+            ))
+        ))
         .then(() => {
             dispatch(closeModal(CART_ESTIMATE_SHIPPING_MODAL))
             dispatch(setTaxRequestPending(false))
         })
+}
+
+const cartUpdateError = (error) => (dispatch) => {
+    const message = error.message
+    if (message.includes('expired')) {
+        return dispatch(cartExpired())
+    }
+    return dispatch(addNotification(
+        'cartUpdateError',
+        message,
+        true
+    ))
 }
 
 export const removeItem = (itemID) => (dispatch) => {
@@ -59,13 +81,7 @@ export const removeItem = (itemID) => (dispatch) => {
             // all active webviews to refresh if needed
             trigger('cart:updated')
         })
-        .catch((error) => {
-            dispatch(addNotification(
-                'cartUpdateError',
-                error.message,
-                true
-            ))
-        })
+        .catch((error) => dispatch(cartUpdateError(error)))
 }
 
 export const saveToWishlist = (productId, itemId, productURL) => (dispatch, getState) => {
@@ -102,16 +118,11 @@ export const openRemoveItemModal = (itemId) => {
 
 export const updateItem = (itemId, itemQuantity) => (dispatch) => {
     return dispatch(updateItemQuantity(itemId, itemQuantity))
-        .catch((error) => {
-            dispatch(addNotification(
-                'cartUpdateError',
-                error.message,
-                true
-            ))
-        })
+        .catch((error) => dispatch(cartUpdateError(error)))
 }
 
 export const submitPromoCode = ({promo}) => (dispatch) => {
+    dispatch(setPromoSubmitting(true))
     dispatch(putPromoCode(promo))
         .catch(({message}) => {
             dispatch(addNotification(
@@ -120,6 +131,7 @@ export const submitPromoCode = ({promo}) => (dispatch) => {
                 true
             ))
         })
+        .then(() => dispatch(setPromoSubmitting(false)))
 }
 
 export const removePromoCode = () => (dispatch, getState) => {

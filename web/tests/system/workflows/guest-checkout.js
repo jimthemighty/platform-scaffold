@@ -8,12 +8,14 @@ import ProductList from '../page-objects/product-list'
 import ProductDetails from '../page-objects/product-details'
 import Cart from '../page-objects/cart'
 import Checkout from '../page-objects/checkout'
+import PushMessaging from '../page-objects/push-messaging'
 
 let home
 let productList
 let productDetails
 let cart
 let checkout
+let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
@@ -27,6 +29,7 @@ export default {
         productDetails = new ProductDetails(browser)
         cart = new Cart(browser)
         checkout = new Checkout(browser)
+        pushMessaging = new PushMessaging(browser)
     },
 
     after: (browser) => {
@@ -47,6 +50,10 @@ export default {
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
             .assert.visible(productList.selectors.productListTemplateIdentifier)
+
+        // This is the second page view, the DefaultAsk should be visible and
+        // dismissable by this point.
+        pushMessaging.dismissDefaultAsk()
     },
 
     'Checkout - Guest - Navigate from ProductList to ProductDetails': (browser) => {
@@ -79,16 +86,24 @@ export default {
 
     'Checkout - Guest - Fill out Guest Checkout Shipping Info form': (browser) => {
         checkout.fillShippingInfo()
-        browser.waitForElementVisible(checkout.selectors.lastShippingInfo)
-    },
-
-    'Checkout - Guest - Fill out Guest Checkout Payment Details form': () => {
-        checkout.continueToPayment()
-    },
-
-    'Checkout - Guest - Verify Submit Order button is visible': (browser) => {
         browser
-            .waitForElementVisible(checkout.selectors.submitOrder)
-            .assert.visible(checkout.selectors.submitOrder)
+            // Phone field should have numeric input type
+            .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
+            .waitForElementVisible(checkout.selectors.address)
+            .assert.valueContains(checkout.selectors.address, checkout.userData.address)
+    },
+
+    'Checkout - Guest - Fill out Guest Checkout Payment Details form': (browser) => {
+        checkout.continueToPayment()
+        checkout.fillPaymentInfo()
+        browser
+            .waitForElementVisible(checkout.selectors.cvv)
+            .assert.valueContains(checkout.selectors.cvv, checkout.userData.cvv)
+    },
+
+    'Checkout - Guest - Verify Place Your Order button is visible': (browser) => {
+        browser
+            .waitForElementVisible(checkout.selectors.placeOrder)
+            .assert.visible(checkout.selectors.placeOrder)
     }
 }

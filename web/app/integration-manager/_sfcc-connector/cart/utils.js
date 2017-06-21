@@ -7,7 +7,7 @@ import {getCartItems} from '../../../store/cart/selectors'
 import {receiveCartProductData} from '../../products/results'
 import {receiveCartContents} from '../../cart/results'
 
-import {getProductById, getProductThumbnailSrcByPathKey, getProductThumbnailByPathKey} from '../../../store/products/selectors'
+import {getProductById, getProductThumbnailSrcById, getProductThumbnailById} from '../../../store/products/selectors'
 import {getProductHref} from '../parsers'
 import {parseCartProducts, parseCartContents} from './parsers'
 
@@ -33,7 +33,7 @@ export const createBasket = (basketContents) => {
 }
 
 export const getProductImage = (item, currentState) => {
-    const productImage = getProductThumbnailSrcByPathKey(getProductHref(item.product_id))(currentState)
+    const productImage = getProductThumbnailSrcById(item.product_id)(currentState)
 
     if (productImage) {
         // If we already have images for the item in our state, then just use those
@@ -77,7 +77,7 @@ export const fetchCartItemImages = () => (dispatch, getState) => {
 
     // We use the .thumbnail as an indicator of whether the product has images already
     return Promise.all(
-        items.filter((cartItem) => getProductThumbnailByPathKey(getProductHref(cartItem.get('productId')))(currentState).size === 0)
+        items.filter((cartItem) => getProductThumbnailById(cartItem.get('productId'))(currentState).size === 0)
             .map((cartItem) => {
                 const productId = cartItem.get('productId')
 
@@ -136,5 +136,29 @@ export const handleCartData = (basket) => (dispatch) => {
 export const createNewBasket = () => (dispatch) => {
     deleteBasketID()
     return requestCartData()
-        .then((basket) => dispatch(handleCartData(basket)))
+        .then((basket) => {
+            dispatch(handleCartData(basket))
+            return basket
+        })
+}
+
+export const isCartExpired = ({fault}) => {
+    if (fault) {
+        if (fault.type === 'InvalidCustomerException') {
+            return true
+        }
+        throw new Error(fault.message)
+    }
+    return false
+}
+
+// Check if the users cart has expired, if it has create a new one and throw an error
+// otherwise return the cart object
+export const updateExpiredCart = (basket) => (dispatch) => {
+    if (isCartExpired(basket)) {
+        return dispatch(createNewBasket())
+            .then((basket) => dispatch(handleCartData(basket)))
+            .then(() => { throw new Error('Your cart has expired.') })
+    }
+    return basket
 }

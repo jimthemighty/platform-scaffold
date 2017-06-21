@@ -216,6 +216,11 @@ const attemptToInitializeApp = () => {
         content: '#4e439b'
     });
 
+    loadAsset('meta', {
+        name: 'charset',
+        content: 'utf-8'
+    });
+
     loadAsset('link', {
         href: getAssetUrl('main.css'),
         rel: 'stylesheet',

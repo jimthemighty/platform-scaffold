@@ -5,13 +5,13 @@
 /* eslint-disable no-unused-vars */
 
 import {receiveProductDetailsProductData, receiveProductDetailsUIData} from '../../products/results'
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
+import {receiveCurrentProductId} from '../../results'
 import {receiveFormInfo} from '../actions'
 
-export const initProductDetailsPage = (url) => (dispatch) => {
-    console.log('[Stub Connector] Called initProductDetailsPage stub')
+export const initProductDetailsPage = (url, routeName) => (dispatch) => {
+    console.log('[Stub Connector] Called initProductDetailsPage stub with arguments:', url, routeName)
 
-    const pathKey = urlToPathKey(url)
+    const id = '1'
 
     const image = {
         src: '//via.placeholder.com/350x350',
@@ -19,7 +19,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
     }
 
     const exampleData = {
-        [pathKey]: {
+        [id]: {
             price: '$10.00',
             available: true,
             href: window.location.href,
@@ -32,7 +32,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
     }
 
     const exampleUIData = {
-        [pathKey]: {
+        [id]: {
             breadcrumbs: [{
                 href: '/',
                 text: 'Home'
@@ -45,7 +45,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
     }
 
     const exampleFormData = {
-        [pathKey]: {
+        [id]: {
             submitUrl: 'submit',
             method: 'POST',
             uenc: '',
@@ -54,6 +54,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
     }
 
     // For more information on the shape of the expected data, see ../../products/types
+    dispatch(receiveCurrentProductId(id))
     dispatch(receiveProductDetailsProductData(exampleData))
     dispatch(receiveProductDetailsUIData(exampleUIData))
     dispatch(receiveFormInfo(exampleFormData))
@@ -61,6 +62,6 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 }
 
 export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => {
-    console.log('[Stub Connector] Called getProductVariantData stub')
+    console.log('[Stub Connector] Called getProductVariantData stub with arguments:', variationSelections, variants, categoryIds)
     return Promise.resolve()
 }

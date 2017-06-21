@@ -37,7 +37,7 @@ ProductImage.propTypes = {
     src: PropTypes.string
 }
 
-const ProductTile = ({className, thumbnail, href, price, title}) => {
+const ProductTile = ({className, thumbnail, href, price, title, onClick}) => {
     const productImage = (<ProductImage {...thumbnail} />)
 
     const titleElement = title
@@ -48,7 +48,7 @@ const ProductTile = ({className, thumbnail, href, price, title}) => {
         : <SkeletonBlock height="22px" width="50px" />
 
     return (
-        <ListTile className="c-product-tile u-card" href={href}>
+        <ListTile className="c-product-tile u-card" onClick={onClick} href={href}>
             <ProductItem customWidth="45%"
                 className={classNames('u-align-center', className)}
                 title={titleElement}
@@ -69,7 +69,8 @@ ProductTile.propTypes = {
         alt: PropTypes.string.isRequired,
         src: PropTypes.string.isRequired,
     }),
-    title: PropTypes.string
+    title: PropTypes.string,
+    onClick: PropTypes.func
 }
 
 export default ProductTile
