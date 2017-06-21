@@ -32,6 +32,7 @@ const Offline = (props, context) => {
 Offline.contextTypes = {
     /**
      * Method that attempts to fetch the page again
+     * context source: /web/app/containers/app/container  getChildContext()
      */
     reload: PropTypes.func
 }
