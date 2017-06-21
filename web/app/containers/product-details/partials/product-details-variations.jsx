@@ -10,29 +10,44 @@ import {getProductVariationCategories} from '../../../store/products/selectors'
 import {onVariationChange} from '../actions'
 
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
-import Field from 'progressive-web-sdk/dist/components/field'
+import {Swatch, SwatchItem} from 'progressive-web-sdk/dist/components/swatch'
 
-const ProductDetailsVariations = ({variations, onVariationChange}) => (
+const variationSwatch = ({input: {value, onChange}, values, label}) => ( // eslint-disable-line
+    <div>
+        <Swatch
+            label={label}
+            onChange={(val) => onChange(value = val)}
+        >
+            {values.map(({label, value}) =>
+                <SwatchItem key={value}
+                    value={value}
+                >
+                    {label}
+                </SwatchItem>
+            )}
+        </Swatch>
+    </div>
+)
+
+variationSwatch.propTypes = {
+    input: {
+        value: PropTypes.string,
+        onChange: PropTypes.func
+    },
+    label: PropTypes.string,
+    values: PropTypes.array
+}
+
+const ProductDetailsVariations = ({variations}) => (
     <div className={variations.length > 0 && 'u-margin-top-lg'}>
         {variations.map(({id, slug, label, values = []}) => (
             <FieldRow key={id}>
                 <ReduxForm.Field
                     label={label}
                     name={slug}
-                    component={Field}
-                    className="pw--has-select"
-                    customEventHandlers={{onChange: onVariationChange}}
-                >
-                    <select name={id}>
-                        <option disabled value="">{label}</option>
-
-                        {values.map(({label, value}) =>
-                            <option value={value} key={value}>
-                                {label}
-                            </option>
-                        )}
-                    </select>
-                </ReduxForm.Field>
+                    values={values}
+                    component={variationSwatch}
+                />
             </FieldRow>
         ))}
     </div>
