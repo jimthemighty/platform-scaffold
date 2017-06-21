@@ -33,7 +33,8 @@ import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 import ModalManager from '../../modals'
 import NotificationManager from '../../components/notification-manager'
 
-import {registerPreloadCallbacks} from '../templates'
+import {prefetchTemplateChunks} from '../templates'
+
 
 // Offline support
 import Offline from '../offline/container'
@@ -57,9 +58,10 @@ class App extends React.Component {
             }
         })
 
-        // Lazy load other containers when browser is at the end of frame
-        // to prevent jank
-        registerPreloadCallbacks()
+        // Prefetch & cache code-splitted chunks when the browser is
+        // at the end of frame to allow for quick page transitions
+        // and graceful failure when offline.
+        prefetchTemplateChunks()
     }
 
     getChildContext() {

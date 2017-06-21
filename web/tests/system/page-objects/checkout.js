@@ -5,8 +5,8 @@
 const selectors = {
     checkoutTemplateIdentifier: '.t-checkout-shipping.t--loaded',
 
-    registeredEmail: 'input[name="username"]',
-    registeredPassword: 'input[name="password"][type="password"]',
+    email: 'input[name="username"]',
+    password: 'input[name="password"][type="password"]',
     signIn: '.qa-checkout__sign-in',
 
     // Shipping info
@@ -17,22 +17,23 @@ const selectors = {
     state: '[name*="region"]',
     postCode: 'input[name*="code"]',
     phone: 'input[name*="phone"]',
-    lastShippingInfo: 'input[name*="phone"]', // Used to verify that shipping info has been completed
+    addressListOption: '.t-checkout-shipping__shipping-address .pw-field-row',
+    shippingMethod: '.t-checkout-shipping__shipping-method .c--checked',
     continueToPayment: '.qa-checkout__continue-to-payment',
 
     paymentTemplate: '.t-app--checkingPayment',
-    creditCardName: 'input[name="name"]',
-    creditCardNumber: 'input[name="ccnumber"]',
-    expiry: 'input[name="ccexpiry"]',
-    cvv: 'input[name="cvv"]',
+    creditCardName: 'input[name="ccname"]',
+    creditCardNumber: '.c-card-input input',
+    expiry: '.pw-expiry-date input',
+    cvv: '.pw-card-verification input',
 
-    submitOrder: 'button.c--primary[type="submit"]'
+    placeOrder: '.qa-checkout__place-order:enabled'
 }
 
 const userData = {
     // Export a test email and password as environment variables with the following names
-    registeredEmail: 'mobifyqa@gmail.com',
-    registeredPassword: 'p4ssword',
+    email: 'mobifyqa@gmail.com',
+    password: 'p4ssword',
 
     name: 'John Doe',
     address: '725 Granville St',
@@ -41,10 +42,10 @@ const userData = {
     country: 'Canada',
     postCode: 'V7Y 1L1',
     phone: '604 343 4696',
-    lastShippingInfo: '604 343 4696', // Used in workflow to assert you have filled out all Shipping Info
 
     creditCardNumber: '4111111111111111',
-    lastPaymentDetail: 'Last Payment Detail Field' // Used in workflow to assert you have filled out all Payment Details
+    expiry: '0920',
+    cvv: '123'
 }
 
 const Checkout = function(browser) {
@@ -67,16 +68,18 @@ Checkout.prototype.continueAsRegistered = function() {
     // Sign in to continue Registered Checkout
     this.browser
         .log('Navigating to Registered Checkout')
-        .waitForElementVisible(selectors.registeredEmail)
-        .setValue(selectors.registeredEmail, userData.registeredEmail)
+        .waitForElementVisible(selectors.email)
+        .setValue(selectors.email, userData.email)
         // The password field is not displayed to the user until focus is
         // removed from the email field.
         .click(selectors.checkoutTemplateIdentifier)
-        .waitForElementVisible(selectors.registeredPassword)
-        .setValue(selectors.registeredPassword, userData.registeredPassword)
+        .waitForElementVisible(selectors.password)
+        .setValue(selectors.password, userData.password)
         .waitForElementVisible(selectors.signIn)
         .click(selectors.signIn)
-        .waitUntilMobified()
+        // Workaround. The login experience is currently not ideal.
+        .pause(3000)
+        .refresh()
     return this
 }
 
@@ -92,13 +95,15 @@ Checkout.prototype.fillShippingInfo = function() {
     // Fill out Shipping info form fields
     this.browser
         .log('Fill out Shipping Info form fields')
-        .waitForElementVisible(selectors.name)
+        .waitForElementVisible(selectors.email)
+        .clearValue(selectors.email)
         .clearValue(selectors.name)
         .clearValue(selectors.address)
         .clearValue(selectors.city)
         .clearValue(selectors.postCode)
         .clearValue(selectors.phone)
 
+        .setValue(selectors.email, userData.email)
         .setValue(selectors.name, userData.name)
         .setValue(selectors.address, userData.address)
         .setValue(selectors.city, userData.city)
@@ -109,14 +114,30 @@ Checkout.prototype.fillShippingInfo = function() {
     return this
 }
 
-Checkout.prototype.fillPaymentDetails = function() {
-    // Fill out Payment details form fields
+Checkout.prototype.chooseShippingInfo = function() {
+    // For registered users who have a list of shipping addresses to choose
     this.browser
-        .log('Fill out Payment Details form fields')
-        .setValue(selectors.creditCardName, userData.creditCardName)
+        .log('Choose shipping address')
+        .waitForElementVisible(selectors.addressListOption)
+        .click(selectors.addressListOption)
+        .waitForElementVisible(selectors.shippingMethod)
+    return this
+}
+
+Checkout.prototype.fillPaymentInfo = function() {
+    // Fill out Payment Infos form fields
+    this.browser
+        .log('Fill out Payment Info form fields')
+        .waitForElementVisible(selectors.creditCardName)
+        .clearValue(selectors.creditCardName)
+        .clearValue(selectors.creditCardNumber)
+        .clearValue(selectors.expiry)
+        .clearValue(selectors.cvv)
+
+        .setValue(selectors.creditCardName, userData.name)
         .setValue(selectors.creditCardNumber, userData.creditCardNumber)
-        // ...
-        .setValue(selectors.lastPaymentDetail, userData.lastPaymentDetail)
+        .setValue(selectors.expiry, userData.expiry)
+        .setValue(selectors.cvv, userData.cvv)
     return this
 }
 

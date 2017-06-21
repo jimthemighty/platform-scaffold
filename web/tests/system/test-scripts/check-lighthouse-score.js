@@ -1,5 +1,9 @@
 #!/usr/bin/env node
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+/* eslint-disable import/no-commonjs */
 const fs = require('fs')
 const chalk = require('chalk')
 
@@ -10,9 +14,9 @@ const chalk = require('chalk')
 let fileName
 let failure = false
 
-if (fs.existsSync('lighthouse/audit-local.report.html')) {
+if (fs.existsSync('tests/system/test-scripts/lighthouse/reports/audit-local.report.html')) {
     fileName = 'audit-local'
-} else if (fs.existsSync('lighthouse/audit-prod.report.html')){
+} else if (fs.existsSync('tests/system/test-scripts/lighthouse/reports/audit-prod.report.html')) {
     fileName = 'audit-prod'
 } else {
     console.log('Error Lighthouse report not found.')
@@ -48,8 +52,8 @@ const checkTTI = function(jsonResults) {
     console.log(`${jsonResults.audits['total-byte-weight'].displayValue}`)
 }
 
-const jsonResults = JSON.parse(fs.readFileSync(`lighthouse/${fileName}.report.json`, 'utf8'))
-const htmlReport = fs.readFileSync(`lighthouse/${fileName}.report.html`, 'utf8')
+const jsonResults = JSON.parse(fs.readFileSync(`tests/system/test-scripts/lighthouse/reports/${fileName}.report.json`, 'utf8'))
+const htmlReport = fs.readFileSync(`tests/system/test-scripts/lighthouse/reports/${fileName}.report.html`, 'utf8')
 
 checkTTI(jsonResults)
 checkLighthouse(htmlReport)
