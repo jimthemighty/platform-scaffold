@@ -11,4 +11,4 @@ lighthouse \
 	--output-path $OUTPUT_PATH \
 	$URL
 
-node tests/system/test-scripts/check-lighthouse-score.js
+npm run test:check-lighthouse-score

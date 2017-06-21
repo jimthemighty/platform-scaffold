@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run the Lighthouse test against the dev build with continuous integration.
+# Run the Lighthouse test against the dev build
 
 # Location to save the generated report.
 OUTPUT_PATH=tests/system/test-scripts/lighthouse/reports/audit-local
@@ -26,4 +26,4 @@ lighthouse \
 	--disable-device-emulation=true \
 	"${URL}${PREVIEW}"
 
-node tests/system/test-scripts/check-lighthouse-score.js
+npm run test:check-lighthouse-score
