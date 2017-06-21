@@ -45,6 +45,20 @@ export const loadScriptAsPromise = ({id, src, onload, isAsync = true, rejectOnEr
     )
 }
 
+export const prefetchLink = ({href}) => {
+    const link = document.createElement('link')
+
+    // Setting UTF-8 as our encoding ensures that certain strings (i.e.
+    // Japanese text) are not improperly converted to something else. We
+    // do this on the vendor scripts also just in case any libs we
+    // import have localized strings in them.
+    link.charset = 'utf-8'
+    link.href = href
+    link.rel = 'prefetch'
+
+    document.getElementsByTagName('head')[0].appendChild(link)
+}
+
 export const isLocalStorageAvailable = () => {
     try {
         const x = '__test_key__'

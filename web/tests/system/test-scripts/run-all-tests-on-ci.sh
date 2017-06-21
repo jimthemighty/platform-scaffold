@@ -25,7 +25,7 @@ if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   echo 'Verify built files sizes'
   npm run test:build-size
   echo 'Starting Lighthouse Tests.'
-  ./tests/system/run-lighthouse.sh
+  ./tests/system/test-scripts/run-lighthouse.sh
   echo 'Running End to End Tests'
   npm run test:e2e
 
@@ -41,7 +41,7 @@ else
       npm run lint     
       ./scripts/wait-for-dependencies.sh
       echo 'Running Lighthouse Test'
-      ./tests/system/run-lighthouse.sh
+      ./tests/system/test-scripts/run-lighthouse.sh
     fi
 
     # The other cirlce_node_index worker will run the rest of the tests
