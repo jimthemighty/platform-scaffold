@@ -64,22 +64,9 @@ const render = (req, res, store, component, css) => {
     res.send(rendered)
 }
 
-
-const productDetailsPage = (req, res, next) => {
-    initializeStore(getFullUrl(req), productDetails.default)
-        .then((store) => render(req, res, store, productDetails.default, productDetails.styles))
-        .catch(next)
-}
-
-const productListPage = (req, res, next) => {
-    initializeStore(getFullUrl(req), productList.default)
-        .then((store) => render(req, res, store, productList.default, productList.styles))
-        .catch(next)
-}
-
-const homePage = (req, res, next) => {
-    initializeStore(getFullUrl(req), home.default)
-        .then((store) => render(req, res, store, home.default, home.styles))
+const handlePage = (page) => (req, res, next) => {
+    initializeStore(getFullUrl(req), page.default)
+        .then((store) => render(req, res, store, page.default, page.styles))
         .catch(next)
 }
 
@@ -91,15 +78,15 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan(onLambda ? 'short' : 'dev'))
 }
 
-app.get('/', homePage)
-app.get('/potions.html', productListPage)
-app.get('/books.html', productListPage)
-app.get('/ingredients.html', productListPage)
-app.get('/supplies.html', productListPage)
-app.get('/new-arrivals.html', productListPage)
-app.get('/charms.html', productListPage)
-app.get('/checkout/cart/configure/id/*/product_id/*/', productDetailsPage)
-app.get('*.html', productDetailsPage)
+app.get('/', handlePage(home))
+app.get('/potions.html', handlePage(productList))
+app.get('/books.html', handlePage(productList))
+app.get('/ingredients.html', handlePage(productList))
+app.get('/supplies.html', handlePage(productList))
+app.get('/new-arrivals.html', handlePage(productList))
+app.get('/charms.html', handlePage(productList))
+app.get('/checkout/cart/configure/id/*/product_id/*/', handlePage(productDetails))
+app.get('*.html', handlePage(productDetails))
 
 app.use('/static', express.static(path.resolve('./app/static')))
 
