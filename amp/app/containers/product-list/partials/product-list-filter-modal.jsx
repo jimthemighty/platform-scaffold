@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
+import Button from '../../../components/button'
 import Sheet from '../../../components/sheet'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../../components/header-bar'
 import IconLabelButton from '../../../components/icon-label-button'
@@ -13,7 +14,7 @@ import * as selectors from '../../../../../web/app/containers/product-list/selec
 
 const ProductListFilterModal = (props) => {
 
-    const {sheetId} = props
+    const {sheetId, filters} = props
 
     const toggleFilterSheet = `tap:${sheetId}.toggle`
 
@@ -36,15 +37,30 @@ const ProductListFilterModal = (props) => {
             </HeaderBar>
 
             <Accordion initialOpenItems={[1]}>
-                <AccordionItem header="Accordion Item #1">
-                    <div>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature</div>
-                </AccordionItem>
-                <AccordionItem header="Accordion Item #2">
-                    <div className="u-margin-bottom-lg">Lorem Ipsum dolor sit amet</div>
-                </AccordionItem>
-                <AccordionItem header="Accordion Item #3">
-                    <div className="u-margin-bottom-lg">Lorem Ipsum dolor sit amet</div>
-                </AccordionItem>
+                {filters.map(({label, ruleset, kinds}) =>
+                    <AccordionItem header={label} key={ruleset} className="u-padding-0">
+                        {/* disabling a11y lints because the below handler is
+                            for the bubbled events from the children button elements */}
+                        <div
+                            className="t-product-list__filter-modal-items"
+                            role="presentation"
+                        >
+                            {kinds.map(({count, label, query}) =>
+                                <Button
+                                    key={query}
+                                    className="c--link u-width-full u-text-letter-spacing-normal"
+                                    innerClassName="u-justify-start"
+                                    id={query}
+                                    href="#"
+                                >
+                                    <div>
+                                        <span className="u-color-brand">{label}</span> <span className="u-color-neutral-40">({count})</span>
+                                    </div>
+                                </Button>
+                            )}
+                        </div>
+                    </AccordionItem>
+                )}
             </Accordion>
         </Sheet>
     )
