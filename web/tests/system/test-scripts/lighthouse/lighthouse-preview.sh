@@ -25,6 +25,6 @@ lighthouse \
 	--output html \
 	--output-path ${OUTPUT_PATH} \
 	--disable-device-emulation=true \
-	"${URL}${PREVIEW}"
+	"${URL}${PREVIEW}" > /dev/null 2>&1
 
 npm run test:check-lighthouse-score
