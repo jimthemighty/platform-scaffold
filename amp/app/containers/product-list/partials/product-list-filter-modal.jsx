@@ -45,13 +45,13 @@ const ProductListFilterModal = (props) => {
                             className="t-product-list__filter-modal-items"
                             role="presentation"
                         >
-                            {kinds.map(({count, label, query}) =>
+                            {kinds.map(({count, label, query, href}) =>
                                 <Button
                                     key={query}
                                     className="c--link u-width-full u-text-letter-spacing-normal"
                                     innerClassName="u-justify-start"
                                     id={query}
-                                    href="#"
+                                    href={href}
                                 >
                                     <div>
                                         <span className="u-color-brand">{label}</span> <span className="u-color-neutral-40">({count})</span>
