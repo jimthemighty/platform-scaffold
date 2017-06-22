@@ -1,10 +1,6 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
-import Carousel from '../../components/carousel'
-import CarouselItem from '../../components/carousel/carousel-item'
-
-import {staticURL} from '../../utils'
 import containerStyles from './container.scss'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
