@@ -65,6 +65,7 @@ class App extends React.Component {
     }
 
     getChildContext() {
+        // Expose reload func for offline modals
         const {children, fetchPage} = this.props
         const routeProps = children.props.route
         return {reload: () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)}
