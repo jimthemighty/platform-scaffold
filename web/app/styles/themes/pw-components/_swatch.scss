@@ -24,3 +24,16 @@
 
     font-weight: bold;
 }
+
+// Button
+// ---
+
+.pw-swatch__button {
+    color: $neutral-40;
+    text-transform: uppercase;
+}
+
+.pw-swatch__button-inner {
+    padding-top: 0;
+    padding-bottom: 0;
+}
