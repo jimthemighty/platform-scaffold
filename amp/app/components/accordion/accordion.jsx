@@ -67,7 +67,7 @@ Accordion.propTypes = {
     /**
      * Set this attribute on the <amp-accordion> to opt out of preserving the collapsed/expanded state of the accordion.
      */
-    disableSessionState: PropTypes.boolean,
+    disableSessionState: PropTypes.bool,
 
     /**
      * If an item should be open by default, include its index in this array
