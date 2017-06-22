@@ -82,6 +82,7 @@ const validateRegisterForm = (formValues) => {
 }
 
 const handleLoginSuccess = (href) => {
+    console.log('handle login success')
     if (isRunningInAstro) {
         jsRpcMethod('user:loggedIn', [])()
     }
@@ -91,8 +92,10 @@ const handleLoginSuccess = (href) => {
         return
     }
     if (isReactRoute(href)) {
+        console.log('proper redirect happening')
         browserHistory.push({pathname: href})
     } else {
+        console.log('nooooo')
         window.location.href = href
     }
 }
@@ -108,6 +111,7 @@ export const submitSignInForm = (formValues) => (dispatch) => {
         password,
         persistent_remember_me
     } = formValues
+    console.log('submit signin form')
 
     return dispatch(login(username, password, persistent_remember_me))
         .then(handleLoginSuccess)
