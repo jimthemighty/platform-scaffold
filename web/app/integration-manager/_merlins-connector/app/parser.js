@@ -3,8 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getCheckoutConfigObject} from '../../../utils/magento-utils'
-import {SEARCH_URL} from '../config'
-import {buildQueryString} from '../../../utils/utils'
+import {buildSearchURL} from '../config'
 
 export const parseLoginStatus = ($html) => {
     if ($html.find('.customer-welcome').length > 0) {
@@ -24,7 +23,7 @@ export const parseSearchSuggestions = (json) => {
         const searchTerm = data.title
         const numResults = data.num_results
         return {
-            href: `${SEARCH_URL}${buildQueryString(searchTerm)}`,
+            href: `${buildSearchURL(searchTerm)}`,
             children: searchTerm,
             endAction: `${numResults} result${numResults > 1 ? 's' : ''}`
         }

@@ -9,7 +9,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {parseLoginStatus, parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-import {CHECKOUT_SHIPPING_URL, CART_URL, QUERY_URL, SEARCH_URL} from '../config'
+import {CHECKOUT_SHIPPING_URL, CART_URL, QUERY_URL, buildSearchURL} from '../config'
 import {getCookieValue, buildQueryString} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
@@ -74,7 +74,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const searchProducts = (query) => (dispatch) => {
-    browserHistory.push({pathname: `${SEARCH_URL}${buildQueryString(query)}`})
+    browserHistory.push({pathname: `${buildSearchURL(query)}`})
 }
 
 

@@ -12,10 +12,9 @@ import {
 } from '../../results'
 import {receiveUserEmail} from '../../checkout/results'
 import {parseCategories, parseSearchSuggestions} from '../parsers'
-import {buildQueryString} from '../../../utils/utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
-import {getSignInURL, getCheckoutShippingURL, getCartURL, SEARCH_URL} from '../config'
+import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL} from '../config'
 import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from '../../../containers/navigation/constants'
 
 export const fetchNavigationData = () => (dispatch) => {
@@ -68,7 +67,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const searchProducts = (query) => (dispatch) => {
-    browserHistory.push({pathname: `${SEARCH_URL}${buildQueryString(query)}`})
+    browserHistory.push({pathname: buildSearchURL(query)})
 }
 
 export const initApp = () => (dispatch) => {

@@ -1,6 +1,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+import {buildQueryString} from '../../utils/utils'
 
 const API_TYPE = 'shop'
 const API_VERSION = 'v17_4'
@@ -33,3 +34,5 @@ export const getCheckoutShippingURL = () => `${getBaseURL()}COShipping-Start`
 export const getCartURL = () => `${getBaseURL()}Cart-Show`
 export const getPaymentURL = () => `${getBaseURL()}COBilling-Start`
 export const getConfirmationURL = () => `${getBaseURL()}COSummary-Submit`
+
+export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`
