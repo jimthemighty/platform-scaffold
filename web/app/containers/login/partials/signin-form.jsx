@@ -59,7 +59,7 @@ class SignInForm extends React.Component {
                         name="password"
                         type="password"
                         forgotPassword={{href: FORGOT_PASSWORD_PATH}}
-                        analyticsName={UI_NAME.passowrd}
+                        analyticsName={UI_NAME.password}
                         />
 
                     <LoginField

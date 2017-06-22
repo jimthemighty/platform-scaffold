@@ -78,7 +78,7 @@ class RegisterForm extends React.Component {
                         label="Password"
                         name="password"
                         type="password"
-                        analyticsName={UI_NAME.passowrd}
+                        analyticsName={UI_NAME.password}
                         />
 
                     <LoginField
