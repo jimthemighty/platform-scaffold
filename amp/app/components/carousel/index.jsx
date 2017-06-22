@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import * as ampSDK from '../../amp-sdk'
+
 import Button from '../button'
 import Icon from '../icon'
 
@@ -81,6 +83,24 @@ class Carousel extends React.Component {
         }
     }
 
+    canMove(direction) {
+        const {children, allowLooping} = this.props
+        const {currentIndex} = this.state
+        const slideCount = React.Children.count(children)
+
+        // If we only have a single slide, it's safe to assume we shouldn't move
+        if (slideCount === 1) {
+            return false
+        }
+
+        // Determine if you can make a move in the given direction, this is used
+        // for both disabling swiping and controls when not looping and you are
+        // at the beginning or end of the item array.
+        return allowLooping ||
+            (direction === DIRECTION_LEFT && currentIndex > 0) ||
+            (direction === DIRECTION_RIGHT && currentIndex !== slideCount - 1)
+    }
+
     render() {
         const {
             className,
@@ -89,7 +109,8 @@ class Carousel extends React.Component {
             iconSize,
             buttonClass,
             showCaption,
-            showControls
+            showControls,
+            typeCarousel
         } = this.props
 
         const {
@@ -132,12 +153,8 @@ class Carousel extends React.Component {
         const childList = [prevChild, currentChild, nextChild]
 
         return (
-            <div className={classes}>
-                <div className="amp-carousel__inner"
-                    onTransitionEnd={this.moveComplete}
-                    {...this.eventHandlers}
-                    ref={(el) => { this._innerWrapper = el }}
-                >
+            <amp-carousel class={classes} type={typeCarousel}>
+                <div className="amp-carousel__inner" ref={(el) => { this._innerWrapper = el }}>
                     {childList.map((item) => item)}
                 </div>
 
@@ -179,7 +196,7 @@ class Carousel extends React.Component {
                         />
                     </div>
                 }
-            </div>
+            </amp-carousel>
         )
     }
 }
@@ -238,7 +255,18 @@ Carousel.propTypes = {
     /**
      * Boolean value to show carousel controls and pips or not
      */
-    showControls: PropTypes.bool
+    showControls: PropTypes.bool,
+
+    /**
+     * carousel: All slides are shown and are scrollable horizontally. This
+     * type supports only the following layouts: `fixed`, `fixed-height`, and
+     * `nodisplay`.
+     *
+     * slides: Shows a single slide at a time. This type supports the
+     * following layouts: `fill`, `fixed`, `fixed-height`, `flex-item`,
+     * `nodisplay`, and `responsive`.
+     */
+    typeCarousel: PropTypes.oneOf(['carousel', 'slides']),
 }
 
 Carousel.defaultProps = {
@@ -247,7 +275,11 @@ Carousel.defaultProps = {
     nextIcon: 'caret-circle-right',
     previousIcon: 'caret-circle-left',
     showCaption: false,
-    showControls: true
+    showControls: true,
+    typeCarousel: 'carousel'
 }
 
-export default Carousel
+export default ampSDK.ampComponent(
+    Carousel,
+    '<script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>'
+)
