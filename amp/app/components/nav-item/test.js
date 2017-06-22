@@ -2,7 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {shallow, mount} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
+import {mount} from 'enzyme'
 import React from 'react'
 
 import ListTile from '../list-tile'
@@ -12,7 +13,7 @@ import NavItem from './index.jsx'
 /* eslint-disable newline-per-chained-call */
 
 test('NavItem renders without errors', () => {
-    const wrapper = mount(<NavItem />)
+    const wrapper = shallow(<NavItem />)
 
     expect(wrapper.length).toBe(1)
 })
@@ -43,10 +44,13 @@ test('renders extra content correctly', () => {
 })
 
 test('renders a childIcon if hasChild is true', () => {
-    const wrapper = shallow(<NavItem hasChild childIcon=">>" />)
+    const wrapper = mount(<NavItem hasChild childIcon=">>" />)
 
     expect(wrapper.hasClass('amp--has-child')).toBe(true)
-    expect(wrapper.prop('endAction')).toBe('>>')
+
+    const icon = wrapper.find('.amp-list-tile__action')
+    expect(icon.length).toBe(1)
+    expect(icon.text()).toBe('>>')
 })
 
 test('does not render a childIcon if hasChild is false', () => {

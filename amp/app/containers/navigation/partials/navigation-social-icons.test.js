@@ -1,10 +1,10 @@
 /* eslint-env jest */
-import {mount} from 'enzyme'
+import {shallowHOC as shallow} from '../../../test-utils'
 import React from 'react'
 
 import NavigationSocialIcons from './navigation-social-icons'
 
 test('NavigationSocialIcons renders without errors', () => {
-    const wrapper = mount(<NavigationSocialIcons />)
+    const wrapper = shallow(<NavigationSocialIcons />)
     expect(wrapper.length).toBe(1)
 })

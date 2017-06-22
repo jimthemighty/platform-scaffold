@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {mount, shallow} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
 import SkipLinks, {targetPropType} from './index.jsx'
@@ -20,7 +20,7 @@ const itemsStub = [{
 }]
 
 test('SkipLinks renders without errors', () => {
-    const wrapper = mount(<SkipLinks items={[]} />)
+    const wrapper = shallow(<SkipLinks items={[]} />)
     expect(wrapper.length).toBe(1)
 })
 
