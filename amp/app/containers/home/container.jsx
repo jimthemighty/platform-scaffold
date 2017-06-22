@@ -10,8 +10,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getHomeCategories} from '../../../../web/app/containers/home/selectors'
 import {initHomePage} from '../../../../web/app/integration-manager/home/commands'
 
-// Container Styles
-import containerStyles from './container.scss'
+import {ampComponent} from '../../amp-sdk'
 
 const Home = ({
     categories
@@ -37,8 +36,6 @@ const mapStateToProps = createPropsSelector({
     categories: getHomeCategories
 })
 
-export default connect(
-    mapStateToProps
-)(Home)
-
-export const styles = containerStyles.toString()
+export default ampComponent(
+    connect(mapStateToProps)(Home)
+)

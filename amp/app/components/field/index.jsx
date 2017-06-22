@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 
 const getUniqueId = (() => {
@@ -252,4 +253,4 @@ Field.propTypes = {
     shouldShowErrorsInstantly: PropTypes.bool
 }
 
-export default Field
+export default ampComponent(Field)

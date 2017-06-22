@@ -4,6 +4,7 @@ import classNames from 'classnames'
 // Components
 import Button from '../button'
 import IconLabel from '../icon-label'
+import {ampComponent} from '../../amp-sdk'
 
 const IconLabelButton = (props) => {
     const {
@@ -95,4 +96,4 @@ IconLabelButton.propTypes = {
     value: PropTypes.string
 }
 
-export default IconLabelButton
+export default ampComponent(IconLabelButton)

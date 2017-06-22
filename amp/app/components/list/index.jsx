@@ -3,6 +3,7 @@ import classNames from 'classnames'
 
 // Components
 import ListTile from '../list-tile'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * The `List` component is used to enclose a series of related items, providing a
@@ -65,4 +66,4 @@ List.propTypes = {
     items: PropTypes.arrayOf(PropTypes.object),
 }
 
-export default List
+export default ampComponent(List)

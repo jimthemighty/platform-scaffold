@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import * as ampSDK from '../../amp-sdk'
+import {ampComponent} from '../../amp-sdk'
 
 const EngagementEngineTag = ({templateName, projectSlug}) => {
     /* eslint-disable max-len */
@@ -106,7 +106,8 @@ Analytics.propTypes = {
     projectSlug: PropTypes.string
 }
 
-export default ampSDK.ampComponent(
-    Analytics,
+Analytics.scripts = [
     '<script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>'
-)
+]
+
+export default ampComponent(Analytics)

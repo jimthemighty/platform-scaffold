@@ -15,6 +15,7 @@ import Icon from '../../components/icon'
 
 // Partials
 import NavigationSocialIcons from './partials/navigation-social-icons'
+import {ampComponent} from '../../amp-sdk'
 
 // Selectors
 import {getNavigationRoot, getPath} from './selectors'
@@ -89,4 +90,6 @@ const mapStateToProps = createPropsSelector({
     path: getPath
 })
 
-export default connect(mapStateToProps)(Navigation)
+export default ampComponent(
+    connect(mapStateToProps)(Navigation)
+)

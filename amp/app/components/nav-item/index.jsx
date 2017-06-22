@@ -3,6 +3,7 @@ import classNames from 'classnames'
 
 // Components
 import ListTile from '../list-tile'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * A default renderer for items displayed in the navigation.
@@ -87,4 +88,4 @@ NavItem.propTypes = {
 
 }
 
-export default NavItem
+export default ampComponent(NavItem)

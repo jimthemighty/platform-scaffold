@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * Product Item represents a single product and it's basic information: name,
@@ -83,4 +84,4 @@ ProductItem.propTypes = {
     price: PropTypes.node
 }
 
-export default ProductItem
+export default ampComponent(ProductItem)

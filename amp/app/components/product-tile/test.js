@@ -1,4 +1,4 @@
-import {mount, shallow} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
 /* eslint-env jest */
 import React from 'react'
 
@@ -6,7 +6,7 @@ import ProductTile from './index.jsx'
 import ProductItem from '../product-item/index.jsx'
 
 test('ProductTile renders without errors', () => {
-    const wrapper = mount(<ProductTile />)
+    const wrapper = shallow(<ProductTile />)
     expect(wrapper.length).toBe(1)
 })
 

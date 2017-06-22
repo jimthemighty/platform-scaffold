@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * A link that supports extra analytics-related attributes. It can take the link
@@ -76,4 +77,4 @@ Link.propTypes = {
 
 Link.displayName = 'Link'
 
-export default Link
+export default ampComponent(Link)

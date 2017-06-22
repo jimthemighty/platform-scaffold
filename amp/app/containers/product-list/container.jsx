@@ -14,6 +14,7 @@ import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 // Container Styles
 import containerStyles from './container.scss'
+import {ampComponent} from '../../amp-sdk'
 
 const ProductList = () => {
     const filterSheetId = 'filter-sheet'
@@ -43,8 +44,4 @@ const mapStateToProps = createPropsSelector({
     products: getFilteredAndSortedListProducts
 })
 
-export default connect(
-    mapStateToProps
-)(ProductList)
-
-export const styles = containerStyles.toString()
+export default ampComponent(connect(mapStateToProps)(ProductList))

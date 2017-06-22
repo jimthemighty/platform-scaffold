@@ -10,6 +10,7 @@ import AmpLightbox from '../../components/amp-lightbox'
 // Selectors
 import {getProductDescription, getProductTitle, getProductImages} from '../../../../web/app/store/products/selectors'
 import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
+import {ampComponent} from '../../amp-sdk'
 
 // Utils
 import {staticURL} from '../../utils'
@@ -57,8 +58,6 @@ const mapStateToProps = createPropsSelector({
     title: getProductTitle
 })
 
-export const styles = containerStyles.toString()
-
-export default connect(
-    mapStateToProps
-)(ProductDetails)
+export default ampComponent(
+    connect(mapStateToProps)(ProductDetails)
+)

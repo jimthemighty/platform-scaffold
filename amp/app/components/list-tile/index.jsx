@@ -3,6 +3,7 @@ import classNames from 'classnames'
 
 // Components
 import Link from '../link'
+import {ampComponent} from '../../amp-sdk'
 
 const ListTilePrimary = ({
     children,
@@ -113,4 +114,4 @@ ListTile.propTypes = {
     startAction: PropTypes.node
 }
 
-export default ListTile
+export default ampComponent(ListTile)

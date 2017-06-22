@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 // The DangerousHTML component isn't intended to be something the user interacts with directly
 // It should just act as an invisible wrapped that catches clicks that bubble up from its children
@@ -60,4 +61,4 @@ DangerousHTML.propTypes = {
     className: PropTypes.string,
 }
 
-export default DangerousHTML
+export default ampComponent(DangerousHTML)

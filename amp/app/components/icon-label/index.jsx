@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 // Components
 import Icon from '../icon'
@@ -53,4 +54,4 @@ IconLabel.propTypes = {
 
 }
 
-export default IconLabel
+export default ampComponent(IconLabel)
