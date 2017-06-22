@@ -4,27 +4,21 @@ machine:
 dependencies:
     cache_directories:
         - "web/node_modules"
-        - "native/node_modules"
+        # - "native/node_modules"
     pre:
-        - mkdir $CIRCLE_ARTIFACTS/logs
-        - ./web/scripts/install-google-chrome-stable.sh $> $CIRCLE_ARTIFACTS/logs/installChrome.log:
-            background: true
-        - npm install:
+        - ./scripts/setup-env-ci.sh:
             pwd: web
-        - ./tests/system/start-test-server.sh &> $CIRCLE_ARTIFACTS/logs/startTestServer.log:
-            pwd: web
-            background: true
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
         #- npm install:
         #    pwd: native
 test:
     override:
-        - ./tests/system/run-all-tests.sh:
+        - ./tests/system/test-scripts/run-all-tests-on-ci.sh:
             pwd: web
             parallel: true
     post:
-       - cp -R lighthouse/* $CIRCLE_ARTIFACTS:
-           pwd: web
+        - ./scripts/upload-artifacts-ci.sh:
+            pwd: web
 experimental:
     notify:
         branches:

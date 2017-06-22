@@ -17,7 +17,7 @@ import header from './header/reducer'
 import home from './home/reducer'
 import login from './login/reducer'
 import myProductDetails from './my-product-details/reducer'
-import navigation from './navigation/reducer'
+import navigation from '../modals/navigation/reducer'
 import productDetails from './product-details/reducer'
 import productList from './product-list/reducer'
 

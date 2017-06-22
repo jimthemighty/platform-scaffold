@@ -1,1 +1,25 @@
-!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.Astro=e():t.Astro=e()}(this,function(){return function(t){function e(r){if(n[r])return n[r].exports;var o=n[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,e),o.l=!0,o.exports}var n={};return e.m=t,e.c=n,e.i=function(t){return t},e.d=function(t,n,r){e.o(t,n)||Object.defineProperty(t,n,{configurable:!1,enumerable:!0,get:r})},e.n=function(t){var n=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(n,"a",n),n},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="",e(e.s=0)}([function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r={},o=/Astro App/i,u=/android/i,i=/ip(hone|ad)/i;r.app=function(){return o.test(navigator.userAgent)},r.androidApp=function(){return r.app()&&u.test(navigator.userAgent)},r.iOSApp=function(){return r.app()&&i.test(navigator.userAgent)},e.default=r}])});
+const isRunningIn = {};
+
+const APP_REGEX = /Astro App/i;
+const ANDROID_REGEX = /android/i;
+const IOS_REGEX = /ip(hone|ad)/i;
+
+// This method is for doing feature detection within a website
+// for augmenting behaviour in the app.
+isRunningIn.app = function() {
+    return APP_REGEX.test(navigator.userAgent);
+};
+
+// This method is for doing feature detection within a website
+// for making Android-specific augmentations in the app.
+isRunningIn.androidApp = function() {
+    return isRunningIn.app() && ANDROID_REGEX.test(navigator.userAgent);
+};
+
+// This method is for doing feature detection within a website
+// for making iOS-specific augmentations in the app.
+isRunningIn.iOSApp = function() {
+    return isRunningIn.app() && IOS_REGEX.test(navigator.userAgent);
+};
+
+export default isRunningIn;
