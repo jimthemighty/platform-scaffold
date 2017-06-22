@@ -17,7 +17,7 @@ import offlineReducer from 'progressive-web-sdk/dist/store/offline/reducer'
 import productReducer from 'progressive-web-sdk/dist/store/products/reducer'
 import checkoutReducer from './checkout/reducer'
 import appReducer from 'progressive-web-sdk/dist/store/app/reducer'
-import {reducer as imReducer} from '../integration-manager/reducer'
+import {reducer as imReducer} from 'progressive-web-sdk/dist/integration-manager/reducer'
 import {reducer as formReducer} from 'redux-form'
 
 import analytics from 'redux-analytics'
