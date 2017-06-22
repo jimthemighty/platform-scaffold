@@ -1,21 +1,32 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import {canonicalURL, staticURL} from '../../../utils'
+import URL from 'url'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Button from '../../../components/button'
+import AmpForm from '../../../components/amp-form'
 import Field from '../../../components/field'
 import List from '../../../components/list'
 import ProductTile from '../../../components/product-tile'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
-import {staticURL} from '../../../utils'
+import * as appSelectors from '../../../../../web/app/containers/app/selectors.js'
 import {getCategoryItemCount} from '../../../../../web/app/store/categories/selectors'
 
 const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
+
+const formAction = (currentUrl) => {
+    const action = URL.parse(canonicalURL(currentUrl))
+    action.query = null
+    action.search = null
+    action.fragment = null
+    return URL.format(action)
+}
 
 const ResultList = ({products}) => (
     <List className="amp--borderless">
@@ -62,9 +73,10 @@ NoResultsList.propTypes = {
 }
 
 const ProductListContents = (props) => {
-    const {sheetId, products, routeName, activeFilters} = props
+    const {sheetId, products, routeName, activeFilters, currentUrl} = props
 
     const toggleFilterSheet = `tap:${sheetId}.toggle`
+    const formId = `${sheetId}__form`
 
     return (
         <div>
@@ -90,20 +102,24 @@ const ProductListContents = (props) => {
                                 </div>
 
                                 <div className="t-product-list__sort u-flex">
-                                    <Field
-                                        className="amp--has-select"
-                                        idForLabel="sort"
-                                        label="Sort by"
-                                    >
-                                        <select
-                                            className="u-color-neutral-60"
+                                    <AmpForm id={formId} method="GET" target="_top" action={formAction(currentUrl)}>
+                                        <Field
+                                            className="amp--has-select"
+                                            idForLabel="sort"
+                                            label="Sort by"
                                         >
-                                            {/* This list of options corresponds to the functions in app/utils/sort-utils.js */}
-                                            <option value="position">Position</option>
-                                            <option value="name">Name</option>
-                                            <option value="price">Price</option>
-                                        </select>
-                                    </Field>
+                                            <select
+                                                name="product_list_order"
+                                                className="u-color-neutral-60"
+                                                on={`change:${formId}.submit`}
+                                            >
+                                                {/* This list of options corresponds to the functions in app/utils/sort-utils.js */}
+                                                <option value="">Position</option>
+                                                <option value="name">Name</option>
+                                                <option value="price">Price</option>
+                                            </select>
+                                        </Field>
+                                    </AmpForm>
                                 </div>
                             </div>
                         }
@@ -123,6 +139,7 @@ const ProductListContents = (props) => {
 ProductListContents.propTypes = {
     products: PropTypes.array.isRequired,
     activeFilters: PropTypes.array,
+    currentUrl: PropTypes.string,
     numItems: PropTypes.number,
     routeName: PropTypes.string,
     sheetId: PropTypes.string
@@ -131,7 +148,8 @@ ProductListContents.propTypes = {
 const mapStateToProps = createPropsSelector({
     activeFilters: selectors.getActiveFilters,
     numItems: getCategoryItemCount,
-    products: selectors.getFilteredAndSortedListProducts
+    products: selectors.getFilteredAndSortedListProducts,
+    currentUrl: appSelectors.getCurrentUrl
 })
 
 export default connect(mapStateToProps)(ProductListContents)

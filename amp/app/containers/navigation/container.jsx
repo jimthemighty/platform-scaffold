@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import URL from 'url'
-import packagejson from '../../../package.json'
 
 // Components
 import Sheet from '../../components/sheet'
@@ -12,6 +11,7 @@ import NavItem from '../../components/nav-item'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabelButton from '../../components/icon-label-button'
 import Icon from '../../components/icon'
+import {canonicalURL} from '../../utils'
 
 // Partials
 import NavigationSocialIcons from './partials/navigation-social-icons'
@@ -21,14 +21,6 @@ import {ampComponent} from '../../amp-sdk'
 import {getNavigationRoot, getPath} from './selectors'
 
 const pathnameMatch = (url, pathname) => Boolean(url && URL.parse(url).pathname === pathname)
-
-const canonicalURL = (localURL) => {
-    const canonical = URL.parse(packagejson.siteUrl)
-    const local = URL.parse(localURL)
-    local.protocol = canonical.protocol
-    local.hostname = canonical.hostname
-    return URL.format(local)
-}
 
 const itemFactory = (type, componentProps) => {
     // Login has a special nav item
