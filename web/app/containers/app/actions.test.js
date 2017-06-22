@@ -8,7 +8,7 @@ import {fromJS} from 'immutable'
 import {checkIfOffline} from './actions'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {OFFLINE_MODAL} from '../offline/constants'
+import {OFFLINE_MODAL} from '../../modals/constants'
 import {OFFLINE_ASSET_URL} from './constants'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 

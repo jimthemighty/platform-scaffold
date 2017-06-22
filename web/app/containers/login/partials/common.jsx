@@ -12,7 +12,7 @@ import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Link from 'progressive-web-sdk/dist/components/link'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-import {REMEMBER_ME_MODAL} from '../constants'
+import {REMEMBER_ME_MODAL} from '../../../modals/constants'
 
 export const LoginFieldLabel = ({label, forgotPassword}) => (
     <span>

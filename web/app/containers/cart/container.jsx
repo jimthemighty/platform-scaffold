@@ -16,11 +16,8 @@ import Image from 'progressive-web-sdk/dist/components/image'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
-import EstimateShippingReduxForm from './partials/cart-estimate-shipping'
 
 import {requestCartContent} from './actions'
-import CartWishlistModal from './partials/cart-wishlist'
-import CartRemoveItemModal from './partials/cart-remove-item'
 import CartItems from './partials/cart-items'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
@@ -112,10 +109,6 @@ class Cart extends React.Component {
 
                     <EmptyCartContents hide={!isCartEmptyAndLoaded} />
                 </Grid>
-
-                <EstimateShippingReduxForm />
-                <CartWishlistModal />
-                <CartRemoveItemModal />
             </div>
         )
     }

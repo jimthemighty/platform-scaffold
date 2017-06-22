@@ -6,11 +6,9 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {fetchShippingMethodsEstimate} from '../../integration-manager/checkout/commands'
 import {
-    CART_ESTIMATE_SHIPPING_MODAL,
-    CART_REMOVE_ITEM_MODAL,
-    CART_WISHLIST_MODAL,
     PROMO_ERROR
 } from './constants'
+import {CART_ESTIMATE_SHIPPING_MODAL, CART_WISHLIST_MODAL, CART_REMOVE_ITEM_MODAL} from '../../modals/constants'
 import {
     getCart,
     removeFromCart,

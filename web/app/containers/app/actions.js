@@ -18,7 +18,7 @@ import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {OFFLINE_MODAL} from '../offline/constants'
+import {OFFLINE_MODAL} from '../../modals/constants'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])

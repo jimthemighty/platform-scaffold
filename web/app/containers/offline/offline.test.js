@@ -7,7 +7,7 @@ import {mount} from 'enzyme'
 import React from 'react'
 
 import ConnectedOfflineBanner from './partials/offline-banner'
-import ConnectedOfflineModal from './partials/offline-modal'
+import ConnectedOfflineModal from '../../modals/offline/container'
 
 const OfflineBanner = ConnectedOfflineBanner.WrappedComponent
 const OfflineModal = ConnectedOfflineModal.WrappedComponent

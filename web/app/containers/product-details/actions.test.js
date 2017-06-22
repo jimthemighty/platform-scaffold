@@ -7,7 +7,7 @@ import Immutable from 'immutable'
 
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
-import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from './constants'
+import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
 import {addToCartStarted, submitCartForm} from './actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
