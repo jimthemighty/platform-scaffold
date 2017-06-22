@@ -74,7 +74,9 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
             }
         })
         if (Object.keys(errors).length > 0) {
-            return Promise.reject(new SubmissionError(errors))
+            return Promise.reject(new SubmissionError({
+                _error: errors
+            }))
         }
     }
 

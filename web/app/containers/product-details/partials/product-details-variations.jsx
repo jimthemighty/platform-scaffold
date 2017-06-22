@@ -12,18 +12,24 @@ import {onVariationChange} from '../actions'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import {Swatch, SwatchItem} from 'progressive-web-sdk/dist/components/swatch'
 
-const variationSwatch = ({input: {value, onChange}, values, label}) => ( // eslint-disable-line
+const variationSwatch = ({input: {value, onChange}, values, label, error}) => ( // eslint-disable-line
     <div>
         <Swatch
             label={label}
             onChange={(val) => onChange(value = val)}
         >
             {values.map(({label, value}) =>
-                <SwatchItem key={value}
-                    value={value}
-                >
-                    {label}
-                </SwatchItem>
+                <div key={value}>
+                    {error ?
+                        <p>{error.size}</p> :
+                        null
+                    }
+                    <SwatchItem
+                        value={value}
+                    >
+                        {label}
+                    </SwatchItem>
+                </div>
             )}
         </Swatch>
     </div>
@@ -38,14 +44,15 @@ variationSwatch.propTypes = {
     values: PropTypes.array
 }
 
-const ProductDetailsVariations = ({variations}) => (
+const ProductDetailsVariations = ({variations, error}) => (
     <div className={variations.length > 0 && 'u-margin-top-lg'}>
         {variations.map(({id, slug, label, values = []}) => (
-            <FieldRow key={id}>
+            <FieldRow key={id} error={error}>
                 <ReduxForm.Field
                     label={label}
                     name={slug}
                     values={values}
+                    error={error}
                     component={variationSwatch}
                 />
             </FieldRow>
