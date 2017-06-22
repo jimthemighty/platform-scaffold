@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import NavItem from '../nav-item'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * Returns a mapping of
@@ -93,4 +94,4 @@ NavMenu.propTypes = {
     })
 }
 
-export default NavMenu
+export default ampComponent(NavMenu)

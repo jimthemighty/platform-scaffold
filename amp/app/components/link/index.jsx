@@ -4,6 +4,7 @@
 
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 
 /**
@@ -80,4 +81,4 @@ Link.propTypes = {
 
 Link.displayName = 'Link'
 
-export default Link
+export default ampComponent(Link)

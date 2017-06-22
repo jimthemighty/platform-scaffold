@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import * as ampSDK from '../../amp-sdk'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * AMP Sheet Component
@@ -116,7 +116,8 @@ Sheet.defaultProps = {
     side: 'left'
 }
 
-export default ampSDK.ampComponent(
-    Sheet,
+Sheet.scripts = [
     '<script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>'
-)
+]
+
+export default ampComponent(Sheet)

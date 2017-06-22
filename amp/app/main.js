@@ -22,28 +22,35 @@ import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
 
 import Analytics from './components/analytics'
-import * as home from './containers/home/container'
-import * as productDetails from './containers/product-details/container'
-import * as productList from './containers/product-list/container'
+import Home from './containers/home/container'
+import ProductDetails from './containers/product-details/container'
+import ProductList from './containers/product-list/container'
 import App from './containers/app/container'
 
-import ampPage from './templates/amp-page'
 import * as ampSDK from './amp-sdk'
+import ampPage from './templates/amp-page'
 
 import {initializeStore} from './data-integration/connectedStore'
 import {PAGE_TITLE} from './data-integration/constants'
-import {fontServe} from './templates/font-serve'
+
+
+import globalStyles from './styles/global.scss'
+import styles from './styles'
+
+const fonts = [
+    '<link href="https://fonts.googleapis.com/css?family=Oswald:200,400" rel="stylesheet">'
+]
 
 
 const getFullUrl = (req) => {
     return `${ampPackageJson.siteUrl}${req.url}`
 }
 
-const render = (req, res, store, component, css) => {
-    const scripts = new ampSDK.Set()
+const render = (req, res, store, component) => {
+    const components = new Set()
 
     const body = ReactDOMServer.renderToStaticMarkup(
-        <ampSDK.AmpContext declareDependency={scripts.add}>
+        <ampSDK.AmpContext trackRender={components.add.bind(components)}>
             <Provider store={store}>
                 <App>
                     <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
@@ -52,34 +59,43 @@ const render = (req, res, store, component, css) => {
             </Provider>
         </ampSDK.AmpContext>
     )
+
+    const scriptIncludes = []
+    const styleIncludes = [globalStyles]
+
+    components.forEach((component) => {
+        Array.prototype.push.apply(scriptIncludes, component.scripts || [])
+        Array.prototype.push.apply(styleIncludes, styles.get(component) || [])
+    })
+
     const state = store.getState()
     const rendered = ampPage({
         title: state.ui.app.get(PAGE_TITLE),
         canonicalURL: getFullUrl(req),
         body,
-        css,
-        ampScriptIncludes: scripts.items().join('\n'),
-        fontServe: fontServe()
+        css: styleIncludes.map((x) => x.toString().trim()).join('\n'),
+        scriptIncludes: scriptIncludes.join('\n'),
+        fontIncludes: fonts.join('\n')
     })
     res.send(rendered)
 }
 
 
 const productDetailsPage = (req, res, next) => {
-    initializeStore(getFullUrl(req), productDetails.default)
-        .then((store) => render(req, res, store, productDetails.default, productDetails.styles))
+    initializeStore(getFullUrl(req), ProductDetails)
+        .then((store) => render(req, res, store, ProductDetails))
         .catch(next)
 }
 
 const productListPage = (req, res, next) => {
-    initializeStore(getFullUrl(req), productList.default)
-        .then((store) => render(req, res, store, productList.default, productList.styles))
+    initializeStore(getFullUrl(req), ProductList)
+        .then((store) => render(req, res, store, ProductList))
         .catch(next)
 }
 
 const homePage = (req, res, next) => {
-    initializeStore(getFullUrl(req), home.default)
-        .then((store) => render(req, res, store, home.default, home.styles))
+    initializeStore(getFullUrl(req), Home)
+        .then((store) => render(req, res, store, Home))
         .catch(next)
 }
 

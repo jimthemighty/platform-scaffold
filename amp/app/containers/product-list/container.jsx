@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import containerStyles from './container.scss'
 
 import List from '../../components/list'
 import ProductTile from '../../components/product-tile'
@@ -13,6 +12,7 @@ import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 // Partials
 import ProductListHeader from './partials/product-list-header'
+import {ampComponent} from '../../amp-sdk'
 
 const ProductList = ({
     numItems,
@@ -61,8 +61,4 @@ const mapStateToProps = createPropsSelector({
     products: getFilteredAndSortedListProducts
 })
 
-export default connect(
-    mapStateToProps
-)(ProductList)
-
-export const styles = containerStyles.toString()
+export default ampComponent(connect(mapStateToProps)(ProductList))

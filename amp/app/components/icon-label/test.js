@@ -1,19 +1,18 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-
-import {mount, shallow} from 'enzyme'
+/* eslint-disable newline-per-chained-call */
+import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
 import Icon from '../icon/'
 import IconLabel from './index.jsx'
 
 test('IconLabel renders without errors', () => {
-    const wrapper = mount(<IconLabel iconName="person" label="person" />)
+    const wrapper = shallow(<IconLabel iconName="person" label="person" />)
     expect(wrapper.length).toBe(1)
 })
 
-/* eslint-disable newline-per-chained-call */
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<IconLabel iconName="person" label="person" />)
 

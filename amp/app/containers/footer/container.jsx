@@ -2,6 +2,7 @@ import React from 'react'
 
 import FooterNewsletterSubscription from './partials/footer-newsletter-subscription'
 import FooterNavigation from './partials/footer-navigation'
+import {ampComponent} from '../../amp-sdk'
 
 const Footer = () => {
     return (
@@ -12,4 +13,4 @@ const Footer = () => {
     )
 }
 
-export default Footer
+export default ampComponent(Footer)

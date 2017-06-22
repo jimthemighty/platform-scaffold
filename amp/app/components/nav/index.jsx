@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 
 const Nav = ({
@@ -28,4 +29,4 @@ Nav.propTypes = {
     className: PropTypes.string,
 }
 
-export default Nav
+export default ampComponent(Nav)

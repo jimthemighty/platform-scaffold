@@ -3,12 +3,12 @@ import {connect} from 'react-redux'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
 import {staticURL} from '../../utils'
-import containerStyles from './container.scss'
 
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getProductDescription, getProductTitle, getProductImages} from '../../../../web/app/store/products/selectors'
 import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
+import {ampComponent} from '../../amp-sdk'
 
 const containerClass = 't-product-details'
 
@@ -52,8 +52,6 @@ const mapStateToProps = createPropsSelector({
     title: getProductTitle
 })
 
-export const styles = containerStyles.toString()
-
-export default connect(
-    mapStateToProps
-)(ProductDetails)
+export default ampComponent(
+    connect(mapStateToProps)(ProductDetails)
+)

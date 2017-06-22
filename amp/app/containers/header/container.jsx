@@ -7,6 +7,8 @@ import IconLabel from '../../components/icon-label'
 
 import {staticURL} from '../../utils'
 
+import {ampComponent} from '../../amp-sdk'
+
 const Header = (props) => {
 
     const {navId} = props
@@ -49,4 +51,4 @@ Header.propTypes = {
     navId: PropTypes.string
 }
 
-export default Header
+export default ampComponent(Header)

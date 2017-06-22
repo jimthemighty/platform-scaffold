@@ -2,42 +2,40 @@
  * Code that might be good to move into the AMP-SDK repository...
  */
 import React from 'react'
+import hoistNonReactStatics from 'hoist-non-react-statics'
 
-const getDisplayName = (Component) => (
-    Component.displayName || Component.name || 'Component'
-)
+const getDisplayName = (Component) => Component.displayName || Component.name || 'Component'
 
 const noop = () => undefined
 
 
 /**
- * Higher-order component that records the wrapped component's dependency
- * on an external script if it is rendered.
- *
- * This only makes sense for server-side rendering.
+ * Higher-order component that tracks calls to components' render() methods on
+ * the server-side so that script/css dependencies can be included on the page,
+ * as needed.
  */
-export const ampComponent = (WrappedComponent, scriptInclude) => {
+export const ampComponent = (WrappedComponent) => {
     const AmpComponent = (props, context) => {
-        const declareDependency = context.declareDependency || noop
-        declareDependency(scriptInclude)
+        const trackRender = context.trackRender || noop
+        trackRender(AmpComponent)
         return <WrappedComponent {...props} />
     }
     AmpComponent.displayName = `AmpComponent(${getDisplayName(WrappedComponent)})`
-
     AmpComponent.contextTypes = {
-        declareDependency: React.PropTypes.func
+        trackRender: React.PropTypes.func
     }
-
-    return AmpComponent
+    return hoistNonReactStatics(AmpComponent, WrappedComponent)  // connect() does this too
 }
 
 
 /**
- * Wraps the AMP app and shares context, ie. to enable tracking js-dependencies.
+ * Root component for an AMP application. Exposes the `trackRender` function
+ * through context which is used to embed script/css dependencies for rendered
+ * components.
  */
 export class AmpContext extends React.Component {
     getChildContext() {
-        return {declareDependency: this.props.declareDependency}
+        return {trackRender: this.props.trackRender}
     }
     render() {
         return this.props.children
@@ -46,26 +44,9 @@ export class AmpContext extends React.Component {
 
 AmpContext.propTypes = {
     children: React.PropTypes.element,
-    declareDependency: React.PropTypes.func
+    trackRender: React.PropTypes.func
 }
 
 AmpContext.childContextTypes = {
-    declareDependency: React.PropTypes.func
-}
-
-
-export class Set {
-    constructor() {
-        this.obj = {}
-        this.add = this.add.bind(this)
-        this.items = this.items.bind(this)
-    }
-
-    add(item) {
-        this.obj[item] = true
-    }
-
-    items() {
-        return Object.keys(this.obj)
-    }
+    trackRender: React.PropTypes.func
 }
