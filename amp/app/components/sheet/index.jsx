@@ -4,6 +4,8 @@ import {ampComponent} from '../../amp-sdk'
 
 /**
  * AMP Sheet Component
+ *
+ * This component must be a direct child of the <body> tag to pass AMP Validator.
  */
 
 const Sheet = ({

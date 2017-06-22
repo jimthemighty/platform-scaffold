@@ -83,6 +83,9 @@
     "deploy": "node ./scripts/deploy.js"
   },
   "jest": {
+    "setupFiles": [
+        "<rootDir>/app/jest-setup.js"
+    ],
     "moduleNameMapper": {
       "\\.(css|scss)$": "<rootDir>/app/__mocks__/styleMock.js",
       "\\.svg$": "<rootDir>/app/__mocks__/svgMock.js"

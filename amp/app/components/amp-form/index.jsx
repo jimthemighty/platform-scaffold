@@ -18,7 +18,6 @@ const AmpForm = ({
     )
 }
 
-
 AmpForm.propTypes = {
     /**
      * The children of the form
@@ -29,7 +28,6 @@ AmpForm.propTypes = {
      */
     className: PropTypes.string,
 }
-
 
 AmpForm.scripts = [
     '<script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>'

@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 
+// Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import ListTile from '../list-tile'
 import ProductItem from '../product-item'

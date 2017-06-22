@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import {ampComponent} from '../../amp-sdk'
 
-
 const Nav = ({
     children,
     className
@@ -15,7 +14,6 @@ const Nav = ({
         </div>
     )
 }
-
 
 Nav.propTypes = {
     /**

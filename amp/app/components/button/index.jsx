@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+
+// Components
 import Link from '../link'
 import Icon from '../icon'
 import {ampComponent} from '../../amp-sdk'

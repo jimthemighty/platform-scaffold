@@ -1,9 +1,10 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+
+// Components
 import Button from '../button'
 import IconLabel from '../icon-label'
 import {ampComponent} from '../../amp-sdk'
-
 
 const IconLabelButton = (props) => {
     const {
@@ -42,7 +43,6 @@ const IconLabelButton = (props) => {
         </Button>
     )
 }
-
 
 IconLabelButton.propTypes = {
     /**
@@ -95,6 +95,5 @@ IconLabelButton.propTypes = {
      */
     value: PropTypes.string
 }
-
 
 export default ampComponent(IconLabelButton)

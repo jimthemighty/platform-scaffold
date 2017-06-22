@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+
+// Components
 import ListTile from '../list-tile'
 import {ampComponent} from '../../amp-sdk'
 
