@@ -38,7 +38,7 @@ class AccordionItem extends React.Component {
 
         const HeadingTag = `h${headingLevel}`
 
-        const expanded = shown ? 'true' : null
+        const expanded = shown ? true : null
 
         return (
             <section className={classes} expanded={expanded} id={this.itemId}>
