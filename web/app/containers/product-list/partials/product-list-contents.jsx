@@ -17,6 +17,7 @@ import {receiveCurrentProductId} from '../../../integration-manager/results'
 import Button from 'progressive-web-sdk/dist/components/button'
 import List from 'progressive-web-sdk/dist/components/list'
 import Image from 'progressive-web-sdk/dist/components/image'
+import Pagination from 'progressive-web-sdk/dist/components/pagination'
 // import Icon from 'progressive-web-sdk/dist/components/icon'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Field from 'progressive-web-sdk/dist/components/field'
@@ -71,7 +72,9 @@ const ProductListContents = ({
     openModal,
     setCurrentProduct,
     sortChange,
-    routeName
+    routeName,
+    pagination,
+    changePagination
 }) => (
     <div>
         {contentsLoaded && activeFilters.length > 0 && (
@@ -148,6 +151,16 @@ const ProductListContents = ({
             :
                 <NoResultsList routeName={routeName} />
             }
+            {!pagination &&
+                <Pagination
+                    className="u-margin-top-lg"
+                    onChange={changePagination}
+                    currentPage={pagination ? pagination.current : '1'}
+                    pageCount={pagination ? pagination.pageCount : '4'}
+                    showCurrentPageMessage={true}
+                    showPageButtons={false}
+                />
+            }
         </div>
     </div>
 )
@@ -156,10 +169,12 @@ const ProductListContents = ({
 ProductListContents.propTypes = {
     products: PropTypes.array.isRequired,
     activeFilters: PropTypes.array,
+    changePagination: PropTypes.func,
     clearFilters: PropTypes.func,
     contentsLoaded: PropTypes.bool,
     numItems: PropTypes.number,
     openModal: PropTypes.func,
+    pagination: PropTypes.object,
     routeName: PropTypes.string,
     setCurrentProduct: PropTypes.func,
     sortChange: PropTypes.func
