@@ -3,7 +3,6 @@ import classNames from 'classnames'
 
 // Components
 import Icon from '../icon'
-import AccordionItemContent from './accordion-item-content'
 
 const uuid = (() => {
     let i = 0
@@ -61,9 +60,11 @@ class AccordionItem extends React.Component {
                     </div>
                 </HeadingTag>
 
-                <AccordionItemContent>
-                    {children}
-                </AccordionItemContent>
+                <div className="amp-accordion__content-wrapper">
+                    <div className="amp-accordion__content" role="presentation">
+                        {children}
+                    </div>
+                </div>
             </section>
         )
     }
