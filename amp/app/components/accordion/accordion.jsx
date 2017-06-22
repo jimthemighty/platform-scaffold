@@ -25,10 +25,8 @@ class Accordion extends React.Component {
 
         const classes = classNames('amp-accordion', className)
 
-        const disableSessionStateAttribute = disableSessionState ? 'true' : null
-
         return (
-            <amp-accordion class={classes} role="tablist" disable-session-states={disableSessionStateAttribute}>
+            <amp-accordion class={classes} role="tablist" disable-session-states={disableSessionState ? true : null}>
                 {React.Children.map(children, (child, idx) => {
                     // If the user is using && to conditionally add a child
                     // the child could be undefined
