@@ -12,24 +12,22 @@ import {onVariationChange} from '../actions'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import {Swatch, SwatchItem} from 'progressive-web-sdk/dist/components/swatch'
 
-const variationSwatch = ({input: {value, onChange}, values, label, error}) => ( // eslint-disable-line
+const variationSwatch = ({input: {value, onChange}, values, label, error, name}) => ( // eslint-disable-line
     <div>
         <Swatch
             label={label}
             onChange={(val) => onChange(value = val)}
         >
+            {error ?
+                <p>{error[name]}</p> :
+                null
+            }
             {values.map(({label, value}) =>
-                <div key={value}>
-                    {error ?
-                        <p>{error.size}</p> :
-                        null
-                    }
-                    <SwatchItem
-                        value={value}
-                    >
-                        {label}
-                    </SwatchItem>
-                </div>
+                <SwatchItem key={value}
+                    value={value}
+                >
+                    {label}
+                </SwatchItem>
             )}
         </Swatch>
     </div>
