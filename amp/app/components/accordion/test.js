@@ -56,6 +56,7 @@ describe('Accordion', () => {
 
         expect(first.hasAttribute('expanded')).toBe(false)
         expect(second.hasAttribute('expanded')).toBe(true)
+        expect(second.getAttribute('expanded')).toBe('')
     })
 })
 

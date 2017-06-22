@@ -32,16 +32,12 @@ class AccordionItem extends React.Component {
             iconPosition
         } = this.props
 
-        const classes = classNames('amp-accordion__item', className)
-
         const headerId = `accordion__header-${this.id}`
-
         const HeadingTag = `h${headingLevel}`
 
-        const expanded = shown ? true : null
-
+        const expanded = shown ? {expanded: ''} : {}
         return (
-            <section className={classes} expanded={expanded} id={this.itemId}>
+            <section id={this.itemId} className={classNames('amp-accordion__item', className)} {...expanded}>
                 <HeadingTag className="amp-accordion__header" id={headerId}>
                     <div className={`amp-accordion__inner-header amp--icon-${iconPosition}`}>
                         <div className="amp-accordion__icon" aria-hidden="true">
