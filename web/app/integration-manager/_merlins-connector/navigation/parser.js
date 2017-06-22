@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {LOGGED_IN_NAV, GUEST_NAV} from '../../../containers/navigation/constants'
+import {LOGGED_IN_NAV, GUEST_NAV} from '../../../modals/navigation/constants'
 
 // We hard-code this since it is only parseable from non-checkout pages.
 const SIGN_IN_HREF = '/customer/account/login/'
@@ -17,7 +17,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
         // reducer in the `containers/navigation/` area can just flip the account
         // node type and title and not worry about switching/adding/deleting the
         // `path` attribute.
-        // See also `containers/navigation/container.jsx`'s `itemFactory()` function.
+        // See also `modals/navigation/container.jsx`'s `itemFactory()` function.
         path: SIGN_IN_HREF
     })
 

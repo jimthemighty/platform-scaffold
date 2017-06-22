@@ -2,7 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {CHECKOUT_CONFIRMATION_MODAL, CHECKOUT_CONFIRMATION_REGISTRATION_FAILED} from './constants'
+import {CHECKOUT_CONFIRMATION_REGISTRATION_FAILED} from './constants'
+import {CHECKOUT_CONFIRMATION_MODAL} from '../../modals/constants'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {createSelector} from 'reselect'
 import {createPropsSelector} from 'reselect-immutable-helpers'
