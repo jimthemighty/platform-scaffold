@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getProductImages} from '../../../store/products/selectors'
+import {getProductImages} from '../../../../../web/app/store/products/selectors'
 
-import Carousel from '../../components/carousel'
-import CarouselItem from '../../components/carousel/carousel-item'
+import Carousel from '../../../components/carousel'
+import CarouselItem from '../../../components/carousel/carousel-item'
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 
 const ProductDetailsCarousel = ({images}) => {
