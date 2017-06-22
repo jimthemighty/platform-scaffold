@@ -4,7 +4,7 @@
 
 import * as utils from '../utils'
 import {receiveNavigationData, setLoggedIn, setCheckoutShippingURL, setCartURL} from '../../results'
-import {receiveUserEmail} from '../../checkout/results'
+import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {parseCategories} from '../parsers'
 
 import {getSignInURL, getCheckoutShippingURL, getCartURL} from '../config'
