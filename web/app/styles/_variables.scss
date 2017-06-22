@@ -109,20 +109,20 @@ $bold-font-weight: 700;
 
 // Neutrals
 $neutral-00: #fff;
-$neutral-10: #f7f7f7;
+$neutral-10: #f7f7f7; // GENERATOR_REPLACE:#f2f2f2
 $neutral-15: #eee;
-$neutral-20: #d5d5d5;
-$neutral-30: #bfbfbf;
-$neutral-40: #999;
-$neutral-50: #696969;
-$neutral-60: #333;
+$neutral-20: #d5d5d5; // GENERATOR_REPLACE:#ddd
+$neutral-30: #bfbfbf; // GENERATOR_REPLACE:#bbb
+$neutral-40: #999; // GENERATOR_REPLACE:#888
+$neutral-50: #696969; // GENERATOR_REPLACE:#666
+$neutral-60: #333; // GENERATOR_REPLACE:#404040
 $neutral-70: #000;
 
 // Brand colors
-$brand-color: #41378c; // purple
-$secondary-brand-color: lighten($brand-color, 15%);
-$tertiary-brand-color: #261c67;
-$quaternary-brand-color: #4e439b;
+$brand-color: #41378c; // purple // GENERATOR_REPLACE:#0288a7
+$secondary-brand-color: lighten($brand-color, 15%); // GENERATOR_REPLACE:#005c83
+$tertiary-brand-color: #261c67; // GENERATOR_REPLACE:#83bdcb
+$quaternary-brand-color: #4e439b; // GENERATOR_REPLACE:#bfdfe6
 
 // Accent colors
 $accent-color: #ec354e; // coral
@@ -130,12 +130,12 @@ $light-accent-color: lighten($accent-color, 15%);
 $dark-accent-color: #b21c30;
 
 // Primary Action
-$primary-action-color: #dc0a3c; // red
+$primary-action-color: #dc0a3c; // red // GENERATOR_REPLACE:#dc0a3c
 $light-primary-action-color: lighten($primary-action-color, 15%);
 $dark-primary-action-color: darken($primary-action-color, 15%);
 
 // Secondary Action
-$secondary-action-color: #ff852c; // orange
+$secondary-action-color: #ff852c; // orange // GENERATOR_REPLACE:#
 $light-secondary-action-color: lighten($secondary-action-color, 15%);
 $dark-secondary-action-color: darken($secondary-action-color, 15%);
 
