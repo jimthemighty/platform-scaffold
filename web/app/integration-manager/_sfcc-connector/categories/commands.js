@@ -8,10 +8,10 @@ import {receiveCategoryContents, receiveCategoryInformation} from '../../categor
 import {receiveProductListProductData} from '../../products/results'
 import {parseProductListData} from '../parsers'
 
-import {getCategoryPath, SUGGESTION_URL} from '../config'
+import {getCategoryPath, SEARCH_URL} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id, query) => `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}`
+const makeCategorySearchURL = (id, query = '') => `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}`
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
@@ -51,7 +51,7 @@ export const initProductListPage = (url) => (dispatch) => {
     let searchUrl
     const path = urlToPathKey(url)
     const categoryID = extractCategoryId(url)
-    const isSearch = path.includes(SUGGESTION_URL)
+    const isSearch = path.includes(SEARCH_URL)
 
     if (isSearch) {
         const searchQueryMatch = path.match(/\?q=\+(.*)/)
@@ -68,7 +68,7 @@ export const initProductListPage = (url) => (dispatch) => {
             parentId: null
         }))
     } else {
-        searchUrl = makeCategorySearchURL(categoryID, '')
+        searchUrl = makeCategorySearchURL(categoryID)
     }
 
     return dispatch(fetchCategoryInfo(isSearch ? null : categoryID))

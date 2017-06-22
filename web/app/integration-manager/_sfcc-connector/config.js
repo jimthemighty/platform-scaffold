@@ -5,7 +5,7 @@
 const API_TYPE = 'shop'
 const API_VERSION = 'v17_4'
 
-export const SUGGESTION_URL = '/catalogsearch/result/?q=+'
+export const SEARCH_URL = '/catalogsearch/result/?q=+'
 
 let config = {}
 

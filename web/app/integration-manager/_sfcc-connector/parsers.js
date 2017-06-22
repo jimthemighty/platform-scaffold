@@ -159,9 +159,7 @@ export const parseProductListData = (products) => {
     return productListData
 }
 
-export const parseSearchSuggestions = ({product_suggestions}) => {
-    const {products} = product_suggestions // eslint-disable-line
-
+export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     if (!products) {
         return []
     }

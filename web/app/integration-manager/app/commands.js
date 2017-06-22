@@ -8,7 +8,11 @@ export const register = (commands) => {
     connector = commands
 }
 
-/** @function */
+/**
+ * Suggests products as the user types their search query
+ * @function
+ * @param {String} args Query string of what the user is typing
+ */
 export const getSearchSuggestions = (...args) => connector.getSearchSuggestions(...args)
 
 /**
