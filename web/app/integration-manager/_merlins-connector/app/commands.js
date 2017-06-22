@@ -67,7 +67,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
         return dispatch(receiveSearchSuggestions(null))
     }
 
-    const queryURL = `${buildQueryURL(query)}&_=${Date.now()}`
+    const queryURL = `${buildQueryURL(query)}`
     return makeRequest(queryURL)
         .then((response) => response.json())
         .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
