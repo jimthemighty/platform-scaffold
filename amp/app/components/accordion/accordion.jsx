@@ -5,47 +5,32 @@ import * as ampSDK from '../../amp-sdk'
 // Components
 import AccordionItem from './accordion-item'
 
-class Accordion extends React.Component {
-    constructor(props) {
-        super(props)
+const Accordion = ({
+    className,
+    children,
+    disableSessionState,
+    initialOpenItems
+}) => {
+    const classes = classNames('amp-accordion', className)
 
-        this.state = {
-            // We need to use a copy of this prop so it doesn't get mutated
-            openItems: [...props.initialOpenItems]
-        }
-    }
-
-    render() {
-        const {
-            className,
-
-            children,
-            disableSessionState
-        } = this.props
-
-        const classes = classNames('amp-accordion', className)
-
-        const disableSessionStateAttribute = disableSessionState ? 'true' : null
-
-        return (
-            <amp-accordion class={classes} role="tablist" disable-session-states={disableSessionStateAttribute}>
-                {React.Children.map(children, (child, idx) => {
-                    // If the user is using && to conditionally add a child
-                    // the child could be undefined
-                    if (child && child.type && child.type.name === AccordionItem.name) {
-                        const childProps = {
-                            shown: this.state.openItems.indexOf(idx) > -1,
-                            key: idx
-                        }
-
-                        return React.cloneElement(child, childProps)
-                    } else {
-                        return child
+    return (
+        <amp-accordion class={classes} role="tablist" disable-session-states={disableSessionState ? true : null}>
+            {React.Children.map(children, (child, idx) => {
+                // If the user is using && to conditionally add a child
+                // the child could be undefined
+                if (child && child.type && child.type.name === AccordionItem.name) {
+                    const childProps = {
+                        shown: initialOpenItems.indexOf(idx) > -1,
+                        key: idx
                     }
-                })}
-            </amp-accordion>
-        )
-    }
+
+                    return React.cloneElement(child, childProps)
+                } else {
+                    return child
+                }
+            })}
+        </amp-accordion>
+    )
 }
 
 Accordion.defaultProps = {

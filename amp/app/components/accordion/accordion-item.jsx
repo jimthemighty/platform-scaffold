@@ -3,7 +3,6 @@ import classNames from 'classnames'
 
 // Components
 import Icon from '../icon'
-import AccordionItemContent from './accordion-item-content'
 
 const uuid = (() => {
     let i = 0
@@ -39,10 +38,10 @@ class AccordionItem extends React.Component {
 
         const HeadingTag = `h${headingLevel}`
 
-        const expandedItem = shown ? 'true' : null
+        const expanded = shown ? true : null
 
         return (
-            <section className={classes} expanded={expandedItem} id={this.itemId} ref={(el) => { this._container = el }}>
+            <section className={classes} expanded={expanded} id={this.itemId}>
                 <HeadingTag className="amp-accordion__header" id={headerId}>
                     <div className={`amp-accordion__inner-header amp--icon-${iconPosition}`}>
                         <div className="amp-accordion__icon" aria-hidden="true">
@@ -61,9 +60,11 @@ class AccordionItem extends React.Component {
                     </div>
                 </HeadingTag>
 
-                <AccordionItemContent>
-                    {children}
-                </AccordionItemContent>
+                <div className="amp-accordion__content-wrapper">
+                    <div className="amp-accordion__content" role="presentation">
+                        {children}
+                    </div>
+                </div>
             </section>
         )
     }

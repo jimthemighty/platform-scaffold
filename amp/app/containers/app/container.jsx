@@ -38,7 +38,6 @@ const App = ({children}) => {
         >
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
-            {/* Place all <Sheet> components here so it will pass AMP validator: "The <amp-sidebar> should be a direct child of the <body>." */}
             <Navigation id={navId} />
             <ProductListFilterModal sheetId={filterSheetId} />
 
