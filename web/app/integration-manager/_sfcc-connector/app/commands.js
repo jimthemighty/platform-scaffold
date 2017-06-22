@@ -17,6 +17,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL} from '../config'
 import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from '../../../containers/navigation/constants'
 
+
 export const fetchNavigationData = () => (dispatch) => {
     return utils.makeUnAuthenticatedApiRequest('/categories/root?levels=2', {method: 'GET'})
         .then((response) => response.json())
@@ -38,7 +39,7 @@ export const fetchNavigationData = () => (dispatch) => {
             // reducer in the `containers/navigation/` area can just flip the account
             // node type and title and not worry about switching/adding/deleting the
             // `path` attribute.
-            // See also `containers/navigation/container.jsx`'s `itemFactory()` function.
+            // See also `modals/navigation/container.jsx`'s `itemFactory()` function.
             accountNode.path = getSignInURL()
 
             return dispatch(receiveNavigationData({
