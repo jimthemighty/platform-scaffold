@@ -15,9 +15,6 @@ import {ampComponent} from '../../amp-sdk'
 // Utils
 import {staticURL} from '../../utils'
 
-// Container Styles
-import containerStyles from './container.scss'
-
 const ProductDetails = ({
     description,
     images,
@@ -58,6 +55,4 @@ const mapStateToProps = createPropsSelector({
     title: getProductTitle
 })
 
-export default ampComponent(
-    connect(mapStateToProps)(ProductDetails)
-)
+export default ampComponent(connect(mapStateToProps)(ProductDetails))

@@ -60,7 +60,8 @@ Accordion.propTypes = {
     initialOpenItems: PropTypes.array
 }
 
-export default ampSDK.ampComponent(
-    Accordion,
+Accordion.scripts = [
     '<script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>'
-)
+]
+
+export default ampSDK.ampComponent(Accordion)

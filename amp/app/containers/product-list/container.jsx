@@ -12,8 +12,6 @@ import {getCategoryItemCount} from '../../../../web/app/store/categories/selecto
 import {initProductListPage} from '../../../../web/app/integration-manager/categories/commands'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-// Container Styles
-import containerStyles from './container.scss'
 import {ampComponent} from '../../amp-sdk'
 
 const ProductList = () => {

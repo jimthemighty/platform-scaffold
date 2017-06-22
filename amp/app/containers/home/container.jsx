@@ -36,6 +36,4 @@ const mapStateToProps = createPropsSelector({
     categories: getHomeCategories
 })
 
-export default ampComponent(
-    connect(mapStateToProps)(Home)
-)
+export default ampComponent(connect(mapStateToProps)(Home))
