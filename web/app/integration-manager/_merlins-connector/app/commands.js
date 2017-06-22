@@ -9,8 +9,8 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {parseLoginStatus, parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-import {CHECKOUT_SHIPPING_URL, CART_URL, QUERY_URL, buildSearchURL} from '../config'
-import {getCookieValue, buildQueryString} from '../../../utils/utils'
+import {CHECKOUT_SHIPPING_URL, CART_URL, buildQueryURL, buildSearchURL} from '../config'
+import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
@@ -67,7 +67,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
         return dispatch(receiveSearchSuggestions(null))
     }
 
-    const queryURL = `${QUERY_URL}${buildQueryString(query)}&_=${Date.now()}`
+    const queryURL = `${buildQueryURL(query)}&_=${Date.now()}`
     return makeRequest(queryURL)
         .then((response) => response.json())
         .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))

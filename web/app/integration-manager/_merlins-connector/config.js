@@ -11,6 +11,7 @@ export const CREATE_ACCOUNT_POST_URL = '/customer/account/createpost/'
 export const LOGIN_POST_URL = '/customer/account/loginPost/'
 export const QUERY_URL = '/search/ajax/suggest/?q='
 
+export const buildQueryURL = (query) => `/search/ajax/suggest/?q=${buildQueryString(query)}`
 export const buildSearchURL = (query) => `/catalogsearch/result/?q=+${buildQueryString(query)}`
 
 // configuration is not currently used by the Merlin's connector
