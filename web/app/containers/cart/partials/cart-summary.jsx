@@ -149,7 +149,6 @@ const CartSummary = ({
     )
 }
 
-
 CartSummary.propTypes = {
     checkoutShippingURL: PropTypes.string,
     discountAmount: PropTypes.string,
