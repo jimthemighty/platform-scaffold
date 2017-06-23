@@ -10,6 +10,7 @@ import {render} from 'react-dom'
 
 // Onboarding
 import Onboarding from '../../containers/onboarding/container'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 // Astro
 import Astro from '../../vendor/astro-client'
@@ -28,7 +29,8 @@ const location = {
     subtitle: 'Enable location services to see your local stores, product availability, and local deals.',
     actionButton: {
         title: 'ENABLE',
-        action: () => {}
+        action: () => {},
+        analyticsName: UI_NAME.enableLocationService
     }
 }
 
@@ -41,7 +43,8 @@ const notifications = {
         title: 'ENABLE',
         action: () => {
             jsRpcMethod('push:enable', [])()
-        }
+        },
+        analyticsName: UI_NAME.enablePushNotification
     }
 }
 
@@ -53,19 +56,22 @@ const login = {
         title: 'SIGN IN',
         action: () => {
             jsRpcMethod('sign-in:Show', [])()
-        }
+        },
+        analyticsName: UI_NAME.goToSignIn
     },
     laterButton: {
         title: 'LATER',
         action: () => {
             jsRpcMethod('onboardingHide', [])()
-        }
+        },
+        analyticsName: UI_NAME.dismiss
     },
     primaryButton: {
         title: 'REGISTER NOW',
         action: () => {
             jsRpcMethod('register:Show', [])()
-        }
+        },
+        analyticsName: UI_NAME.goToRegister
     }
 }
 

@@ -15,6 +15,7 @@ import {getRemoveItemID} from '../../containers/cart/selectors'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem}) => {
     return (
@@ -49,6 +50,7 @@ const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem}) => 
                     <Button
                         className="c--tertiary u-text-uppercase u-flex"
                         onClick={closeModal}
+                        data-analytics-name={UI_NAME.cancelRemoveItem}
                     >
                         Cancel
                     </Button>
@@ -59,6 +61,7 @@ const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem}) => 
                             closeModal()
                             removeItem(removeItemID)
                         }}
+                        data-analytics-name={UI_NAME.confirmRemoveItem}
                     >
                         Ok
                     </Button>
@@ -93,7 +96,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(CART_REMOVE_ITEM_MODAL),
+    closeModal: () => closeModal(CART_REMOVE_ITEM_MODAL, UI_NAME.removeItem),
     removeItem
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CartRemoveItemModal)
