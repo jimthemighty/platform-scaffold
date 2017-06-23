@@ -154,7 +154,7 @@ export const parseProductListData = (products) => {
     const productListData = {}
 
     products.forEach((productHit) => {
-        productListData[getProductHref(productHit.product_id)] = parseProductHit(productHit)
+        productListData[productHit.product_id] = parseProductHit(productHit)
     })
     return productListData
 }

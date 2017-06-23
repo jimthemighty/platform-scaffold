@@ -127,7 +127,7 @@ class App extends React.Component {
 
                     {messagingEnabled && [
                         <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
-                        <DefaultAsk key="ask" showOnPageCount={1} />
+                        <DefaultAsk key="ask" showOnPageCount={2} />
                     ]}
 
                     <div id="app-header" className="u-flex-none" role="banner">
