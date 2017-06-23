@@ -60,3 +60,11 @@ export const parseSelect = ($, $select) => {
         options: $.makeArray($select.children()).map((item) => parseOption($(item)))
     }
 }
+
+export const parseProductID = ($product) => {
+    // wishlist is the only element containing the product ID
+    // when the item is out of stock
+    const $wishlist = $product.find('.towishlist')
+    const productData = JSON.parse($wishlist.attr('data-post'))
+    return productData.data.product
+}

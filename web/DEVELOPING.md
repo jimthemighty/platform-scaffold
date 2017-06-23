@@ -30,9 +30,10 @@ Note: This should make it's way into the Tutorial eventually, but this is here f
 1. Open `app/main.jsx`.
 2. Import the Merlin's connector:
 
-```
-import connector from './integration-manager/_merlins-connector'
-// import connector from './integration-manager/_sfcc-connector'
+```javascript
+import initConnector from './init-merlins-connector'
+// import initConnector from './init-sfcc-connector'
+// import initConnector from './init-stub-connector'
 ```
 
 3. Open Preview using the following link:
@@ -44,9 +45,10 @@ https://preview.mobify.com/?url=https%3A%2F%2Fwww.merlinspotions.com%2F&site_fol
 1. Open `app/main.jsx`.
 2. Import the SFCC connector:
 
-```
-// import connector from './integration-manager/_merlins-connector'
-import connector from './integration-manager/_sfcc-connector'
+```javascript
+// import initConnector from './init-merlins-connector'
+import initConnector from './init-sfcc-connector'
+// import initConnector from './init-stub-connector'
 ```
 
 3. Open Preview using the following link:

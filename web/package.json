@@ -80,7 +80,7 @@
     "minimist": "1.2.0",
     "mobify-code-style": "2.8.3",
     "nightwatch": "0.9.8",
-    "nightwatch-commands": "2.0.1",
+    "nightwatch-commands": "2.1.0",
     "node-sass": "4.5.2",
     "postcss-loader": "1.3.3",
     "progressive-web-sdk": "~0.15.3",
@@ -100,14 +100,16 @@
     "svgo": "0.7.2",
     "text-loader": "0.0.1",
     "validator": "7.0.0",
-    "webpack": "2.3.3",
+    "walk": "2.3.9",
+    "webpack": "2.6.1",
     "webpack-bundle-analyzer": "2.3.1",
     "webpack-dev-server": "1.16.2",
     "webpack-hot-middleware": "2.13.0"
   },
   "config": {
     "sdk_generator_version": 2,
-    "min_lighthouse_score": 80
+    "min_lighthouse_score": 80,
+    "file_size_limit": 2000000
   },
   "scripts": {
     "add:component": "sdk-generate component",
@@ -118,6 +120,7 @@
     "clean:svgs": "svgo --enable='removeUselessStrokeAndFill' -f ./app/static/svg/sprite-source",
     "clean:images": "imagemin-power -v --recursive --plugin=pngquant \"./app/static/img/**/*\" --out-dir=.",
     "messaging:certificate": "sdk-messaging certificate",
+    "messaging:testmessage": "sdk-messaging testmessage",
     "messaging:upload": "sdk-messaging upload",
     "copyright:lint": "copyright 'app/!(vendor|static)/!(docs)/**/*.js?(x)' 'worker/**/*.js?(x)' 'tests/**/*.js?(x)' 'webpack/**/*.js?(x)' 'service-worker-loader.js'",
     "copyright:fix": "copyright --fix --update 'app/!(vendor|static)/!(docs)/**/*.js?(x)' 'worker/**/*.js?(x)' 'tests/**/*.js?(x)' 'webpack/**/*.js?(x)' 'service-worker-loader.js'",
@@ -134,7 +137,8 @@
     "smoke-test": "bash ./tests/system/smoke-test.sh",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
-    "test:e2e": "node ./node_modules/nightwatch/bin/runner.js -c ./tests/system/nightwatch-config.js --suiteRetries 1",
+    "test:build-size": "node tests/system/verify-build-size.js",
+    "test:e2e": "cross-env NODE_ENV=test node ./node_modules/nightwatch/bin/runner.js -c ./tests/system/nightwatch-config.js --suiteRetries 1",
     "test:pwa-prod": "bash ./scripts/lighthouse-prod.sh",
     "test:pwa-ci": "bash ./scripts/lighthouse-ci.sh",
     "test:pwa-local": "bash ./scripts/lighthouse-local.sh",
