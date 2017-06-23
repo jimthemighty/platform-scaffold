@@ -8,7 +8,7 @@
 \_| |_/\_|  |_/\_|    
 ```
 
-Create and maintain valid (Accelerated Mobile Pages)[ampproject.org] pages for your site.
+Create and maintain valid [Accelerated Mobile Pages](ampproject.org) pages for your site.
 
 TODO: Owner? Where to ask for help?
 
@@ -30,4 +30,4 @@ TBD
 
 ## Contribute
 
-See (CONTRIBUTING.md)[./CONTRIBUTING.md]
+See [CONTRIBUTING.md](CONTRIBUTING.md)
