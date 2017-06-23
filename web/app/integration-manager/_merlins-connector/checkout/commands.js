@@ -164,8 +164,7 @@ export const initCheckoutConfirmationPage = (url) => (dispatch) => {
 
 export const submitShipping = (formValues) => (dispatch, getState) => {
     const savedAddress = formValues.savedAddress
-    const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
-
+    const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined || savedAddress === null
     const address = {
         firstname: formValues.firstname,
         lastname: formValues.lastname,
