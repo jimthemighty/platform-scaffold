@@ -9,15 +9,15 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {splitFullName} from '../../utils/utils'
-import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from '../../integration-manager/checkout/results'
+import {receiveUserEmail, receiveShippingAddress, receiveSelectedShippingMethod, setDefaultShippingAddressId} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 import {
     submitShipping as submitShippingCommand,
     fetchShippingMethodsEstimate,
     initCheckoutShippingPage
-} from '../../integration-manager/checkout/commands'
-import {customCommands} from '../../integration-manager/custom/commands'
-import {login} from '../../integration-manager/account/commands'
+} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
+import {customCommands} from 'progressive-web-sdk/dist/integration-manager/custom/commands'
+import {login} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {handleCartExpiryError} from '../app/actions'
 
 import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'

@@ -15,7 +15,8 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Image from 'progressive-web-sdk/dist/components/image'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
-import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
+
+import {getCartLoaded, getCartHasItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getIsLoggedIn} from '../../store/user/selectors'
 
 import {requestCartContent} from './actions'
