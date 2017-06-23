@@ -3,6 +3,11 @@
 // ProductDetails
 // ===
 
-.t-product-details {
-    border: 1px solid red;
+
+// Price
+// ---
+
+.t-product-details__price {
+    font-size: $bigger-font-size;
+    line-height: $huge-line-height;
 }

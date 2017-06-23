@@ -6,6 +6,7 @@ import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import AmpLightbox from '../../components/amp-lightbox'
+import ProductDetailsHeading from './partials/product-details-heading'
 
 // Selectors
 import {getProductDescription, getProductTitle, getProductImages} from '../../../../web/app/store/products/selectors'
@@ -19,21 +20,18 @@ const ProductDetails = ({
     description,
     images,
     title
-}) => (
-    <div className="t-product-details">
-        <div dangerouslySetInnerHTML={{__html: '<button on="tap:my-lightbox">Open lightbox</button>'}} />
-        <AmpLightbox id="my-lightbox">
-            <AmpImage src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" width="500" height="500" />
-        </AmpLightbox>
-        <AmpImage src={staticURL('mobify.png')} width="252" height="64" layout="fixed" />
+}) => {
 
-        <h1>{title}</h1>
-        <p>{description}</p>
+    return (
+        <div className="t-product-details">
 
-        <AmpImage src={images[0].src} width="240" height="240" layout="fixed" alt={images[0].alt} />
-    </div>
-)
+            <ProductDetailsHeading isInCheckout={false}/>
+            <p>{description}</p>
 
+            <AmpImage src={images[0].src} width="240" height="240" layout="fixed" alt={images[0].alt} />
+        </div>
+    )
+}
 ProductDetails.propTypes = {
     description: PropTypes.string.isRequired,
     images: PropTypes.arrayOf(PropTypes.shape({
