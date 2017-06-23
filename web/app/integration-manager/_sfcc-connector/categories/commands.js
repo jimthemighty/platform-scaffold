@@ -11,7 +11,7 @@ import {parseProductListData} from '../parsers'
 import {getCategoryPath} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}`
+const makeCategorySearchURL = (id, start) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}&count=5&start=${start}`
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
@@ -41,11 +41,17 @@ const extractCategoryId = (url) => {
     return categoryIDMatch ? categoryIDMatch[1] : ''
 }
 
+const extractPageNumber = (url) => {
+    const pageMatch = url.match(/page=(.*)/)
+    return pageMatch ? pageMatch[1] : ''
+}
+
 export const initProductListPage = (url) => (dispatch) => {
     const categoryID = extractCategoryId(url)
+    const start = parseInt(extractPageNumber(url)) * 2
 
     return dispatch(fetchCategoryInfo(categoryID))
-        .then(() => makeApiRequest(makeCategorySearchURL(categoryID), {method: 'GET'}))
+        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start), {method: 'GET'}))
         .then((response) => response.json())
         .then(({hits, total}) => {
             if (total === 0) {
