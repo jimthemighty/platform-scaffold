@@ -1,18 +1,16 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-
-import {shallow, mount} from 'enzyme'
+/* eslint-disable newline-per-chained-call */
+import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
 import Button from './index'
 import Link from '../link'
 import Icon from '../icon'
 
-/* eslint-disable newline-per-chained-call */
-
 test('Button renders without errors', () => {
-    const wrapper = mount(<Button />)
+    const wrapper = shallow(<Button />)
     expect(wrapper.length).toBe(1)
 })
 
@@ -38,7 +36,7 @@ test('returns a button if the href prop is not passed', () => {
 })
 
 test('Button renders with inner container', () => {
-    const wrapper = mount(<Button />)
+    const wrapper = shallow(<Button />)
 
     expect(wrapper.find('> .amp-button__inner').length).toBe(1)
 })
@@ -62,25 +60,17 @@ test('does not render an \'undefined\' class with no className', () => {
 })
 
 test('renders the contents of the className prop if present', () => {
-    [
-        'test',
-        'test another'
-    ].forEach((name) => {
-        const wrapper = shallow(<Button className={name} />)
+    const name = 'test'
+    const wrapper = shallow(<Button className={name} />)
 
-        expect(wrapper.hasClass(name)).toBe(true)
-    })
+    expect(wrapper.hasClass(name)).toBe(true)
 })
 
 test('renders the contents of the innerClassName prop if present', () => {
-    [
-        'test',
-        'test another'
-    ].forEach((name) => {
-        const wrapper = shallow(<Button innerClassName={name} />)
+    const name = 'test'
+    const wrapper = shallow(<Button innerClassName={name} />)
 
-        expect(wrapper.find('.amp-button__inner').hasClass(name)).toBe(true)
-    })
+    expect(wrapper.find('.amp-button__inner').hasClass(name)).toBe(true)
 })
 
 test('renders an icon if the icon prop is passed', () => {

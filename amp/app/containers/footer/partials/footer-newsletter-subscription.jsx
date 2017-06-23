@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 
+// Partials
 import NewsletterForm from './newsletter-form'
-
 
 const FooterNewsletterSubscription = ({onSubmit}) => {
     return (

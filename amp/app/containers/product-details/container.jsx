@@ -1,13 +1,11 @@
 import React, {PropTypes} from 'react'
-import {connect} from 'react-redux'
-
-import containerStyles from './container.scss'
-
-import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getProductDescription, getProductTitle, getProductImages} from '../../../../web/app/store/products/selectors'
-import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
+import {ampComponent} from '../../amp-sdk'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
+// Selectors
+import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
+
+// Partials
 import ProductDetailsCarousel from './partials/product-details-carousel'
 
 const ProductDetails = () => (
@@ -33,14 +31,4 @@ ProductDetails.resolves = [({dispatch, getState}) => {
 
 ProductDetails.templateName = 'pdp'
 
-const mapStateToProps = createPropsSelector({
-    description: getProductDescription,
-    images: getProductImages,
-    title: getProductTitle
-})
-
-export const styles = containerStyles.toString()
-
-export default connect(
-    mapStateToProps
-)(ProductDetails)
+export default ampComponent(ProductDetails)

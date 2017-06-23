@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Components
 import Link from '../../../components/link'
 
 const footerLinks = [

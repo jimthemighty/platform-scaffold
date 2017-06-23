@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {mount, shallow} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
 const noop = () => undefined
@@ -12,7 +12,7 @@ import Field from './index'
 /* eslint-disable newline-per-chained-call */
 
 test('Field renders without errors', () => {
-    const wrapper = mount(<Field><input type="checkbox" /></Field>)
+    const wrapper = shallow(<Field><input type="checkbox" /></Field>)
     expect(wrapper.length).toBe(1)
 })
 
@@ -43,7 +43,7 @@ test('passes the idForLabel prop to the label', () => {
 
 test('sets the label position', () => {
     const setLabelPositionToAndExpect = (position, hasStackClass, hasEndClass) => {
-        const wrapper = mount(<Field label="Test" labelPosition={position}><input type="checkbox" /></Field>)
+        const wrapper = shallow(<Field label="Test" labelPosition={position}><input type="checkbox" /></Field>)
         expect(wrapper.find('.amp-field__inner').hasClass('amp--stack')).toBe(hasStackClass)
         expect(wrapper.find('.amp-field__label-wrap').hasClass('amp--end')).toBe(hasEndClass)
     }
@@ -214,7 +214,7 @@ test('calls redux form onBlur handler when custom event is passed', () => {
     const inputProps = {
         onBlur: reduxOnBlur
     }
-    const wrapper = mount(<Field input={inputProps} customEventHandlers={{onBlur: customOnBlur}}><input type="text" /></Field>)
+    const wrapper = shallow(<Field input={inputProps} customEventHandlers={{onBlur: customOnBlur}}><input type="text" /></Field>)
 
     wrapper.find('input').simulate('blur')
 

@@ -1,11 +1,15 @@
 import React, {PropTypes} from 'react'
 
+// Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Button from '../../components/button'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabel from '../../components/icon-label'
 
+// Utils
 import {staticURL} from '../../utils'
+
+import {ampComponent} from '../../amp-sdk'
 
 const Header = (props) => {
 
@@ -49,4 +53,4 @@ Header.propTypes = {
     navId: PropTypes.string
 }
 
-export default Header
+export default ampComponent(Header)

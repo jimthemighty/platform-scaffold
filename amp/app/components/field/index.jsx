@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
+
 
 const getUniqueId = (() => {
     let i = 0
@@ -17,6 +19,7 @@ const getUniqueId = (() => {
  * form-input component. Custom inputs should be compatible with redux-form
  * which typically means accepting `onChange`, `onBlur` and `value` props.
  */
+
 class Field extends React.Component {
     constructor(props) {
         super(props)
@@ -176,8 +179,6 @@ class Field extends React.Component {
     }
 }
 
-
-
 Field.propTypes = {
     /**
      * The input(s) to include in the field
@@ -252,4 +253,4 @@ Field.propTypes = {
     shouldShowErrorsInstantly: PropTypes.bool
 }
 
-export default Field
+export default ampComponent(Field)

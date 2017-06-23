@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 const uuid = (() => {
     let i = 0
@@ -83,4 +84,4 @@ Icon.propTypes = {
     title: PropTypes.string
 }
 
-export default Icon
+export default ampComponent(Icon)

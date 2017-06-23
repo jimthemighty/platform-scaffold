@@ -1,9 +1,6 @@
-/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
-/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * Skip Links are a simple technique that is used to provide a fast navigation
@@ -33,7 +30,7 @@ SkipLinks.defaultProps = {
     items: []
 }
 
-const targetPropType = (props, propName) => {
+export const targetPropType = (props, propName) => {
     const isAlphaNumeric = new RegExp(/^#[\w\-_]+$/).test(props[propName])
     if (!isAlphaNumeric) {
         return new Error('SkipLinks item target is invalid. Must be an ID selector, starting with "#" followed by alphanumeric characters, dashes and underscores with no spaces.')
@@ -59,4 +56,4 @@ SkipLinks.propTypes = {
     className: PropTypes.string
 }
 
-export {SkipLinks as default, targetPropType}
+export default ampComponent(SkipLinks)

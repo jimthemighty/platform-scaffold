@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-
+import {ampComponent} from '../../amp-sdk'
 
 const Nav = ({
     children,
@@ -15,7 +15,6 @@ const Nav = ({
     )
 }
 
-
 Nav.propTypes = {
     /**
      * The content that should be rendered within the Nav section
@@ -28,4 +27,4 @@ Nav.propTypes = {
     className: PropTypes.string,
 }
 
-export default Nav
+export default ampComponent(Nav)

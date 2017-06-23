@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {mount, shallow} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
 import Link from './index.jsx'
@@ -10,7 +10,7 @@ import Link from './index.jsx'
 /* eslint-disable jsx-a11y/anchor-has-content */
 
 test('Link renders without errors', () => {
-    const wrapper = mount(<Link href="test" />)
+    const wrapper = shallow(<Link href="test" />)
     expect(wrapper.length).toBe(1)
 })
 

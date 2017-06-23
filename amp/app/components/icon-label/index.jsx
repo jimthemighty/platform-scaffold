@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
+// Components
 import Icon from '../icon'
-
 
 /**
  * An icon and label combination. If no iconSize is passed in, the default will be medium
@@ -53,4 +54,4 @@ IconLabel.propTypes = {
 
 }
 
-export default IconLabel
+export default ampComponent(IconLabel)

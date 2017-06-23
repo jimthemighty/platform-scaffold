@@ -1,9 +1,12 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 
+// Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import ListTile from '../list-tile'
 import ProductItem from '../product-item'
+
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * Product Tile represents a product and its basic information: image,
@@ -60,4 +63,4 @@ ProductTile.propTypes = {
     title: PropTypes.string
 }
 
-export default ProductTile
+export default ampComponent(ProductTile)

@@ -1,5 +1,6 @@
-import {mount} from 'enzyme'
 /* eslint-env jest */
+import {shallowHOC as shallow} from '../../test-utils'
+import {mount} from 'enzyme'
 import React from 'react'
 
 import AmpLightbox from './index.jsx'
@@ -7,7 +8,7 @@ import AmpLightbox from './index.jsx'
 describe('AmpLightbox', () => {
 
     test('renders without errors', () => {
-        expect(mount(<AmpLightbox />).length).toBe(1)
+        expect(shallow(<AmpLightbox />).length).toBe(1)
     })
 
     test('renders css classes properly', () => {

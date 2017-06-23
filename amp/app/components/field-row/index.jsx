@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 /**
  * FieldRow is used to group multiple Fields on one line of a form.
@@ -29,4 +30,4 @@ FieldRow.propTypes = {
     className: PropTypes.string
 }
 
-export default FieldRow
+export default ampComponent(FieldRow)

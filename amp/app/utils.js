@@ -1,6 +1,6 @@
 import process from 'process'
 import packagejson from '../package.json'
-
+import URL from 'url'
 
 /**
  * Prepend the static URL to a static asset path. The path must be relative to
@@ -23,4 +23,16 @@ export const staticURL = (path) => (process.env.STATIC_URL || '/static/') + path
  */
 export const pathFromURL = (url) => {
     return url.startsWith(packagejson.siteUrl) ? url.substring(packagejson.siteUrl.length) : url
+}
+
+
+/**
+ * Return the canonical equivalent URL for a local, AMP URL.
+ */
+export const canonicalURL = (localURL) => {
+    const canonical = URL.parse(packagejson.siteUrl)
+    const local = URL.parse(localURL)
+    local.protocol = canonical.protocol
+    local.hostname = canonical.hostname
+    return URL.format(local)
 }

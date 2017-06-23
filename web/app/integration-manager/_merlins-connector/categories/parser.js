@@ -60,6 +60,7 @@ export const priceFilterParser = ($, $html) => {
                 criteria: priceParser(price), // priceParser('10-20')
                 label: $kind.text().trim(), // '$10.00 - $19.99'
                 ruleset: 'price', // we only have one ruleset at the moment
+                href: $kind.find('a').attr('href'), // filter link
                 query // 'price10to20'
             }
         }).toArray()
