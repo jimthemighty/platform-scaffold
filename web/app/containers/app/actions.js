@@ -5,7 +5,7 @@
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
 
-import {EVENT_ACTION, Page, UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
