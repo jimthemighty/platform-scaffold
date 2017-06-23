@@ -12,7 +12,7 @@ import {PRODUCT_LIST_FILTER_MODAL} from '../../../modals/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
 import {changeSort} from '../actions'
-import {receiveCurrentProductId} from '../../../integration-manager/results'
+import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import List from 'progressive-web-sdk/dist/components/list'

@@ -4,7 +4,7 @@
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {fetchShippingMethodsEstimate} from '../../integration-manager/checkout/commands'
+import {fetchShippingMethodsEstimate} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {
     PROMO_ERROR
 } from './constants'
@@ -17,9 +17,9 @@ import {
     fetchTaxEstimate,
     putPromoCode,
     deletePromoCode
-} from '../../integration-manager/cart/commands'
+} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {cartExpired, handleCartExpiryError} from '../app/actions'
-import {getDiscountCode} from '../../store/cart/selectors'
+import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'

@@ -5,7 +5,7 @@
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
 import {changeSelectedSort} from './actions'
-import {mergePayload} from '../../utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 
 const productListReducer = handleActions({
     [changeSelectedSort]: mergePayload

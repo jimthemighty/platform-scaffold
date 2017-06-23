@@ -11,8 +11,8 @@ import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
 import {addToCartStarted, submitCartForm} from './actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-jest.mock('../../integration-manager/cart/commands')
-import {addToCart} from '../../integration-manager/cart/commands'
+jest.mock('progressive-web-sdk/dist/integration-manager/cart/commands')
+import {addToCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 
 /* eslint-disable import/namespace */
 
@@ -21,16 +21,16 @@ describe('Add to Cart', () => {
     mockDispatch.mockImplementation((...args) => args[0])
 
     const getStore = () => ({
+        app: Immutable.fromJS({currentProduct: '1'}),
         ui: {
-            app: Immutable.fromJS({currentURL: 'https://test.mobify.com/'}),
             productDetails: Immutable.fromJS({
-                '/': {
+                1: {
                     itemQuantity: 1
                 }
             })
         },
         products: Immutable.fromJS({
-            '/': {
+            1: {
                 variationOptions: undefined
             }
         })
