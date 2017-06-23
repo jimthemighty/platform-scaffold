@@ -18,10 +18,6 @@ const variationSwatch = ({input: {value, onChange}, values, label, error, name})
             label={label}
             onChange={(val) => onChange(value = val)}
         >
-            {error ?
-                <p>{error[name]}</p> :
-                null
-            }
             {values.map(({label, value}) =>
                 <SwatchItem key={value}
                     value={value}
@@ -30,6 +26,9 @@ const variationSwatch = ({input: {value, onChange}, values, label, error, name})
                 </SwatchItem>
             )}
         </Swatch>
+        {error &&
+            <div className="u-color-error">{error[name]}</div>
+        }
     </div>
 )
 
@@ -59,6 +58,7 @@ const ProductDetailsVariations = ({variations, error}) => (
 )
 
 ProductDetailsVariations.propTypes = {
+    error: PropTypes.object,
     variations: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string,
         label: PropTypes.string,
