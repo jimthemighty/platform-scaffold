@@ -11,6 +11,10 @@
     &.pw--selected {
         border-width: $sub-unit/2;
         border-color: $brand-color;
+
+        + .pw-swatch__error {
+            display: none;
+        }
     }
 }
 
@@ -25,6 +29,7 @@
     font-weight: bold;
 }
 
+
 // Button
 // ---
 
@@ -36,4 +41,12 @@
 .pw-swatch__button-inner {
     padding-top: 0;
     padding-bottom: 0;
+}
+
+
+// Error
+// ---
+
+.pw-swatch__error {
+    color: $error-color;
 }

@@ -17,6 +17,8 @@ const variationSwatch = ({input: {value, onChange}, values, label, error, name})
         <Swatch
             label={label}
             onChange={(val) => onChange(value = val)}
+            value={value}
+            className={error && !value ? 'pw-swatch__error' : ''}
         >
             {values.map(({label, value}) =>
                 <SwatchItem key={value}
@@ -25,10 +27,10 @@ const variationSwatch = ({input: {value, onChange}, values, label, error, name})
                     {label}
                 </SwatchItem>
             )}
+            {error && !value &&
+                <div className="pw-swatch__error">{error[name]}</div>
+            }
         </Swatch>
-        {error &&
-            <div className="u-color-error">{error[name]}</div>
-        }
     </div>
 )
 
