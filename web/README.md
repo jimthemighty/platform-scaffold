@@ -194,19 +194,20 @@ You can run [Lighthouse](https://github.com/GoogleChrome/lighthouse) test agains
 npm run test:pwa-prod
 ```
 
-When you develop it might be helpful to run the same test against your local files. This assumes you have `npm run dev` running in another tab:
+When you develop it might be helpful to run the test against your local files. To run Lighthouse while previewing against the build (locally or on CI), assuming the server is already running:
 
 ```
-npm run test:pwa-local
-```
-
-For CI builds, this command builds and serves the bundle for testing with Preview:
-
-```
-npm run test:pwa-ci
+npm run test:pwa-preview
 ```
 
 ## Analyze Bundle Size
+
+Set a maximum file size for built assets by specifying a value for `file_size_limit` in `package.json`. To verify that the contents of `build` are not over this size limit:
+
+```
+npm run prod:build
+npm run test:build-size
+```
 
 To visualize bundle script content, run:
 

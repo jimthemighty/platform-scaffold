@@ -8,13 +8,16 @@ import Immutable from 'immutable'
 
 import rootReducer from '../containers/reducers'
 import userReducer from './user/reducer'
-import cartReducer from './cart/reducer'
+import cartReducer from 'progressive-web-sdk/dist/store/cart/reducer'
 import categoryReducer from './categories/reducer'
 import modalReducer from 'progressive-web-sdk/dist/store/modals/reducer'
 import notificationsReducer from 'progressive-web-sdk/dist/store/notifications/reducer'
-import productReducer from './products/reducer'
+import pushMessagingReducer from 'progressive-web-sdk/dist/store/push-messaging/reducer'
+import offlineReducer from 'progressive-web-sdk/dist/store/offline/reducer'
+import productReducer from 'progressive-web-sdk/dist/store/products/reducer'
 import checkoutReducer from './checkout/reducer'
-import {reducer as imReducer} from '../integration-manager/reducer'
+import appReducer from 'progressive-web-sdk/dist/store/app/reducer'
+import {reducer as imReducer} from 'progressive-web-sdk/dist/integration-manager/reducer'
 import {reducer as formReducer} from 'redux-form'
 
 import analytics from 'redux-analytics'
@@ -33,6 +36,7 @@ const configureStore = (initialState) => {
         analytics(({type, payload}, state) => analyticsManager.distribute(type, payload, state))
     ]
     const reducer = combineReducers({
+        app: appReducer,
         categories: categoryReducer,
         cart: cartReducer,
         ui: rootReducer,
@@ -41,8 +45,10 @@ const configureStore = (initialState) => {
         notifications: notificationsReducer,
         products: productReducer,
         checkout: checkoutReducer,
+        offline: offlineReducer,
         integrationManager: imReducer,
-        form: formReducer
+        form: formReducer,
+        pushMessaging: pushMessagingReducer
     })
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

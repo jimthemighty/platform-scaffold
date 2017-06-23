@@ -11,6 +11,8 @@ import {connect} from 'react-redux'
 
 import {getCountries} from '../../store/checkout/selectors'
 
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
 /**
  * A field for selecting a country.
  */
@@ -28,7 +30,7 @@ const CountrySelect = ({
             name="countryId"
             label="Country"
         >
-            <select>
+            <select data-analytics-name={UI_NAME.country}>
                 {countries.map(({label, id}) => (
                     <option value={id} key={id}>
                         {label}

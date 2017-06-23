@@ -6,7 +6,7 @@ import isEmail from 'validator/lib/isEmail'
 import {SubmissionError} from 'redux-form'
 
 import {isRunningInAstro, jsRpcMethod} from '../../utils/astro-integration'
-import {login, registerUser} from '../../integration-manager/account/commands'
+import {login, registerUser} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import isReactRoute from 'progressive-web-sdk/dist/routing/is-react-route'
 
@@ -87,6 +87,9 @@ const handleLoginSuccess = (href) => {
     }
     // This is only here because there is no account page in the PWA right now
     // Once we've added one we should user browserHistory to navigate to the account page after successfully logging in
+    if (!href) {
+        return
+    }
     if (isReactRoute(href)) {
         browserHistory.push({pathname: href})
     } else {

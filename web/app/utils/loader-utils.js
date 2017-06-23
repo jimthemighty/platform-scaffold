@@ -45,6 +45,20 @@ export const loadScriptAsPromise = ({id, src, onload, isAsync = true, rejectOnEr
     )
 }
 
+export const prefetchLink = ({href}) => {
+    const link = document.createElement('link')
+
+    // Setting UTF-8 as our encoding ensures that certain strings (i.e.
+    // Japanese text) are not improperly converted to something else. We
+    // do this on the vendor scripts also just in case any libs we
+    // import have localized strings in them.
+    link.charset = 'utf-8'
+    link.href = href
+    link.rel = 'prefetch'
+
+    document.getElementsByTagName('head')[0].appendChild(link)
+}
+
 export const isLocalStorageAvailable = () => {
     try {
         const x = '__test_key__'
@@ -65,7 +79,16 @@ const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-
  * or init fails, the Promise is rejected.
  */
 export const loadAndInitMessagingClient = (debug, siteId) => {
-    window.Progressive.MessagingClientInitPromise = loadScriptAsPromise({
+    // Creating an early promise that users of the Messaging Client can
+    // chain means they don't need to poll for its existence
+    let clientInitResolver
+    let clientInitRejecter
+    window.Progressive.MessagingClientInitPromise = new Promise((resolve, reject) => {
+        clientInitResolver = resolve
+        clientInitRejecter = reject
+    })
+
+    return () => loadScriptAsPromise({
         id: 'progressive-web-messaging-client',
         src: MESSAGING_PWA_CLIENT_PATH,
         rejectOnError: true
@@ -81,10 +104,11 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
             return messagingClient.init({
                 debug,
                 siteId
-            })
+            }).then(clientInitResolver)
         })
         .catch((error) => {
-            console.log(`Error loading ${MESSAGING_PWA_CLIENT_PATH}: ${error}`)
+            console.error(`Error loading ${MESSAGING_PWA_CLIENT_PATH}:`, error)
+            clientInitRejecter(error)
             throw error
         })
 }

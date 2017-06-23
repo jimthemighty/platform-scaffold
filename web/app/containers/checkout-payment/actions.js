@@ -7,18 +7,26 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getPaymentBillingFormValues} from '../../store/form/selectors'
 import {getEmailAddress} from '../../store/checkout/selectors'
 import {getShippingAddress} from '../../store/checkout/shipping/selectors'
-import {submitPayment as submitPaymentCommand} from '../../integration-manager/checkout/commands'
+import {submitPayment as submitPaymentCommand, initCheckoutPaymentPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {splitFullName} from '../../utils/utils'
-import {receiveBillingAddress, receiveBillingSameAsShipping} from '../../integration-manager/checkout/results'
+import {handleCartExpiryError} from '../app/actions'
+import {receiveBillingAddress, receiveBillingSameAsShipping} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 export const receiveContents = createAction('Received CheckoutPayment Contents')
+export const toggleLoadingState = createAction('Toggled the spinner inside of "Place Order" button', ['isLoading'])
 export const toggleFixedPlaceOrder = createAction('Toggled the fixed "Place Order" container', ['isFixedPlaceOrderShown'])
 export const toggleCardInputRadio = createAction('Toggled the card method radio input', ['isNewCardInputSelected'])
 export const toggleCompanyAptField = createAction('Toggled the "Company" and "Apt #" fields (Payment)', ['isCompanyOrAptShown'])
 export const toggleNewAddressFields = createAction('Toggled new address fields', ['newShippingAddressIsEnabled'])
 export const setCvvType = createAction('Setting CVV type', ['cvvType'])
 
+export const initPaymentPage = (url, routeName) => (dispatch) => (
+    dispatch(initCheckoutPaymentPage(url, routeName))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
+)
+
 export const submitPayment = () => (dispatch, getState) => {
+    dispatch(toggleLoadingState(true))
     const currentState = getState()
     const billingFormValues = getPaymentBillingFormValues(currentState)
     const billingSameAsShipping = billingFormValues.billingSameAsShipping
@@ -58,8 +66,13 @@ export const submitPayment = () => (dispatch, getState) => {
     dispatch(receiveBillingAddress(address))
     return dispatch(submitPaymentCommand({...address, ...paymentInfo, billingSameAsShipping}))
         .then((url) => {
+            dispatch(toggleLoadingState(false))
             browserHistory.push({
                 pathname: url
             })
+        })
+        .catch((error) => {
+            dispatch(toggleLoadingState(false))
+            return dispatch(handleCartExpiryError(error))
         })
 }

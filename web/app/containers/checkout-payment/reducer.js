@@ -5,16 +5,18 @@
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
 import * as checkoutPaymentActions from './actions'
-import {receiveHasExistingCard} from '../../integration-manager/checkout/results'
+import {receiveHasExistingCard} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {DEFAULT_CARD} from './constants'
-import {mergePayload} from '../../utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 
 const initialState = Immutable.fromJS({
+    isLoading: false,
     isFixedPlaceOrderShown: true,
     cvvType: DEFAULT_CARD
 })
 
 const checkoutPayment = handleActions({
+    [checkoutPaymentActions.toggleLoadingState]: mergePayload,
     [checkoutPaymentActions.toggleFixedPlaceOrder]: mergePayload,
     [checkoutPaymentActions.toggleCardInputRadio]: mergePayload,
     [checkoutPaymentActions.toggleCompanyAptField]: mergePayload,
