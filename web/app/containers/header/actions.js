@@ -2,8 +2,16 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
+
+import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getSearchSuggestions, searchProducts} from '../../integration-manager/app/commands'
+import {EVENT_ACTION} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
+const searchAnalytics = createActionWithAnalytics(
+    'Send search analytics', [],
+    EVENT_ACTION.search,
+    (query) => ({query})
+)
 
 export const toggleHeader = createAction('Toggled the header', ['isCollapsed'])
 
@@ -16,5 +24,6 @@ export const searchQueryChanged = (query) => (dispatch) => (
 )
 
 export const searchSubmit = (query) => (dispatch) => {
+    dispatch(searchAnalytics(query))
     dispatch(searchProducts(query))
 }

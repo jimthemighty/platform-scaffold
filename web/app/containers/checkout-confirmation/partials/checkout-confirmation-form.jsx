@@ -10,6 +10,7 @@ import * as actions from '../actions'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {CONFIRMATION_FORM_NAME} from '../../../store/form/constants'
 
@@ -26,13 +27,13 @@ const CheckoutConfirmationForm = ({
 
             <FieldRow>
                 <ReduxForm.Field component={Field} name="password" label="Choose Password" caption="More than 5 characters with at least one number">
-                    <input type="password" noValidate />
+                    <input type="password" noValidate data-analytics-name={UI_NAME.passowrd} />
                 </ReduxForm.Field>
             </FieldRow>
 
             <FieldRow>
                 <ReduxForm.Field component={Field} name="password_confirmation" label="Re-enter Password">
-                    <input type="password" noValidate />
+                    <input type="password" noValidate data-analytics-name={UI_NAME.confirmPassword} />
                 </ReduxForm.Field>
             </FieldRow>
 
@@ -47,6 +48,7 @@ const CheckoutConfirmationForm = ({
                     type="submit"
                     className="c--primary u-text-uppercase u-width-full"
                     disabled={submitting}
+                    data-analytics-name={UI_NAME.register}
                 >
                     Create Account
                 </Button>

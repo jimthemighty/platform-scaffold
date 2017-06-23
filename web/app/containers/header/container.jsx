@@ -19,6 +19,7 @@ import {getCartSummaryCount} from '../../store/cart/selectors'
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Search from 'progressive-web-sdk/dist/components/search'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import NavigationAction from './partials/navigation-action'
 import HeaderTitle from './partials/header-title'
@@ -165,7 +166,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    onMenuClick: () => openModal(NAVIGATION_MODAL),
+    onMenuClick: () => openModal(NAVIGATION_MODAL, UI_NAME.menu),
     onMiniCartClick: miniCartActions.requestOpenMiniCart,
     onSearchOpenClick: headerActions.openSearch,
     onSearchCloseClick: headerActions.closeSearch,

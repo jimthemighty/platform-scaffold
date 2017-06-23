@@ -24,6 +24,7 @@ import IconLabelButton from '../../components/icon-label-button'
 import RegionField from '../../components/region-field'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
 import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const CartEstimateShippingModal = ({closeModal, isOpen, stateProvinces, submitEstimateShipping, isTaxRequestPending, handleSubmit}) => {
     return (
@@ -53,7 +54,7 @@ export const CartEstimateShippingModal = ({closeModal, isOpen, stateProvinces, s
 
                     <FieldRow>
                         <ReduxForm.Field component={Field} name="postcode" label="Zip/Postal Code">
-                            <input type="text" noValidate />
+                            <input type="text" noValidate data-analytics-name={UI_NAME.postcode} />
                         </ReduxForm.Field>
                     </FieldRow>
 
@@ -63,7 +64,11 @@ export const CartEstimateShippingModal = ({closeModal, isOpen, stateProvinces, s
                                 <InlineLoader className="pw--white" title="Estimating" />
                             </Button>
                         :
-                            <Button className="c--secondary u-width-full u-text-uppercase" type="submit">
+                            <Button
+                                className="c--secondary u-width-full u-text-uppercase"
+                                type="submit"
+                                data-analytics-name={UI_NAME.estimateShipping}
+                            >
                                 Get Estimate
                             </Button>
                         }
@@ -106,7 +111,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(CART_ESTIMATE_SHIPPING_MODAL),
+    closeModal: () => closeModal(CART_ESTIMATE_SHIPPING_MODAL, UI_NAME.estimateShipping),
     submitEstimateShipping
 }
 
