@@ -12,7 +12,7 @@ import classNames from 'classnames'
 import WebFont from 'webfontloader'
 import {isRunningInAstro} from '../../utils/astro-integration'
 
-import {initApp} from '../../integration-manager/app/commands'
+import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 
 import {hidePreloader} from 'progressive-web-sdk/dist/preloader'
 import DangerousHTML from 'progressive-web-sdk/dist/components/dangerous-html'
@@ -24,7 +24,7 @@ import NativeConnector from '../native-connector/container'
 import * as appActions from './actions'
 import * as selectors from './selectors'
 import {getNotifications} from '../../store/selectors'
-import {getPageFetchError} from 'progressive-web-sdk/dist/store/offline/selectors'
+import {getPageFetchError, hasFetchedCurrentPath} from 'progressive-web-sdk/dist/store/offline/selectors'
 import {getModals} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging-controller'
@@ -218,7 +218,7 @@ App.childContextTypes = {
 const mapStateToProps = createPropsSelector({
     notifications: getNotifications,
     fetchError: getPageFetchError,
-    hasFetchedCurrentPath: selectors.hasFetchedCurrentPath,
+    hasFetchedCurrentPath,
     isModalOpen: getModals,
     sprite: selectors.getSvgSprite,
     hideApp: selectors.getHideApp

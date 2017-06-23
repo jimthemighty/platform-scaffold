@@ -13,7 +13,11 @@ import * as shippingSelectors from '../../store/checkout/shipping/selectors'
 import * as formSelectors from '../../store/form/selectors'
 import {getBillingAddress} from '../../store/checkout/billing/selectors'
 import {getEmailAddress} from '../../store/checkout/selectors'
-import {updateShippingAddress, updateBillingAddress, registerUser} from '../../integration-manager/account/commands'
+import {
+    updateShippingAddress,
+    updateBillingAddress,
+    registerUser
+} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const hideRegistrationForm = createAction('Hiding Registration Form (Save Your Address Details)')

@@ -6,7 +6,7 @@ import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/
 
 import {SUGGESTION_URL} from './constants'
 import {buildQueryString} from '../../utils/utils'
-import {getSearchSuggestions} from '../../integration-manager/commands'
+import {getSearchSuggestions} from 'progressive-web-sdk/dist/integration-manager/commands'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {EVENT_ACTION} from 'progressive-web-sdk/dist/analytics/data-objects/'
