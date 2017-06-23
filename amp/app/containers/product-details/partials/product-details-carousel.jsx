@@ -15,6 +15,7 @@ const ProductDetailsCarousel = ({images}) => {
         className: 'amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10',
         showControls: images.length > 1,
         height: '330px',
+        width: '330px',
         controls: true,
         dataNextButtonAriaLabel: 'HELLO WORLD',
         dataPrevButtonAriaLabel: 'BYE BYE',

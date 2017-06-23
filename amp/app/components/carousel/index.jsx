@@ -67,6 +67,7 @@ class Carousel extends React.Component {
             delay,
             loop,
             height,
+            width,
             className,
             controls,
             dataNextButtonAriaLabel,
@@ -163,6 +164,7 @@ class Carousel extends React.Component {
                 type={typeCarousel}
                 layout={layoutItemValue}
                 height={height}
+                width={width}
                 {...controlsValue}
                 {...dataNextButtonAriaLabelValue}
                 {...dataPrevButtonAriaLabelValue}
@@ -287,7 +289,12 @@ Carousel.propTypes = {
      * following layouts: `fill`, `fixed`, `fixed-height`, `flex-item`,
      * `nodisplay`, and `responsive`.
      */
-    typeCarousel: PropTypes.oneOf(['carousel', 'slides'])
+    typeCarousel: PropTypes.oneOf(['carousel', 'slides']),
+
+    /**
+     * Specifies the width of the carousel, in pixels.
+     */
+    width: PropTypes.number
 }
 
 Carousel.defaultProps = {
@@ -297,7 +304,8 @@ Carousel.defaultProps = {
     layoutItem: 'responsive'
 }
 
-export default ampSDK.ampComponent(
-    Carousel,
+Carousel.scripts = [
     '<script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>'
-)
+]
+
+export default ampSDK.ampComponent(Carousel)
