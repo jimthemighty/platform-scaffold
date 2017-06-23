@@ -22,6 +22,7 @@ import Pagination from 'progressive-web-sdk/dist/components/pagination'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Field from 'progressive-web-sdk/dist/components/field'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {ITEMS_PER_PAGE} from '../constants'
 
 import ProductTile from '../../../components/product-tile'
 
@@ -69,13 +70,15 @@ const ProductListContents = ({
     activeFilters,
     clearFilters,
     contentsLoaded,
+    numItems,
+    path,
     products,
     openModal,
     setCurrentProduct,
     sortChange,
     routeName,
-    pagination,
-    changePagination
+    router,
+    page
 }) => (
     <div>
         {contentsLoaded && activeFilters.length > 0 && (
@@ -154,12 +157,12 @@ const ProductListContents = ({
             :
                 <NoResultsList routeName={routeName} />
             }
-            {!pagination &&
+            {page &&
                 <Pagination
                     className="u-margin-top-lg"
-                    onChange={changePagination}
-                    currentPage={pagination ? pagination.current : '1'}
-                    pageCount={pagination ? pagination.pageCount : '4'}
+                    onChange={(newPage) => router.push(`${path}?page=${newPage}`)}
+                    currentPage={page ? page : 1}
+                    pageCount={Math.floor(numItems / ITEMS_PER_PAGE)} // count harded coded for now
                     showCurrentPageMessage={true}
                     showPageButtons={false}
                 />
@@ -177,8 +180,10 @@ ProductListContents.propTypes = {
     contentsLoaded: PropTypes.bool,
     numItems: PropTypes.number,
     openModal: PropTypes.func,
-    pagination: PropTypes.object,
+    page: PropTypes.number,
+    path: PropTypes.string,
     routeName: PropTypes.string,
+    router: PropTypes.object,
     setCurrentProduct: PropTypes.func,
     sortChange: PropTypes.func
 }

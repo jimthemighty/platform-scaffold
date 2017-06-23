@@ -9,7 +9,8 @@ import ProductListHeader from './partials/product-list-header'
 import SearchResultHeader from './partials/search-result-header'
 import ProductListContents from './partials/product-list-contents'
 
-const ProductList = ({route: {routeName}}) => {
+const ProductList = (props) => {
+    const {router, route: {routeName}, location: {query: {page}, pathname}} = props
     return (
         <div className="t-product-list">
             {!isRunningInAstro &&
@@ -21,14 +22,18 @@ const ProductList = ({route: {routeName}}) => {
                     }
                 </div>
             }
-            <ProductListContents routeName={routeName} />
+            <ProductListContents routeName={routeName} path={pathname} page={page ? parseInt(page) : 1} router={router} />
         </div>
     )
 }
 
 ProductList.propTypes = {
+    // Location object added by react router
+    location: React.PropTypes.object,
     // Route object added by react router
-    route: React.PropTypes.object
+    route: React.PropTypes.object,
+    // React Router for pagination
+    router: React.PropTypes.object,
 }
 
 export default template(ProductList)
