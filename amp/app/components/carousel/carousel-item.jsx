@@ -15,8 +15,8 @@ const CarouselItem = ({
 }) => {
     const Item = href ? Link : 'div'
     const itemProps = {
-        className: classNames(`pw-carousel__item c-carousel__item`, {
-            'pw--active c--active': active
+        className: classNames(`amp-carousel__item`, {
+            'amp--active': active
         }, className),
         'aria-hidden': active ? 'false' : 'true',
         tabIndex: active ? '0' : '-1',
