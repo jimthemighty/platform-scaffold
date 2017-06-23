@@ -37,7 +37,8 @@ const fetchCategoryInfo = (id) => (dispatch) => (
 )
 
 const extractCategoryId = (url) => {
-    const categoryIDMatch = /\/([^/]+)$/.exec(url)
+    const pathKeyMatch = /\/([^/]+)$/.exec(url)
+    const categoryIDMatch = pathKeyMatch ? pathKeyMatch[1].match(/(.*)\?.*/) : ''
     return categoryIDMatch ? categoryIDMatch[1] : ''
 }
 
