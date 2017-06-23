@@ -19,7 +19,7 @@ Owned by the AMP Team @ Mobify.
 
 ## Setup
 
-`npm run deps`
+`npm install`
 
 ## Run
 
