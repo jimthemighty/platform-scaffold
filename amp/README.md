@@ -1,28 +1,33 @@
 # Mobify AMP SDK Scaffold
+```
+  ___  ___  _________
+ / _ \ |  \/  || ___ \
+/ /_\ \| .  . || |_/ /
+|  _  || |\/| ||  __/
+| | | || |  | || |    
+\_| |_/\_|  |_/\_|    
+```
 
-TODO: ASCII?
-
-TODO: Purpose
+Create and maintain valid (Accelerated Mobile Pages)[ampproject.org] pages for your site.
 
 TODO: Owner? Where to ask for help?
 
-TODO: Steps to setup the project. Should be one command.
-
-TODO: Steps to run the project. Should be one command
-
-TODO: Steps to test the project. Should be one command
-
-TODO: Steps to deploy the project. Should be one command
-
-TODO: Steps to contribute to the project - set up CONTRIBUTING.md
 ## Setup
 
-From `amp/`
-Run `cd ../web && npm install && cd ../amp`
-Run `npm install`
+`npm run deps`
 
 ## Run
 
 Start the development server with `npm run dev` and go to http://localhost:3000.
 
+## Test
+
 Run `npm run test:all` for all linters and tests.
+
+## Deploy
+
+TBD
+
+## Contribute
+
+See (CONTRIBUTING.md)[./CONTRIBUTING.md]
