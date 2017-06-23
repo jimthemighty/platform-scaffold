@@ -14,6 +14,8 @@ import FieldSet from 'progressive-web-sdk/dist/components/field-set'
 
 import {LoginField, RememberMeTooltip} from './common'
 
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
 class RegisterForm extends React.Component {
     constructor(props) {
         super(props)
@@ -46,24 +48,28 @@ class RegisterForm extends React.Component {
                         label="First Name"
                         name="firstname"
                         type="text"
+                        analyticsName={UI_NAME.firstName}
                         />
 
                     <LoginField
                         label="Last Name"
                         name="lastname"
                         type="text"
+                        analyticsName={UI_NAME.lastName}
                         />
 
                     <LoginField
                         label="Email"
                         name="email"
                         type="email"
+                        analyticsName={UI_NAME.email}
                         />
 
                     <LoginField
                         label="Sign Up for Newsletter"
                         name="is_subscribed"
                         type="checkbox"
+                        analyticsName={UI_NAME.subscribe}
                         />
                 </FieldSet>
 
@@ -72,12 +78,14 @@ class RegisterForm extends React.Component {
                         label="Password"
                         name="password"
                         type="password"
+                        analyticsName={UI_NAME.password}
                         />
 
                     <LoginField
                         label="Confirm Password"
                         name="password_confirmation"
                         type="password"
+                        analyticsName={UI_NAME.confirmPassword}
                         />
 
                     <LoginField
@@ -85,6 +93,7 @@ class RegisterForm extends React.Component {
                         name="persistent_remember_me"
                         type="checkbox"
                         tooltip={<RememberMeTooltip />}
+                        analyticsName={UI_NAME.remember}
                         />
                 </FieldSet>
 
@@ -92,6 +101,7 @@ class RegisterForm extends React.Component {
                     className="c--primary u-width-full u-margin-top-lg"
                     type="submit"
                     disabled={submitting || !isFormLoaded}
+                    data-analytics-name={UI_NAME.register}
                 >
                     <span className="u-text-uppercase">Create an Account</span>
                 </Button>

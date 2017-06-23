@@ -4,6 +4,8 @@
 
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
+
+import {EVENT_ACTION, Page, UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
@@ -15,8 +17,9 @@ import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/s
 
 import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {OFFLINE_MODAL} from '../offline/constants'
+import {OFFLINE_MODAL} from '../../modals/constants'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
@@ -27,7 +30,7 @@ export const toggleHideApp = createAction('Toggling the hiding of App', ['hideAp
  * return a JSON object where `{offline: true}` if the request failed, which we
  * can use to detect if we're offline.
  */
-export const checkIfOffline = () => (dispatch) => {
+export const checkIfOffline = () => (dispatch, getState) => {
     // we need to cachebreak every request to ensure we don't get something
     // stale from the disk cache on the device - the CDN will ignore query
     // parameters for this asset, however
@@ -40,7 +43,10 @@ export const checkIfOffline = () => (dispatch) => {
                 dispatch(setPageFetchError('Network failure, using worker cache'))
             } else {
                 dispatch(clearPageFetchError())
-                dispatch(closeModal(OFFLINE_MODAL))
+
+                if (isModalOpen(OFFLINE_MODAL)(getState())) {
+                    dispatch(closeModal(OFFLINE_MODAL, UI_NAME.offline))
+                }
             }
         })
         .catch((error) => {

@@ -29,6 +29,7 @@ import Image from 'progressive-web-sdk/dist/components/image'
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
 import List from 'progressive-web-sdk/dist/components/list'
 import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 class OrderSummary extends React.Component {
     constructor(props) {
@@ -78,17 +79,22 @@ class OrderSummary extends React.Component {
         } = this.props
 
         const removeButton = (
-            <Button innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal" onClick={removePromoCode}>
+            <Button
+                innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal"
+                onClick={removePromoCode}
+                data-analytics-name={UI_NAME.removeDiscount}
+            >
                 Remove Discount
             </Button>
         )
 
         const PlaceOrderButton = (
             <Button
-                className="c--primary u-flex-none u-width-full u-text-uppercase"
+                className="c--primary u-flex-none u-width-full u-text-uppercase qa-checkout__place-order"
                 type="button"
                 onClick={submitPayment}
                 disabled={isLoading}
+                data-analytics-name={UI_NAME.submitOrder}
             >
                 {isLoading ?
                     <InlineLoader />

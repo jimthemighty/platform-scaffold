@@ -11,7 +11,6 @@ import {navigateToSection} from 'progressive-web-sdk/dist/integration-manager/ac
 
 import SignInPanel from './partials/signin-panel'
 import RegisterPanel from './partials/register-panel'
-import RememberMeModal from './partials/remember-me-modal'
 
 import {Tabs, TabsPanel} from 'progressive-web-sdk/dist/components/tabs'
 
@@ -64,21 +63,18 @@ class Login extends React.Component {
                             <RegisterPanel />
                         </TabsPanel>
                     </Tabs>
-                    <RememberMeModal />
                 </div>
             )
         } else if (routeName === SIGN_IN_SECTION) {
             return (
                 <div className="t-login">
                     <SignInPanel />
-                    <RememberMeModal />
                 </div>
             )
         } else if (routeName === REGISTER_SECTION) {
             return (
                 <div className="t-login">
                     <RegisterPanel />
-                    <RememberMeModal />
                 </div>
             )
         } else {

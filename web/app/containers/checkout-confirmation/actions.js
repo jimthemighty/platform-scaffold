@@ -2,7 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {CHECKOUT_CONFIRMATION_MODAL, CHECKOUT_CONFIRMATION_REGISTRATION_FAILED} from './constants'
+import {CHECKOUT_CONFIRMATION_REGISTRATION_FAILED} from './constants'
+import {CHECKOUT_CONFIRMATION_MODAL} from '../../modals/constants'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {createSelector} from 'reselect'
 import {createPropsSelector} from 'reselect-immutable-helpers'
@@ -17,6 +18,7 @@ import {
     updateBillingAddress,
     registerUser
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const hideRegistrationForm = createAction('Hiding Registration Form (Save Your Address Details)')
 
@@ -46,7 +48,7 @@ export const submitRegisterForm = () => {
 
         return dispatch(registerUser(firstname, lastname, email, password))
             .then(() => {
-                dispatch(openModal(CHECKOUT_CONFIRMATION_MODAL))
+                dispatch(openModal(CHECKOUT_CONFIRMATION_MODAL, UI_NAME.createAccountConfirmation))
                 return dispatch(updateShippingAddress(shippingData))
                     .then(() => {
                         if (!billingAddressData.sameAsShipping) {

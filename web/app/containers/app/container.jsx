@@ -20,25 +20,26 @@ import SkipLinks from 'progressive-web-sdk/dist/components/skip-links'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import Header from '../../containers/header/container'
 import Footer from '../../containers/footer/container'
-import MiniCart from '../../containers/mini-cart/container'
-import Navigation from '../../containers/navigation/container'
 import NativeConnector from '../native-connector/container'
-import * as appActions from '../app/actions'
+import * as appActions from './actions'
 import * as selectors from './selectors'
 import {getNotifications} from '../../store/selectors'
 import {getPageFetchError, hasFetchedCurrentPath} from 'progressive-web-sdk/dist/store/offline/selectors'
+import {getModals} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import PushMessagingController from 'progressive-web-sdk/dist/components/push-messaging-controller'
 import DefaultAsk from 'progressive-web-sdk/dist/components/default-ask'
 
+import ModalManager from '../../modals'
 import NotificationManager from '../../components/notification-manager'
 
-import {registerPreloadCallbacks} from '../templates'
+import {prefetchTemplateChunks} from '../templates'
+
 
 // Offline support
 import Offline from '../offline/container'
 import OfflineBanner from '../offline/partials/offline-banner'
-import OfflineModal from '../offline/partials/offline-modal'
+
 
 class App extends React.Component {
     constructor(props) {
@@ -57,9 +58,17 @@ class App extends React.Component {
             }
         })
 
-        // Lazy load other containers when browser is at the end of frame
-        // to prevent jank
-        registerPreloadCallbacks()
+        // Prefetch & cache code-splitted chunks when the browser is
+        // at the end of frame to allow for quick page transitions
+        // and graceful failure when offline.
+        prefetchTemplateChunks()
+    }
+
+    getChildContext() {
+        // Expose reload func for offline modals
+        const {children, fetchPage} = this.props
+        const routeProps = children.props.route
+        return {reload: () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)}
     }
 
     hidePreloaderWhenCSSIsLoaded() {
@@ -78,21 +87,18 @@ class App extends React.Component {
     render() {
         const {
             children,
-            history,
             fetchError,
-            fetchPage,
             hasFetchedCurrentPath,
             notifications,
             removeNotification,
             sprite,
-            hideApp
+            hideApp,
+            isModalOpen,
         } = this.props
 
         const routeProps = children.props.route
         const CurrentHeader = routeProps.Header || Header
         const CurrentFooter = routeProps.Footer || Footer
-
-        const reload = () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)
 
         const skipLinksItems = [
             // Customize your list of SkipLinks here. These are necessary to
@@ -110,6 +116,14 @@ class App extends React.Component {
 
         const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
+        let hideModalBackground = 'false'
+
+        for (const modal in isModalOpen) {
+            if (isModalOpen[modal]) {
+                hideModalBackground = 'true'
+            }
+        }
+
         return (
             <div
                 id="app"
@@ -120,55 +134,53 @@ class App extends React.Component {
                     {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
                 </DangerousHTML>
 
-                <SkipLinks items={skipLinksItems} />
+                <div aria-hidden={hideModalBackground}>
+                    <SkipLinks items={skipLinksItems} />
 
-                <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
-                    {isRunningInAstro && <NativeConnector />}
+                    <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
+                        {isRunningInAstro && <NativeConnector />}
 
-                    {messagingEnabled && [
-                        <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
-                        <DefaultAsk key="ask" showOnPageCount={2} />
-                    ]}
+                        {messagingEnabled && [
+                            <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
+                            <DefaultAsk key="ask" showOnPageCount={2} />
+                        ]}
 
-                    <div id="app-header" className="u-flex-none" role="banner">
-                        <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
+                        <div id="app-header" className="u-flex-none" role="banner">
+                            <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
+                            {
+                                // Only display banner when we are offline and have content to show
+                                fetchError && hasFetchedCurrentPath && <OfflineBanner />
+                            }
+
+                            {notifications &&
+                                <NotificationManager
+                                    notifications={notifications}
+                                    actions={{removeNotification}}
+                                />
+                            }
+
+                        </div>
 
                         {
-                            // Only display banner when we are offline and have content to show
-                            fetchError && hasFetchedCurrentPath && <OfflineBanner />
-                        }
+                            // Display main content if we have no network errors or
+                            // if we've already got the content in the store
+                            (!fetchError || hasFetchedCurrentPath) ?
+                                <div>
+                                    <main id="app-main" className="u-flex" role="main">
+                                        {this.props.children}
+                                    </main>
 
-                        <OfflineModal reload={reload} />
-
-                        {notifications &&
-                            <NotificationManager
-                                notifications={notifications}
-                                actions={{removeNotification}}
-                            />
-                        }
-
-                        <Navigation history={history} />
-
-                        <MiniCart />
-                    </div>
-
-                    {
-                        // Display main content if we have no network errors or
-                        // if we've already got the content in the store
-                        (!fetchError || hasFetchedCurrentPath) ?
-                            <div>
-                                <main id="app-main" className="u-flex" role="main">
-                                    {this.props.children}
-                                </main>
-
-                                <div id="app-footer" className="u-flex-none">
-                                    <CurrentFooter />
+                                    <div id="app-footer" className="u-flex-none">
+                                        <CurrentFooter />
+                                    </div>
                                 </div>
-                            </div>
-                        :
-                            <Offline reload={reload} location={children.props.location} route={routeProps} />
-                    }
+                            :
+                                <Offline location={children.props.location} route={routeProps} />
+                        }
+                    </div>
                 </div>
+
+                <ModalManager />
             </div>
         )
     }
@@ -189,19 +201,25 @@ App.propTypes = {
     * Calls a command in the integration manager that initializes some app data
     */
     initApp: PropTypes.func,
+    isModalOpen: PropTypes.object,
     notifications: PropTypes.array,
     removeNotification: PropTypes.func,
     /**
      * The SVG icon sprite needed in order for all Icons to work
      */
     sprite: PropTypes.string,
-    toggleHideApp: PropTypes.func,
+    toggleHideApp: PropTypes.func
+}
+
+App.childContextTypes = {
+    reload: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
     notifications: getNotifications,
     fetchError: getPageFetchError,
     hasFetchedCurrentPath,
+    isModalOpen: getModals,
     sprite: selectors.getSvgSprite,
     hideApp: selectors.getHideApp
 })
