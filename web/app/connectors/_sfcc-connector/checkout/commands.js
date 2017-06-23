@@ -9,7 +9,7 @@ import {getOrderTotal} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
-import {receiveOrderConfirmationContents} from '../../results'
+import {receiveOrderConfirmationContents} from 'progressive-web-sdk/dist/integration-manager/results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
 import {getSelectedShippingMethodValue} from '../../../store/checkout/shipping/selectors'
 import {

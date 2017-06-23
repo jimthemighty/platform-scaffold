@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import * as utils from '../utils'
-import {receiveNavigationData, setLoggedIn, setCheckoutShippingURL, setCartURL} from '../../results'
+import {receiveNavigationData, setLoggedIn, setCheckoutShippingURL, setCartURL} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {parseCategories} from '../parsers'
 
