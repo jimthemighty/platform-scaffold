@@ -26,6 +26,7 @@ import OrderSummary from './order-summary'
 
 const REQUIRED_TEXT = 'Required'
 const INVALID_TEXT = 'Invalid Input'
+const FIRST_LAST_NAME_TEXT = 'Please enter a first and last name'
 
 const validate = (values) => {
     const errors = {}
@@ -44,7 +45,20 @@ const validate = (values) => {
     ]
 
     if (values.name && !validateFullName(values.name)) {
-        errors.name = 'Please enter a first and last name'
+        errors.name = FIRST_LAST_NAME_TEXT
+    }
+
+    if (values.ccnumber && !validateCCNumber(values.ccnumber)) {
+        errors.ccnumber = INVALID_TEXT
+    }
+
+    if (values.ccexpiry && !validateCCExpiry(values.ccexpiry)) {
+        errors.ccexpiry = INVALID_TEXT
+    }
+
+
+    if (values.cvv && values.cvv.length !== 3) {
+        errors.cvv = INVALID_TEXT
     }
 
     requiredFieldNames.forEach((fieldName) => {
@@ -52,18 +66,6 @@ const validate = (values) => {
             errors[fieldName] = REQUIRED_TEXT
         }
     })
-
-    if (values.ccexpiry && !validateCCExpiry(values.ccexpiry)) {
-        errors.ccexpiry = INVALID_TEXT
-    }
-
-    if (values.ccnumber && !validateCCNumber(values.ccnumber)) {
-        errors.ccnumber = INVALID_TEXT
-    }
-
-    if (values.cvv && values.cvv.length !== 3) {
-        errors.cvv = INVALID_TEXT
-    }
 
     return errors
 }

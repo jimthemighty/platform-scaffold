@@ -34,14 +34,7 @@ export const isRegionFreeform = (formName) => createSelector(
 
 export const getFormAddressValues = (formKey) => createSelector(
     getFormValues(formKey),
-    isRegionFreeform(formKey),
-    (address, freeformRegion) => {
-        if (freeformRegion) {
-            address.region = region
-        }
-
-        return address
-    }
+    (address) => address || {}
 )
 
 export const getEstimateShippingAddress = getFormAddressValues(ESTIMATE_FORM_NAME)
