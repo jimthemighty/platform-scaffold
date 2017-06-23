@@ -160,9 +160,10 @@ const ProductListContents = ({
             {page &&
                 <Pagination
                     className="u-margin-top-lg"
-                    onChange={(newPage) => router.push(`${path}?page=${newPage}`)}
+                    // if newPage is 1, remove search string '?page=1' to avoid duplicate entries
+                    onChange={(newPage) => router.push(path + (newPage === 1 ? '' : `?page=${newPage}`))}
                     currentPage={page ? page : 1}
-                    pageCount={Math.floor(numItems / ITEMS_PER_PAGE)} // count harded coded for now
+                    pageCount={Math.floor(numItems / ITEMS_PER_PAGE)}
                     showCurrentPageMessage={true}
                     showPageButtons={false}
                 />
