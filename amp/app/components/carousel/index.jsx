@@ -2,33 +2,11 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import * as ampSDK from '../../amp-sdk'
 
-import Button from '../button'
-import Icon from '../icon'
-
 const DIRECTION_RIGHT = 'right'
 const DIRECTION_LEFT = 'left'
 
 const getKey = (index) => {
     return `slide-${index}`
-}
-
-const CarouselButton = ({className, buttonClass, disabled, icon, iconSize, title}) => {
-    return (
-        <div className={className}>
-            <Button className={buttonClass} disabled={disabled}>
-                <Icon name={icon} size={iconSize} title={title} />
-            </Button>
-        </div>
-    )
-}
-
-CarouselButton.propTypes = {
-    buttonClass: PropTypes.string,
-    className: PropTypes.string,
-    disabled: PropTypes.bool,
-    icon: PropTypes.string,
-    iconSize: PropTypes.string,
-    title: PropTypes.string
 }
 
 const CarouselPip = ({isCurrentPip, slideNumber}) => {
@@ -83,31 +61,17 @@ class Carousel extends React.Component {
         }
     }
 
-    canMove(direction) {
-        const {children, allowLooping} = this.props
-        const {currentIndex} = this.state
-        const slideCount = React.Children.count(children)
-
-        // If we only have a single slide, it's safe to assume we shouldn't move
-        if (slideCount === 1) {
-            return false
-        }
-
-        // Determine if you can make a move in the given direction, this is used
-        // for both disabling swiping and controls when not looping and you are
-        // at the beginning or end of the item array.
-        return allowLooping ||
-            (direction === DIRECTION_LEFT && currentIndex > 0) ||
-            (direction === DIRECTION_RIGHT && currentIndex !== slideCount - 1)
-    }
-
     render() {
         const {
+            autoplay,
+            delay,
+            loop,
+            height,
             className,
-            previousIcon,
-            nextIcon,
-            iconSize,
-            buttonClass,
+            controls,
+            dataNextButtonAriaLabel,
+            dataPrevButtonAriaLabel,
+            layoutItem,
             showCaption,
             showControls,
             typeCarousel
@@ -150,10 +114,62 @@ class Carousel extends React.Component {
             }
         })()
 
+        let layoutItemValue
+
+        // Check to make sure that Carousel are getting the right layout type
+        const typeCheck = (value) => {
+            if (value === 'carousel') {
+                console.log('carousel is TRUE')
+                console.log('VALUE IS' + layoutItem)
+                if ((layoutItem === 'fixed') || (layoutItem === 'fixed-height') || (layoutItem === 'nodisplay')) {
+                    return true
+                }
+            } else if (value === 'slides') {
+                console.log('slides is TRUE')
+                console.log('VALUE IS' + layoutItem)
+                if ((layoutItem === 'fill') || (layoutItem === 'fixed-height') || (layoutItem === 'flex-item') || (layoutItem === 'nodisplay') || (layoutItem === 'responsive')) {
+                    return true
+                }
+            }
+
+            return false
+        }
+
+        if (typeCheck(typeCarousel)) {
+            console.log('VALUE LOOKS FINE')
+            layoutItemValue = layoutItem
+        } else {
+            // write error here
+            console.log('ERROR!!!!!')
+        }
+
         const childList = [prevChild, currentChild, nextChild]
 
+        const controlsValue = controls ? {controls: ''} : {}
+
+        const dataNextButtonAriaLabelValue = dataNextButtonAriaLabel ? {'data-next-button-aria-label': dataNextButtonAriaLabel} : {}
+
+        const dataPrevButtonAriaLabelValue = dataPrevButtonAriaLabel ? {'data-prev-button-aria-label': dataPrevButtonAriaLabel} : {}
+
+        const autoplayValue = autoplay ? {autoplay: ''} : {}
+
+        const delayValue = delay ? {delay} : {}
+
+        const loopValue = loop ? {loop: ''} : {}
+
         return (
-            <amp-carousel class={classes} type={typeCarousel}>
+            <amp-carousel
+                class={classes}
+                type={typeCarousel}
+                layout={layoutItemValue}
+                height={height}
+                {...controlsValue}
+                {...dataNextButtonAriaLabelValue}
+                {...dataPrevButtonAriaLabelValue}
+                {...autoplayValue}
+                {...delayValue}
+                {...loopValue}
+            >
                 <div className="amp-carousel__inner" ref={(el) => { this._innerWrapper = el }}>
                     {childList.map((item) => item)}
                 </div>
@@ -167,15 +183,6 @@ class Carousel extends React.Component {
 
                 {showControls &&
                     <div className="amp-carousel__controls">
-                        <CarouselButton
-                            className="amp-carousel__previous"
-                            disabled={!this.canMove(DIRECTION_LEFT)}
-                            buttonClass={buttonClass}
-                            icon={previousIcon}
-                            iconSize={iconSize}
-                            title={`Show slide ${prevIndex + 1} of ${slideCount}`}
-                        />
-
                         <div className="amp-carousel__pips">
                             {React.Children.map(children, (item, index) =>
                                 <CarouselPip
@@ -185,15 +192,6 @@ class Carousel extends React.Component {
                                 />
                             )}
                         </div>
-
-                        <CarouselButton
-                            className="amp-carousel__next"
-                            disabled={!this.canMove(DIRECTION_RIGHT)}
-                            buttonClass={buttonClass}
-                            icon={nextIcon}
-                            iconSize={iconSize}
-                            title={`Show slide ${nextIndex + 1} of ${slideCount}`}
-                        />
                     </div>
                 }
             </amp-carousel>
@@ -203,15 +201,16 @@ class Carousel extends React.Component {
 
 Carousel.propTypes = {
     /**
-     * AllowLooping will cause the carousel to start at the beginning on the next move
-     * when the end is reached.
+     * Specifies the height of the carousel, in pixels.
      */
-    allowLooping: PropTypes.bool,
+    height: PropTypes.string.isRequired,
 
     /**
-     * Adds values to the `class` attribute for the Previous/Next buttons
+     * Advances the slide to the next slide without user interaction. By
+     * default, advances a slide in 5000 millisecond intervals (5 seconds); this
+     * can be overridden by the delay attribute.
      */
-    buttonClass: PropTypes.string,
+    autoplay: PropTypes.bool,
 
     /**
      * The CarouselItems to display.
@@ -227,24 +226,46 @@ Carousel.propTypes = {
     className: PropTypes.string,
 
     /**
+     * Displays left and right arrows for the user to navigate carousel
+     * items on mobile devices.
+     */
+    controls: PropTypes.bool,
+
+    /**
      * The index of the current slide. This prop can be used to set the active slide to an index of your choice.
      */
     currentSlide: PropTypes.number,
 
     /**
-     * Icon size for the Previous/Next buttons
+     * Sets the aria-label for the `amp-carousel-button-next`. If no value is
+     * given, the aria-label defaults to 'Next item in carousel'.
      */
-    iconSize: PropTypes.string,
+    dataNextButtonAriaLabel: PropTypes.string,
 
     /**
-     * Icon name for the "Next Button"
+     * Sets the aria-label for the `amp-carousel-button-prev`. If no value is
+     * given, the aria-label defaults to 'Previous item in carousel'.
      */
-    nextIcon: PropTypes.string,
+    dataPrevButtonAriaLabel: PropTypes.string,
 
     /**
-     * Icon name for the "Previous Button"
+     * Specifies the duration (in milliseconds) to delay advancing to the next
+     * slide when `autoplay` is enabled. The `delay` attribute is only applicable
+     * to carousels with `type=slides`.
      */
-    previousIcon: PropTypes.string,
+    delay: PropTypes.number,
+
+    /**
+     * Specifies the display type for the carousel items
+     */
+    layoutItem: PropTypes.oneOf(['fill', 'fixed', 'fixed-height', 'flex-item', 'nodisplay', 'responsive']),
+
+    /**
+     * Allows the user to advance past the first item or the final item. There
+     * must be at least 3 slides for looping to occur. The loop attribute is
+     * only applicable to carousels with type=slides.
+     */
+    loop: PropTypes.bool,
 
     /**
      * Boolean value to show slide caption or not. The caption is read
@@ -266,17 +287,14 @@ Carousel.propTypes = {
      * following layouts: `fill`, `fixed`, `fixed-height`, `flex-item`,
      * `nodisplay`, and `responsive`.
      */
-    typeCarousel: PropTypes.oneOf(['carousel', 'slides']),
+    typeCarousel: PropTypes.oneOf(['carousel', 'slides'])
 }
 
 Carousel.defaultProps = {
-    allowLooping: false,
-    iconSize: 'small',
-    nextIcon: 'caret-circle-right',
-    previousIcon: 'caret-circle-left',
     showCaption: false,
     showControls: true,
-    typeCarousel: 'carousel'
+    typeCarousel: 'slides',
+    layoutItem: 'responsive'
 }
 
 export default ampSDK.ampComponent(

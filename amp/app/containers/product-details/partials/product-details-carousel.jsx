@@ -13,14 +13,22 @@ const ProductDetailsCarousel = ({images}) => {
         nextIcon: 'chevron-right',
         iconSize: 'medium',
         className: 'amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10',
-        showControls: images.length > 1
+        showControls: images.length > 1,
+        height: '330px',
+        controls: true,
+        dataNextButtonAriaLabel: 'HELLO WORLD',
+        dataPrevButtonAriaLabel: 'BYE BYE',
+        autoplay: true,
+        delay: 3000,
+        loop: true
     }
 
     const imgProps = {
         className: 'u-display-block',
         hidePlaceholder: true,
         ratio: {aspect: '1:1'},
-        useLoaderDuringTransitions: false
+        useLoaderDuringTransitions: false,
+        height: '330px'
     }
 
     return (
