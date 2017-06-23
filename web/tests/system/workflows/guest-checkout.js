@@ -18,7 +18,7 @@ let checkout
 let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
-const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
+const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 2
 
 export default {
     '@tags': ['checkout'],

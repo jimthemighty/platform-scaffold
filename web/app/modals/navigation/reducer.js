@@ -9,9 +9,15 @@ import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 import {setNavigationPath} from './actions'
 import {LOGGED_IN_NAV, GUEST_NAV} from './constants'
 
+const CATEGORY_PLACEHOLDER_COUNT = 6
+
 export const initialState = Immutable.fromJS({
     path: undefined,
-    root: {},
+    root: {
+        children: new Array(CATEGORY_PLACEHOLDER_COUNT).fill({
+            isCategoryLink: true
+        }),
+    },
 })
 
 export const reducer = handleActions({
