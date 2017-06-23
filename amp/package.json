@@ -81,7 +81,7 @@
     "test:all": "npm run lint && npm test -- --coverage",
     "build": "cross-env NODE_ENV=production node ./scripts/build/build.js",
     "deploy": "node ./scripts/deploy.js",
-    "postinstall": "pushd ../web && npm i && popd"
+    "postinstall": "scripts/postinstall.sh"
   },
   "jest": {
     "setupFiles": [
