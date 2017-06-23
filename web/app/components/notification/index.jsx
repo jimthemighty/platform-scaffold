@@ -6,6 +6,7 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import Button from 'progressive-web-sdk/dist/components/button'
 import {noop} from 'progressive-web-sdk/dist/utils/utils'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 class Notification extends React.Component {
     constructor(props) {
@@ -97,7 +98,12 @@ class Notification extends React.Component {
 
                 {showRemoveButton &&
                     <div className={`${baseClass}__action u-flex-none u-padding`}>
-                        <Button icon="close" title="Remove" onClick={this.dismissNotification} />
+                        <Button
+                            icon="close"
+                            title="Remove"
+                            onClick={this.dismissNotification}
+                            data-analytics-name={UI_NAME.dismissNotification}
+                        />
                     </div>
                 }
             </div>

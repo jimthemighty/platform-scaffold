@@ -52,9 +52,11 @@ OnboardingScreen.propTypes = {
 
 const Onboarding = ({carouselData}) => {
     return (
-        <Carousel allowLooping={false}>
-            {carouselData.map((val, idx) => <OnboardingScreen {...val} id={idx.toString()} key={idx.toString()} />)}
-        </Carousel>
+        <div className="t-onboarding">
+            <Carousel allowLooping={false}>
+                {carouselData.map((val, idx) => <OnboardingScreen {...val} id={idx.toString()} key={idx.toString()} />)}
+            </Carousel>
+        </div>
     )
 }
 

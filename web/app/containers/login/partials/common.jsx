@@ -10,8 +10,9 @@ import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Link from 'progressive-web-sdk/dist/components/link'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-import {REMEMBER_ME_MODAL} from '../constants'
+import {REMEMBER_ME_MODAL} from '../../../modals/constants'
 
 export const LoginFieldLabel = ({label, forgotPassword}) => (
     <span>
@@ -33,14 +34,14 @@ LoginFieldLabel.propTypes = {
     label: PropTypes.string
 }
 
-export const LoginField = ({label, type, forgotPassword, name, tooltip}) => (
+export const LoginField = ({label, type, forgotPassword, name, tooltip, analyticsName}) => (
     <FieldRow>
         <ReduxFormField
             name={name}
             label={<LoginFieldLabel label={label} forgotPassword={forgotPassword} />}
             component={Field}
             >
-            <input type={type} />
+            <input type={type} data-analytics-name={analyticsName} />
         </ReduxFormField>
 
         {tooltip}
@@ -48,6 +49,7 @@ export const LoginField = ({label, type, forgotPassword, name, tooltip}) => (
 )
 
 LoginField.propTypes = {
+    analyticsName: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
@@ -66,5 +68,5 @@ RememberMeTooltipContent.propTypes = {
 }
 
 export const RememberMeTooltip = connect(null, {
-    openModal: () => openModal(REMEMBER_ME_MODAL)
+    openModal: () => openModal(REMEMBER_ME_MODAL, UI_NAME.remember)
 })(RememberMeTooltipContent)

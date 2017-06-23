@@ -6,11 +6,9 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {fetchShippingMethodsEstimate} from '../../integration-manager/checkout/commands'
 import {
-    CART_ESTIMATE_SHIPPING_MODAL,
-    CART_REMOVE_ITEM_MODAL,
-    CART_WISHLIST_MODAL,
     PROMO_ERROR
 } from './constants'
+import {CART_ESTIMATE_SHIPPING_MODAL, CART_WISHLIST_MODAL, CART_REMOVE_ITEM_MODAL} from '../../modals/constants'
 import {
     getCart,
     removeFromCart,
@@ -27,6 +25,7 @@ import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
 import {getEstimateShippingAddress} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])
 export const setIsWishlistComplete = createAction('Set wishlist add complete', ['isWishlistAddComplete'])
@@ -57,7 +56,7 @@ export const submitEstimateShipping = () => (dispatch, getState) => {
             ))
         ))
         .then(() => {
-            dispatch(closeModal(CART_ESTIMATE_SHIPPING_MODAL))
+            dispatch(closeModal(CART_ESTIMATE_SHIPPING_MODAL, UI_NAME.estimateShipping))
             dispatch(setTaxRequestPending(false))
         })
 }
@@ -86,7 +85,7 @@ export const removeItem = (itemID) => (dispatch) => {
 
 export const saveToWishlist = (productId, itemId, productURL) => (dispatch, getState) => {
     dispatch(setIsWishlistComplete(false))
-    dispatch(openModal(CART_WISHLIST_MODAL))
+    dispatch(openModal(CART_WISHLIST_MODAL, UI_NAME.wishlist))
     if (!getIsLoggedIn(getState())) {
         return Promise.resolve()
     }
@@ -97,7 +96,7 @@ export const saveToWishlist = (productId, itemId, productURL) => (dispatch, getS
         })
         .catch((error) => {
             if (/Failed to fetch|Add Request Failed|Unable to add item/i.test(error.message)) {
-                dispatch(closeModal(CART_WISHLIST_MODAL))
+                dispatch(closeModal(CART_WISHLIST_MODAL, UI_NAME.wishlist))
                 dispatch(addNotification(
                     'cartWishlistError',
                     'Unable to add item to wishlist.',
@@ -111,7 +110,7 @@ export const saveToWishlist = (productId, itemId, productURL) => (dispatch, getS
 
 export const openRemoveItemModal = (itemId) => {
     return (dispatch) => {
-        dispatch(openModal(CART_REMOVE_ITEM_MODAL))
+        dispatch(openModal(CART_REMOVE_ITEM_MODAL, UI_NAME.removeItem))
         dispatch(setRemoveItemId(itemId))
     }
 }
