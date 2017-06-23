@@ -63,7 +63,6 @@ const Router = ({store}) => (
                 <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initPage(initCartPage)} />
                 <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initPage(initRegisterPage)} />
-                <Route component={Account} path="customer/account" routeName="account" fetchAction={initPage(customCommands.initAccountPage)} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
@@ -116,6 +115,7 @@ const Router = ({store}) => (
                 <Route component={ProductList} path="*/gift-certificates*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/top-seller*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/Search-Show?*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={Account} path="*/customer/account" routeName="account" fetchAction={initPage(customCommands.initAccountPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="*/COShipping-Start*"
