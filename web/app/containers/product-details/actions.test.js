@@ -20,16 +20,16 @@ describe('Add to Cart', () => {
     mockDispatch.mockImplementation((...args) => args[0])
 
     const getStore = () => ({
+        app: Immutable.fromJS({currentProduct: '1'}),
         ui: {
-            app: Immutable.fromJS({currentURL: 'https://test.mobify.com/'}),
             productDetails: Immutable.fromJS({
-                '/': {
+                1: {
                     itemQuantity: 1
                 }
             })
         },
         products: Immutable.fromJS({
-            '/': {
+            1: {
                 variationOptions: undefined
             }
         })
