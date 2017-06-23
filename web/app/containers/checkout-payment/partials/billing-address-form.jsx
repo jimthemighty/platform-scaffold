@@ -24,6 +24,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
 
@@ -64,6 +65,7 @@ class BillingAddressForm extends React.Component {
                 className="c--is-anchor"
                 innerClassName="c--no-min-height u-padding-0"
                 onClick={handleShowCompanyAndApt}
+                data-analytics-name={UI_NAME.additionalAddressInfo}
             >
                 <span className="u-color-brand u-text-letter-spacing-normal u-text-size-small">
                     Add company, apt #, suite etc.
@@ -91,7 +93,7 @@ class BillingAddressForm extends React.Component {
                                     onChange: this.handleSavedAddress
                                 }}
                             >
-                                <input type="checkbox" noValidate />
+                                <input type="checkbox" noValidate data-analytics-name={UI_NAME.sameAsShipping} />
                             </ReduxForm.Field>
                         </FieldRow>
                     }
@@ -111,7 +113,7 @@ class BillingAddressForm extends React.Component {
                                     label="Address"
                                     caption={!isCompanyOrAptShown && addDetails}
                                 >
-                                    <input type="text" noValidate />
+                                    <input type="text" noValidate data-analytics-name={UI_NAME.address} />
                                 </ReduxForm.Field>
                             </FieldRow>
 
@@ -122,7 +124,7 @@ class BillingAddressForm extends React.Component {
                                         name="company"
                                         label="Company"
                                     >
-                                        <input type="text" noValidate placeholder="Optional" />
+                                        <input type="text" noValidate placeholder="Optional" data-analytics-name={UI_NAME.company} />
                                     </ReduxForm.Field>
 
                                     <ReduxForm.Field
@@ -130,14 +132,14 @@ class BillingAddressForm extends React.Component {
                                         name="addressLine2"
                                         label="Apt #, suite etc."
                                     >
-                                        <input type="text" noValidate placeholder="Optional" />
+                                        <input type="text" noValidate placeholder="Optional" data-analytics-name={UI_NAME.additionalAddressInfo} />
                                     </ReduxForm.Field>
                                 </FieldRow>
                             }
 
                             <FieldRow>
                                 <ReduxForm.Field component={Field} name="city" label="City">
-                                    <input type="text" noValidate />
+                                    <input type="text" noValidate data-analytics-name={UI_NAME.city} />
                                 </ReduxForm.Field>
                             </FieldRow>
 
@@ -152,7 +154,7 @@ class BillingAddressForm extends React.Component {
                             <FieldRow>
                                 <ReduxForm.Field component={Field} name="postcode" label="Zip/Postal code">
                                     {/* @TODO: Set Type to text or tel based on country! */}
-                                    <input type="text" noValidate />
+                                    <input type="text" noValidate data-analytics-name={UI_NAME.postcode} />
                                 </ReduxForm.Field>
                             </FieldRow>
                         </div>

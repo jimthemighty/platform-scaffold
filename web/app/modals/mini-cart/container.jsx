@@ -17,6 +17,7 @@ import {MINI_CART_MODAL} from '../constants'
 import {MINI_CART_CONTENT_CLASSES} from './constants'
 import {stripEvent} from '../../utils/utils'
 import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getCheckoutShippingURL} from '../../containers/app/selectors'
 import {requestCartContent} from './actions'
 
@@ -47,11 +48,19 @@ const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
 
             <div className="u-padding-top-lg u-flex-none">
                 {hasItems ?
-                    <Button href={checkoutShippingURL} className={buttonClasses}>
+                    <Button
+                        href={checkoutShippingURL}
+                        className={buttonClasses}
+                        data-analytics-name={UI_NAME.checkout}
+                    >
                         Go To Checkout
                     </Button>
                 :
-                    <Button onClick={closeMiniCart} className={buttonClasses}>
+                    <Button
+                        onClick={closeMiniCart}
+                        className={buttonClasses}
+                        data-analytics-name={UI_NAME.continueShopping}
+                    >
                         Continue Shopping
                     </Button>
                 }
@@ -140,7 +149,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL)),
+    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL, UI_NAME.miniCart)),
     requestCartContent
 }
 
