@@ -5,7 +5,7 @@
 /* eslint-env jest */
 import Immutable from 'immutable'
 import reducer from './reducer'
-import {receiveUserCustomContent} from '../../integration-manager/results'
+import {receiveUserCustomContent} from 'progressive-web-sdk/dist/integration-manager/results'
 
 /* eslint-disable newline-per-chained-call */
 
