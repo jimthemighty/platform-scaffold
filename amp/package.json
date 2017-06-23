@@ -37,6 +37,7 @@
     "mobify-amp-sdk": "0.0.2",
     "mobify-code-style": "2.8.3",
     "ncp": "2.0.0",
+    "node-exceptions": "^2.0.2",
     "node-fetch": "1.6.3",
     "node-mocks-http": "^1.6.2",
     "node-sass": "4.5.2",
@@ -84,7 +85,7 @@
   },
   "jest": {
     "setupFiles": [
-        "<rootDir>/app/jest-setup.js"
+      "<rootDir>/app/jest-setup.js"
     ],
     "moduleNameMapper": {
       "\\.(css|scss)$": "<rootDir>/app/__mocks__/styleMock.js",
