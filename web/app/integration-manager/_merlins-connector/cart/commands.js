@@ -82,7 +82,7 @@ export const addToCart = (productId, quantity, variant) => (dispatch, getState) 
 }
 
 
-export const updateCartItem = (itemId, quantity, productId, variant) => (dispatch) => {
+export const updateCartItem = (itemId, quantity, productId, variant) => (dispatch) => (
     // merlin's uses the standard addToCart to update cart items
     // POST at https://www.merlinspotions.com/checkout/cart/updateItemOptions/id/8645/
     /*
@@ -96,7 +96,7 @@ export const updateCartItem = (itemId, quantity, productId, variant) => (dispatc
     */
 
     dispatch(addToCart(productId, quantity, variant))
-}
+)
 
 /**
  * Remove an item from the users cart

@@ -23,11 +23,11 @@ const parseVariationCategories = (magentoObject) => {
     return Object.keys(optionList).map((key) => {
         const option = optionList[key]
         const {code, id, label, options} = option
-        const values = options.map((option) => {
+        const values = options.map(({label, products, id}) => {
             return {
-                label: option.label,
-                value: option.id,
-                products: option.products
+                label,
+                value: id,
+                products
             }
         })
 

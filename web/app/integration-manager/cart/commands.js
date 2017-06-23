@@ -55,6 +55,7 @@ const dispatchCartAnalytics = (action, dispatch, getState, id) => {
  * @function
  * @param productId {string} The product's ID
  * @param quantity {number} The quantity to add
+ * @param variant {object} optional object with variant data
  */
 export const addToCart = (productId, quantity, variant) => (dispatch, getState) => {
     return dispatch(connector.addToCart(productId, quantity, variant)).then((cart) => {
@@ -81,6 +82,7 @@ export const removeFromCart = (ItemId) => (dispatch, getState) => {
  * @param itemID {string} The cart item ID to update
  * @param quantity {number} The new quantity
  * @param productId {string} The new product ID to replace cart item
+ * @param variant {object} optional object with new variant data
  */
 export const updateCartItem = (itemId, quantity, productId, variant) => (dispatch) => (
     dispatch(connector.updateCartItem(itemId, quantity, productId, variant))

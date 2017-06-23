@@ -89,13 +89,15 @@ class CartProductItem extends React.Component {
                 image={<ProductImage {...product.thumbnail} />}
                 >
 
-                <div className="u-margin-bottom-sm">
-                    {options ? options.map((option) => (
-                        <p key={option.option_value} className="u-color-neutral-50">
-                            {option.label} - {option.value}
-                        </p>
-                    )) : null}
-                </div>
+                {options &&
+                    <div className="u-margin-bottom-sm">
+                        {options.map((option) => (
+                            <p key={option.option_value} className="u-color-neutral-50">
+                                {option.label} - {option.value}
+                            </p>
+                        ))}
+                    </div>
+                }
 
                 <FieldRow className="u-align-bottom">
                     <Field label="Quantity" idFor={`quantity-${cartItemId}`}>
