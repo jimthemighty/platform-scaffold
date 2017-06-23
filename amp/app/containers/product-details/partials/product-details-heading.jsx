@@ -29,7 +29,7 @@ ProductDetailsHeading.propTypes = {
     price: PropTypes.string,
     title: PropTypes.string
 }
-//
+
 const mapStateToProps = createPropsSelector({
     available: getProductAvailability,
     breadcrumbs: selectors.getProductDetailsBreadcrumbs,
