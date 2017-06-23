@@ -15,7 +15,6 @@ import {NAVIGATION_MODAL} from '../../modals/constants'
 
 import * as selectors from './selectors'
 import {getCartSummaryCount} from '../../store/cart/selectors'
-import {searchProducts} from '../../integration-manager/app/commands'
 
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
@@ -170,7 +169,7 @@ const mapDispatchToProps = {
     onMiniCartClick: miniCartActions.requestOpenMiniCart,
     onSearchOpenClick: headerActions.openSearch,
     onSearchCloseClick: headerActions.closeSearch,
-    searchSubmit: searchProducts,
+    searchSubmit: headerActions.searchSubmit,
     toggleHeader: headerActions.toggleHeader,
     searchQueryChanged: headerActions.searchQueryChanged,
     clearSuggestions: headerActions.clearSuggestions
