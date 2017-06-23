@@ -116,7 +116,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {taxAmount
+                    {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)
                         : <LedgerRow
                             className="u-flex-none"
