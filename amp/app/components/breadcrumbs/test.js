@@ -2,14 +2,14 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {shallow, mount} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
 import Link from '../link'
 import Breadcrumbs from './index'
 
 test('Breadcrumbs renders without errors', () => {
-    const wrapper = mount(<Breadcrumbs />)
+    const wrapper = shallow(<Breadcrumbs />)
     expect(wrapper.length).toBe(1)
 })
 
@@ -40,7 +40,7 @@ test('renders a Link', () => {
             href: 'http://www.mobify.com'
         }
     ]
-    const wrapper = mount(<Breadcrumbs items={items} />)
+    const wrapper = shallow(<Breadcrumbs items={items} />)
 
     expect(wrapper.find(Link).length).toBe(1)
 })
@@ -52,8 +52,8 @@ test('wraps breadcrumb item content in a link if the href prop is passed', () =>
             href: 'http://www.mobify.com'
         }
     ]
-    const wrapper = mount(<Breadcrumbs items={items} />)
-    const link = wrapper.find('.amp-breadcrumbs__item a')
+    const wrapper = shallow(<Breadcrumbs items={items} />)
+    const link = wrapper.find(Link)
 
     expect(link.length).toBe(1)
 })
@@ -64,8 +64,8 @@ test('does not wrap breadcrumb item content in a link if the href prop is not pa
             text: 'Home'
         }
     ]
-    const wrapper = mount(<Breadcrumbs items={items} />)
-    const link = wrapper.find('.amp-breadcrumbs__item a')
+    const wrapper = shallow(<Breadcrumbs items={items} />)
+    const link = wrapper.find(Link)
 
     expect(link.length).toBe(0)
 })

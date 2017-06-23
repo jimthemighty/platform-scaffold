@@ -1,4 +1,4 @@
-import {shallow, mount} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
 import List from './index.jsx'
@@ -6,7 +6,7 @@ import ListTile from '../list-tile/index.jsx'
 import Button from '../button'
 
 test('List renders without errors', () => {
-    const wrapper = mount(<List items={[]} />)
+    const wrapper = shallow(<List items={[]} />)
     expect(wrapper.length).toBe(1)
 })
 

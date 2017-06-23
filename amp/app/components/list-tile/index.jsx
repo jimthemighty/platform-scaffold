@@ -1,6 +1,9 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+
+// Components
 import Link from '../link'
+import {ampComponent} from '../../amp-sdk'
 
 const ListTilePrimary = ({
     children,
@@ -71,11 +74,9 @@ const ListTile = ({
     )
 }
 
-
 ListTile.defaultProps = {
     includeEndActionInPrimary: true
 }
-
 
 ListTile.propTypes = {
     /**
@@ -113,4 +114,4 @@ ListTile.propTypes = {
     startAction: PropTypes.node
 }
 
-export default ListTile
+export default ampComponent(ListTile)

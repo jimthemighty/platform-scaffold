@@ -1,6 +1,9 @@
 import React from 'react'
 
+// Components
 import Link from '../../../components/link'
+
+import {canonicalURL} from '../../../utils'
 
 const footerLinks = [
     {text: 'Privacy and Cookie Policy', href: '/privacy-policy-cookie-restriction-mode/'},
@@ -14,7 +17,7 @@ const FooterNavigation = () => {
     return (
         <div className="t-footer__navigation u-padding-lg u-text-align-center">
             {footerLinks.map(({text, href}, index) => (
-                <Link className="t-footer__navigation-link" href={href} key={index}>
+                <Link className="t-footer__navigation-link" href={canonicalURL(href)} key={index}>
                     {text}
                 </Link>
             ))}

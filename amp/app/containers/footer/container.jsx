@@ -1,15 +1,15 @@
 import React from 'react'
 
-import FooterNewsletterSubscription from './partials/footer-newsletter-subscription'
+// Partials
 import FooterNavigation from './partials/footer-navigation'
+import {ampComponent} from '../../amp-sdk'
 
 const Footer = () => {
     return (
         <footer className="t-footer">
-            <FooterNewsletterSubscription />
             <FooterNavigation />
         </footer>
     )
 }
 
-export default Footer
+export default ampComponent(Footer)

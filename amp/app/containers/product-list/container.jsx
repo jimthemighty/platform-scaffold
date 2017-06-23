@@ -1,53 +1,34 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import containerStyles from './container.scss'
-
-import List from '../../components/list'
-import ProductTile from '../../components/product-tile'
-
 import {createPropsSelector} from 'reselect-immutable-helpers'
+
+// Partials
+import ProductListHeader from './partials/product-list-header'
+import ProductListContents from './partials/product-list-contents'
+
+// Selectors
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
 import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
 import {initProductListPage} from '../../../../web/app/integration-manager/categories/commands'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
-// Partials
-import ProductListHeader from './partials/product-list-header'
+import {ampComponent} from '../../amp-sdk'
 
-const ProductList = ({
-    numItems,
-    products
-}) => (
+const ProductList = () => {
+    const filterSheetId = 'filter-sheet'
 
-    <div className="t-product-list">
-        <ProductListHeader />
+    return (
+        <div className="t-product-list">
+            <ProductListHeader />
 
-        <div className="t-product-list__container u-padding-end u-padding-bottom-lg u-padding-start">
-            <p className="t-product-list__num-results">{numItems} Results</p>
-            <List>
-                {
-                    products.map((prod) =>
-                        <ProductTile
-                            href={prod.href}
-                            key={prod.id}
-                            price={prod.price}
-                            thumbnail={{
-                                alt: prod.title,
-                                src: prod.thumbnail.src
-                            }}
-                            title={prod.title}
-                        />
-                    )
-                }
-            </List>
+            <ProductListContents sheetId={filterSheetId} /> {/* TODO FIX HOW TO WORK WITH route name eg. <ProductListContents routeName={routeName} /> */}
         </div>
-    </div>
-)
-
+    )
+}
 
 ProductList.propTypes = {
-    products: PropTypes.array.isRequired,
-    numItems: PropTypes.number
+    // Route object added by react router
+    route: PropTypes.object
 }
 
 ProductList.resolves = [({dispatch, getState}) => {
@@ -61,8 +42,4 @@ const mapStateToProps = createPropsSelector({
     products: getFilteredAndSortedListProducts
 })
 
-export default connect(
-    mapStateToProps
-)(ProductList)
-
-export const styles = containerStyles.toString()
+export default ampComponent(connect(mapStateToProps)(ProductList))

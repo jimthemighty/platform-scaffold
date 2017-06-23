@@ -1,6 +1,9 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+
+// Components
 import Link from '../link'
+import {ampComponent} from '../../amp-sdk'
 
 const Breadcrumbs = ({
     className,
@@ -75,4 +78,4 @@ Breadcrumbs.propTypes = {
     youAreHereMessage: PropTypes.string
 }
 
-export default Breadcrumbs
+export default ampComponent(Breadcrumbs)

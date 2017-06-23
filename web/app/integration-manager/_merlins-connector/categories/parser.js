@@ -2,8 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {getTextFrom} from '../../../utils/parser-utils'
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
+import {getTextFrom, parseProductID} from '../../../utils/parser-utils'
 
 /* eslint-disable newline-per-chained-call */
 
@@ -60,6 +59,7 @@ export const priceFilterParser = ($, $html) => {
                 criteria: priceParser(price), // priceParser('10-20')
                 label: $kind.text().trim(), // '$10.00 - $19.99'
                 ruleset: 'price', // we only have one ruleset at the moment
+                href: $kind.find('a').attr('href'), // filter link
                 query // 'price10to20'
             }
         }).toArray()
@@ -70,14 +70,13 @@ export const priceFilterParser = ($, $html) => {
 const categoryProductsParser = ($, $html) => {
     const $numItems = $html.find('#toolbar-amount .toolbar-number').first()
 
-    const products = $
+    const productIds = $
           .makeArray($html.find('.item.product-item'))
-          .map((product) => $(product).find('.product-item-link').attr('href'))
-          .map(urlToPathKey)
+          .map((product) => parseProductID($(product)))
 
     return {
         itemCount: $numItems.length > 0 ? parseInt($numItems.text(), 10) : 0,
-        products
+        products: productIds
     }
 }
 

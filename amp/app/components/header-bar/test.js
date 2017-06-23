@@ -1,14 +1,13 @@
-import {mount, shallow} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
+import {mount} from 'enzyme'
 import React from 'react'
-
-import Link from '../../components/link'
 
 import {HeaderBar, HeaderBarTitle} from './index'
 
 /* eslint-disable newline-per-chained-call */
 
 test('HeaderBarTitle renders without errors', () => {
-    const wrapper = mount(<HeaderBarTitle><h1>Test</h1></HeaderBarTitle>)
+    const wrapper = shallow(<HeaderBarTitle><h1>Test</h1></HeaderBarTitle>)
     expect(wrapper.length).toBe(1)
 })
 
@@ -36,24 +35,23 @@ test('HeaderBarTitle renders the contents of the className prop if present', () 
 })
 
 test('HeaderBarTitle renders a div with the given children with no href', () => {
-    const wrapper = shallow(<HeaderBarTitle><span>a</span><div>b</div></HeaderBarTitle>)
-
-    expect(wrapper.is('div')).toBe(true)
-    expect(wrapper.children().contains(<span>a</span>)).toBe(true)
-    expect(wrapper.children().contains(<div>b</div>)).toBe(true)
+    const wrapper = mount(<HeaderBarTitle>some title</HeaderBarTitle>)
+    const node = wrapper.getDOMNode()
+    expect(node.tagName.toLowerCase()).toBe('div')
+    expect(node.hasAttribute('href')).toBe(false)
+    expect(wrapper.text()).toBe('some title')
 })
 
 test('HeaderBarTitle renders a Link with the given children with an href', () => {
-    const wrapper = shallow(<HeaderBarTitle href="http://mobify.com/"><span>a</span><div>b</div></HeaderBarTitle>)
-
-    expect(wrapper.is(Link)).toBe(true)
-    expect(wrapper.prop('href')).toBe('http://mobify.com/')
-    expect(wrapper.children().contains(<span>a</span>)).toBe(true)
-    expect(wrapper.children().contains(<div>b</div>)).toBe(true)
+    const wrapper = mount(<HeaderBarTitle href="http://mobify.com/">some title</HeaderBarTitle>)
+    const node = wrapper.getDOMNode()
+    expect(node.tagName.toLowerCase()).toBe('a')
+    expect(node.hasAttribute('href')).toBe(true)
+    expect(wrapper.text()).toBe('some title')
 })
 
 test('HeaderBar renders without errors', () => {
-    const wrapper = mount(<HeaderBar><h1>Test</h1></HeaderBar>)
+    const wrapper = shallow(<HeaderBar><h1>Test</h1></HeaderBar>)
     expect(wrapper.length).toBe(1)
 })
 

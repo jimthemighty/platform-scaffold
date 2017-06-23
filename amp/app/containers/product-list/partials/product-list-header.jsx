@@ -1,11 +1,16 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getCategoryTitle, getCategoryParentTitle, getCategoryParentHref} from '../../../../../web/app/store/categories/selectors'
-import {staticURL} from '../../../utils'
 
+// Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Breadcrumbs from '../../../components/breadcrumbs'
+
+// Selectors
+import {getCategoryTitle, getCategoryParentTitle, getCategoryParentHref} from '../../../../../web/app/store/categories/selectors'
+
+// Utils
+import {staticURL} from '../../../utils'
 
 const ProductListHeader = ({title, parentName, parentHref}) => (
     <div className="u-flexbox u-align-bottom">

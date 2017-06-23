@@ -44,8 +44,6 @@ export default {
             .preview()
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
-
-        pushMessaging.dismissDefaultAsk()
     },
 
     'Checkout - Registered - Navigate from Home to ProductList': (browser) => {
@@ -53,6 +51,10 @@ export default {
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
             .assert.visible(productList.selectors.productListTemplateIdentifier)
+
+        // This is the second page view, the DefaultAsk should be visible and
+        // dismissable by this point.
+        pushMessaging.dismissDefaultAsk()
     },
 
     'Checkout - Registered - Navigate from ProductList to ProductDetails': (browser) => {
@@ -82,7 +84,7 @@ export default {
             .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
             .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
             // Email field should have email input type
-            .waitForElementVisible(`${checkout.selectors.registeredEmail}[type="email"]`)
+            .waitForElementVisible(`${checkout.selectors.email}[type="email"]`)
     },
 
     'Checkout - Registered - Continue to Registered Checkout': (browser) => {
@@ -92,22 +94,22 @@ export default {
             .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
     },
 
-    'Checkout - Registered - Fill out Shipping Info form': (browser) => {
-        checkout.fillShippingInfo()
-        browser
-            // Phone field should have numeric input type
-            .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
-            .waitForElementVisible(checkout.selectors.lastShippingInfo)
+    'Checkout - Registered - Choose shipping info': (browser) => {
+        checkout.chooseShippingInfo()
+        browser.waitForElementVisible(`${checkout.selectors.addressListOption} .c--checked`)
     },
 
-    'Checkout - Registered - Fill out Registered Checkout Payment Details form': () => {
+    'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {
         checkout.continueToPayment()
+        checkout.fillPaymentInfo()
+        browser
+            .waitForElementVisible(checkout.selectors.cvv)
+            .assert.valueContains(checkout.selectors.cvv, checkout.userData.cvv)
     },
 
     'Checkout - Registered - Verify Submit Order button is visible': (browser) => {
         browser
-            .waitForElementVisible(checkout.selectors.submitOrder)
-            .assert.visible(checkout.selectors.submitOrder)
+            .waitForElementVisible(checkout.selectors.placeOrder)
+            .assert.visible(checkout.selectors.placeOrder)
     }
-
 }

@@ -2,7 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {mount, shallow} from 'enzyme'
+import {shallowHOC as shallow} from '../../test-utils'
+import {mount} from 'enzyme'
 import React from 'react'
 
 import Link from '../link'
@@ -11,7 +12,7 @@ import ListTile from './index'
 /* eslint-disable newline-per-chained-call */
 
 test('ListTile renders without errors', () => {
-    const wrapper = mount(<ListTile />)
+    const wrapper = shallow(<ListTile />)
     expect(wrapper.length).toBe(1)
 })
 

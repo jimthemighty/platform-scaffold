@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import packagejson from '../../../package.json'
+import URL from 'url'
 
+// Components
 import Sheet from '../../components/sheet'
 import Nav from '../../components/nav'
 import NavMenu from '../../components/nav-menu'
@@ -10,22 +11,16 @@ import NavItem from '../../components/nav-item'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabelButton from '../../components/icon-label-button'
 import Icon from '../../components/icon'
-import NavigationSocialIcons from './partials/navigation-social-icons'
-import {getNavigationRoot, getPath} from './selectors'
-import URL from 'url'
+import {canonicalURL} from '../../utils'
 
+// Partials
+import NavigationSocialIcons from './partials/navigation-social-icons'
+import {ampComponent} from '../../amp-sdk'
+
+// Selectors
+import {getNavigationRoot, getPath} from './selectors'
 
 const pathnameMatch = (url, pathname) => Boolean(url && URL.parse(url).pathname === pathname)
-
-
-const canonicalURL = (localURL) => {
-    const canonical = URL.parse(packagejson.siteUrl)
-    const local = URL.parse(localURL)
-    local.protocol = canonical.protocol
-    local.hostname = canonical.hostname
-    return URL.format(local)
-}
-
 
 const itemFactory = (type, componentProps) => {
     // Login has a special nav item
@@ -35,7 +30,6 @@ const itemFactory = (type, componentProps) => {
     return <NavItem {...componentProps} href={canonicalURL(componentProps.href)} />
 }
 
-
 const SignInListItem = (props) => (
     <NavItem {...props}
         className="u-bg-color-neutral-10"
@@ -44,7 +38,6 @@ const SignInListItem = (props) => (
         }
     />
 )
-
 
 const Navigation = (props) => {
     const {id, root, path} = props
@@ -89,4 +82,6 @@ const mapStateToProps = createPropsSelector({
     path: getPath
 })
 
-export default connect(mapStateToProps)(Navigation)
+export default ampComponent(
+    connect(mapStateToProps)(Navigation)
+)

@@ -1,9 +1,16 @@
 import React, {PropTypes} from 'react'
+import sprite from '../../static/svg/sprite-dist/sprite.svg'
+
+// Partials
 import Header from '../header/container'
 import Footer from '../footer/container'
-import SkipLinks from '../../components/skip-links'
 import Navigation from '../navigation/container'
-import sprite from '../../static/svg/sprite-dist/sprite.svg'
+import ProductListFilterModal from '../product-list/partials/product-list-filter-modal'
+
+// Components
+import SkipLinks from '../../components/skip-links'
+
+import {ampComponent} from '../../amp-sdk'
 
 const App = ({children}) => {
 
@@ -19,10 +26,12 @@ const App = ({children}) => {
         {target: '#app-footer', label: 'Skip to footer'},
     ]
 
-    const navId = 'main-nav'
-
     // Important note: dont remove or rename "app" in body ID because we need this ID to work with sharing styles from PWA.
     const appId = 'app'
+
+    // IDs for Sheet components
+    const navId = 'main-nav'
+    const filterSheetId = 'filter-sheet'
 
     return (
         <body
@@ -32,6 +41,7 @@ const App = ({children}) => {
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
             <Navigation id={navId} />
+            <ProductListFilterModal sheetId={filterSheetId} />
 
             <SkipLinks items={skipLinksItems} />
 
@@ -52,10 +62,8 @@ const App = ({children}) => {
     )
 }
 
-
 App.propTypes = {
     children: PropTypes.node
 }
 
-
-export default App
+export default ampComponent(App)
