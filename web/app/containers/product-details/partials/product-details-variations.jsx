@@ -34,14 +34,14 @@ const variationSwatch = ({input: {value, onChange}, values, label, error, name})
     </div>
 )
 
-variationSwatch.PropTypes.shape({
+variationSwatch.propTypes = {
     input: {
         value: PropTypes.string,
         onChange: PropTypes.func
     },
     label: PropTypes.string,
     values: PropTypes.array
-})
+}
 
 const ProductDetailsVariations = ({variations, error}) => (
     <div className={variations.length > 0 && 'u-margin-top-lg'}>
