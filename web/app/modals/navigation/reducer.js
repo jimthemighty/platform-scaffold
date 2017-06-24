@@ -10,13 +10,17 @@ import {setNavigationPath} from './actions'
 import {LOGGED_IN_NAV, GUEST_NAV} from './constants'
 
 const CATEGORY_PLACEHOLDER_COUNT = 6
+const INITIAL_ROOT = new Array(CATEGORY_PLACEHOLDER_COUNT).fill({
+    isCategoryLink: true
+})
+
+// Insert blank object at start to act as placeholder for "sign in"
+INITIAL_ROOT.unshift({})
 
 export const initialState = Immutable.fromJS({
     path: undefined,
     root: {
-        children: new Array(CATEGORY_PLACEHOLDER_COUNT).fill({
-            isCategoryLink: true
-        }),
+        children: INITIAL_ROOT,
     },
 })
 
