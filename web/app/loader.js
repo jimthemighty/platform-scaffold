@@ -5,9 +5,10 @@ import {
     isFirefoxBrowser,
     preventDesktopSiteFromRendering,
     loadScript,
-    loadScriptAsPromise
+    loadScriptAsPromise,
+    documentWriteSupported
 } from 'progressive-web-sdk/dist/utils/utils'
-import {shouldPreview, loadPreview} from 'progressive-web-sdk/dist/utils/preview-utils'
+import {shouldPreview, loadPreview, isV8Tag} from 'progressive-web-sdk/dist/utils/preview-utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
@@ -187,22 +188,12 @@ const attemptToInitializeApp = () => {
     initCacheManifest(cacheHashManifest)
     triggerAppStartEvent()
 
-    // Force create the body element in order to render content. This is necessary
-    // because we load scripts synchronously in order to speed up loading, which
-    // by default would throw them in head, where as we need them in body.
-    document.write('<body>')
-
     // When the PWA is running in an Astro app, hide the preloader because apps
     // have their own splash screen.
     if (!isRunningInAstro) {
         displayPreloader(preloadCSS, preloadHTML, preloadJS)
     }
 
-    // Create React mounting target
-    const body = document.getElementsByTagName('body')[0]
-    const reactTarget = document.createElement('div')
-    reactTarget.className = 'react-target'
-    body.appendChild(reactTarget)
 
     /* eslint-disable max-len */
     loadAsset('meta', {
@@ -237,7 +228,22 @@ const attemptToInitializeApp = () => {
 
     asyncInitApp()
 
-    const loadScriptsSynchronously = true // TODO: this should be false when network is 2G.
+    // On poor connections, we don't want to load via document.write, otherwise
+    // document.write will fail to work
+    const loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
+
+    // Force create the body element in order to render content. This is necessary
+    // because we load scripts synchronously in order to speed up loading, which
+    // by default would throw them in head, where as we need them in body.
+    if (loadScriptsSynchronously) {
+        document.write('<body>')
+    }
+
+    // Create React mounting target
+    const body = document.getElementsByTagName('body')[0]
+    const reactTarget = document.createElement('div')
+    reactTarget.className = 'react-target'
+    body.appendChild(reactTarget)
 
     // The following scripts are loaded async via document.write, in order
     // for the browser to increase the priority of these scripts. If the scripts
@@ -245,11 +251,13 @@ const attemptToInitializeApp = () => {
     // queue them while waiting for other high priority resources to finish
     // loading. This delay can go all the way up to 5 seconds on a Moto G4 on a
     // 3G connection.
+
     loadScript({
         id: 'progressive-web-vendor',
         src: getAssetUrl('vendor.js'),
         docwrite: loadScriptsSynchronously,
-        isAsync: false
+        isAsync: false,
+        onerror: function(){ alert('test') } // TODO: make this load the non-sync way!
     })
 
     loadScript({
@@ -305,6 +313,7 @@ const attemptToInitializeApp = () => {
 
     // We insert a <plaintext> tag at the end of loading the scripts, in order
     // to ensure that the original site does not execute anything.
+    // Do not remove!
     preventDesktopSiteFromRendering()
 }
 
