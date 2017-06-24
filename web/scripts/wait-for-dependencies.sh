@@ -21,7 +21,7 @@ printf "Chrome installed\n"
 if git rev-parse ; then
     # Get the current branch on CircleCI or local
     CURRENT_BRANCH=${CIRCLE_BRANCH:-$(git branch | grep "*" | awk '{ print $2 }')}
-    if [ "$CURRENT_BRANCH" == "master" ]; then
+    if [ "$CURRENT_BRANCH" == "master-test-hotfix" ]; then
         exit 0 
     else
         echo "Waiting for npm prod:build to complete"
@@ -49,5 +49,5 @@ if git rev-parse ; then
             fi 
         done
         printf "8443 test server is now active\n"      
-     fi
+    fi
 fi
