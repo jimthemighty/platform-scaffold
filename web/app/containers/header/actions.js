@@ -4,7 +4,7 @@
 
 
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
-import {getSearchSuggestions, searchProducts} from '../../integration-manager/app/commands'
+import {getSearchSuggestions, searchProducts} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 import {EVENT_ACTION} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const searchAnalytics = createActionWithAnalytics(
