@@ -12,7 +12,6 @@ import * as headerActions from './actions'
 import * as miniCartActions from '../../modals/mini-cart/actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {NAVIGATION_MODAL} from '../../modals/constants'
-
 import * as selectors from './selectors'
 import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
 
