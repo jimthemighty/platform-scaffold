@@ -8,32 +8,7 @@
 // ---
 
 .amp-carousel {
-    overflow: hidden;
-}
-
-
-// Carousel Inner Wrapper
-// ---
-
-.amp-carousel__inner {
-    display: flex;
-    justify-content: center;
-    flex: 0 0 auto;
-}
-
-
-// Carousel Item
-// ---
-//
-// 1. Prevent there from being unwanted white space beneath images
-
-.amp-carousel__item {
-    display: block;
-    flex: 0 0 auto;
-    width: 100%;
-
-    line-height: 0;
-    text-align: center; // 1
+    //
 }
 
 
@@ -46,29 +21,22 @@
 }
 
 
-// Carousel Previous
-// ---
-
-.amp-carousel__previous {
-    flex: 0 0 auto;
-}
-
-
-// Carousel Next
-// ---
-
-.amp-carousel__next {
-    flex: 0 0 auto;
-}
-
-
 // Carousel Pips Container
 // ---
+//
+// 1. Reset button styles
 
 .amp-carousel__pips {
     flex: 1 1 auto;
 
     text-align: center;
+
+    .amp-button,
+    .amp-button__inner {
+        min-width: auto; // 1
+        min-height: auto; // 1
+        padding: 0; // 1
+    }
 
     &:last-of-type {
         margin-right: 0;
@@ -90,7 +58,8 @@
     border-radius: 50%;
     background-color: $neutral-20;
 
-    &.amp--active {
-        background-color: $neutral-50;
+    &:active,
+    &:focus {
+        background-color: $neutral-20;
     }
 }
