@@ -80,7 +80,8 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
     "build": "cross-env NODE_ENV=production node ./scripts/build/build.js",
-    "deploy": "node ./scripts/deploy.js"
+    "deploy": "node ./scripts/deploy.js",
+    "postinstall": "node ./scripts/postinstall.js"
   },
   "jest": {
     "setupFiles": [
