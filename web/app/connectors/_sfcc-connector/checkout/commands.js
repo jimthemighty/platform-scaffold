@@ -9,7 +9,7 @@ import {getOrderTotal} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
-import {receiveOrderConfirmationContents} from '../../results'
+import {receiveOrderConfirmationContents} from 'progressive-web-sdk/dist/integration-manager/results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
 import {getSelectedShippingMethodValue} from '../../../store/checkout/shipping/selectors'
 import {
@@ -56,12 +56,26 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                 }]
             } = basket
 
-            let initialValues
+            // Ensure required properties for Address runtype are present
+            let initialValues = {
+                countryId: 'us',
+                name: '',
+                firstname: '',
+                lastname: '',
+                addressLine1: '',
+                postcode: '',
+                telephone: '',
+                city: ''
+            }
+
             /* eslint-disable camelcase */
             if (shipping_address) {
                 initialValues = {
+                    ...initialValues,
                     username: email,
                     name: shipping_address.full_name,
+                    firstname: shipping_address.first_name,
+                    lastname: shipping_address.last_name,
                     company: shipping_address.company_name,
                     addressLine1: shipping_address.address1,
                     addressLine2: shipping_address.address2,
@@ -71,17 +85,15 @@ export const initCheckoutShippingPage = () => (dispatch) => {
                     postcode: shipping_address.postal_code,
                     telephone: shipping_address.phone
                 }
-            } else {
-                initialValues = {
-                    countryId: 'us'
-                }
             }
+
             dispatch(receiveSelectedShippingMethod(shipping_method ? shipping_method.id : undefined))
-            dispatch(receiveShippingAddress(initialValues))
             /* eslint-enable camelcase */
-            return dispatch(populateLocationsData())
+            dispatch(receiveShippingAddress(initialValues))
+            dispatch(populateLocationsData())
+            return initialValues
         })
-        .then(() => dispatch(fetchShippingMethodsEstimate()))
+        .then((initialValues) => dispatch(fetchShippingMethodsEstimate(initialValues)))
 }
 
 // We don't need to fetch any data for this page
