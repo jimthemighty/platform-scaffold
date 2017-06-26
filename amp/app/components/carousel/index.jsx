@@ -2,24 +2,25 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import * as ampSDK from '../../amp-sdk'
 
-const DIRECTION_RIGHT = 'right'
-const DIRECTION_LEFT = 'left'
+// Components
+import Button from '../button'
 
 const getKey = (index) => {
     return `slide-${index}`
 }
 
+const carouselId = 'carousel-id'
+
 const CarouselPip = ({isCurrentPip, slideNumber}) => {
-    const pipClasses = classNames('amp-carousel__pip', {
-        'amp--active': isCurrentPip
-    })
+    const number = slideNumber - 1
+    const button = `tap:${carouselId}.goToSlide(index=${number})`
 
     return (
-        <div className={pipClasses}>
+        <Button className="amp-carousel__pip" on={button}>
             <span className="u-visually-hidden">
                 {`${isCurrentPip ? 'Current slide' : 'Slide'} ${slideNumber}`}
             </span>
-        </div>
+        </Button>
     )
 }
 
@@ -159,29 +160,31 @@ class Carousel extends React.Component {
         const loopValue = loop ? {loop: ''} : {}
 
         return (
-            <amp-carousel
-                class={classes}
-                type={typeCarousel}
-                layout={layoutItemValue}
-                height={height}
-                width={width}
-                {...controlsValue}
-                {...dataNextButtonAriaLabelValue}
-                {...dataPrevButtonAriaLabelValue}
-                {...autoplayValue}
-                {...delayValue}
-                {...loopValue}
-            >
-                <div className="amp-carousel__inner" ref={(el) => { this._innerWrapper = el }}>
-                    {childList.map((item) => item)}
-                </div>
+            <div className={classes}>
+                <div className="amp-carousel__inner">
+                    <amp-carousel
+                        id={carouselId}
+                        type={typeCarousel}
+                        layout={layoutItemValue}
+                        height={height}
+                        width={width}
+                        {...controlsValue}
+                        {...dataNextButtonAriaLabelValue}
+                        {...dataPrevButtonAriaLabelValue}
+                        {...autoplayValue}
+                        {...delayValue}
+                        {...loopValue}
+                    >
+                        {childList.map((item) => item)}
 
-                {/* Optional 'caption' label control */}
-                {showCaption &&
-                    <span className={`amp-carousel__caption`}>
-                        {currentChild.props.caption}
-                    </span>
-                }
+                        {/* Optional 'caption' label control */}
+                        {showCaption &&
+                            <span className="amp-carousel__caption">
+                                {currentChild.props.caption}
+                            </span>
+                        }
+                    </amp-carousel>
+                </div>
 
                 {showControls &&
                     <div className="amp-carousel__controls">
@@ -196,7 +199,7 @@ class Carousel extends React.Component {
                         </div>
                     </div>
                 }
-            </amp-carousel>
+            </div>
         )
     }
 }
@@ -298,6 +301,8 @@ Carousel.propTypes = {
 }
 
 Carousel.defaultProps = {
+    loop: false,
+    controls: false,
     showCaption: false,
     showControls: true,
     typeCarousel: 'slides',

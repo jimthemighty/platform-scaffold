@@ -3,9 +3,9 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getProductImages} from '../../../../../web/app/store/products/selectors'
 
+// Components
 import Carousel from '../../../components/carousel'
-import CarouselItem from '../../../components/carousel/carousel-item'
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import AmpImage from '../../../components/amp-image'
 
 const ProductDetailsCarousel = ({images}) => {
     const carouselProps = {
@@ -16,19 +16,12 @@ const ProductDetailsCarousel = ({images}) => {
         showControls: images.length > 1,
         height: '330px',
         width: '330px',
-        controls: true,
         dataNextButtonAriaLabel: 'HELLO WORLD',
-        dataPrevButtonAriaLabel: 'BYE BYE',
-        autoplay: true,
-        delay: 3000,
-        loop: true
+        dataPrevButtonAriaLabel: 'BYE BYE'
     }
 
     const imgProps = {
         className: 'u-display-block',
-        hidePlaceholder: true,
-        ratio: {aspect: '1:1'},
-        useLoaderDuringTransitions: false,
         height: '330px'
     }
 
@@ -36,9 +29,7 @@ const ProductDetailsCarousel = ({images}) => {
         <Carousel {...carouselProps}>
             {images.map(({src, alt = ''}) => {
                 return (
-                    <CarouselItem key={src}>
-                        <AmpImage {...imgProps} alt={alt} src={src} />
-                    </CarouselItem>
+                    <AmpImage {...imgProps} alt={alt} src={src} key={src} />
                 )
             })}
         </Carousel>
