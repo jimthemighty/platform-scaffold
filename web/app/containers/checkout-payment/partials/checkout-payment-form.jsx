@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
-import {validateFullName} from '../../../utils/utils'
+import {validateFullName, validateCCExpiry, validateCCNumber} from '../../../utils/utils'
 
 // Selectors
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
@@ -25,6 +25,8 @@ import BillingAddressForm from './billing-address-form'
 import OrderSummary from './order-summary'
 
 const REQUIRED_TEXT = 'Required'
+const INVALID_TEXT = 'Invalid Input'
+const FIRST_LAST_NAME_TEXT = 'Please enter a first and last name'
 
 const validate = (values) => {
     const errors = {}
@@ -35,11 +37,28 @@ const validate = (values) => {
         'countryId',
         'regionId',
         'postcode',
-        'telephone'
+        'telephone',
+        'ccexpiry',
+        'ccname',
+        'ccnumber',
+        'cvv'
     ]
 
     if (values.name && !validateFullName(values.name)) {
-        errors.name = 'Please enter a first and last name'
+        errors.name = FIRST_LAST_NAME_TEXT
+    }
+
+    if (values.ccnumber && !validateCCNumber(values.ccnumber)) {
+        errors.ccnumber = INVALID_TEXT
+    }
+
+    if (values.ccexpiry && !validateCCExpiry(values.ccexpiry)) {
+        errors.ccexpiry = INVALID_TEXT
+    }
+
+
+    if (values.cvv && values.cvv.length !== 3) {
+        errors.cvv = INVALID_TEXT
     }
 
     requiredFieldNames.forEach((fieldName) => {
@@ -51,21 +70,42 @@ const validate = (values) => {
     return errors
 }
 
+class CheckoutPaymentForm extends React.Component {
+    constructor(props) {
+        super(props)
+        this.onSubmit = this.onSubmit.bind(this)
+    }
 
-const CheckoutPaymentForm = ({handleSubmit, submitPayment}) => {
-    return (
-        <Grid className="u-center-piece">
-            <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
-                <form className="t-checkout-payment__form" onSubmit={handleSubmit(submitPayment)} noValidate>
-                    <CreditCardForm />
-                    <BillingAddressForm />
-                </form>
-            </GridSpan>
-            <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
-                <OrderSummary />
-            </GridSpan>
-        </Grid>
-    )
+    onSubmit(values) {
+        return new Promise((resolve, reject) => {
+            const errors = validate(values)
+            if (!Object.keys(errors).length) {
+                this.props.submitPayment()
+                return resolve()
+            }
+            return reject(new ReduxForm.SubmissionError(errors))
+        })
+    }
+
+    render() {
+        const {
+            handleSubmit
+        } = this.props
+
+        return (
+            <Grid className="u-center-piece">
+                <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
+                    <form className="t-checkout-payment__form" onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                        <CreditCardForm />
+                        <BillingAddressForm />
+                    </form>
+                </GridSpan>
+                <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 5}}>
+                    <OrderSummary submitPayment={handleSubmit(this.onSubmit)} />
+                </GridSpan>
+            </Grid>
+        )
+    }
 }
 
 CheckoutPaymentForm.propTypes = {

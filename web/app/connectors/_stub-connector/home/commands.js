@@ -4,7 +4,7 @@
 
 /* eslint-disable no-unused-vars */
 
-import {receiveHomeData} from '../../results'
+import {receiveHomeData} from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initHomePage = (url, routeName) => (dispatch) => {
     console.log('[Stub Connector] Called initHomePage stub with arguments:', url, routeName)
