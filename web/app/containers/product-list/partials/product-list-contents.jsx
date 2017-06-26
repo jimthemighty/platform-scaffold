@@ -112,7 +112,7 @@ const ProductListContents = ({
                                 <div className="t-product-list__filter u-flex u-margin-end-md">
                                     <Field
                                         idForLabel="filterButton"
-                                        label={`${products.length} Items`}
+                                        label={`${numItems} Items`}
                                     >
                                         <Button
                                             className="c--tertiary u-width-full u-text-uppercase"
