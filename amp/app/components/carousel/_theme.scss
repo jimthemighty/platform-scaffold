@@ -2,36 +2,40 @@
 
 // Carousel Theme
 // ===
-
-// Root
-// ---
 //
-// 1. Position context for child previous/next buttons
+// - You may use the `amp-carousel` element selector to style it freely.
+// - You may use the ``.amp-carousel-slide` class selector to target carousel items.
+// - The visual state of an `amp-carousel` button when it's disabled is hidden.
+// - By default, ``.amp-carousel-button` uses an inlined SVG as the background-image of the buttons. You may override this with your own SVG or image as in the example below.
+
+
+// Style amp built in elements
+// ---
 
 .amp-carousel {
-    position: relative;
-}
+    // Carousel Button: built-in class
+    // ---
+    .amp-carousel-button {
+        width: 44px;
+        height: 100%;
 
+        &.amp-disabled {
+            visibility: visible;
+            opacity: 0.3;
+        }
+    }
 
-// Previous & Next
-// ---
-//
-// 1. Absolutely position relative to the parent carousel container
+    // Carousel Button Prev: built-in class
+    // ---
+    .amp-carousel-button-prev {
+        left: 0;
+    }
 
-.amp-carousel__previous,
-.amp-carousel__next {
-    position: absolute; // 1
-    top: 50%;
-
-    transform: translateY(-50%);
-}
-
-.amp-carousel__previous {
-    left: 0;
-}
-
-.amp-carousel__next {
-    right: 0;
+    // Carousel Button Next: built-in class
+    // ---
+    .amp-carousel-button-next {
+        right: 0;
+    }
 }
 
 
@@ -45,30 +49,11 @@
 .amp-carousel__pip {
     width: $sub-unit*3;
     height: $sub-unit*3;
+    margin-right: $sub-unit;
 
-    background-color: transparent;
+    background-color: $neutral-30;
 
-    &::after {
-        content: '';
-
-        display: block;
-        flex: 0 0 auto;
-        width: $unit;
-        height: $unit;
-
-        border-radius: 50%;
-        background-color: $neutral-20;
-    }
-
-    &.amp--active {
-        background-color: transparent;
-
-        &::after {
-            background-color: $border-color;
-        }
-    }
-
-    &:not(:last-of-type) {
-        margin-right: $sub-unit;
+    &:last-of-type {
+        margin-right: 0;
     }
 }

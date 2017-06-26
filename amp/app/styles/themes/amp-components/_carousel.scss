@@ -3,11 +3,42 @@
 // Carousel Theme
 // ===
 //
-// 1. Position context for the child `.amp--side-controls .amp-carousel__previous`
-//    and `.amp--side-controls .amp-carousel__next` elements
+// - You may use the `amp-carousel` element selector to style it freely.
+// - You may use the ``.amp-carousel-slide` class selector to target carousel items.
+// - The visual state of an `amp-carousel` button when it's disabled is hidden.
+// - By default, ``.amp-carousel-button` uses an inlined SVG as the background-image of the buttons. You may override this with your own SVG or image as in the example below.
 
 .amp-carousel {
-    position: relative; // 1
+    // Carousel Button: built-in class
+    // ---
+    .amp-carousel-button {
+        width: $tap-size;
+        height: 100%;
+
+        background-color: transparent;
+        background-size: 12px 12px;
+
+        &.amp-disabled {
+            visibility: visible;
+            opacity: 0.3;
+        }
+    }
+
+    // Carousel Button Prev: built-in class
+    // ---
+    .amp-carousel-button-prev {
+        left: 0;
+
+        background-image: url('/static/svg/chevron-left.svg');
+    }
+
+    // Carousel Button Next: built-in class
+    // ---
+    .amp-carousel-button-next {
+        right: 0;
+
+        background-image: url('/static/svg/chevron-right.svg');
+    }
 }
 
 
@@ -15,53 +46,9 @@
 // ---
 
 .amp-carousel.amp--frame {
-    .amp-carousel__item {
-        margin: 0 $unit;
-        padding: $unit*3;
-
+    .amp-carousel__inner {
         background: $neutral-00;
         box-shadow: $box-shadow;
-    }
-}
-
-
-// Carousel Modifier: Side Controls
-// ---
-//
-// 1. Positioned absolute relative to the parent `amp-carousel` container
-
-.amp-carousel.amp--side-controls {
-    .amp-carousel__previous,
-    .amp-carousel__next {
-        position: absolute; // 1
-        top: 0;
-        bottom: 0;
-
-        display: flex;
-        width: $tap-size;
-
-        svg {
-            max-width: 100%;
-        }
-    }
-
-    .amp-carousel__previous {
-        left: $unit;
-    }
-
-    .amp-carousel__next {
-        right: $unit;
-    }
-}
-
-
-// Carousel Modifier: Hide Controls
-// ---
-
-.amp-carousel.amp--hide-controls {
-    .amp-carousel__previous,
-    .amp-carousel__next {
-        display: none;
     }
 }
 
@@ -86,15 +73,10 @@
     height: 6px;
     margin-right: 6px;
 
-    border-radius: 50%;
     background-color: $neutral-30;
 
     color: transparent; // 1
     font: 0/0 a; // 1
-
-    &.amp--active {
-        background-color: $neutral-60;
-    }
 
     &:last-of-type {
         margin-right: 0;
