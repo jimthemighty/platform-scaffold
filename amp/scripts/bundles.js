@@ -65,7 +65,7 @@ const upload = ({projectSlug, file}) => {
         fs.readFileAsync(file)
         .then(buffer => buffer.toString('base64'))
         .then(base64 => ({
-            message: 'message',
+            message: parsed.name,
             artifact: `data:application/zip;base64,${base64}`
         }))
     )
