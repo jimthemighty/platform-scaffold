@@ -5,7 +5,7 @@ import {getProductImages} from '../../../../../web/app/store/products/selectors'
 
 // Components
 import Carousel from '../../../components/carousel'
-import AmpImage from '../../../components/amp-image'
+import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 
 const ProductDetailsCarousel = ({images}) => {
     const carouselProps = {
@@ -14,15 +14,15 @@ const ProductDetailsCarousel = ({images}) => {
         iconSize: 'medium',
         className: 'amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10',
         showControls: false,
-        // showControls: images.length > 1,
+        showControls: images.length > 1,
         height: '330',
         width: '330'
     }
 
     const imgProps = {
-        className: 'u-display-block',
+        className: 'u-display-block LOOK-HERE',
         height: '330',
-        width: '330'
+        width: '330',
     }
 
     return (
