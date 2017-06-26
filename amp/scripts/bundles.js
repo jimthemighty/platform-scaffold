@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const process = require('process')
 const yargs = require('yargs');
 const path = require('path');
@@ -83,7 +82,7 @@ const upload = ({projectSlug, file}) => {
 const main = () => {
     const argv = (
         yargs
-        .usage('Usage: $0 <command> [options]')
+        .usage('Manage AMP bundles deployed through Mobify Cloud\n\nUsage: $0 <command> [options]')
         .command('list <projectSlug>', 'List uploaded bundles')
         .command('upload <projectSlug> <file>', 'Upload a new bundle')
         .demandCommand()
