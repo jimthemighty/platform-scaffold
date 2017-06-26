@@ -43,7 +43,7 @@ export const LoginField = ({label, type, forgotPassword, name, tooltip, analytic
             component={Field}
             >
             {isPassword ?
-                <PasswordInput isText buttonTextHide="Hide" buttonTextShow="Show" />
+                <PasswordInput isText buttonTextHide="Hide" buttonTextShow="Show" data-analytics-name={analyticsName} />
             :
                 <input type={type} data-analytics-name={analyticsName} />
             }
