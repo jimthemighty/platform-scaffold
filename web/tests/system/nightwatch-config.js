@@ -5,6 +5,11 @@
 var reportsPath = process.env.CIRCLE_TEST_REPORTS || './tests/reports';
 var screenshotsPath = process.env.CIRCLE_ARTIFACTS || './tests/screenshots';
 
+var notificationSettings = {
+    ALLOW: 1,
+    BLOCK: 2
+};
+
 require('babel-core/register');
 
 module.exports = {
@@ -30,7 +35,7 @@ module.exports = {
             'end_session_on_fail': false,
             'silent': true,
             'output': true,
-            'exclude': ['page-objects'],
+            'exclude': ['page-objects', 'test-scripts', 'site.js'],
             'screenshots': {
                 'enabled': true,
                 'path': screenshotsPath,
@@ -58,6 +63,18 @@ module.exports = {
                 'javascriptEnabled': true,
                 'acceptSslCerts': true
             }
-        }
+        },
+        // For testing push messaging.
+        // Always Allow browser notifications
+        'subscribe': {
+            'desiredCapabilities': {
+                'chromeOptions': {
+                    'prefs': {
+                        'profile.default_content_setting_values.notifications': notificationSettings.ALLOW
+                    }
+                }
+            },
+            'filter': 'tests/system/workflows/push-subscribe.js'
+        },
     }
 };

@@ -8,11 +8,11 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getCategoryItemCount} from '../../../store/categories/selectors'
 import * as selectors from '../selectors'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
-import {PRODUCT_LIST_FILTER_MODAL} from '../constants'
+import {PRODUCT_LIST_FILTER_MODAL} from '../../../modals/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
 import {changeSort} from '../actions'
-import {receiveCurrentProductId} from '../../../integration-manager/results'
+import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import List from 'progressive-web-sdk/dist/components/list'
@@ -20,6 +20,7 @@ import Image from 'progressive-web-sdk/dist/components/image'
 // import Icon from 'progressive-web-sdk/dist/components/icon'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Field from 'progressive-web-sdk/dist/components/field'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import ProductTile from '../../../components/product-tile'
 
@@ -88,6 +89,7 @@ const ProductListContents = ({
                         className="u-color-brand"
                         icon="trash"
                         onClick={clearFilters}
+                        data-analytics-name={UI_NAME.clearFilters}
                     >
                         Clear
                     </Button>
@@ -111,6 +113,7 @@ const ProductListContents = ({
                                             onClick={openModal}
                                             disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
                                             id="filterButton"
+                                            data-analytics-name={UI_NAME.showFilters}
                                         >
                                             Filter
                                         </Button>
@@ -174,7 +177,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     clearFilters: () => changeFilterTo(null),
-    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL),
+    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
     sortChange: changeSort,
     setCurrentProduct: receiveCurrentProductId
 }

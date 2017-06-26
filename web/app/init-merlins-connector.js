@@ -1,6 +1,6 @@
-import {Connector} from './integration-manager/_merlins-connector'
+import {Connector} from './connectors/_merlins-connector'
 import connectorExtension from './connector-extension'
-import {registerConnector, registerConnectorExtension} from './integration-manager'
+import {registerConnector, registerConnectorExtension} from 'progressive-web-sdk/dist/integration-manager'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 
 const initConnector = () => {

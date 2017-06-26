@@ -1,3 +1,5 @@
+## 0.17.1 (June 23, 2017)
+- Update Progressive Web SDK to 0.15.5 [#807](https://github.com/mobify/platform-scaffold/pull/807)
 - Add `messaging:testmessage` command to `web/package.json` [#735](https://github.com/mobify/platform-scaffold/pull/735)
 
 ## 0.17.0 (June 6, 2017)

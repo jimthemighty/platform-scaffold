@@ -16,35 +16,6 @@
 }
 
 
-// Added to Cart Sheet
-// ---
-//
-// 1. Provide the space within which the Close button with be vertically and
-//    horisontally centered in order to match the mockup
-
-.t-product-details__item-added-modal {
-    .c-sheet__content {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .pw-sheet__wrapper {
-        justify-content: flex-end;
-    }
-}
-
-.t-product-details__item-added-modal-close {
-    width: $unit*7; // 1
-    height: $unit*7; // 1
-}
-
-.t-product-details__item-added-modal-icon {
-    color: $neutral-30;
-
-    fill: $neutral-30;
-}
-
-
 // Nearest Stores
 // ---
 

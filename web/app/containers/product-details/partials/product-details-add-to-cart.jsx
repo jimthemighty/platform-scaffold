@@ -7,13 +7,14 @@ import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as selectors from '../selectors'
-import {getProductInitialValues, getProductAvailability} from '../../../store/products/selectors'
+import {getProductInitialValues, getProductAvailability} from 'progressive-web-sdk/dist/store/products/selectors'
 import * as actions from '../actions'
 
 import ProductDetailsVariations from './product-details-variations'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, handleSubmit}) => {
     const stepperProps = {
@@ -55,6 +56,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                     showIconText={true}
                     className="c--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"
                     disabled={disabled}
+                    data-analytics-name={UI_NAME.addToCart}
                 />
             }
         </form>

@@ -9,6 +9,7 @@ import isEmail from 'validator/lib/isEmail'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const NewsletterForm = ({handleSubmit, disabled, submitting, onSubmit}) => {
     return (
@@ -19,13 +20,16 @@ const NewsletterForm = ({handleSubmit, disabled, submitting, onSubmit}) => {
                         type="email"
                         placeholder="Enter your email..."
                         noValidate
+                        data-analytics-name={UI_NAME.email}
                     />
                 </ReduxForm.Field>
 
                 <Button
                     type="submit"
                     className="c--tertiary u-margin-0 u-text-uppercase"
-                    disabled={submitting || disabled}>
+                    disabled={submitting || disabled}
+                    data-analytics-name={UI_NAME.subscribe}
+                >
                     Submit
                 </Button>
             </FieldRow>
