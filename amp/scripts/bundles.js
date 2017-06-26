@@ -14,7 +14,7 @@ const {info, error, step} = common
 
 const gitRevisionLength = 40
 
-const mobifyCloudURL = `http://cloud-dev.mobify.com:8000`
+const mobifyCloudURL = process.env['MOBIFY_CLOUD_URL'] || 'https://cloud.mobify.com/'
 const listCreateURL = (projectSlug) => `${mobifyCloudURL}/api/v2/projects/${projectSlug}/amp/bundles/`
 
 class LogicalException extends ne.LogicalException {}
