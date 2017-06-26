@@ -74,7 +74,6 @@ class Carousel extends React.Component {
             dataNextButtonAriaLabel,
             dataPrevButtonAriaLabel,
             layoutItem,
-            showCaption,
             showControls,
             typeCarousel
         } = this.props
@@ -169,13 +168,6 @@ class Carousel extends React.Component {
                         {...loopValue}
                     >
                         {childList.map((item) => item)}
-
-                        {/* Optional 'caption' label control */}
-                        {showCaption &&
-                            <span className="amp-carousel__caption">
-                                {currentChild.props.caption}
-                            </span>
-                        }
                     </amp-carousel>
                 </div>
 
@@ -266,12 +258,6 @@ Carousel.propTypes = {
     loop: PropTypes.bool,
 
     /**
-     * Boolean value to show slide caption or not. The caption is read
-     * from the props of the current CarouselItem.
-     */
-    showCaption: PropTypes.bool,
-
-    /**
      * Boolean value to show carousel controls and pips or not
      */
     showControls: PropTypes.bool,
@@ -296,7 +282,6 @@ Carousel.propTypes = {
 Carousel.defaultProps = {
     loop: false,
     controls: false,
-    showCaption: false,
     showControls: false,
     typeCarousel: 'slides',
     layoutItem: 'responsive'
