@@ -10,7 +10,7 @@ const fs = Promise.promisifyAll(require('fs'))
 const ne = require('node-exceptions')
 const fetch = require('node-fetch')
 
-const {success, info, error, step} = common
+const {info, error, step} = common
 
 const gitRevisionLength = 40
 
