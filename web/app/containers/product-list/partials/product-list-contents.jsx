@@ -74,8 +74,9 @@ const ProductListContents = ({
     path,
     products,
     openModal,
+    selectedSortOption,
     setCurrentProduct,
-    sortChange,
+    // sortChange,
     sortOptions,
     routeName,
     router,
@@ -85,100 +86,112 @@ const ProductListContents = ({
         router.push(
             path +
             (page === 1 ? '' : `?page=${page}`) +
-            (option === 'default' ? '' : `&sort=${option}`)
+            (page === 1 ? '?' : '&') +
+            ((option === 'default' || !option) ? '' : `sort=${option}`)
+        )
+    }
+
+    const goToPage = (newPage) => {
+        router.push(
+            path +
+            (newPage === 1 ? '' : `?page=${newPage}`) +
+            (newPage === 1 ? '?' : '&') +
+            ((selectedSortOption === 'default' || !selectedSortOption) ? '' : `sort=${selectedSortOption}`)
         )
     }
 
     return (
-    <div>
-        {contentsLoaded && activeFilters.length > 0 && (
-            <div className="u-flexbox u-align-center u-border-light-top">
-                <div className="u-flex u-padding-start-md">
-                    {activeFilters.map(({label, query}) =>
-                        <div className="t-product-list__active-filter" key={query}>
-                            <strong>Price</strong>: {label}
-                        </div>
-                    )}
-                </div>
-                <div className="u-flex-none">
-                    <Button
-                        className="u-color-brand"
-                        icon="trash"
-                        onClick={clearFilters}
-                        data-analytics-name={UI_NAME.clearFilters}
-                    >
-                        Clear
-                    </Button>
-                </div>
-            </div>
-        )}
-
-        <div className="t-product-list__container u-padding-end u-padding-bottom-lg u-padding-start">
-            <div className="t-product-list__num-results u-padding-md u-padding-start-sm u-padding-end-sm">
-                {contentsLoaded ?
-                    <div>
-                        {products.length > 0 &&
-                            <div className="u-flexbox">
-                                <div className="t-product-list__filter u-flex u-margin-end-md">
-                                    <Field
-                                        idForLabel="filterButton"
-                                        label={`${numItems} Items`}
-                                    >
-                                        <Button
-                                            className="c--tertiary u-width-full u-text-uppercase"
-                                            onClick={openModal}
-                                            disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
-                                            id="filterButton"
-                                            data-analytics-name={UI_NAME.showFilters}
-                                        >
-                                            Filter
-                                        </Button>
-                                    </Field>
-                                </div>
-
-                                <div className="t-product-list__sort u-flex">
-                                    <Field
-                                        className="pw--has-select"
-                                        idForLabel="sort"
-                                        label="Sort by"
-                                    >
-                                        <select
-                                            className="u-color-neutral-60"
-                                            onChange={(e) => { sort(e.target.value) }}
-                                        >
-                                            <option value="default" />
-                                            {
-                                                sortOptions.map((choice, index) => <option key={index} value={choice.id}>{choice.label}</option>)
-                                            }
-                                        </select>
-                                    </Field>
-                                </div>
+        <div>
+            {contentsLoaded && activeFilters.length > 0 && (
+                <div className="u-flexbox u-align-center u-border-light-top">
+                    <div className="u-flex u-padding-start-md">
+                        {activeFilters.map(({label, query}) =>
+                            <div className="t-product-list__active-filter" key={query}>
+                                <strong>Price</strong>: {label}
                             </div>
-                        }
+                        )}
                     </div>
+                    <div className="u-flex-none">
+                        <Button
+                            className="u-color-brand"
+                            icon="trash"
+                            onClick={clearFilters}
+                            data-analytics-name={UI_NAME.clearFilters}
+                        >
+                            Clear
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            <div className="t-product-list__container u-padding-end u-padding-bottom-lg u-padding-start">
+                <div className="t-product-list__num-results u-padding-md u-padding-start-sm u-padding-end-sm">
+                    {contentsLoaded ?
+                        <div>
+                            {products.length > 0 &&
+                                <div className="u-flexbox">
+                                    <div className="t-product-list__filter u-flex u-margin-end-md">
+                                        <Field
+                                            idForLabel="filterButton"
+                                            label={`${numItems} Items`}
+                                        >
+                                            <Button
+                                                className="c--tertiary u-width-full u-text-uppercase"
+                                                onClick={openModal}
+                                                disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
+                                                id="filterButton"
+                                                data-analytics-name={UI_NAME.showFilters}
+                                            >
+                                                Filter
+                                            </Button>
+                                        </Field>
+                                    </div>
+
+                                    <div className="t-product-list__sort u-flex">
+                                        <Field
+                                            className="pw--has-select"
+                                            idForLabel="sort"
+                                            label="Sort by"
+                                        >
+                                            <select
+                                                className="u-color-neutral-60"
+                                                value={selectedSortOption}
+                                                onChange={(e) => { sort(e.target.value) }}
+                                                onBlur={(e) => { sort(e.target.value) }}
+                                            >
+                                                <option value="default" />
+                                                {
+                                                    sortOptions.map((choice, index) => <option key={index} value={choice.id}>{choice.label}</option>)
+                                                }
+                                            </select>
+                                        </Field>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    :
+                        <SkeletonBlock height="20px" />
+                    }
+                </div>
+
+                {(products.length > 0 || !contentsLoaded) ?
+                    <ResultList products={products} setCurrentProduct={setCurrentProduct} />
                 :
-                    <SkeletonBlock height="20px" />
+                    <NoResultsList routeName={routeName} />
+                }
+                {page &&
+                    <Pagination
+                        className="u-margin-top-lg"
+                        // if newPage is 1, remove search string '?page=1' to avoid duplicate entries
+                        onChange={(newPage) => goToPage(newPage)}
+                        currentPage={page ? page : 1}
+                        pageCount={Math.floor(numItems / ITEMS_PER_PAGE)}
+                        showCurrentPageMessage={true}
+                        showPageButtons={false}
+                    />
                 }
             </div>
-
-            {(products.length > 0 || !contentsLoaded) ?
-                <ResultList products={products} setCurrentProduct={setCurrentProduct} />
-            :
-                <NoResultsList routeName={routeName} />
-            }
-            {page &&
-                <Pagination
-                    className="u-margin-top-lg"
-                    // if newPage is 1, remove search string '?page=1' to avoid duplicate entries
-                    onChange={(newPage) => router.push(path + (newPage === 1 ? '' : `?page=${newPage}`))}
-                    currentPage={page ? page : 1}
-                    pageCount={Math.floor(numItems / ITEMS_PER_PAGE)}
-                    showCurrentPageMessage={true}
-                    showPageButtons={false}
-                />
-            }
         </div>
-    </div>
     )
 }
 
@@ -195,6 +208,7 @@ ProductListContents.propTypes = {
     path: PropTypes.string,
     routeName: PropTypes.string,
     router: PropTypes.object,
+    selectedSortOption: PropTypes.string,
     setCurrentProduct: PropTypes.func,
     sortChange: PropTypes.func,
     sortOptions: PropTypes.array

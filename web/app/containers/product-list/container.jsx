@@ -10,7 +10,7 @@ import SearchResultHeader from './partials/search-result-header'
 import ProductListContents from './partials/product-list-contents'
 
 const ProductList = (props) => {
-    const {router, route: {routeName}, location: {query: {page}, pathname}} = props
+    const {router, route: {routeName}, location: {query: {page, sort}, pathname}} = props
     return (
         <div className="t-product-list">
             {!isRunningInAstro &&
@@ -22,7 +22,13 @@ const ProductList = (props) => {
                     }
                 </div>
             }
-            <ProductListContents routeName={routeName} path={pathname} page={page ? parseInt(page) : 1} router={router} />
+            <ProductListContents
+                routeName={routeName}
+                path={pathname}
+                page={page ? parseInt(page) : 1}
+                selectedSortOption={sort ? sort : 'default'}
+                router={router}
+            />
         </div>
     )
 }

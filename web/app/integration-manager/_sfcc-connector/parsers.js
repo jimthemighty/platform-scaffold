@@ -158,3 +158,12 @@ export const parseProductListData = (products) => {
     })
     return productListData
 }
+
+export const parseSortedProductKeys = (products) => {
+    const sortedProductKeys = []
+
+    products.forEach((productHit) => {
+        sortedProductKeys.push(productHit.product_id)
+    })
+    return sortedProductKeys
+}

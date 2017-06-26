@@ -6,7 +6,7 @@ import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
 import {receiveCategoryContents, receiveCategoryInformation, receiveCategorySortOptions} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
-import {parseProductListData} from '../parsers'
+import {parseProductListData, parseSortedProductKeys} from '../parsers'
 import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
 
 import {getCategoryPath} from '../config'
@@ -74,11 +74,12 @@ export const initProductListPage = (url) => (dispatch) => {
             }
 
             const productListData = parseProductListData(hits)
-            const products = Object.keys(productListData)
+            const sortedProductKeys = parseSortedProductKeys(hits)
+            // const products = Object.keys(productListData)
 
             dispatch(receiveProductListProductData(productListData))
             dispatch(receiveCategoryContents(urlToPathKey(url), {
-                products,
+                products: sortedProductKeys,
                 itemCount: total
             }))
         })
