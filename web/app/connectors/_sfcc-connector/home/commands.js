@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {receiveHomeData} from '../../results'
+import {receiveHomeData} from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initHomePage = () => (dispatch) => {
     // Banners are being pulled from the bundle right now

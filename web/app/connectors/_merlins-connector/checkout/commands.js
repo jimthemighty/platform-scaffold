@@ -27,9 +27,21 @@ import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
 import {prepareEstimateAddress} from '../utils'
+
+const INITIAL_SHIPPING_ADDRESS = {
+    countryId: 'us',
+    name: '',
+    firstname: '',
+    lastname: '',
+    addressLine1: '',
+    postcode: '',
+    telephone: '',
+    city: ''
+}
 
 const shippingMethodEstimateSelector = createPropsSelector({
     cartBaseUrl: getCartBaseUrl,
@@ -50,16 +62,12 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
         .then((shippingMethods) => {
             dispatch(receiveShippingMethods(shippingMethods))
             dispatch(receiveShippingAddress({
-                postcode: address.postcode,
-                countryId: address.country_id,
-                region: address.region,
-                regionId: address.regionId
+                ...INITIAL_SHIPPING_ADDRESS,
+                ...inputAddress
             })) // set initial values for the shipping form
             dispatch(receiveSelectedShippingMethod(selectedShippingMethodId || shippingMethods[0].id))
         })
 }
-
-
 
 export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
     return (dispatch) => {
@@ -105,9 +113,16 @@ const processShippingData = ($response) => (dispatch, getState) => {
           .getIn(['children', 'shipping-address-fieldset', 'children'])
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-    const isInitialized = shippingSelectors.getIsInitialized(getState())
+    const state = getState()
+    const isInitialized = shippingSelectors.getIsInitialized(state)
+
     if (!isInitialized) {
-        dispatch(receiveShippingAddress(parseShippingInitialValues(magentoFieldData)))
+        const currentAddressData = shippingSelectors.getShippingAddress(state).toJS()
+        const initializationData = parseShippingInitialValues(magentoFieldData)
+
+        // initialize our current state data with the data from Magento
+        // this is so that we maintain a consistent data object
+        dispatch(receiveShippingAddress({...currentAddressData, ...initializationData}))
     }
 }
 
@@ -151,8 +166,7 @@ export const initCheckoutConfirmationPage = (url) => (dispatch) => {
 
 export const submitShipping = (formValues) => (dispatch, getState) => {
     const savedAddress = formValues.savedAddress
-    const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined
-
+    const submittingWithNewAddress = savedAddress === ADD_NEW_ADDRESS_FIELD || savedAddress === undefined || savedAddress === null
     const address = {
         firstname: formValues.firstname,
         lastname: formValues.lastname,
@@ -190,7 +204,8 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             shipping_method_code: shippingSelections[1]
         }
     }
-    const cartBaseUrl = getCartBaseUrl(getState())
+    const state = getState()
+    const cartBaseUrl = getCartBaseUrl(state)
     const persistShippingURL = `${cartBaseUrl}/shipping-information`
     return makeJsonEncodedRequest(persistShippingURL, addressData, {method: 'POST'})
         .then((response) => {
@@ -203,8 +218,9 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             if (!responseJSON.payment_methods) {
                 throw new SubmissionError({_error: 'Unable to save shipping address'})
             }
-
-            dispatch(receiveCartContents(parseCartTotals(responseJSON.totals)))
+            const cartItems = getCartItems(state).toJS()
+            const cartTotals = parseCartTotals(responseJSON.totals)
+            dispatch(receiveCartContents({items: cartItems, ...cartTotals}))
             return PAYMENT_URL
         })
 }
@@ -273,7 +289,7 @@ export const submitPayment = (formValues) => (dispatch, getState) => {
             // Looks like when it is successful, the responseJSON is a number
             if (/^\d+$/.test(responseJSON)) {
                 // reset isInitialized flag in shippingAddress
-                dispatch(receiveShippingAddress({isInitialized: false}))
+                dispatch(receiveShippingAddress({...INITIAL_SHIPPING_ADDRESS, isInitialized: false}))
                 return '/checkout/onepage/success/'
             } else {
                 throw new Error(responseJSON.message)
