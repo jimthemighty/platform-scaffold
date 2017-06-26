@@ -22,7 +22,8 @@ const ProductDetailsCarousel = ({images}) => {
 
     const imgProps = {
         className: 'u-display-block',
-        height: '330px'
+        height: '330px',
+        width: '330px'
     }
 
     return (
