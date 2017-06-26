@@ -76,10 +76,20 @@ const ProductListContents = ({
     openModal,
     setCurrentProduct,
     sortChange,
+    sortOptions,
     routeName,
     router,
     page
-}) => (
+}) => {
+    const sort = (option) => {
+        router.push(
+            path +
+            (page === 1 ? '' : `?page=${page}`) +
+            (option === 'default' ? '' : `&sort=${option}`)
+        )
+    }
+
+    return (
     <div>
         {contentsLoaded && activeFilters.length > 0 && (
             <div className="u-flexbox u-align-center u-border-light-top">
@@ -134,13 +144,12 @@ const ProductListContents = ({
                                     >
                                         <select
                                             className="u-color-neutral-60"
-                                            onChange={(e) => { sortChange(e.target.value) }}
-                                            onBlur={(e) => { sortChange(e.target.value) }}
+                                            onChange={(e) => { sort(e.target.value) }}
                                         >
-                                            {/* This list of options corresponds to the functions in app/utils/sort-utils.js */}
-                                            <option value="position">Position</option>
-                                            <option value="name">Name</option>
-                                            <option value="price">Price</option>
+                                            <option value="default" />
+                                            {
+                                                sortOptions.map((choice, index) => <option key={index} value={choice.id}>{choice.label}</option>)
+                                            }
                                         </select>
                                     </Field>
                                 </div>
@@ -170,7 +179,8 @@ const ProductListContents = ({
             }
         </div>
     </div>
-)
+    )
+}
 
 
 ProductListContents.propTypes = {
@@ -186,14 +196,16 @@ ProductListContents.propTypes = {
     routeName: PropTypes.string,
     router: PropTypes.object,
     setCurrentProduct: PropTypes.func,
-    sortChange: PropTypes.func
+    sortChange: PropTypes.func,
+    sortOptions: PropTypes.array
 }
 
 const mapStateToProps = createPropsSelector({
     contentsLoaded: selectors.getProductListContentsLoaded,
     numItems: getCategoryItemCount,
     activeFilters: selectors.getActiveFilters,
-    products: selectors.getFilteredAndSortedListProducts
+    products: selectors.getFilteredAndSortedListProducts,
+    sortOptions: selectors.getCategorySortOptions
 })
 
 const mapDispatchToProps = {

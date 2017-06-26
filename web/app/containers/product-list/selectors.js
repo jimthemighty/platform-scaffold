@@ -50,3 +50,5 @@ export const getFilteredAndSortedListProducts = createSelector(
         return sort ? products.sort(sortLib[sort]) : products
     }
 )
+
+export const getCategorySortOptions = createGetSelector(getCategories, 'sortOptions')

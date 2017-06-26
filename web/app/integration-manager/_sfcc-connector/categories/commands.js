@@ -4,7 +4,7 @@
 
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
-import {receiveCategoryContents, receiveCategoryInformation} from '../../categories/results'
+import {receiveCategoryContents, receiveCategoryInformation, receiveCategorySortOptions} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import {parseProductListData} from '../parsers'
 import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
@@ -12,7 +12,7 @@ import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
 import {getCategoryPath} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id, start) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}`
+const makeCategorySearchURL = (id, start, sortOption) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}&sort=${sortOption}`
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
@@ -48,13 +48,23 @@ const extractPageNumber = (url) => {
     return pageMatch ? pageMatch[1] : '1'
 }
 
+const extractSortOption = (url) => {
+    const sortOption = url.match(/sort=(.*)/)
+    return sortOption ? sortOption[1] : ''
+}
+
 export const initProductListPage = (url) => (dispatch) => {
     const categoryID = extractCategoryId(url)
     const start = (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE
+    const sortOption = extractSortOption(url)
     return dispatch(fetchCategoryInfo(categoryID))
-        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start), {method: 'GET'}))
+        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start, sortOption), {method: 'GET'}))
         .then((response) => response.json())
-        .then(({hits, total}) => {
+        .then(({total, hits, sorting_options}) => {
+            if (sorting_options.length > 0) {
+                dispatch(receiveCategorySortOptions(sorting_options))
+            }
+
             if (total === 0) {
                 dispatch(receiveCategoryContents(urlToPathKey(url), {
                     products: [],

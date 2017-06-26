@@ -22,6 +22,13 @@ export const receiveCategoryContents = createAction(
     })
 )
 
+export const receiveCategorySortOptions = createAction(
+    'Receive Category Sorting Options',
+    (Options) => (
+        {sortOptions: Options}
+    )
+)
+
 export const receiveCategory = createTypedAction(
     'Receive Category data',
     Categories
