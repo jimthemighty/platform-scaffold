@@ -15,7 +15,6 @@ import CartEstimateShippingModal from './cart-estimate-shipping/container'
 import CartWishlistModal from './cart-wishlist/container'
 import CartRemoveItemModal from './cart-remove-item/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
-import RememberMeModal from './remember-me/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
 
