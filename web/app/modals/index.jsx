@@ -29,7 +29,6 @@ const modals = {
     [MODAL.CART_WISHLIST_MODAL]: <CartWishlistModal />,
     [MODAL.CART_REMOVE_ITEM_MODAL]: <CartRemoveItemModal />,
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: <CheckoutConfirmationModal />,
-    [MODAL.REMEMBER_ME_MODAL]: <RememberMeModal />
 }
 
 const ModalManager = (props) => {
