@@ -14,8 +14,8 @@ const {success, info, error, step} = common
 
 const gitRevisionLength = 40
 
-const mobifyCloudURL = `https://cloud.mobify.com`
-const listCreateURL = (projectSlug) => `${mobifyCloudURL}/api/v2/amp/projects/${projectSlug}/amp/bundles/`
+const mobifyCloudURL = `http://cloud-dev.mobify.com:8000`
+const listCreateURL = (projectSlug) => `${mobifyCloudURL}/api/v2/projects/${projectSlug}/amp/bundles/`
 
 class LogicalException extends ne.LogicalException {}
 
@@ -44,19 +44,14 @@ const headers = ({api_key}) => ({
 })
 
 const list = ({projectSlug}) => {
-    // const url = listCreateURL(projectSlug)
-    // step(`Fetching bundles from "${url}"`)
-
-    // TODO: Just checking that we can make a basic request...
-    const url = 'https://cloud.mobify.com/api/v2/users/obrook@mobify.com/businesses/'
-
+    const url = listCreateURL(projectSlug)
     return getCredentials()
         .then(credentials => fetch(url, {
             method: 'GET',
             headers: headers(credentials)
         }))
         .then(res => res.json())
-        .then(res => info(JSON.stringify(res, null, 4)))
+        .then(data => info(JSON.stringify(data, null, 4)))
 }
 
 const upload = ({projectSlug, file}) => {
@@ -69,23 +64,28 @@ const upload = ({projectSlug, file}) => {
     const buildRequestBody = () => (
         fs.readFileAsync(file)
         .then(buffer => buffer.toString('base64'))
-        .then(base64 => ({message: 'message', artifact: base64}))
+        .then(base64 => ({
+            message: 'message',
+            artifact: `data:application/zip;base64,${base64}`
+        }))
     )
 
     return Promise.all([getCredentials(), buildRequestBody()])
-        .then(([credentials, body]) => {
-            info(JSON.stringify(credentials, null, 4))
-            info('----')
-            info(JSON.stringify(body, null, 4))
-        })
+        .then(([credentials, body]) => fetch(url, {
+            method: 'POST',
+            headers: headers(credentials),
+            body: JSON.stringify(body)
+        }))
+        .then(res => res.json())
+        .then(data => info(JSON.stringify(data, null, 4)))
 }
 
 const main = () => {
     const argv = (
         yargs
         .usage('Usage: $0 <command> [options]')
-        .command('list', 'List uploaded bundles')
-        .command('upload <file>', 'Upload a new bundle')
+        .command('list <projectSlug>', 'List uploaded bundles')
+        .command('upload <projectSlug> <file>', 'Upload a new bundle')
         .demandCommand()
         .help()
         .argv
