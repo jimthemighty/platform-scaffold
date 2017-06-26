@@ -7,26 +7,30 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import template from '../../template'
 
-import {getUserName, getTitle} from './selectors'
+import {getFirstName, getLastName, getUserName} from './selectors'
 
 const containerClass = 't-account'
 const titleClass = `${containerClass}__title`
 
-const Account = ({user, title}) => (
+const Account = ({firstName, lastName, user}) => (
     <div className={containerClass}>
-        <div>TEST ACCOUNT PAGE User = {user}</div>
-        <h1 className={titleClass}>{title}</h1>
+        <h1 className={titleClass}>My Account</h1>
+        <div>Username: {user}</div>
+        <div>First name: {firstName}</div>
+        <div>Last name: {lastName}</div>
     </div>
 )
 
 Account.propTypes = {
-    title: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
     user: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
+    firstName: getFirstName,
+    lastName: getLastName,
     user: getUserName,
-    title: getTitle
 })
 
 export default template(connect(mapStateToProps)(Account))
