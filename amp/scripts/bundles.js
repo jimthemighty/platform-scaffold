@@ -57,9 +57,9 @@ const list = ({projectSlug}) => {
 const upload = ({projectSlug, file}) => {
     const url = listCreateURL(projectSlug)
     step(`Uploading bundle "${file}" to "${url}"`)
-    // const parsed = path.parse(file)
-    // parsed.ext !== '.zip' && abort('Expected a zip file')
-    // parsed.name.length !== gitRevisionLength && abort(`Expected a ${gitRevisionLength}-character git revision`)
+    const parsed = path.parse(file)
+    parsed.ext !== '.zip' && abort('Expected a zip file')
+    parsed.name.length !== gitRevisionLength && abort(`Expected a ${gitRevisionLength}-character git revision`)
 
     const buildRequestBody = () => (
         fs.readFileAsync(file)
