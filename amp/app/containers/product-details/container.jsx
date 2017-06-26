@@ -10,8 +10,6 @@ import ProductDetailsCarousel from './partials/product-details-carousel'
 
 const ProductDetails = () => (
     <div className="t-product-details">
-        <h1>Hello World</h1>
-
         <ProductDetailsCarousel />
     </div>
 )
