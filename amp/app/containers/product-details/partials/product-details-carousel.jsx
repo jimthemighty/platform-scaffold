@@ -13,17 +13,16 @@ const ProductDetailsCarousel = ({images}) => {
         nextIcon: 'chevron-right',
         iconSize: 'medium',
         className: 'amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10',
-        showControls: images.length > 1,
-        height: '330px',
-        width: '330px',
-        dataNextButtonAriaLabel: 'HELLO WORLD',
-        dataPrevButtonAriaLabel: 'BYE BYE'
+        showControls: false,
+        // showControls: images.length > 1,
+        height: '330',
+        width: '330'
     }
 
     const imgProps = {
         className: 'u-display-block',
-        height: '330px',
-        width: '330px'
+        height: '330',
+        width: '330'
     }
 
     return (
