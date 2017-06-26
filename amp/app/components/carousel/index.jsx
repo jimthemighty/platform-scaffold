@@ -116,33 +116,26 @@ class Carousel extends React.Component {
             }
         })()
 
-        let layoutItemValue
-
-        // Check to make sure that Carousel are getting the right layout type
+        // Check for carousel's type and see if it can support the layout.
         const typeCheck = (value) => {
             if (value === 'carousel') {
-                console.log('carousel is TRUE')
-                console.log('VALUE IS' + layoutItem)
                 if ((layoutItem === 'fixed') || (layoutItem === 'fixed-height') || (layoutItem === 'nodisplay')) {
                     return true
                 }
             } else if (value === 'slides') {
-                console.log('slides is TRUE')
-                console.log('VALUE IS' + layoutItem)
                 if ((layoutItem === 'fill') || (layoutItem === 'fixed-height') || (layoutItem === 'flex-item') || (layoutItem === 'nodisplay') || (layoutItem === 'responsive')) {
                     return true
                 }
             }
-
             return false
         }
 
+        let layoutItemValue
+
         if (typeCheck(typeCarousel)) {
-            console.log('VALUE LOOKS FINE')
             layoutItemValue = layoutItem
         } else {
-            // write error here
-            console.log('ERROR!!!!!')
+            throw new Error(`'${typeCarousel}' type does not support '${layoutItem}' layout`)
         }
 
         const childList = [prevChild, currentChild, nextChild]
@@ -304,7 +297,7 @@ Carousel.defaultProps = {
     loop: false,
     controls: false,
     showCaption: false,
-    showControls: true,
+    showControls: false,
     typeCarousel: 'slides',
     layoutItem: 'responsive'
 }
