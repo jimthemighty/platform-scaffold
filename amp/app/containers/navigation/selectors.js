@@ -1,7 +1,7 @@
 import Immutable from 'immutable'
 import {createSelector} from 'reselect'
 import {pathFromURL} from '../../utils'
-import * as navSelectors from '../../../../web/app/containers/navigation/selectors'
+import * as navSelectors from '../../../../web/app/modals/navigation/selectors'
 
 const convertPaths = (node) => Object.assign({}, node, {
     children: node.children && node.children.map(convertPaths),

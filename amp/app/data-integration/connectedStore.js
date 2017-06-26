@@ -6,21 +6,21 @@ import Promise from 'bluebird'
 import _jsdom from 'jsdom'
 
 // DO NOT USE! Merlins Connector is an example connector that is for demo only
-import {Connector} from '../../../web/app/integration-manager/_merlins-connector'
-// import {Connector} from './integration-manager/_sfcc-connector'
+import {Connector} from '../../../web/app/connectors/_merlins-connector'
+// import {Connector} from '../../../web/app/connectors/_sfcc-connector'
 
-import {registerConnector} from '../../../web/app/integration-manager'
-import {reducer as imReducer} from '../../../web/app/integration-manager/reducer'
-import {CURRENT_URL} from '../../../web/app/containers/app/constants'
+import {registerConnector} from 'progressive-web-sdk/dist/integration-manager'
+import {reducer as imReducer} from 'progressive-web-sdk/dist/integration-manager/reducer'
+import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
 
 import appReducer from './app-reducer'
 import footerReducer from '../../../web/app/containers/footer/reducer'
 import homeReducer from '../../../web/app/containers/home/reducer'
-import navigationReducer from '../../../web/app/containers/navigation/reducer'
+import navigationReducer from '../../../web/app/modals/navigation/reducer'
 import productListReducer from '../../../web/app/containers/product-list/reducer'
 import productDetailsReducer from './product-details-reducer'
 import categoryReducer from '../../../web/app/store/categories/reducer'
-import productReducer from '../../../web/app/store/products/reducer'
+import productReducer from 'progressive-web-sdk/dist/store/products/reducer'
 
 import {jqueryResponse} from './capturejs'
 import {PAGE_TITLE} from './constants'
@@ -36,7 +36,6 @@ export const initializeStore = (fullUrl, container) => {
         }))
 
         const uiReducer = combineReducers({
-            app: appReducer,
             footer: footerReducer,
             home: homeReducer,
             navigation: navigationReducer,
@@ -45,6 +44,7 @@ export const initializeStore = (fullUrl, container) => {
         })
 
         const reducer = combineReducers({
+            app: appReducer,
             categories: categoryReducer,
             ui: uiReducer,
             products: productReducer,
@@ -57,10 +57,12 @@ export const initializeStore = (fullUrl, container) => {
 
         const noop = (f) => f
 
-        const initialState = ({ui: {app: fromJS({
-            [CURRENT_URL]: fullUrl,
-            [PAGE_TITLE]: 'Merlins AMP' // Fetch the page again and get title?
-        })}})
+        const initialState = ({
+            app: fromJS({
+                [CURRENT_URL]: fullUrl,
+                [PAGE_TITLE]: 'Merlins AMP' // Fetch the page again and get title?
+            })
+        })
 
         const createdStore = createStore(reducer, initialState, compose(applyMiddleware(...middlewares), noop))
 

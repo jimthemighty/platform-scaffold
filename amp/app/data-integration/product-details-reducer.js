@@ -5,9 +5,9 @@
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
 
-import {receiveProductDetailsUIData} from '../../../web/app/integration-manager/products/results'
+import {receiveProductDetailsUIData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 
-import {mergePayload} from '../../../web/app/utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 
 const reducer = handleActions({
     [receiveProductDetailsUIData]: mergePayload,
