@@ -10,6 +10,5 @@ import * as myProductDetailsActions from './actions'
 const initialState = Immutable.Map()
 
 export default handleActions({
-    [myProductDetailsActions.receiveData]: mergePayload,
-    [myProductDetailsActions.changeTitle]: mergePayload
+    [myProductDetailsActions.receiveData]: mergePayload
 }, initialState)
