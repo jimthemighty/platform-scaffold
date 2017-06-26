@@ -13,7 +13,7 @@ import {getCart} from '../cart/commands'
 import {
     receiveNavigationData,
     setCartURL
-} from '../../results'
+} from 'progressive-web-sdk/dist/integration-manager/results'
 
 /**
  * When the user first lands on the site, the response from the desktop site is saved
