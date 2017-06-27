@@ -24,6 +24,7 @@ const win = process.platform === 'win32'
 const home = win ? process.env.USERPROFILE : process.env.HOME
 const configFile = path.join(home, '.mobify')
 
+const pprint = (obj) => JSON.stringify(obj, null, 4)
 
 const getCredentials = () => (
     fs.readFileAsync(configFile)
@@ -50,7 +51,7 @@ const list = ({projectSlug}) => {
             headers: headers(credentials)
         }))
         .then(res => res.json())
-        .then(data => info(JSON.stringify(data, null, 4)))
+        .then(data => info(pprint(data)))
 }
 
 const upload = ({projectSlug, file}) => {
@@ -76,7 +77,7 @@ const upload = ({projectSlug, file}) => {
             body: JSON.stringify(body)
         }))
         .then(res => res.json())
-        .then(data => info(JSON.stringify(data, null, 4)))
+        .then(data => info(pprint(data)))
 }
 
 const main = () => {
