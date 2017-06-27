@@ -11,7 +11,7 @@ import {removePromoCode} from '../../cart/actions' // @TODO: figure out where th
 
 // Selectors
 import * as selectors from '../selectors'
-import * as cartSelectors from '../../../store/cart/selectors'
+import * as cartSelectors from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getSelectedShippingRate, getSelectedShippingLabel} from '../../../store/checkout/shipping/selectors'
 
 // Actions
@@ -29,6 +29,7 @@ import Image from 'progressive-web-sdk/dist/components/image'
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
 import List from 'progressive-web-sdk/dist/components/list'
 import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 class OrderSummary extends React.Component {
     constructor(props) {
@@ -78,7 +79,11 @@ class OrderSummary extends React.Component {
         } = this.props
 
         const removeButton = (
-            <Button innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal" onClick={removePromoCode}>
+            <Button
+                innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal"
+                onClick={removePromoCode}
+                data-analytics-name={UI_NAME.removeDiscount}
+            >
                 Remove Discount
             </Button>
         )
@@ -89,6 +94,7 @@ class OrderSummary extends React.Component {
                 type="button"
                 onClick={submitPayment}
                 disabled={isLoading}
+                data-analytics-name={UI_NAME.submitOrder}
             >
                 {isLoading ?
                     <InlineLoader />

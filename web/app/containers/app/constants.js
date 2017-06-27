@@ -5,7 +5,6 @@
 /**
  * This file contains constants for use in the application.
  */
-export const CURRENT_URL = 'currentURL'
 export const PLACEHOLDER = 'placeholder'
 
 // This is the asset url we use to check if we're offline when making requests

@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
+import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
 
 // Components
 import Link from '../../components/link'
@@ -8,7 +8,7 @@ import Link from '../../components/link'
 // Selectors
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getHomeCategories} from '../../../../web/app/containers/home/selectors'
-import {initHomePage} from '../../../../web/app/integration-manager/home/commands'
+import {initHomePage} from 'progressive-web-sdk/dist/integration-manager/home/commands'
 
 import {ampComponent} from '../../amp-sdk'
 
@@ -27,7 +27,7 @@ Home.propTypes = {
 }
 
 Home.resolves = [({dispatch, getState}) => {
-    return dispatch(initHomePage(getState().ui.app.get(CURRENT_URL)))
+    return dispatch(initHomePage(getState().app.get(CURRENT_URL)))
 }]
 
 Home.templateName = 'home'
