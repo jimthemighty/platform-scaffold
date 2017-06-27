@@ -92,7 +92,6 @@ const ProductListContents = ({
         if (query.sort === DEFAULT_SORT_OPTION) {
             query.sort = ''
         }
-        console.log(makeQueryString(query))
         router.push(path + makeQueryString(query))
     }
 
