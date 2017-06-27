@@ -7,7 +7,7 @@ import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Carousel from '../../../components/carousel'
 
 // Selectors
-import {getProductImages} from '../../../../../web/app/store/products/selectors'
+import {getProductImages} from 'progressive-web-sdk/dist/store/products/selectors'
 
 const ProductDetailsCarousel = ({images}) => {
 
