@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import {ampComponent} from '../../amp-sdk'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
@@ -13,15 +13,6 @@ const ProductDetails = () => (
         <ProductDetailsCarousel />
     </div>
 )
-
-ProductDetails.propTypes = {
-    description: PropTypes.string.isRequired,
-    images: PropTypes.arrayOf(PropTypes.shape({
-        src: PropTypes.string.isRequired,
-        alt: PropTypes.string
-    })).isRequired,
-    title: PropTypes.string.isRequired
-}
 
 ProductDetails.resolves = [({dispatch, getState}) => {
     return dispatch(initProductDetailsPage(getState().ui.app.get(CURRENT_URL)))

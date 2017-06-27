@@ -182,7 +182,7 @@ Carousel.propTypes = {
     /**
      * Specifies the width of the carousel, in pixels.
      */
-    width: PropTypes.number
+    width: PropTypes.string
 }
 
 Carousel.defaultProps = {
