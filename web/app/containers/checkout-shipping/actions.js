@@ -116,7 +116,7 @@ export const submitShipping = () => (dispatch, getState) => {
     }
     dispatch(receiveSelectedShippingMethod(shippingMethodId))
     dispatch(receiveShippingAddress(address))
-    return dispatch(submitShippingCommand({...address, shippingMethodId}))
+    return dispatch(submitShippingCommand({...address, shippingMethodId, savedAddress}))
         .then((paymentURL) => {
             browserHistory.push({
                 pathname: paymentURL

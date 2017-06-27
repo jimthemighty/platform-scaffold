@@ -108,7 +108,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {zipCode &&
+                    {(zipCode !== null && zipCode !== undefined) &&
                         <LedgerRow
                             label={`Shipping (${selectedShippingLabel})`}
                             value={selectedShippingRate}
@@ -116,7 +116,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {taxAmount
+                    {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)
                         : <LedgerRow
                             className="u-flex-none"
@@ -148,7 +148,6 @@ const CartSummary = ({
         </div>
     )
 }
-
 
 CartSummary.propTypes = {
     checkoutShippingURL: PropTypes.string,
