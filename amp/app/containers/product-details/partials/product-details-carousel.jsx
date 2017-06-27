@@ -12,7 +12,6 @@ const ProductDetailsCarousel = ({images}) => {
         id: 'product-details-carousel',
         previousIcon: 'chevron-left',
         nextIcon: 'chevron-right',
-        iconSize: 'medium',
         className: 'amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10',
         showControls: images.length > 1,
         height: '330',
