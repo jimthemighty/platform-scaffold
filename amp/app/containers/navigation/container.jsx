@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import URL from 'url'
+import {canonicalURL} from '../../utils'
 
 // Components
 import Sheet from '../../components/sheet'
@@ -11,7 +12,6 @@ import NavItem from '../../components/nav-item'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
 import IconLabelButton from '../../components/icon-label-button'
 import Icon from '../../components/icon'
-import {canonicalURL} from '../../utils'
 
 // Partials
 import NavigationSocialIcons from './partials/navigation-social-icons'

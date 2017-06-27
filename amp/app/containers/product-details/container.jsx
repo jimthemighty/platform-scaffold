@@ -1,7 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getProductImages} from '../../../../web/app/store/products/selectors'
+import {ampComponent} from '../../amp-sdk'
 import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
 
 // Selectors
@@ -9,12 +7,18 @@ import {initProductDetailsPage} from '../../../../web/app/integration-manager/pr
 
 // Partials
 import ProductDetailsCarousel from './partials/product-details-carousel'
+import ProductDetailsAddToCart from './partials/product-details-add-to-cart'
+import ProductDetailsDescription from './partials/product-details-description'
 
-const ProductDetails = () => (
-    <div className="t-product-details">
-        <ProductDetailsCarousel />
-    </div>
-)
+const ProductDetails = () => {
+    return (
+        <div className="t-product-details">
+            <ProductDetailsCarousel />
+            <ProductDetailsAddToCart />
+            <ProductDetailsDescription />
+        </div>
+    )
+}
 
 ProductDetails.resolves = [({dispatch, getState}) => {
     return dispatch(initProductDetailsPage(getState().ui.app.get(CURRENT_URL)))
@@ -22,8 +26,4 @@ ProductDetails.resolves = [({dispatch, getState}) => {
 
 ProductDetails.templateName = 'pdp'
 
-const mapStateToProps = createPropsSelector({
-    images: getProductImages
-})
-
-export default connect(mapStateToProps)(ProductDetails)
+export default ampComponent(ProductDetails)
