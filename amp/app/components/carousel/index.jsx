@@ -5,10 +5,6 @@ import * as ampSDK from '../../amp-sdk'
 // Components
 import Button from '../button'
 
-const getKey = (index) => {
-    return `slide-${index}`
-}
-
 const carouselId = 'carousel-id'
 
 
@@ -16,10 +12,6 @@ class Carousel extends React.Component {
 
     constructor(props) {
         super(props)
-
-        this.state = {
-            ...this.calculateIndexes(props.currentSlide || 0), // Easy way to populate the prev/cur/next indexes
-        }
     }
 
     calculateIndex(position, length) {
@@ -60,12 +52,6 @@ class Carousel extends React.Component {
             children
         } = this.props
 
-        const {
-            currentIndex,
-            prevIndex,
-            nextIndex
-        } = this.state
-
         const classes = classNames('amp-carousel', className)
         const numChildren = React.Children.count(children)
 
@@ -73,62 +59,12 @@ class Carousel extends React.Component {
             return false
         }
 
-
-        // Handle the case where there is only a single child correctly
-        let currentChild = children[currentIndex] || children
-        currentChild = React.cloneElement(currentChild, {active: true, key: getKey(currentIndex)})
-
-        // If we have only one child, prev and next can be null
-        const prevChild = numChildren > 1
-            ? React.cloneElement(children[prevIndex], {key: getKey(prevIndex)})
-            : null
-
-        // If we have two children, we need to have a dummy 'next' one,
-        // so we'll clone the prev and give it a new key
-        const nextChild = (() => {
-            if (numChildren > 2) {
-                return React.cloneElement(children[nextIndex], {key: getKey(nextIndex)})
-            } else if (numChildren > 1 && prevChild) {
-                return React.cloneElement(prevChild, {key: getKey(`${prevIndex}-duplicate`)})
-            } else {
-                return null
-            }
-        })()
-
-        // Check for carousel's type and see if it can support the layout.
-        const typeCheck = (value) => {
-            if (value === 'carousel') {
-                if ((layoutItem === 'fixed') || (layoutItem === 'fixed-height') || (layoutItem === 'nodisplay')) {
-                    return true
-                }
-            } else if (value === 'slides') {
-                if ((layoutItem === 'fill') || (layoutItem === 'fixed-height') || (layoutItem === 'flex-item') || (layoutItem === 'nodisplay') || (layoutItem === 'responsive')) {
-                    return true
-                }
-            }
-            return false
-        }
-
-        let layoutItemValue
-
-        if (typeCheck(typeCarousel)) {
-            layoutItemValue = layoutItem
-        } else {
-            throw new Error(`'${typeCarousel}' type does not support '${layoutItem}' layout`)
-        }
-
-        const childList = [prevChild, currentChild, nextChild]
-
+        const layoutItemValue = layoutItem
         const controlsValue = controls ? {controls: ''} : {}
-
         const dataNextButtonAriaLabelValue = dataNextButtonAriaLabel ? {'data-next-button-aria-label': dataNextButtonAriaLabel} : {}
-
         const dataPrevButtonAriaLabelValue = dataPrevButtonAriaLabel ? {'data-prev-button-aria-label': dataPrevButtonAriaLabel} : {}
-
         const autoplayValue = autoplay ? {autoplay: ''} : {}
-
         const delayValue = delay ? {delay} : {}
-
         const loopValue = loop ? {loop: ''} : {}
 
         return (
@@ -147,7 +83,7 @@ class Carousel extends React.Component {
                         {...delayValue}
                         {...loopValue}
                     >
-                        {childList.map((item) => item)}
+                    {children}
                     </amp-carousel>
                 </div>
 
@@ -254,7 +190,17 @@ Carousel.propTypes = {
      * following layouts: `fill`, `fixed`, `fixed-height`, `flex-item`,
      * `nodisplay`, and `responsive`.
      */
-    typeCarousel: PropTypes.oneOf(['carousel', 'slides']),
+    typeCarousel: (props) => {
+        const {typeCarousel, layoutItem} = props
+        const layoutSupported = (
+            ((value === 'carousel') && ['fixed', 'fixed-height', 'nodisplay'].indexOf(layoutItem) >= 0) ||
+            ((value === 'slides') && ['fill', 'fixed-height', 'flex-item', 'nodisplay', 'responsive'].indexOf(layoutItem) >= 0)
+        )
+        if (!layoutSupported) {
+            return new Error(`Invalid combination of 'typeCarousel' and 'layoutItem'`)
+        }
+    },
+
 
     /**
      * Specifies the width of the carousel, in pixels.
