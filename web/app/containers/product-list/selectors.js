@@ -7,7 +7,7 @@ import {createSelector} from 'reselect'
 import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi, getCategories} from '../../store/selectors'
 import {getSelectedCategory, getCategoryProducts} from '../../store/categories/selectors'
-import {getCurrentPathKey} from '../app/selectors'
+import {getCurrentPathKey, getCurrentPathKeyWithoutSearchKey} from '../app/selectors'
 import {byFilters} from '../../utils/filter-utils'
 import {sortLib} from '../../utils/sort-utils'
 
@@ -51,4 +51,10 @@ export const getFilteredAndSortedListProducts = createSelector(
     }
 )
 
-export const getCategorySortOptions = createGetSelector(getCategories, 'sortOptions')
+export const getSortOptions = createGetSelector(getCategories, 'sortOptions', Immutable.Map())
+
+export const getCategorySortOptions = createGetSelector(
+    getSortOptions,
+    getCurrentPathKeyWithoutSearchKey,
+    Immutable.Map()
+)

@@ -7,12 +7,14 @@ import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi} from '../../store/selectors'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {getFetchedPages} from 'progressive-web-sdk/dist/store/offline/selectors'
+import {getURLWithoutSearchKey} from '../../utils/utils'
 import {CURRENT_URL} from './constants'
 
 export const getApp = createSelector(getUi, ({app}) => app)
 
 export const getCurrentUrl = createGetSelector(getApp, CURRENT_URL)
 export const getCurrentPathKey = createSelector(getCurrentUrl, urlToPathKey)
+export const getCurrentPathKeyWithoutSearchKey = createSelector(getCurrentPathKey, getURLWithoutSearchKey)
 
 export const hasFetchedCurrentPath = createHasSelector(getFetchedPages, getCurrentPathKey)
 

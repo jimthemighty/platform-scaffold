@@ -24,8 +24,8 @@ export const receiveCategoryContents = createAction(
 
 export const receiveCategorySortOptions = createAction(
     'Receive Category Sorting Options',
-    (Options) => (
-        {sortOptions: Options}
+    (Options, pathKey) => (
+        {sortOptions: {[pathKey]: Options}}
     )
 )
 

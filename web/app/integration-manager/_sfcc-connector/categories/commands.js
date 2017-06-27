@@ -75,7 +75,6 @@ export const initProductListPage = (url) => (dispatch) => {
 
             const productListData = parseProductListData(hits)
             const sortedProductKeys = parseSortedProductKeys(hits)
-            // const products = Object.keys(productListData)
 
             dispatch(receiveProductListProductData(productListData))
             dispatch(receiveCategoryContents(urlToPathKey(url), {

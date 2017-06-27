@@ -8,6 +8,7 @@ import {receiveProductListProductData} from '../../products/results'
 import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser, parseSortOptions} from './parser'
 import {productListParser} from '../products/parsers'
 import {getTextFrom} from '../../../utils/parser-utils'
+import {getURLWithoutSearchKey} from '../../../utils/utils'
 import {fetchPageData} from '../app/commands'
 
 export const initProductListPage = (url) => (dispatch) => {
@@ -18,12 +19,13 @@ export const initProductListPage = (url) => (dispatch) => {
         .then((res) => {
             const [$, $response] = res
             const pathKey = urlToPathKey(url).replace('product_list_order', 'sort')
+            const pathKeyWithoutSearchKey = getURLWithoutSearchKey(pathKey)
 
             const title = parseCategoryTitle($, $response)
             const searchTermMatch = title.match(/'(.*)'/)
             const sortOptions = parseSortOptions($, $response)
             if (sortOptions.length > 0) {
-                dispatch(receiveCategorySortOptions(sortOptions))
+                dispatch(receiveCategorySortOptions(sortOptions, pathKeyWithoutSearchKey))
             }
 
             // Receive page contents

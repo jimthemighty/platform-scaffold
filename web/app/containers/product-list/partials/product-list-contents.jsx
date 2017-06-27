@@ -11,7 +11,6 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {PRODUCT_LIST_FILTER_MODAL} from '../../../modals/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
-import {changeSort} from '../actions'
 import {receiveCurrentProductId} from '../../../integration-manager/results'
 
 import Button from 'progressive-web-sdk/dist/components/button'
@@ -213,7 +212,7 @@ ProductListContents.propTypes = {
     router: PropTypes.object,
     selectedSortOption: PropTypes.string,
     setCurrentProduct: PropTypes.func,
-    sortOptions: PropTypes.array
+    sortOptions: PropTypes.object
 }
 
 const mapStateToProps = createPropsSelector({

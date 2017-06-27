@@ -30,6 +30,16 @@ export const getPath = ({pathname, search}) => pathname + search
 export const getURL = (location) =>
     window.location.origin + getPath(location)
 
+/**
+ * Returns a URL with no search key given a `location` object.
+ * @param {object} url - full url
+ * @returns {string} - the URL with no search key
+ */
+export const getURLWithoutSearchKey = (url) => {
+    const index = url.indexOf('?')
+    return url.substring(0, index !== -1 ? index : url.length)
+}
+
 
 // Regex courtesy of https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
 export const getCookieValue = (cookieName) => {
