@@ -9,11 +9,11 @@ import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 
 const ProductDetailsCarousel = ({images}) => {
     const carouselProps = {
+        id: 'product-details-carousel',
         previousIcon: 'chevron-left',
         nextIcon: 'chevron-right',
         iconSize: 'medium',
         className: 'amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10',
-        controls: images.length > 1,
         showControls: images.length > 1,
         height: '330',
         width: '330'
@@ -22,7 +22,7 @@ const ProductDetailsCarousel = ({images}) => {
     const imgProps = {
         className: 'u-display-block',
         height: '330',
-        width: '330',
+        width: '330'
     }
 
     return (

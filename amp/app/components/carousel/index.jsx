@@ -5,8 +5,6 @@ import * as ampSDK from '../../amp-sdk'
 // Components
 import Button from '../button'
 
-const carouselId = 'carousel-id'
-
 const onlyDefined = (obj) => {
     const ret = {}
     Object.keys(obj).forEach((k) => {
@@ -17,10 +15,10 @@ const onlyDefined = (obj) => {
     return ret
 }
 
-
 const Carousel = (props) => {
 
     const {
+        id,
         autoplay,
         delay,
         loop,
@@ -38,6 +36,8 @@ const Carousel = (props) => {
 
     const classes = classNames('amp-carousel', className)
     const numChildren = React.Children.count(children)
+
+    const carouselId = id
 
     if (!numChildren) {
         return false
@@ -74,7 +74,8 @@ const Carousel = (props) => {
                             <Button
                                 className="amp-carousel__pip"
                                 on={`tap:${carouselId}.goToSlide(index=${index})`}
-                                key={index}>
+                                key={index}
+                            >
                                 <span className="u-visually-hidden">
                                     Slide {index + 1}
                                 </span>
@@ -92,6 +93,11 @@ Carousel.propTypes = {
      * Specifies the height of the carousel, in pixels.
      */
     height: PropTypes.string.isRequired,
+
+    /**
+     * Give unique ID to carousel to work with controls.
+     */
+    id: PropTypes.string.isRequired,
 
     /**
      * Advances the slide to the next slide without user interaction. By
