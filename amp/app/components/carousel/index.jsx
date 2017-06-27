@@ -9,7 +9,7 @@ const carouselId = 'carousel-id'
 
 const onlyDefined = (obj) => {
     const ret = {}
-    Object.keys(obj).forEach(k => {
+    Object.keys(obj).forEach((k) => {
         if (obj[k] !== undefined) {
             ret[k] = obj[k]
         }
@@ -18,79 +18,73 @@ const onlyDefined = (obj) => {
 }
 
 
-class Carousel extends React.Component {
+const Carousel = (props) => {
 
-    constructor(props) {
-        super(props)
+    const {
+        autoplay,
+        delay,
+        loop,
+        height,
+        width,
+        className,
+        controls,
+        dataNextButtonAriaLabel,
+        dataPrevButtonAriaLabel,
+        layout,
+        showControls,
+        type,
+        children
+    } = props
+
+    const classes = classNames('amp-carousel', className)
+    const numChildren = React.Children.count(children)
+
+    if (!numChildren) {
+        return false
     }
 
-    render() {
-        const {
-            autoplay,
-            delay,
-            loop,
-            height,
-            width,
-            className,
-            controls,
-            dataNextButtonAriaLabel,
-            dataPrevButtonAriaLabel,
-            layout,
-            showControls,
-            type,
-            children
-        } = this.props
+    const attrs = onlyDefined({
+        autoplay: autoplay ? '' : undefined,
+        loop: loop ? '' : undefined
+    })
 
-        const classes = classNames('amp-carousel', className)
-        const numChildren = React.Children.count(children)
-
-        if (!numChildren) {
-            return false
-        }
-
-        const attrs = onlyDefined({
-            'autoplay': autoplay ? '' : undefined,
-            'loop': loop ? '' : undefined
-        })
-
-        return (
-            <div className={classes}>
-                <div className="amp-carousel__inner">
-                    <amp-carousel
-                        id={carouselId}
-                        type={type}
-                        layout={layout}
-                        height={height}
-                        width={width}
-                        controls={controls}
-                        data-next-button-aria-label={dataNextButtonAriaLabel}
-                        data-prev-button-aria-label={dataPrevButtonAriaLabel}
-                        delay={delay}
-                        {...attrs}
-                    >
+    return (
+        <div className={classes}>
+            <div className="amp-carousel__inner">
+                <amp-carousel
+                    id={carouselId}
+                    type={type}
+                    layout={layout}
+                    height={height}
+                    width={width}
+                    controls={controls}
+                    data-next-button-aria-label={dataNextButtonAriaLabel}
+                    data-prev-button-aria-label={dataPrevButtonAriaLabel}
+                    delay={delay}
+                    {...attrs}
+                >
                     {children}
-                    </amp-carousel>
-                </div>
-
-                {showControls &&
-                    <div className="amp-carousel__controls">
-                        <div className="amp-carousel__pips">
-                            {React.Children.map(children, (item, index) => (
-                                <Button
-                                    className="amp-carousel__pip"
-                                    on={`tap:${carouselId}.goToSlide(index=${index})`}
-                                    key={index}>
-                                    <span className="u-visually-hidden">
-                                        Slide {index + 1}
-                                    </span>
-                                </Button>
-                            ))}
-                        </div>
-                    </div>
-                }
+                </amp-carousel>
             </div>
-        )
-    }
+
+            {showControls &&
+                <div className="amp-carousel__controls">
+                    <div className="amp-carousel__pips">
+                        {React.Children.map(children, (item, index) => (
+                            <Button
+                                className="amp-carousel__pip"
+                                on={`tap:${carouselId}.goToSlide(index=${index})`}
+                                key={index}>
+                                <span className="u-visually-hidden">
+                                    Slide {index + 1}
+                                </span>
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+            }
+        </div>
+    )
 }
 
 Carousel.propTypes = {
@@ -181,9 +175,7 @@ Carousel.propTypes = {
             ((type === 'carousel') && ['fixed', 'fixed-height', 'nodisplay'].indexOf(layout) >= 0) ||
             ((type === 'slides') && ['fill', 'fixed-height', 'flex-item', 'nodisplay', 'responsive'].indexOf(layout) >= 0)
         )
-        if (!layoutSupported) {
-            return new Error(`Invalid combination of 'type' and 'layout'`)
-        }
+        return !layoutSupported ? new Error(`Invalid combination of 'type' and 'layout'`) : undefined
     },
 
 
