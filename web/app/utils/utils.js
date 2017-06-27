@@ -31,16 +31,6 @@ export const getURL = (location) =>
     window.location.origin + getPath(location)
 
 /**
- * Returns a URL with no search key given a `location` object.
- * @param {object} url - full url
- * @returns {string} - the URL with no search key
- */
-export const getURLWithoutQuery = (url) => {
-    const index = url.indexOf('?')
-    return url.substring(0, index !== -1 ? index : url.length)
-}
-
-/**
  * Returns query string given an object of parameters
  * @param {object} params
  * @returns {string} - url query string
