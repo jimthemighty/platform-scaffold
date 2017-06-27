@@ -68,6 +68,7 @@ ProductDetailsAddToCart.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     available: PropTypes.bool,
     disabled: PropTypes.bool,
+    error: PropTypes.object,
     handleSubmit: PropTypes.func,
     initialValues: PropTypes.object,
     isInCheckout: PropTypes.bool,
