@@ -62,16 +62,18 @@ export const addToCart = (productId, quantity, variant) => (dispatch, getState) 
 
     const formValues = {
         ...formInfo.get('hiddenInputs').toJS(),
-        selected_configurable_option: parseInt(variant.id),
         qty: quantity
     }
 
-    Object.keys(variant.values).forEach((key) => {
-        const superAttribute = variant.attributeIds[key]
-        const selectedSuper = variant.values[key]
+    if (variant) {
+        formValues.selected_configurable_option = parseInt(variant.id)
+        Object.keys(variant.values).forEach((key) => {
+            const superAttribute = variant.attributeIds[key]
+            const selectedSuper = variant.values[key]
 
-        formValues[`super_attribute[${superAttribute}]`] = parseInt(selectedSuper)
-    })
+            formValues[`super_attribute[${superAttribute}]`] = parseInt(selectedSuper)
+        })
+    }
 
     return submitForm(
             formInfo.get('submitUrl'),
