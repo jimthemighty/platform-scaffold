@@ -108,9 +108,6 @@ Carousel.propTypes = {
 
     /**
      * The CarouselItems to display.
-     *
-     * Because of the way this component handles animation,
-     * only 3 will ever be rendered at a time
      */
     children: PropTypes.node,
 
@@ -124,11 +121,6 @@ Carousel.propTypes = {
      * items on mobile devices.
      */
     controls: PropTypes.bool,
-
-    /**
-     * The index of the current slide. This prop can be used to set the active slide to an index of your choice.
-     */
-    currentSlide: PropTypes.number,
 
     /**
      * Sets the aria-label for the `amp-carousel-button-next`. If no value is
@@ -150,7 +142,7 @@ Carousel.propTypes = {
     delay: PropTypes.number,
 
     /**
-     * Specifies the display type for the carousel items
+     * Specifies the layout of the carousel
      */
     layout: PropTypes.oneOf(['fill', 'fixed', 'fixed-height', 'flex-item', 'nodisplay', 'responsive']),
 
@@ -162,18 +154,20 @@ Carousel.propTypes = {
     loop: PropTypes.bool,
 
     /**
-     * Boolean value to show carousel controls and pips or not
+     * Displays "pips" that allow navigation to a specific slide in the carousel.
      */
     showControls: PropTypes.bool,
 
     /**
-     * carousel: All slides are shown and are scrollable horizontally. This
-     * type supports only the following layouts: `fixed`, `fixed-height`, and
-     * `nodisplay`.
+     * Specifies the display type for the carousel items, which can be:
      *
-     * slides: Shows a single slide at a time. This type supports the
-     * following layouts: `fill`, `fixed`, `fixed-height`, `flex-item`,
-     * `nodisplay`, and `responsive`.
+     *   carousel: All slides are shown and are scrollable horizontally. This
+     *   type supports only the following layouts: `fixed`, `fixed-height`, and
+     *   `nodisplay`.
+     *
+     *   slides: Shows a single slide at a time. This type supports the
+     *   following layouts: `fill`, `fixed`, `fixed-height`, `flex-item`,
+     *   `nodisplay`, and `responsive`.
      */
     type: (props) => {
         const {type, layout} = props
