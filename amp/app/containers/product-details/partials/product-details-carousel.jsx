@@ -17,7 +17,7 @@ const ProductDetailsCarousel = ({images}) => {
             previousIcon="chevron-left"
             nextIcon="chevron-right"
             className="amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10"
-            showControls={images.length > 1}
+            showPips={images.length > 1}
             height="330"
             width="330"
         >

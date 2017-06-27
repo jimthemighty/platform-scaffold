@@ -25,11 +25,11 @@ const Carousel = (props) => {
         height,
         width,
         className,
-        controls,
+        showArrows,
         dataNextButtonAriaLabel,
         dataPrevButtonAriaLabel,
         layout,
-        showControls,
+        showPips,
         type,
         children
     } = props
@@ -40,7 +40,7 @@ const Carousel = (props) => {
     const attrs = onlyDefined({
         autoplay: autoplay ? '' : undefined,
         loop: loop ? '' : undefined,
-        controls: controls ? '' : undefined
+        controls: showArrows ? '' : undefined
     })
 
     return (
@@ -61,7 +61,7 @@ const Carousel = (props) => {
                 </amp-carousel>
             </div>
 
-            {showControls &&
+            {showPips &&
                 <div className="amp-carousel__controls">
                     <div className="amp-carousel__pips">
                         {React.Children.map(children, (item, index) => (
@@ -111,12 +111,6 @@ Carousel.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Displays left and right arrows for the user to navigate carousel
-     * items on mobile devices.
-     */
-    controls: PropTypes.bool,
-
-    /**
      * Sets the aria-label for the `amp-carousel-button-next`. If no value is
      * given, the aria-label defaults to 'Next item in carousel'.
      */
@@ -148,9 +142,15 @@ Carousel.propTypes = {
     loop: PropTypes.bool,
 
     /**
+     * Displays left and right arrows for the user to navigate carousel
+     * items on mobile devices.
+     */
+    showArrows: PropTypes.bool,
+
+    /**
      * Displays "pips" that allow navigation to a specific slide in the carousel.
      */
-    showControls: PropTypes.bool,
+    showPips: PropTypes.bool,
 
     /**
      * Specifies the display type for the carousel items, which can be:
@@ -181,8 +181,8 @@ Carousel.propTypes = {
 
 Carousel.defaultProps = {
     loop: false,
-    controls: false,
-    showControls: false,
+    showArrows: false,
+    showPips: false,
     type: 'slides',
     layout: 'responsive'
 }
