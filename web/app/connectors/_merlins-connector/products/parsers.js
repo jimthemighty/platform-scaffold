@@ -106,8 +106,7 @@ export const productDetailsParser = ($, $html) => {
         available: getAvailabilityFrom($mainContent),
         images,
         variants: hasVariants ? buildVariants(magentoObject, variationCategories) : [],
-        variationCategories,
-        thumbnail: images[0]
+        variationCategories
     }
 }
 
