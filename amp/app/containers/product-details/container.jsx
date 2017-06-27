@@ -5,12 +5,16 @@ import {initProductDetailsPage} from '../../../../web/app/integration-manager/pr
 
 // Partials
 import ProductDetailsDescription from './partials/product-details-description'
+import ProductDetailsAddToCart from './partials/product-details-add-to-cart'
 
-const ProductDetails = () => (
-    <div className="t-product-details">
-        <ProductDetailsDescription />
-    </div>
-)
+const ProductDetails = () => {
+    return (
+        <div className="t-product-details">
+            <ProductDetailsAddToCart />
+            <ProductDetailsDescription />
+        </div>
+    )
+}
 
 ProductDetails.resolves = [({dispatch, getState}) => {
     return dispatch(initProductDetailsPage(getState().ui.app.get(CURRENT_URL)))
