@@ -34,7 +34,7 @@
     "immutable": "^3.8.1",
     "imports-loader": "^0.7.1",
     "jest-cli": "19.0.2",
-    "mobify-amp-sdk": "0.0.2",
+    "mobify-amp-sdk": "0.0.3",
     "mobify-code-style": "2.8.3",
     "ncp": "2.0.0",
     "node-fetch": "1.6.3",
