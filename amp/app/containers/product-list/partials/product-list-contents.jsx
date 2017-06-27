@@ -33,7 +33,7 @@ const ResultList = ({products}) => (
         {
             products.map((prod) =>
                 <ProductTile
-                    href="/"
+                    href={prod.href}
                     key={prod.id}
                     price={prod.price}
                     thumbnail={{
