@@ -11,10 +11,13 @@ import {getTextFrom} from '../../../utils/parser-utils'
 import {fetchPageData} from '../app/commands'
 
 export const initProductListPage = (url) => (dispatch) => {
+    // Merlins uses 'product_list_order' as URL search key
+    url = url.replace('sort', 'product_list_order')
+
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res
-            const pathKey = urlToPathKey(url)
+            const pathKey = urlToPathKey(url).replace('product_list_order', 'sort')
 
             const title = parseCategoryTitle($, $response)
             const searchTermMatch = title.match(/'(.*)'/)

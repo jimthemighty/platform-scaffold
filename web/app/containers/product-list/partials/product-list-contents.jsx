@@ -76,7 +76,6 @@ const ProductListContents = ({
     openModal,
     selectedSortOption,
     setCurrentProduct,
-    sortChange,
     sortOptions,
     routeName,
     router,
@@ -159,8 +158,8 @@ const ProductListContents = ({
                                                 <select
                                                     className="u-color-neutral-60"
                                                     value={selectedSortOption}
-                                                    onChange={(e) => { sortChange(e.target.value) }}
-                                                    onBlur={(e) => { sortChange(e.target.value) }}
+                                                    onChange={(e) => { sort(e.target.value) }}
+                                                    onBlur={(e) => { sort(e.target.value) }}
                                                 >
                                                     <option value="default" />
                                                     {
@@ -214,7 +213,6 @@ ProductListContents.propTypes = {
     router: PropTypes.object,
     selectedSortOption: PropTypes.string,
     setCurrentProduct: PropTypes.func,
-    sortChange: PropTypes.func,
     sortOptions: PropTypes.array
 }
 
@@ -229,7 +227,6 @@ const mapStateToProps = createPropsSelector({
 const mapDispatchToProps = {
     clearFilters: () => changeFilterTo(null),
     openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
-    sortChange: changeSort,
     setCurrentProduct: receiveCurrentProductId
 }
 
