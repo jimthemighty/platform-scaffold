@@ -35,10 +35,10 @@ const variationSwatch = ({input: {value, onChange}, values, label, error, name})
 )
 
 variationSwatch.propTypes = {
-    input: {
+    input: PropTypes.shape({
         value: PropTypes.string,
         onChange: PropTypes.func
-    },
+    }),
     label: PropTypes.string,
     values: PropTypes.array
 }
