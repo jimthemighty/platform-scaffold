@@ -76,7 +76,7 @@ const ProductListContents = ({
     openModal,
     selectedSortOption,
     setCurrentProduct,
-    // sortChange,
+    sortChange,
     sortOptions,
     routeName,
     router,
@@ -85,7 +85,7 @@ const ProductListContents = ({
     const sort = (option) => {
         router.push(
             path +
-            (page === 1 ? '' : `?page=${page}`) +
+            (page === 1 ? '' : `?p=${page}`) +
             (page === 1 ? '?' : '&') +
             ((option === 'default' || !option) ? '' : `sort=${option}`)
         )
@@ -94,11 +94,13 @@ const ProductListContents = ({
     const goToPage = (newPage) => {
         router.push(
             path +
-            (newPage === 1 ? '' : `?page=${newPage}`) +
+            (newPage === 1 ? '' : `?p=${newPage}`) +
             (newPage === 1 ? '?' : '&') +
             ((selectedSortOption === 'default' || !selectedSortOption) ? '' : `sort=${selectedSortOption}`)
         )
     }
+
+    const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
 
     return (
         <div>
@@ -147,25 +149,27 @@ const ProductListContents = ({
                                         </Field>
                                     </div>
 
-                                    <div className="t-product-list__sort u-flex">
-                                        <Field
-                                            className="pw--has-select"
-                                            idForLabel="sort"
-                                            label="Sort by"
-                                        >
-                                            <select
-                                                className="u-color-neutral-60"
-                                                value={selectedSortOption}
-                                                onChange={(e) => { sort(e.target.value) }}
-                                                onBlur={(e) => { sort(e.target.value) }}
+                                    {sortOptions &&
+                                        <div className="t-product-list__sort u-flex">
+                                            <Field
+                                                className="pw--has-select"
+                                                idForLabel="sort"
+                                                label="Sort by"
                                             >
-                                                <option value="default" />
-                                                {
-                                                    sortOptions.map((choice, index) => <option key={index} value={choice.id}>{choice.label}</option>)
-                                                }
-                                            </select>
-                                        </Field>
-                                    </div>
+                                                <select
+                                                    className="u-color-neutral-60"
+                                                    value={selectedSortOption}
+                                                    onChange={(e) => { sortChange(e.target.value) }}
+                                                    onBlur={(e) => { sortChange(e.target.value) }}
+                                                >
+                                                    <option value="default" />
+                                                    {
+                                                        sortOptions.map((choice, index) => <option key={index} value={choice.id}>{choice.label}</option>)
+                                                    }
+                                                </select>
+                                            </Field>
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>
@@ -179,13 +183,13 @@ const ProductListContents = ({
                 :
                     <NoResultsList routeName={routeName} />
                 }
-                {page &&
+                {page && pageCount > 1 &&
                     <Pagination
                         className="u-margin-top-lg"
                         // if newPage is 1, remove search string '?page=1' to avoid duplicate entries
                         onChange={(newPage) => goToPage(newPage)}
                         currentPage={page ? page : 1}
-                        pageCount={Math.floor(numItems / ITEMS_PER_PAGE)}
+                        pageCount={pageCount}
                         showCurrentPageMessage={true}
                         showPageButtons={false}
                     />

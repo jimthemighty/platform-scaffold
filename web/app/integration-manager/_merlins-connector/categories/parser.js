@@ -79,4 +79,16 @@ const categoryProductsParser = ($, $html) => {
     }
 }
 
+export const parseSortOptions = ($, $html) => {
+    const $select = $html.find('select.sorter-options').first()
+    const sortOptions = []
+    $select.children().each((index, option) => {
+        sortOptions.push({
+            id: option.value,
+            label: option.text
+        })
+    })
+    return sortOptions
+}
+
 export default categoryProductsParser

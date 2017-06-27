@@ -3,9 +3,9 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
-import {receiveCategoryContents, receiveCategoryInformation} from '../../categories/results'
+import {receiveCategoryContents, receiveCategoryInformation, receiveCategorySortOptions} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
-import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser} from './parser'
+import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser, parseSortOptions} from './parser'
 import {productListParser} from '../products/parsers'
 import {getTextFrom} from '../../../utils/parser-utils'
 import {fetchPageData} from '../app/commands'
@@ -18,6 +18,10 @@ export const initProductListPage = (url) => (dispatch) => {
 
             const title = parseCategoryTitle($, $response)
             const searchTermMatch = title.match(/'(.*)'/)
+            const sortOptions = parseSortOptions($, $response)
+            if (sortOptions.length > 0) {
+                dispatch(receiveCategorySortOptions(sortOptions))
+            }
 
             // Receive page contents
             dispatch(receiveProductListProductData(productListParser($, $response)))

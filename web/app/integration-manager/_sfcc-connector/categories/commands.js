@@ -44,7 +44,7 @@ const extractCategoryId = (url) => {
 }
 
 const extractPageNumber = (url) => {
-    const pageMatch = url.match(/page=(.*)/)
+    const pageMatch = url.match(/p=(.*)/)
     return pageMatch ? pageMatch[1] : '1'
 }
 
@@ -56,13 +56,13 @@ const extractSortOption = (url) => {
 export const initProductListPage = (url) => (dispatch) => {
     const categoryID = extractCategoryId(url)
     const start = (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE
-    const sortOption = extractSortOption(url)
+    const sort = extractSortOption(url)
     return dispatch(fetchCategoryInfo(categoryID))
-        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start, sortOption), {method: 'GET'}))
+        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start, sort), {method: 'GET'}))
         .then((response) => response.json())
-        .then(({total, hits, sorting_options}) => {
-            if (sorting_options.length > 0) {
-                dispatch(receiveCategorySortOptions(sorting_options))
+        .then(({total, hits, sortOptions}) => {
+            if (sortOptions.length > 0) {
+                dispatch(receiveCategorySortOptions(sortOptions))
             }
 
             if (total === 0) {
