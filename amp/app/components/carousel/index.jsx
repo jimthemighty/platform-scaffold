@@ -56,7 +56,8 @@ class Carousel extends React.Component {
             dataPrevButtonAriaLabel,
             layoutItem,
             showControls,
-            typeCarousel
+            typeCarousel,
+            children
         } = this.props
 
         const {
@@ -65,31 +66,29 @@ class Carousel extends React.Component {
             nextIndex
         } = this.state
 
-        const {children} = this.props
-
         const classes = classNames('amp-carousel', className)
+        const numChildren = React.Children.count(children)
 
-        if (!React.Children.count(children)) {
+        if (!numChildren) {
             return false
         }
 
-        const slideCount = React.Children.count(children)
 
         // Handle the case where there is only a single child correctly
         let currentChild = children[currentIndex] || children
         currentChild = React.cloneElement(currentChild, {active: true, key: getKey(currentIndex)})
 
         // If we have only one child, prev and next can be null
-        const prevChild = slideCount > 1
+        const prevChild = numChildren > 1
             ? React.cloneElement(children[prevIndex], {key: getKey(prevIndex)})
             : null
 
         // If we have two children, we need to have a dummy 'next' one,
         // so we'll clone the prev and give it a new key
         const nextChild = (() => {
-            if (slideCount > 2) {
+            if (numChildren > 2) {
                 return React.cloneElement(children[nextIndex], {key: getKey(nextIndex)})
-            } else if (slideCount > 1 && prevChild) {
+            } else if (numChildren > 1 && prevChild) {
                 return React.cloneElement(prevChild, {key: getKey(`${prevIndex}-duplicate`)})
             } else {
                 return null
