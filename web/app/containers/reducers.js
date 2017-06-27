@@ -16,6 +16,7 @@ import footer from './footer/reducer'
 import header from './header/reducer'
 import home from './home/reducer'
 import login from './login/reducer'
+import navigation from '../modals/navigation/reducer'
 import productDetails from './product-details/reducer'
 import productList from './product-list/reducer'
 
@@ -31,6 +32,7 @@ const uiReducer = combineReducers({
     header,
     home,
     login,
+    navigation,
     productDetails,
     productList,
 })
