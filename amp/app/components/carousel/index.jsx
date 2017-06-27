@@ -161,7 +161,7 @@ class Carousel extends React.Component {
                                     on={`tap:${carouselId}.goToSlide(index=${index})`}
                                     key={index}>
                                     <span className="u-visually-hidden">
-                                        {`${index === currentIndex ? 'Current slide' : 'Slide'} ${index + 1}`}
+                                        Slide {index + 1}
                                     </span>
                                 </Button>
                             ))}
