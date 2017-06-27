@@ -67,14 +67,14 @@ export const getSearchSuggestions = (query) => (dispatch) => {
         return dispatch(receiveSearchSuggestions(null))
     }
 
-    const queryURL = `${buildQueryURL(query)}`
+    const queryURL = buildQueryURL(query)
     return makeRequest(queryURL)
         .then((response) => response.json())
         .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
 }
 
 export const searchProducts = (query) => (dispatch) => {
-    browserHistory.push({pathname: `${buildSearchURL(query)}`})
+    browserHistory.push({pathname: buildSearchURL(query)})
 }
 
 

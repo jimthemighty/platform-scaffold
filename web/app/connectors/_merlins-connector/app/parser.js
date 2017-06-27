@@ -23,7 +23,7 @@ export const parseSearchSuggestions = (json) => {
         const searchTerm = data.title
         const numResults = data.num_results
         return {
-            href: `${buildSearchURL(searchTerm)}`,
+            href: buildSearchURL(searchTerm),
             children: searchTerm,
             endAction: `${numResults} result${numResults > 1 ? 's' : ''}`
         }
