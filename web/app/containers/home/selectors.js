@@ -5,7 +5,7 @@
 import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getUi} from '../../store/selectors'
-import {getNavigationChildren} from '../navigation/selectors'
+import {getNavigationChildren} from '../../modals/navigation/selectors'
 
 export const getHome = createSelector(getUi, ({home}) => home)
 

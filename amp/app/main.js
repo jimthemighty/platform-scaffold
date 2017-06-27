@@ -63,7 +63,7 @@ const render = (req, res, store, component) => {
 
     const state = store.getState()
     const rendered = ampPage({
-        title: state.ui.app.get(PAGE_TITLE),
+        title: state.app.get(PAGE_TITLE),
         canonicalURL: getFullUrl(req),
         body,
         css: styleIncludes.map((x) => x.toString().trim()).join('\n'),

@@ -7,7 +7,7 @@ import {canonicalURL} from '../../../utils'
 import Button from '../../../components/button'
 
 // Selectors
-import * as appSelectors from '../../../../../web/app/containers/app/selectors.js'
+import {getCurrentUrl} from 'progressive-web-sdk/dist/store/app/selectors'
 
 const ProductDetailsAddToCart = ({currentUrl}) => {
 
@@ -28,7 +28,7 @@ ProductDetailsAddToCart.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    currentUrl: appSelectors.getCurrentUrl
+    currentUrl: getCurrentUrl
 })
 
 export default connect(mapStateToProps)(ProductDetailsAddToCart)

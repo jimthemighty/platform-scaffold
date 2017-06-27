@@ -1,9 +1,9 @@
 import React from 'react'
 import {ampComponent} from '../../amp-sdk'
-import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
+import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
 
 // Selectors
-import {initProductDetailsPage} from '../../../../web/app/integration-manager/products/commands'
+import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 
 // Partials
 import ProductDetailsCarousel from './partials/product-details-carousel'
@@ -21,7 +21,7 @@ const ProductDetails = () => {
 }
 
 ProductDetails.resolves = [({dispatch, getState}) => {
-    return dispatch(initProductDetailsPage(getState().ui.app.get(CURRENT_URL)))
+    return dispatch(initProductDetailsPage(getState().app.get(CURRENT_URL)))
 }]
 
 ProductDetails.templateName = 'pdp'

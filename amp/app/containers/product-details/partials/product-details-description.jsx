@@ -6,7 +6,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {Accordion, AccordionItem} from '../../../components/accordion'
 
 // Selectors
-import {getProductDescription} from '../../../../../web/app/store/products/selectors'
+import {getProductDescription} from 'progressive-web-sdk/dist/store/products/selectors'
 
 const ProductDetailsDescription = ({description}) => (
     <Accordion className="t-product-details__description" initialOpenItems={[0]}>
