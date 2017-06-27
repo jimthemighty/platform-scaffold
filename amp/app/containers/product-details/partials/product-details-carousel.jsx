@@ -13,14 +13,13 @@ const ProductDetailsCarousel = ({images}) => {
         nextIcon: 'chevron-right',
         iconSize: 'medium',
         className: 'amp--frame amp--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10',
-        showControls: false,
         showControls: images.length > 1,
         height: '330',
         width: '330'
     }
 
     const imgProps = {
-        className: 'u-display-block LOOK-HERE',
+        className: 'u-display-block',
         height: '330',
         width: '330',
     }
