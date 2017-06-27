@@ -79,6 +79,7 @@ class RegisterForm extends React.Component {
                         name="password"
                         type="password"
                         analyticsName={UI_NAME.password}
+                        isPassword
                         />
 
                     <LoginField
@@ -86,6 +87,7 @@ class RegisterForm extends React.Component {
                         name="password_confirmation"
                         type="password"
                         analyticsName={UI_NAME.confirmPassword}
+                        isPassword
                         />
                 </FieldSet>
 
