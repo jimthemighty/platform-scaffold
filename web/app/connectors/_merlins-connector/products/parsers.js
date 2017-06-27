@@ -96,7 +96,7 @@ export const productDetailsParser = ($, $html) => {
     const carouselItems = parseCarouselItems(magentoObject)
     const images = carouselItemsToImages(carouselItems)
     const hasVariants = !!magentoObject.getIn(['#product_addtocart_form', 'configurable', 'spConfig', 'attributes'])
-    const variationCategories = hasVariants ? parseVariationCategories(magentoObject) : null
+    const variationCategories = hasVariants ? parseVariationCategories(magentoObject) : []
 
     return {
         id: $mainContent.find('#product_addtocart_form input[name="product"]').val(),
@@ -105,7 +105,7 @@ export const productDetailsParser = ($, $html) => {
         description: getTextFrom($mainContent, '.product.info.detailed .product.attibute.description p'),
         available: getAvailabilityFrom($mainContent),
         images,
-        variants: hasVariants ? buildVariants(magentoObject, variationCategories) : null,
+        variants: hasVariants ? buildVariants(magentoObject, variationCategories) : [],
         variationCategories,
         thumbnail: images[0]
     }
