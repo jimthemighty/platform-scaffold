@@ -1,5 +1,4 @@
 /* eslint-disable newline-per-chained-call, max-nested-callbacks */
-import {mount} from 'enzyme'
 import {shallowHOC as shallow} from '../../test-utils'
 import React from 'react'
 
