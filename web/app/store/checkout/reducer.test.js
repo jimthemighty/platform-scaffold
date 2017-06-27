@@ -5,7 +5,7 @@
 /* eslint-env jest */
 import Immutable from 'immutable'
 import reducer from './reducer'
-import * as checkoutActions from '../../integration-manager/checkout/results'
+import * as checkoutActions from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 /* eslint-disable newline-per-chained-call */
 

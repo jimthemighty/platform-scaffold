@@ -1,5 +1,5 @@
-import {Connector} from './integration-manager/_stub-connector'
-import {registerConnector} from './integration-manager'
+import {Connector} from './connectors/_stub-connector'
+import {registerConnector} from 'progressive-web-sdk/dist/integration-manager'
 
 const initConnector = () => {
     registerConnector(Connector())

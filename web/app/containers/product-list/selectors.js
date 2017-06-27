@@ -7,7 +7,7 @@ import {createSelector} from 'reselect'
 import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi, getCategories} from '../../store/selectors'
 import {getSelectedCategory, getCategoryProducts} from '../../store/categories/selectors'
-import {getCurrentPathKey, getCurrentPathKeyWithoutQuery} from '../app/selectors'
+import {getCurrentPathKey, getCurrentPathKeyWithoutQuery} from 'progressive-web-sdk/dist/store/app/selectors'
 import {byFilters} from '../../utils/filter-utils'
 import {sortLib} from '../../utils/sort-utils'
 
