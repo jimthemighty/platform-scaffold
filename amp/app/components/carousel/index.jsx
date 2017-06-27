@@ -14,27 +14,6 @@ class Carousel extends React.Component {
         super(props)
     }
 
-    calculateIndex(position, length) {
-        const len = length || React.Children.count(this.props.children)
-
-        // Always return a value within the array bounds. This
-        // accounts for when the current position is either 0 or
-        // length - 1.
-        return position < 0 ? (len - (Math.abs(position) % len)) % len : position % len
-    }
-
-    calculateIndexes(position, length) {
-        // Calculate the array index for the current item, as well as the previous and next.
-        //
-        // Optionally called with `length` when indices need to be recalculated due to number of
-        // carousel children changing
-        return {
-            currentIndex: this.calculateIndex(position, length),
-            prevIndex: this.calculateIndex(position - 1, length),
-            nextIndex: this.calculateIndex(position + 1, length)
-        }
-    }
-
     render() {
         const {
             autoplay,
@@ -59,7 +38,6 @@ class Carousel extends React.Component {
             return false
         }
 
-        const layoutItemValue = layout
         const controlsValue = controls ? {controls: ''} : {}
         const dataNextButtonAriaLabelValue = dataNextButtonAriaLabel ? {'data-next-button-aria-label': dataNextButtonAriaLabel} : {}
         const dataPrevButtonAriaLabelValue = dataPrevButtonAriaLabel ? {'data-prev-button-aria-label': dataPrevButtonAriaLabel} : {}
@@ -73,7 +51,7 @@ class Carousel extends React.Component {
                     <amp-carousel
                         id={carouselId}
                         type={type}
-                        layout={layoutItemValue}
+                        layout={layout}
                         height={height}
                         width={width}
                         {...controlsValue}
