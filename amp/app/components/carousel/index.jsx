@@ -35,13 +35,7 @@ const Carousel = (props) => {
     } = props
 
     const classes = classNames('amp-carousel', className)
-    const numChildren = React.Children.count(children)
-
     const carouselId = id
-
-    if (!numChildren) {
-        return false
-    }
 
     const attrs = onlyDefined({
         autoplay: autoplay ? '' : undefined,
