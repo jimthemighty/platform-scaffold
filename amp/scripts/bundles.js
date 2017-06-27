@@ -17,6 +17,7 @@ const mobifyCloudURL = process.env['MOBIFY_CLOUD_URL'] || 'https://cloud.mobify.
 const listCreateURL = (projectSlug) => `${mobifyCloudURL}/api/v2/projects/${projectSlug}/amp/bundles/`
 
 class LogicalException extends ne.LogicalException {}
+class HttpException extends ne.HttpException {}
 
 const abort = (msg) => {throw new LogicalException(msg)}
 
@@ -25,6 +26,14 @@ const home = win ? process.env.USERPROFILE : process.env.HOME
 const configFile = path.join(home, '.mobify')
 
 const pprint = (obj) => JSON.stringify(obj, null, 4)
+
+/**
+ * Fetch and reject with a readable error, if appropriate.
+ */
+const safeFetch = (input, init) => fetch(input, init)
+    .then(res => {
+        return res.ok ? res : Promise.reject(new HttpException(res.statusText, res.status))
+    })
 
 const getCredentials = () => {
     const override = process.env['MOBIFY_DEPLOYMENT_CREDENTIALS']
@@ -49,7 +58,7 @@ const headers = ({api_key}) => ({
 const list = ({projectSlug}) => {
     const url = listCreateURL(projectSlug)
     return getCredentials()
-        .then(credentials => fetch(url, {
+        .then(credentials => safeFetch(url, {
             method: 'GET',
             headers: headers(credentials)
         }))
@@ -74,7 +83,7 @@ const upload = ({projectSlug, file}) => {
     )
 
     return Promise.all([getCredentials(), buildRequestBody()])
-        .then(([credentials, body]) => fetch(url, {
+        .then(([credentials, body]) => safeFetch(url, {
             method: 'POST',
             headers: headers(credentials),
             body: JSON.stringify(body)
