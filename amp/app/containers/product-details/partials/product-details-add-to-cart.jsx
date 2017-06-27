@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {canonicalURL} from '../../../utils'
-import URL from 'url'
 
 // Components
 import Button from '../../../components/button'
