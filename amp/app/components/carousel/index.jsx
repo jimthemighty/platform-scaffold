@@ -39,7 +39,8 @@ const Carousel = (props) => {
 
     const attrs = onlyDefined({
         autoplay: autoplay ? '' : undefined,
-        loop: loop ? '' : undefined
+        loop: loop ? '' : undefined,
+        controls: controls ? '' : undefined
     })
 
     return (
@@ -51,7 +52,6 @@ const Carousel = (props) => {
                     layout={layout}
                     height={height}
                     width={width}
-                    controls={controls}
                     data-next-button-aria-label={dataNextButtonAriaLabel}
                     data-prev-button-aria-label={dataPrevButtonAriaLabel}
                     delay={delay}
