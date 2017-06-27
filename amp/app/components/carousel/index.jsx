@@ -46,9 +46,9 @@ class Carousel extends React.Component {
             controls,
             dataNextButtonAriaLabel,
             dataPrevButtonAriaLabel,
-            layoutItem,
+            layout,
             showControls,
-            typeCarousel,
+            type,
             children
         } = this.props
 
@@ -59,7 +59,7 @@ class Carousel extends React.Component {
             return false
         }
 
-        const layoutItemValue = layoutItem
+        const layoutItemValue = layout
         const controlsValue = controls ? {controls: ''} : {}
         const dataNextButtonAriaLabelValue = dataNextButtonAriaLabel ? {'data-next-button-aria-label': dataNextButtonAriaLabel} : {}
         const dataPrevButtonAriaLabelValue = dataPrevButtonAriaLabel ? {'data-prev-button-aria-label': dataPrevButtonAriaLabel} : {}
@@ -72,7 +72,7 @@ class Carousel extends React.Component {
                 <div className="amp-carousel__inner">
                     <amp-carousel
                         id={carouselId}
-                        type={typeCarousel}
+                        type={type}
                         layout={layoutItemValue}
                         height={height}
                         width={width}
@@ -167,7 +167,7 @@ Carousel.propTypes = {
     /**
      * Specifies the display type for the carousel items
      */
-    layoutItem: PropTypes.oneOf(['fill', 'fixed', 'fixed-height', 'flex-item', 'nodisplay', 'responsive']),
+    layout: PropTypes.oneOf(['fill', 'fixed', 'fixed-height', 'flex-item', 'nodisplay', 'responsive']),
 
     /**
      * Allows the user to advance past the first item or the final item. There
@@ -190,14 +190,14 @@ Carousel.propTypes = {
      * following layouts: `fill`, `fixed`, `fixed-height`, `flex-item`,
      * `nodisplay`, and `responsive`.
      */
-    typeCarousel: (props) => {
-        const {typeCarousel, layoutItem} = props
+    type: (props) => {
+        const {type, layout} = props
         const layoutSupported = (
-            ((value === 'carousel') && ['fixed', 'fixed-height', 'nodisplay'].indexOf(layoutItem) >= 0) ||
-            ((value === 'slides') && ['fill', 'fixed-height', 'flex-item', 'nodisplay', 'responsive'].indexOf(layoutItem) >= 0)
+            ((type === 'carousel') && ['fixed', 'fixed-height', 'nodisplay'].indexOf(layout) >= 0) ||
+            ((type === 'slides') && ['fill', 'fixed-height', 'flex-item', 'nodisplay', 'responsive'].indexOf(layout) >= 0)
         )
         if (!layoutSupported) {
-            return new Error(`Invalid combination of 'typeCarousel' and 'layoutItem'`)
+            return new Error(`Invalid combination of 'type' and 'layout'`)
         }
     },
 
@@ -212,8 +212,8 @@ Carousel.defaultProps = {
     loop: false,
     controls: false,
     showControls: false,
-    typeCarousel: 'slides',
-    layoutItem: 'responsive'
+    type: 'slides',
+    layout: 'responsive'
 }
 
 Carousel.scripts = [
