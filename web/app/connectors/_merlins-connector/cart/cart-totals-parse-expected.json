@@ -5,6 +5,7 @@
         "code": "magic"
     },
     "shipping": {
+        "label": "",
         "amount": "$0.00"
     },
     "subtotal": "$10.00",
