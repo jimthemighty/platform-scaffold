@@ -1,0 +1,65 @@
+@import '../../styles/component-base';
+
+// Carousel
+// ===
+
+
+// Root
+// ---
+
+.amp-carousel {
+    //
+}
+
+
+// Carousel Controls
+// ---
+
+.amp-carousel__controls {
+    display: flex;
+    align-items: center;
+}
+
+
+// Carousel Pips Container
+// ---
+//
+// 1. Reset button styles
+
+.amp-carousel__pips {
+    flex: 1 1 auto;
+
+    text-align: center;
+
+    .amp-button,
+    .amp-button__inner {
+        min-width: auto; // 1
+        min-height: auto; // 1
+        padding: 0; // 1
+    }
+
+    &:last-of-type {
+        margin-right: 0;
+    }
+}
+
+
+// Carousel Pip
+// ---
+
+.amp-carousel__pip {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 0.5em;
+    height: 0.5em;
+    margin-right: 0.5em;
+
+    border-radius: 50%;
+    background-color: $neutral-20;
+
+    &:active,
+    &:focus {
+        background-color: $neutral-20;
+    }
+}

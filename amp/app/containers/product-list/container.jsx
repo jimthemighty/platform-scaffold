@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import {ampComponent} from '../../amp-sdk'
+import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
 
 // Partials
 import ProductListHeader from './partials/product-list-header'
@@ -10,9 +12,6 @@ import ProductListContents from './partials/product-list-contents'
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
 import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
 import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
-import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
-
-import {ampComponent} from '../../amp-sdk'
 
 const ProductList = () => {
     const filterSheetId = 'filter-sheet'

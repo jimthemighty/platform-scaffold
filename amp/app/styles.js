@@ -76,6 +76,10 @@ import SkipLinks from './components/skip-links/index'
 import SkipLinksBase from './components/skip-links/_base.scss'
 import SkipLinksTheme from './components/skip-links/_theme.scss'
 
+import Carousel from './components/carousel/index'
+import CarouselBase from './components/carousel/_base.scss'
+import CarouselTheme from './styles/themes/amp-components/_carousel.scss'
+
 
 // Containers
 import Footer from './containers/footer/container'
@@ -117,6 +121,7 @@ styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase, ProductTileTheme])
 styles.set(Sheet, [SheetBase, SheetTheme])
 styles.set(SkipLinks, [SkipLinksBase, SkipLinksTheme])
+styles.set(Carousel, [CarouselBase, CarouselTheme])
 
 
 styles.set(Footer, [FooterStyles])
