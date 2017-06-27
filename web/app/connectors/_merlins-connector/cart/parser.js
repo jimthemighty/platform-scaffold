@@ -58,7 +58,7 @@ export const parseCartTotals = ({
     const initialCartTotals = {
         discount: {amount: '', code: '', label: ''},
         orderTotal: '',
-        shipping: {amount: '', label: ''},
+        shipping: {amount: ''},
         subtotal: '',
         tax: ''
     }
