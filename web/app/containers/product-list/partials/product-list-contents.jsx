@@ -21,7 +21,8 @@ import Pagination from 'progressive-web-sdk/dist/components/pagination'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Field from 'progressive-web-sdk/dist/components/field'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {ITEMS_PER_PAGE} from '../constants'
+import {makeQueryString} from '../../../utils/utils'
+import {ITEMS_PER_PAGE, DEFAULT_SORT_OPTION} from '../constants'
 
 import ProductTile from '../../../components/product-tile'
 
@@ -80,22 +81,19 @@ const ProductListContents = ({
     router,
     page
 }) => {
-    const sort = (option) => {
-        router.push(
-            path +
-            (page === 1 ? '' : `?p=${page}`) +
-            (page === 1 ? '?' : '&') +
-            ((option === 'default' || !option) ? '' : `sort=${option}`)
-        )
-    }
 
-    const goToPage = (newPage) => {
-        router.push(
-            path +
-            (newPage === 1 ? '' : `?p=${newPage}`) +
-            (newPage === 1 ? '?' : '&') +
-            ((selectedSortOption === 'default' || !selectedSortOption) ? '' : `sort=${selectedSortOption}`)
-        )
+    const push = (query) => {
+        // No query string for page 1
+        if (query.p === 1) {
+            query.p = ''
+        }
+
+        // No query string for default sort option
+        if (query.sort === DEFAULT_SORT_OPTION) {
+            query.sort = ''
+        }
+        console.log(makeQueryString(query))
+        router.push(path + makeQueryString(query))
     }
 
     const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
@@ -157,8 +155,8 @@ const ProductListContents = ({
                                                 <select
                                                     className="u-color-neutral-60"
                                                     value={selectedSortOption}
-                                                    onChange={(e) => { sort(e.target.value) }}
-                                                    onBlur={(e) => { sort(e.target.value) }}
+                                                    onChange={(e) => { push({p: page, sort: e.target.value}) }}
+                                                    onBlur={(e) => { push({p: page, sort: e.target.value}) }}
                                                 >
                                                     <option value="default" />
                                                     {
@@ -184,8 +182,7 @@ const ProductListContents = ({
                 {page && pageCount > 1 &&
                     <Pagination
                         className="u-margin-top-lg"
-                        // if newPage is 1, remove search string '?page=1' to avoid duplicate entries
-                        onChange={(newPage) => goToPage(newPage)}
+                        onChange={(newPage) => push({p: newPage, sort: selectedSortOption})}
                         currentPage={page ? page : 1}
                         pageCount={pageCount}
                         showCurrentPageMessage={true}
@@ -212,7 +209,7 @@ ProductListContents.propTypes = {
     router: PropTypes.object,
     selectedSortOption: PropTypes.string,
     setCurrentProduct: PropTypes.func,
-    sortOptions: PropTypes.object
+    sortOptions: PropTypes.array
 }
 
 const mapStateToProps = createPropsSelector({

@@ -35,9 +35,40 @@ export const getURL = (location) =>
  * @param {object} url - full url
  * @returns {string} - the URL with no search key
  */
-export const getURLWithoutSearchKey = (url) => {
+export const getURLWithoutQuery = (url) => {
     const index = url.indexOf('?')
     return url.substring(0, index !== -1 ? index : url.length)
+}
+
+/**
+ * Returns query string given an object of parameters
+ * @param {object} params
+ * @returns {string} - url query string
+ */
+export const makeQueryString = (params) => {
+    if (typeof params === 'undefined' || typeof params !== 'object') {
+        return ''
+    }
+
+    let query = '?'
+    let index = 0
+
+    for (const i in params) {
+        if (params[i]) {
+            index++
+            const param = i
+            const value = params[i]
+            if (index === 1) {
+                query += `${param}=${value}`
+            } else {
+                query += `&${param}=${value}`
+            }
+        }
+    }
+    if (query.length === 1) {
+        return ''
+    }
+    return query
 }
 
 
