@@ -26,15 +26,18 @@ const configFile = path.join(home, '.mobify')
 
 const pprint = (obj) => JSON.stringify(obj, null, 4)
 
-const getCredentials = () => (
-    fs.readFileAsync(configFile)
+const getCredentials = () => {
+    const override = process.env['MOBIFY_DEPLOYMENT_CREDENTIALS']
+    const json = override !== undefined ? Promise.resolve(override) : fs.readFileAsync(configFile)
+
+    return json
         .then(json => JSON.parse(json))
         .then(d => ({username: d.username, api_key: d.api_key}))
         .catch(e => abort(
             `Credentials file "${configFile}" not found or invalid\n` +
             'Visit https://cloud.mobify.com/account for steps on authorizing your computer to push bundles.'
         ))
-)
+}
 
 const headers = ({api_key}) => ({
     'User-Agent': `amp-sdk`,
