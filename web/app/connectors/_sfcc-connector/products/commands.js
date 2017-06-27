@@ -6,7 +6,7 @@ import {
     receiveProductDetailsProductData,
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {setCurrentURL, receiveCurrentProductId} from '../../results'
+import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
 import {parseProductDetails, getCurrentProductID, getProductHref, getInitialSelectedVariant} from '../parsers'

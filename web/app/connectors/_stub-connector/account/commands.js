@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {setLoggedIn} from '../../results'
+import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 /* eslint-disable no-unused-vars */
 
