@@ -11,25 +11,6 @@ const getKey = (index) => {
 
 const carouselId = 'carousel-id'
 
-const CarouselPip = ({isCurrentPip, slideNumber}) => {
-    const number = slideNumber - 1
-    const button = `tap:${carouselId}.goToSlide(index=${number})`
-
-    return (
-        <Button className="amp-carousel__pip" on={button}>
-            <span className="u-visually-hidden">
-                {`${isCurrentPip ? 'Current slide' : 'Slide'} ${slideNumber}`}
-            </span>
-        </Button>
-    )
-}
-
-CarouselPip.propTypes = {
-    isCurrentPip: PropTypes.bool,
-    slideNumber: PropTypes.number
-}
-
-CarouselPip.displayName = 'CarouselPip'
 
 class Carousel extends React.Component {
 
@@ -174,13 +155,16 @@ class Carousel extends React.Component {
                 {showControls &&
                     <div className="amp-carousel__controls">
                         <div className="amp-carousel__pips">
-                            {React.Children.map(children, (item, index) =>
-                                <CarouselPip
-                                    isCurrentPip={index === currentIndex}
-                                    slideNumber={index + 1}
-                                    key={index}
-                                />
-                            )}
+                            {React.Children.map(children, (item, index) => (
+                                <Button
+                                    className="amp-carousel__pip"
+                                    on={`tap:${carouselId}.goToSlide(index=${index})`}
+                                    key={index}>
+                                    <span className="u-visually-hidden">
+                                        {`${index === currentIndex ? 'Current slide' : 'Slide'} ${index + 1}`}
+                                    </span>
+                                </Button>
+                            ))}
                         </div>
                     </div>
                 }
