@@ -9,8 +9,8 @@ import {
     setLoggedIn,
     setCheckoutShippingURL,
     setCartURL
-} from '../../results'
-import {receiveUserEmail} from '../../checkout/results'
+} from 'progressive-web-sdk/dist/integration-manager/results'
+import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {parseCategories, parseSearchSuggestions} from '../parsers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 

@@ -12,12 +12,24 @@ export const parseShippingAddressFromBasket = (basketData) => {
         }]
     } = basketData
 
-    let initialValues
+    let initialValues = {
+        countryId: 'us',
+        firstname: '',
+        lastname: '',
+        addressLine1: '',
+        city: '',
+        postcode: '',
+        telephone: ''
+    }
+
     /* eslint-disable camelcase */
     if (shipping_address) {
         initialValues = {
+            ...initialValues,
             username: email,
             name: shipping_address.full_name,
+            firstname: shipping_address.first_name,
+            lastname: shipping_address.last_name,
             company: shipping_address.company_name,
             addressLine1: shipping_address.address1,
             addressLine2: shipping_address.address2,
@@ -26,10 +38,6 @@ export const parseShippingAddressFromBasket = (basketData) => {
             regionId: shipping_address.state_code,
             postcode: shipping_address.postal_code,
             telephone: shipping_address.phone
-        }
-    } else {
-        initialValues = {
-            countryId: 'us'
         }
     }
     /* eslint-enable camelcase */
