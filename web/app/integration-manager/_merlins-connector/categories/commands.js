@@ -20,7 +20,7 @@ export const initProductListPage = (url) => (dispatch) => {
             const [$, $response] = res
             const pathKey = urlToPathKey(url).replace('product_list_order', 'sort')
             const pathKeyWithoutQuery = getURLWithoutQuery(pathKey)
-            
+
             const title = parseCategoryTitle($, $response)
             const searchTermMatch = title.match(/'(.*)'/)
             const sortOptions = parseSortOptions($, $response)

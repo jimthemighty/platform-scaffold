@@ -7,12 +7,13 @@ import {makeApiRequest} from '../utils'
 import {receiveCategoryContents, receiveCategoryInformation, receiveCategorySortOptions} from '../../categories/results'
 import {receiveProductListProductData} from '../../products/results'
 import {parseProductListData, parseSortedProductKeys} from '../parsers'
+import {getURLWithoutQuery} from '../../../utils/utils'
 import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
 
 import {getCategoryPath} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id, start, sortOption) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}&sort=${sortOption}`
+const makeCategorySearchURL = (id, start, sortQuery) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}${sortQuery}`
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
@@ -57,12 +58,19 @@ export const initProductListPage = (url) => (dispatch) => {
     const categoryID = extractCategoryId(url)
     const start = (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE
     const sort = extractSortOption(url)
+    const sortQuery = sort ? `&sort=${sort}` : ''
+
     return dispatch(fetchCategoryInfo(categoryID))
-        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start, sort), {method: 'GET'}))
+        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start, sortQuery), {method: 'GET'}))
         .then((response) => response.json())
-        .then(({total, hits, sortOptions}) => {
-            if (sortOptions.length > 0) {
-                dispatch(receiveCategorySortOptions(sortOptions))
+        .then((response) => {
+            const {total, hits, sorting_options} = response
+
+            const pathKey = urlToPathKey(url).replace('product_list_order', 'sort')
+            const pathKeyWithoutQuery = getURLWithoutQuery(pathKey)
+
+            if (sorting_options.length > 0) {
+                dispatch(receiveCategorySortOptions(sorting_options, pathKeyWithoutQuery))
             }
 
             if (total === 0) {
