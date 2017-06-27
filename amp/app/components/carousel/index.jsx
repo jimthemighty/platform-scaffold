@@ -7,6 +7,16 @@ import Button from '../button'
 
 const carouselId = 'carousel-id'
 
+const onlyDefined = (obj) => {
+    const ret = {}
+    Object.keys(obj).forEach(k => {
+        if (obj[k] !== undefined) {
+            ret[k] = obj[k]
+        }
+    })
+    return ret
+}
+
 
 class Carousel extends React.Component {
 
@@ -38,12 +48,10 @@ class Carousel extends React.Component {
             return false
         }
 
-        const controlsValue = controls ? {controls: ''} : {}
-        const dataNextButtonAriaLabelValue = dataNextButtonAriaLabel ? {'data-next-button-aria-label': dataNextButtonAriaLabel} : {}
-        const dataPrevButtonAriaLabelValue = dataPrevButtonAriaLabel ? {'data-prev-button-aria-label': dataPrevButtonAriaLabel} : {}
-        const autoplayValue = autoplay ? {autoplay: ''} : {}
-        const delayValue = delay ? {delay} : {}
-        const loopValue = loop ? {loop: ''} : {}
+        const attrs = onlyDefined({
+            'autoplay': autoplay ? '' : undefined,
+            'loop': loop ? '' : undefined
+        })
 
         return (
             <div className={classes}>
@@ -54,12 +62,11 @@ class Carousel extends React.Component {
                         layout={layout}
                         height={height}
                         width={width}
-                        {...controlsValue}
-                        {...dataNextButtonAriaLabelValue}
-                        {...dataPrevButtonAriaLabelValue}
-                        {...autoplayValue}
-                        {...delayValue}
-                        {...loopValue}
+                        controls={controls}
+                        data-next-button-aria-label={dataNextButtonAriaLabel}
+                        data-prev-button-aria-label={dataPrevButtonAriaLabel}
+                        delay={delay}
+                        {...attrs}
                     >
                     {children}
                     </amp-carousel>
