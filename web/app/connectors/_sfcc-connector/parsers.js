@@ -167,3 +167,21 @@ export const parseSortedProductKeys = (products) => {
     })
     return sortedProductKeys
 }
+
+export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
+    if (!products) {
+        return []
+    }
+
+    const suggestions = products.map((suggestion) => {
+        const productIdMatch = suggestion.link.match(/products\/(.*?)\?/)
+        const productId = productIdMatch ? productIdMatch[1] : ''
+
+        return {
+            href: getProductHref(productId),
+            children: suggestion.product_name
+        }
+    })
+
+    return suggestions
+}

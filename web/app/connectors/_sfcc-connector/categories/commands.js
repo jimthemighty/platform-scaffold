@@ -11,16 +11,18 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseProductListData, parseSortedProductKeys} from '../parsers'
+import {getCategoryPath, SEARCH_URL} from '../config'
 import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
-import {getCategoryPath} from '../config'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id, start, sortQuery) => `/product_search?expand=availability,images,prices&q=&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}${sortQuery}`
+const makeCategorySearchURL = (id, query = '', start, sortQuery) => `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}${sortQuery}`
+
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     const parentId = parent_category_id !== 'root' ? parent_category_id : null
     const path = getCategoryPath(id)
+
     dispatch(receiveCategoryInformation(id, {
         id,
         title: name,
@@ -34,11 +36,16 @@ const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
 }
 /* eslint-enable camelcase, no-use-before-define */
 
-const fetchCategoryInfo = (id) => (dispatch) => (
-    makeApiRequest(makeCategoryURL(id), {method: 'GET'})
-        .then((response) => response.json())
-        .then(processCategory(dispatch))
-)
+const buildSearchTerm = (query) => query.replace(/\+/g, ' ').trim()
+
+const fetchCategoryInfo = (id) => (dispatch) => {
+    if (id) {
+        return makeApiRequest(makeCategoryURL(id), {method: 'GET'})
+            .then((response) => response.json())
+            .then(processCategory(dispatch))
+    }
+    return Promise.resolve()
+}
 
 const extractCategoryId = (url) => {
     const pathKeyMatch = /\/([^/]+)$/.exec(url)
@@ -57,13 +64,36 @@ const extractSortOption = (url) => {
 }
 
 export const initProductListPage = (url) => (dispatch) => {
+
+    const path = urlToPathKey(url)
     const categoryID = extractCategoryId(url)
     const start = (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE
     const sort = extractSortOption(url)
     const sortQuery = sort ? `&sort=${sort}` : ''
 
-    return dispatch(fetchCategoryInfo(categoryID))
-        .then(() => makeApiRequest(makeCategorySearchURL(categoryID, start, sortQuery), {method: 'GET'}))
+    let searchUrl
+    const isSearch = path.includes(SEARCH_URL)
+
+    if (isSearch) {
+        const searchQueryMatch = path.match(/\?q=\+(.*)/)
+        const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
+        const searchTerm = buildSearchTerm(searchQuery)
+
+        searchUrl = makeCategorySearchURL('', encodeURIComponent(searchQuery).replace(/%2B/g, '+'))
+
+        dispatch(receiveCategoryInformation(path, {
+            id: searchQuery,
+            href: path,
+            searchTerm,
+            title: `Search results for ${searchTerm}`,
+            parentId: null
+        }))
+    } else {
+        searchUrl = makeCategorySearchURL(categoryID, start, sortQuery)
+    }
+
+    return dispatch(fetchCategoryInfo(isSearch ? null : categoryID))
+        .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
         .then((response) => response.json())
         .then((response) => {
             const {total, hits, sorting_options} = response
