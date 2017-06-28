@@ -12,7 +12,7 @@ test('AmpForm renders without errors', () => {
 /* eslint-disable newline-per-chained-call */
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<AmpForm />)
-    expect(wrapper.hasClass('c-amp-form')).toBe(true)
+    expect(wrapper.hasClass('a-form')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {
