@@ -1,12 +1,11 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import ListTile from '../list-tile'
 import ProductItem from '../product-item'
-
-import {ampComponent} from '../../amp-sdk'
 
 /**
  * Product Tile represents a product and its basic information: image,
@@ -14,7 +13,7 @@ import {ampComponent} from '../../amp-sdk'
  */
 
 const titleClassName = classNames(
-    'amp-product-tile__name',
+    'c-product-tile__name',
     'u-h4',
     'u-text-family',
     'u-text-weight-medium',
@@ -39,7 +38,7 @@ ProductImage.propTypes = {
 const ProductTile = ({className, thumbnail, href, price, title}) => {
 
     return (
-        <ListTile className="amp-product-tile u-card" href={href}>
+        <ListTile className="c-product-tile u-card" href={href}>
             <ProductItem customWidth="45%"
                 className={classNames('u-align-center', className)}
                 title={<h2 className={titleClassName}>{title}</h2>}
