@@ -12,6 +12,7 @@ import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {OFFLINE_MODAL} from '../constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const OfflineModal = (props, context) => {
     const {closeModal, isOpen} = props
@@ -26,8 +27,18 @@ const OfflineModal = (props, context) => {
                     you have already visited, but in in order to load new content you must re-establish
                     your internet connection.
                 </p>
-                <Button className="c--secondary u-width-full u-text-uppercase u-margin-bottom" onClick={reload}>Retry connection</Button>
-                <Button className="c--tertiary u-width-full u-text-uppercase" onClick={closeModal}>
+                <Button
+                    className="c--secondary u-width-full u-text-uppercase u-margin-bottom"
+                    onClick={reload}
+                    data-analytics-name={UI_NAME.retryConnection}
+                >
+                    Retry connection
+                </Button>
+                <Button
+                    className="c--tertiary u-width-full u-text-uppercase"
+                    onClick={closeModal}
+                    data-analytics-name={UI_NAME.continueOffline}
+                >
                     Continue offline
                 </Button>
             </div>
@@ -53,7 +64,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(OFFLINE_MODAL)
+    closeModal: () => closeModal(OFFLINE_MODAL, UI_NAME.offline)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(OfflineModal)

@@ -4,7 +4,7 @@
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import * as constants from './constants'
-import * as commands from '../../integration-manager/commands'
+import * as commands from 'progressive-web-sdk/dist/integration-manager/commands'
 
 export const newsletterSignupComplete = createAction('Newsletter signup complete', ['signupStatus'])
 

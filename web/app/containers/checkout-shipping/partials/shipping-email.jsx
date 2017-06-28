@@ -15,7 +15,7 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Link from 'progressive-web-sdk/dist/components/link'
-
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable}) => {
     const passwordHint = (
@@ -40,14 +40,14 @@ const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable}
                             onBlur: isEmailAvailable
                         }}
                     >
-                        <input type="email" noValidate placeholder="Email Address" />
+                        <input type="email" noValidate placeholder="Email Address" data-analytics-name={UI_NAME.email} />
                     </ReduxForm.Field>
                 </FieldRow>
 
                 {customerEmailRecognized &&
                     <FieldRow>
                         <ReduxForm.Field component={Field} name="password" label="Password" hint={passwordHint}>
-                            <input type="password" name="password" noValidate />
+                            <input type="password" name="password" noValidate data-analytics-name={UI_NAME.password} />
                         </ReduxForm.Field>
                     </FieldRow>
                 }
@@ -56,7 +56,8 @@ const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable}
                     <FieldRow>
                         <Button
                             className="c--secondary u-width-full u-text-uppercase qa-checkout__sign-in"
-                            onClick={submitSignIn}>
+                            onClick={submitSignIn}
+                            data-analytics-name={UI_NAME.login}>
                             <Icon name="user" className="u-margin-end" />
                             Sign In
                         </Button>

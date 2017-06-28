@@ -6,8 +6,8 @@
 import {submitPayment} from './actions'
 import Immutable from 'immutable'
 
-jest.mock('../../integration-manager/checkout/commands')
-import {submitPayment as submitPaymentCommand} from '../../integration-manager/checkout/commands'
+jest.mock('progressive-web-sdk/dist/integration-manager/checkout/commands')
+import {submitPayment as submitPaymentCommand} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 jest.mock('progressive-web-sdk/dist/routing')
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 

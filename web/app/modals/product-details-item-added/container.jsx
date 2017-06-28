@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as selectors from '../../containers/product-details/selectors'
 import {stripEvent} from '../../utils/utils'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
-import {getProductThumbnail, getProductTitle, getProductPrice} from '../../store/products/selectors'
+import {getProductThumbnail, getProductTitle, getProductPrice} from 'progressive-web-sdk/dist/store/products/selectors'
 import * as productDetailsActions from '../../containers/product-details/actions'
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
@@ -17,6 +17,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import ProductItem from '../../components/product-item'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout}) => (
     <Sheet open={open} onDismiss={onDismiss} effect="slide-bottom" className="m-product-details__item-added-modal" coverage="50%" shrinkToContent>
@@ -28,7 +29,11 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
                 </h1>
 
                 <div className="m-product-details__item-added-modal-close u-flexbox u-flex-none u-align-center u-justify-center">
-                    <Button className="u-text-uppercase" onClick={onDismiss}>
+                    <Button
+                        className="u-text-uppercase"
+                        onClick={onDismiss}
+                        data-analytics-name={UI_NAME.dismissModal}
+                    >
                         <Icon name="close" title="Close" className="m-product-details__item-added-modal-icon" />
                     </Button>
                 </div>
@@ -54,10 +59,16 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
                 <Button
                     onClick={onGoToCheckout}
                     className="c--primary u-width-full u-margin-bottom-md u-text-uppercase"
-                    innerClassName="u-text-align-center">
+                    innerClassName="u-text-align-center"
+                    data-analytics-name={UI_NAME.checkout}
+                >
                     Go To Checkout
                 </Button>
-                <Button className="c--tertiary u-width-full u-text-uppercase" onClick={onDismiss}>
+                <Button
+                    className="c--tertiary u-width-full u-text-uppercase"
+                    onClick={onDismiss}
+                    data-analytics-name={UI_NAME.continueShopping}
+                >
                     Continue Shopping
                 </Button>
             </div>
@@ -88,7 +99,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     onGoToCheckout: productDetailsActions.goToCheckout,
-    onDismiss: stripEvent(() => closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL))
+    onDismiss: stripEvent(() => closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
 }
 
 export default connect(
