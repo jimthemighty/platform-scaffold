@@ -127,7 +127,7 @@ $quaternary-brand-color: #4e439b; // ui_kit_value: #bfdfe6;
 // Accent colors
 $accent-color: #ec354e; // ui_kit_value: #83bdcb; // coral
 $light-accent-color: lighten($accent-color, 15%);
-$dark-accent-color: #b21c30; // ui_kit_value: darken(#accent-color, 15%);
+$dark-accent-color: #b21c30; // ui_kit_value: darken($accent-color, 15%);
 
 // Primary Action
 $primary-action-color: #dc0a3c; // ui_kit_value: #dc0a3c; // red
