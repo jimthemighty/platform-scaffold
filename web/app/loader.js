@@ -158,6 +158,12 @@ const attemptToInitializeApp = () => {
         }
     }
 
+    /**
+     * A setTimeout wraps this trigger function in order to control the exact
+     * timing that any tracking pixels are downloaded as the app initializes.
+     * More specifically, downloading of any tracking pixels should not delay
+     * the downloading of any other scripts (i.e. service workers, etc.)
+     */
     const triggerAppStartEvent = () => setTimeout(() => {
         // Collect timing put for when app has started loading in order to
         // determine % dropoff of users who don't make it to the "pageview" event.
