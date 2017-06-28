@@ -130,6 +130,7 @@ const ProductListContents = ({
                                             className="u-color-neutral-60"
                                             onChange={(e) => { sortChange(e.target.value) }}
                                             onBlur={(e) => { sortChange(e.target.value) }}
+                                            data-analytics-name={UI_NAME.sortBy}
                                         >
                                             {/* This list of options corresponds to the functions in app/utils/sort-utils.js */}
                                             <option value="position">Position</option>
