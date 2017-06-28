@@ -79,7 +79,7 @@ export const initProductListPage = (url) => (dispatch) => {
         const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         const searchTerm = buildSearchTerm(searchQuery)
 
-        searchUrl = makeCategorySearchURL('', encodeURIComponent(searchQuery).replace(/%2B/g, '+'))
+        searchUrl = makeCategorySearchURL('', encodeURIComponent(searchQuery).replace(/%2B/g, '+'), start, sortQuery)
 
         dispatch(receiveCategoryInformation(path, {
             id: searchQuery,
@@ -89,7 +89,7 @@ export const initProductListPage = (url) => (dispatch) => {
             parentId: null
         }))
     } else {
-        searchUrl = makeCategorySearchURL(categoryID, start, sortQuery)
+        searchUrl = makeCategorySearchURL(categoryID, '', start, sortQuery)
     }
 
     return dispatch(fetchCategoryInfo(isSearch ? null : categoryID))
