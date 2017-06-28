@@ -1,6 +1,6 @@
 # Mobify Progressive Web Scaffold
 
-The quick start guide for using the scaffold can be found [here](https://docs.mobify.com/progressive-web/latest/guides/quick-start-guide/)
+The quick start guide for using the scaffold can be found [here](https://docs.mobify.com/progressive-web/latest/getting-started/quick-start/)
 
 ## Running npm scripts
 

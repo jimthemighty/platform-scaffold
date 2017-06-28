@@ -8,7 +8,7 @@ import {
     receiveProductDetailsProductData,
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCurrentProductId} from '../../results'
+import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveFormInfo} from '../actions'
 
 export const initProductDetailsPage = (url, routeName) => (dispatch) => {
