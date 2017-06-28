@@ -5,7 +5,7 @@ const HeaderBarActions = ({
     children,
     className
 }) => {
-    const classes = classNames('amp-header-bar__actions', className)
+    const classes = classNames('a-header-bar__actions', className)
 
     return (
         <div className={classes}>
