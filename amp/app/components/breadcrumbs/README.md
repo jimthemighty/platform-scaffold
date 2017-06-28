@@ -1,9 +1,9 @@
 ```js
 // JS import
-import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
+import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs'
 
 // SCSS import
-@import 'node_modules/progressive-web-sdk/dist/components/breadcrumbs/base';
+@import 'node_modules/mobify-amp-sdk/dist/components/breadcrumbs/base';
 ```
 
 
