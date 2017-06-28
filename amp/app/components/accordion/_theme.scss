@@ -24,6 +24,12 @@ $accordion__padding: $unit*1.5;
 
 .amp-accordion__header {
     font-weight: bold;
+
+    &:first-child {
+        border: 0;
+
+        background-color: $neutral-00;
+    }
 }
 
 

@@ -1,11 +1,10 @@
 import React from 'react'
 import {ampComponent} from '../../amp-sdk'
 import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
-
-// Selectors
 import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 
 // Partials
+import ProductDetailsHeading from './partials/product-details-heading'
 import ProductDetailsCarousel from './partials/product-details-carousel'
 import ProductDetailsAddToCart from './partials/product-details-add-to-cart'
 import ProductDetailsDescription from './partials/product-details-description'
@@ -13,6 +12,7 @@ import ProductDetailsDescription from './partials/product-details-description'
 const ProductDetails = () => {
     return (
         <div className="t-product-details">
+            <ProductDetailsHeading />
             <ProductDetailsCarousel />
             <ProductDetailsAddToCart />
             <ProductDetailsDescription />

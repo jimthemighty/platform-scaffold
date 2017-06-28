@@ -35,6 +35,14 @@
     }
 }
 
+.amp-accordion__header {
+    &:first-child {
+        border: 0;
+
+        background-color: $neutral-00;
+    }
+}
+
 .amp-accordion__inner-header {
     align-items: center;
 }
