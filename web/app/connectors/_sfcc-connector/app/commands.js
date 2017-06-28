@@ -15,7 +15,7 @@ import {parseCategories, parseSearchSuggestions} from '../parsers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL} from '../config'
-import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from '../../../containers/navigation/constants'
+import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from '../../../modals/navigation/constants'
 
 
 export const fetchNavigationData = () => (dispatch) => {
