@@ -49,7 +49,7 @@ test('If no href is passed, it renders a link with #', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<Link />)
 
-    expect(wrapper.hasClass('amp-link')).toBe(true)
+    expect(wrapper.hasClass('a-link')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {

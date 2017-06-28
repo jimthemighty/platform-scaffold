@@ -24,7 +24,7 @@ const Link = ({
     }
 
     const attrs = {
-        className: classNames('amp-link', className),
+        className: classNames('a-link', className),
         ...props
     }
 
