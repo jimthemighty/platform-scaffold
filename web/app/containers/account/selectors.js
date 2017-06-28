@@ -12,5 +12,12 @@ export const getAccount = createSelector(
     ({account}) => account
 )
 
-export const getTitle = createGetSelector(getAccount, 'title')
-export const getText = createGetSelector(getAccount, 'text', Immutable.List())
+export const getDashboardInfo = createGetSelector(getAccount, 'dashboardInfo', Immutable.Map())
+
+export const getTitle = createGetSelector(getDashboardInfo, 'title')
+// export const getLink = createSelector(getAccount, (account) => {
+//     debugger
+//     debugger
+//     return account.get('dashboardInfo') ? account.get('dashboardInfo').get('links') : []
+// })
+export const getLink = createGetSelector(getDashboardInfo, 'links', Immutable.List())

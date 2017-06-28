@@ -7,32 +7,38 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import template from '../../template'
 
-import {getTitle, getText} from './selectors'
+import {getTitle, getLink} from './selectors'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 // import * as accountActions from './actions'
 
 const containerClass = 't-account'
 const titleClass = `${containerClass}__title`
 
-const Account = ({title, text}) => (
+const Account = ({title, links}) => (
     <div className={containerClass}>
         { title ?
             <h1 className={titleClass}>{title}</h1>
         :
             <SkeletonText lines={1} type="h1" width="100px" />
         }
-        {text.map((paragraph, idx) => <p key={idx}>{paragraph}</p>)}
+        <ul>
+            {links.map((link, idx) => {
+                return (
+                    <li key={idx}>{link.href}</li>
+                )
+            })}
+        </ul>
     </div>
 )
 
 Account.propTypes = {
-    text: PropTypes.arrayOf(PropTypes.string),
+    links: PropTypes.array,
     title: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
-    text: getText,
-    title: getTitle
+    title: getTitle,
+    links: getLink
 })
 
 const mapDispatchToProps = {

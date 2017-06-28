@@ -10,13 +10,13 @@ import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
-import {setSigninLoaded, setRegisterLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {setSigninLoaded, setRegisterLoaded, recieveDashboardInfo} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid} from './parsers/parsers'
+import {isFormResponseInvalid, parsedDashboard} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -29,6 +29,15 @@ export const initRegisterPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then(() => {
             dispatch(setRegisterLoaded())
+        })
+}
+
+export const initAccountDashboard = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+        .then((res) => {
+            const [$, $response] = res
+            const parsedDashboardLinks = parsedDashboard($, $response)
+            return dispatch(recieveDashboardInfo(parsedDashboardLinks))
         })
 }
 
