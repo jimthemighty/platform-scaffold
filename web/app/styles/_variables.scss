@@ -119,18 +119,18 @@ $neutral-60: #333; // ui_kit_value: #404040;
 $neutral-70: #000;
 
 // Brand colors
-$brand-color: #41378c; // ui_kit_value: #0288a7; // purple
+$brand-color: #41378c; // purple // ui_kit_value: #0288a7; // deep aqua
 $secondary-brand-color: lighten($brand-color, 15%); // ui_kit_value: #005c83;
 $tertiary-brand-color: #261c67; // ui_kit_value: #83bdcb;
 $quaternary-brand-color: #4e439b; // ui_kit_value: #bfdfe6;
 
 // Accent colors
-$accent-color: #ec354e; // ui_kit_value: #83bdcb; // coral
+$accent-color: #ec354e; // coral // ui_kit_value: #83bdcb; // light aqua
 $light-accent-color: lighten($accent-color, 15%);
 $dark-accent-color: #b21c30; // ui_kit_value: darken($accent-color, 15%);
 
 // Primary Action
-$primary-action-color: #dc0a3c; // ui_kit_value: #dc0a3c; // red
+$primary-action-color: #dc0a3c; // red
 $light-primary-action-color: lighten($primary-action-color, 15%);
 $dark-primary-action-color: darken($primary-action-color, 15%);
 

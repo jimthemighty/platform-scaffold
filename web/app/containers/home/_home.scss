@@ -16,7 +16,7 @@
     position: relative; // 1
 
     background-color: $background-color; // ui_kit_value: transparent;
-    box-shadow: $inset-box-shadow;
+    box-shadow: $inset-box-shadow; // ui_kit_value: none;
 
     font-family: $header-font-family;
 

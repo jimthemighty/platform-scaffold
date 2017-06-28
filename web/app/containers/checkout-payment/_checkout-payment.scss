@@ -70,6 +70,8 @@
 @include susy-breakpoint($mobile-breakpoint, $mobile-layout) {
     .t-checkout-payment__title {
         padding-left: $unit * 1.5;
+
+        background-color: trasparent; // ui_kit_value: $background-color;
     }
 }
 

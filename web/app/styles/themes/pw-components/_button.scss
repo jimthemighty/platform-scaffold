@@ -54,24 +54,24 @@
 // ---
 
 .pw-button.c--primary {
-    background-color: $accent-color;
+    background-color: $accent-color; // ui_kit_valu: $primary-action-color;
 
     color: #fff;
 
     &:active,
     &:focus {
-        background-color: $dark-accent-color;
+        background-color: $dark-accent-color; // ui_kit_valu: $dark-primary-action-color;
     }
 }
 
 .pw-button.c--secondary {
-    background-color: $brand-color;
+    background-color: $brand-color; // ui_kit_valu: $secondary-action-color;
 
     color: #fff;
 
     &:active,
     &:focus {
-        background-color: $tertiary-brand-color;
+        background-color: $tertiary-brand-color; // ui_kit_valu: $dark-secondary-action-color;
     }
 }
 
