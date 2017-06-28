@@ -3,10 +3,6 @@ import Accordion from './components/accordion/accordion'
 import AccordionBase from './components/accordion/_base.scss'
 import AccordionTheme from './styles/themes/amp-components/_accordion.scss'
 
-import AmpLightbox from './components/amp-lightbox/index'
-import AmpLightboxBase from './components/amp-lightbox/_base.scss'
-import AmpLightboxTheme from './components/amp-lightbox/_theme.scss'
-
 import Breadcrumbs from './components/breadcrumbs/index'
 import BreadcrumbsBase from './components/breadcrumbs/_base.scss'
 import BreadcrumbsTheme from './styles/themes/amp-components/_breadcrumbs.scss'
@@ -102,7 +98,6 @@ import ProductListStyles from './containers/product-list/_container.scss'
 const styles = new Map()
 
 styles.set(Accordion, [AccordionBase, AccordionTheme])
-styles.set(AmpLightbox, [AmpLightboxBase, AmpLightboxTheme])
 styles.set(Breadcrumbs, [BreadcrumbsBase, BreadcrumbsTheme])
 styles.set(Button, [ButtonBase, ButtonTheme])
 styles.set(Field, [FieldBase, FieldTheme])
