@@ -10,7 +10,7 @@
 $field__error-color: red;
 
 
-.amp-field {
+.a-field {
     flex: 1 1 auto;
 }
 
@@ -18,10 +18,10 @@ $field__error-color: red;
 // Field Inner
 // ---
 
-.amp-field__inner {
+.a-field__inner {
     display: flex;
 
-    &.amp--stack {
+    &.a--stack {
         flex-flow: column;
     }
 }
@@ -30,9 +30,9 @@ $field__error-color: red;
 // ---
 //
 // This container is for the actual form inputs itself. It is required in order
-// to achieve the necessary layout inside of the parent `.amp-field__inner` wrap.
+// to achieve the necessary layout inside of the parent `.a-field__inner` wrap.
 
-.amp-field__input {
+.a-field__input {
     display: flex;
     flex: 1 1 auto;
 }
@@ -44,7 +44,7 @@ $field__error-color: red;
 // This container is for the input label. Click on this should select it's
 // respective input.
 
-.amp-field__label {
+.a-field__label {
     width: 100%;
 }
 
@@ -52,14 +52,14 @@ $field__error-color: red;
 // Label Wrap
 // ---
 //
-// 1. Position context so the child `amp-field__hint` can be absolutely positioned
+// 1. Position context so the child `a-field__hint` can be absolutely positioned
 
-.amp-field__label-wrap {
+.a-field__label-wrap {
     position: relative; // 1
 
     flex: 0 1 auto;
 
-    &.amp--end {
+    &.a--end {
         order: 1;
     }
 }
@@ -68,8 +68,8 @@ $field__error-color: red;
 // Field: Error
 // ---
 
-.amp-field__error,
-%amp-field__error {
+.a-field__error,
+%a-field__error {
     color: $field__error-color;
 }
 
@@ -77,8 +77,8 @@ $field__error-color: red;
 // Modifier: Check-radio field
 // ---
 
-.amp-field.amp--is-check-radio {
-    .amp-field__input {
+.a-field.a--is-check-radio {
+    .a-field__input {
         flex: 0 0 auto;
     }
 }
@@ -87,13 +87,13 @@ $field__error-color: red;
 // Modifier: Error Field
 // ---
 
-.amp-field.amp--error {
-    .amp-field__label-wrap {
+.a-field.a--error {
+    .a-field__label-wrap {
         color: $field__error-color;
     }
 
     input,
-    .amp-field__input > * {
+    .a-field__input > * {
         border-color: $field__error-color;
     }
 }
@@ -102,11 +102,11 @@ $field__error-color: red;
 // Modifier: Overlayed Hint
 // ---
 //
-// 1. Positioned relative to the parent `amp-field__label-wrap` container
+// 1. Positioned relative to the parent `a-field__label-wrap` container
 // 2. Position the hint button to sit directly on top of the field input
 
-.amp-field.amp--overlayed-hint {
-    .amp-field__hint {
+.a-field.a--overlayed-hint {
+    .a-field__hint {
         position: absolute; // 1
         top: 100%; // 2
         right: 0; // 2

@@ -18,7 +18,7 @@ test('Field renders without errors', () => {
 
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<Field><input type="checkbox" /></Field>)
-    expect(wrapper.hasClass('amp-field')).toBe(true)
+    expect(wrapper.hasClass('a-field')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {
@@ -44,24 +44,24 @@ test('passes the idForLabel prop to the label', () => {
 test('sets the label position', () => {
     const setLabelPositionToAndExpect = (position, hasStackClass, hasEndClass) => {
         const wrapper = shallow(<Field label="Test" labelPosition={position}><input type="checkbox" /></Field>)
-        expect(wrapper.find('.amp-field__inner').hasClass('amp--stack')).toBe(hasStackClass)
-        expect(wrapper.find('.amp-field__label-wrap').hasClass('amp--end')).toBe(hasEndClass)
+        expect(wrapper.find('.a-field__inner').hasClass('a--stack')).toBe(hasStackClass)
+        expect(wrapper.find('.a-field__label-wrap').hasClass('a--end')).toBe(hasEndClass)
     }
     setLabelPositionToAndExpect('start', false, false)
     setLabelPositionToAndExpect('top', true, false)
     setLabelPositionToAndExpect('end', false, true)
 })
 
-test('has the class amp--required if the input is required', () => {
+test('has the class a--required if the input is required', () => {
     const wrapper = shallow(<Field><input type="text" required /></Field>)
 
-    expect(wrapper.find('.amp-field').hasClass('amp--required')).toBe(true)
+    expect(wrapper.find('.a-field').hasClass('a--required')).toBe(true)
 })
 
-test('does not have the class amp--required if the input is not required', () => {
+test('does not have the class a--required if the input is not required', () => {
     const wrapper = shallow(<Field><input type="text" /></Field>)
 
-    expect(wrapper.find('.amp-field').hasClass('amp--required')).toBe(false)
+    expect(wrapper.find('.a-field').hasClass('a--required')).toBe(false)
 })
 
 test('passes the `input` prop contents to the input', () => {
@@ -134,37 +134,37 @@ test('does not set the id or input props on a non-input', () => {
 test('does not render caption, error, or hint if not passed', () => {
     const wrapper = shallow(<Field><input /></Field>)
 
-    expect(wrapper.find('.amp-field__caption').length).toBe(0)
-    expect(wrapper.find('.amp-field__error').length).toBe(0)
-    expect(wrapper.find('.amp-field__hint').length).toBe(0)
+    expect(wrapper.find('.a-field__caption').length).toBe(0)
+    expect(wrapper.find('.a-field__error').length).toBe(0)
+    expect(wrapper.find('.a-field__hint').length).toBe(0)
 })
 
 test('renders the caption if passed', () => {
     const wrapper = shallow(<Field caption="A caption"><input /></Field>)
 
-    expect(wrapper.find('.amp-field__caption').length).toBe(1)
-    expect(wrapper.find('.amp-field__caption').text()).toBe('A caption')
+    expect(wrapper.find('.a-field__caption').length).toBe(1)
+    expect(wrapper.find('.a-field__caption').text()).toBe('A caption')
 })
 
 test('renders the error if passed', () => {
     const wrapper = shallow(<Field error="Not Valid"><input /></Field>)
 
-    expect(wrapper.find('.amp-field__error').length).toBe(1)
-    expect(wrapper.find('.amp-field__error').text()).toBe('Not Valid')
+    expect(wrapper.find('.a-field__error').length).toBe(1)
+    expect(wrapper.find('.a-field__error').text()).toBe('Not Valid')
 })
 
 test('renders a hint in the label if passed with a label', () => {
     const wrapper = shallow(<Field hint="Look under the rock" label="Test"><input /></Field>)
 
-    expect(wrapper.find('.amp-field__label-wrap .amp-field__hint').length).toBe(1)
-    expect(wrapper.find('.amp-field__label-wrap .amp-field__hint').text())
+    expect(wrapper.find('.a-field__label-wrap .a-field__hint').length).toBe(1)
+    expect(wrapper.find('.a-field__label-wrap .a-field__hint').text())
         .toBe('Look under the rock')
 })
 
 test('renders no hint if no label is passed', () => {
     const wrapper = shallow(<Field hint="Look under the rock"><input /></Field>)
 
-    expect(wrapper.find('.amp-field__label-wrap .amp-field__hint').length).toBe(0)
+    expect(wrapper.find('.a-field__label-wrap .a-field__hint').length).toBe(0)
 })
 
 test('renders the redux form error if the field is touched and inactive', () => {
@@ -175,15 +175,15 @@ test('renders the redux form error if the field is touched and inactive', () => 
     }
     const wrapper = shallow(<Field meta={metaProps}><input /></Field>)
 
-    expect(wrapper.find('.amp-field__error').length).toBe(1)
-    expect(wrapper.find('.amp-field__error').text()).toBe('redux form error')
+    expect(wrapper.find('.a-field__error').length).toBe(1)
+    expect(wrapper.find('.a-field__error').text()).toBe('redux form error')
 })
 
 test('does not render the redux form error if the field is not touched or active', () => {
     [{touched: false, active: false}, {touched: true, active: true}].forEach((state) => {
         const wrapper = shallow(<Field meta={{...state, error: 'redux form error'}}><input /></Field>)
 
-        expect(wrapper.find('.amp-field__error').length).toBe(0)
+        expect(wrapper.find('.a-field__error').length).toBe(0)
     })
 })
 
@@ -194,8 +194,8 @@ test('renders the redux form error if dirty and shouldShowErrorsInstantly is set
     }
     const wrapper = shallow(<Field meta={metaProps} shouldShowErrorsInstantly><input /></Field>)
 
-    expect(wrapper.find('.amp-field__error').length).toBe(1)
-    expect(wrapper.find('.amp-field__error').text()).toBe('redux form error')
+    expect(wrapper.find('.a-field__error').length).toBe(1)
+    expect(wrapper.find('.a-field__error').text()).toBe('redux form error')
 })
 
 test('renders no redux form error if not dirty and shouldShowErrorsInstantly is set', () => {
@@ -205,7 +205,7 @@ test('renders no redux form error if not dirty and shouldShowErrorsInstantly is 
     }
     const wrapper = shallow(<Field meta={metaProps} shouldShowErrorsInstantly><input /></Field>)
 
-    expect(wrapper.find('.amp-field__error').length).toBe(0)
+    expect(wrapper.find('.a-field__error').length).toBe(0)
 })
 
 test('calls redux form onBlur handler when custom event is passed', () => {
@@ -224,11 +224,11 @@ test('calls redux form onBlur handler when custom event is passed', () => {
 test('sets the disabled class if a child is disabled', () => {
     const wrapper = shallow(<Field><input type="text" disabled /></Field>)
 
-    expect(wrapper.hasClass('amp--disabled')).toBe(true)
+    expect(wrapper.hasClass('a--disabled')).toBe(true)
 })
 
 test('sets the checked class if a child is checked', () => {
     const wrapper = shallow(<Field><input type="radio" checked /></Field>)
 
-    expect(wrapper.hasClass('amp--checked')).toBe(true)
+    expect(wrapper.hasClass('a--checked')).toBe(true)
 })
