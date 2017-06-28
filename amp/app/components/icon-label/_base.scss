@@ -1,12 +1,12 @@
 @import '../../styles/component-base';
 
-// IconLabel
+// Icon Label
 // ===
 
-// IconLabel root
+// Icon Label root
 // ---
 
-.amp-icon-label {
+.a-icon-label {
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
@@ -19,7 +19,7 @@
 // ---
 //
 
-.amp-icon-label__label {
+.a-icon-label__label {
     display: block;
     margin-top: $sub-unit;
 
