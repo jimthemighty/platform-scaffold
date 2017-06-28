@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from '../../amp-sdk'
 
 // Components
 import ListTile from '../list-tile'
-import {ampComponent} from '../../amp-sdk'
 
 /**
  * The `List` component is used to enclose a series of related items, providing a
@@ -16,7 +16,7 @@ const List = ({
     component,
     children
 }) => {
-    const classes = classNames('amp-list', className)
+    const classes = classNames('a-list', className)
 
     return (
         <div className={classes}>
@@ -26,7 +26,7 @@ const List = ({
                 return React.createElement(componentToRender, {
                     key: idx,
                     children: item.children || item.title,
-                    className: 'amp-list__item',
+                    className: 'a-list__item',
                     ...item
                 })
             })}
