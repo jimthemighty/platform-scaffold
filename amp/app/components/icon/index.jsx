@@ -25,9 +25,9 @@ class Icon extends React.Component {
         } = this.props
 
         const a11y = (title.length) ? {role: 'img'} : {'aria-hidden': 'true'}
-        const sizeClass = `amp--${size}`
+        const sizeClass = `a--${size}`
 
-        const classes = classNames('amp-icon', {
+        const classes = classNames('a-icon', {
             [sizeClass]: !!size
         }, className)
 
