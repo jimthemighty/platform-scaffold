@@ -2,8 +2,9 @@
 // ===
 
 .t-account-dashboard {
-    background-color: $neutral-10;
     padding-bottom: $unit * 1.5;
+
+    background-color: $neutral-10;
 
     .pw-list-tile__content {
         color: $font-color;
@@ -14,6 +15,6 @@
 // Account Link
 // ---
 
-.t-account-dashboard__link + .t-account-dashboard__link{
+.t-account-dashboard__link + .t-account-dashboard__link {
     border-top: $border;
 }
