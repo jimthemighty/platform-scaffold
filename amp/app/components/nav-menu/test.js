@@ -12,7 +12,7 @@ test('Nav renders without errors', () => {
 
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<Nav />)
-    expect(wrapper.hasClass('amp-nav-menu')).toBe(true)
+    expect(wrapper.hasClass('a-nav-menu')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {

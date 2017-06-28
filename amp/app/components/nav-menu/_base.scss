@@ -3,7 +3,7 @@
 //
 // 1. The positioning context for a NavSlider. The NavMenu is a ReactTransitionGroup.
 
-.amp-nav-menu {
+.a-nav-menu {
     position: relative;  // 1
 
     overflow: hidden;
@@ -13,7 +13,7 @@
 }
 
 
-.amp-nav-menu__panel {
+.a-nav-menu__panel {
     overflow-x: hidden;
     overflow-y: scroll;
     width: 100%;
