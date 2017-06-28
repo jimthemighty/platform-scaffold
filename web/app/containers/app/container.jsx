@@ -165,7 +165,7 @@ class App extends React.Component {
                             // Display main content if we have no network errors or
                             // if we've already got the content in the store
                             (!fetchError || hasFetchedCurrentPath) ?
-                                <div>
+                                <div className="u-flexbox u-flex u-direction-column">
                                     <main id="app-main" className="u-flex" role="main">
                                         {this.props.children}
                                     </main>

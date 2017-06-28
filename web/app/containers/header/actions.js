@@ -2,13 +2,9 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
-
-import {SUGGESTION_URL} from './constants'
-import {buildQueryString} from '../../utils/utils'
-import {getSearchSuggestions} from 'progressive-web-sdk/dist/integration-manager/commands'
-import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
+import {getSearchSuggestions, searchProducts} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 import {EVENT_ACTION} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const searchAnalytics = createActionWithAnalytics(
@@ -29,5 +25,5 @@ export const searchQueryChanged = (query) => (dispatch) => (
 
 export const searchSubmit = (query) => (dispatch) => {
     dispatch(searchAnalytics(query))
-    browserHistory.push({pathname: `${SUGGESTION_URL}${buildQueryString(query)}`})
+    dispatch(searchProducts(query))
 }
