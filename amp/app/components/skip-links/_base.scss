@@ -1,13 +1,13 @@
 @import '../../styles/component-base';
 
-// SkipLinks
+// Skip Links
 // ===
 //
 // 1. Above everything, but underneath modals and their masks
 
 $skip-links__z-index: 99; // 1
 
-.amp-skip-links__anchor {
+.a-skip-links__anchor {
     position: absolute;
     top: $unit;
     left: -10000px;

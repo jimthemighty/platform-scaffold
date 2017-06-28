@@ -14,11 +14,11 @@ import {ampComponent} from '../../amp-sdk'
  */
 
 const SkipLinks = ({className, items}) => {
-    const classes = classNames('amp-skip-links', className)
+    const classes = classNames('a-skip-links', className)
     return (
         <div className={classes}>
             {items.map(({target, label}, key) =>
-                <a href={target} className="amp-skip-links__anchor" key={`skip-link-${target}-${key}`}>
+                <a href={target} className="a-skip-links__anchor" key={`skip-link-${target}-${key}`}>
                     {label}
                 </a>
             )}
