@@ -18,7 +18,7 @@ import AmpForm from 'mobify-amp-sdk/dist/components/dangerous-html'
 
             <Button
                 type="submit"
-                className="amp--tertiary u-margin-0 u-text-uppercase"
+                className="a--tertiary u-margin-0 u-text-uppercase"
                 disabled={submitting || disabled}>
                 Submit
             </Button>

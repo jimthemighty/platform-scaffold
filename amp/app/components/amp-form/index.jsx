@@ -3,14 +3,14 @@ import classNames from 'classnames'
 import {ampComponent} from '../../amp-sdk'
 
 /**
- * A form component that automatically includes the required amp-form script.
+ * A form component that automatically includes the required a-form script.
  */
 const AmpForm = ({
     className,
     children,
     ...props
 }) => {
-    const classes = classNames('c-amp-form', className)
+    const classes = classNames('c-a-form', className)
     return (
         <form className={classes} {...props}>
             {children}
@@ -30,7 +30,7 @@ AmpForm.propTypes = {
 }
 
 AmpForm.scripts = [
-    '<script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>'
+    '<script async custom-element="a-form" src="https://cdn.ampproject.org/v0/a-form-0.1.js"></script>'
 ]
 
 export default ampComponent(AmpForm)
