@@ -3,17 +3,12 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import React, {PropTypes} from 'react'
-import {connect} from 'react-redux'
 import {Field as ReduxFormField} from 'redux-form'
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
 import Link from 'progressive-web-sdk/dist/components/link'
-import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-
-import {REMEMBER_ME_MODAL} from '../../../modals/constants'
 
 export const LoginFieldLabel = ({label, forgotPassword}) => (
     <span>
@@ -62,17 +57,3 @@ LoginField.propTypes = {
     isPassword: PropTypes.bool,
     tooltip: PropTypes.node
 }
-
-const RememberMeTooltipContent = ({openModal}) => (
-    <a href="#remember-me" onClick={openModal}>
-        {'What\'s this?'}
-    </a>
-)
-
-RememberMeTooltipContent.propTypes = {
-    openModal: PropTypes.func
-}
-
-export const RememberMeTooltip = connect(null, {
-    openModal: () => openModal(REMEMBER_ME_MODAL, UI_NAME.remember)
-})(RememberMeTooltipContent)
