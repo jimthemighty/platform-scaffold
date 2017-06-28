@@ -70,17 +70,19 @@ const ProductListContents = ({
     activeFilters,
     clearFilters,
     contentsLoaded,
+    location,
     numItems,
-    path,
     products,
     openModal,
-    selectedSortOption,
     setCurrentProduct,
     sortOptions,
     routeName,
     router,
-    page
 }) => {
+
+    const path = location.pathname
+    const page = location.query.p ? parseInt(location.query.p) : 1
+    const selectedSortOption = location.query.sort ? location.query.sort : 'default'
 
     const push = (query) => {
         // No query string for page 1
@@ -200,13 +202,11 @@ ProductListContents.propTypes = {
     changePagination: PropTypes.func,
     clearFilters: PropTypes.func,
     contentsLoaded: PropTypes.bool,
+    location: PropTypes.object,
     numItems: PropTypes.number,
     openModal: PropTypes.func,
-    page: PropTypes.number,
-    path: PropTypes.string,
     routeName: PropTypes.string,
     router: PropTypes.object,
-    selectedSortOption: PropTypes.string,
     setCurrentProduct: PropTypes.func,
     sortOptions: PropTypes.array
 }

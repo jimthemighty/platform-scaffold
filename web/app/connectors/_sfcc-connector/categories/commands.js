@@ -12,11 +12,27 @@ import {
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseProductListData, parseSortedProductKeys} from '../parsers'
 import {getCategoryPath, SEARCH_URL} from '../config'
+import {makeQueryString} from '../../../utils/utils'
 import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-const makeCategorySearchURL = (id, query = '', start, sortQuery) => `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}${sortQuery}`
+// const makeCategorySearchURL = (id, query = '', start, sortQuery) =>
+//     `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}${sortQuery}`
+const makeCategorySearchURL = (queries) => {
+    queries.q = queries.q.replace(/%2B/g, '+')
+    let queryString = makeQueryString(queries)
 
+    // mandatory keys
+    if (!queries.q) {
+        queryString += '&q='
+    }
+    
+    if (!queries.start) {
+        queryString += '&start=0'
+    }
+
+    return `/product_search${queryString}`
+}
 
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
@@ -66,12 +82,15 @@ const extractSortOption = (url) => {
 export const initProductListPage = (url) => (dispatch) => {
 
     const path = urlToPathKey(url)
-    const categoryID = extractCategoryId(url)
-    const start = (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE
-    const sort = extractSortOption(url)
-    const sortQuery = sort ? `&sort=${sort}` : ''
+    const queries = {
+        expand: 'availability,images,prices',
+        q: '',
+        'refine_1=cgid': extractCategoryId(url),
+        start: (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE,
+        count: ITEMS_PER_PAGE,
+        sort: extractSortOption(url)
+    }
 
-    let searchUrl
     const isSearch = path.includes(SEARCH_URL)
 
     if (isSearch) {
@@ -79,7 +98,7 @@ export const initProductListPage = (url) => (dispatch) => {
         const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         const searchTerm = buildSearchTerm(searchQuery)
 
-        searchUrl = makeCategorySearchURL('', encodeURIComponent(searchQuery).replace(/%2B/g, '+'), start, sortQuery)
+        queries.q = searchQuery
 
         dispatch(receiveCategoryInformation(path, {
             id: searchQuery,
@@ -88,25 +107,25 @@ export const initProductListPage = (url) => (dispatch) => {
             title: `Search results for ${searchTerm}`,
             parentId: null
         }))
-    } else {
-        searchUrl = makeCategorySearchURL(categoryID, '', start, sortQuery)
     }
 
-    return dispatch(fetchCategoryInfo(isSearch ? null : categoryID))
+    const searchUrl = makeCategorySearchURL(queries)
+
+    return dispatch(fetchCategoryInfo(isSearch ? null : queries.cid))
         .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
         .then((response) => response.json())
         .then((response) => {
             const {total, hits, sorting_options} = response
 
-            const pathKey = urlToPathKey(url).replace('product_list_order', 'sort')
-            const pathKeyWithoutQuery = getURLWithoutQuery(pathKey)
+            const pathKeyWithoutQuery = getURLWithoutQuery(path)
 
-            if (sorting_options.length > 0) {
+            /* eslint-disable camelcase, no-use-before-define */
+            if (sorting_options) {
                 dispatch(receiveCategorySortOptions(sorting_options, pathKeyWithoutQuery))
             }
 
             if (total === 0) {
-                dispatch(receiveCategoryContents(urlToPathKey(url), {
+                dispatch(receiveCategoryContents(path, {
                     products: [],
                     itemCount: total
                 }))
@@ -117,7 +136,7 @@ export const initProductListPage = (url) => (dispatch) => {
             const sortedProductKeys = parseSortedProductKeys(hits)
 
             dispatch(receiveProductListProductData(productListData))
-            dispatch(receiveCategoryContents(urlToPathKey(url), {
+            dispatch(receiveCategoryContents(path, {
                 products: sortedProductKeys,
                 itemCount: total
             }))

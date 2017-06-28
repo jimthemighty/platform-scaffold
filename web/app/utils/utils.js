@@ -32,7 +32,7 @@ export const getURL = (location) =>
 
 /**
  * Returns query string given an object of parameters
- * @param {object} params
+ * @param {object} params - contains list of keys and values
  * @returns {string} - url query string
  */
 export const makeQueryString = (params) => {
@@ -55,7 +55,7 @@ export const makeQueryString = (params) => {
             }
         }
     }
-    if (query.length === 1) {
+    if (query.length <= 1) {
         return ''
     }
     return query
