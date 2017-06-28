@@ -11,7 +11,7 @@ const Accordion = ({
     disableSessionState,
     initialOpenItems
 }) => {
-    const classes = classNames('amp-accordion', className)
+    const classes = classNames('a-accordion', className)
 
     return (
         <amp-accordion class={classes} role="tablist" disable-session-states={disableSessionState ? true : null}>
