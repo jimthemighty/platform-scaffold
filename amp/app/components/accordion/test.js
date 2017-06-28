@@ -16,7 +16,7 @@ describe('Accordion', () => {
 
     test('includes the component class name with no className prop', () => {
         const wrapper = mount(<Accordion />)
-        expect(wrapper.hasClass('amp-accordion')).toBe(true)
+        expect(wrapper.hasClass('a-accordion')).toBe(true)
     })
 
     test('does not render an \'undefined\' class with no className', () => {
@@ -50,7 +50,7 @@ describe('Accordion', () => {
             </Accordion>
         )
 
-        const children = wrapper.find('.amp-accordion__item')
+        const children = wrapper.find('.a-accordion__item')
         expect(children.length).toBe(2)
         const [first, second] = children
 
@@ -68,7 +68,7 @@ describe('AccordionItem', () => {
 
     test('includes the component class name with no className prop', () => {
         const wrapper = shallow(<AccordionItem />)
-        expect(wrapper.hasClass('amp-accordion__item')).toBe(true)
+        expect(wrapper.hasClass('a-accordion__item')).toBe(true)
     })
 
     test('does not render an \'undefined\' class with no className', () => {
