@@ -7,13 +7,12 @@ import Breadcrumbs from '../../../components/breadcrumbs'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-details/selectors'
-import {getCartURL} from '../../../../../web/app/containers/app/selectors'
 import {getProductTitle, getProductPrice, getProductAvailability} from 'progressive-web-sdk/dist/store/products/selectors'
 
-const ProductDetailsHeading = ({available, breadcrumbs, title, price, isInCheckout, cartURL}) => (
+const ProductDetailsHeading = ({available, breadcrumbs, title, price}) => (
     <div className="t-product-details-heading u-padding-md u-box-shadow u-position-relative u-z-index-1">
         <div className="t-product-details__breadcrumbs u-margin-bottom-md">
-            <Breadcrumbs items={!isInCheckout ? breadcrumbs : [{text: 'Cart', href: cartURL}]} />
+            <Breadcrumbs items={breadcrumbs} />
         </div>
 
         <h1 className="t-product-details-heading__title u-text-uppercase u-margin-bottom">{title}</h1>
@@ -26,8 +25,6 @@ const ProductDetailsHeading = ({available, breadcrumbs, title, price, isInChecko
 ProductDetailsHeading.propTypes = {
     available: PropTypes.bool,
     breadcrumbs: PropTypes.array,
-    cartURL: PropTypes.string,
-    isInCheckout: PropTypes.bool,
     price: PropTypes.string,
     title: PropTypes.string
 }
@@ -35,7 +32,6 @@ ProductDetailsHeading.propTypes = {
 const mapStateToProps = createPropsSelector({
     available: getProductAvailability,
     breadcrumbs: selectors.getProductDetailsBreadcrumbs,
-    cartURL: getCartURL,
     title: getProductTitle,
     price: getProductPrice
 })
