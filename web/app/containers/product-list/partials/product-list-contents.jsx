@@ -82,6 +82,7 @@ const ProductListContents = ({
 
     const path = location.pathname
     const page = location.query.p ? parseInt(location.query.p) : 1
+    const search = location.query.q ? parseInt(location.query.q) : ''
     const selectedSortOption = location.query.sort ? location.query.sort : 'default'
 
     const push = (query) => {
@@ -156,8 +157,8 @@ const ProductListContents = ({
                                                 <select
                                                     className="u-color-neutral-60"
                                                     value={selectedSortOption}
-                                                    onChange={(e) => { push({p: page, sort: e.target.value}) }}
-                                                    onBlur={(e) => { push({p: page, sort: e.target.value}) }}
+                                                    onChange={(e) => { push({p: page, sort: e.target.value, q: search}) }}
+                                                    onBlur={(e) => { push({p: page, sort: e.target.value, q: search}) }}
                                                 >
                                                     <option value="default" />
                                                     {
@@ -183,7 +184,7 @@ const ProductListContents = ({
                 {page && pageCount > 1 &&
                     <Pagination
                         className="u-margin-top-lg"
-                        onChange={(newPage) => push({p: newPage, sort: selectedSortOption})}
+                        onChange={(newPage) => push({p: newPage, sort: selectedSortOption, q: search})}
                         currentPage={page ? page : 1}
                         pageCount={pageCount}
                         showCurrentPageMessage={true}

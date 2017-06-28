@@ -26,7 +26,7 @@ const makeCategorySearchURL = (queries) => {
     if (!queries.q) {
         queryString += '&q='
     }
-    
+
     if (!queries.start) {
         queryString += '&start=0'
     }
