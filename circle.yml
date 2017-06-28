@@ -16,7 +16,7 @@ dependencies:
         #    pwd: native
 test:
     override:
-        - ./tests/system/run-all-tests-on-ci.sh:
+        - ./tests/system/test-scripts/run-all-tests-on-ci.sh:
             pwd: web
             parallel: true
         - npm run test:all:

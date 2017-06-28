@@ -14,7 +14,7 @@ import ProductTile from '../../../components/product-tile'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
-import * as appSelectors from '../../../../../web/app/containers/app/selectors.js'
+import {getCurrentUrl} from 'progressive-web-sdk/dist/store/app/selectors'
 import {getCategoryItemCount} from '../../../../../web/app/store/categories/selectors'
 
 const noResultsText = 'We can\'t find products matching the selection'
@@ -149,7 +149,7 @@ const mapStateToProps = createPropsSelector({
     activeFilters: selectors.getActiveFilters,
     numItems: getCategoryItemCount,
     products: selectors.getFilteredAndSortedListProducts,
-    currentUrl: appSelectors.getCurrentUrl
+    currentUrl: getCurrentUrl
 })
 
 export default connect(mapStateToProps)(ProductListContents)

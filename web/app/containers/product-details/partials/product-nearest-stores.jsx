@@ -10,6 +10,7 @@ import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Icon from 'progressive-web-sdk/dist/components/icon'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 // Nearby Widget Config
 import NearbyConfig from '../../../config/nearby-config.json'
@@ -97,6 +98,7 @@ class ProductNearestStores extends React.Component {
                     <Button
                         className="c--tertiary u-text-uppercase u-width-full"
                         href={LOCATION_URL}
+                        data-analytics-name={UI_NAME.viewAllStores}
                     >
                         {viewAllStoresText}
                     </Button>

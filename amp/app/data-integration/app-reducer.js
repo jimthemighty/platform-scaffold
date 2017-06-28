@@ -4,10 +4,10 @@
 */
 import {handleActions} from 'redux-actions'
 import {fromJS} from 'immutable'
-import {mergePayload} from '../../../web/app/utils/reducer-utils'
+import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 
-import {receiveCurrentProductId, setCurrentURL} from '../../../web/app/integration-manager/results'
-import {CURRENT_URL} from '../../../web/app/containers/app/constants'
+import {receiveCurrentProductId, setCurrentURL} from 'progressive-web-sdk/dist/integration-manager/results'
+import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
 
 export const initialState = fromJS({
     [CURRENT_URL]: ''

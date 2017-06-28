@@ -4,14 +4,14 @@
 
 const selectors = {
     miniCart: '.qa-header__cart',
-    miniCartContent: '.t-mini-cart__content',
-    viewCart: '.t-mini-cart__content .c--tertiary',
+    miniCartContent: '.m-mini-cart__content',
+    viewCart: '.m-mini-cart__content .c--tertiary',
     cartTemplateIdentifier: '.t-cart.t--loaded',
     cartCheckout: '.qa-cart__checkout',
     removeItem: '.qa-cart__remove-item',
-    confirmRemove: '.t-cart__remove-item-confirmation-modal .c--secondary',
+    confirmRemove: '.m-cart__remove-item-confirmation-modal .c--secondary',
     emptyCart: '.t-cart__empty',
-    emptyMiniCart: '.t-mini-cart__empty-content'
+    emptyMiniCart: '.m-mini-cart__empty-content'
 }
 
 const Cart = function(browser) {

@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getProductVariationCategories} from '../../../store/products/selectors'
+import {getProductVariationCategories} from 'progressive-web-sdk/dist/store/products/selectors'
 import {onVariationChange} from '../actions'
 
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'

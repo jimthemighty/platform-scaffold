@@ -1,6 +1,8 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import {ampComponent} from '../../amp-sdk'
+import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
 
 // Partials
 import ProductListHeader from './partials/product-list-header'
@@ -9,10 +11,7 @@ import ProductListContents from './partials/product-list-contents'
 // Selectors
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
 import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
-import {initProductListPage} from '../../../../web/app/integration-manager/categories/commands'
-import {CURRENT_URL} from '../../../../web/app/containers/app/constants'
-
-import {ampComponent} from '../../amp-sdk'
+import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 
 const ProductList = () => {
     const filterSheetId = 'filter-sheet'
@@ -32,7 +31,7 @@ ProductList.propTypes = {
 }
 
 ProductList.resolves = [({dispatch, getState}) => {
-    return dispatch(initProductListPage(getState().ui.app.get(CURRENT_URL)))
+    return dispatch(initProductListPage(getState().app.get(CURRENT_URL)))
 }]
 
 ProductList.templateName = 'plp'
