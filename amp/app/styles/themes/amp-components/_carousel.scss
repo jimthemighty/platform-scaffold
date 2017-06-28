@@ -8,17 +8,17 @@
 // - The visual state of an `amp-carousel` button when it's disabled is hidden.
 // - By default, ``.amp-carousel-button` uses an inlined SVG as the background-image of the buttons. You may override this with your own SVG or image as in the example below.
 
-.amp-carousel {
+.a-carousel {
     // Carousel Button: built-in class
     // ---
-    .amp-carousel-button {
+    .a-carousel-button {
         width: $tap-size;
         height: 100%;
 
         background-color: transparent;
         background-size: 12px 12px;
 
-        &.amp-disabled {
+        &.a-disabled {
             visibility: visible;
             opacity: 0.3;
         }
@@ -26,7 +26,7 @@
 
     // Carousel Button Prev: built-in class
     // ---
-    .amp-carousel-button-prev {
+    .a-carousel-button-prev {
         left: 0;
 
         background-image: url('/static/svg/chevron-left.svg');
@@ -34,7 +34,7 @@
 
     // Carousel Button Next: built-in class
     // ---
-    .amp-carousel-button-next {
+    .a-carousel-button-next {
         right: 0;
 
         background-image: url('/static/svg/chevron-right.svg');
@@ -45,13 +45,13 @@
 // Carousel Modifier: Frame
 // ---
 
-.amp-carousel.amp--frame {
-    .amp-carousel__inner {
+.a-carousel.a--frame {
+    .a-carousel__inner {
         background: $neutral-00;
         box-shadow: $box-shadow;
     }
 
-    .amp-image {
+    .a-image {
         padding: $unit*3;
     }
 }
@@ -62,17 +62,17 @@
 //
 // 1. Hide the carousel slide numbers from being displayed
 
-.amp-carousel__controls {
+.a-carousel__controls {
     margin-bottom: $unit * 1.5;
     padding-top: $unit * 1.5;
 }
 
-.amp-carousel__pips {
+.a-carousel__pips {
     display: flex;
     justify-content: center;
 }
 
-.amp-carousel__pip {
+.a-carousel__pip {
     width: 6px;
     height: 6px;
     margin-right: 6px;
