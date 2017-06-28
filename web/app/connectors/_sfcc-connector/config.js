@@ -6,7 +6,7 @@ import {buildQueryString} from '../../utils/utils'
 const API_TYPE = 'shop'
 const API_VERSION = 'v17_4'
 
-export const SEARCH_URL = '/catalogsearch/result/?q=+'
+export const SEARCH_URL = '/catalogsearch/result/'
 
 let config = {}
 

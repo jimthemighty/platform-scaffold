@@ -82,7 +82,7 @@ const ProductListContents = ({
 
     const path = location.pathname
     const page = location.query.p ? parseInt(location.query.p) : 1
-    const search = location.query.q ? parseInt(location.query.q) : ''
+    const search = location.query.q ? location.query.q : ''
     const selectedSortOption = location.query.sort ? location.query.sort : 'default'
 
     const push = (query) => {
@@ -95,6 +95,12 @@ const ProductListContents = ({
         if (query.sort === DEFAULT_SORT_OPTION) {
             query.sort = ''
         }
+
+        // preserve search key
+        // keep the convention to store space as '+'
+        // app/utils/utils - buildQueryString()
+        Object.assign(query, {q: search.replace(/ /g, '+')})
+
         router.push(path + makeQueryString(query))
     }
 
@@ -157,8 +163,8 @@ const ProductListContents = ({
                                                 <select
                                                     className="u-color-neutral-60"
                                                     value={selectedSortOption}
-                                                    onChange={(e) => { push({p: page, sort: e.target.value, q: search}) }}
-                                                    onBlur={(e) => { push({p: page, sort: e.target.value, q: search}) }}
+                                                    onChange={(e) => { push({p: page, sort: e.target.value}) }}
+                                                    onBlur={(e) => { push({p: page, sort: e.target.value}) }}
                                                 >
                                                     <option value="default" />
                                                     {
@@ -184,7 +190,7 @@ const ProductListContents = ({
                 {page && pageCount > 1 &&
                     <Pagination
                         className="u-margin-top-lg"
-                        onChange={(newPage) => push({p: newPage, sort: selectedSortOption, q: search})}
+                        onChange={(newPage) => push({p: newPage, sort: selectedSortOption})}
                         currentPage={page ? page : 1}
                         pageCount={pageCount}
                         showCurrentPageMessage={true}

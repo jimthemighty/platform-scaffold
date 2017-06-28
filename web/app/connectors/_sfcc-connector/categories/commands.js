@@ -16,10 +16,8 @@ import {makeQueryString} from '../../../utils/utils'
 import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
 
 const makeCategoryURL = (id) => `/categories/${id}`
-// const makeCategorySearchURL = (id, query = '', start, sortQuery) =>
-//     `/product_search?expand=availability,images,prices&q=${query}&refine_1=cgid=${id}&count=${ITEMS_PER_PAGE}&start=${start}${sortQuery}`
+
 const makeCategorySearchURL = (queries) => {
-    queries.q = queries.q.replace(/%2B/g, '+')
     let queryString = makeQueryString(queries)
 
     // mandatory keys
@@ -83,8 +81,8 @@ export const initProductListPage = (url) => (dispatch) => {
 
     const path = urlToPathKey(url)
     const queries = {
-        expand: 'availability,images,prices',
         q: '',
+        expand: 'availability,images,prices',
         'refine_1=cgid': extractCategoryId(url),
         start: (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE,
         count: ITEMS_PER_PAGE,
@@ -94,7 +92,7 @@ export const initProductListPage = (url) => (dispatch) => {
     const isSearch = path.includes(SEARCH_URL)
 
     if (isSearch) {
-        const searchQueryMatch = path.match(/q=\+([^&]*)/)
+        const searchQueryMatch = path.match(/q=([^&]*)/)
         const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         const searchTerm = buildSearchTerm(searchQuery)
 

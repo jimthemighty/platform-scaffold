@@ -124,7 +124,8 @@ export const createTypedAction = (description, type, key) => createReduxAction(
 )
 
 export const buildQueryString = (query) => {
-    return query.replace(/ /g, '+')
+    return `?q=${query.replace(/ /g, '+')}`
+    // return `?q=${encodeURIComponent(query)}`
 }
 
 export const validateFullName = (fullName) => {
