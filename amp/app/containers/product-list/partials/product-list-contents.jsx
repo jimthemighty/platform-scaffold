@@ -29,7 +29,7 @@ const formAction = (currentUrl) => {
 }
 
 const ResultList = ({products}) => (
-    <List className="amp--borderless">
+    <List className="a--borderless">
         {
             products.map((prod) =>
                 <ProductTile
@@ -91,7 +91,7 @@ const ProductListContents = (props) => {
                                         label={`${products.length} Items`}
                                     >
                                         <Button
-                                            className="amp--tertiary u-width-full u-text-uppercase"
+                                            className="a--tertiary u-width-full u-text-uppercase"
                                             disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
                                             id="filterButton"
                                             on={toggleFilterSheet}
@@ -104,7 +104,7 @@ const ProductListContents = (props) => {
                                 <div className="t-product-list__sort u-flex">
                                     <Form id={formId} method="GET" target="_top" action={formAction(currentUrl)}>
                                         <Field
-                                            className="amp--has-select"
+                                            className="a--has-select"
                                             idForLabel="sort"
                                             label="Sort by"
                                         >

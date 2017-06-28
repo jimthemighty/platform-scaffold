@@ -15,7 +15,7 @@ const ProductDetailsAddToCart = ({currentUrl}) => {
         <div className="u-padding-start-md u-padding-end-md">
             <Button
                 href={canonicalURL(currentUrl)}
-                className="amp--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"
+                className="a--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"
             >
                 Select Options & Buy
             </Button>
