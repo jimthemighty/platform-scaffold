@@ -15,6 +15,7 @@ import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {isFormResponseInvalid, parsedDashboard} from './parsers'
 
@@ -129,8 +130,9 @@ export const navigateToSection = (router, routes, sectionName) => {
     }
 }
 
-export const logout = () => (dispatch) => (
-    makeRequest('/customer/account/logout/')
+export const logout = () => (dispatch) => {
+    browserHistory.push({pathname: '/'})
+    return makeRequest('/customer/account/logout/')
         // Don't wait for the cart to do everything else
         .then(() => {
             dispatch(getCart())
@@ -139,7 +141,7 @@ export const logout = () => (dispatch) => (
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active
         .then(() => fetchPageData(window.location.href))
-)
+}
 
 export const updateShippingAddress = (shippingData) => (dispatch) => {
     const formData = buildFormData({
