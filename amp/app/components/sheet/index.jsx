@@ -19,16 +19,16 @@ const Sheet = ({
     shrinkToContent,
     noShadow
 }) => {
-    const classes = classNames('amp-sheet', {
-        'amp--no-shadow': noShadow
+    const classes = classNames('a-sheet', {
+        'a--no-shadow': noShadow
     }, className)
 
-    const innerClasses = classNames('amp-sheet__inner', {
-        'amp--shrink-to-content': shrinkToContent
+    const innerClasses = classNames('a-sheet__inner', {
+        'a--shrink-to-content': shrinkToContent
     })
 
     const header = (headerContent || title) && (
-        <div className="amp-sheet__header">
+        <div className="a-sheet__header">
             {title &&
                 <h1>{title}</h1>
             }
@@ -38,7 +38,7 @@ const Sheet = ({
     )
 
     const footer = footerContent && (
-        <div className="amp-sheet__footer">
+        <div className="a-sheet__footer">
             {footerContent}
         </div>
     )
@@ -48,7 +48,7 @@ const Sheet = ({
             <div className={innerClasses}>
                 {header}
 
-                <div className="amp-sheet__content">
+                <div className="a-sheet__content">
                     {children}
                 </div>
 
