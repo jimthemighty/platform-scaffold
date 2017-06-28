@@ -24,7 +24,7 @@ const Account = ({title, links}) => (
         <ul>
             {links.map((link, idx) => {
                 return (
-                    <li key={idx}>{link.href}</li>
+                    <li key={idx}>{link.text}</li>
                 )
             })}
         </ul>
