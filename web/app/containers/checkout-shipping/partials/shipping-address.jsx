@@ -12,7 +12,7 @@ import {setShowAddNewAddress} from '../actions'
 import {ADD_NEW_ADDRESS_FIELD, SAVED_SHIPPING_ADDRESS_FIELD} from '../constants'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getShowAddNewAddress} from '../selectors'
-import {getSavedAddresses} from '../../../store/checkout/shipping/selectors'
+import {getSavedAddresses} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'

@@ -12,7 +12,7 @@ import {stripEvent} from '../../../utils/utils'
 import {showCompanyAndApt, fetchShippingMethods} from '../actions'
 import {getIsCompanyOrAptShown} from '../selectors'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
-import {getAvailableRegions} from '../../../store/checkout/selectors'
+import {getAvailableRegions} from 'progressive-web-sdk/dist/store/checkout/selectors'
 
 import CountrySelect from '../../../components/country-select'
 import RegionField from '../../../components/region-field'

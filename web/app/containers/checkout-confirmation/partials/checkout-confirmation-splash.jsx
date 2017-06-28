@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {GRID_SETTINGS} from '../constants'
 import * as selectors from '../selectors'
-import {getEmailAddress} from '../../../store/checkout/selectors'
+import {getEmailAddress} from 'progressive-web-sdk/dist/store/checkout/selectors'
 
 import {Grid, GridSpan} from 'progressive-web-sdk/dist/components/grid'
 import Image from 'progressive-web-sdk/dist/components/image'

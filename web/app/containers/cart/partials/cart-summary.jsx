@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as cartSelectors from 'progressive-web-sdk/dist/store/cart/selectors'
 import {CART_ESTIMATE_SHIPPING_MODAL} from '../../../modals/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {getSelectedShippingLabel, getPostcode} from '../../../store/checkout/shipping/selectors'
+import {getSelectedShippingLabel, getPostcode} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 import {getCheckoutShippingURL} from '../../app/selectors'
 import {removePromoCode} from '../actions'
 

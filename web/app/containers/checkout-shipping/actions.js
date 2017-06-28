@@ -21,7 +21,7 @@ import {login} from 'progressive-web-sdk/dist/integration-manager/account/comman
 import {handleCartExpiryError} from '../app/actions'
 
 import {getShippingFormValues, getShippingEstimateAddress} from '../../store/form/selectors'
-import {getSelectedSavedShippingAddress} from '../../store/checkout/shipping/selectors'
+import {getSelectedSavedShippingAddress} from '../../store/checkout/selectors'
 import {addNotification, removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 
 export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #" fields (Shipping)')

@@ -12,7 +12,7 @@ import {removePromoCode} from '../../cart/actions' // @TODO: figure out where th
 // Selectors
 import * as selectors from '../selectors'
 import * as cartSelectors from 'progressive-web-sdk/dist/store/cart/selectors'
-import {getSelectedShippingRate, getSelectedShippingLabel} from '../../../store/checkout/shipping/selectors'
+import {getSelectedShippingRate, getSelectedShippingLabel} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 
 // Actions
 import * as checkoutPaymentActions from '../actions'

@@ -9,10 +9,10 @@ import {createSelector} from 'reselect'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {addNotification, removeAllNotifications} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import * as shippingSelectors from '../../store/checkout/shipping/selectors'
+import * as shippingSelectors from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 import * as formSelectors from '../../store/form/selectors'
-import {getBillingAddress} from '../../store/checkout/billing/selectors'
-import {getEmailAddress} from '../../store/checkout/selectors'
+import {getBillingAddress} from 'progressive-web-sdk/dist/store/checkout/billing/selectors'
+import {getEmailAddress} from 'progressive-web-sdk/dist/store/checkout/selectors'
 import {
     updateShippingAddress,
     updateBillingAddress,

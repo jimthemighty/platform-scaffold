@@ -3,7 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createSelector} from 'reselect'
-import {getForm} from '../selectors'
 
 import {
     ADD_TO_CART_FORM_NAME,
@@ -13,29 +12,9 @@ import {
     SHIPPING_FORM_NAME
 } from './constants'
 
-const getFormByKey = (formKey) => createSelector(
-    getForm,
-    (form) => { return form[formKey] ? form[formKey] : {} }
-)
-export const getFormValues = (formKey) => createSelector(
-    getFormByKey(formKey),
-    ({values}) => values || {}
-)
+import {getFormValues, getFormAddressValues} from 'progressive-web-sdk/dist/store/form/selectors'
 
-export const getFormRegisteredFields = (formKey) => createSelector(
-    getFormByKey(formKey),
-    ({registeredFields}) => { return registeredFields ? registeredFields : [] }
-)
-
-export const isRegionFreeform = (formName) => createSelector(
-    getFormRegisteredFields(formName),
-    (fields) => fields.some(({name}) => name === 'region')
-)
-
-export const getFormAddressValues = (formKey) => createSelector(
-    getFormValues(formKey),
-    (address) => address || {}
-)
+export const getForm = ({form}) => form
 
 export const getEstimateShippingAddress = getFormAddressValues(ESTIMATE_FORM_NAME)
 

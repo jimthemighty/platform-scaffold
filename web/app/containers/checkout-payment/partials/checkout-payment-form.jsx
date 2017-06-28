@@ -11,7 +11,7 @@ import {validateFullName, validateCCExpiry, validateCCNumber} from '../../../uti
 
 // Selectors
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
-import {getBillingInitialValues} from '../../../store/checkout/billing/selectors'
+import {getBillingInitialValues} from 'progressive-web-sdk/dist/store/checkout/billing/selectors'
 
 // Actions
 import {submitPayment} from '../actions'
