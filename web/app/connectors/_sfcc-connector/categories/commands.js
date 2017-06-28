@@ -26,7 +26,7 @@ const makeCategorySearchURL = (queries) => {
     if (!queries.q) {
         queryString += '&q='
     }
-    
+
     if (!queries.start) {
         queryString += '&start=0'
     }
@@ -94,7 +94,7 @@ export const initProductListPage = (url) => (dispatch) => {
     const isSearch = path.includes(SEARCH_URL)
 
     if (isSearch) {
-        const searchQueryMatch = path.match(/\?q=\+(.*)/)
+        const searchQueryMatch = path.match(/q=\+([^&]*)/)
         const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         const searchTerm = buildSearchTerm(searchQuery)
 
