@@ -15,6 +15,8 @@ import {getCategoryPath, SEARCH_URL} from '../config'
 import {makeQueryString} from '../../../utils/utils'
 import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
 
+const REFINE_CATEGORY = 'refine_1=cgid'
+
 const makeCategoryURL = (id) => `/categories/${id}`
 
 const makeCategorySearchURL = (queries) => {
@@ -83,7 +85,7 @@ export const initProductListPage = (url) => (dispatch) => {
     const queries = {
         q: '',
         expand: 'availability,images,prices',
-        'refine_1=cgid': extractCategoryId(url),
+        [REFINE_CATEGORY]: extractCategoryId(url),
         start: (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE,
         count: ITEMS_PER_PAGE,
         sort: extractSortOption(url)
@@ -109,7 +111,7 @@ export const initProductListPage = (url) => (dispatch) => {
 
     const searchUrl = makeCategorySearchURL(queries)
 
-    return dispatch(fetchCategoryInfo(isSearch ? null : queries.cid))
+    return dispatch(fetchCategoryInfo(isSearch ? null : queries[REFINE_CATEGORY]))
         .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
         .then((response) => response.json())
         .then((response) => {
