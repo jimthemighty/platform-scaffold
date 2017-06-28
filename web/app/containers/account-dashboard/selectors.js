@@ -15,4 +15,10 @@ export const getAccount = createSelector(
 export const getDashboardInfo = createGetSelector(getAccount, 'dashboardInfo', Immutable.Map())
 
 export const getTitle = createGetSelector(getDashboardInfo, 'title')
-export const getLink = createGetSelector(getDashboardInfo, 'links', Immutable.List())
+
+const PLACEHOLDER = {
+    text: undefined,
+    href: undefined
+}
+
+export const getLink = createGetSelector(getDashboardInfo, 'links', Immutable.List(new Array(7).fill(PLACEHOLDER)))
