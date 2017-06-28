@@ -6,7 +6,7 @@
 
 import {combineReducers} from 'redux'
 
-import account from './account/reducer'
+import account from './account-dashboard/reducer'
 import app from './app/reducer'
 import cart from './cart/reducer'
 import checkoutConfirmation from './checkout-confirmation/reducer'

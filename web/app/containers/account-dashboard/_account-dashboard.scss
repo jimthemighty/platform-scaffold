@@ -4,6 +4,10 @@
 .t-account-dashboard {
     background-color: $neutral-10;
     padding-bottom: $unit * 1.5;
+
+    .pw-list-tile__content {
+        color: $font-color;
+    }
 }
 
 
