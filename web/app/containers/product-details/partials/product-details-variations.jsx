@@ -12,27 +12,34 @@ import {onVariationChange} from '../actions'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import {Swatch, SwatchItem} from 'progressive-web-sdk/dist/components/swatch'
 
-const variationSwatch = ({input: {value, onChange}, values, label, error, name}) => ( // eslint-disable-line
-    <div>
-        <Swatch
-            label={label}
-            onChange={(val) => onChange(value = val)}
-            value={value}
-            className={error && !value ? 'pw-swatch__error' : ''}
-        >
-            {values.map(({label, value}) =>
-                <SwatchItem key={value}
-                    value={value}
-                >
-                    {label}
-                </SwatchItem>
-            )}
-            {error && !value &&
-                <div className="pw-swatch__error">{error[name]}</div>
-            }
-        </Swatch>
-    </div>
-)
+const variationSwatch = ({input: {value, onChange}, values, label, error, name, onVariationChange}) => { // eslint-disable-line
+    const handleChange = (val) => {
+        onChange(value = val)
+        onVariationChange()
+    }
+
+    return (
+        <div>
+            <Swatch
+                label={label}
+                onChange={handleChange}
+                value={value}
+                className={error && !value ? 'pw-swatch__error' : ''}
+            >
+                {values.map(({label, value}) =>
+                    <SwatchItem key={value}
+                        value={value}
+                    >
+                        {label}
+                    </SwatchItem>
+                )}
+                {error && !value &&
+                    <div className="pw-swatch__error">{error[name]}</div>
+                }
+            </Swatch>
+        </div>
+    )
+}
 
 variationSwatch.propTypes = {
     input: PropTypes.shape({
@@ -43,7 +50,7 @@ variationSwatch.propTypes = {
     values: PropTypes.array
 }
 
-const ProductDetailsVariations = ({variations, error}) => (
+const ProductDetailsVariations = ({variations, error, onVariationChange}) => (
     <div className={variations.length > 0 && 'u-margin-top-lg'}>
         {variations.map(({id, slug, label, values = []}) => (
             <FieldRow key={id} error={error}>
@@ -53,6 +60,7 @@ const ProductDetailsVariations = ({variations, error}) => (
                     values={values}
                     error={error}
                     component={variationSwatch}
+                    onVariationChange={onVariationChange}
                 />
             </FieldRow>
         ))}
