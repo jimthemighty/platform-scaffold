@@ -5,7 +5,7 @@ import {ampComponent} from '../../amp-sdk'
 /**
  * A form component that automatically includes the required a-form script.
  */
-const AmpForm = ({
+const Form = ({
     className,
     children,
     ...props
@@ -18,7 +18,7 @@ const AmpForm = ({
     )
 }
 
-AmpForm.propTypes = {
+Form.propTypes = {
     /**
      * The children of the form
      */
@@ -29,8 +29,8 @@ AmpForm.propTypes = {
     className: PropTypes.string,
 }
 
-AmpForm.scripts = [
+Form.scripts = [
     '<script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>'
 ]
 
-export default ampComponent(AmpForm)
+export default ampComponent(Form)
