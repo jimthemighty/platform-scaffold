@@ -15,23 +15,23 @@ const Breadcrumbs = ({
     }
 
     return (
-        <nav role="navigation" className={classNames('amp-breadcrumbs', className)}>
-            <p id="breadcrumb__label" className="amp-breadcrumbs__label u-visually-hidden">
+        <nav role="navigation" className={classNames('a-breadcrumbs', className)}>
+            <p id="breadcrumb__label" className="a-breadcrumbs__label u-visually-hidden">
                 {youAreHereMessage}: {items[items.length - 1].text}
             </p>
 
-            <ol aria-labelledby="breadcrumb__label" className="amp-breadcrumbs__list">
+            <ol aria-labelledby="breadcrumb__label" className="a-breadcrumbs__list">
                 {items.map(({href, text, onClick}, index) => (
-                    <li className="amp-breadcrumbs__item" key={index}>
+                    <li className="a-breadcrumbs__item" key={index}>
                         {href ?
                             <Link
                                 href={href}
-                                className="amp-breadcrumbs__link"
+                                className="a-breadcrumbs__link"
                             >
                                 {text}
                             </Link>
                         :
-                            <span className="amp-breadcrumbs__non-link">
+                            <span className="a-breadcrumbs__non-link">
                                 {text}
                             </span>
                         }

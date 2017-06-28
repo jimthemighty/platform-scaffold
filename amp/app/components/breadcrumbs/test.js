@@ -86,7 +86,7 @@ test('aria label contains the correct location', () => {
     ]
 
     const wrapper = shallow(<Breadcrumbs items={items} />)
-    const label = wrapper.find('.amp-breadcrumbs__label')
+    const label = wrapper.find('.a-breadcrumbs__label')
     const lastItemRegex = new RegExp(items[items.length - 1])
 
     expect(lastItemRegex.test(label.text())).toBe(true)
@@ -100,7 +100,7 @@ test('aria label contains the correct youAreHereMessage', () => {
     ]
     const youAreHereMessage = 'You are at this location'
     const wrapper = shallow(<Breadcrumbs items={items} youAreHereMessage={youAreHereMessage} />)
-    const label = wrapper.find('.amp-breadcrumbs__label')
+    const label = wrapper.find('.a-breadcrumbs__label')
     const youAreHereMessageRegex = new RegExp(youAreHereMessage)
 
     expect(youAreHereMessageRegex.test(label.text())).toBe(true)
@@ -110,7 +110,7 @@ test('aria label contains the correct youAreHereMessage', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<Breadcrumbs items={[{text: 'test'}]} />)
 
-    expect(wrapper.hasClass('amp-breadcrumbs')).toBe(true)
+    expect(wrapper.hasClass('a-breadcrumbs')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {
