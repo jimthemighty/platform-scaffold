@@ -2,11 +2,13 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
+// Components
+import Breadcrumbs from '../../../components/breadcrumbs'
+
+// Selectors
 import * as selectors from '../../../../../web/app/containers/product-details/selectors'
 import {getCartURL} from '../../../../../web/app/containers/app/selectors'
-import {getProductTitle, getProductPrice, getProductAvailability} from '../../../../../web/app/store/products/selectors'
-
-import Breadcrumbs from '../../../components/breadcrumbs'
+import {getProductTitle, getProductPrice, getProductAvailability} from 'progressive-web-sdk/dist/store/products/selectors'
 
 const ProductDetailsHeading = ({available, breadcrumbs, title, price, isInCheckout, cartURL}) => (
     <div className="t-product-details-heading u-padding-md u-box-shadow u-position-relative u-z-index-1">
@@ -37,5 +39,5 @@ const mapStateToProps = createPropsSelector({
     title: getProductTitle,
     price: getProductPrice
 })
-//
+
 export default connect(mapStateToProps)(ProductDetailsHeading)
