@@ -27,7 +27,7 @@ const CheckoutConfirmationForm = ({
 
             <FieldRow>
                 <ReduxForm.Field component={Field} name="password" label="Choose Password" caption="More than 5 characters with at least one number">
-                    <input type="password" noValidate data-analytics-name={UI_NAME.passowrd} />
+                    <input type="password" noValidate data-analytics-name={UI_NAME.password} />
                 </ReduxForm.Field>
             </FieldRow>
 
