@@ -34,15 +34,15 @@ const Button = (props) => {
         on
     } = props
 
-    const classes = classNames('amp-button', {
-        'amp--anchor c--anchor': !!href,
-        'amp--icon-only c--icon-only': !!icon && !props.children
+    const classes = classNames('a-button', {
+        'a--anchor c--anchor': !!href,
+        'a--icon-only c--icon-only': !!icon && !props.children
     }, className)
-    const innerClass = classNames('amp-button__inner', innerClassName)
-    const iconClass = classNames('amp-button__icon', iconClassName, {
-        'amp--has-siblings c--has-siblings': props.children || (title && showIconText)
+    const innerClass = classNames('a-button__inner', innerClassName)
+    const iconClass = classNames('a-button__icon', iconClassName, {
+        'a--has-siblings c--has-siblings': props.children || (title && showIconText)
     })
-    const textClass = classNames('amp-button__text', {
+    const textClass = classNames('a-button__text', {
         'u-visually-hidden': !showIconText
     })
     const attrs = {
@@ -167,7 +167,7 @@ Button.propTypes = {
     /**
     * For use when the icon and title attributes have been defined
     * If true the title attribute will be wrapped in a container with the class
-    * `amp-button c-button__text`, if false the wrapper's class will be
+    * `a-button c-button__text`, if false the wrapper's class will be
     * `u-visually-hidden`
     */
     showIconText: PropTypes.bool,

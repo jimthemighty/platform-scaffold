@@ -15,20 +15,20 @@ import Button from 'mobify-amp-sdk/dist/components/button'
 
 *Secondary*
 
-    <Button className="amp--secondary">Secondary Button</Button>
+    <Button className="a--secondary">Secondary Button</Button>
 
 *Tertiary*
 
-    <Button className="amp--tertiary">Tertiary Button</Button>
+    <Button className="a--tertiary">Tertiary Button</Button>
 
 *Blank*
 
-    <Button className="amp--blank">Blank Button</Button>
+    <Button className="a--blank">Blank Button</Button>
 
 *Link style button*
 
     <div>
-        Hello <Button className="amp--link">Link style button</Button>
+        Hello <Button className="a--link">Link style button</Button>
     </div>
 
 *Disabled*
@@ -60,11 +60,11 @@ import Button from 'mobify-amp-sdk/dist/components/button'
 *Social buttons*
 
     <div>
-        <Button className="amp--facebook" icon="social-facebook" title="Facebook" />
-        <Button className="amp--twitter" icon="social-twitter" title="Twitter" />
-        <Button className="amp--instagram" icon="social-instagram" title="Instagram" />
-        <Button className="amp--pinterest" icon="social-pinterest" title="Pinterest" />
-        <Button className="amp--youtube" icon="social-youtube" title="youtube" />
-        <Button className="amp--google-plus" icon="social-google-plus" title="Google Plus" />
-        <Button className="amp--yelp" icon="social-yelp" title="Yelp" />
+        <Button className="a--facebook" icon="social-facebook" title="Facebook" />
+        <Button className="a--twitter" icon="social-twitter" title="Twitter" />
+        <Button className="a--instagram" icon="social-instagram" title="Instagram" />
+        <Button className="a--pinterest" icon="social-pinterest" title="Pinterest" />
+        <Button className="a--youtube" icon="social-youtube" title="youtube" />
+        <Button className="a--google-plus" icon="social-google-plus" title="Google Plus" />
+        <Button className="a--yelp" icon="social-yelp" title="Yelp" />
     </div>
