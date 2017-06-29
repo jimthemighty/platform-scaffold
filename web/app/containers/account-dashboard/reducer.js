@@ -6,12 +6,12 @@ import {handleActions} from 'redux-actions'
 import Immutable from 'immutable'
 import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 import * as accountActions from './actions'
-import {recieveDashboardInfo} from 'progressive-web-sdk/dist/integration-manager/account/results.js'
+import {recieveAccountDashboardUIData} from 'progressive-web-sdk/dist/integration-manager/account/results.js'
 
 const initialState = Immutable.Map()
 
 export default handleActions({
     [accountActions.receiveData]: mergePayload,
     [accountActions.changeTitle]: mergePayload,
-    [recieveDashboardInfo]: mergePayload
+    [recieveAccountDashboardUIData]: mergePayload
 }, initialState)

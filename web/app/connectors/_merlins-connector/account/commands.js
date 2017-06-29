@@ -10,7 +10,7 @@ import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
-import {setSigninLoaded, setRegisterLoaded, recieveDashboardInfo} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {setSigninLoaded, setRegisterLoaded, recieveAccountDashboardUIData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
@@ -38,7 +38,7 @@ export const initAccountDashboard = (url) => (dispatch) => {
         .then((res) => {
             const [$, $response] = res
             const parsedDashboardLinks = parsedDashboard($, $response)
-            return dispatch(recieveDashboardInfo(parsedDashboardLinks))
+            return dispatch(recieveAccountDashboardUIData(parsedDashboardLinks))
         })
 }
 
