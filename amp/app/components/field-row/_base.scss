@@ -3,10 +3,10 @@
 // Field Row
 // ===
 
-.amp-field-row {
+.a-field-row {
     display: flex;
 
-    + .amp-field-row {
+    + .a-field-row {
         margin-top: $unit*2;
     }
 }

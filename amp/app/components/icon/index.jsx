@@ -25,9 +25,9 @@ class Icon extends React.Component {
         } = this.props
 
         const a11y = (title.length) ? {role: 'img'} : {'aria-hidden': 'true'}
-        const sizeClass = `amp--${size}`
+        const sizeClass = `a--${size}`
 
-        const classes = classNames('amp-icon', {
+        const classes = classNames('a-icon', {
             [sizeClass]: !!size
         }, className)
 
@@ -48,14 +48,14 @@ class Icon extends React.Component {
 Icon.defaultProps = {
     name: '',
     title: '',
-    prefix: 'amp',
+    prefix: 'a',
     style: {}
 }
 
 Icon.propTypes = {
     /**
      * Identifier for the desired icon. Usually the filename, sans its prefix.
-     * For example, if the target icon is `amp-chevron-up.svg`, the name
+     * For example, if the target icon is `a-chevron-up.svg`, the name
      * is `chevron-up`.
      */
     name: PropTypes.string.isRequired,

@@ -3,10 +3,6 @@ import Accordion from './components/accordion/accordion'
 import AccordionBase from './components/accordion/_base.scss'
 import AccordionTheme from './styles/themes/amp-components/_accordion.scss'
 
-import AmpLightbox from './components/amp-lightbox/index'
-import AmpLightboxBase from './components/amp-lightbox/_base.scss'
-import AmpLightboxTheme from './components/amp-lightbox/_theme.scss'
-
 import Breadcrumbs from './components/breadcrumbs/index'
 import BreadcrumbsBase from './components/breadcrumbs/_base.scss'
 import BreadcrumbsTheme from './styles/themes/amp-components/_breadcrumbs.scss'
@@ -14,6 +10,10 @@ import BreadcrumbsTheme from './styles/themes/amp-components/_breadcrumbs.scss'
 import Button from './components/button/index'
 import ButtonBase from './components/button/_base.scss'
 import ButtonTheme from './styles/themes/amp-components/_button.scss'
+
+import Carousel from './components/carousel/index'
+import CarouselBase from './components/carousel/_base.scss'
+import CarouselTheme from './styles/themes/amp-components/_carousel.scss'
 
 import Field from './components/field/index'
 import FieldBase from './components/field/_base.scss'
@@ -76,10 +76,6 @@ import SkipLinks from './components/skip-links/index'
 import SkipLinksBase from './components/skip-links/_base.scss'
 import SkipLinksTheme from './components/skip-links/_theme.scss'
 
-import Carousel from './components/carousel/index'
-import CarouselBase from './components/carousel/_base.scss'
-import CarouselTheme from './styles/themes/amp-components/_carousel.scss'
-
 
 // Containers
 import Footer from './containers/footer/container'
@@ -102,7 +98,6 @@ import ProductListStyles from './containers/product-list/_container.scss'
 const styles = new Map()
 
 styles.set(Accordion, [AccordionBase, AccordionTheme])
-styles.set(AmpLightbox, [AmpLightboxBase, AmpLightboxTheme])
 styles.set(Breadcrumbs, [BreadcrumbsBase, BreadcrumbsTheme])
 styles.set(Button, [ButtonBase, ButtonTheme])
 styles.set(Field, [FieldBase, FieldTheme])

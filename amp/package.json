@@ -72,7 +72,7 @@
   "scripts": {
     "add:component": "amp-sdk-add-component",
     "add:container": "amp-sdk-add-container",
-    "build-sprites": "npm run clean:svgs && svg-sprite --svg-xmldecl false --symbol --symbol-dest='.' --symbol-sprite='sprite.svg' --shape-id-generator='amp-%s' --dest=./app/static/svg/sprite-dist ../web/app/static/svg/sprite-source/*.svg",
+    "build-sprites": "npm run clean:svgs && svg-sprite --svg-xmldecl false --symbol --symbol-dest='.' --symbol-sprite='sprite.svg' --shape-id-generator='a-%s' --dest=./app/static/svg/sprite-dist ../web/app/static/svg/sprite-source/*.svg",
     "clean:svgs": "svgo --enable='removeUselessStrokeAndFill' -f ../web/app/static/svg/sprite-source",
     "dev": "node ./scripts/watch.js",
     "lint": "npm run lint:js && npm run lint:sass && npm run lint:amp-scss",

@@ -10,7 +10,7 @@ $breadcrumb__space: $tap-size;
 //
 // 1. Absolutely position the scroll fade pseudo element relative to parent root container
 
-.amp-breadcrumbs {
+.a-breadcrumbs {
     position: relative; // 1
 
     &::after {
@@ -36,7 +36,7 @@ $breadcrumb__space: $tap-size;
 // 1. Spacer for scroll fade pseudo element so last item in the list
 //    will clear the fade completely.
 
-.amp-breadcrumbs__list {
+.a-breadcrumbs__list {
     display: flex;
     overflow-x: auto;
     margin: 0;
@@ -60,7 +60,7 @@ $breadcrumb__space: $tap-size;
 // Item
 // ---
 
-.amp-breadcrumbs__item {
+.a-breadcrumbs__item {
     display: block;
     flex: 0 0 auto;
 

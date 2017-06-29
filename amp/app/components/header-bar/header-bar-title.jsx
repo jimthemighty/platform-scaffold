@@ -9,7 +9,7 @@ const HeaderBarTitle = ({
     children,
     className
 }) => {
-    const classes = classNames('amp-header-bar__title', className)
+    const classes = classNames('a-header-bar__title', className)
 
     if (href) {
         return (

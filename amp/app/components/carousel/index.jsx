@@ -34,7 +34,7 @@ const Carousel = (props) => {
         children
     } = props
 
-    const classes = classNames('amp-carousel', className)
+    const classes = classNames('a-carousel', className)
     const carouselId = id
 
     const attrs = onlyDefined({
@@ -45,7 +45,7 @@ const Carousel = (props) => {
 
     return (
         <div className={classes}>
-            <div className="amp-carousel__inner">
+            <div className="a-carousel__inner">
                 <amp-carousel
                     id={carouselId}
                     type={type}
@@ -62,11 +62,11 @@ const Carousel = (props) => {
             </div>
 
             {showPips &&
-                <div className="amp-carousel__controls">
-                    <div className="amp-carousel__pips">
+                <div className="a-carousel__controls">
+                    <div className="a-carousel__pips">
                         {React.Children.map(children, (item, index) => (
                             <Button
-                                className="amp-carousel__pip"
+                                className="a-carousel__pip"
                                 on={`tap:${carouselId}.goToSlide(index=${index})`}
                                 key={index}
                             >

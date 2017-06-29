@@ -28,7 +28,7 @@ const DangerousHTML = ({
     className,
     html
 }) => {
-    const classes = classNames('amp-dangerous-html', className)
+    const classes = classNames('a-dangerous-html', className)
 
     /* Disable this eslint a11y rule, because it's meant to catch bubbled
      * click events */

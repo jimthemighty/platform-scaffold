@@ -15,7 +15,7 @@ test('Icon renders without errors', () => {
 
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<Icon name="test" />)
-    expect(wrapper.hasClass('amp-icon')).toBe(true)
+    expect(wrapper.hasClass('a-icon')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {

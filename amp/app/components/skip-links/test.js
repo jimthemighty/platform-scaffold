@@ -28,19 +28,19 @@ test('SkipLinks renders without errors', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<SkipLinks items={[]} />)
 
-    expect(wrapper.first().prop('className').startsWith('amp-skip-links')).toBe(true)
+    expect(wrapper.first().prop('className').startsWith('a-skip-links')).toBe(true)
 })
 
 test('creates a link for each item passed to the items prop', () => {
     const wrapper = shallow(<SkipLinks items={itemsStub} />)
 
-    expect(wrapper.find('.amp-skip-links__anchor').length).toBe(itemsStub.length)
+    expect(wrapper.find('.a-skip-links__anchor').length).toBe(itemsStub.length)
 })
 
 test('Each rendered link\'s href should match that item\'s target prop', () => {
     const wrapper = shallow(<SkipLinks items={itemsStub} />)
 
-    wrapper.find('.amp-skip-links__anchor').forEach((item, idx) => {
+    wrapper.find('.a-skip-links__anchor').forEach((item, idx) => {
         const target = itemsStub[idx].target
         expect(item.prop('href')).toBe(target)
     })
@@ -49,7 +49,7 @@ test('Each rendered link\'s href should match that item\'s target prop', () => {
 test('Each rendered link\'s text should match that item\'s label prop', () => {
     const wrapper = shallow(<SkipLinks items={itemsStub} />)
 
-    wrapper.find('.amp-skip-links__anchor').forEach((item, idx) => {
+    wrapper.find('.a-skip-links__anchor').forEach((item, idx) => {
         const label = itemsStub[idx].label
         expect(item.text()).toBe(label)
     })

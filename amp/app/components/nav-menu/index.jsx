@@ -39,11 +39,11 @@ const NavMenu = ({root, path, itemFactory, className}) => {
     const expanded = isLeaf ? selectedParent : selected
     const children = expanded.children || []
 
-    const classes = classNames('amp-nav-menu', {}, className)
+    const classes = classNames('a-nav-menu', {}, className)
 
     return (
         <div className={classes}>
-            <div className="amp-nav-menu__panel">
+            <div className="a-nav-menu__panel">
                 {children.map((child) => {
                     const props = {
                         key: child.path,

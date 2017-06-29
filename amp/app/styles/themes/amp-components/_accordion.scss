@@ -3,23 +3,23 @@
 // Accordion Theme
 // ===
 
-.amp-accordion {
+.a-accordion {
     border-top: 1px solid $neutral-15;
     border-bottom: 1px solid $neutral-15;
 }
 
-.amp-accordion__item {
+.a-accordion__item {
     &:not(:last-child) {
         border-bottom: 1px solid $neutral-15;
     }
 }
 
-.amp-accordion__icon {
+.a-accordion__icon {
     min-width: $unit*5;
 }
 
-.amp-accordion__open-icon,
-.amp-accordion__close-icon {
+.a-accordion__open-icon,
+.a-accordion__close-icon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,14 +28,14 @@
 
     color: $brand-color;
 
-    .amp-accordion__glyph {
+    .a-accordion__glyph {
         width: $unit*2;
         height: $unit*2;
         padding: 0;
     }
 }
 
-.amp-accordion__header {
+.a-accordion__header {
     &:first-child {
         border: 0;
 
@@ -43,16 +43,16 @@
     }
 }
 
-.amp-accordion__inner-header {
+.a-accordion__inner-header {
     align-items: center;
 }
 
-.amp-accordion__title {
+.a-accordion__title {
     font-family: $font-family;
     font-size: $font-size+2;
     text-align: left;
 }
 
-.amp-accordion__content {
+.a-accordion__content {
     padding: $unit*1.5 $unit*1.5 $unit*2;
 }

@@ -38,7 +38,7 @@ test('returns a button if the href prop is not passed', () => {
 test('Button renders with inner container', () => {
     const wrapper = shallow(<Button />)
 
-    expect(wrapper.find('> .amp-button__inner').length).toBe(1)
+    expect(wrapper.find('> .a-button__inner').length).toBe(1)
 })
 
 test('includes its children as the children of the button', () => {
@@ -50,7 +50,7 @@ test('includes its children as the children of the button', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<Button />)
 
-    expect(wrapper.hasClass('amp-button')).toBe(true)
+    expect(wrapper.hasClass('a-button')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {
@@ -70,7 +70,7 @@ test('renders the contents of the innerClassName prop if present', () => {
     const name = 'test'
     const wrapper = shallow(<Button innerClassName={name} />)
 
-    expect(wrapper.find('.amp-button__inner').hasClass(name)).toBe(true)
+    expect(wrapper.find('.a-button__inner').hasClass(name)).toBe(true)
 })
 
 test('renders an icon if the icon prop is passed', () => {
@@ -94,14 +94,14 @@ test('renders a visible title if the icon and title props are passed with showIc
     const title = 'Shopping Cart'
     const wrapper = shallow(<Button icon="cart" title={title} showIconText={true} />)
 
-    expect(wrapper.find('span').first().hasClass('amp-button__text')).toBe(true)
+    expect(wrapper.find('span').first().hasClass('a-button__text')).toBe(true)
     expect(wrapper.find('span').first().text()).toBe(title)
 })
 
 test('renders a string child whole when an icon is passed', () => {
     const wrapper = shallow(<Button icon="x">Child String</Button>)
 
-    const inner = wrapper.find('.amp-button__inner')
+    const inner = wrapper.find('.a-button__inner')
     expect(inner.children().length).toBe(2)
     expect(inner.childAt(0).type()).toBe(Icon)
     expect(inner.childAt(1).text()).toBe('Child String')
@@ -110,7 +110,7 @@ test('renders a string child whole when an icon is passed', () => {
 test('renders its children alongside the icon', () => {
     const wrapper = shallow(<Button icon="x"><hr /><hr /></Button>)
 
-    const inner = wrapper.find('.amp-button__inner')
+    const inner = wrapper.find('.a-button__inner')
     expect(inner.children().length).toBe(3)
     expect(inner.children().map((child) => child.type()))
         .toEqual([Icon, 'hr', 'hr'])

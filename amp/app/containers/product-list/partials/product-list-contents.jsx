@@ -7,7 +7,7 @@ import URL from 'url'
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Button from '../../../components/button'
-import AmpForm from '../../../components/amp-form'
+import Form from '../../../components/form'
 import Field from '../../../components/field'
 import List from '../../../components/list'
 import ProductTile from '../../../components/product-tile'
@@ -29,7 +29,7 @@ const formAction = (currentUrl) => {
 }
 
 const ResultList = ({products}) => (
-    <List className="amp--borderless">
+    <List className="a--borderless">
         {
             products.map((prod) =>
                 <ProductTile
@@ -91,7 +91,7 @@ const ProductListContents = (props) => {
                                         label={`${products.length} Items`}
                                     >
                                         <Button
-                                            className="amp--tertiary u-width-full u-text-uppercase"
+                                            className="a--tertiary u-width-full u-text-uppercase"
                                             disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
                                             id="filterButton"
                                             on={toggleFilterSheet}
@@ -102,9 +102,9 @@ const ProductListContents = (props) => {
                                 </div>
 
                                 <div className="t-product-list__sort u-flex">
-                                    <AmpForm id={formId} method="GET" target="_top" action={formAction(currentUrl)}>
+                                    <Form id={formId} method="GET" target="_top" action={formAction(currentUrl)}>
                                         <Field
-                                            className="amp--has-select"
+                                            className="a--has-select"
                                             idForLabel="sort"
                                             label="Sort by"
                                         >
@@ -119,7 +119,7 @@ const ProductListContents = (props) => {
                                                 <option value="price">Price</option>
                                             </select>
                                         </Field>
-                                    </AmpForm>
+                                    </Form>
                                 </div>
                             </div>
                         }

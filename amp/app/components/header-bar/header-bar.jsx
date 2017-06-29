@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 const HeaderBar = ({className, children}) => {
 
-    const classes = classNames('amp-header-bar', className)
+    const classes = classNames('a-header-bar', className)
 
     return (
         <div className={classes}>

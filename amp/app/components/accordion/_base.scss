@@ -10,7 +10,7 @@
 // 1. Ensure the button element extends to full width
 // 2. Override base buttons tyles
 
-.amp-accordion__header {
+.a-accordion__header {
     width: 100%; // 1
     padding: 0; // 2
     border: 0; // 2
@@ -25,12 +25,12 @@
 // 1. Ensure in iOS 5 and 6 that flex-direction isn't inherited from
 //    any flexbox parents that has flex-direction set to direction-row-reverse
 
-.amp-accordion__inner-header {
+.a-accordion__inner-header {
     display: flex;
     flex-direction: row; // 1
     min-height: $tap-size;
 
-    &.amp--icon-end {
+    &.a--icon-end {
         flex-direction: row-reverse;
     }
 }
@@ -44,7 +44,7 @@
 // 2. Position absolute to `.c-accordion__icon`
 // 3. Ensure width collapses in old implementations.
 
-.amp-accordion__icon {
+.a-accordion__icon {
     position: relative; // 1
 
     flex: initial;
@@ -53,12 +53,12 @@
 
     text-align: center;
 
-    .amp-icon {
+    .a-icon {
         pointer-events: none;
     }
 }
 
-.amp-accordion__close-icon {
+.a-accordion__close-icon {
     position: absolute; // 2
     top: 0;
     right: 0;
@@ -75,7 +75,7 @@
 // 1. Ensure inline elements are treated as block-level.
 // 2. Prevent width collapsing in old implementations.
 
-.amp-accordion__title {
+.a-accordion__title {
     display: block; // 1
     flex: 1 1 auto;
     width: 100%; // 2
@@ -85,12 +85,12 @@
 // States: Opened state
 // ---
 
-.amp-accordion__item[expanded] {
-    > .amp-accordion__header .amp-accordion__open-icon {
+.a-accordion__item[expanded] {
+    > .a-accordion__header .a-accordion__open-icon {
         opacity: 0;
     }
 
-    > .amp-accordion__header .amp-accordion__close-icon {
+    > .a-accordion__header .a-accordion__close-icon {
         opacity: 1;
     }
 }

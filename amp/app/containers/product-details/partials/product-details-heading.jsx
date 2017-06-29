@@ -16,7 +16,7 @@ const ProductDetailsHeading = ({available, breadcrumbs, title, price}) => (
         </div>
 
         <h1 className="t-product-details-heading__title u-text-uppercase u-margin-bottom">{title}</h1>
-        {(available !== null && available !== undefined && price !== null && price !== undefined) &&
+        {(available && price) &&
             <span className="t-product-details-heading__price t-product-details__price u-color-accent u-text-weight-regular u-text-family-header u-text-letter-spacing-small">{price}</span>
         }
     </div>

@@ -14,7 +14,7 @@ test('ProductTile renders without errors', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<ProductTile />)
 
-    expect(wrapper.hasClass('amp-product-tile')).toBe(true)
+    expect(wrapper.hasClass('c-product-tile')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {

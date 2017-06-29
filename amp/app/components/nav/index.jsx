@@ -6,7 +6,7 @@ const Nav = ({
     children,
     className
 }) => {
-    const classes = classNames('amp-nav', className)
+    const classes = classNames('a-nav', className)
 
     return (
         <div className={classes}>

@@ -3,7 +3,7 @@
 // Header Bar Theme
 // ===
 
-.amp-header-bar {
+.a-header-bar {
     padding: $unit/2;
 
     background-color: $brand-color;
@@ -15,7 +15,7 @@
 // Title
 // ---
 
-.amp-header-bar__title {
+.a-header-bar__title {
     line-height: 0;
 }
 
@@ -23,7 +23,7 @@
 // Actions
 // ---
 
-.amp-header-bar__actions {
+.a-header-bar__actions {
     justify-content: center;
     min-width: $tap-size;
     min-height: $tap-size;

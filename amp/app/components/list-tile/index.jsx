@@ -10,7 +10,7 @@ const ListTilePrimary = ({
     href
 }) => {
     const listTileProps = {
-        className: 'amp-list-tile__primary'
+        className: 'a-list-tile__primary'
     }
     return (
         <Link href={href} {...listTileProps}>
@@ -40,25 +40,25 @@ const ListTile = ({
     includeEndActionInPrimary
 }) => {
 
-    const classes = classNames('amp-list-tile', {
-        'amp--is-anchor': !!href
+    const classes = classNames('a-list-tile', {
+        'a--is-anchor': !!href
     }, className)
 
     return (
         <div className={classes}>
             <ListTilePrimary href={href}>
                 {startAction &&
-                    <div className="amp-list-tile__action">
+                    <div className="a-list-tile__action">
                         {startAction}
                     </div>
                 }
 
-                <div className="amp-list-tile__content">
+                <div className="a-list-tile__content">
                     {children}
                 </div>
 
                 {includeEndActionInPrimary && endAction &&
-                    <div className="amp-list-tile__action">
+                    <div className="a-list-tile__action">
                         {endAction}
                     </div>
                 }
@@ -66,7 +66,7 @@ const ListTile = ({
 
 
             {!includeEndActionInPrimary && endAction &&
-                <div className="amp-list-tile__action">
+                <div className="a-list-tile__action">
                     {endAction}
                 </div>
             }

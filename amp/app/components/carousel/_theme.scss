@@ -12,14 +12,14 @@
 // Style amp built in elements
 // ---
 
-.amp-carousel {
+.a-carousel {
     // Carousel Button: built-in class
     // ---
-    .amp-carousel-button {
+    .a-carousel-button {
         width: 44px;
         height: 100%;
 
-        &.amp-disabled {
+        &.a-disabled {
             visibility: visible;
             opacity: 0.3;
         }
@@ -27,13 +27,13 @@
 
     // Carousel Button Prev: built-in class
     // ---
-    .amp-carousel-button-prev {
+    .a-carousel-button-prev {
         left: 0;
     }
 
     // Carousel Button Next: built-in class
     // ---
-    .amp-carousel-button-next {
+    .a-carousel-button-next {
         right: 0;
     }
 }
@@ -42,11 +42,11 @@
 // Pips
 // ---
 
-.amp-carousel__pips {
+.a-carousel__pips {
     padding: $sub-unit 0;
 }
 
-.amp-carousel__pip {
+.a-carousel__pip {
     width: $sub-unit*3;
     height: $sub-unit*3;
     margin-right: $sub-unit;

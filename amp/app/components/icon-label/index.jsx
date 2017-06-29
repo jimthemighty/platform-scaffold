@@ -16,12 +16,12 @@ const IconLabel = ({
     label
 }) => {
 
-    const classes = classNames('amp-icon-label', className)
+    const classes = classNames('a-icon-label', className)
 
     return (
         <div className={classes}>
             <Icon name={iconName} size={iconSize} />
-            <span className="amp-icon-label__label">{label}</span>
+            <span className="a-icon-label__label">{label}</span>
         </div>
     )
 }

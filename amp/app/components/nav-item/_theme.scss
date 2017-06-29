@@ -3,7 +3,7 @@
 // Nav Item Theme
 // ===
 
-.amp-nav-item {
+.a-nav-item {
     &:hover,
     &:active,
     &:visited,
@@ -20,6 +20,6 @@
 // Selected
 // ---
 
-.amp-nav-item.amp--selected {
+.a-nav-item.a--selected {
     background-color: $neutral-10;
 }

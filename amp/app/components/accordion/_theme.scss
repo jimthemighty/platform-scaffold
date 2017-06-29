@@ -10,7 +10,7 @@ $accordion__padding: $unit*1.5;
 // Item
 // ---
 
-.amp-accordion__item {
+.a-accordion__item {
     border-bottom: $accordion__border;
 
     &:first-child {
@@ -22,7 +22,7 @@ $accordion__padding: $unit*1.5;
 // Header
 // ---
 
-.amp-accordion__header {
+.a-accordion__header {
     font-weight: bold;
 
     &:first-child {
@@ -39,7 +39,7 @@ $accordion__padding: $unit*1.5;
 // 1. Relative position for absolute positioned separator
 // 2. Separator between accordion header and content
 
-.amp-accordion__inner-header {
+.a-accordion__inner-header {
     position: relative; // 1
 
     overflow: hidden;
@@ -63,7 +63,7 @@ $accordion__padding: $unit*1.5;
 // Icon
 // ---
 
-.amp-accordion__icon {
+.a-accordion__icon {
     flex: 0 0 auto;
     width: $tap-size;
     height: $tap-size;
@@ -73,8 +73,8 @@ $accordion__padding: $unit*1.5;
 // Open and Close Icon
 // ---
 
-.amp-accordion__open-icon,
-.amp-accordion__close-icon {
+.a-accordion__open-icon,
+.a-accordion__close-icon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,7 +86,7 @@ $accordion__padding: $unit*1.5;
 // Glyph
 // ---
 
-.amp-accordion__glyph {
+.a-accordion__glyph {
     flex: 0 0 auto;
 
     color: $secondary-brand-color;
@@ -96,7 +96,7 @@ $accordion__padding: $unit*1.5;
 // Title
 // ---
 
-.amp-accordion__title {
+.a-accordion__title {
     display: flex;
     align-items: center;
     padding: $accordion__padding $accordion__padding $accordion__padding 0;
@@ -106,7 +106,7 @@ $accordion__padding: $unit*1.5;
 // Content
 // ---
 
-.amp-accordion__content {
+.a-accordion__content {
     padding: $accordion__padding;
 }
 
@@ -116,7 +116,7 @@ $accordion__padding: $unit*1.5;
 //
 // 1. Don't show header and content separator when accordion is closed
 
-.amp-accordion__item:not([expanded]) .amp-accordion__inner-header::after {
+.a-accordion__item:not([expanded]) .a-accordion__inner-header::after {
     opacity: 0; // 1
 }
 
@@ -124,8 +124,8 @@ $accordion__padding: $unit*1.5;
 // Modifier: Set icon to end
 // ---
 
-.amp-accordion__inner-header.amp--icon-end {
-    .amp-accordion__title {
+.a-accordion__inner-header.a--icon-end {
+    .a-accordion__title {
         padding-right: 0;
         padding-left: $accordion__padding;
     }
