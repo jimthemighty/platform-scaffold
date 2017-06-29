@@ -31,14 +31,6 @@ describe('Renders valid AMP', () => {
         })
     }
 
-    test('Home', () => {
-        const req = httpMocks.createRequest({
-            method: 'GET',
-            url: '/'
-        })
-        return handle(req).then((res) => validateAmp(res._getData()))
-    })
-
     test('ProductList', () => {
         const req = httpMocks.createRequest({
             method: 'GET',
