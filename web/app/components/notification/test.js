@@ -165,7 +165,7 @@ test('if showRemoveButton is true, we render a close button', () => {
 
     const button = wrapper.find(Button)
     expect(button.length).toBe(1)
-    expect(button.find('button').hasClass('c--icon-only')).toBe(true)
+    expect(button.find('button').hasClass('pw--icon-only')).toBe(true)
     const icon = button.find(Icon)
     expect(icon.length).toBe(1)
     expect(icon.prop('name')).toBe('close')
