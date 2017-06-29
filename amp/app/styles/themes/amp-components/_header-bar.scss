@@ -18,21 +18,3 @@
 .a-header-bar__title {
     line-height: 0;
 }
-
-
-// Actions
-// ---
-
-.a-header-bar__actions {
-    justify-content: center;
-    min-width: $tap-size;
-    min-height: $tap-size;
-
-    color: currentColor;
-    text-transform: lowercase;
-
-    &:focus,
-    &:active {
-        color: currentColor;
-    }
-}

@@ -28,3 +28,23 @@
 
     box-shadow: $large-box-shadow;
 }
+
+
+// Link
+// ---
+
+// Link
+// ---
+
+.t-header__link {
+    color: currentColor;
+
+    &:focus,
+    &:active {
+        color: currentColor;
+    }
+
+    .c-button__inner {
+        padding: 0;
+    }
+}
