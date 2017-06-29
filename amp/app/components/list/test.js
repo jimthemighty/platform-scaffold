@@ -89,7 +89,7 @@ test('List renders its items as designated by that item\'s own component prop', 
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<List items={[]} />)
 
-    expect(wrapper.hasClass('amp-list')).toBe(true)
+    expect(wrapper.hasClass('a-list')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {

@@ -1,9 +1,9 @@
 ```js
 // JS import
-import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/accordion'
+import {Accordion, AccordionItem} from 'mobify-amp-sdk/dist/components/accordion'
 
 // SCSS import
-@import 'node_modules/progressive-web-sdk/dist/components/accordion/base';
+@import 'node_modules/mobify-amp-sdk/dist/components/accordion/base';
 ```
 
 

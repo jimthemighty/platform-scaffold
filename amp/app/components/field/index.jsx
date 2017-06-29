@@ -96,7 +96,7 @@ class Field extends React.Component {
             }
 
             if (error) {
-                childProps.className = classNames(child.props.className, 'amp--has-error')
+                childProps.className = classNames(child.props.className, 'a--has-error')
             }
 
             // Give the first child the id for the field
@@ -120,23 +120,23 @@ class Field extends React.Component {
         const reduxFormError = metaProps && shouldShowReduxError && metaProps.error
         const fieldError = error || reduxFormError
 
-        const classes = classNames('amp-field', {
-            'amp--is-check-radio': this.isCheckRadio,
-            'amp--error': fieldError,
-            'amp--required': this.isRequired,
-            'amp--disabled': childDisabled,
-            'amp--checked': childChecked
+        const classes = classNames('a-field', {
+            'a--is-check-radio': this.isCheckRadio,
+            'a--error': fieldError,
+            'a--required': this.isRequired,
+            'a--disabled': childDisabled,
+            'a--checked': childChecked
         }, className)
 
-        const innerClasses = classNames('amp-field__inner', {
-            'amp--stack': this.shouldStackLabelInput()
+        const innerClasses = classNames('a-field__inner', {
+            'a--stack': this.shouldStackLabelInput()
         })
 
-        const labelClasses = classNames('amp-field__label-wrap', {
-            'amp--end': this.shouldPlaceLabelAtEnd()
+        const labelClasses = classNames('a-field__label-wrap', {
+            'a--end': this.shouldPlaceLabelAtEnd()
         })
 
-        const inputClasses = classNames('amp-field__input')
+        const inputClasses = classNames('a-field__input')
 
         return (
             <div className={classes}>
@@ -144,14 +144,14 @@ class Field extends React.Component {
                     {label &&
                         <div className={labelClasses}>
                             <label
-                                className="amp-field__label"
+                                className="a-field__label"
                                 htmlFor={this.inputId}
                             >
                                 {label}
                             </label>
 
                             {hint &&
-                                <div className="amp-field__hint">
+                                <div className="a-field__hint">
                                     {hint}
                                 </div>
                             }
@@ -164,13 +164,13 @@ class Field extends React.Component {
                 </div>
 
                 {fieldError &&
-                    <div className="amp-field__error">
+                    <div className="a-field__error">
                         {fieldError}
                     </div>
                 }
 
                 {caption &&
-                    <div className="amp-field__caption">
+                    <div className="a-field__caption">
                         {caption}
                     </div>
                 }
@@ -196,7 +196,7 @@ Field.propTypes = {
     className: PropTypes.string,
 
     /**
-     * If this prop is passed in, the amp--error class will be added to the field
+     * If this prop is passed in, the a--error class will be added to the field
      * and the error will be shown
      *
      * Also adds the aria-invalid attribute

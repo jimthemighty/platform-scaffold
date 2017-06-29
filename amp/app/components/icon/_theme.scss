@@ -3,18 +3,18 @@
 // Icon theme
 // ===
 
-.amp-icon {
-    &.amp--microscopic {
+.a-icon {
+    &.a--microscopic {
         width: $sub-unit;
         height: $sub-unit;
     }
 
-    &.amp--gargantuan {
+    &.a--gargantuan {
         width: $unit*12;
         height: $unit*12;
     }
 
-    &.amp--colossal {
+    &.a--colossal {
         width: $unit*24;
         height: $unit*24;
     }

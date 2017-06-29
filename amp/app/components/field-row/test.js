@@ -14,7 +14,7 @@ test('FieldRow renders without errors', () => {
 
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<FieldRow />)
-    expect(wrapper.hasClass('amp-field-row')).toBe(true)
+    expect(wrapper.hasClass('a-field-row')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {

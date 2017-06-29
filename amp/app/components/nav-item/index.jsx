@@ -21,9 +21,9 @@ const NavItem = (props) => {
         href,
     } = props
 
-    const classes = classNames('amp-nav-item', {
-        'amp--has-child': hasChild,
-        'amp--selected': selected,
+    const classes = classNames('a-nav-item', {
+        'a--has-child': hasChild,
+        'a--selected': selected,
     }, className)
 
     return (

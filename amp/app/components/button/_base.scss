@@ -7,7 +7,7 @@
 //    "replaced elements". See here for more details:
 //    http://stackoverflow.com/questions/19679337/why-are-not-all-flexbox-elements-behaving-like-flexbox-divs
 
-.amp-button {
+.a-button {
     display: inline-table; // 1
     min-width: $tap-size;
     min-height: $tap-size;
@@ -18,7 +18,7 @@
 
     -webkit-appearance: none;
 
-    &.amp--anchor {
+    &.a--anchor {
         display: inline-flex; // 1
         justify-content: center;
     }

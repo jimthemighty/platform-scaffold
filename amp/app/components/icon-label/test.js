@@ -16,7 +16,7 @@ test('IconLabel renders without errors', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<IconLabel iconName="person" label="person" />)
 
-    expect(wrapper.hasClass('amp-icon-label')).toBe(true)
+    expect(wrapper.hasClass('a-icon-label')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {
@@ -41,6 +41,6 @@ test('renders the icon and label with the correct values', () => {
 
     expect(wrapper.find(Icon).prop('name')).toBe('tester')
     expect(wrapper.find(Icon).prop('size')).toBe('small')
-    expect(wrapper.find('.amp-icon-label__label').length).toBe(1)
-    expect(wrapper.find('.amp-icon-label__label').text()).toBe('Label')
+    expect(wrapper.find('.a-icon-label__label').length).toBe(1)
+    expect(wrapper.find('.a-icon-label__label').text()).toBe('Label')
 })

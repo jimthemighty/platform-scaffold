@@ -1,9 +1,9 @@
 ```js
-// JS import
-import ProductItem from 'mobify-amp-sdk/dist/components/product-tile'
+// JS, importing the local component
+import ProductItem from '../components/product-tile'
 
-// SCSS import
-@import 'node_modules/mobify-amp-sdk/dist/components/product-tile/base';
+// SCSS, importing the local component styles to app/styles/_components.scss
+@import '../components/product-tile/base';
 ```
 
 

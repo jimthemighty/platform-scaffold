@@ -8,14 +8,14 @@
 // ---
 //
 // 1. Hide the tap hightlight when clicked. For example, when
-// `amp--shrink-to-content` is active.
+// `a--shrink-to-content` is active.
 
-.amp-sheet {
+.a-sheet {
     box-shadow: $box-shadow;
 
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0); // 1
 
-    &.amp--no-shadow {
+    &.a--no-shadow {
         box-shadow: none;
     }
 }
@@ -27,7 +27,7 @@
 // 1. Set content to always scroll because of iOS issue.
 // 2. Necessary in order for point 1 to work... not sure why, really.
 
-.amp-sheet__inner {
+.a-sheet__inner {
     position: absolute;
     top: 0;
     right: 0;
@@ -43,7 +43,7 @@
 
     -webkit-overflow-scrolling: touch;
 
-    &.amp--shrink-to-content {
+    &.a--shrink-to-content {
         position: static;
         top: auto;
         right: auto;
@@ -67,10 +67,10 @@
 // Sheet Content
 // ---
 //
-// 1. This is necessary to ensure that the scroll fix on `amp-sheet__inner` works
-//    when `amp-sheet__content` spans the full height (i.e. `amp--shrink-to-content`
+// 1. This is necessary to ensure that the scroll fix on `a-sheet__inner` works
+//    when `a-sheet__content` spans the full height (i.e. `a--shrink-to-content`
 //    is not enabled)
 
-.amp-sheet__content {
+.a-sheet__content {
     flex: 1 1 auto; // 1
 }

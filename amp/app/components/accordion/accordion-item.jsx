@@ -37,27 +37,27 @@ class AccordionItem extends React.Component {
 
         const expanded = shown ? {expanded: ''} : {}
         return (
-            <section id={this.itemId} className={classNames('amp-accordion__item', className)} {...expanded}>
-                <HeadingTag className="amp-accordion__header" id={headerId}>
-                    <div className={`amp-accordion__inner-header amp--icon-${iconPosition}`}>
-                        <div className="amp-accordion__icon" aria-hidden="true">
-                            <div className="amp-accordion__open-icon">
-                                <Icon className="amp-accordion__glyph" size={iconSize} name={openIconName} />
+            <section id={this.itemId} className={classNames('a-accordion__item', className)} {...expanded}>
+                <HeadingTag className="a-accordion__header" id={headerId}>
+                    <div className={`a-accordion__inner-header a--icon-${iconPosition}`}>
+                        <div className="a-accordion__icon" aria-hidden="true">
+                            <div className="a-accordion__open-icon">
+                                <Icon className="a-accordion__glyph" size={iconSize} name={openIconName} />
                             </div>
 
-                            <div className="amp-accordion__close-icon">
-                                <Icon className="amp-accordion__glyph" size={iconSize} name={closeIconName} />
+                            <div className="a-accordion__close-icon">
+                                <Icon className="a-accordion__glyph" size={iconSize} name={closeIconName} />
                             </div>
                         </div>
 
-                        <div className="amp-accordion__title">
+                        <div className="a-accordion__title">
                             {header}
                         </div>
                     </div>
                 </HeadingTag>
 
-                <div className="amp-accordion__content-wrapper">
-                    <div className="amp-accordion__content" role="presentation">
+                <div className="a-accordion__content-wrapper">
+                    <div className="a-accordion__content" role="presentation">
                         {children}
                     </div>
                 </div>

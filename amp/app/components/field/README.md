@@ -1,6 +1,6 @@
 ```js
 // JS import
-import AmpForm from 'mobify-amp-sdk/dist/components/amp-form';
+import Form from 'mobify-amp-sdk/dist/components/form';
 import FieldRown from 'mobify-amp-sdk/dist/components/field-row';
 import Field from 'mobify-amp-sdk/dist/components/field';
 
@@ -13,7 +13,7 @@ import Field from 'mobify-amp-sdk/dist/components/field';
 
 ### Basic
 
-    <AmpForm>
+    <Form>
         <FieldRow>
             <Field
                 label="Email"
@@ -23,12 +23,12 @@ import Field from 'mobify-amp-sdk/dist/components/field';
 
             </Field>
         </FieldRow>
-    </AmpForm>
+    </Form>
 
 
 ### With optional attributes
 
-    <AmpForm>
+    <Form>
         <FieldRow>
             <Field
                 label="Email"
@@ -41,12 +41,12 @@ import Field from 'mobify-amp-sdk/dist/components/field';
 
             </Field>
         </FieldRow>
-    </AmpForm>
+    </Form>
 
 
 ### Disabled field styles
 
-    <AmpForm>
+    <Form>
         <FieldRow>
             <Field
                 label="Email"
@@ -81,12 +81,12 @@ import Field from 'mobify-amp-sdk/dist/components/field';
                 <input checked type="radio" disabled />
             </Field>
         </FieldRow>
-    </AmpForm>
+    </Form>
 
 
 ### With validation errors
 
-    <AmpForm>
+    <Form>
         <FieldRow>
             <Field
                 label="Email"
@@ -98,10 +98,10 @@ import Field from 'mobify-amp-sdk/dist/components/field';
 
             </Field>
         </FieldRow>
-    </AmpForm>
+    </Form>
 
 ## Redux Select Example
-    <AmpForm>
+    <Form>
         <FieldRow>
             <Field>
                 <select disabled>
@@ -110,4 +110,4 @@ import Field from 'mobify-amp-sdk/dist/components/field';
                 </select>
             </Field>
         </FieldRow>
-    </AmpForm>
+    </Form>

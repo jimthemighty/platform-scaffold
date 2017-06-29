@@ -3,7 +3,7 @@
 // Button theme
 // ===
 
-.amp-button {
+.a-button {
     min-width: $tap-size;
     min-height: $tap-size;
     padding: $unit*1.5;
@@ -26,7 +26,7 @@
 // Inner
 // ---
 
-.amp-button__inner {
+.a-button__inner {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,7 +36,7 @@
 // Icon
 // ---
 
-.amp-button__icon {
+.a-button__icon {
     flex: 0 0 auto;
 }
 
@@ -44,7 +44,7 @@
 // Themes: Secondary
 // ---
 
-.amp-button.amp--secondary {
+.a-button.a--secondary {
     background: $secondary-action-color;
 
     color: $neutral-00;
@@ -61,7 +61,7 @@
 // Themes: Tertiary
 // ---
 
-.amp-button.amp--tertiary {
+.a-button.a--tertiary {
     border: $border;
 
     background: $neutral-00;
@@ -80,7 +80,7 @@
 // Themes: Blank
 // ---
 
-.amp-button.amp--blank {
+.a-button.a--blank {
     background: transparent;
 
     color: inherit;
@@ -97,7 +97,7 @@
 //
 // Allow button elements to resemble as an inline link element
 
-.amp-button.amp--link {
+.a-button.a--link {
     min-width: initial;
     min-height: initial;
     padding: 0;
@@ -112,10 +112,10 @@
 // State: Disabled button
 // ---
 
-.amp-button[disabled] {
+.a-button[disabled] {
     background: $disabled-button-background-color;
 
-    .amp-button__icon {
+    .a-button__icon {
         color: $tertiary-brand-color;
     }
 }
@@ -124,7 +124,7 @@
 // State: Button icon has siblings
 // ---
 
-.amp-button__icon.amp--has-siblings {
+.a-button__icon.a--has-siblings {
     margin-right: $sub-unit*3;
 }
 
@@ -133,36 +133,36 @@
 // ---
 
 // Facebook
-.amp-button.amp--facebook {
+.a-button.a--facebook {
     background: $facebook-color;
 }
 
 // Twitter
-.amp-button.amp--twitter {
+.a-button.a--twitter {
     background: $twitter-color;
 }
 
 // Instagram
-.amp-button.amp--instagram {
+.a-button.a--instagram {
     background: $instagram-color;
 }
 
 // Pinterest
-.amp-button.amp--pinterest {
+.a-button.a--pinterest {
     background: $pinterest-color;
 }
 
 // Youtube
-.amp-button.amp--youtube {
+.a-button.a--youtube {
     background: $youtube-color;
 }
 
 // Google Plus
-.amp-button.amp--google-plus {
+.a-button.a--google-plus {
     background: $google-plus-color;
 }
 
 // Yelp
-.amp-button.amp--yelp {
+.a-button.a--yelp {
     background: $yelp-color;
 }

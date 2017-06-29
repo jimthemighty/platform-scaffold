@@ -8,7 +8,7 @@
 //
 // 1. Slightly larger than standard font size, at 15px
 
-.amp-list-tile__primary {
+.a-list-tile__primary {
     font-size: $font-size + 1; // 1
 }
 
@@ -16,7 +16,7 @@
 // Content
 // ---
 
-.amp-list-tile__content {
+.a-list-tile__content {
     padding: $unit $unit*1.5;
 }
 
@@ -24,7 +24,7 @@
 // Action
 // ---
 
-.amp-list-tile__action {
+.a-list-tile__action {
     display: flex;
     justify-content: center;
     align-items: center;

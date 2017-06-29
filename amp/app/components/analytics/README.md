@@ -1,9 +1,9 @@
 ```js
 // JS import
-import Analytics from '../components/analytics'
+import Analytics from 'mobify-amp-sdk/dist/components/analytics'
 ```
 
-There should only be one of these in a page. 
+There should only be one of these in a page.
 
 ## Example Usage
 

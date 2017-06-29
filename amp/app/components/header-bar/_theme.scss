@@ -5,7 +5,7 @@
 
 $header-bar__min-height: $tap-size + $unit; // 52px
 
-.amp-header-bar {
+.a-header-bar {
     min-height: $header-bar__min-height;
 
     background: $brand-color;
@@ -17,10 +17,10 @@ $header-bar__min-height: $tap-size + $unit; // 52px
 // Title
 // ---
 //
-// 1. `amp-header-bar__title` can be an <a> element. We'll inherit the same
-//    text color specified in the parent `amp-header-bar`
+// 1. `a-header-bar__title` can be an <a> element. We'll inherit the same
+//    text color specified in the parent `a-header-bar`
 
-.amp-header-bar__title {
+.a-header-bar__title {
     padding: $unit*1.5;
 
     color: inherit; // 1
@@ -36,6 +36,6 @@ $header-bar__min-height: $tap-size + $unit; // 52px
 // Actions
 // ---
 
-.amp-header-bar__actions {
+.a-header-bar__actions {
     margin: $sub-unit;
 }

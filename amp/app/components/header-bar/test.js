@@ -14,7 +14,7 @@ test('HeaderBarTitle renders without errors', () => {
 test('HeaderBarTitle includes the component class name with no className prop', () => {
     const wrapper = shallow(<HeaderBarTitle><h1>Test</h1></HeaderBarTitle>)
 
-    expect(wrapper.hasClass('amp-header-bar__title')).toBe(true)
+    expect(wrapper.hasClass('a-header-bar__title')).toBe(true)
 })
 
 test('HeaderBarTitle does not render an \'undefined\' class with no className', () => {
@@ -58,7 +58,7 @@ test('HeaderBar renders without errors', () => {
 test('includes the component class name with no className prop', () => {
     const wrapper = shallow(<HeaderBar><h1>Test</h1></HeaderBar>)
 
-    expect(wrapper.hasClass('amp-header-bar')).toBe(true)
+    expect(wrapper.hasClass('a-header-bar')).toBe(true)
 })
 
 test('does not render an \'undefined\' class with no className', () => {

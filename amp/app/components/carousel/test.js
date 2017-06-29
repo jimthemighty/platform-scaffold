@@ -12,7 +12,7 @@ describe('Carousel', () => {
 
     test('includes the component class name with no className prop', () => {
         const wrapper = shallow(<Carousel id="id" height="10" />)
-        expect(wrapper.hasClass('amp-carousel')).toBe(true)
+        expect(wrapper.hasClass('a-carousel')).toBe(true)
     })
 
     test('does not render an \'undefined\' class with no className', () => {

@@ -9,7 +9,7 @@ const FieldRow = ({
     className,
     children
 }) => {
-    const classes = classNames('amp-field-row', className)
+    const classes = classNames('a-field-row', className)
 
     return (
         <div className={classes}>

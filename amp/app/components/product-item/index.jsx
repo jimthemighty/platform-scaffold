@@ -15,13 +15,13 @@ const ProductItem = ({
     price,
     title
 }) => {
-    const classes = classNames('amp-product-item', 'u-flexbox', 'u-direction-row-reverse', className)
+    const classes = classNames('c-product-item', 'u-flexbox', 'u-direction-row-reverse', className)
 
     return (
         <article className={classes}>
             <div className="u-flex">
                 {!!category &&
-                    <p className="amp-product-item__category u-margin-bottom-sm u-color-brand">
+                    <p className="c-product-item__category u-margin-bottom-sm u-color-brand">
                         {category}
                     </p>
                 }
@@ -74,7 +74,7 @@ ProductItem.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Image of the product. An `<AMPImage />` component.
+     * Image of the product. An `<AmpImage />` component.
      */
     image: PropTypes.node,
 

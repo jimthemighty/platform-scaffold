@@ -26,15 +26,15 @@ ListTile components can have a `startAction` and/or an `endAction` prop passed t
         </ListTile>
 
         <ListTile endAction={
-            <Button className="amp--blank" icon="lock" />
+            <Button className="a--blank" icon="lock" />
         }>
             <div>ListItem with <code>endAction</code> only</div>
         </ListTile>
 
         <ListTile startAction={
-            <Button className="amp--blank" icon="user" />
+            <Button className="a--blank" icon="user" />
         } endAction={
-            <Button className="amp--blank" icon="chevron-right" />
+            <Button className="a--blank" icon="chevron-right" />
         }>
             <div>ListItem with  <code>startAction</code> and <code>endAction</code></div>
         </ListTile>
@@ -51,7 +51,7 @@ ListTile components can have a `startAction` and/or an `endAction` prop passed t
         <ListTile href="http://www.mobify.com" startAction={
             <Icon name="basket" />
         } endAction={
-            <Button className="amp--blank" icon="star" />
+            <Button className="a--blank" icon="star" />
         }>
             <div>
                 Notice secondary action is included in the anchor. If you wish to change this behaviour,
@@ -60,9 +60,9 @@ ListTile components can have a `startAction` and/or an `endAction` prop passed t
         </ListTile>
 
         <ListTile startAction={
-            <Button className="amp--blank u-link-color" href="http://www.mobify.com" icon="chevron-left" />
+            <Button className="a--blank u-link-color" href="http://www.mobify.com" icon="chevron-left" />
         } endAction={
-            <Button className="amp--blank u-link-color" href="http://www.mobify.com" icon="chevron-right" />
+            <Button className="a--blank u-link-color" href="http://www.mobify.com" icon="chevron-right" />
         }>
             Of course, elements inside can be their own anchors.
         </ListTile>
@@ -71,10 +71,10 @@ ListTile components can have a `startAction` and/or an `endAction` prop passed t
 
 ## `includeEndActionInPrimary`
 
-The `endAction` by default is wrapped by the `amp-list-tile__primary` wrapper. We've chosen this behaviour as in most cases, clicking on the ListTile and on the endAction should have the same effect. This can be altered by applying `includeEndActionInPrimary={false}`.
+The `endAction` by default is wrapped by the `a-list-tile__primary` wrapper. We've chosen this behaviour as in most cases, clicking on the ListTile and on the endAction should have the same effect. This can be altered by applying `includeEndActionInPrimary={false}`.
 
     <ListTile includeEndActionInPrimary={false} href="http://www.mobify.com" endAction={
-        <Button className="amp--blank" icon="chevron-right" />
+        <Button className="a--blank" icon="chevron-right" />
     }>
         <div>ListTile with the <code>endAction</code> outside of the primary container</div>
     </ListTile>

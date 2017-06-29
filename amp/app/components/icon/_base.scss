@@ -5,7 +5,7 @@
 //
 // 1. To avoid svg icon eating up your clicks
 
-.amp-icon {
+.a-icon {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -20,17 +20,17 @@
 
     fill: currentColor;
 
-    &.amp--small {
+    &.a--small {
         width: $unit;
         height: $unit;
     }
 
-    &.amp--medium {
+    &.a--medium {
         width: $unit*3;
         height: $unit*3;
     }
 
-    &.amp--large {
+    &.a--large {
         width: $unit*4;
         height: $unit*4;
     }
