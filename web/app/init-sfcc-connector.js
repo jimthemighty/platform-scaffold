@@ -1,4 +1,4 @@
-import {Connector} from './connectors/_sfcc-connector'
+import {Connector} from 'progressive-web-sdk/dist/connectors/sfcc-connector'
 import {registerConnector} from 'progressive-web-sdk/dist/integration-manager'
 
 const initConnector = () => {
