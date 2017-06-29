@@ -15,11 +15,14 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Image from 'progressive-web-sdk/dist/components/image'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
-import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
+
+import {getCartLoaded, getCartHasItems} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {getIsLoggedIn} from '../../store/user/selectors'
 
 import {requestCartContent} from './actions'
 import CartItems from './partials/cart-items'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const openSignIn = () => {
     if (isRunningInAstro) {
@@ -37,8 +40,8 @@ export const continueShopping = () => {
     }
 }
 
-const EmptyCartContents = ({hide}) => {
-    const emptyCartClassnames = classNames('t-cart__empty u-flexbox u-flex u-direction-column u-align-center u-justify-center', {
+const EmptyCartContents = ({hide, isLoggedIn}) => {
+    const emptyCartClassnames = classNames('t-cart__empty u-flexbox u-flex u-direction-column u-align-center u-justify-center u-padding-top-lg u-margin-top', {
         'u-visually-hidden': hide,
         't--hide': hide,
         't--viewport-height': isRunningInAstro
@@ -59,12 +62,23 @@ const EmptyCartContents = ({hide}) => {
                     <p className="u-padding-top u-padding-start-lg u-padding-end-lg u-text-align-center u-margin-bottom-lg">
                         Your shopping cart is empty. Sign in to retrieve saved items or continue shopping.
                     </p>
-                    <Button className="c--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg" onClick={openSignIn}>
-                        <Icon name="User" />
-                        Sign In
-                    </Button>
 
-                    <Button className="c--tertiary u-text-uppercase u-h5 u-width-full" onClick={continueShopping}>
+                    {!isLoggedIn &&
+                        <Button
+                            className="c--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg"
+                            onClick={openSignIn}
+                            data-analytics-name={UI_NAME.goToSignIn}
+                        >
+                            <Icon name="User" />
+                            Sign In
+                        </Button>
+                    }
+
+                    <Button
+                        className="c--tertiary u-text-uppercase u-h5 u-width-full"
+                        onClick={continueShopping}
+                        data-analytics-name={UI_NAME.continueShopping}
+                    >
                         Continue Shopping
                     </Button>
                 </div>
@@ -75,6 +89,7 @@ const EmptyCartContents = ({hide}) => {
 
 EmptyCartContents.propTypes = {
     hide: PropTypes.bool,
+    isLoggedIn: PropTypes.bool
 }
 
 class Cart extends React.Component {
@@ -86,7 +101,8 @@ class Cart extends React.Component {
     render() {
         const {
             cartLoaded,
-            hasItems
+            hasItems,
+            isLoggedIn
         } = this.props
         const isCartEmptyAndLoaded = !hasItems && cartLoaded
         const templateClassnames = classNames('t-cart u-bg-color-neutral-10', {
@@ -98,7 +114,7 @@ class Cart extends React.Component {
                 <Grid className="u-center-piece">
                     {!isCartEmptyAndLoaded && <CartItems onContinueShopping={continueShopping} onOpenSignIn={openSignIn} />}
 
-                    <EmptyCartContents hide={!isCartEmptyAndLoaded} />
+                    <EmptyCartContents hide={!isCartEmptyAndLoaded} isLoggedIn={isLoggedIn} />
                 </Grid>
             </div>
         )
@@ -108,13 +124,15 @@ class Cart extends React.Component {
 Cart.propTypes = {
     cartLoaded: PropTypes.bool,
     hasItems: PropTypes.bool,
+    isLoggedIn: PropTypes.bool,
     removeItemID: PropTypes.string,
     requestCartContent: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
     cartLoaded: getCartLoaded,
-    hasItems: getCartHasItems
+    hasItems: getCartHasItems,
+    isLoggedIn: getIsLoggedIn
 })
 
 const mapDispatchToProps = {

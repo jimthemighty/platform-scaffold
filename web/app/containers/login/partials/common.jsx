@@ -3,15 +3,12 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import React, {PropTypes} from 'react'
-import {connect} from 'react-redux'
 import {Field as ReduxFormField} from 'redux-form'
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
+import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
 import Link from 'progressive-web-sdk/dist/components/link'
-
-import {REMEMBER_ME_MODAL} from '../../../modals/constants'
 
 export const LoginFieldLabel = ({label, forgotPassword}) => (
     <span>
@@ -33,14 +30,18 @@ LoginFieldLabel.propTypes = {
     label: PropTypes.string
 }
 
-export const LoginField = ({label, type, forgotPassword, name, tooltip}) => (
+export const LoginField = ({label, type, forgotPassword, name, tooltip, analyticsName, isPassword}) => (
     <FieldRow>
         <ReduxFormField
             name={name}
             label={<LoginFieldLabel label={label} forgotPassword={forgotPassword} />}
             component={Field}
             >
-            <input type={type} />
+            {isPassword ?
+                <PasswordInput isText buttonTextHide="Hide" buttonTextShow="Show" data-analytics-name={analyticsName} />
+            :
+                <input type={type} data-analytics-name={analyticsName} />
+            }
         </ReduxFormField>
 
         {tooltip}
@@ -48,23 +49,11 @@ export const LoginField = ({label, type, forgotPassword, name, tooltip}) => (
 )
 
 LoginField.propTypes = {
+    analyticsName: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     forgotPassword: PropTypes.object,
+    isPassword: PropTypes.bool,
     tooltip: PropTypes.node
 }
-
-const RememberMeTooltipContent = ({openModal}) => (
-    <a href="#remember-me" onClick={openModal}>
-        {'What\'s this?'}
-    </a>
-)
-
-RememberMeTooltipContent.propTypes = {
-    openModal: PropTypes.func
-}
-
-export const RememberMeTooltip = connect(null, {
-    openModal: () => openModal(REMEMBER_ME_MODAL)
-})(RememberMeTooltipContent)

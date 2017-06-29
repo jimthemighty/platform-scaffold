@@ -4,8 +4,8 @@
 
 import Immutable from 'immutable'
 import {handleActions} from 'redux-actions'
-import {mergePayload, setCustomContent} from '../../utils/reducer-utils'
-import * as integrationManagerResults from '../../integration-manager/checkout/results'
+import {mergePayload, setCustomContent} from 'progressive-web-sdk/dist/utils/reducer-utils'
+import * as integrationManagerResults from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 const checkoutReducer = handleActions({
     [integrationManagerResults.receiveSavedShippingAddresses]: mergePayload,

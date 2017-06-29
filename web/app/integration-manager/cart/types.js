@@ -33,9 +33,10 @@ const Tax = Runtypes.Record({
 })
 
 const Shipping = Runtypes.Record({
-    label: Text,
     amount: Money
-})
+}).And(Runtypes.Optional({
+    label: Text
+}))
 
 export const Cart = Runtypes.Record({
     /**

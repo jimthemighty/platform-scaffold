@@ -6,7 +6,6 @@ export const getAccount = ({account}) => account
 export const getUi = ({ui}) => ui
 export const getUser = ({user}) => user
 export const getCategories = ({categories}) => categories
-export const getProducts = ({products}) => products
 export const getCart = ({cart}) => cart
 export const getNotifications = ({notifications}) => notifications
 export const getCheckout = ({checkout}) => checkout

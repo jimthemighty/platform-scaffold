@@ -10,7 +10,8 @@ import Badge from 'progressive-web-sdk/dist/components/badge'
 import Button from 'progressive-web-sdk/dist/components/button'
 import IconLabel from 'progressive-web-sdk/dist/components/icon-label'
 import {HeaderBarActions} from 'progressive-web-sdk/dist/components/header-bar'
-import {getCartSummaryCount} from '../../../store/cart/selectors'
+import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CartItemCounterBadge = ({itemCount}) => {
     // `undefined` is not greater than 0
@@ -33,7 +34,12 @@ CartItemCounterBadge.propTypes = {
 
 const CartAction = ({innerButtonClassName, onClick, itemCount}) => (
     <HeaderBarActions>
-        <Button className="u-position-relative qa-header__cart" innerClassName={innerButtonClassName} onClick={onClick}>
+        <Button
+            className="u-position-relative qa-header__cart"
+            innerClassName={innerButtonClassName}
+            onClick={onClick}
+            data-analytics-name={UI_NAME.showMiniCart}
+        >
             <IconLabel label="Cart" iconName="cart" iconSize="medium" />
             <CartItemCounterBadge itemCount={itemCount} />
         </Button>

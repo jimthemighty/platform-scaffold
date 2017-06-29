@@ -4,42 +4,33 @@
 
 /* eslint-disable import/namespace */
 /* eslint-disable import/named */
-import {EVENT_ACTION, Page} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
-import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
+import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
-import {logout} from '../../integration-manager/account/commands'
+import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
-import {CURRENT_URL, OFFLINE_ASSET_URL} from './constants'
+import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {OFFLINE_MODAL} from '../../modals/constants'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
 
-/**
- * Action dispatched when the route changes
- * @param {string} currentURL - what's currently shown in the address bar
- * @param {string} routeName - Template name for analytic
- */
-export const onRouteChanged = createActionWithAnalytics(
-    'On route changed',
-    [CURRENT_URL],
-    EVENT_ACTION.pageview,
-    (currentURL, routeName) => (new Page({[Page.TEMPLATENAME]: routeName}))
-)
 
 /**
  * Make a separate request that is intercepted by the worker. The worker will
  * return a JSON object where `{offline: true}` if the request failed, which we
  * can use to detect if we're offline.
  */
-export const checkIfOffline = () => (dispatch) => {
+export const checkIfOffline = () => (dispatch, getState) => {
     // we need to cachebreak every request to ensure we don't get something
     // stale from the disk cache on the device - the CDN will ignore query
     // parameters for this asset, however
@@ -52,7 +43,10 @@ export const checkIfOffline = () => (dispatch) => {
                 dispatch(setPageFetchError('Network failure, using worker cache'))
             } else {
                 dispatch(clearPageFetchError())
-                dispatch(closeModal(OFFLINE_MODAL))
+
+                if (isModalOpen(OFFLINE_MODAL)(getState())) {
+                    dispatch(closeModal(OFFLINE_MODAL, UI_NAME.offline))
+                }
             }
         })
         .catch((error) => {

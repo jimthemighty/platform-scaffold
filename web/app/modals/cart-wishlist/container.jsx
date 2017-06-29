@@ -17,6 +17,7 @@ import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CartWishlistComplete = ({closeModal}) => (
     <div>
@@ -40,6 +41,7 @@ const CartWishlistComplete = ({closeModal}) => (
         <Button
             className="c--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
+            data-analytics-name={UI_NAME.confirmation}
         >
             Ok
         </Button>
@@ -72,6 +74,7 @@ const CartWishlistGuest = ({closeModal}) => (
         <Button
             className="c--secondary u-width-full u-text-uppercase u-margin-bottom-lg"
             href="/customer/account/login/"
+            data-analytics-name={UI_NAME.goToSignIn}
         >
             Sign in or sign up
         </Button>
@@ -79,6 +82,7 @@ const CartWishlistGuest = ({closeModal}) => (
         <Button
             className="c--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
+            data-analytics-name={UI_NAME.cancel}
         >
             Cancel
         </Button>
@@ -148,7 +152,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(CART_WISHLIST_MODAL),
+    closeModal: () => closeModal(CART_WISHLIST_MODAL, UI_NAME.wishlist),
     setIsWishlistComplete
 }
 
