@@ -14,7 +14,7 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 
 
 const containerClass = 't-account-dashboard'
-const titleClass = 't-account-dashboard__title u-padding-md'
+const titleClass = 't-account-dashboard__title u-padding-md u-text-uppercase'
 
 const DashboardLinks = ({link}) => {
     const {text, href} = link
