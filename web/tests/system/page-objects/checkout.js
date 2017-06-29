@@ -18,7 +18,7 @@ const selectors = {
     postCode: 'input[name*="code"]',
     phone: 'input[name*="phone"]',
     addressListOption: '.t-checkout-shipping__shipping-address .pw-field-row',
-    shippingMethod: '.t-checkout-shipping__shipping-method .c--checked',
+    shippingMethod: '.t-checkout-shipping__shipping-method .pw--checked',
     continueToPayment: '.qa-checkout__continue-to-payment',
 
     paymentTemplate: '.t-app--checkingPayment',
