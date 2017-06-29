@@ -21,7 +21,7 @@ describe('NavItemIcon', () => {
     test('has the appropriate class name', () => {
         const wrapper = shallow(<NavItemIcon name="plus" />)
 
-        expect(wrapper.hasClass('pw-nav-item__icon')).toBe(true)
+        expect(wrapper.hasClass('c-nav-item__icon')).toBe(true)
     })
 
     test('renders the named icon', () => {
