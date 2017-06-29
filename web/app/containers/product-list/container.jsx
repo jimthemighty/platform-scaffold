@@ -9,8 +9,7 @@ import ProductListHeader from './partials/product-list-header'
 import SearchResultHeader from './partials/search-result-header'
 import ProductListContents from './partials/product-list-contents'
 
-const ProductList = (props) => {
-    const {route: {routeName}} = props
+const ProductList = ({route: {routeName}}) => {
     return (
         <div className="t-product-list">
             {!isRunningInAstro &&
@@ -22,16 +21,14 @@ const ProductList = (props) => {
                     }
                 </div>
             }
-            <ProductListContents
-                routeName={routeName}
-            />
+            <ProductListContents routeName={routeName} />
         </div>
     )
 }
 
 ProductList.propTypes = {
     // Route object added by react router
-    route: React.PropTypes.object,
+    route: React.PropTypes.object
 }
 
 export default template(ProductList)

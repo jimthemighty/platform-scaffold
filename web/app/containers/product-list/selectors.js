@@ -6,7 +6,7 @@ import Immutable from 'immutable'
 import {createSelector} from 'reselect'
 import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi, getCategories} from '../../store/selectors'
-import {getSelectedCategory, getCategoryProducts} from '../../store/categories/selectors'
+import {getCategoryProducts} from '../../store/categories/selectors'
 import {getCurrentPathKey, getCurrentPathKeyWithoutQuery} from 'progressive-web-sdk/dist/store/app/selectors'
 import {byFilters} from '../../utils/filter-utils'
 import {sortLib} from '../../utils/sort-utils'
@@ -39,9 +39,8 @@ export const getCategoryFilterOptions = createGetSelector(
     getCurrentPathKeyWithoutQuery,
     Immutable.List()
 )
-export const getCategoryFilters = createGetSelector(getCategoryFilterOptions, 'filters', Immutable.List())
 export const getActiveFilters = createSelector(
-    getCategoryFilters,
+    getCategoryFilterOptions,
     (filters) => (
         filters.reduce((activeFilters, filter) => activeFilters.concat(
             filter.get('kinds').filter((kind) => kind.get('active'))

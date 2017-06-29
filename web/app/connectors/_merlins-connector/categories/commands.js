@@ -51,7 +51,6 @@ export const initProductListPage = (url) => (dispatch) => {
                 id: parseCategoryId($, $response) || pathKey,
                 href: pathKey,
                 parentId: null,
-                filters: priceFilterParser($, $response),
                 title,
                 searchTerm: searchTermMatch ? searchTermMatch[0] : null,
                 description: getTextFrom($response, '#text, .category-description')
