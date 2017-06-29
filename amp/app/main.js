@@ -15,7 +15,6 @@ import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
 
 import Analytics from './components/analytics'
-import Home from './containers/home/container'
 import ProductDetails from './containers/product-details/container'
 import ProductList from './containers/product-list/container'
 import App from './containers/app/container'
@@ -87,7 +86,6 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan(onLambda ? 'short' : 'dev'))
 }
 
-app.get('/', handlePage(Home))
 app.get('/potions.html', handlePage(ProductList))
 app.get('/books.html', handlePage(ProductList))
 app.get('/ingredients.html', handlePage(ProductList))
