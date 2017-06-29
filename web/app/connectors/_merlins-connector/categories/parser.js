@@ -36,33 +36,54 @@ const priceParser = (value) => {
 }
 
 export const priceFilterParser = ($, $html) => {
-    const $priceOptions = $html.find('.filter-options .item')
+    const $filters = $html.find('.filter-options .filter-options-item')
+    const filters = []
 
-    return [{
-        label: 'Price',
-        ruleset: 'price',
-        kinds: $priceOptions.map((idx, kind) => {
+    // eslint-disable-next-line array-callback-return
+    $filters.map((idx, filter) => {
+        const filterObject = {}
+
+        filterObject.label = $(filter).find('.filter-options-title').text()
+        filterObject.ruleset = filterObject.label.toLowerCase()
+
+        const kindArray = []
+        $(filter).find('.filter-options-content .item').map((idx, kind) => {
             const $kind = $(kind)
-            let query = $kind.find('a')[0].search
-            const price = query.split('=')[1]
+            
+            const searchKey = $kind.find('a')[0].search
+            let query = searchKey
+            let criteria = ''
+            let label = $kind.text()
             const $count = $kind.find('.count').remove()
             const count = $count.text().replace(REGEX_NON_NUM, '')
 
-            // Replace `-` with `to` to prevent the replacement of non alpha-num
-            // characters from obfuscating the meaning of the query. For
-            // example, prevent `price10-20` from becoming `price1020`, because
-            // what would that mean: 10-20, 0-1020 or 1020-Infinity?
-            query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '')
+            if ($kind.has('.price').length > 0) {
+                const price = query.split('=')[1]
+                criteria = priceParser(price) // priceParser('10-20')
+                label = $kind.text().trim() // '$10.00 - $19.99'
 
-            return {
-                count, // 2
-                criteria: priceParser(price), // priceParser('10-20')
-                label: $kind.text().trim(), // '$10.00 - $19.99'
-                ruleset: 'price', // we only have one ruleset at the moment
-                query // 'price10to20'
+                // Replace `-` with `to` to prevent the replacement of non alpha-num
+                // characters from obfuscating the meaning of the query. For
+                // example, prevent `price10-20` from becoming `price1020`, because
+                // what would that mean: 10-20, 0-1020 or 1020-Infinity?
+                // 'price10to20'
+                query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '')
             }
-        }).toArray()
-    }]
+
+            kindArray.push({
+                count, // 2
+                criteria,
+                label,
+                ruleset: 'price', // we only have one ruleset at the moment
+                query,
+                searchKey
+            })
+        })
+        filterObject.kinds = kindArray
+        filters.push(filterObject)
+    })
+
+    return filters
 }
 
 
