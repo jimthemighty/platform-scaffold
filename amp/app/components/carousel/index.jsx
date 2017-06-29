@@ -181,7 +181,7 @@ Carousel.propTypes = {
 
 Carousel.defaultProps = {
     loop: false,
-    showArrows: false,
+    showArrows: true,
     showPips: false,
     type: 'slides',
     layout: 'responsive'

@@ -19,7 +19,6 @@ const ProductDetailsCarousel = ({images}) => {
             className="a--frame a--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10"
             height="330"
             width="330"
-            showArrows
         >
             {images.map(({src, alt = ''}) => (
                 <AmpImage
