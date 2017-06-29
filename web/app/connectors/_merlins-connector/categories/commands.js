@@ -3,18 +3,26 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {urlToPathKey, getURLWithoutQuery} from 'progressive-web-sdk/dist/utils/utils'
-import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser, parseSortOptions} from './parser'
+import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser, parseSortOptions, parseCurrentFilter} from './parser'
 import {
     receiveCategoryContents,
     receiveCategoryInformation,
-    receiveCategorySortOptions
+    receiveCategorySortOptions,
+    receiveCategoryFilterOptions
 } from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {changeFilterTo} from '../../../store/categories/actions'
 import {productListParser} from '../products/parsers'
 import {getTextFrom} from '../../../utils/parser-utils'
 import {fetchPageData} from '../app/commands'
 
+const extractFilter = (url) => {
+    const filter = url.match(/(price=.*)/) || url.match(/(color=.*)/)
+    return filter ? filter[1] : ''
+}
+
 export const initProductListPage = (url) => (dispatch) => {
+    const filter = extractFilter(url)
     // Merlins uses 'product_list_order' as URL search key
     url = url.replace('sort', 'product_list_order')
 
@@ -27,8 +35,14 @@ export const initProductListPage = (url) => (dispatch) => {
             const title = parseCategoryTitle($, $response)
             const searchTermMatch = title.match(/'(.*)'/)
             const sortOptions = parseSortOptions($, $response)
+            const isFilter = parseCurrentFilter($, $response)
             if (sortOptions.length > 0) {
                 dispatch(receiveCategorySortOptions(sortOptions, pathKeyWithoutQuery))
+            }
+            if (!isFilter) {
+                dispatch(receiveCategoryFilterOptions(priceFilterParser($, $response), pathKeyWithoutQuery))
+            } else {
+                dispatch(changeFilterTo(filter))
             }
 
             // Receive page contents

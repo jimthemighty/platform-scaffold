@@ -26,15 +26,29 @@ export const getProductListContentsLoaded = createHasSelector(
     getCurrentPathKey
 )
 
-export const getFilters = createGetSelector(getSelectedCategory, 'filters', Immutable.List())
+export const getSortOptions = createGetSelector(getCategories, 'sortOptions', Immutable.Map())
+export const getCategorySortOptions = createGetSelector(
+    getSortOptions,
+    getCurrentPathKeyWithoutQuery,
+    Immutable.List()
+)
+
+export const getFilterOptions = createGetSelector(getCategories, 'filterOptions', Immutable.Map())
+export const getCategoryFilterOptions = createGetSelector(
+    getFilterOptions,
+    getCurrentPathKeyWithoutQuery,
+    Immutable.List()
+)
+export const getCategoryFilters = createGetSelector(getCategoryFilterOptions, 'filters', Immutable.List())
 export const getActiveFilters = createSelector(
-    getFilters,
+    getCategoryFilters,
     (filters) => (
         filters.reduce((activeFilters, filter) => activeFilters.concat(
             filter.get('kinds').filter((kind) => kind.get('active'))
         ), Immutable.List())
     )
 )
+
 export const getFilteredProductListProducts = createSelector(
     getCategoryProducts,
     getActiveFilters,
@@ -49,12 +63,4 @@ export const getFilteredAndSortedListProducts = createSelector(
     (products, sort) => {
         return sort ? products.sort(sortLib[sort]) : products
     }
-)
-
-export const getSortOptions = createGetSelector(getCategories, 'sortOptions', Immutable.Map())
-
-export const getCategorySortOptions = createGetSelector(
-    getSortOptions,
-    getCurrentPathKeyWithoutQuery,
-    Immutable.List()
 )

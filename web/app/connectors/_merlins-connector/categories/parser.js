@@ -47,11 +47,13 @@ export const priceFilterParser = ($, $html) => {
         filterObject.ruleset = filterObject.label.toLowerCase()
 
         const kindArray = []
+
+        // eslint-disable-next-line array-callback-return
         $(filter).find('.filter-options-content .item').map((idx, kind) => {
             const $kind = $(kind)
-            
-            const searchKey = $kind.find('a')[0].search
-            let query = searchKey
+
+            let query = $kind.find('a')[0].search
+            const searchKey = query.split('&')[0].replace('?', '')
             let criteria = ''
             let label = $kind.text()
             const $count = $kind.find('.count').remove()
@@ -82,7 +84,6 @@ export const priceFilterParser = ($, $html) => {
         filterObject.kinds = kindArray
         filters.push(filterObject)
     })
-
     return filters
 }
 
@@ -110,6 +111,12 @@ export const parseSortOptions = ($, $html) => {
         })
     })
     return sortOptions
+}
+
+export const parseCurrentFilter = ($, $html) => {
+    const currentFilter = $html.has('.filter-current').length
+
+    return currentFilter
 }
 
 export default categoryProductsParser

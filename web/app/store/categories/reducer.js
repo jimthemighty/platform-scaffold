@@ -8,7 +8,8 @@ import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
 import {
     receiveCategoryInformation,
     receiveCategoryContents,
-    receiveCategorySortOptions
+    receiveCategorySortOptions,
+    receiveCategoryFilterOptions
 } from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {changeFilter} from './actions'
 
@@ -18,6 +19,7 @@ const categoryReducer = handleActions({
     [receiveCategoryInformation]: mergePayload,
     [receiveCategoryContents]: mergePayload,
     [receiveCategorySortOptions]: mergePayload,
+    [receiveCategoryFilterOptions]: mergePayload,
     [changeFilter]: mergePayload,
 }, initialState)
 

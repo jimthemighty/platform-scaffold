@@ -5,6 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCategoryItemCount} from '../../../store/categories/selectors'
 import * as selectors from '../selectors'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
@@ -21,7 +22,6 @@ import Pagination from 'progressive-web-sdk/dist/components/pagination'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Field from 'progressive-web-sdk/dist/components/field'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {makeQueryString} from '../../../utils/utils'
 import {ITEMS_PER_PAGE, DEFAULT_SORT_OPTION} from '../constants'
 
 import ProductTile from '../../../components/product-tile'
@@ -70,38 +70,39 @@ const ProductListContents = ({
     activeFilters,
     clearFilters,
     contentsLoaded,
-    location,
     numItems,
     products,
     openModal,
     setCurrentProduct,
     sortOptions,
-    routeName,
-    router,
+    routeName
 }) => {
-
-    const path = location.pathname
+    const location = browserHistory.getCurrentLocation()
+    const pathname = location.pathname
     const page = location.query.p ? parseInt(location.query.p) : 1
-    const search = location.query.q ? location.query.q : ''
     const selectedSortOption = location.query.sort ? location.query.sort : 'default'
 
-    const push = (query) => {
+    const updateURL = (queryObject) => {
+        const query = Object.assign({}, location.query, queryObject)
         // No query string for page 1
         if (query.p === 1) {
-            query.p = ''
+            delete query.p
         }
 
         // No query string for default sort option
         if (query.sort === DEFAULT_SORT_OPTION) {
-            query.sort = ''
+            delete query.sort
         }
 
-        // preserve search key
-        // keep the convention to store space as '+'
-        // app/utils/utils - buildQueryString()
-        Object.assign(query, {q: search.replace(/ /g, '+')})
+        browserHistory.push({pathname, query})
+    }
 
-        router.push(path + makeQueryString(query))
+    const clearFiltersURL = () => {
+        clearFilters()
+        const query = Object.assign({}, location.query)
+        delete query.price
+        delete query.color
+        browserHistory.push({pathname, query})
     }
 
     const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
@@ -121,7 +122,7 @@ const ProductListContents = ({
                         <Button
                             className="u-color-brand"
                             icon="trash"
-                            onClick={clearFilters}
+                            onClick={clearFiltersURL}
                             data-analytics-name={UI_NAME.clearFilters}
                         >
                             Clear
@@ -163,8 +164,8 @@ const ProductListContents = ({
                                                 <select
                                                     className="u-color-neutral-60"
                                                     value={selectedSortOption}
-                                                    onChange={(e) => { push({p: page, sort: e.target.value}) }}
-                                                    onBlur={(e) => { push({p: page, sort: e.target.value}) }}
+                                                    onChange={(e) => { updateURL({sort: e.target.value}) }}
+                                                    onBlur={(e) => { updateURL({sort: e.target.value}) }}
                                                 >
                                                     <option value="default" />
                                                     {
@@ -190,7 +191,7 @@ const ProductListContents = ({
                 {page && pageCount > 1 &&
                     <Pagination
                         className="u-margin-top-lg"
-                        onChange={(newPage) => push({p: newPage, sort: selectedSortOption})}
+                        onChange={(newPage) => updateURL({p: newPage})}
                         currentPage={page ? page : 1}
                         pageCount={pageCount}
                         showCurrentPageMessage={true}
@@ -213,7 +214,6 @@ ProductListContents.propTypes = {
     numItems: PropTypes.number,
     openModal: PropTypes.func,
     routeName: PropTypes.string,
-    router: PropTypes.object,
     setCurrentProduct: PropTypes.func,
     sortOptions: PropTypes.array
 }
