@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import {ampComponent} from '../../amp-sdk'
 
 /**
- * A form component that automatically includes the required a-form script.
+ * A form component that automatically includes the required amp-form script.
  */
 const Form = ({
     className,
