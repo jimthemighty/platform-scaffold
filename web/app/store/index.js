@@ -6,7 +6,6 @@ import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import Immutable from 'immutable'
 
-import accountReducer from './account/reducer'
 import rootReducer from '../containers/reducers'
 import userReducer from './user/reducer'
 import cartReducer from 'progressive-web-sdk/dist/store/cart/reducer'

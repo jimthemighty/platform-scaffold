@@ -1,5 +1,5 @@
-import {receiveAccountCustomContent} from '../../integration-manager/account/results'
-import {getAuthTokenPayload, makeApiRequest} from '../../integration-manager/_sfcc-connector/utils'
+import {receiveUserCustomContent} from 'progressive-web-sdk/dist/integration-manager/results'
+import {getAuthTokenPayload, makeApiRequest} from '../../connectors/_sfcc-connector/utils'
 
 export const initAccountPage = () => (dispatch) => {
     const {sub} = getAuthTokenPayload()
@@ -12,7 +12,7 @@ export const initAccountPage = () => (dispatch) => {
             if (responseJSON.fault) {
                 console.error('Ruh roh!', responseJSON.fault)
             }
-            return dispatch(receiveAccountCustomContent({
+            return dispatch(receiveUserCustomContent({
                 user: responseJSON.email,
                 firstName: responseJSON.first_name,
                 lastName: responseJSON.last_name

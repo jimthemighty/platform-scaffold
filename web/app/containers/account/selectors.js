@@ -5,13 +5,13 @@
 import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getUi} from '../../store/selectors'
-import {getAccountCustomContent} from '../../store/account/selectors'
+import {getUserCustomContent} from '../../store/user/selectors'
 
 export const getAccount = createSelector(
     getUi,
     ({account}) => account
 )
 
-export const getFirstName = createGetSelector(getAccountCustomContent, 'firstName')
-export const getLastName = createGetSelector(getAccountCustomContent, 'lastName')
-export const getUserName = createGetSelector(getAccountCustomContent, 'user')
+export const getFirstName = createGetSelector(getUserCustomContent, 'firstName')
+export const getLastName = createGetSelector(getUserCustomContent, 'lastName')
+export const getUserName = createGetSelector(getUserCustomContent, 'user')

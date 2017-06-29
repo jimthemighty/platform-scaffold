@@ -13,7 +13,7 @@ import CarouselItem from 'progressive-web-sdk/dist/components/carousel/carousel-
 import Image from 'progressive-web-sdk/dist/components/image'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 
-import {getProductAvailability, getProductPrice, getProductTitle, getProductDescription, getProductImages} from '../../store/products/selectors'
+import {getProductAvailability, getProductPrice, getProductTitle, getProductDescription, getProductImages} from 'progressive-web-sdk/dist/store/products/selectors'
 
 import {addProductToCart} from './actions'
 
@@ -28,18 +28,15 @@ const MyProductDetails = ({available, description, images, price, title, onAddTo
             <h2>Price: {price}</h2>
             <div>{description}</div>
             {images.length > 0 ?
-                <div>
-                    <Carousel>
-                        {images.map(({src, alt = ''}) => {
-                            return (
-                                <CarouselItem key={src}>
-                                    <div>{src}</div>
-                                    <Image alt={alt} src={src} />
-                                </CarouselItem>
-                            )
-                        })}
-                    </Carousel>
-                </div>
+                <Carousel>
+                    {images.map(({src, alt = ''}) => {
+                        return (
+                            <CarouselItem key={src}>
+                                <Image alt={alt} src={src} />
+                            </CarouselItem>
+                        )
+                    })}
+                </Carousel>
             :
                 <SkeletonBlock height="100px" />
             }
