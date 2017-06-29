@@ -23,7 +23,7 @@ const selectors = {
 
     paymentTemplate: '.t-app--checkingPayment',
     creditCardName: 'input[name="ccname"]',
-    creditCardNumber: '.c-card-input input',
+    creditCardNumber: '.pw-card-input input',
     expiry: '.pw-expiry-date input',
     cvv: '.pw-card-verification input',
 
