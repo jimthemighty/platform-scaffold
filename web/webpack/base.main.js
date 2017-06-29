@@ -46,6 +46,7 @@ const config = {
         }
     },
     plugins: [
+        ...baseCommon.plugins,
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: (module) => /node_modules/.test(module.resource)
