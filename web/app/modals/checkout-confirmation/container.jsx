@@ -52,7 +52,7 @@ const CheckoutConfirmationModal = (props) => {
                     </p>
 
                     <Button
-                        className="c--tertiary u-width-full u-text-uppercase"
+                        className="pw--tertiary u-width-full u-text-uppercase"
                         onClick={closeCheckoutConfirmationModal}
                         data-analytics-name={UI_NAME.confirmation}
                     >

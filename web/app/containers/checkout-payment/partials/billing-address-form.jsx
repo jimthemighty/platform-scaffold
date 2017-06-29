@@ -63,7 +63,7 @@ class BillingAddressForm extends React.Component {
         const addDetails = (
             <Button
                 className="c--is-anchor"
-                innerClassName="c--no-min-height u-padding-0"
+                innerClassName="pw--no-min-height u-padding-0"
                 onClick={handleShowCompanyAndApt}
                 data-analytics-name={UI_NAME.additionalAddressInfo}
             >

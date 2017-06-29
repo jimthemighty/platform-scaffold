@@ -109,7 +109,7 @@ const ProductListContents = ({
                                         label={`${products.length} Items`}
                                     >
                                         <Button
-                                            className="c--tertiary u-width-full u-text-uppercase"
+                                            className="pw--tertiary u-width-full u-text-uppercase"
                                             onClick={openModal}
                                             disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
                                             id="filterButton"

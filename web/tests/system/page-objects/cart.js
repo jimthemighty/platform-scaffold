@@ -5,7 +5,7 @@
 const selectors = {
     miniCart: '.qa-header__cart',
     miniCartContent: '.m-mini-cart__content',
-    viewCart: '.m-mini-cart__content .c--tertiary',
+    viewCart: '.m-mini-cart__content .pw--tertiary',
     cartTemplateIdentifier: '.t-cart.t--loaded',
     cartCheckout: '.qa-cart__checkout',
     removeItem: '.qa-cart__remove-item',

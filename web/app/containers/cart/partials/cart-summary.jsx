@@ -137,7 +137,7 @@ const CartSummary = ({
 
                 <div className="u-padding-end-md u-padding-bottom-lg u-padding-start-md">
                     <Button
-                        className="c--primary u-flex-none u-width-full u-text-uppercase qa-cart__checkout"
+                        className="pw--primary u-flex-none u-width-full u-text-uppercase qa-cart__checkout"
                         href={checkoutShippingURL}
                         data-analytics-name={UI_NAME.checkout}>
                         <Icon name="lock" />

@@ -54,7 +54,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                     iconClassName="c--small u-margin-end"
                     title={isInCheckout ? 'Update Cart' : 'Add to Cart'}
                     showIconText={true}
-                    className="c--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"
+                    className="pw--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"
                     disabled={disabled}
                     data-analytics-name={UI_NAME.addToCart}
                 />
