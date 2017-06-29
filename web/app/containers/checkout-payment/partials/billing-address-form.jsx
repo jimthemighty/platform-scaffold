@@ -9,8 +9,8 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Selectors
 import * as selectors from '../selectors'
-import {getAvailableRegions} from '../../../store/checkout/selectors'
-import {getShippingFullName, getAddressLineOne, getCity, getPostcode} from '../../../store/checkout/shipping/selectors'
+import {getAvailableRegions} from 'progressive-web-sdk/dist/store/checkout/selectors'
+import {getShippingFullName, getAddressLineOne, getCity, getPostcode} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 
 // Actions
 import {toggleNewAddressFields, toggleCompanyAptField} from '../actions'

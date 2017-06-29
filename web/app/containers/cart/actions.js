@@ -24,7 +24,7 @@ import {addNotification} from 'progressive-web-sdk/dist/store/notifications/acti
 import {getIsLoggedIn} from '../../store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
 import {getEstimateShippingAddress} from '../../store/form/selectors'
-import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
+import {getSelectedShippingMethod} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])

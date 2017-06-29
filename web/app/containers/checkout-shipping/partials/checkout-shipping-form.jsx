@@ -10,7 +10,7 @@ import isEmail from 'validator/lib/isEmail'
 
 import {validateFullName} from '../../../utils/utils'
 import {getIsLoggedIn} from '../../../store/user/selectors'
-import {getInitialShippingAddress} from '../../../store/checkout/shipping/selectors'
+import {getInitialShippingAddress} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 
 import {submitShipping} from '../actions'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'

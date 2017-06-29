@@ -9,7 +9,7 @@ import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/a
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getUenc, getCartBaseUrl, getFormInfoByProductId} from '../selectors'
 import {receiveEntityID} from '../actions'
-import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
+import {getSelectedShippingMethod, getShippingAddress} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 import {receiveCartContents, receiveCartTotals} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {submitForm, textFromFragment, prepareEstimateAddress} from '../utils'
