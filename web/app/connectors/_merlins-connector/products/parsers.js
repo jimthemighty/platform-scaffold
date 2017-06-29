@@ -90,6 +90,17 @@ const getAvailabilityFrom = ($content) => {
     return availability.toLowerCase() === 'in stock'
 }
 
+
+const setInitialVariantValues = (variationCategories) => {
+    const initialValues = {}
+
+    variationCategories.forEach(({slug, values}) => {
+        initialValues[slug] = values[0].value
+    })
+
+    return initialValues
+}
+
 export const productDetailsParser = ($, $html) => {
     const $mainContent = $html.find('.page-main')
     const magentoObject = extractMagentoJson($html)
@@ -105,6 +116,7 @@ export const productDetailsParser = ($, $html) => {
         description: getTextFrom($mainContent, '.product.info.detailed .product.attibute.description p'),
         available: getAvailabilityFrom($mainContent),
         images,
+        initialValues: hasVariants ? setInitialVariantValues(variationCategories) : {},
         variants: hasVariants ? buildVariants(magentoObject, variationCategories) : [],
         variationCategories
     }
