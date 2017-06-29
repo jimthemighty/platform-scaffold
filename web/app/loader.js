@@ -205,16 +205,16 @@ const attemptToInitializeApp = () => {
         loadAsset('meta', {
             name: 'charset',
             content: 'utf-8'
-        });
+        })
 
         loadAsset('link', {
-                href: getAssetUrl('main.css'),
-                rel: 'stylesheet',
-                type: 'text/css',
-                // Tell us when the stylesheet has loaded so we know when it's safe to
-                // display the app! This prevents a flash of unstyled content.
-                onload: 'window.Progressive.stylesheetLoaded = true;'
-            })
+            href: getAssetUrl('main.css'),
+            rel: 'stylesheet',
+            type: 'text/css',
+            // Tell us when the stylesheet has loaded so we know when it's safe to
+            // display the app! This prevents a flash of unstyled content.
+            onload: 'window.Progressive.stylesheetLoaded = true;'
+        })
 
         loadAsset('link', {
             href: getAssetUrl('static/manifest.json'),
