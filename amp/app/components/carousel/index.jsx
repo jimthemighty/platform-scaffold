@@ -111,13 +111,13 @@ Carousel.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Sets the aria-label for the `a-carousel-button-next`. If no value is
+     * Sets the aria-label for the `amp-carousel-button-next`. If no value is
      * given, the aria-label defaults to 'Next item in carousel'.
      */
     dataNextButtonAriaLabel: PropTypes.string,
 
     /**
-     * Sets the aria-label for the `a-carousel-button-prev`. If no value is
+     * Sets the aria-label for the `amp-carousel-button-prev`. If no value is
      * given, the aria-label defaults to 'Previous item in carousel'.
      */
     dataPrevButtonAriaLabel: PropTypes.string,

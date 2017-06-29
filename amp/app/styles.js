@@ -11,6 +11,10 @@ import Button from './components/button/index'
 import ButtonBase from './components/button/_base.scss'
 import ButtonTheme from './styles/themes/amp-components/_button.scss'
 
+import Carousel from './components/carousel/index'
+import CarouselBase from './components/carousel/_base.scss'
+import CarouselTheme from './styles/themes/amp-components/_carousel.scss'
+
 import Field from './components/field/index'
 import FieldBase from './components/field/_base.scss'
 import FieldTheme from './styles/themes/amp-components/_field.scss'
@@ -71,10 +75,6 @@ import SheetTheme from './components/sheet/_theme.scss'
 import SkipLinks from './components/skip-links/index'
 import SkipLinksBase from './components/skip-links/_base.scss'
 import SkipLinksTheme from './components/skip-links/_theme.scss'
-
-import Carousel from './components/carousel/index'
-import CarouselBase from './components/carousel/_base.scss'
-import CarouselTheme from './styles/themes/amp-components/_carousel.scss'
 
 
 // Containers

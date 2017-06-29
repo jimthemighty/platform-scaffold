@@ -11,7 +11,7 @@
 .a-carousel {
     // Carousel Button: built-in class
     // ---
-    .a-carousel-button {
+    .amp-carousel-button {
         width: $tap-size;
         height: 100%;
 
@@ -26,7 +26,7 @@
 
     // Carousel Button Prev: built-in class
     // ---
-    .a-carousel-button-prev {
+    .amp-carousel-button-prev {
         left: 0;
 
         background-image: url('/static/svg/chevron-left.svg');
@@ -34,7 +34,7 @@
 
     // Carousel Button Next: built-in class
     // ---
-    .a-carousel-button-next {
+    .amp-carousel-button-next {
         right: 0;
 
         background-image: url('/static/svg/chevron-right.svg');
