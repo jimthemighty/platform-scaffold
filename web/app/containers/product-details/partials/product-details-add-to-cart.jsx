@@ -51,7 +51,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                 <Button
                     type="submit"
                     icon="plus"
-                    iconClassName="c--small u-margin-end"
+                    iconClassName="pw--small u-margin-end"
                     title={isInCheckout ? 'Update Cart' : 'Add to Cart'}
                     showIconText={true}
                     className="pw--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"

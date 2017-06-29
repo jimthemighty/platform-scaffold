@@ -9,7 +9,7 @@ const selectors = {
     cartTemplateIdentifier: '.t-cart.t--loaded',
     cartCheckout: '.qa-cart__checkout',
     removeItem: '.qa-cart__remove-item',
-    confirmRemove: '.m-cart__remove-item-confirmation-modal .c--secondary',
+    confirmRemove: '.m-cart__remove-item-confirmation-modal .pw--secondary',
     emptyCart: '.t-cart__empty',
     emptyMiniCart: '.m-mini-cart__empty-content'
 }
