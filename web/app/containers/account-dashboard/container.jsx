@@ -13,9 +13,6 @@ import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 
 
-const containerClass = 't-account-dashboard'
-const titleClass = 't-account-dashboard__title u-padding-md u-text-uppercase'
-
 const DashboardLinks = ({link}) => {
     const {text, href} = link
     return (
@@ -45,9 +42,9 @@ DashboardLinks.propTypes = {
 
 
 const AccountDashboard = ({title, links}) => (
-    <div className={containerClass}>
+    <div className="t-account-dashboard">
         { title ?
-            <h1 className={titleClass}>{title}</h1>
+            <h1 className="t-account-dashboard__title u-padding-md u-text-uppercase">{title}</h1>
         :
             <SkeletonText className="u-padding-md" lines={1} type="h1" width="100px" />
         }
