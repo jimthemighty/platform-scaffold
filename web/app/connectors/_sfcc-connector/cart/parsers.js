@@ -40,7 +40,7 @@ export const parseCartProducts = ({product_items = []}) => { /* Products */
     const productMap = {}
 
     product_items.forEach(({product_id, product_name, price, item_text}) => {
-        productMap[getProductHref(product_id)] = {
+        productMap[product_id] = {
             id: product_id,
             title: product_name,
             price: formatPrice(price),

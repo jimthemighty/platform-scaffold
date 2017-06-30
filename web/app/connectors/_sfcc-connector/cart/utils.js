@@ -81,9 +81,9 @@ export const fetchCartItemImages = () => (dispatch, getState) => {
             .map((cartItem) => {
                 const productId = cartItem.get('productId')
 
-                return makeApiRequest(`/products/${productId}/images?all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
+                return makeApiRequest(`/products/${productId}?expand=images,variations&all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
                     .then((response) => response.json())
-                    .then(({image_groups, name, page_title, short_description}) => {
+                    .then(({image_groups, name, page_title, short_description, variation_values, variation_attributes}) => {
                         const productHref = getProductHref(productId)
                         const productState = getProductById(productId)(currentState).toJS()
                         const product = {
@@ -91,6 +91,15 @@ export const fetchCartItemImages = () => (dispatch, getState) => {
                             id: productId,
                             title: page_title,
                             available: true,
+                            options: variation_attributes.map((attribute) => {
+                                const selectedId = variation_values[attribute.id]
+                                const selectedVariant = attribute.values.find((val) => val.value === selectedId) // eslint-disable-line
+
+                                return {
+                                    label: attribute.name,
+                                    value: selectedVariant.name
+                                }
+                            }),
                             href: productHref,
                             price: productState.price || ''
                         }
@@ -103,7 +112,7 @@ export const fetchCartItemImages = () => (dispatch, getState) => {
                         if (largeGroup) {
                             product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
                         }
-                        updatedProducts[productHref] = product
+                        updatedProducts[productId] = product
                     })
             })
     )

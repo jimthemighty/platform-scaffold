@@ -78,7 +78,6 @@ class CartProductItem extends React.Component {
             quantity,
             itemPrice,
             linePrice,
-            options,
             setCurrentProduct
         } = this.props
 
@@ -89,10 +88,10 @@ class CartProductItem extends React.Component {
                 image={<ProductImage {...product.thumbnail} />}
                 >
 
-                {options &&
+                {product.options &&
                     <div className="u-margin-bottom-sm">
-                        {options.map((option) => (
-                            <p key={option.option_value} className="u-color-neutral-50">
+                        {product.options.map((option) => (
+                            <p key={option.value} className="u-color-neutral-50">
                                 {option.label} - {option.value}
                             </p>
                         ))}
