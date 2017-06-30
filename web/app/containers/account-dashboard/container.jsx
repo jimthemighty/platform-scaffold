@@ -10,8 +10,8 @@ import template from '../../template'
 import {getTitle, getLink} from './selectors'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import ListTile from 'progressive-web-sdk/dist/components/list-tile'
+import List from 'progressive-web-sdk/dist/components/list'
 import Icon from 'progressive-web-sdk/dist/components/icon'
-
 
 const DashboardLinks = ({link: {text, href}}) => {
     return (
@@ -47,9 +47,9 @@ const AccountDashboard = ({title, links}) => (
         :
             <SkeletonText className="u-padding-md" lines={1} type="h1" width="100px" />
         }
-        <div className="u-bg-color-neutral-00 u-border-bottom u-border-top">
+        <List className="u-bg-color-neutral-00 u-border-bottom u-border-top">
             {links.map((link, idx) => <DashboardLinks link={link} key={idx} />)}
-        </div>
+        </List>
     </div>
 )
 
