@@ -10,6 +10,7 @@ import {
     loadAndInitMessagingClient,
     loadScript,
     loadScriptAsPromise,
+    prefetchLink,
     updateMessagingSWVersion
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
@@ -280,6 +281,11 @@ const attemptToInitializeApp = () => {
             // loading is complete.
             setupMessagingClient(serviceWorkerSupported, messagingEnabled)
         })
+
+        // Prefetch analytics - it's something that we will be downloading later,
+        // and thus we want to fetch it so execution is not delayed to prevent
+        // time to interactive from being delayed.
+        prefetchLink({href: '//www.google-analytics.com/analytics.js'})
     } else {
         const capturing = document.createElement('script')
         capturing.async = true
