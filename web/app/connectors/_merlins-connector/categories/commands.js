@@ -17,7 +17,7 @@ import {getTextFrom} from '../../../utils/parser-utils'
 import {fetchPageData} from '../app/commands'
 
 const extractFilter = (url) => {
-    const filter = url.match(/(price=.*?)?(?=&|#)/) || url.match(/(color=.*?)?(?=&|#)/)
+    const filter = url.match(/(price=[^&|#]*)/) || url.match(/(color=[^&|#]*)/)
     return filter ? filter[1] : ''
 }
 

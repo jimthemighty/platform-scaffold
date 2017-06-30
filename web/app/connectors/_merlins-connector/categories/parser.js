@@ -59,6 +59,7 @@ export const priceFilterParser = ($, $html) => {
             const $count = $kind.find('.count').remove()
             const count = $count.text().replace(REGEX_NON_NUM, '')
 
+            // price ruleset
             if ($kind.has('.price').length > 0) {
                 const price = query.split('=')[1]
                 criteria = priceParser(price) // priceParser('10-20')
@@ -70,13 +71,16 @@ export const priceFilterParser = ($, $html) => {
                 // what would that mean: 10-20, 0-1020 or 1020-Infinity?
                 // 'price10to20'
                 query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '')
+            } else if (query.includes('color')) { // color ruleset
+                const colorCode = query.split('=')[1]
+                criteria = {colorCode} // priceParser('10-20')}
             }
 
             kindArray.push({
-                count, // 2
+                count,
                 criteria,
                 label,
-                ruleset: 'price', // we only have one ruleset at the moment
+                ruleset: filterObject.ruleset,
                 query,
                 searchKey
             })

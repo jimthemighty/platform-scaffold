@@ -8,7 +8,6 @@ import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi, getCategories} from '../../store/selectors'
 import {getCategoryProducts} from '../../store/categories/selectors'
 import {getCurrentPathKey, getCurrentPathKeyWithoutQuery} from 'progressive-web-sdk/dist/store/app/selectors'
-import {byFilters} from '../../utils/filter-utils'
 import {sortLib} from '../../utils/sort-utils'
 
 export const getProductList = createSelector(getUi, ({productList}) => productList)
@@ -48,16 +47,17 @@ export const getActiveFilters = createSelector(
     )
 )
 
+/* filtering is done on page
 export const getFilteredProductListProducts = createSelector(
     getCategoryProducts,
     getActiveFilters,
     (products, filters) => {
         return filters.size > 0 ? products.filter(byFilters(filters.toJS())) : products
     }
-)
+)*/
 
 export const getFilteredAndSortedListProducts = createSelector(
-    getFilteredProductListProducts,
+    getCategoryProducts,
     getCurrentSort,
     (products, sort) => {
         return sort ? products.sort(sortLib[sort]) : products
