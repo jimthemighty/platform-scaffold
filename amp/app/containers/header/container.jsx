@@ -7,7 +7,7 @@ import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/head
 import IconLabel from '../../components/icon-label'
 
 // Utils
-import {staticURL} from '../../utils'
+import {staticURL, canonicalURL} from '../../utils'
 
 import {ampComponent} from '../../amp-sdk'
 
@@ -39,7 +39,7 @@ const Header = (props) => {
                         </Button>
                     </HeaderBarActions>
                     <HeaderBarActions>
-                        <Button href="https://www.merlinspotions.com/checkout/cart/" className="t-header__link" innerClassName="u-padding-0">
+                        <Button href={canonicalURL('/checkout/cart')} className="t-header__link" innerClassName="u-padding-0">
                             <IconLabel iconName="cart" label="Cart" iconSize="medium" />
                         </Button>
                     </HeaderBarActions>
