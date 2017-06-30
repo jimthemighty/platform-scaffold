@@ -78,8 +78,11 @@ class CartProductItem extends React.Component {
             quantity,
             itemPrice,
             linePrice,
+            options,
             setCurrentProduct
         } = this.props
+
+        const variations = options ? options : product.options
 
         return (
             <ProductItem customWidth="40%"
@@ -88,9 +91,9 @@ class CartProductItem extends React.Component {
                 image={<ProductImage {...product.thumbnail} />}
                 >
 
-                {product.options &&
+                {variations &&
                     <div className="u-margin-bottom-sm">
-                        {product.options.map((option) => (
+                        {variations.map((option) => (
                             <p key={option.value} className="u-color-neutral-50">
                                 {option.label} - {option.value}
                             </p>
