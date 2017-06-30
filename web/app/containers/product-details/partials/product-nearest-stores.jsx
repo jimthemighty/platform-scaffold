@@ -96,7 +96,7 @@ class ProductNearestStores extends React.Component {
                     </div>
 
                     <Button
-                        className="c--tertiary u-text-uppercase u-width-full"
+                        className="pw--tertiary u-text-uppercase u-width-full"
                         href={LOCATION_URL}
                         data-analytics-name={UI_NAME.viewAllStores}
                     >

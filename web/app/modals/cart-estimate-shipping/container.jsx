@@ -85,7 +85,7 @@ class CartEstimateShippingModal extends React.Component {
                     </HeaderBarTitle>
 
                     <HeaderBarActions>
-                        <IconLabelButton iconName="close" label="" onClick={closeModal} />
+                        <IconLabelButton iconName="close" label="" onClick={closeModal} analyticsName={UI_NAME.dismissModal} />
                         <span className="u-visually-hidden">Close</span>
                     </HeaderBarActions>
                 </HeaderBar>
@@ -108,12 +108,12 @@ class CartEstimateShippingModal extends React.Component {
 
                         <FieldRow>
                             {isTaxRequestPending ?
-                                <Button className="c--secondary u-width-full">
+                                <Button className="pw--secondary u-width-full">
                                     <InlineLoader className="pw--white" title="Estimating" />
                                 </Button>
                             :
                                 <Button
-                                    className="c--secondary u-width-full u-text-uppercase"
+                                    className="pw--secondary u-width-full u-text-uppercase"
                                     type="submit"
                                     data-analytics-name={UI_NAME.estimateShipping}
                                 >

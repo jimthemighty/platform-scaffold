@@ -73,7 +73,7 @@ const Navigation = (props) => {
                         </HeaderBarTitle>
 
                         <HeaderBarActions>
-                            <IconLabelButton iconName="close" label="close" onClick={closeNavigation} />
+                            <IconLabelButton iconName="close" label="close" onClick={closeNavigation} analyticsName={UI_NAME.dismissModal} />
                         </HeaderBarActions>
                     </HeaderBar>
 

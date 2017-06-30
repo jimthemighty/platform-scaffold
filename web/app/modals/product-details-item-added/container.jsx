@@ -58,14 +58,14 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
             <div className="u-flex-none">
                 <Button
                     onClick={onGoToCheckout}
-                    className="c--primary u-width-full u-margin-bottom-md u-text-uppercase"
+                    className="pw--primary u-width-full u-margin-bottom-md u-text-uppercase"
                     innerClassName="u-text-align-center"
                     data-analytics-name={UI_NAME.checkout}
                 >
                     Go To Checkout
                 </Button>
                 <Button
-                    className="c--tertiary u-width-full u-text-uppercase"
+                    className="pw--tertiary u-width-full u-text-uppercase"
                     onClick={onDismiss}
                     data-analytics-name={UI_NAME.continueShopping}
                 >
