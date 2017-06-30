@@ -39,7 +39,7 @@ const CheckoutConfirmationForm = ({
 
             {submitFailed && error &&
                 <FieldRow>
-                    <p className="pw-field__error c-field__error">{error}</p>
+                    <p className="pw-field__error">{error}</p>
                 </FieldRow>
             }
 
