@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {isLocalStorageAvailable} from 'progressive-web-sdk/utils/utils'
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 
 export const loadScript = ({id, src, onload, isAsync = true, onerror}) => {
     const script = document.createElement('script')
