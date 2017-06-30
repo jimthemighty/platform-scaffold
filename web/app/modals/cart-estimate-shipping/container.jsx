@@ -85,7 +85,7 @@ class CartEstimateShippingModal extends React.Component {
                     </HeaderBarTitle>
 
                     <HeaderBarActions>
-                        <IconLabelButton iconName="close" label="" onClick={closeModal} />
+                        <IconLabelButton iconName="close" label="" onClick={closeModal} analyticsName={UI_NAME.dismissModal} />
                         <span className="u-visually-hidden">Close</span>
                     </HeaderBarActions>
                 </HeaderBar>

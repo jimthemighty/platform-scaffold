@@ -48,7 +48,7 @@ class ProductListFilterModal extends React.Component {
                     </HeaderBarTitle>
 
                     <HeaderBarActions>
-                        <IconLabelButton iconName="close" label="" onClick={closeModal}>Close</IconLabelButton>
+                        <IconLabelButton iconName="close" label="" onClick={closeModal} analyticsName={UI_NAME.dismissModal}>Close</IconLabelButton>
                     </HeaderBarActions>
                 </HeaderBar>
 
