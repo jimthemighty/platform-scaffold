@@ -112,7 +112,7 @@ class CartProductItem extends React.Component {
                 <div className="u-flexbox">
                     <Button
                         className="u-text-size-small u-color-brand u-flex-none u-text-letter-spacing-normal"
-                        innerClassName="c--no-min-width u-padding-start-0 u-padding-bottom-0"
+                        innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
                         href={configureUrl}
                         data-analytics-name={UI_NAME.editItem}
                         onClick={() => setCurrentProduct(product.id)}

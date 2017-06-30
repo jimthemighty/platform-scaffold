@@ -62,7 +62,7 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
         <div className="u-padding-md">
             <Button
                 href={cartURL}
-                className="c--tertiary u-width-full u-margin-bottom u-text-capitalize"
+                className="pw--tertiary u-width-full u-margin-bottom u-text-capitalize"
                 data-analytics-name={UI_NAME.goToCart}
             >
                 View and edit cart
