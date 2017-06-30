@@ -39,7 +39,7 @@ const CartWishlistComplete = ({closeModal}) => (
         </p>
 
         <Button
-            className="c--tertiary u-width-full u-text-uppercase"
+            className="pw--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
             data-analytics-name={UI_NAME.confirmation}
         >
@@ -72,7 +72,7 @@ const CartWishlistGuest = ({closeModal}) => (
         </p>
 
         <Button
-            className="c--secondary u-width-full u-text-uppercase u-margin-bottom-lg"
+            className="pw--secondary u-width-full u-text-uppercase u-margin-bottom-lg"
             href="/customer/account/login/"
             data-analytics-name={UI_NAME.goToSignIn}
         >
@@ -80,7 +80,7 @@ const CartWishlistGuest = ({closeModal}) => (
         </Button>
 
         <Button
-            className="c--tertiary u-width-full u-text-uppercase"
+            className="pw--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
             data-analytics-name={UI_NAME.cancel}
         >

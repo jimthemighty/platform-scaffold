@@ -48,7 +48,7 @@ const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem}) => 
 
                 <div className="u-flex u-flexbox">
                     <Button
-                        className="c--tertiary u-text-uppercase u-flex"
+                        className="pw--tertiary u-text-uppercase u-flex"
                         onClick={closeModal}
                         data-analytics-name={UI_NAME.cancelRemoveItem}
                     >
@@ -56,7 +56,7 @@ const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem}) => 
                     </Button>
 
                     <Button
-                        className="c--secondary u-text-uppercase u-flex u-margin-start"
+                        className="pw--secondary u-text-uppercase u-flex u-margin-start"
                         onClick={() => {
                             closeModal()
                             removeItem(removeItemID)
