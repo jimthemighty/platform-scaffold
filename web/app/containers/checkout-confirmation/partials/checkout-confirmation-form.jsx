@@ -39,14 +39,14 @@ const CheckoutConfirmationForm = ({
 
             {submitFailed && error &&
                 <FieldRow>
-                    <p className="pw-field__error c-field__error">{error}</p>
+                    <p className="pw-field__error">{error}</p>
                 </FieldRow>
             }
 
             <FieldRow>
                 <Button
                     type="submit"
-                    className="c--primary u-text-uppercase u-width-full"
+                    className="pw--primary u-text-uppercase u-width-full"
                     disabled={submitting}
                     data-analytics-name={UI_NAME.register}
                 >
