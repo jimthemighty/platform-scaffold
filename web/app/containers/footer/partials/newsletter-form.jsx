@@ -26,7 +26,7 @@ const NewsletterForm = ({handleSubmit, disabled, submitting, onSubmit}) => {
 
                 <Button
                     type="submit"
-                    className="c--tertiary u-margin-0 u-text-uppercase"
+                    className="pw--tertiary u-margin-0 u-text-uppercase"
                     disabled={submitting || disabled}
                     data-analytics-name={UI_NAME.subscribe}
                 >
