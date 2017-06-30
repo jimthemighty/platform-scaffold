@@ -21,4 +21,4 @@ const PLACEHOLDER = {
     href: undefined
 }
 
-export const getLink = createGetSelector(getDashboardInfo, 'links', Immutable.List(new Array(7).fill(PLACEHOLDER)))
+export const getLink = createGetSelector(getDashboardInfo, 'links', Immutable.List(new Array(8).fill(PLACEHOLDER)))
