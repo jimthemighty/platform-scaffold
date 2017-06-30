@@ -41,7 +41,7 @@ export const continueShopping = () => {
 }
 
 const EmptyCartContents = ({hide, isLoggedIn}) => {
-    const emptyCartClassnames = classNames('t-cart__empty u-flexbox u-flex u-direction-column u-align-center u-justify-center', {
+    const emptyCartClassnames = classNames('t-cart__empty u-flexbox u-flex u-direction-column u-align-center u-justify-center u-padding-top-lg u-margin-top', {
         'u-visually-hidden': hide,
         't--hide': hide,
         't--viewport-height': isRunningInAstro
