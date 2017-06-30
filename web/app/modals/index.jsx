@@ -30,20 +30,44 @@ const modals = {
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: <CheckoutConfirmationModal />,
 }
 
-const ModalManager = (props) => {
-    const {isOpen} = props
-    let openedModal
-    for (const modal in isOpen) {
-        if (isOpen[modal]) {
-            openedModal = modals[modal]
+class ModalManager extends React.Component {
+    shouldComponentUpdate(nextProps) {
+        const nextIsOpen = nextProps.isOpen
+        const isOpen = this.props.isOpen
+
+        for (const nextModal in nextIsOpen) {
+            // Open Modal
+            if (nextIsOpen[nextModal] === true) {
+                return true
+            } else {
+                // Close Modal
+                // Set a delay for modal dismiss animation
+                // `delay` should be larger than transition time
+                const delay = 1000
+                if (isOpen[nextModal] !== nextIsOpen[nextModal]) {
+                    setTimeout(() => this.forceUpdate(), delay)
+                    return false
+                }
+            }
         }
+        return true
     }
 
-    return (
-        <div className="m-modal-manager">
-            {openedModal}
-        </div>
-    )
+    render() {
+        const {isOpen} = this.props
+        let openedModal
+        for (const modal in isOpen) {
+            if (isOpen[modal]) {
+                openedModal = modals[modal]
+            }
+        }
+
+        return (
+            <div className="m-modal-manager">
+                {openedModal}
+            </div>
+        )
+    }
 }
 
 ModalManager.propTypes = {
