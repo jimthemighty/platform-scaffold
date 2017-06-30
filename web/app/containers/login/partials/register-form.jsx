@@ -12,7 +12,7 @@ import {submitRegisterForm} from '../actions'
 import Button from 'progressive-web-sdk/dist/components/button'
 import FieldSet from 'progressive-web-sdk/dist/components/field-set'
 
-import {LoginField, RememberMeTooltip} from './common'
+import {LoginField} from './common'
 
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
@@ -79,6 +79,7 @@ class RegisterForm extends React.Component {
                         name="password"
                         type="password"
                         analyticsName={UI_NAME.password}
+                        isPassword
                         />
 
                     <LoginField
@@ -86,19 +87,12 @@ class RegisterForm extends React.Component {
                         name="password_confirmation"
                         type="password"
                         analyticsName={UI_NAME.confirmPassword}
-                        />
-
-                    <LoginField
-                        label="Remember Me"
-                        name="persistent_remember_me"
-                        type="checkbox"
-                        tooltip={<RememberMeTooltip />}
-                        analyticsName={UI_NAME.remember}
+                        isPassword
                         />
                 </FieldSet>
 
                 <Button
-                    className="c--primary u-width-full u-margin-top-lg"
+                    className="pw--primary u-width-full u-margin-top-lg"
                     type="submit"
                     disabled={submitting || !isFormLoaded}
                     data-analytics-name={UI_NAME.register}

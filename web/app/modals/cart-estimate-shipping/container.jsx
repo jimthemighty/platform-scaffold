@@ -26,58 +26,108 @@ import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/d
 import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-export const CartEstimateShippingModal = ({closeModal, isOpen, stateProvinces, submitEstimateShipping, isTaxRequestPending, handleSubmit}) => {
-    return (
-        <Sheet className="m-cart__estimate-shipping-modal" open={isOpen} onDismiss={closeModal} maskOpacity={0.7} effect="slide-right" coverage="85%">
-            <HeaderBar>
-                <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
-                    <h1 className="u-h4 u-text-family-header u-text-uppercase">
-                        <span className="u-text-weight-extra-light">Estimate Shipping</span>
-                    </h1>
-                </HeaderBarTitle>
+const REQUIRED_TEXT = 'Required'
 
-                <HeaderBarActions>
-                    <IconLabelButton iconName="close" label="" onClick={closeModal} />
-                    <span className="u-visually-hidden">Close</span>
-                </HeaderBarActions>
-            </HeaderBar>
+const validate = (values) => {
+    const errors = {}
+    const requiredFieldNames = [
+        'countryId',
+        'postcode'
+    ]
+    if (!(values.region || values.regionId)) {
+        errors.region = REQUIRED_TEXT
+        errors.regionId = REQUIRED_TEXT
+    }
+    requiredFieldNames.forEach((fieldName) => {
+        if (!values[fieldName]) {
+            errors[fieldName] = REQUIRED_TEXT
+        }
+    })
 
-            <div className="u-padding-md">
-                <form onSubmit={handleSubmit(submitEstimateShipping)}>
-                    <FieldRow>
-                        <CountrySelect />
-                    </FieldRow>
-
-                    <FieldRow>
-                        <RegionField regions={stateProvinces} />
-                    </FieldRow>
-
-                    <FieldRow>
-                        <ReduxForm.Field component={Field} name="postcode" label="Zip/Postal Code">
-                            <input type="text" noValidate data-analytics-name={UI_NAME.postcode} />
-                        </ReduxForm.Field>
-                    </FieldRow>
-
-                    <FieldRow>
-                        {isTaxRequestPending ?
-                            <Button className="c--secondary u-width-full">
-                                <InlineLoader className="pw--white" title="Estimating" />
-                            </Button>
-                        :
-                            <Button
-                                className="c--secondary u-width-full u-text-uppercase"
-                                type="submit"
-                                data-analytics-name={UI_NAME.estimateShipping}
-                            >
-                                Get Estimate
-                            </Button>
-                        }
-                    </FieldRow>
-                </form>
-            </div>
-        </Sheet>
-    )
+    return errors
 }
+
+class CartEstimateShippingModal extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    onSubmit(values) {
+        return new Promise((resolve, reject) => {
+            const errors = validate(values)
+
+            if (!Object.keys(errors).length) {
+                this.props.submitEstimateShipping()
+                return resolve()
+            }
+            return reject(new ReduxForm.SubmissionError(errors))
+        })
+    }
+
+    render() {
+        const {
+            closeModal,
+            handleSubmit,
+            isOpen,
+            isTaxRequestPending,
+            stateProvinces
+        } = this.props
+
+        return (
+            <Sheet className="m-cart__estimate-shipping-modal" open={isOpen} onDismiss={closeModal} maskOpacity={0.7} effect="slide-right" coverage="85%">
+                <HeaderBar>
+                    <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
+                        <h1 className="u-h4 u-text-family-header u-text-uppercase">
+                            <span className="u-text-weight-extra-light">Estimate Shipping</span>
+                        </h1>
+                    </HeaderBarTitle>
+
+                    <HeaderBarActions>
+                        <IconLabelButton iconName="close" label="" onClick={closeModal} analyticsName={UI_NAME.dismissModal} />
+                        <span className="u-visually-hidden">Close</span>
+                    </HeaderBarActions>
+                </HeaderBar>
+
+                <div className="u-padding-md">
+                    <form onSubmit={handleSubmit(this.onSubmit)}>
+                        <FieldRow>
+                            <CountrySelect />
+                        </FieldRow>
+
+                        <FieldRow>
+                            <RegionField regions={stateProvinces} />
+                        </FieldRow>
+
+                        <FieldRow>
+                            <ReduxForm.Field component={Field} name="postcode" label="Zip/Postal Code">
+                                <input type="text" noValidate data-analytics-name={UI_NAME.postcode} />
+                            </ReduxForm.Field>
+                        </FieldRow>
+
+                        <FieldRow>
+                            {isTaxRequestPending ?
+                                <Button className="pw--secondary u-width-full">
+                                    <InlineLoader className="pw--white" title="Estimating" />
+                                </Button>
+                            :
+                                <Button
+                                    className="pw--secondary u-width-full u-text-uppercase"
+                                    type="submit"
+                                    data-analytics-name={UI_NAME.estimateShipping}
+                                >
+                                    Get Estimate
+                                </Button>
+                            }
+                        </FieldRow>
+                    </form>
+                </div>
+            </Sheet>
+        )
+    }
+}
+
 
 CartEstimateShippingModal.propTypes = {
     /**
@@ -119,4 +169,5 @@ const EstimateShippingReduxForm = ReduxForm.reduxForm({
     form: ESTIMATE_FORM_NAME
 })(CartEstimateShippingModal)
 
+export {CartEstimateShippingModal}
 export default connect(mapStateToProps, mapDispatchToProps)(EstimateShippingReduxForm)

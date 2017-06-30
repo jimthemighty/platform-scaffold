@@ -3,12 +3,20 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import * as utils from '../utils'
-import {receiveNavigationData, setLoggedIn, setCheckoutShippingURL, setCartURL} from '../../results'
+import {
+    receiveNavigationData,
+    receiveSearchSuggestions,
+    setLoggedIn,
+    setCheckoutShippingURL,
+    setCartURL
+} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
-import {parseCategories} from '../parsers'
+import {parseCategories, parseSearchSuggestions} from '../parsers'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
-import {getSignInURL, getCheckoutShippingURL, getCartURL} from '../config'
+import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL} from '../config'
 import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from '../../../modals/navigation/constants'
+
 
 export const fetchNavigationData = () => (dispatch) => {
     return utils.makeUnAuthenticatedApiRequest('/categories/root?levels=2', {method: 'GET'})
@@ -46,6 +54,21 @@ export const fetchNavigationData = () => (dispatch) => {
                 }
             }))
         })
+}
+
+export const getSearchSuggestions = (query) => (dispatch) => {
+    // SFCC API requires min length of 3
+    if (query.length < 3) {
+        return dispatch(receiveSearchSuggestions(null))
+    }
+    const queryURL = `/search_suggestion?q=${query}`
+    return utils.makeApiRequest(queryURL)
+        .then((response) => response.json())
+        .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
+}
+
+export const searchProducts = (query) => (dispatch) => {
+    browserHistory.push({pathname: buildSearchURL(query)})
 }
 
 export const initApp = () => (dispatch) => {

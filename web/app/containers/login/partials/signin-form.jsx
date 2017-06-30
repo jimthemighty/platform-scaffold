@@ -13,7 +13,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import FieldSet from 'progressive-web-sdk/dist/components/field-set'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 
-import {LoginField, RememberMeTooltip} from './common'
+import {LoginField} from './common'
 
 const FORGOT_PASSWORD_PATH = '/customer/account/forgotpassword'
 
@@ -60,19 +60,11 @@ class SignInForm extends React.Component {
                         type="password"
                         forgotPassword={{href: FORGOT_PASSWORD_PATH}}
                         analyticsName={UI_NAME.password}
+                        isPassword
                         />
-
-                    <LoginField
-                        label="Remember Me"
-                        name="persistent_remember_me"
-                        type="checkbox"
-                        tooltip={<RememberMeTooltip />}
-                        analyticsName={UI_NAME.remember}
-                        />
-
                     <FieldRow>
                         <Button
-                            className="c--primary u-width-full"
+                            className="pw--primary u-width-full"
                             type="submit"
                             disabled={submitting || !isFormLoaded}
                             data-analytics-name={UI_NAME.login}
