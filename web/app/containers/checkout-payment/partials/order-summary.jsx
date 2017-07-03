@@ -280,7 +280,7 @@ OrderSummary.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    cartItems: cartSelectors.getCartItems,
+    cartItems: cartSelectors.getCartItemData,
     cartshippingRate: cartSelectors.getShippingAmount,
     discountAmount: cartSelectors.getDiscountAmount,
     discountLabel: cartSelectors.getDiscountLabel,

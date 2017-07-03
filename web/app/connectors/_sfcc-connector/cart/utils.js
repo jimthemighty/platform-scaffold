@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID} from '../utils'
-import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {getCartItemData} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 
@@ -72,7 +72,7 @@ export const fetchCartItemImages = () => (dispatch, getState) => {
     const largeViewType = 'large'
 
     const currentState = getState()
-    const items = getCartItems(currentState)
+    const items = getCartItemData(currentState)
     const updatedProducts = {}
 
     // We use the .thumbnail as an indicator of whether the product has images already

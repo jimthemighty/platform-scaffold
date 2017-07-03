@@ -105,7 +105,7 @@ MiniCartProductList.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     cartURL: getCartURL,
-    items: selectors.getCartItems,
+    items: selectors.getCartItemData,
     orderTotal: selectors.getOrderTotal
 })
 
