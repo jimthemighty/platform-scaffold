@@ -23,15 +23,15 @@ const OnboardingScreen = ({imageURL, imageAlt, title, subtitle, primaryButton, l
                 </div>
                 {primaryButton &&
                     <div className="u-flexbox u-flexbox-gutters button-wrapper">
-                        <Button text={primaryButton.title} className="c--primary u-flex" onClick={primaryButton.action} />
+                        <Button text={primaryButton.title} className="pw--primary u-flex" onClick={primaryButton.action} />
                     </div>
                 }
                 <div className="u-flexbox u-flexbox-gutters button-wrapper">
                     {laterButton &&
-                        <Button className="c--tertiary u-flex" text={laterButton.title} onClick={laterButton.action} />
+                        <Button className="pw--tertiary u-flex" text={laterButton.title} onClick={laterButton.action} />
                     }
                     {actionButton &&
-                        <Button className="c--secondary u-flex" text={actionButton.title} onClick={actionButton.action} />
+                        <Button className="pw--secondary u-flex" text={actionButton.title} onClick={actionButton.action} />
                     }
                 </div>
             </div>

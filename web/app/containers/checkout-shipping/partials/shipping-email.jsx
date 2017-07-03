@@ -55,7 +55,7 @@ const ShippingEmail = ({submitSignIn, customerEmailRecognized, isEmailAvailable}
                 {customerEmailRecognized &&
                     <FieldRow>
                         <Button
-                            className="c--secondary u-width-full u-text-uppercase qa-checkout__sign-in"
+                            className="pw--secondary u-width-full u-text-uppercase qa-checkout__sign-in"
                             onClick={submitSignIn}
                             data-analytics-name={UI_NAME.login}>
                             <Icon name="user" className="u-margin-end" />
