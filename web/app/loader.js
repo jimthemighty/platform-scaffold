@@ -8,6 +8,7 @@ import {
     getMessagingSWVersion,
     isLocalStorageAvailable,
     loadAndInitMessagingClient,
+    addMessagingClientInitPromise,
     loadScript,
     loadScriptAsPromise,
     prefetchLink,
@@ -256,6 +257,10 @@ const attemptToInitializeApp = () => {
             src: getAssetUrl('main.js')
         })
 
+        // This must come before vendor.js, or before the Webpack chunk that contains
+        // Messaging React components
+        addMessagingClientInitPromise(messagingEnabled)
+
         loadScriptAsPromise({
             id: 'progressive-web-vendor',
             src: getAssetUrl('vendor.js')
@@ -275,10 +280,6 @@ const attemptToInitializeApp = () => {
          ? loadWorker()
          : Promise.resolve(false)
         ).then((serviceWorkerSupported) => {
-
-            // Set up the Messaging client integration - this must be
-            // done now, but the work is deferred until after script
-            // loading is complete.
             setupMessagingClient(serviceWorkerSupported, messagingEnabled)
         })
 
