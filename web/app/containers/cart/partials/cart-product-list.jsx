@@ -74,7 +74,6 @@ class CartProductItem extends React.Component {
         const {
             cartItemId,
             configureUrl,
-            product,
             quantity,
             itemPrice,
             linePrice,
@@ -169,10 +168,11 @@ CartProductItem.propTypes = {
     linePrice: PropTypes.string,
     openRemoveItemModal: PropTypes.func,
     options: PropTypes.array,
-    product: PropTypes.object, /* Product */
     productId: PropTypes.string,
     quantity: PropTypes.number,
     setCurrentProduct: PropTypes.func,
+    thumbnail: PropTypes.object,
+    title: PropTypes.string,
     onQtyChange: PropTypes.func,
     onSaveLater: PropTypes.func
 
