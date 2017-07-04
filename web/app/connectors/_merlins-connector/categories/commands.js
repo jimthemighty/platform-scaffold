@@ -47,9 +47,9 @@ export const initProductListPage = (url) => (dispatch) => {
 
             // Receive page contents
             dispatch(receiveProductListProductData(productListParser($, $response)))
-            dispatch(receiveCategoryInformation(pathKey, {
+            dispatch(receiveCategoryInformation(pathKeyWithoutQuery, {
                 id: parseCategoryId($, $response) || pathKey,
-                href: pathKey,
+                href: pathKeyWithoutQuery,
                 parentId: null,
                 title,
                 searchTerm: searchTermMatch ? searchTermMatch[0] : null,

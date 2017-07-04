@@ -20,6 +20,11 @@ export const getCurrentProductList = createGetSelector(
 
 export const getCurrentSort = createGetSelector(getCurrentProductList, 'sort')
 
+export const getProductListInfoLoaded = createHasSelector(
+    getCategories,
+    getCurrentPathKeyWithoutQuery
+)
+
 export const getProductListContentsLoaded = createHasSelector(
     getCategories,
     getCurrentPathKey

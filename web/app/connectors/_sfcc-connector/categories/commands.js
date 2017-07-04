@@ -37,9 +37,9 @@ const makeCategorySearchURL = (queries) => {
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     const parentId = parent_category_id !== 'root' ? parent_category_id : null
-    const path = getCategoryPath(id)
+    const path = getURLWithoutQuery(getCategoryPath(id))
 
-    dispatch(receiveCategoryInformation(id, {
+    dispatch(receiveCategoryInformation(path, {
         id,
         title: name,
         href: path,
