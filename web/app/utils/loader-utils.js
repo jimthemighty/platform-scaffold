@@ -76,7 +76,7 @@ const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-
 // chain from means they don't need to poll for its existence
 let clientInitResolver = () => {}
 let clientInitRejecter = () => {}
-export const addMessagingClientInitPromise = (messagingEnabled) => {
+export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
     if (!messagingEnabled) {
         return
     }
