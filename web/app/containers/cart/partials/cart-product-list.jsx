@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {openRemoveItemModal, saveToWishlist, updateItem} from '../actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {getCartItem, getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {getCartItemData, getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 
 import {noop} from 'progressive-web-sdk/dist/utils/utils'

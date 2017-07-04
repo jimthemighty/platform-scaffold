@@ -70,8 +70,8 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
 
             <List>
                 {items.map(({product, itemPrice, linePrice, quantity}) => {
-                    const src = product.thumbnail ? product.thumbnail.src : ''
-                    const alt = product.thumbnail ? product.thumbnail.alt : ''
+                    const src = product ? product.thumbnail.src : ''
+                    const alt = product ? product.thumbnail.alt : ''
                     return (
                         <ProductItem
                             className={productListClasses}
