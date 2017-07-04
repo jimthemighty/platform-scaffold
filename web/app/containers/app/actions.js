@@ -71,15 +71,16 @@ export const fetchSvgSprite = () => (dispatch) => {
 
 
 export const signOut = () => (dispatch) => {
-    browserHistory.push({pathname: '/'})
-    return dispatch(logout()).then(() => {
-        // Desktop's message includes 'redirect to home page' message
-        // so we'll just hardcode a message instead
-        dispatch(addNotification(
-            'signedOutNotification',
-            'You are now signed out'
-        ))
-    })
+    return dispatch(logout())
+        .then(() => browserHistory.push({pathname: '/'}))
+        .then(() => {
+            // Desktop's message includes 'redirect to home page' message
+            // so we'll just hardcode a message instead
+            dispatch(addNotification(
+                'signedOutNotification',
+                'You are now signed out'
+            ))
+        })
 }
 
 export const cartExpired = () => (dispatch) => {
