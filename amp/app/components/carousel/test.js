@@ -1,5 +1,5 @@
 /* eslint-disable newline-per-chained-call, max-nested-callbacks */
-import {shallowHOC as shallow} from '../../test-utils'
+import {shallowHOC as shallow} from 'mobify-amp-sdk/dist/test-utils'
 import React from 'react'
 
 import Carousel from './index'

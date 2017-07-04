@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 
 // Components
-import Link from '../link'
+import Link from 'mobify-amp-sdk/dist/components/link'
 import {ampComponent} from '../../amp-sdk'
 
 const Breadcrumbs = ({

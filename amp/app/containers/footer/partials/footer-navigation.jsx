@@ -1,7 +1,7 @@
 import React from 'react'
 
 // Components
-import Link from '../../../components/link'
+import Link from 'mobify-amp-sdk/dist/components/link'
 
 import {canonicalURL} from '../../../utils'
 

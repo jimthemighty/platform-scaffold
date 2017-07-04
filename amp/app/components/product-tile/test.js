@@ -1,4 +1,4 @@
-import {shallowHOC as shallow} from '../../test-utils'
+import {shallowHOC as shallow} from 'mobify-amp-sdk/dist/test-utils'
 /* eslint-env jest */
 import React from 'react'
 
