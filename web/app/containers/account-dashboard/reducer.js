@@ -11,7 +11,6 @@ import {recieveAccountDashboardUIData} from 'progressive-web-sdk/dist/integratio
 const initialState = Immutable.Map()
 
 export default handleActions({
-    [accountActions.receiveData]: mergePayload,
     [accountActions.changeTitle]: mergePayload,
     [recieveAccountDashboardUIData]: mergePayload
 }, initialState)

@@ -6,7 +6,7 @@ import {getTextFrom} from '../../../utils/parser-utils'
 
 export const isFormResponseInvalid = ($response, formSelector) => $response.find(formSelector).length
 
-export const parsedDashboard = ($, $html) => {
+export const parseDashboard = ($, $html) => {
     const $mainContent = $html.find('.page-main')
     const linkArray = $.makeArray($mainContent.find('.sidebar-main .nav.item:not(.current)'))
     return {

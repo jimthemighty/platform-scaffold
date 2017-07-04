@@ -16,7 +16,7 @@ import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, parsedDashboard} from './parsers'
+import {isFormResponseInvalid, parseDashboard} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -36,8 +36,7 @@ export const initAccountDashboard = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res
-            const parsedDashboardLinks = parsedDashboard($, $response)
-            return dispatch(recieveAccountDashboardUIData(parsedDashboardLinks))
+            return dispatch(recieveAccountDashboardUIData(parseDashboard($, $response)))
         })
 }
 

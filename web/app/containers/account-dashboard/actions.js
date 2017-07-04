@@ -4,7 +4,5 @@
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
-export const receiveData = createAction('Receive Account data')
-
 // This action will change the `title` key in the local private state
 export const changeTitle = createAction('Change Account title', 'title')
