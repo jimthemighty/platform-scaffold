@@ -133,6 +133,7 @@ const Router = ({store}) => (
                     fetchAction={initPage(initPaymentPage)}
                 />
                 <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initPage(initLoginPage)} />
+                <Route component={Account} path="*/Dashboard-Show" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 
                 <Route
