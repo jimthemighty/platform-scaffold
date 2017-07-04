@@ -78,22 +78,23 @@ class CartProductItem extends React.Component {
             quantity,
             itemPrice,
             linePrice,
+            thumbnail,
+            title,
             options,
+            productId,
             setCurrentProduct
         } = this.props
-
-        const variations = options ? options : product.options
 
         return (
             <ProductItem customWidth="40%"
                 className={productItemClassNames}
-                title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{product.title}</h2>}
-                image={<ProductImage {...product.thumbnail} />}
+                title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{title}</h2>}
+                image={<ProductImage {...thumbnail} />}
                 >
 
-                {variations &&
+                {options &&
                     <div className="u-margin-bottom-sm">
-                        {variations.map((option) => (
+                        {options.map((option) => (
                             <p key={option.value} className="u-color-neutral-50">
                                 {option.label} - {option.value}
                             </p>
@@ -128,7 +129,7 @@ class CartProductItem extends React.Component {
                         innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
                         href={configureUrl}
                         data-analytics-name={UI_NAME.editItem}
-                        onClick={() => setCurrentProduct(product.id)}
+                        onClick={() => setCurrentProduct(productId)}
                         >
                         Edit
                     </Button>

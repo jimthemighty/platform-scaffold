@@ -75,9 +75,9 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
                     return (
                         <ProductItem
                             className={productListClasses}
-                            title={<h2 className="u-h3">{product.name}</h2>}
+                            title={<h2 className="u-h3">{name}</h2>}
                             price={itemPrice}
-                            key={product.id}
+                            key={id}
                             image={<Image src={src} alt={alt} width="64px" height="64px" />}
                         >
                             <div>
