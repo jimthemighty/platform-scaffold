@@ -10,13 +10,13 @@ import Breadcrumbs from '../../../components/breadcrumbs'
 import {getCategoryTitle, getCategoryParentTitle, getCategoryParentHref} from '../../../../../web/app/store/categories/selectors'
 
 // Utils
-import {staticURL} from '../../../utils'
+import {canonicalURL, staticURL} from '../../../utils'
 
 const ProductListHeader = ({title, parentName, parentHref}) => (
     <div className="u-flexbox u-align-bottom">
         <div className="u-flex u-padding-top-lg u-padding-bottom-lg u-padding-start-md">
             <div className="t-product-list__breadcrumb">
-                <Breadcrumbs items={[{text: parentName, href: parentHref}]} />
+                <Breadcrumbs items={[{text: parentName, href: canonicalURL(parentHref)}]} />
             </div>
             <div className="u-margin-top-md">
                 <h1 className="u-text-uppercase">{title}</h1>
