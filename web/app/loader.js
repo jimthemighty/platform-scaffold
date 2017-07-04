@@ -8,7 +8,7 @@ import {
     getMessagingSWVersion,
     isLocalStorageAvailable,
     loadAndInitMessagingClient,
-    addMessagingClientInitPromise,
+    createGlobalMessagingClientInitPromise,
     loadScript,
     loadScriptAsPromise,
     prefetchLink,
@@ -259,7 +259,7 @@ const attemptToInitializeApp = () => {
 
         // This must come before vendor.js, or before the Webpack chunk that contains
         // Messaging React components
-        addMessagingClientInitPromise(messagingEnabled)
+        createGlobalMessagingClientInitPromise(messagingEnabled)
 
         loadScriptAsPromise({
             id: 'progressive-web-vendor',
