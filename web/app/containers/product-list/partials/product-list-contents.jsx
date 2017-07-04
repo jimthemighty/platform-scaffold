@@ -167,7 +167,6 @@ const ProductListContents = ({
                                                     onChange={(e) => { updateURL({sort: e.target.value}) }}
                                                     onBlur={(e) => { updateURL({sort: e.target.value}) }}
                                                 >
-                                                    <option value="default" />
                                                     {
                                                         sortOptions.map((choice, index) => <option key={index} value={choice.id}>{choice.label}</option>)
                                                     }
