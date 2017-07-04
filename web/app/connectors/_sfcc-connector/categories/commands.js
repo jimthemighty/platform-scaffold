@@ -13,7 +13,7 @@ import {receiveProductListProductData} from 'progressive-web-sdk/dist/integratio
 import {parseProductListData, parseSortedProductKeys} from '../parsers'
 import {getCategoryPath, SEARCH_URL} from '../config'
 import {makeQueryString} from '../../../utils/utils'
-import {ITEMS_PER_PAGE} from '../../../containers/product-list/constants'
+import {ITEMS_PER_PAGE, DEFAULT_SORT_OPTION} from '../../../containers/product-list/constants'
 
 const REFINE_CATEGORY = 'refine_1=cgid'
 
@@ -121,6 +121,7 @@ export const initProductListPage = (url) => (dispatch) => {
 
             /* eslint-disable camelcase, no-use-before-define */
             if (sorting_options) {
+                sorting_options.unshift({id: DEFAULT_SORT_OPTION, label: ''}) // default sorting option
                 dispatch(receiveCategorySortOptions(sorting_options, pathKeyWithoutQuery))
             }
 
