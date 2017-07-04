@@ -18,7 +18,7 @@ const parseImages = (imageGroups) => {
 const parseVariationCategories = (variation_attributes) => {
     return variation_attributes.map(({id, name, values}) => ({
         id,
-        slug: id,
+        variationType: id,
         label: name,
         values: values.map(({name, value}) => ({
             label: name,

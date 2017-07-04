@@ -52,11 +52,11 @@ variationSwatch.propTypes = {
 
 const ProductDetailsVariations = ({variations, error, onVariationChange}) => (
     <div className={variations.length > 0 && 'u-margin-top-lg'}>
-        {variations.map(({id, slug, label, values = []}) => (
+        {variations.map(({id, variationType, label, values = []}) => (
             <FieldRow key={id} error={error}>
                 <ReduxForm.Field
                     label={label}
-                    name={slug}
+                    name={variationType}
                     values={values}
                     error={error}
                     component={variationSwatch}
