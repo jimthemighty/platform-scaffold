@@ -59,7 +59,7 @@ const CheckoutConfirmationQuestions = () => (
             <div className="u-padding-lg">
                 <Button
                     onClick={continueShopping}
-                    className="c--tertiary u-width-full u-text-uppercase"
+                    className="pw--tertiary u-width-full u-text-uppercase"
                     data-analytics-name={UI_NAME.continueShopping}
                 >
                     Continue Shopping

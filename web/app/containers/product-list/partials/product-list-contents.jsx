@@ -30,7 +30,7 @@ const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
 
 const ResultList = ({products, setCurrentProduct}) => (
-    <List className="c--borderless">
+    <List className="pw--borderless">
         {products.map((product, idx) => (
             <ProductTile
                 onClick={product ? () => setCurrentProduct(product.id) : null}
@@ -143,7 +143,7 @@ const ProductListContents = ({
                                             label={`${numItems} Items`}
                                         >
                                             <Button
-                                                className="c--tertiary u-width-full u-text-uppercase"
+                                                className="pw--tertiary u-width-full u-text-uppercase"
                                                 onClick={openModal}
                                                 disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
                                                 id="filterButton"

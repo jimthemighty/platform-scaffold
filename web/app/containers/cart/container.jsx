@@ -65,7 +65,7 @@ const EmptyCartContents = ({hide, isLoggedIn}) => {
 
                     {!isLoggedIn &&
                         <Button
-                            className="c--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg"
+                            className="pw--primary u-text-uppercase u-h5 u-width-full u-margin-bottom-lg"
                             onClick={openSignIn}
                             data-analytics-name={UI_NAME.goToSignIn}
                         >
@@ -75,7 +75,7 @@ const EmptyCartContents = ({hide, isLoggedIn}) => {
                     }
 
                     <Button
-                        className="c--tertiary u-text-uppercase u-h5 u-width-full"
+                        className="pw--tertiary u-text-uppercase u-h5 u-width-full"
                         onClick={continueShopping}
                         data-analytics-name={UI_NAME.continueShopping}
                     >
