@@ -96,11 +96,6 @@ export const fetchCartItemData = () => (dispatch, getState) => {
                         }
                     })
 
-                    updatedCartItems.push({
-                        ...cartItem,
-                        options
-                    })
-
                     const product = {
                         ...productState,
                         id: productId,
@@ -118,7 +113,15 @@ export const fetchCartItemData = () => (dispatch, getState) => {
                     if (largeGroup) {
                         product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
                     }
+
                     updatedProducts[productId] = product
+
+                    updatedCartItems.push({
+                        ...cartItem,
+                        options,
+                        thumbnail: product.thumbnail,
+                        title: product.title
+                    })
                 })
         })
     )
