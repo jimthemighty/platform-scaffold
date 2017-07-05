@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 // Components
 import Link from 'mobify-amp-sdk/dist/components/link'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const ListTilePrimary = ({
     children,

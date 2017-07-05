@@ -1,5 +1,5 @@
 import React from 'react'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 import {CURRENT_URL} from 'progressive-web-sdk/dist/store/app/constants'
 import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 

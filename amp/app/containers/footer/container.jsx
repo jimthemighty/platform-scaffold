@@ -2,7 +2,7 @@ import React from 'react'
 
 // Partials
 import FooterNavigation from './partials/footer-navigation'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const Footer = () => {
     return (

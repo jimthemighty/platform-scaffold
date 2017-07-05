@@ -19,7 +19,7 @@ import ProductDetails from './containers/product-details/container'
 import ProductList from './containers/product-list/container'
 import App from './containers/app/container'
 
-import * as ampSDK from './amp-sdk'
+import * as ampSDK from 'mobify-amp-sdk/dist/amp-sdk'
 import ampPage from './templates/amp-page'
 
 import {initializeStore} from './data-integration/connectedStore'

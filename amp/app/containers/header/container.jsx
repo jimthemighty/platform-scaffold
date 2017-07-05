@@ -9,7 +9,7 @@ import IconLabel from '../../components/icon-label'
 // Utils
 import {staticURL, canonicalURL} from '../../utils'
 
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const Header = (props) => {
 

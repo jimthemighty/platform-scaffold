@@ -4,7 +4,7 @@ import classNames from 'classnames'
 // Components
 import Button from '../button'
 import IconLabel from '../icon-label'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const IconLabelButton = (props) => {
     const {
