@@ -52,15 +52,6 @@ export const getActiveFilters = createSelector(
     )
 )
 
-/* filtering is done on page
-export const getFilteredProductListProducts = createSelector(
-    getCategoryProducts,
-    getActiveFilters,
-    (products, filters) => {
-        return filters.size > 0 ? products.filter(byFilters(filters.toJS())) : products
-    }
-)*/
-
 export const getSortedListProducts = createSelector(
     getCategoryProducts,
     getCurrentSort,
