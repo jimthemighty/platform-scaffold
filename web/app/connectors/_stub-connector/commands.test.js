@@ -8,7 +8,9 @@ import commands from './commands'
 export const testStubCommand = (command, ...args) => {
     it(`${command.name} executes without errors`, () => {
         const dispatch = () => Promise.resolve()
-        return command(...args)(dispatch)
+        const getState = () => {}
+
+        return command(...args)(dispatch, getState)
             .then((results) => {
                 expect(results).toBe(undefined)
             })
