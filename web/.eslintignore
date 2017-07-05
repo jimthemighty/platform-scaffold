@@ -1,12 +1,11 @@
 build
 coverage
-lighthouse
 app/integration-manager/docs
 app/static
 app/vendor/astro-client.js
 app/vendor/astro-detect.js
 proxy
-tests/system/nightwatch-config.js
-tests/system/site.js
+tests/e2e/nightwatch-config.js
+tests/e2e/site.js
 tests/jest-setup.js
 tests/jest-preprocessor.js
