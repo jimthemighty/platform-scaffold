@@ -35,6 +35,8 @@ export default {
 
         // This is the second page view, the DefaultAsk should be visible
         // by this point.
-        pushMessaging.acceptDefaultAsk()
+        pushMessaging
+            .acceptDefaultAsk()
+            .assertSubscribed()
     }
 }
