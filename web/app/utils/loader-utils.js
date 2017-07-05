@@ -74,8 +74,9 @@ const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-
 
 // Creating an early promise that users of the Messaging Client can
 // chain from means they don't need to poll for its existence
-let clientInitResolver = () => {}
-let clientInitRejecter = () => {}
+const logMessagingSetupError = () => console.error('`LoaderUtils.createGlobalMessagingClientInitPromise` must be called before `setupMessagingClient`')
+let clientInitResolver = logMessagingSetupError
+let clientInitRejecter = logMessagingSetupError
 export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
     if (!messagingEnabled) {
         return
