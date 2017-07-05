@@ -122,7 +122,7 @@ export const initProductListPage = (url) => (dispatch) => {
             /* eslint-disable camelcase, no-use-before-define */
             if (sorting_options) {
                 sorting_options.unshift({id: DEFAULT_SORT_OPTION, label: ''}) // default sorting option
-                dispatch(receiveCategorySortOptions(sorting_options, pathKeyWithoutQuery))
+                dispatch(receiveCategorySortOptions(pathKeyWithoutQuery, sorting_options))
             }
 
             if (total === 0) {

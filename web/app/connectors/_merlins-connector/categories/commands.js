@@ -37,7 +37,7 @@ export const initProductListPage = (url) => (dispatch) => {
             const sortOptions = parseSortOptions($, $response)
 
             if (sortOptions.length > 0) {
-                dispatch(receiveCategorySortOptions(sortOptions, pathKeyWithoutQuery))
+                dispatch(receiveCategorySortOptions(pathKeyWithoutQuery, sortOptions))
             }
             if (!hasFilter($, $response)) {
                 dispatch(receiveCategoryFilterOptions(filterParser($, $response), pathKeyWithoutQuery))
