@@ -166,10 +166,11 @@ const ProductListContents = ({
                                                     value={selectedSortOption}
                                                     onChange={(e) => { updateURL({sort: e.target.value}) }}
                                                     onBlur={(e) => { updateURL({sort: e.target.value}) }}
+                                                    data-analytics-name={UI_NAME.sortBy}
                                                 >
-                                                    {
-                                                        sortOptions.map((choice, index) => <option key={index} value={choice.id}>{choice.label}</option>)
-                                                    }
+                                                    {sortOptions.map((choice, index) =>
+                                                        <option key={index} value={choice.id}>{choice.label}</option>
+                                                    )}
                                                 </select>
                                             </Field>
                                         </div>
@@ -221,7 +222,7 @@ const mapStateToProps = createPropsSelector({
     contentsLoaded: selectors.getProductListContentsLoaded,
     numItems: getCategoryItemCount,
     activeFilters: selectors.getActiveFilters,
-    products: selectors.getFilteredAndSortedListProducts,
+    products: selectors.getSortedListProducts,
     sortOptions: selectors.getCategorySortOptions
 })
 

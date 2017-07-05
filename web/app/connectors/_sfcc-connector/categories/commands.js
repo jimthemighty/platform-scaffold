@@ -70,12 +70,12 @@ const extractCategoryId = (url) => {
 }
 
 const extractPageNumber = (url) => {
-    const pageMatch = url.match(/p=(.*)/)
+    const pageMatch = url.match(/p=([^&|#]*)/)
     return pageMatch ? pageMatch[1] : '1'
 }
 
 const extractSortOption = (url) => {
-    const sortOption = url.match(/sort=(.*)/)
+    const sortOption = url.match(/sort=([^&|#]*)/)
     return sortOption ? sortOption[1] : ''
 }
 
@@ -94,7 +94,7 @@ export const initProductListPage = (url) => (dispatch) => {
     const isSearch = path.includes(SEARCH_URL)
 
     if (isSearch) {
-        const searchQueryMatch = path.match(/q=([^&]*)/)
+        const searchQueryMatch = path.match(/q=([^&|#]*)/)
         const searchQuery = searchQueryMatch ? searchQueryMatch[1] : ''
         const searchTerm = buildSearchTerm(searchQuery)
 

@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {urlToPathKey, getURLWithoutQuery} from 'progressive-web-sdk/dist/utils/utils'
-import categoryProductsParser, {parseCategoryTitle, parseCategoryId, priceFilterParser, parseSortOptions, parseCurrentFilter} from './parser'
+import categoryProductsParser, {parseCategoryTitle, parseCategoryId, filterParser, parseSortOptions, hasFilter} from './parser'
 import {
     receiveCategoryContents,
     receiveCategoryInformation,
@@ -35,12 +35,12 @@ export const initProductListPage = (url) => (dispatch) => {
             const title = parseCategoryTitle($, $response)
             const searchTermMatch = title.match(/'(.*)'/)
             const sortOptions = parseSortOptions($, $response)
-            const isFilter = parseCurrentFilter($, $response)
+
             if (sortOptions.length > 0) {
                 dispatch(receiveCategorySortOptions(sortOptions, pathKeyWithoutQuery))
             }
-            if (!isFilter) {
-                dispatch(receiveCategoryFilterOptions(priceFilterParser($, $response), pathKeyWithoutQuery))
+            if (!hasFilter($, $response)) {
+                dispatch(receiveCategoryFilterOptions(filterParser($, $response), pathKeyWithoutQuery))
             } else {
                 dispatch(changeFilterTo(filter))
             }

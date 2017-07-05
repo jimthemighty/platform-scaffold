@@ -35,7 +35,7 @@ const priceParser = (value) => {
     return {floor, ceiling}
 }
 
-export const priceFilterParser = ($, $html) => {
+export const filterParser = ($, $html) => {
     const $filters = $html.find('.filter-options .filter-options-item')
     const filters = []
 
@@ -69,11 +69,13 @@ export const priceFilterParser = ($, $html) => {
                 // characters from obfuscating the meaning of the query. For
                 // example, prevent `price10-20` from becoming `price1020`, because
                 // what would that mean: 10-20, 0-1020 or 1020-Infinity?
-                // 'price10to20'
-                query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '')
+                
+                query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '') // 'price10to20'
             } else if (query.includes('color')) { // color ruleset
                 const colorCode = query.split('=')[1]
-                criteria = {colorCode} // priceParser('10-20')}
+                // Color code is represented by a integer on Merlins
+                // i.e. Green is `11` and Red is `8`
+                criteria = {colorCode}
             }
 
             kindArray.push({
@@ -117,7 +119,7 @@ export const parseSortOptions = ($, $html) => {
     return sortOptions
 }
 
-export const parseCurrentFilter = ($, $html) => {
+export const hasFilter = ($, $html) => {
     const currentFilter = $html.has('.filter-current').length
 
     return currentFilter

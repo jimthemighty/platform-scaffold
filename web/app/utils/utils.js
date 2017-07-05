@@ -43,11 +43,11 @@ export const makeQueryString = (params) => {
     let query = '?'
     let index = 0
 
-    for (const i in params) {
-        if (params[i]) {
+    for (const key in params) {
+        if (params[key]) {
             index++
-            const param = i
-            const value = params[i]
+            const param = key
+            const value = params[key]
             if (index === 1) {
                 query += `${param}=${value}`
             } else {
@@ -125,7 +125,6 @@ export const createTypedAction = (description, type, key) => createReduxAction(
 
 export const buildQueryString = (query) => {
     return `?q=${query.replace(/ /g, '+')}`
-    // return `?q=${encodeURIComponent(query)}`
 }
 
 export const validateFullName = (fullName) => {

@@ -61,7 +61,7 @@ export const getFilteredProductListProducts = createSelector(
     }
 )*/
 
-export const getFilteredAndSortedListProducts = createSelector(
+export const getSortedListProducts = createSelector(
     getCategoryProducts,
     getCurrentSort,
     (products, sort) => {

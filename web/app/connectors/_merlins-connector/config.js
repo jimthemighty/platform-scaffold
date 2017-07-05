@@ -9,8 +9,8 @@ export const CART_URL = '/checkout/cart/'
 export const PAYMENT_URL = '/checkout/payment/'
 export const CREATE_ACCOUNT_POST_URL = '/customer/account/createpost/'
 export const LOGIN_POST_URL = '/customer/account/loginPost/'
-export const SEARCH_URL = '/catalogsearch/result/'
-export const SEARCH_SUGGESTION_URL = '/search/ajax/suggest/'
+const SEARCH_URL = '/catalogsearch/result/'
+const SEARCH_SUGGESTION_URL = '/search/ajax/suggest/'
 
 export const buildQueryURL = (query) => `${SEARCH_SUGGESTION_URL}${buildQueryString(query)}&_=${Date.now()}`
 export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`
