@@ -47,11 +47,8 @@ PushMessaging.prototype.acceptDefaultAsk = function() {
 PushMessaging.prototype.assertSubscribed = function() {
     const self = this
     this.browser
-        // We have a pause here to allow Messaging Client to perform Service Worker
-        // operations that are asynchronous and take time - this may need to be
-        // increased
-        // .pause(2000)
         .executeAsync((_, done) => {
+            // 10 attempts; 200ms after each failure - 2 seconds total
             let attempt = 1
 
             const checkForSubscription = () => {
