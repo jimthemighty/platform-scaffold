@@ -33,7 +33,7 @@ const parseVariationCategories = (magentoObject) => {
 
         return {
             id,
-            variationType: code,
+            name: code,
             label,
             values
         }
@@ -65,8 +65,8 @@ const buildVariantFromId = (id, variationCategories) => {
 
     variationCategories.forEach((category) => {
         const selectedCategory = category.values.find((option) => option.products.find((product) => product === id))
-        variant.values[category.variationType] = selectedCategory.value
-        variant.attributeIds[category.variationType] = category.id
+        variant.values[category.name] = selectedCategory.value
+        variant.attributeIds[category.name] = category.id
     })
 
     return variant
@@ -83,15 +83,15 @@ const setInitialVariantValues = (variationCategories, magentoObject) => {
     const selectedVariant = parseDefaultVariant(magentoObject)
 
     if (selectedVariant) {
-        variationCategories.forEach(({id, variationType}) => {
-            initialValues[variationType] = selectedVariant[id]
+        variationCategories.forEach(({id, name}) => {
+            initialValues[name] = selectedVariant[id]
         })
 
         return initialValues
     }
 
-    variationCategories.forEach(({variationType, values}) => {
-        initialValues[variationType] = values[0].value
+    variationCategories.forEach(({name, values}) => {
+        initialValues[name] = values[0].value
     })
 
     return initialValues

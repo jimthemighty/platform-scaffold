@@ -65,9 +65,9 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
 
     if (variationCategories) {
         const errors = {}
-        variationCategories.forEach(({variationType, label}) => {
-            if (!formValues[variationType]) {
-                errors[variationType] = `Please select a ${label}`
+        variationCategories.forEach(({name, label}) => {
+            if (!formValues[name]) {
+                errors[name] = `Please select a ${label}`
             }
         })
         if (Object.keys(errors).length > 0) {
