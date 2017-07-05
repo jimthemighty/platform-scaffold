@@ -5,6 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import template from '../../template'
 
 import {getTitle, getText} from './selectors'
 // import * as accountInfoActions from './actions'
@@ -30,7 +31,7 @@ const mapDispatchToProps = {
     // setTitle: accountInfoActions.setTitle
 }
 
-export default connect(
+export default template(connect(
     mapStateToProps,
     mapDispatchToProps
-)(AccountInfo)
+)(AccountInfo))

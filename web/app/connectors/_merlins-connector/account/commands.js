@@ -10,13 +10,19 @@ import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
-import {setSigninLoaded, setRegisterLoaded, recieveAccountDashboardUIData} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import
+{
+    setSigninLoaded,
+    setRegisterLoaded,
+    recieveAccountDashboardUIData,
+    recieveAccountInfoUIData
+} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, parseDashboard} from './parsers'
+import {isFormResponseInvalid, parseDashboard, parseAccountInfo} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -43,6 +49,11 @@ export const initAccountDashboardPage = (url) => (dispatch) => {
 export const initAccountInfoPage = (url) => (dispatch) => {
 debugger
 debugger
+    return dispatch(fetchPageData(url))
+        .then((res) => {
+            const [$, $response] = res
+            return dispatch(recieveAccountInfoUIData(parseAccountInfo($, $response)))
+        })
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
