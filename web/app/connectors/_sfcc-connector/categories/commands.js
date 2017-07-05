@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {urlToPathKey, extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
+import {urlToPathKey, urlToBasicPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
 import {
     receiveCategoryContents,
@@ -37,7 +37,7 @@ const makeCategorySearchURL = (queries) => {
 /* eslint-disable camelcase, no-use-before-define */
 const processCategory = (dispatch) => ({parent_category_id, id, name}) => {
     const parentId = parent_category_id !== 'root' ? parent_category_id : null
-    const path = extractPathFromURL(getCategoryPath(id), false, false)
+    const path = urlToBasicPathKey(getCategoryPath(id))
 
     dispatch(receiveCategoryInformation(path, {
         id,
@@ -117,7 +117,7 @@ export const initProductListPage = (url) => (dispatch) => {
         .then((response) => {
             const {total, hits, sorting_options} = response
 
-            const pathKeyWithoutQuery = extractPathFromURL(path, false, false)
+            const pathKeyWithoutQuery = urlToBasicPathKey(path)
 
             /* eslint-disable camelcase, no-use-before-define */
             if (sorting_options) {
