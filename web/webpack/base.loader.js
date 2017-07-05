@@ -54,6 +54,7 @@ module.exports = {
         ],
     },
     plugins: [
+        ...baseCommon.plugins,
         new webpack.LoaderOptionsPlugin({
             options: {
                 postcss: baseCommon.postcss
