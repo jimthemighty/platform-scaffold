@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {openRemoveItemModal, saveToWishlist, updateItem} from '../actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {getCartItemData, getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {getCartItemsFull, getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 
 import {noop} from 'progressive-web-sdk/dist/utils/utils'
@@ -229,7 +229,7 @@ CartProductList.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    items: getCartItemData,
+    items: getCartItemsFull,
     summaryCount: getCartSummaryCount,
     isLoggedIn: getIsLoggedIn
 })
