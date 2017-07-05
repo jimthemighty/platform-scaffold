@@ -38,7 +38,6 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
 //
 // @TODO: Add `pw-field__label` to the SDK component
 
-.c-field__label,
 .pw-field__label {
     flex: 1 1 auto;
     margin-bottom: $unit;
@@ -119,7 +118,6 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
         display: flex;
     }
 
-    .c-field__label,
     .pw-field__label {
         margin-bottom: 0; // 2
 
@@ -131,7 +129,6 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
     }
 
     &.pw--checked {
-        .c-field__label,
         .pw-field__label {
             font-weight: $semi-bold-font-weight;
         }
