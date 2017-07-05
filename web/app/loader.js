@@ -257,8 +257,13 @@ const attemptToInitializeApp = () => {
             src: getAssetUrl('main.js')
         })
 
-        // This must come before vendor.js, or before the Webpack chunk that contains
-        // Messaging React components
+        /**
+         * This must be called before vendor.js is loaded (or before the Webpack
+         * chunk that contains Messaging React components is loaded)
+         *
+         * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
+         * which will be resolved or rejected later by the method `setupMessagingClient`
+         */
         createGlobalMessagingClientInitPromise(messagingEnabled)
 
         loadScriptAsPromise({
