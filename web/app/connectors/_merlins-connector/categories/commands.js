@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {urlToPathKey, getURLWithoutQuery} from 'progressive-web-sdk/dist/utils/utils'
+import {urlToPathKey, urlToBasicPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import categoryProductsParser, {parseCategoryTitle, parseCategoryId, filterParser, parseSortOptions, hasFilter} from './parser'
 import {
     receiveCategoryContents,
@@ -30,7 +30,7 @@ export const initProductListPage = (url) => (dispatch) => {
         .then((res) => {
             const [$, $response] = res
             const pathKey = urlToPathKey(url).replace('product_list_order', 'sort')
-            const pathKeyWithoutQuery = getURLWithoutQuery(pathKey)
+            const pathKeyWithoutQuery = urlToBasicPathKey(pathKey)
 
             const title = parseCategoryTitle($, $response)
             const searchTermMatch = title.match(/'(.*)'/)
