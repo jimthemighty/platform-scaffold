@@ -40,7 +40,7 @@ export const initProductListPage = (url) => (dispatch) => {
                 dispatch(receiveCategorySortOptions(pathKeyWithoutQuery, sortOptions))
             }
             if (!hasFilter($, $response)) {
-                dispatch(receiveCategoryFilterOptions(filterParser($, $response), pathKeyWithoutQuery))
+                dispatch(receiveCategoryFilterOptions(pathKeyWithoutQuery, filterParser($, $response)))
             } else {
                 dispatch(changeFilterTo(filter))
             }
