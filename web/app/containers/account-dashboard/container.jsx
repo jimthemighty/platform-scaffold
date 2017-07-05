@@ -4,10 +4,8 @@
 
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {createPropsSelector} from 'reselect-immutable-helpers'
 import template from '../../template'
 
-import {getTitle, getLink} from './selectors'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import List from 'progressive-web-sdk/dist/components/list'
@@ -40,27 +38,23 @@ DashboardLinks.propTypes = {
 }
 
 
-const AccountDashboard = ({title, links}) => (
-    <div className="t-account-dashboard">
-        {title ?
-            <h1 className="t-account-dashboard__title u-padding-md u-text-uppercase">{title}</h1>
-        :
-            <SkeletonText className="u-padding-md" lines={1} type="h1" width="100px" />
+const AccountDashboard = () => {
+    const links = [
+        {
+            text: 'Account Information',
+            href: '/customer/account/edit/'
         }
-        <List className="u-bg-color-neutral-00 u-border-bottom u-border-top">
-            {links.map((link, idx) => <DashboardLinks link={link} key={idx} />)}
-        </List>
-    </div>
-)
+    ]
 
-AccountDashboard.propTypes = {
-    links: PropTypes.array,
-    title: PropTypes.string
+    return (
+        <div className="t-account-dashboard">
+            <h1 className="t-account-dashboard__title u-padding-md u-text-uppercase">Account Dashboard</h1>
+            <List className="u-bg-color-neutral-00 u-border-bottom u-border-top">
+                {links.map((link, idx) => <DashboardLinks link={link} key={idx} />)}
+            </List>
+        </div>
+    )
 }
 
-const mapStateToProps = createPropsSelector({
-    title: getTitle,
-    links: getLink
-})
 
-export default template(connect(mapStateToProps)(AccountDashboard))
+export default template(connect()(AccountDashboard))

@@ -32,12 +32,17 @@ export const initRegisterPage = (url) => (dispatch) => {
         })
 }
 
-export const initAccountDashboard = (url) => (dispatch) => {
+export const initAccountDashboardPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res
             return dispatch(recieveAccountDashboardUIData(parseDashboard($, $response)))
         })
+}
+
+export const initAccountInfoPage = (url) => (dispatch) => {
+debugger
+debugger
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
