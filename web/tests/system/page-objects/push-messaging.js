@@ -47,6 +47,10 @@ PushMessaging.prototype.acceptDefaultAsk = function() {
 PushMessaging.prototype.assertSubscribed = function() {
     const self = this
     this.browser
+        // We have a pause here to allow Messaging Client to perform Service Worker
+        // operations that are asynchronous and take time - this may need to be
+        // increased
+        .pause(2000)
         .execute(() => {
             return window.Progressive.MessagingClient.LocalStorage.get('mobifyMessagingClientSubscriptionStatus')
         }, [], ({value}) => {
