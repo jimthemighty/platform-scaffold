@@ -25,7 +25,7 @@ export default {
 
     'Home Page': (browser) => {
         browser
-            .preview()
+            .preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js', false)
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },

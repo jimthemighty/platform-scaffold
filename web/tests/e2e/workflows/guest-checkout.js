@@ -17,8 +17,8 @@ let cart
 let checkout
 let pushMessaging
 
-const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
-const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 2
+const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 1
+const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
 
 export default {
     '@tags': ['checkout'],
@@ -40,7 +40,7 @@ export default {
 
     'Checkout - Guest - Navigate to Home': (browser) => {
         browser
-            .preview()
+            .preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js', false)
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },
