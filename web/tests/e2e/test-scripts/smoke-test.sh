@@ -2,11 +2,11 @@
 set -o pipefail
 set -o nounset
 
-# Run automated system tests to verify that checkout still works.
+# Run automated end-to-end (e2e) tests to verify that checkout still works.
 
 # This script starts the local dev server if the current branch is not master.
 # The TEST_PROFILE environment variable defines which testing environment
-# should be used in tests/system/site.js.
+# should be used in tests/e2e/site.js.
 
 # If the project is not using git, assume we want to test the local build.
 
@@ -38,7 +38,7 @@ VALUE=${CIRCLECI:-}
 if [[  -z "${VALUE}" ]]; then
     npm run test:e2e
 else
-  testfiles=$(find ./tests/system/workflows/ -name '*.js'| sort | awk "NR % ${CIRCLE_NODE_TOTAL} == ${CIRCLE_NODE_INDEX}")
+  testfiles=$(find ./tests/e2e/workflows/ -name '*.js'| sort | awk "NR % ${CIRCLE_NODE_TOTAL} == ${CIRCLE_NODE_INDEX}")
   if [ -z "$testfiles" ]
   then
       echo "more parallelism than tests"
