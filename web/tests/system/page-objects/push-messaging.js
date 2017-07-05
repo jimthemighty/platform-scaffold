@@ -44,4 +44,15 @@ PushMessaging.prototype.acceptDefaultAsk = function() {
     return this
 }
 
+PushMessaging.prototype.assertSubscribed = function() {
+    const self = this
+    this.browser
+        .execute(() => {
+            return window.Progressive.MessagingClient.LocalStorage.get('mobifyMessagingClientSubscriptionStatus')
+        }, [], ({value}) => {
+            self.browser.assert.equal(value, 'subscribed')
+        })
+    return this
+}
+
 export default PushMessaging
