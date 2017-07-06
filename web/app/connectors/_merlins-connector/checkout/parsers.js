@@ -18,6 +18,17 @@ export const getNameValue = (firstname, lastname) =>
 export const parseShippingInitialValues = (shippingFieldData) => {
     const fieldData = shippingFieldData.toJS()
     const streetFields = fieldData.street.children
+    const initialValues = {
+        countryId: 'us',
+        name: '',
+        firstname: '',
+        lastname: '',
+        addressLine1: '',
+        postcode: '',
+        telephone: '',
+        city: ''
+    }
+
     const addressData = {
         name: getNameValue(fieldData.firstname.value, fieldData.lastname.value),
         addressLine1: streetFields[0].value,
@@ -31,8 +42,7 @@ export const parseShippingInitialValues = (shippingFieldData) => {
         isInitialized: true
     }
 
-    // Remove undefined keys to prevent valid content being overriden in the store
-    return removeUndefinedAddressKeys(addressData)
+    return {...initialValues, ...removeUndefinedAddressKeys(addressData)}
 }
 
 /* eslint-disable camelcase */

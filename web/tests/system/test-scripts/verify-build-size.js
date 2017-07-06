@@ -46,7 +46,7 @@ if (fs.existsSync('build')) {
     console.log(`Verifying individual file sizes in the build are less than ${FILE_SIZE_LIMIT} bytes...`)
     walk.walkSync('build', options)
 } else {
-    console.log(`Run 'npm prod:build' to generate a build.`)
+    console.log(`Run 'npm run prod:build' to generate a build.`)
 }
 
 if (failure) {
