@@ -11,7 +11,6 @@ import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
 import {
     AccountDashboard,
-    AccountInfo,
     Cart,
     CheckoutConfirmation,
     CheckoutPayment,
@@ -33,8 +32,7 @@ import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manag
 import {
     initRegisterPage,
     initLoginPage,
-    initAccountDashboardPage,
-    initAccountInfoPage
+    initAccountDashboardPage
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
@@ -77,7 +75,6 @@ const Router = ({store}) => (
                 <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initPage(initCartPage)} />
                 <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initPage(initRegisterPage)} />
-                <Route component={AccountInfo} path="customer/account/edit/" routeName="accountInfo" fetchAction={initPage(initAccountInfoPage)} />
 
                 <Route component={AccountDashboard} path="customer/account" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
