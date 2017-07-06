@@ -28,11 +28,30 @@ module.exports = {
                 loader: 'babel-loader?cacheDirectory=true'
             },
             {
+                test: /\.js(x?)$/,
+                include: /progressive-web-sdk/,
+                use: [
+                    {loader: "imports-loader?window=>{location: {href: 'about:blank'}}"}
+                ],
+            },
+            {
                 test: /\.scss$/,
                 use: [
-                    {loader: 'css-loader?-autoprefixer&-url', options: {minimize : true}},
-                    {loader: 'postcss-loader'},
-                    {loader: 'sass-loader'}
+                    {
+                        loader: 'css-loader?-autoprefixer&-url',
+                        options: {
+                            minimize: true
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader'
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            includePaths: [path.join(__dirname, 'app', 'styles')]
+                        }
+                    }
                 ]
             },
             {

@@ -94,7 +94,6 @@ import ProductList from './containers/product-list/container'
 import ProductListStyles from './containers/product-list/_container.scss'
 
 
-
 const styles = new Map()
 
 styles.set(Accordion, [AccordionBase, AccordionTheme])

@@ -55,25 +55,35 @@ export const parseCartTotals = ({
     subtotal_incl_tax
 }) => {
 
+    const initialCartTotals = {
+        discount: {amount: '', code: '', label: ''},
+        orderTotal: '',
+        shipping: {amount: ''},
+        subtotal: '',
+        tax: ''
+    }
+
     // We need the grand total if there's a discount or non-free shipping.
     /* eslint-disable camelcase */
     const orderTotal = (discount_amount || shipping_amount > 0)
           ? base_grand_total
           : subtotal_incl_tax
-    /* eslint-enable camelcase */
 
     return {
-        shipping: {
-            // label // => this value is either blank or set when a shipping method is chosen
-            amount: formatMerlinsMoney(shipping_amount)
-        },
+        ...initialCartTotals,
         discount: {
-            label: coupon_code,
-            code: coupon_code,
+            ...initialCartTotals.discount,
+            label: coupon_code || '',
+            code: coupon_code || '',
             amount: formatMerlinsMoney(discount_amount, true)
+        },
+        shipping: {
+            ...initialCartTotals.shipping,
+            amount: formatMerlinsMoney(shipping_amount)
         },
         subtotal: formatMerlinsMoney(subtotal),
         tax: formatMerlinsMoney(tax_amount),
         orderTotal: formatMerlinsMoney(orderTotal)
     }
+    /* eslint-enable camelcase */
 }

@@ -158,7 +158,13 @@ const attemptToInitializeApp = () => {
         }
     }
 
-    const triggerAppStartEvent = () => {
+    /**
+     * A setTimeout wraps this trigger function in order to control the exact
+     * timing that any tracking pixels are downloaded as the app initializes.
+     * More specifically, downloading of any tracking pixels should not delay
+     * the downloading of any other scripts (i.e. service workers, etc.)
+     */
+    const triggerAppStartEvent = () => setTimeout(() => {
         // Collect timing put for when app has started loading in order to
         // determine % dropoff of users who don't make it to the "pageview" event.
         Sandy.init(window)
@@ -176,7 +182,7 @@ const attemptToInitializeApp = () => {
         // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client
         // We are restoring it here for now and will revisit this when we rewrite sandy tracking pixel client
         window.sandy.instance = Sandy
-    }
+    }, 0)
 
     if (isReactRoute() && !isSamsungBrowser(window.navigator.userAgent) && !isFirefoxBrowser(window.navigator.userAgent)) {
         triggerAppStartEvent()
