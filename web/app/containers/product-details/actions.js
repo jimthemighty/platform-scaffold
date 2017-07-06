@@ -52,6 +52,16 @@ const submitCartFormSelector = createPropsSelector({
     variants: getProductVariants
 })
 
+/**
+ * @param {Object} formValues form values of selected variant options
+ * {
+ *	"color": "8",
+ *	"size": "6"
+ * }
+ * @param {Array} variants all possible variants, array of {Objects}, each object has a values key
+ * the values in this key will have the same shape / data as the above formValues if they match
+ * @return {Object} returns the variant object matching the selected form values
+ */
 const getProductFromFormValues = (formValues, variants) => {
     return variants ? variants.find(({values}) => {
         return Object.keys(formValues).every((key) => formValues[key] === values[key])
