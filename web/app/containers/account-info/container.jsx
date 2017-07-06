@@ -17,7 +17,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import {getTitle, getFormInfo} from './selectors'
 // import * as accountInfoActions from './actions'
 
-const AccountInfoForm = ({title, initialValues}) => {
+const AccountInfoForm = ({initialValues}) => {
     const initValues = {
         names: 'blah blah'
     }
@@ -25,15 +25,15 @@ const AccountInfoForm = ({title, initialValues}) => {
         <div className="t-account-info">
             <div className="t-account-info__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
                 <div className="t-account-info__breadcrumb">
-                    <Breadcrumbs items={[{text: 'Account Dashboard', href: '/customer/account'}]} />
+                    <Breadcrumbs items={[{text: 'Back to Dashboard', href: '/customer/account'}]} />
                 </div>
                 <div className="u-margin-top-md">
-                    <h1 className="t-account-info__title u-text-uppercase u-width-1of2">{title}</h1>
+                    <h1 className="t-account-info__title u-text-uppercase u-width-1of2">Edit Account</h1>
                 </div>
             </div>
             <form>
                 <div className="t-account-info__section">
-                    Account Information
+                    Change name / email
                 </div>
                 <div className="t-account-info__section-content u-padding-md">
                     <FieldRow>
@@ -53,7 +53,7 @@ const AccountInfoForm = ({title, initialValues}) => {
                         <ReduxForm.Field
                             component={Field}
                             label="Email"
-                            name="names"
+                            name="email"
                             initialValues={initValues}
                         >
                             <input
@@ -64,27 +64,24 @@ const AccountInfoForm = ({title, initialValues}) => {
                     </FieldRow>
                 </div>
                 <div className="t-account-info__section">
-                    Change Password (Optional)
+                    Change password (Optional)
                 </div>
                 <div className="t-account-info__section-content u-padding-md">
                     <FieldRow>
                         <ReduxForm.Field
                             component={Field}
                             label="Current Password"
-                            name="names"
+                            name="currentPassword"
                             initialValues={initValues}
                         >
-                            <input
-                                className="t-account-info-input"
-                                type="text"
-                            />
+                            <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
                         </ReduxForm.Field>
                     </FieldRow>
                     <FieldRow>
                         <ReduxForm.Field
                             component={Field}
                             label="New Password"
-                            name="names"
+                            name="newPassword"
                             initialValues={initValues}
                         >
                             <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
@@ -106,11 +103,9 @@ const AccountInfoForm = ({title, initialValues}) => {
 AccountInfoForm.propTypes = {
     handleSubmit: PropTypes.func,
     initialValues: PropTypes.object,
-    title: PropTypes.string,
 }
 
 const mapStateToProps = createPropsSelector({
-    title: getTitle,
     initialValues: getFormInfo
 })
 
