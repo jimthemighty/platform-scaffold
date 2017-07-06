@@ -7,10 +7,11 @@ import {makeApiRequest} from '../utils'
 import {
     receiveCategoryContents,
     receiveCategoryInformation,
-    receiveCategorySortOptions
+    receiveCategorySortOptions,
+    receiveCategoryFilterOptions
 } from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseProductListData, parseSortedProductKeys} from '../parsers'
+import {parseProductListData, parseSortedProductKeys, parseFilterOptions} from '../parsers'
 import {getCategoryPath, SEARCH_URL} from '../config'
 import {makeQueryString} from '../../../utils/utils'
 import {ITEMS_PER_PAGE, DEFAULT_SORT_OPTION} from '../../../containers/product-list/constants'
@@ -115,9 +116,13 @@ export const initProductListPage = (url) => (dispatch) => {
         .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
         .then((response) => response.json())
         .then((response) => {
-            const {total, hits, sorting_options} = response
+            const {total, hits, sorting_options, refinements} = response
 
             const pathKeyWithoutQuery = urlToBasicPathKey(path)
+
+            if (refinements) {
+                dispatch(receiveCategoryFilterOptions(pathKeyWithoutQuery, parseFilterOptions(refinements)))
+            }
 
             /* eslint-disable camelcase, no-use-before-define */
             if (sorting_options) {
