@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'

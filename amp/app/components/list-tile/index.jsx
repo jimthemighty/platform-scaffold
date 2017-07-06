@@ -2,8 +2,8 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 
 // Components
-import Link from '../link'
-import {ampComponent} from '../../amp-sdk'
+import Link from 'mobify-amp-sdk/dist/components/link'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const ListTilePrimary = ({
     children,

@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const EngagementEngineTag = ({templateName, projectSlug}) => {
     /* eslint-disable max-len */

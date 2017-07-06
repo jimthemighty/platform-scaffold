@@ -38,9 +38,9 @@ import IconLabelTheme from './styles/themes/amp-components/_icon-label.scss'
 import IconLabelButton from './components/icon-label-button/index'
 import IconLabelButtonBase from './components/icon-label-button/_base.scss'
 
-import Link from './components/link/index'
-import LinkBase from './components/link/_base.scss'
-import LinkTheme from './components/link/_theme.scss'
+import Link from 'mobify-amp-sdk/dist/components/link/index'
+import LinkBase from 'mobify-amp-sdk/dist/components/link/_base.scss'
+import LinkTheme from 'mobify-amp-sdk/dist/components/link/_theme.scss'
 
 import List from './components/list/index'
 import ListTheme from './styles/themes/amp-components/_list.scss'

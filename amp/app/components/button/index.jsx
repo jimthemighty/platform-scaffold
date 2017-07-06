@@ -2,9 +2,9 @@ import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 
 // Components
-import Link from '../link'
+import Link from 'mobify-amp-sdk/dist/components/link'
 import Icon from '../icon'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 /**
  * A styleable, accessible `<button>` component for [Mobify’s Progressive Web SDK](#).

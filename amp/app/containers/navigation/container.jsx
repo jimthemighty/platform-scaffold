@@ -15,7 +15,7 @@ import Icon from '../../components/icon'
 
 // Partials
 import NavigationSocialIcons from './partials/navigation-social-icons'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Selectors
 import {getNavigationRoot, getPath} from './selectors'

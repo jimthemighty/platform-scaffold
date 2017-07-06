@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import * as ampSDK from '../../amp-sdk'
+import * as ampSDK from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
 import AccordionItem from './accordion-item'

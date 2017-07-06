@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 // Components
 import ListTile from '../list-tile'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 /**
  * A default renderer for items displayed in the navigation.

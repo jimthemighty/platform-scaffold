@@ -2,10 +2,10 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {shallowHOC as shallow} from '../../test-utils'
+import {shallowHOC as shallow} from 'mobify-amp-sdk/dist/test-utils'
 import React from 'react'
 
-import Link from '../link'
+import Link from 'mobify-amp-sdk/dist/components/link'
 import Breadcrumbs from './index'
 
 test('Breadcrumbs renders without errors', () => {

@@ -10,7 +10,7 @@ import ProductListFilterModal from '../product-list/partials/product-list-filter
 // Components
 import SkipLinks from '../../components/skip-links'
 
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const App = ({children}) => {
 

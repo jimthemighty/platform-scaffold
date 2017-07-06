@@ -1,4 +1,4 @@
-import {shallowHOC as shallow} from '../../test-utils'
+import {shallowHOC as shallow} from 'mobify-amp-sdk/dist/test-utils'
 import {mount} from 'enzyme'
 import React from 'react'
 

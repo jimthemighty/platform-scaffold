@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import {shallowHOC as shallow} from '../../../test-utils'
+import {shallowHOC as shallow} from 'mobify-amp-sdk/dist/test-utils'
 import React from 'react'
 
 import NavigationSocialIcons from './navigation-social-icons'

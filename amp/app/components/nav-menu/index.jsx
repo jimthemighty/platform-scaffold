@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 // Components
 import NavItem from '../nav-item'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 /**
  * Returns a mapping of

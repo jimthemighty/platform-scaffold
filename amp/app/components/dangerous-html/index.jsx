@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import {ampComponent} from '../../amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // The DangerousHTML component isn't intended to be something the user interacts with directly
 // It should just act as an invisible wrapped that catches clicks that bubble up from its children
