@@ -45,10 +45,10 @@ export const parseCartProducts = ({product_items = []}) => /* Products */ {
             title: product_name,
             price: formatPrice(price),
             href: getProductHref(product_id),
-            description: item_text
+            description: item_text,
+            available: true
         }
     })
-
     return productMap
 }
 /* eslint-enable camelcase */

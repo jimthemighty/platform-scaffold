@@ -296,8 +296,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     toggleFixedPlaceOrder: checkoutPaymentActions.toggleFixedPlaceOrder,
-    submitPayment: checkoutPaymentActions.submitPayment,
-    removePromoCode
+    removePromoCode,
 }
 
 export default connect(

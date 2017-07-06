@@ -47,8 +47,7 @@ export const productDetailsParser = ($, $html) => {
         price: getTextFrom($mainContent, '.product-info-price .price-wrapper .price'),
         description: getTextFrom($mainContent, '.product.info.detailed .product.attibute.description p'),
         available: getAvailabilityFrom($mainContent),
-        images,
-        thumbnail: images[0]
+        images
     }
 }
 
