@@ -10,8 +10,7 @@ import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
-import
-{
+import {
     setSigninLoaded,
     setRegisterLoaded,
     recieveAccountDashboardUIData,
@@ -47,8 +46,6 @@ export const initAccountDashboardPage = (url) => (dispatch) => {
 }
 
 export const initAccountInfoPage = (url) => (dispatch) => {
-debugger
-debugger
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res

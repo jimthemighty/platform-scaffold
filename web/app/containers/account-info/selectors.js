@@ -13,4 +13,4 @@ export const getAccountInfo = createSelector(
 )
 
 export const getTitle = createGetSelector(getAccountInfo, 'title')
-export const getText = createGetSelector(getAccountInfo, 'text', Immutable.List())
+export const getFormInfo = createGetSelector(getAccountInfo, 'formInfo', Immutable.List())

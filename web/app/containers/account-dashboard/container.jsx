@@ -48,7 +48,7 @@ const AccountDashboard = () => {
 
     return (
         <div className="t-account-dashboard">
-            <h1 className="t-account-dashboard__title u-padding-md u-text-uppercase">Account Dashboard</h1>
+            <h1 className="t-account-dashboard__title u-padding-md u-text-uppercase">My Dashboard</h1>
             <List className="u-bg-color-neutral-00 u-border-bottom u-border-top">
                 {links.map((link, idx) => <DashboardLinks link={link} key={idx} />)}
             </List>
