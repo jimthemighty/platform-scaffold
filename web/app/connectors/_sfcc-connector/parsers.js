@@ -197,6 +197,7 @@ export const parseFilterOptions = (refinements) => {
                     count: kind.hit_count,
                     label: kind.label,
                     query: kind.presentation_id ? kind.presentation_id : `${uniqueKey++}`,
+                    ruleset: filter.label,
                     searchKey: `${ruleset}=${kind.value}`
                 }
             })

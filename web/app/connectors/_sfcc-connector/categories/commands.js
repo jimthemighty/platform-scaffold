@@ -12,6 +12,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseProductListData, parseSortedProductKeys, parseFilterOptions} from '../parsers'
+import {changeFilterTo} from '../../../store/categories/actions'
 import {getCategoryPath, SEARCH_URL} from '../config'
 import {makeQueryString} from '../../../utils/utils'
 import {ITEMS_PER_PAGE, DEFAULT_SORT_OPTION} from '../../../containers/product-list/constants'
@@ -122,12 +123,22 @@ export const initProductListPage = (url) => (dispatch) => {
         .then(() => makeApiRequest(searchUrl, {method: 'GET'}))
         .then((response) => response.json())
         .then((response) => {
-            const {total, hits, sorting_options, refinements} = response
+            const {total, hits, refinements, sorting_options, selected_refinements} = response
 
             const pathKeyWithoutQuery = urlToBasicPathKey(path)
 
             if (refinements) {
                 dispatch(receiveCategoryFilterOptions(pathKeyWithoutQuery, parseFilterOptions(refinements)))
+            }
+
+            /* eslint-disable camelcase, no-use-before-define */
+            if (selected_refinements) {
+                // delete filter keys from query
+                for (const key in selected_refinements) {
+                    if (Object.prototype.hasOwnProperty.call(selected_refinements, key)) {
+                        dispatch(changeFilterTo(`${key}=${selected_refinements[key]}`))
+                    }
+                }
             }
 
             /* eslint-disable camelcase, no-use-before-define */
