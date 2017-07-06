@@ -1,0 +1,11 @@
+{
+    "bundleSize": {
+        "max": 2000000,
+        "files": {
+            "vendor.js": 173000,
+            "main.js": 148000,
+            "main.css": 200000
+        }
+    }
+
+}

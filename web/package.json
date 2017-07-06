@@ -64,6 +64,7 @@
     "exports-loader": "0.6.4",
     "express": "4.15.2",
     "extract-text-webpack-plugin": "2.1.0",
+    "gzip-size": "3.0.0",
     "html-to-json": "0.6.0",
     "html-webpack-plugin": "2.28.0",
     "http-proxy": "1.15.1",
