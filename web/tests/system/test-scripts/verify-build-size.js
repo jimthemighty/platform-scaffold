@@ -14,6 +14,11 @@ const fileSize = require(path.join(path.resolve('./'), 'tests/system/test-script
 
 // A number denoting maximum file size in bytes.
 const FILE_SIZE_LIMIT = fileSize.bundleSize.max
+/* eslint-disable no-undef */
+
+/* Parse file-size-config.json file */
+const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'file-size-config.json'), 'utf8'))
+const files = config.bundleSize.files
 
 let failure = false
 
@@ -25,24 +30,24 @@ let failure = false
 * The test will fail if it goes above the threshold
 */
 
-/* eslint-disable no-undef */
+
 const options = {
     listeners: {
         file: (root, fileStats, next) => {
             const filePath = path.join(root, fileStats.name)
             const fileStat = fs.statSync(filePath)
 
+            /* Checks each file - if it's over size limit */
             if (fileStat.size > FILE_SIZE_LIMIT) {
                 failure = true
                 console.log(chalk.red(`${filePath} is ${fileStat.size} bytes. It is too big!\n`))
             }
 
-
+            /* Get the gzipped file size and parse file-size-config.json*/
             const source = fs.readFileSync(filePath, 'utf8')
             const gzipped = gzipSize.sync(source)
-            const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'file-size-config.json'), 'utf8'))
-            const files = config.bundleSize.files
 
+            /* Checks the file - if it's in the list of files in the file-size-config.json */
             for (const file in files) {
                 if (fileStats.name === file) {
                     const fileMax = files[file]
