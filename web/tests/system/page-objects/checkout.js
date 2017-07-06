@@ -32,7 +32,7 @@ const selectors = {
 
 const userData = {
     // Export a test email and password as environment variables with the following names
-    email: 'mobifyqa@gmail.com',
+    email: 'mobifyautomation@gmail.com',
     password: 'p4ssword',
 
     name: 'John Doe',
