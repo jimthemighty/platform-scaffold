@@ -80,6 +80,11 @@ const extractSortOption = (url) => {
     return sortOption ? sortOption[1] : ''
 }
 
+const extractFilterOption = (url) => {
+    const filterOption = url.match(/filters=([^&|#]*)/)
+    return filterOption ? filterOption[1] : ''
+}
+
 export const initProductListPage = (url) => (dispatch) => {
 
     const path = urlToPathKey(url)
@@ -89,7 +94,8 @@ export const initProductListPage = (url) => (dispatch) => {
         [REFINE_CATEGORY]: extractCategoryId(url),
         start: (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE,
         count: ITEMS_PER_PAGE,
-        sort: extractSortOption(url)
+        sort: extractSortOption(url),
+        refine_2: extractFilterOption(url) // support only one filter option now
     }
 
     const isSearch = path.includes(SEARCH_URL)
