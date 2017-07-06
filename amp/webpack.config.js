@@ -32,14 +32,18 @@ module.exports = {
                 use: [
                     {
                         loader: 'css-loader?-autoprefixer&-url',
-                        options: {minimize : true}
+                        options: {
+                            minimize: true
+                        }
                     },
                     {
                         loader: 'postcss-loader'
                     },
                     {
                         loader: 'sass-loader',
-                        options: {includePaths: [path.join(__dirname, 'app', 'styles')]}
+                        options: {
+                            includePaths: [path.join(__dirname, 'app', 'styles')]
+                        }
                     }
                 ]
             },
