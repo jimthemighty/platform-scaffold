@@ -40,7 +40,7 @@ export default {
 
     'Checkout - Guest - Navigate to Home': (browser) => {
         browser
-            .preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js', false)
+            .preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },
