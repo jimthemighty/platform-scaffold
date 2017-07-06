@@ -100,8 +100,17 @@ const ProductListContents = ({
     const clearFiltersURL = () => {
         clearFilters()
         const query = Object.assign({}, location.query)
-        delete query.price
-        delete query.color
+
+        // delete filter keys from query
+        for (const key in query) {
+            if (Object.prototype.hasOwnProperty.call(query, key)) {
+                activeFilters.forEach((filter) => {
+                    if (key === filter.ruleset) {
+                        delete query[key]
+                    }
+                })
+            }
+        }
         browserHistory.push({pathname, query})
     }
 
