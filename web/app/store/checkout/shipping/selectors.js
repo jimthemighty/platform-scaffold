@@ -11,7 +11,7 @@ import {getShippingSavedAddressID} from '../../form/selectors'
 
 export const getShipping = createGetSelector(getCheckout, 'shipping', Immutable.Map())
 
-export const getShippingCustomContent = createGetSelector(getShipping, 'custom')
+export const getShippingCustomContent = createGetSelector(getShipping, 'custom', Immutable.Map())
 
 export const getSavedAddresses = createGetSelector(getCheckout, 'storedAddresses', Immutable.List())
 
@@ -84,4 +84,4 @@ export const getCity = createGetSelector(getShippingAddress, 'city')
 
 export const getIsInitialized = createGetSelector(getShippingAddress, 'isInitialized')
 
-export const getShippingAddressCustomContent = createGetSelector(getShippingAddress, 'custom')
+export const getShippingAddressCustomContent = createGetSelector(getShippingAddress, 'custom', Immutable.Map())
