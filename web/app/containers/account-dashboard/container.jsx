@@ -43,6 +43,22 @@ const AccountDashboard = () => {
         {
             text: 'Account Information',
             href: '/customer/account/edit/'
+        },
+        {
+            text: 'Address Book',
+            href: '/customer/address/'
+        },
+        {
+            text: 'My Orders',
+            href: '/sales/order/history/'
+        },
+        {
+            text: 'My Wish List',
+            href: '/wishlist/'
+        },
+        {
+            text: 'My Subscriptions',
+            href: '/newsletter/manage/'
         }
     ]
 

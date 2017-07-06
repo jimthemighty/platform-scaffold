@@ -1,7 +1,10 @@
 // Account
 // ===
 
+$account__content-height: calc(100vh - #{$header-height} - #{$footer-height});
+
 .t-account-dashboard {
+    min-height: $account__content-height;
     padding-bottom: $unit * 1.5;
 
     background-color: $neutral-10;
