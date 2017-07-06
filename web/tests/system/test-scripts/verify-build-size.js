@@ -4,7 +4,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 
-/* eslint-disable import/no-commonjs */
+/* eslint-disable import/no-commonjs*/
 const fs = require('fs')
 const path = require('path')
 const walk = require('walk')
@@ -18,11 +18,14 @@ const FILE_SIZE_LIMIT = fileSize.bundleSize.max
 let failure = false
 
 /**
+* Run the following with npm run test:build-size
 * Traverse the build folder and verify that built files are smaller than a
 * defined threshold.
+* It also verifies the gzipped files within the build folder against the maximum file sizes set in file-size-config.json
+* The test will fail if it goes above the threshold
 */
 
-
+/* eslint-disable no-undef */
 const options = {
     listeners: {
         file: (root, fileStats, next) => {
