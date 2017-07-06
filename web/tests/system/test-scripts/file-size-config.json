@@ -2,9 +2,9 @@
     "bundleSize": {
         "max": 2000000,
         "files": {
-            "vendor.js": 173000,
-            "main.js": 148000,
-            "main.css": 200000
+            "vendor.js": 174000,
+            "main.js": 40000,
+            "main.css": 12000
         }
     }
 
