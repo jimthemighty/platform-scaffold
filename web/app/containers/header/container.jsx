@@ -122,7 +122,7 @@ class Header extends React.Component {
                     onClear={clearSuggestions}
                     termSuggestions={searchSuggestions}
                     submitButtonProps={{
-                        className: 'c--secondary t-header__search-submit-button',
+                        className: 'pw--secondary t-header__search-submit-button',
                         children: searchIcon
                     }}
                     inputProps={{

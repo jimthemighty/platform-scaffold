@@ -40,7 +40,7 @@ const MiniCartEmpty = () => (
 )
 
 const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
-    const buttonClasses = 'c--primary u-width-full u-text-uppercase'
+    const buttonClasses = 'pw--primary u-width-full u-text-uppercase'
 
     return (
         <div className={MINI_CART_CONTENT_CLASSES}>

@@ -96,7 +96,7 @@ export default {
 
     'Checkout - Registered - Choose shipping info': (browser) => {
         checkout.chooseShippingInfo()
-        browser.waitForElementVisible(`${checkout.selectors.addressListOption} .c--checked`)
+        browser.waitForElementVisible(`${checkout.selectors.addressListOption} .pw--checked`)
     },
 
     'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {

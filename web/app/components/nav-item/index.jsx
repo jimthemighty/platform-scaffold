@@ -25,7 +25,7 @@ NavItemIcon.propTypes = {
  * Project-specific NavItem which displays an icon on the left.
  */
 export const NavItemWithIcon = (props) => (
-    <NavItem {...props} className="c--with-icon" />
+    <NavItem {...props} className="pw--with-icon" />
 )
 
 NavItemWithIcon.propTypes = NavItem.propTypes
