@@ -69,8 +69,7 @@ const Navigation = (props) => {
                         <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
                             <h2 className="u-text-family-header u-text-uppercase">
                                 <a href="/" className="u-text-weight-extra-light u-color-neutral-00">
-                                    <span>MERLINS </span>
-                                    <span className="u-text-weight-semi-bold">POTIONS</span>
+                                    <span>Menu</span>
                                 </a>
                             </h2>
                         </HeaderBarTitle>
