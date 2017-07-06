@@ -10,6 +10,8 @@ import template from '../../template'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
+import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
+import Button from 'progressive-web-sdk/dist/components/button'
 
 
 import {getTitle, getFormInfo} from './selectors'
@@ -21,11 +23,13 @@ const AccountInfoForm = ({title, initialValues}) => {
     }
     return (
         <div className="t-account-info">
-            <div className="t-account-info__headings u-padding-md">
+            <div className="t-account-info__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
                 <div className="t-account-info__breadcrumb">
                     <Breadcrumbs items={[{text: 'Account Dashboard', href: '/customer/account'}]} />
                 </div>
-                <h1 className="t-account-info__title">{title}</h1>
+                <div className="u-margin-top-md">
+                    <h1 className="t-account-info__title u-text-uppercase u-width-1of2">{title}</h1>
+                </div>
             </div>
             <form>
                 <div className="t-account-info__section">
@@ -83,11 +87,15 @@ const AccountInfoForm = ({title, initialValues}) => {
                             name="names"
                             initialValues={initValues}
                         >
-                            <input
-                                className="t-account-info-input"
-                                type="text"
-                            />
+                            <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
                         </ReduxForm.Field>
+                    </FieldRow>
+                    <FieldRow>
+                        <Button
+                            className="pw--primary u-width-full"
+                        >
+                        Save
+                        </Button>
                     </FieldRow>
                 </div>
             </form>
