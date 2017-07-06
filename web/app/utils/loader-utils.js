@@ -41,7 +41,7 @@ export const loadScriptAsPromise = ({id, src, onload, isAsync = true, rejectOnEr
                 src,
                 onload: resolver,
                 isAsync,
-                onerror: rejectOnError ? reject : resolve
+                onerror: rejectOnError ? (e) => reject(new URIError(`The script ${e.target.src} is not accessible.`)) : resolve
             })
         }
     )
@@ -63,6 +63,22 @@ export const prefetchLink = ({href}) => {
 
 const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-client.js'
 
+// Creating an early promise that users of the Messaging Client can
+// chain from means they don't need to poll for its existence
+const logMessagingSetupError = () => console.error('`LoaderUtils.createGlobalMessagingClientInitPromise` must be called before `setupMessagingClient`')
+let clientInitResolver = logMessagingSetupError
+let clientInitRejecter = logMessagingSetupError
+export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
+    if (!messagingEnabled) {
+        return
+    }
+
+    window.Progressive.MessagingClientInitPromise = new Promise((resolve, reject) => {
+        clientInitResolver = resolve
+        clientInitRejecter = reject
+    })
+}
+
 /**
  * Start the asynchronous loading and intialization of the Messaging client,
  * storing a Promise in window.Progressive.MessagingClientInitPromise that
@@ -70,16 +86,7 @@ const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-
  * or init fails, the Promise is rejected.
  */
 export const loadAndInitMessagingClient = (debug, siteId) => {
-    // Creating an early promise that users of the Messaging Client can
-    // chain means they don't need to poll for its existence
-    let clientInitResolver
-    let clientInitRejecter
-    window.Progressive.MessagingClientInitPromise = new Promise((resolve, reject) => {
-        clientInitResolver = resolve
-        clientInitRejecter = reject
-    })
-
-    return () => loadScriptAsPromise({
+    loadScriptAsPromise({
         id: 'progressive-web-messaging-client',
         src: MESSAGING_PWA_CLIENT_PATH,
         rejectOnError: true
@@ -88,20 +95,17 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
             // We assume window.Progressive will exist at this point.
             const messagingClient = window.Progressive.MessagingClient || {}
 
-            // If init is not a function, this will
-            // throw, and the catch below will
-            // cause the promise to reject with
-            // the error.
-            return messagingClient.init({
-                debug,
-                siteId
-            }).then(clientInitResolver)
+            return messagingClient
+                .init({debug, siteId})
+                .then(clientInitResolver)
         })
-        .catch((error) => {
-            console.error(`Error loading ${MESSAGING_PWA_CLIENT_PATH}:`, error)
-            clientInitRejecter(error)
-            throw error
-        })
+        /**
+         * Potential errors:
+         * - URIError thrown by `loadScriptAsPromise` rejection
+         * - TypeError from `messagingClient.init` being undefined
+         * - expected error if Messaging is unavailable on the device (i.e. Safari)
+         */
+        .catch(clientInitRejecter)
 }
 
 const MESSAGING_PWA_SW_VERSION_PATH = 'https://webpush-cdn.mobify.net/pwa-serviceworker-version.json'

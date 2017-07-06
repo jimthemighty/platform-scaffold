@@ -7,6 +7,7 @@ import {isRunningInAstro} from './utils/astro-integration'
 import {
     getMessagingSWVersion,
     loadAndInitMessagingClient,
+    createGlobalMessagingClientInitPromise,
     loadScript,
     loadScriptAsPromise,
     prefetchLink,
@@ -252,6 +253,15 @@ const attemptToInitializeApp = () => {
             src: getAssetUrl('main.js')
         })
 
+        /**
+         * This must be called before vendor.js is loaded (or before the Webpack
+         * chunk that contains Messaging React components is loaded)
+         *
+         * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
+         * which will be resolved or rejected later by the method `setupMessagingClient`
+         */
+        createGlobalMessagingClientInitPromise(messagingEnabled)
+
         loadScriptAsPromise({
             id: 'progressive-web-vendor',
             src: getAssetUrl('vendor.js')
@@ -271,10 +281,6 @@ const attemptToInitializeApp = () => {
          ? loadWorker()
          : Promise.resolve(false)
         ).then((serviceWorkerSupported) => {
-
-            // Set up the Messaging client integration - this must be
-            // done now, but the work is deferred until after script
-            // loading is complete.
             setupMessagingClient(serviceWorkerSupported, messagingEnabled)
         })
 
