@@ -19,7 +19,10 @@ import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
 
 const modals = {
-    [MODAL.NAVIGATION_MODAL]: {content: <Navigation />, customDuration: 2000},
+    // You can set transition duration for individual modal:
+    // [MODAL.NAVIGATION_MODAL]: {content: <Navigation />, customDuration: 2000},
+
+    [MODAL.NAVIGATION_MODAL]: {content: <Navigation />},
     [MODAL.OFFLINE_MODAL]: {content: <OfflineModal />},
     [MODAL.MINI_CART_MODAL]: {content: <MiniCart />},
     [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: {content: <ProductDetailsItemAddedModal />},
@@ -27,7 +30,7 @@ const modals = {
     [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
     [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
-    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />},
+    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }
 
 class ModalManager extends React.Component {
@@ -41,8 +44,7 @@ class ModalManager extends React.Component {
                 return true
             } else {
                 // Close Modal
-                // Set a delay for modal dismiss animation
-                // `delay` should be larger than transition time
+                // Set a delay for modal close animation
                 if (isOpen[nextModal] !== nextIsOpen[nextModal]) {
                     const delay = modals[nextModal].customDuration || duration
                     setTimeout(() => this.forceUpdate(), delay)
