@@ -1,13 +1,13 @@
 /* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
-import {isSamsungBrowser, isFirefoxBrowser} from 'progressive-web-sdk/dist/utils/utils'
+import {isSamsungBrowser, isFirefoxBrowser, isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
 import {
     getMessagingSWVersion,
-    isLocalStorageAvailable,
     loadAndInitMessagingClient,
+    createGlobalMessagingClientInitPromise,
     loadScript,
     loadScriptAsPromise,
     prefetchLink,
@@ -103,6 +103,8 @@ const getServiceWorkerURL = () => {
     const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
     const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}`
 
+    const workerPathElements = [SW_LOADER_PATH]
+
     // In order to load the worker, we need to get the current Messaging
     // PWA service-worker version so that we can include it in the URL
     // (meaning that we will register a 'new' worker when that version
@@ -118,15 +120,11 @@ const getServiceWorkerURL = () => {
     // does not, then we may assume we're running in some situation
     // like incognito mode, in which case there is no point getting
     // Messaging worker version data, we can just use the base URL.
-    if (!isLocalStorageAvailable()) {
-        return SW_LOADER_PATH
-    }
-
-    const workerPathElements = [SW_LOADER_PATH]
-
-    const swVersion = getMessagingSWVersion()
-    if (swVersion) {
-        workerPathElements.push(`msg_sw_version=${swVersion}`)
+    if (isLocalStorageAvailable()) {
+        const swVersion = getMessagingSWVersion()
+        if (swVersion) {
+            workerPathElements.push(`msg_sw_version=${swVersion}`)
+        }
     }
 
     // Return the service worker path
@@ -141,8 +139,7 @@ const loadWorker = () => (
     navigator.serviceWorker.register(getServiceWorkerURL())
         .then(() => navigator.serviceWorker.ready)
         .then(() => true)
-        .catch(() => {
-        })
+        .catch(() => { /* We're intentially swallowing errors here */ })
 )
 
 const asyncInitApp = () => {
@@ -194,7 +191,7 @@ const attemptToInitializeApp = () => {
         /* eslint-disable max-len */
         loadAsset('meta', {
             name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'
+            content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'
         })
         /* eslint-enable max-len */
 
@@ -251,6 +248,15 @@ const attemptToInitializeApp = () => {
             src: getAssetUrl('static/js/jquery.min.js')
         })
 
+        /**
+         * This must be called before the Webpack chunk that contains Messaging
+         * React components is loaded - right now that's main.js.
+         *
+         * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
+         * which will be resolved or rejected later by the method `setupMessagingClient`
+         */
+        createGlobalMessagingClientInitPromise(messagingEnabled)
+
         loadScript({
             id: 'progressive-web-main',
             src: getAssetUrl('main.js')
@@ -275,10 +281,6 @@ const attemptToInitializeApp = () => {
          ? loadWorker()
          : Promise.resolve(false)
         ).then((serviceWorkerSupported) => {
-
-            // Set up the Messaging client integration - this must be
-            // done now, but the work is deferred until after script
-            // loading is complete.
             setupMessagingClient(serviceWorkerSupported, messagingEnabled)
         })
 
