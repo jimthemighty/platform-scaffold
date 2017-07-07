@@ -42,14 +42,14 @@ class ModalManager extends React.Component {
             // Open Modal
             if (nextIsOpen[nextModal] === true) {
                 return true
-            } else {
-                // Close Modal
-                // Set a delay for modal close animation
-                if (isOpen[nextModal] !== nextIsOpen[nextModal]) {
-                    const delay = modals[nextModal].customDuration || duration
-                    setTimeout(() => this.forceUpdate(), delay)
-                    return false
-                }
+            }
+
+            // Close Modal
+            // Set a delay for modal close animation
+            if (isOpen[nextModal] !== nextIsOpen[nextModal]) {
+                const delay = modals[nextModal].customDuration || duration
+                setTimeout(() => this.forceUpdate(), delay)
+                return false
             }
         }
         return true
