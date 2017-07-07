@@ -17,19 +17,21 @@ import {getTextFrom} from '../../../utils/parser-utils'
 import {fetchPageData} from '../app/commands'
 
 const extractFilter = (url) => {
-    const filter = url.match(/(price=[^&|#]*)/) || url.match(/(color=[^&|#]*)/)
+    const filter = url.match(/filters=([^&|#]*)/)
     return filter ? filter[1] : ''
 }
 
 export const initProductListPage = (url) => (dispatch) => {
-    const filter = extractFilter(url)
+    const filter = decodeURIComponent(extractFilter(url))
     // Merlins uses 'product_list_order' as URL search key
+    const rawURL = url
     url = url.replace('sort', 'product_list_order')
+    url = decodeURIComponent(url.replace('filters=', ''))
 
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res
-            const pathKey = urlToPathKey(url).replace('product_list_order', 'sort')
+            const pathKey = urlToPathKey(rawURL)
             const pathKeyWithoutQuery = urlToBasicPathKey(pathKey)
 
             const title = parseCategoryTitle($, $response)
