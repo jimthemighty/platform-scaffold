@@ -19,6 +19,7 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 const CheckoutConfirmationModal = (props) => {
     const {
         closeCheckoutConfirmationModal,
+        duration,
         isOpen,
     } = props
 
@@ -28,6 +29,7 @@ const CheckoutConfirmationModal = (props) => {
                 className="m-checkout-confirmation__account-created-modal pw--no-shadow"
                 open={isOpen}
                 onDismiss={closeCheckoutConfirmationModal}
+                duration={duration}
                 maskOpacity={0.7}
                 coverage="90%"
                 effect="modal-center"
@@ -70,6 +72,11 @@ CheckoutConfirmationModal.propTypes = {
      * state to closed
      */
     closeCheckoutConfirmationModal: React.PropTypes.func,
+
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: React.PropTypes.number,
 
     /**
      * Whether the modal is open or not

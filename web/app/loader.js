@@ -191,7 +191,7 @@ const attemptToInitializeApp = () => {
         /* eslint-disable max-len */
         loadAsset('meta', {
             name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'
+            content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'
         })
         /* eslint-enable max-len */
 
@@ -248,19 +248,19 @@ const attemptToInitializeApp = () => {
             src: getAssetUrl('static/js/jquery.min.js')
         })
 
-        loadScript({
-            id: 'progressive-web-main',
-            src: getAssetUrl('main.js')
-        })
-
         /**
-         * This must be called before vendor.js is loaded (or before the Webpack
-         * chunk that contains Messaging React components is loaded)
+         * This must be called before the Webpack chunk that contains Messaging
+         * React components is loaded - right now that's main.js.
          *
          * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
          * which will be resolved or rejected later by the method `setupMessagingClient`
          */
         createGlobalMessagingClientInitPromise(messagingEnabled)
+
+        loadScript({
+            id: 'progressive-web-main',
+            src: getAssetUrl('main.js')
+        })
 
         loadScriptAsPromise({
             id: 'progressive-web-vendor',
