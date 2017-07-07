@@ -73,7 +73,7 @@ if (fs.existsSync('build')) {
     console.log(`Verifying gzipped build files are not larger than threshold from file-size-config.json...`)
     walk.walkSync('build', options)
 } else {
-    console.log(`Run 'npm prod:build' to generate a build.`)
+    console.log(`Run 'npm run prod:build' to generate a build.`)
 }
 
 if (failure) {

@@ -5,8 +5,8 @@
 const selectors = {
     productDetailsTemplateIdentifier: '.t-product-details',
     addItem: '.t-product-details__add-to-cart:not([disabled])',
-    itemAdded: '.t-product-details__item-added-modal',
-    goToCheckout: '.t-product-details__item-added-modal .c--primary'
+    itemAdded: '.m-product-details__item-added-modal',
+    goToCheckout: '.m-product-details__item-added-modal .pw--primary'
 }
 
 const ProductDetails = function(browser) {

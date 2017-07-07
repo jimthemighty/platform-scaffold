@@ -5,8 +5,8 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import * as cartSelectors from '../../../store/cart/selectors'
-import {CART_ESTIMATE_SHIPPING_MODAL} from '../constants'
+import * as cartSelectors from 'progressive-web-sdk/dist/store/cart/selectors'
+import {CART_ESTIMATE_SHIPPING_MODAL} from '../../../modals/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {getSelectedShippingLabel, getPostcode} from '../../../store/checkout/shipping/selectors'
 import {getCheckoutShippingURL} from '../../app/selectors'
@@ -17,13 +17,18 @@ import CartPromoForm from './cart-promo-form'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
 import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/accordion'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 // This is not written as a component to preserve the proptype
 // requirements of the Ledger component.
 const renderTaxAmountRow = (taxAmount, zipCode, openCalculateModal) => {
     const editButton = (
         <span>Based on delivery to
-            <Button innerClassName="u-padding-start-sm u-color-brand u-text-letter-spacing-normal" onClick={openCalculateModal}>
+            <Button
+                innerClassName="u-padding-start-sm u-color-brand u-text-letter-spacing-normal"
+                onClick={openCalculateModal}
+                data-analytics-name={UI_NAME.recalculateTax}
+            >
                 {zipCode}
             </Button>
         </span>
@@ -55,13 +60,21 @@ const CartSummary = ({
     removePromoCode
 }) => {
     const calculateButton = (
-        <Button innerClassName="u-padding-end-0 u-color-brand u-text-letter-spacing-normal" onClick={onCalculateClick}>
+        <Button
+            innerClassName="u-padding-end-0 u-color-brand u-text-letter-spacing-normal"
+            onClick={onCalculateClick}
+            data-analytics-name={UI_NAME.calculateTax}
+        >
             Calculate <Icon name="chevron-right" />
         </Button>
     )
 
     const removeButton = (
-        <Button innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal" onClick={removePromoCode}>
+        <Button
+            innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal"
+            onClick={removePromoCode}
+            data-analytics-name={UI_NAME.removePromotionCode}
+        >
             Remove Discount
         </Button>
     )
@@ -95,7 +108,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {zipCode &&
+                    {(zipCode !== null && zipCode !== undefined) &&
                         <LedgerRow
                             label={`Shipping (${selectedShippingLabel})`}
                             value={selectedShippingRate}
@@ -103,7 +116,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {taxAmount
+                    {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)
                         : <LedgerRow
                             className="u-flex-none"
@@ -124,8 +137,9 @@ const CartSummary = ({
 
                 <div className="u-padding-end-md u-padding-bottom-lg u-padding-start-md">
                     <Button
-                        className="c--primary u-flex-none u-width-full u-text-uppercase qa-cart__checkout"
-                        href={checkoutShippingURL}>
+                        className="pw--primary u-flex-none u-width-full u-text-uppercase qa-cart__checkout"
+                        href={checkoutShippingURL}
+                        data-analytics-name={UI_NAME.checkout}>
                         <Icon name="lock" />
                         Proceed To Checkout
                     </Button>
@@ -134,7 +148,6 @@ const CartSummary = ({
         </div>
     )
 }
-
 
 CartSummary.propTypes = {
     checkoutShippingURL: PropTypes.string,
@@ -165,7 +178,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    onCalculateClick: () => openModal(CART_ESTIMATE_SHIPPING_MODAL),
+    onCalculateClick: () => openModal(CART_ESTIMATE_SHIPPING_MODAL, UI_NAME.estimateShipping),
     removePromoCode
 }
 

@@ -2,7 +2,7 @@
 // ===
 
 $cart__approximate-header-height: 52px;
-$cart__approximate-footer-height: 584px;
+$cart__approximate-footer-height: 173px;
 $cart__content-height: calc(100vh - #{$cart__approximate-header-height} - #{$cart__approximate-footer-height});
 $cart__custom-ease-out: cubic-bezier(0.35, 0.35, 0.32, 1);
 
@@ -102,18 +102,6 @@ $cart__custom-ease-out: cubic-bezier(0.35, 0.35, 0.32, 1);
 
 .t-cart__promo-input {
     border-right: 0;
-}
-
-
-// Wislist Modal
-// ---
-
-.t-cart__wishlist-modal {
-    .pw-sheet__inner {
-        max-width: 520px;
-        margin-right: auto;
-        margin-left: auto;
-    }
 }
 
 

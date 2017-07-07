@@ -22,6 +22,7 @@ import ExpiryDate from 'progressive-web-sdk/dist/components/expiry-date'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import CardVerification from 'progressive-web-sdk/dist/components/card-verification'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 class CreditCardForm extends React.Component {
     constructor(props) {
@@ -71,7 +72,7 @@ class CreditCardForm extends React.Component {
                         name="ccname"
                         label="Cardholder Name"
                     >
-                        <input type="text" noValidate />
+                        <input type="text" noValidate data-analytics-name={UI_NAME.cardHolderName} />
                     </ReduxForm.Field>
                 </FieldRow>
 
@@ -120,7 +121,7 @@ class CreditCardForm extends React.Component {
                                 label={<strong className="u-text-weight-regular">VISA **** **** **** 5678</strong>}
                                 caption="John Appleseed"
                             >
-                                <input type="radio" value={PAYMENT_EXISTING_CARD} onChange={this.handleRadioChange} defaultChecked noValidate />
+                                <input type="radio" value={PAYMENT_EXISTING_CARD} onChange={this.handleRadioChange} defaultChecked noValidate data-analytics-name={UI_NAME.savedCard} />
                             </ReduxForm.Field>
                         </FieldRow>
 
@@ -131,7 +132,7 @@ class CreditCardForm extends React.Component {
                                     name="selectCreditCard"
                                     label={<span className={isNewCardInputSelected && 'u-text-weight-medium'}>Add a new card</span>}
                                 >
-                                    <input type="radio" value={PAYMENT_NEW_CARD} onChange={this.handleRadioChange} noValidate />
+                                    <input type="radio" value={PAYMENT_NEW_CARD} onChange={this.handleRadioChange} noValidate data-analytics-name={UI_NAME.addNewCard} />
                                 </ReduxForm.Field>
                             </FieldRow>
 

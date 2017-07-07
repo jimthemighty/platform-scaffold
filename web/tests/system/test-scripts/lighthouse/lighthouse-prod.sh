@@ -6,9 +6,10 @@ URL=${1-$npm_package_siteUrl}
 
 lighthouse \
 	--view \
+	--quiet \
 	--output json \
 	--output html \
 	--output-path $OUTPUT_PATH \
-	$URL
+	$URL > /dev/null 2>&1
 
-node tests/system/test-scripts/check-lighthouse-score.js
+npm run test:check-lighthouse-score

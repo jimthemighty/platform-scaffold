@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as selectors from '../selectors'
-import {getProductImages} from '../../../store/products/selectors'
+import {getProductImages} from 'progressive-web-sdk/dist/store/products/selectors'
 import classNames from 'classnames'
 
 import Carousel from 'progressive-web-sdk/dist/components/carousel'
@@ -42,7 +42,7 @@ const ProductDetailsCarousel = ({images, contentsLoaded}) => {
 
     const imgProps = {
         className: classNames('u-display-block', {
-            'c--is-transitioning': !contentsLoaded // Carousel hasn't received the final images yet
+            'pw--is-transitioning': !contentsLoaded // Carousel hasn't received the final images yet
         }),
         hidePlaceholder: true,
         ratio: {aspect: '1:1'},

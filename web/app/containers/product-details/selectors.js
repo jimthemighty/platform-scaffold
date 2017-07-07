@@ -6,7 +6,7 @@ import {createSelector} from 'reselect'
 import Immutable from 'immutable'
 import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 import {getUi} from '../../store/selectors'
-import {getCurrentProductId} from '../../store/products/selectors'
+import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selectors'
 
 const PLACEHOLDER_BREADCRUMBS = Immutable.fromJS([
     {

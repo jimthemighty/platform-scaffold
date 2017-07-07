@@ -1,6 +1,6 @@
 # Mobify Progressive Web Scaffold
 
-The quick start guide for using the scaffold can be found [here](https://docs.mobify.com/progressive-web/latest/guides/quick-start-guide/)
+The quick start guide for using the scaffold can be found [here](https://docs.mobify.com/progressive-web/latest/getting-started/quick-start/)
 
 ## Running npm scripts
 
@@ -194,16 +194,10 @@ You can run [Lighthouse](https://github.com/GoogleChrome/lighthouse) test agains
 npm run test:pwa-prod
 ```
 
-When you develop it might be helpful to run the same test against your local files. This assumes you have `npm run dev` running in another tab:
+When you develop it might be helpful to run the test against your local files. To run Lighthouse while previewing against the build (locally or on CI), assuming the server is already running:
 
 ```
-npm run test:pwa-local
-```
-
-For CI builds, this command builds and serves the bundle for testing with Preview:
-
-```
-npm run test:pwa-ci
+npm run test:pwa-preview
 ```
 
 ## Analyze Bundle Size

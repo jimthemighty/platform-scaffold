@@ -43,8 +43,6 @@ export const prefetchTemplateChunks = () => {
     }
 }
 
-// These are on the old model and need to be wrapped here
-// rather than in container.js to avoid circular imports
 export const Cart = PWALoadable(() => import('./cart/container' /* webpackChunkName: "cart" */), 'cart')
 export const CheckoutConfirmation = PWALoadable(() => import('./checkout-confirmation/container' /* webpackChunkName: "checkout-confirmation" */), 'checkout-confirmation')
 export const CheckoutPayment = PWALoadable(() => import('./checkout-payment/container' /* webpackChunkName: "checkout-payment" */), 'checkout-payment')
