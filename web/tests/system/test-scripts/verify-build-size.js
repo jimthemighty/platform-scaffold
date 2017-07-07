@@ -10,16 +10,14 @@ const path = require('path')
 const walk = require('walk')
 const chalk = require('chalk')
 const gzipSize = require('gzip-size')
-const fileSize = require(path.join(path.resolve('./'), 'tests/system/test-scripts/file-size-config.json'))
 
-// A number denoting maximum file size in bytes.
-const FILE_SIZE_LIMIT = fileSize.bundleSize.max
 /* eslint-disable no-undef */
-
 /* Parse file-size-config.json file */
 const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'file-size-config.json'), 'utf8'))
 const files = config.bundleSize.files
 
+// A number denoting maximum file size in bytes.
+const FILE_SIZE_LIMIT = config.bundleSize.max
 let failure = false
 
 /**
@@ -27,9 +25,8 @@ let failure = false
 * Traverse the build folder and verify that built files are smaller than a
 * defined threshold.
 * It also verifies the gzipped files within the build folder against the maximum file sizes set in file-size-config.json
-* The test will fail if it goes above the threshold
+* The test will fail if it goes above the threshold.
 */
-
 
 const options = {
     listeners: {
@@ -37,19 +34,18 @@ const options = {
             const filePath = path.join(root, fileStats.name)
             const fileStat = fs.statSync(filePath)
 
-            /* Checks each file - if it's over size limit */
+            /* Checks each minified file - if it's over size limit before gzip compression */
             if (fileStat.size > FILE_SIZE_LIMIT) {
                 failure = true
                 console.log(chalk.red(`${filePath} is ${fileStat.size} bytes. It is too big!\n`))
             }
 
-            /* Get the gzipped file size and parse file-size-config.json*/
-            const source = fs.readFileSync(filePath, 'utf8')
-            const gzipped = gzipSize.sync(source)
-
             /* Checks the file - if it's in the list of files in the file-size-config.json */
             for (const file in files) {
                 if (fileStats.name === file) {
+                    /* Get the gzipped file size and parse file-size-config.json*/
+                    const source = fs.readFileSync(filePath, 'utf8')
+                    const gzipped = gzipSize.sync(source)
                     const fileMax = files[file]
                     if (gzipped > fileMax) {
                         failure = true
@@ -74,7 +70,7 @@ const options = {
 
 if (fs.existsSync('build')) {
     console.log(`Verifying individual file sizes in the build are less than ${FILE_SIZE_LIMIT} bytes...`)
-    console.log(`Verifying build files are not larger than threshold in file-size-config.json...`)
+    console.log(`Verifying build files are not larger than threshold from file-size-config.json...`)
     walk.walkSync('build', options)
 } else {
     console.log(`Run 'npm prod:build' to generate a build.`)
