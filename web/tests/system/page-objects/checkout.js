@@ -18,12 +18,12 @@ const selectors = {
     postCode: 'input[name*="code"]',
     phone: 'input[name*="phone"]',
     addressListOption: '.t-checkout-shipping__shipping-address .pw-field-row',
-    shippingMethod: '.t-checkout-shipping__shipping-method .c--checked',
+    shippingMethod: '.t-checkout-shipping__shipping-method .pw--checked',
     continueToPayment: '.qa-checkout__continue-to-payment',
 
     paymentTemplate: '.t-app--checkingPayment',
     creditCardName: 'input[name="ccname"]',
-    creditCardNumber: '.c-card-input input',
+    creditCardNumber: '.pw-card-input input',
     expiry: '.pw-expiry-date input',
     cvv: '.pw-card-verification input',
 
@@ -32,7 +32,7 @@ const selectors = {
 
 const userData = {
     // Export a test email and password as environment variables with the following names
-    email: 'mobifyqa@gmail.com',
+    email: 'mobifyautomation@gmail.com',
     password: 'p4ssword',
 
     name: 'John Doe',

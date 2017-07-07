@@ -2,8 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {getCart} from '../../integration-manager/cart/commands'
-import {submitForm} from '../../integration-manager/_merlins-connector/utils'
+import {getCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
+import {submitForm} from '../../connectors/_merlins-connector/utils'
 const UPDATE_ITEM_URL = '/checkout/cart/updatePost/'
 
 // This command overrides the Merlin's connector updateItemQuantity

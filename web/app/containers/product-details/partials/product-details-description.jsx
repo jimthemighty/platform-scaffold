@@ -5,7 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getProductDescription} from '../../../store/products/selectors'
+import {getProductDescription} from 'progressive-web-sdk/dist/store/products/selectors'
 
 import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/accordion'
 

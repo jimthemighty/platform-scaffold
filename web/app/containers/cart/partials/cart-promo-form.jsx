@@ -11,6 +11,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {submitPromoCode} from '../actions'
 import {isPromoSubmitting} from '../selectors'
@@ -27,16 +28,20 @@ const CartPromoForm = (props) => {
                         className="t-cart__promo-input"
                         type="text"
                         placeholder="Enter promo or gift code"
+                        data-analytics-name={UI_NAME.promotionCode}
                     />
                 </ReduxForm.Field>
                 {isPromoSubmitting ?
-                    <Button className="c--tertiary u-margin-0">
+                    <Button className="pw--tertiary u-margin-0">
                         <InlineLoader className="pw--small" title="Submitting" />
                     </Button>
                 :
-                    <Button type="submit"
-                        className="c--tertiary u-margin-0 u-text-uppercase"
-                        disabled={disabled || submitting}>
+                    <Button
+                        type="submit"
+                        className="pw--tertiary u-margin-0 u-text-uppercase"
+                        disabled={disabled || submitting}
+                        data-analytics-name={UI_NAME.submitPromoCode}
+                    >
                         Apply
                     </Button>
                 }

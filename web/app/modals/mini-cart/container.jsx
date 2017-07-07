@@ -16,7 +16,8 @@ import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {MINI_CART_MODAL} from '../constants'
 import {MINI_CART_CONTENT_CLASSES} from './constants'
 import {stripEvent} from '../../utils/utils'
-import {getCartLoaded, getCartHasItems} from '../../store/cart/selectors'
+import {getCartLoaded, getCartHasItems} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getCheckoutShippingURL} from '../../containers/app/selectors'
 import {requestCartContent} from './actions'
 
@@ -39,7 +40,7 @@ const MiniCartEmpty = () => (
 )
 
 const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
-    const buttonClasses = 'c--primary u-width-full u-text-uppercase'
+    const buttonClasses = 'pw--primary u-width-full u-text-uppercase'
 
     return (
         <div className={MINI_CART_CONTENT_CLASSES}>
@@ -47,11 +48,19 @@ const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
 
             <div className="u-padding-top-lg u-flex-none">
                 {hasItems ?
-                    <Button href={checkoutShippingURL} className={buttonClasses}>
+                    <Button
+                        href={checkoutShippingURL}
+                        className={buttonClasses}
+                        data-analytics-name={UI_NAME.checkout}
+                    >
                         Go To Checkout
                     </Button>
                 :
-                    <Button onClick={closeMiniCart} className={buttonClasses}>
+                    <Button
+                        onClick={closeMiniCart}
+                        className={buttonClasses}
+                        data-analytics-name={UI_NAME.continueShopping}
+                    >
                         Continue Shopping
                     </Button>
                 }
@@ -93,6 +102,7 @@ class MiniCart extends React.Component {
             cartLoaded,
             isOpen,
             closeMiniCart,
+            duration,
             checkoutShippingURL
         } = this.props
 
@@ -101,6 +111,7 @@ class MiniCart extends React.Component {
                 className="m-mini-cart"
                 open={isOpen}
                 onDismiss={closeMiniCart}
+                duration={duration}
                 maskOpacity={0.7}
                 effect="slide-right"
                 coverage="85%"
@@ -127,6 +138,10 @@ MiniCart.propTypes = {
     cartLoaded: PropTypes.bool,
     checkoutShippingURL: PropTypes.string,
     closeMiniCart: PropTypes.func,
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
     hasItems: PropTypes.bool,
     isOpen: PropTypes.bool,
     requestCartContent: PropTypes.func,
@@ -140,7 +155,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL)),
+    closeMiniCart: stripEvent(() => closeModal(MINI_CART_MODAL, UI_NAME.miniCart)),
     requestCartContent
 }
 

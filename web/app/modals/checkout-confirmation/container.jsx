@@ -14,10 +14,12 @@ import {stripEvent} from '../../utils/utils'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CheckoutConfirmationModal = (props) => {
     const {
         closeCheckoutConfirmationModal,
+        duration,
         isOpen,
     } = props
 
@@ -27,6 +29,7 @@ const CheckoutConfirmationModal = (props) => {
                 className="m-checkout-confirmation__account-created-modal pw--no-shadow"
                 open={isOpen}
                 onDismiss={closeCheckoutConfirmationModal}
+                duration={duration}
                 maskOpacity={0.7}
                 coverage="90%"
                 effect="modal-center"
@@ -51,8 +54,9 @@ const CheckoutConfirmationModal = (props) => {
                     </p>
 
                     <Button
-                        className="c--tertiary u-width-full u-text-uppercase"
+                        className="pw--tertiary u-width-full u-text-uppercase"
                         onClick={closeCheckoutConfirmationModal}
+                        data-analytics-name={UI_NAME.confirmation}
                     >
                         Ok
                     </Button>
@@ -70,6 +74,11 @@ CheckoutConfirmationModal.propTypes = {
     closeCheckoutConfirmationModal: React.PropTypes.func,
 
     /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: React.PropTypes.number,
+
+    /**
      * Whether the modal is open or not
      */
     isOpen: React.PropTypes.bool,
@@ -80,7 +89,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeCheckoutConfirmationModal: stripEvent(() => closeModal(CHECKOUT_CONFIRMATION_MODAL)),
+    closeCheckoutConfirmationModal: stripEvent(() => closeModal(CHECKOUT_CONFIRMATION_MODAL, UI_NAME.createAccountConfirmation)),
 }
 
 export default connect(

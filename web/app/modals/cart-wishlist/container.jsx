@@ -17,6 +17,7 @@ import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CartWishlistComplete = ({closeModal}) => (
     <div>
@@ -38,8 +39,9 @@ const CartWishlistComplete = ({closeModal}) => (
         </p>
 
         <Button
-            className="c--tertiary u-width-full u-text-uppercase"
+            className="pw--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
+            data-analytics-name={UI_NAME.confirmation}
         >
             Ok
         </Button>
@@ -70,15 +72,17 @@ const CartWishlistGuest = ({closeModal}) => (
         </p>
 
         <Button
-            className="c--secondary u-width-full u-text-uppercase u-margin-bottom-lg"
+            className="pw--secondary u-width-full u-text-uppercase u-margin-bottom-lg"
             href="/customer/account/login/"
+            data-analytics-name={UI_NAME.goToSignIn}
         >
             Sign in or sign up
         </Button>
 
         <Button
-            className="c--tertiary u-width-full u-text-uppercase"
+            className="pw--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
+            data-analytics-name={UI_NAME.cancel}
         >
             Cancel
         </Button>
@@ -102,7 +106,7 @@ CartWishlistLoggedIn.propTypes = {
 }
 
 
-const CartWishlistModal = ({closeModal, isOpen, isComplete, isLoggedIn}) => {
+const CartWishlistModal = ({closeModal, duration, isOpen, isComplete, isLoggedIn}) => {
     return (
         <Sheet
             className="pw--no-shadow m-cart__wishlist-modal"
@@ -111,6 +115,7 @@ const CartWishlistModal = ({closeModal, isOpen, isComplete, isLoggedIn}) => {
                 closeModal()
                 setIsWishlistComplete(false)
             }}
+            duration={duration}
             maskOpacity={0.7}
             effect="modal-center"
             shrinkToContent={true}
@@ -132,6 +137,11 @@ CartWishlistModal.propTypes = {
      */
     closeModal: PropTypes.func,
 
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
+
     isComplete: PropTypes.bool,
     isLoggedIn: PropTypes.bool,
 
@@ -148,7 +158,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(CART_WISHLIST_MODAL),
+    closeModal: () => closeModal(CART_WISHLIST_MODAL, UI_NAME.wishlist),
     setIsWishlistComplete
 }
 

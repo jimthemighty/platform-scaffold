@@ -6,8 +6,17 @@
 /* eslint-env node */
 
 const autoprefixer = require('autoprefixer')
+const WebpackNotifierPlugin = require('webpack-notifier')
+const packageConfig = require('../package.json')
 
 module.exports = {
+    plugins: [
+        new WebpackNotifierPlugin({
+            title: `Mobify Project: ${packageConfig.name}`,
+            excludeWarnings: true,
+            skipFirstNotification: true
+        }),
+    ],
     postcss: () => {
         return [
             autoprefixer({

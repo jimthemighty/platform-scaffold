@@ -1,8 +1,7 @@
 // Breadcrumbs Theme
 // ===
 
-.pw-breadcumbs__item,
-.c-breadcrumbs__item {
+.pw-breadcumbs__item {
     font-size: $small-font-size;
 
     &:not(:last-of-type)::after {
