@@ -19,14 +19,22 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import IconLabelButton from '../../components/icon-label-button'
 import {AccountNavItem, NavItemWithOnClick} from '../../components/nav-item'
 import * as selectors from './selectors'
-import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from './constants'
+import {SIGNED_IN_LOGOUT_ITEM, SIGNED_OUT_NAV_ITEM_TYPE, HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE} from './constants'
 import {NAVIGATION_MODAL} from '../constants'
 import {signOut} from '../../containers/app/actions'
 import {setNavigationPath} from './actions'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 
 const Navigation = (props) => {
-    const {path, isOpen, root, closeNavigation, router, setNavigationPath, logoutAction} = props
+    const {
+        path,
+        isOpen,
+        root,
+        closeNavigation,
+        router,
+        setNavigationPath,
+        logoutAction
+    } = props
 
     const onPathChange = (path, isLeaf) => {
         if (isLeaf) {
@@ -44,9 +52,11 @@ const Navigation = (props) => {
      */
     const itemFactory = (type, props) => {
         switch (type) {
-            case GUEST_NAV_ITEM_TYPE:
+            case HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE:
+                return null
+            case SIGNED_OUT_NAV_ITEM_TYPE:
                 return <AccountNavItem {...props} />
-            case SIGNED_IN_NAV_ITEM_TYPE:
+            case SIGNED_IN_LOGOUT_ITEM:
                 return (
                     <NavItemWithOnClick
                         {...props}

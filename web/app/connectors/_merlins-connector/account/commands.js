@@ -129,7 +129,7 @@ export const logout = () => (dispatch) => (
         })
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active
-        .then(() => fetchPageData(window.location.href))
+        .then(() => dispatch(fetchPageData(window.location.href)))
 )
 
 export const updateShippingAddress = (shippingData) => (dispatch) => {
