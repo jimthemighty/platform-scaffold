@@ -19,21 +19,21 @@ import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
 
 const modals = {
-    [MODAL.NAVIGATION_MODAL]: <Navigation />,
-    [MODAL.OFFLINE_MODAL]: <OfflineModal />,
-    [MODAL.MINI_CART_MODAL]: <MiniCart />,
-    [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: <ProductDetailsItemAddedModal />,
-    [MODAL.PRODUCT_LIST_FILTER_MODAL]: <ProductListFilterModal />,
-    [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: <CartEstimateShippingModal />,
-    [MODAL.CART_WISHLIST_MODAL]: <CartWishlistModal />,
-    [MODAL.CART_REMOVE_ITEM_MODAL]: <CartRemoveItemModal />,
-    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: <CheckoutConfirmationModal />,
+    [MODAL.NAVIGATION_MODAL]: {content: <Navigation />, customDuration: 2000},
+    [MODAL.OFFLINE_MODAL]: {content: <OfflineModal />},
+    [MODAL.MINI_CART_MODAL]: {content: <MiniCart />},
+    [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: {content: <ProductDetailsItemAddedModal />},
+    [MODAL.PRODUCT_LIST_FILTER_MODAL]: {content: <ProductListFilterModal />},
+    [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
+    [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},
+    [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
+    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />},
 }
 
 class ModalManager extends React.Component {
     shouldComponentUpdate(nextProps) {
         const nextIsOpen = nextProps.isOpen
-        const isOpen = this.props.isOpen
+        const {isOpen, duration} = this.props
 
         for (const nextModal in nextIsOpen) {
             // Open Modal
@@ -43,8 +43,8 @@ class ModalManager extends React.Component {
                 // Close Modal
                 // Set a delay for modal dismiss animation
                 // `delay` should be larger than transition time
-                const delay = 1000
                 if (isOpen[nextModal] !== nextIsOpen[nextModal]) {
+                    const delay = modals[nextModal].customDuration || duration
                     setTimeout(() => this.forceUpdate(), delay)
                     return false
                 }
@@ -53,25 +53,46 @@ class ModalManager extends React.Component {
         return true
     }
 
-    render() {
-        const {isOpen} = this.props
-        let openedModal
+    onModalChange() {
+        const {isOpen, duration} = this.props
+        let openModal
         for (const modal in isOpen) {
             if (isOpen[modal]) {
-                openedModal = modals[modal]
+                openModal = React.cloneElement(
+                    modals[modal].content,
+                    {duration: modals[modal].customDuration || duration}
+                )
             }
         }
+        return openModal
+    }
 
+    render() {
+        const openModal = this.onModalChange()
         return (
             <div className="m-modal-manager">
-                {openedModal}
+                {openModal}
             </div>
         )
     }
 }
 
 ModalManager.propTypes = {
-    isOpen: PropTypes.object
+    /**
+     * Duration will define the time animation takes to complete.
+     * It is the default value for all modals in the project.
+     * You can also pass duration to individual modals.
+     */
+    duration: PropTypes.number,
+
+    /**
+     * The object that contains the open/closed flag of all modals.
+     */
+    isOpen: PropTypes.object,
+}
+
+ModalManager.defaultProps = {
+    duration: 200
 }
 
 const mapStateToProps = createPropsSelector({

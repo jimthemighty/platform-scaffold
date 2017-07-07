@@ -136,6 +136,13 @@ CartWishlistModal.propTypes = {
      */
     closeModal: PropTypes.func,
 
+    /**
+     * Duration will define the time animation takes to complete.
+     * It is the default value for all modals in the project.
+     * You can also pass duration to individual modals.
+     */
+    duration: PropTypes.number,
+
     isComplete: PropTypes.bool,
     isLoggedIn: PropTypes.bool,
 

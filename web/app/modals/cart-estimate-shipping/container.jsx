@@ -69,6 +69,7 @@ class CartEstimateShippingModal extends React.Component {
     render() {
         const {
             closeModal,
+            duration,
             handleSubmit,
             isOpen,
             isTaxRequestPending,
@@ -76,7 +77,14 @@ class CartEstimateShippingModal extends React.Component {
         } = this.props
 
         return (
-            <Sheet className="m-cart__estimate-shipping-modal" open={isOpen} onDismiss={closeModal} maskOpacity={0.7} effect="slide-right" coverage="85%">
+            <Sheet className="m-cart__estimate-shipping-modal"
+                open={isOpen}
+                onDismiss={closeModal}
+                duration={duration}
+                maskOpacity={0.7}
+                effect="slide-right"
+                coverage="85%"
+            >
                 <HeaderBar>
                     <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
                         <h1 className="u-h4 u-text-family-header u-text-uppercase">
@@ -134,6 +142,11 @@ CartEstimateShippingModal.propTypes = {
      * A function used to set the navigation-sheet's state to closed
      */
     closeModal: React.PropTypes.func,
+
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: React.PropTypes.number,
 
     /**
     * (Internal) Added by Redux form

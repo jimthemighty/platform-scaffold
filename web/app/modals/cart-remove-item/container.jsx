@@ -17,12 +17,13 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem}) => {
+const CartRemoveItemModal = ({closeModal, isOpen, removeItemID, removeItem, duration}) => {
     return (
         <Sheet
             className="pw--no-shadow m-cart__remove-item-confirmation-modal"
             open={isOpen}
             onDismiss={closeModal}
+            duration={duration}
             maskOpacity={0.7}
             effect="modal-center"
             shrinkToContent={true}
@@ -76,6 +77,10 @@ CartRemoveItemModal.propTypes = {
      * A function used to set the navigation-sheet's state to closed
      */
     closeModal: React.PropTypes.func,
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: React.PropTypes.number,
     /**
      * Whether the modal is open or not
      */

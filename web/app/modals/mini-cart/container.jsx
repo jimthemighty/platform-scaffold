@@ -136,6 +136,10 @@ MiniCart.propTypes = {
     cartLoaded: PropTypes.bool,
     checkoutShippingURL: PropTypes.string,
     closeMiniCart: PropTypes.func,
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
     hasItems: PropTypes.bool,
     isOpen: PropTypes.bool,
     requestCartContent: PropTypes.func,

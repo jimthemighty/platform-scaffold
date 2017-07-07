@@ -48,7 +48,11 @@ const OfflineModal = (props, context) => {
 
 OfflineModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
-    isOpen: PropTypes.bool.isRequired
+    isOpen: PropTypes.bool.isRequired,
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number
 }
 
 OfflineModal.contextTypes = {

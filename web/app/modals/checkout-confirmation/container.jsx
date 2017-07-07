@@ -72,6 +72,11 @@ CheckoutConfirmationModal.propTypes = {
     closeCheckoutConfirmationModal: React.PropTypes.func,
 
     /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: React.PropTypes.number,
+
+    /**
      * Whether the modal is open or not
      */
     isOpen: React.PropTypes.bool,
