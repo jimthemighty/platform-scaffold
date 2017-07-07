@@ -69,8 +69,8 @@ const options = {
 }
 
 if (fs.existsSync('build')) {
-    console.log(`Verifying individual file sizes in the build are less than ${FILE_SIZE_LIMIT} bytes...`)
-    console.log(`Verifying build files are not larger than threshold from file-size-config.json...`)
+    console.log(`Verifying individual minified file sizes in the build are less than ${FILE_SIZE_LIMIT} bytes...`)
+    console.log(`Verifying gzipped build files are not larger than threshold from file-size-config.json...`)
     walk.walkSync('build', options)
 } else {
     console.log(`Run 'npm prod:build' to generate a build.`)
