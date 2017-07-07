@@ -4,7 +4,7 @@
 .pw-header-bar {
     padding: $unit/2;
 
-    background-color: $brand-color;
+    background-color: $brand-color; // ui_kit_value: $secondary-brand-color;
 
     color: $neutral-00;
 }
