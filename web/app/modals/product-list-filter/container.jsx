@@ -40,13 +40,14 @@ class ProductListFilterModal extends React.Component {
     }
 
     render() {
-        const {closeModal, filters, isOpen} = this.props
+        const {closeModal, filters, isOpen, changeFilter, duration} = this.props
 
         return (
             <Sheet
                 className="m-product-list__filter-modal"
                 open={isOpen}
                 onDismiss={closeModal}
+                duration={duration}
                 maskOpacity={0.7}
                 effect="slide-right"
                 shrinkToContent={false}
@@ -114,6 +115,11 @@ ProductListFilterModal.propTypes = {
      * A function used to set the filter sheet's state to closed
      */
     closeModal: PropTypes.func,
+
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
 
     /*
      * An array of filters
