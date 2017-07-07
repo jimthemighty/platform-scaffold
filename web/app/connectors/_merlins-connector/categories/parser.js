@@ -55,7 +55,7 @@ export const filterParser = ($, $html) => {
             let query = $kind.find('a')[0].search
             const searchKey = query.split('&')[0].replace('?', '')
             let criteria = ''
-            let label = $kind.text()
+            let label = $kind.clone().find('span').remove().end().text()
             const $count = $kind.find('.count').remove()
             const count = $count.text().replace(REGEX_NON_NUM, '')
 
