@@ -106,7 +106,7 @@ CartWishlistLoggedIn.propTypes = {
 }
 
 
-const CartWishlistModal = ({closeModal, isOpen, isComplete, isLoggedIn}) => {
+const CartWishlistModal = ({closeModal, duration, isOpen, isComplete, isLoggedIn}) => {
     return (
         <Sheet
             className="pw--no-shadow m-cart__wishlist-modal"
@@ -115,6 +115,7 @@ const CartWishlistModal = ({closeModal, isOpen, isComplete, isLoggedIn}) => {
                 closeModal()
                 setIsWishlistComplete(false)
             }}
+            duration={duration}
             maskOpacity={0.7}
             effect="modal-center"
             shrinkToContent={true}
@@ -137,9 +138,7 @@ CartWishlistModal.propTypes = {
     closeModal: PropTypes.func,
 
     /**
-     * Duration will define the time animation takes to complete.
-     * It is the default value for all modals in the project.
-     * You can also pass duration to individual modals.
+     * Duration will define the time the animation takes to complete.
      */
     duration: PropTypes.number,
 

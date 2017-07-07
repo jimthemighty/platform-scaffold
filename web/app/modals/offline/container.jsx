@@ -15,11 +15,18 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const OfflineModal = (props, context) => {
-    const {closeModal, isOpen} = props
+    const {closeModal, isOpen, duration} = props
     const {reload} = context
 
     return (
-        <Sheet open={isOpen} onDismiss={closeModal} maskOpacity={0.7} effect="modal-center" shrinkToContent>
+        <Sheet
+            open={isOpen}
+            onDismiss={closeModal}
+            duration={duration}
+            maskOpacity={0.7}
+            effect="modal-center" 
+            shrinkToContent
+        >
             <div className="u-padding-md u-text-align-center">
                 <div className="u-margin-top u-text-weight-bold">Offline mode</div>
                 <p className="u-margin-top-md u-margin-bottom-lg">

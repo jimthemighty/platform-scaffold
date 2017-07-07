@@ -102,6 +102,7 @@ class MiniCart extends React.Component {
             cartLoaded,
             isOpen,
             closeMiniCart,
+            duration,
             checkoutShippingURL
         } = this.props
 
@@ -110,6 +111,7 @@ class MiniCart extends React.Component {
                 className="m-mini-cart"
                 open={isOpen}
                 onDismiss={closeMiniCart}
+                duration={duration}
                 maskOpacity={0.7}
                 effect="slide-right"
                 coverage="85%"
