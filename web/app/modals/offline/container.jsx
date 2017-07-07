@@ -24,7 +24,7 @@ const OfflineModal = (props, context) => {
             onDismiss={closeModal}
             duration={duration}
             maskOpacity={0.7}
-            effect="modal-center" 
+            effect="modal-center"
             shrinkToContent
         >
             <div className="u-padding-md u-text-align-center">
