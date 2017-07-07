@@ -40,14 +40,23 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
                 type: isLoggedIn ? SIGNED_OUT_NAV_ITEM_TYPE : HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE,
                 title: 'My Account',
                 options: {
-                    icon: isLoggedIn ? 'user' : 'lock'
+                    icon: 'user',
+                    className: 'u-margin-top-md u-border-top'
                 },
                 path: '/customer/account/'
             },
             {
+                type: isLoggedIn ? SIGNED_OUT_NAV_ITEM_TYPE : HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE,
+                title: 'Wishlist',
+                options: {
+                    icon: 'star'
+                },
+                path: '/wishlist/'
+            },
+            {
                 ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
                 options: {
-                    icon: isLoggedIn ? 'user' : 'lock'
+                    icon: isLoggedIn ? 'lock' : 'user'
                 },
                 path: SIGN_IN_HREF
             }

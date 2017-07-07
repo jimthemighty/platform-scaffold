@@ -12,9 +12,9 @@ $nav-item__active-color: #f1f0f7;
 .pw-nav-item {
     display: block;
     height: $unit * 5.5;
-    border: 0;
+    border-bottom: $border;
 
-    background: none;
+    background-color: $neutral-00;
 
     color: $neutral-60;
     font-size: 15px;
@@ -90,8 +90,9 @@ $nav-item__active-color: #f1f0f7;
 
 
 .pw-nav-item.pw--with-icon {
-    background-color: $neutral-10;
-
+    + .pw-nav-item.pw--with-icon {
+        border-bottom: $border
+    }
     .pw-nav-item__inner {
         padding: 0;
     }
