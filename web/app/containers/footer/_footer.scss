@@ -33,3 +33,9 @@
 
 // Panel Newsletter
 // ---
+
+.t-footer__newsletter {
+    .pw-field__label {
+        @include visually-hidden();
+    }
+}
