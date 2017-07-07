@@ -19,8 +19,16 @@ import ProductItem from '../../components/product-item'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout}) => (
-    <Sheet open={open} onDismiss={onDismiss} effect="slide-bottom" className="m-product-details__item-added-modal" coverage="50%" shrinkToContent>
+const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, duration}) => (
+    <Sheet
+        open={open}
+        onDismiss={onDismiss}
+        duration={duration}
+        effect="slide-bottom"
+        className="m-product-details__item-added-modal"
+        coverage="50%"
+        shrinkToContent
+    >
         {/* Modal header */}
         <div className="u-flex-none u-border-bottom">
             <div className="u-flexbox u-align-center">
@@ -77,6 +85,10 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
 )
 
 ProductDetailsItemAddedModal.propTypes = {
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
     open: PropTypes.bool,
     price: PropTypes.string,
     quantity: PropTypes.number,
