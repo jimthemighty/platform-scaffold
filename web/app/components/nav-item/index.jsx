@@ -37,7 +37,9 @@ NavItemWithIcon.propTypes = NavItem.propTypes
 export const NavItemWithOnClick = (props) => {
     const {title, options} = props
     return (
-        <ListTile {...props} className="c-nav-item c--with-icon" startAction={<NavItemIcon name={options.icon} />}>
+        <ListTile {...props}
+            className="c-nav-item c--with-icon"
+            startAction={<NavItemIcon name={options ? options.icon : null} />}>
             {title}
         </ListTile>
     )
@@ -54,7 +56,7 @@ export const AccountNavItem = (props) => {
 
     return (
         <NavItemWithIcon {...props}
-            beforeContent={<NavItemIcon name={options.icon} />} />
+            beforeContent={<NavItemIcon name={options ? options.icon : null} />} />
     )
 }
 
