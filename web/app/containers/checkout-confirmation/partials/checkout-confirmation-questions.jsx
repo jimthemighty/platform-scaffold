@@ -11,6 +11,7 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import List from 'progressive-web-sdk/dist/components/list'
 import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {isRunningInAstro, trigger} from '../../../utils/astro-integration'
 
@@ -56,7 +57,11 @@ const CheckoutConfirmationQuestions = () => (
 
         <GridSpan {...GRID_SETTINGS}>
             <div className="u-padding-lg">
-                <Button onClick={continueShopping} className="c--tertiary u-width-full u-text-uppercase">
+                <Button
+                    onClick={continueShopping}
+                    className="pw--tertiary u-width-full u-text-uppercase"
+                    data-analytics-name={UI_NAME.continueShopping}
+                >
                     Continue Shopping
                 </Button>
             </div>

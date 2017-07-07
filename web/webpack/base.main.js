@@ -46,6 +46,7 @@ const config = {
         }
     },
     plugins: [
+        ...baseCommon.plugins,
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: (module) => /node_modules/.test(module.resource)
@@ -128,7 +129,7 @@ config.plugins.push(function() {
                 }
 
                 const source = children[0]
-                source._value = source._value.replace(/^webpackJsonp/, 'webpackJsonpAsync')
+                source._value = source._value.replace(/^webpackJsonp\w*/, 'webpackJsonpAsync')
             }
         }
 

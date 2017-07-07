@@ -15,6 +15,7 @@ import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/acco
 import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import IconLabelButton from '../../components/icon-label-button'
 
 const FILTER_QUERY = 'filter_is_open'
@@ -27,13 +28,14 @@ class ProductListFilterModal extends React.Component {
     }
 
     render() {
-        const {closeModal, filters, isOpen, changeFilter} = this.props
+        const {closeModal, filters, isOpen, changeFilter, duration} = this.props
 
         return (
             <Sheet
                 className="m-product-list__filter-modal"
                 open={isOpen}
                 onDismiss={closeModal}
+                duration={duration}
                 maskOpacity={0.7}
                 effect="slide-right"
                 shrinkToContent={false}
@@ -47,7 +49,7 @@ class ProductListFilterModal extends React.Component {
                     </HeaderBarTitle>
 
                     <HeaderBarActions>
-                        <IconLabelButton iconName="close" label="" onClick={closeModal}>Close</IconLabelButton>
+                        <IconLabelButton iconName="close" label="" onClick={closeModal} analyticsName={UI_NAME.dismissModal}>Close</IconLabelButton>
                     </HeaderBarActions>
                 </HeaderBar>
 
@@ -68,13 +70,14 @@ class ProductListFilterModal extends React.Component {
                                 {kinds.map(({count, label, query}) =>
                                     <Button
                                         key={query}
-                                        className="c--link u-width-full u-text-letter-spacing-normal"
+                                        className="pw--link u-width-full u-text-letter-spacing-normal"
                                         innerClassName="u-justify-start"
                                         id={query}
                                         onClick={() => {
                                             changeFilter(query)
                                             closeModal()
                                         }}
+                                        data-analytics-name={UI_NAME.showFilters}
                                     >
                                         <div>
                                             <span className="u-color-brand">{label}</span> <span className="u-color-neutral-40">({count})</span>
@@ -101,6 +104,11 @@ ProductListFilterModal.propTypes = {
      */
     closeModal: PropTypes.func,
 
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
+
     /*
      * An array of filters
      */
@@ -124,8 +132,8 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     changeFilter: changeFilterTo,
-    closeModal: () => closeModal(PRODUCT_LIST_FILTER_MODAL),
-    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL)
+    closeModal: () => closeModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
+    openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters)
 }
 
 export default connect(

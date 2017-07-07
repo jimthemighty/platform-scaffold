@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import * as selectors from '../selectors'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getCartURL} from '../../app/selectors'
-import {getProductTitle, getProductPrice, getProductAvailability} from '../../../store/products/selectors'
+import {getProductTitle, getProductPrice, getProductAvailability} from 'progressive-web-sdk/dist/store/products/selectors'
 
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'

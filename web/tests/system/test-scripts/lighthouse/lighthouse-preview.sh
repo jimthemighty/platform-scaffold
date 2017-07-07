@@ -19,11 +19,12 @@ PREVIEW=#mobify-override\&mobify-path=true\&mobify-url=https://localhost:8443/lo
 
 # --ignore-certificate-errors thanks to https://github.com/GoogleChrome/lighthouse/issues/559
 lighthouse \
+	--quiet \
     --chrome-flags='--user-agent="MobifyPreview" --allow-insecure-localhost --ignore-certificate-errors' \
 	--output json \
 	--output html \
 	--output-path ${OUTPUT_PATH} \
 	--disable-device-emulation=true \
-	"${URL}${PREVIEW}"
+	"${URL}${PREVIEW}" > /dev/null 2>&1
 
 npm run test:check-lighthouse-score

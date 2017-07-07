@@ -6,8 +6,8 @@
 import {signUpToNewsletter, newsletterSignupComplete} from './actions'
 import {SIGNUP_SUCCESSFUL, SIGNUP_FAILED} from './constants'
 
-jest.mock('../../integration-manager/commands')
-import {submitNewsletter} from '../../integration-manager/commands'
+jest.mock('progressive-web-sdk/dist/integration-manager/commands')
+import {submitNewsletter} from 'progressive-web-sdk/dist/integration-manager/commands'
 
 test('signUpToNewsletter submits the form and dispatches the success action on success', () => {
     const mockDispatch = jest.fn()

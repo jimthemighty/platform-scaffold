@@ -14,6 +14,7 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
 import {withRouter} from 'progressive-web-sdk/dist/routing'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import IconLabelButton from '../../components/icon-label-button'
 import {AccountNavItem, NavItemWithOnClick} from '../../components/nav-item'
@@ -25,7 +26,7 @@ import {setNavigationPath} from './actions'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 
 const Navigation = (props) => {
-    const {path, isOpen, root, closeNavigation, router, setNavigationPath, logoutAction} = props
+    const {path, isOpen, root, closeNavigation, router, setNavigationPath, logoutAction, duration} = props
 
     const onPathChange = (path, isLeaf) => {
         if (isLeaf) {
@@ -61,7 +62,13 @@ const Navigation = (props) => {
     }
 
     return (
-        <Sheet className="m-navigation" open={isOpen} onDismiss={closeNavigation} maskOpacity={0.7} coverage="85%">
+        <Sheet className="m-navigation"
+            open={isOpen}
+            onDismiss={closeNavigation}
+            duration={duration}
+            maskOpacity={0.7}
+            coverage="85%"
+        >
             {path &&
                 <Nav root={root.title ? root : null} path={path} onPathChange={onPathChange}>
                     <HeaderBar>
@@ -72,7 +79,7 @@ const Navigation = (props) => {
                         </HeaderBarTitle>
 
                         <HeaderBarActions>
-                            <IconLabelButton iconName="close" label="close" onClick={closeNavigation} />
+                            <IconLabelButton iconName="close" label="close" onClick={closeNavigation} analyticsName={UI_NAME.dismissModal} />
                         </HeaderBarActions>
                     </HeaderBar>
 
@@ -97,6 +104,11 @@ Navigation.propTypes = {
      */
     closeNavigation: PropTypes.func,
 
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
+
     isOpen: PropTypes.bool,
     logoutAction: PropTypes.func,
     path: PropTypes.string,
@@ -119,7 +131,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    closeNavigation: () => closeModal(NAVIGATION_MODAL),
+    closeNavigation: () => closeModal(NAVIGATION_MODAL, UI_NAME.menu),
     setNavigationPath,
     logoutAction: signOut
 }
