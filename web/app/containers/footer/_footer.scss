@@ -13,7 +13,7 @@
 // ---
 
 .t-footer__navigation {
-    background-color: $brand-color;
+    background-color: $brand-color; // ui_kit_value: $secondary-brand-color;
 
     color: #fff;
 }
@@ -33,3 +33,9 @@
 
 // Panel Newsletter
 // ---
+
+.t-footer__newsletter {
+    .pw-field__label {
+        @include visually-hidden();
+    }
+}

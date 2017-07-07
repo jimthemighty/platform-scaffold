@@ -33,7 +33,8 @@ const Navigation = (props) => {
         closeNavigation,
         router,
         setNavigationPath,
-        logoutAction
+        logoutAction,
+        duration
     } = props
 
     const onPathChange = (path, isLeaf) => {
@@ -72,7 +73,13 @@ const Navigation = (props) => {
     }
 
     return (
-        <Sheet className="m-navigation" open={isOpen} onDismiss={closeNavigation} maskOpacity={0.7} coverage="85%">
+        <Sheet className="m-navigation"
+            open={isOpen}
+            onDismiss={closeNavigation}
+            duration={duration}
+            maskOpacity={0.7}
+            coverage="85%"
+        >
             {path &&
                 <Nav root={root.title ? root : null} path={path} onPathChange={onPathChange}>
                     <HeaderBar>
@@ -107,6 +114,11 @@ Navigation.propTypes = {
      * A function used to set the navigation-sheet's state to closed
      */
     closeNavigation: PropTypes.func,
+
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
 
     isOpen: PropTypes.bool,
     logoutAction: PropTypes.func,
