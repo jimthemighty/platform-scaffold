@@ -26,7 +26,7 @@ import {setNavigationPath} from './actions'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 
 const Navigation = (props) => {
-    const {path, isOpen, root, closeNavigation, router, setNavigationPath, logoutAction} = props
+    const {path, isOpen, root, closeNavigation, router, setNavigationPath, logoutAction, duration} = props
 
     const onPathChange = (path, isLeaf) => {
         if (isLeaf) {
@@ -62,7 +62,13 @@ const Navigation = (props) => {
     }
 
     return (
-        <Sheet className="m-navigation" open={isOpen} onDismiss={closeNavigation} maskOpacity={0.7} coverage="85%">
+        <Sheet className="m-navigation"
+            open={isOpen}
+            onDismiss={closeNavigation}
+            duration={duration}
+            maskOpacity={0.7}
+            coverage="85%"
+        >
             {path &&
                 <Nav root={root.title ? root : null} path={path} onPathChange={onPathChange}>
                     <HeaderBar>
@@ -97,6 +103,11 @@ Navigation.propTypes = {
      * A function used to set the navigation-sheet's state to closed
      */
     closeNavigation: PropTypes.func,
+
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
 
     isOpen: PropTypes.bool,
     logoutAction: PropTypes.func,
