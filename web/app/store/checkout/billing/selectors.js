@@ -16,4 +16,4 @@ export const getBillingInitialValues = createSelector(
     (billingAddress, billingSameAsShipping) => billingAddress.set('billingSameAsShipping', billingSameAsShipping)
 )
 
-export const getBillingAddressCustomContent = createGetSelector(getBillingAddress, 'custom')
+export const getBillingAddressCustomContent = createGetSelector(getBillingAddress, 'custom', Immutable.Map())
