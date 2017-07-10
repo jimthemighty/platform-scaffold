@@ -56,7 +56,8 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
             {
                 ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
                 options: {
-                    icon: isLoggedIn ? 'lock' : 'user'
+                    icon: isLoggedIn ? 'lock' : 'user',
+                    className: !isLoggedIn ? 'u-margin-top-md u-border-top' : ''
                 },
                 path: SIGN_IN_HREF
             }

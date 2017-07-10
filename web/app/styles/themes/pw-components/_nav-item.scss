@@ -90,9 +90,6 @@ $nav-item__active-color: #f1f0f7;
 
 
 .pw-nav-item.pw--with-icon {
-    + .pw-nav-item.pw--with-icon {
-        border-bottom: $border
-    }
     .pw-nav-item__inner {
         padding: 0;
     }
