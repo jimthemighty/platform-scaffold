@@ -6,6 +6,8 @@ import Promise from 'bluebird'
 import _jsdom from 'jsdom'
 import atob from 'atob'
 
+import ampPackageJson from '../../package.json'
+
 // DO NOT USE! Merlins Connector is an example connector that is for demo only
 // import {Connector} from '../../../web/app/connectors/_merlins-connector'
 import {Connector} from '../../../web/app/connectors/_sfcc-connector'
@@ -51,7 +53,7 @@ export const initializeStore = (fullUrl, containers) => {
             setItemInStorage,
             getItemInStorage,
             removeItemInStorage,
-            siteBaseURL: 'https://mobify-tech-prtnr-na03-dw.demandware.net',
+            siteBaseURL: ampPackageJson.siteUrl,
             siteID: '2017refresh',
             clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93',
             atob
