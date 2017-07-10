@@ -4,10 +4,11 @@ import thunk from 'redux-thunk'
 import {fromJS} from 'immutable'
 import Promise from 'bluebird'
 import _jsdom from 'jsdom'
+import atob from 'atob'
 
 // DO NOT USE! Merlins Connector is an example connector that is for demo only
-import {Connector} from '../../../web/app/connectors/_merlins-connector'
-// import {Connector} from '../../../web/app/connectors/_sfcc-connector'
+// import {Connector} from '../../../web/app/connectors/_merlins-connector'
+import {Connector} from '../../../web/app/connectors/_sfcc-connector'
 
 import {registerConnector} from 'progressive-web-sdk/dist/integration-manager'
 import {reducer as imReducer} from 'progressive-web-sdk/dist/integration-manager/reducer'
@@ -27,12 +28,33 @@ import {PAGE_TITLE} from './constants'
 
 const jsdom = Promise.promisifyAll(_jsdom)
 
+const storage = {}
+
+const setItemInStorage = (key, value) => {
+    storage[key] = value
+}
+
+const getItemInStorage = (key) => {
+    return storage[key]
+}
+
+const removeItemInStorage = (key) => {
+    delete storage[key]
+}
+
 export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
 
-export const initializeStore = (fullUrl, container) => {
+export const initializeStore = (fullUrl, containers) => {
     return jsdomEnv().then((window) => {
         registerConnector(Connector({
-            jqueryResponse: jqueryResponse(window)
+            jqueryResponse: jqueryResponse(window),
+            setItemInStorage,
+            getItemInStorage,
+            removeItemInStorage,
+            siteBaseURL: 'https://mobify-tech-prtnr-na03-dw.demandware.net',
+            siteID: '2017refresh',
+            clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93',
+            atob
         }))
 
         const uiReducer = combineReducers({
@@ -68,7 +90,7 @@ export const initializeStore = (fullUrl, container) => {
 
         const renderProps = {
             location: {},
-            components: [container],
+            components: containers,
             history: {}
         }
 

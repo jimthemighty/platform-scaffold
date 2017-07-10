@@ -11,6 +11,7 @@ import ProductListContents from './partials/product-list-contents'
 // Selectors
 import {getFilteredAndSortedListProducts} from '../../../../web/app/containers/product-list/selectors'
 import {getCategoryItemCount} from '../../../../web/app/store/categories/selectors'
+
 import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 
 const ProductList = () => {

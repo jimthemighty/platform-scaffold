@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {getApiEndPoint, getRequestHeaders} from './config'
+import {getApiEndPoint, getRequestHeaders, configuredStorageAvailable, setItemInStorage, getItemInStorage, removeItemInStorage, atob} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
@@ -42,8 +42,10 @@ const supportsSessionStorage = () => {
 }
 
 const setItemInBrowserStorage = (keyName, value) => {
-    // Use session storage if it's supported
-    if (supportsSessionStorage()) {
+    if (configuredStorageAvailable()) {
+        setItemInStorage(keyName, value)
+    } else if (supportsSessionStorage()) {
+        // Use session storage if it's supported
         window.sessionStorage.setItem(keyName, value)
     } else {
         // Use Cookies otherwise
@@ -52,7 +54,9 @@ const setItemInBrowserStorage = (keyName, value) => {
 }
 
 const getItemFromBrowserStorage = (keyName) => {
-    if (supportsSessionStorage()) {
+    if (configuredStorageAvailable()) {
+        return getItemInStorage(keyName)
+    } else if (supportsSessionStorage()) {
         return window.sessionStorage.getItem(keyName)
     }
 
@@ -60,7 +64,9 @@ const getItemFromBrowserStorage = (keyName) => {
 }
 
 const removeItemFromBrowserStorage = (keyName) => {
-    if (supportsSessionStorage()) {
+    if (configuredStorageAvailable()) {
+        removeItemInStorage(keyName)
+    } else if (supportsSessionStorage()) {
         window.sessionStorage.removeItem(keyName)
     } else {
         removeCookieValue(keyName)
@@ -104,7 +110,7 @@ export const getAuthTokenPayload = (authToken) => {
     // The token consists of 3 parts: header, payload and signature
     // separated by a '.', each part is encoded
     // we only need the payload
-    return JSON.parse(window.atob(authToken.split('.')[1]))
+    return JSON.parse((atob()(authToken.split('.')[1])))
 }
 
 export const getCustomerData = (authorization) => {

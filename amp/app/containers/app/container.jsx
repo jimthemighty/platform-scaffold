@@ -10,6 +10,8 @@ import ProductListFilterModal from '../product-list/partials/product-list-filter
 // Components
 import SkipLinks from '../../components/skip-links'
 
+import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands'
+
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const App = ({children}) => {
@@ -65,5 +67,9 @@ const App = ({children}) => {
 App.propTypes = {
     children: PropTypes.node
 }
+
+App.resolves = [({dispatch}) => {
+    return dispatch(initApp())
+}]
 
 export default ampComponent(App)

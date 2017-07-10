@@ -73,7 +73,7 @@ const render = (req, res, store, component) => {
 }
 
 const handlePage = (page) => (req, res, next) => {
-    initializeStore(getFullUrl(req), page)
+    initializeStore(getFullUrl(req), [page, App])
         .then((store) => render(req, res, store, page))
         .catch(next)
 }
@@ -86,6 +86,7 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan(onLambda ? 'short' : 'dev'))
 }
 
+app.get('/s/2017refresh/mens', handlePage(ProductList))
 app.get('/potions.html', handlePage(ProductList))
 app.get('/books.html', handlePage(ProductList))
 app.get('/ingredients.html', handlePage(ProductList))
