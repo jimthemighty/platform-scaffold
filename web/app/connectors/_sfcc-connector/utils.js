@@ -3,6 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+
 import {getApiEndPoint, getRequestHeaders} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
@@ -23,27 +25,9 @@ const removeCookieValue = (keyName) => {
     document.cookie = `${keyName}=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
 }
 
-// sessionStorage detection as seen in such great libraries as Modernizr
-// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/sessionstorage.js
-let cachedSessionStorageSupport
-const supportsSessionStorage = () => {
-    if (cachedSessionStorageSupport !== undefined) {
-        return cachedSessionStorageSupport
-    }
-    const mod = 'modernizr'
-    try {
-        sessionStorage.setItem(mod, mod)
-        sessionStorage.removeItem(mod)
-        cachedSessionStorageSupport = true
-    } catch (e) {
-        cachedSessionStorageSupport = false
-    }
-    return cachedSessionStorageSupport
-}
-
 const setItemInBrowserStorage = (keyName, value) => {
     // Use session storage if it's supported
-    if (supportsSessionStorage()) {
+    if (isSessionStorageAvailable()) {
         window.sessionStorage.setItem(keyName, value)
     } else {
         // Use Cookies otherwise
@@ -52,7 +36,7 @@ const setItemInBrowserStorage = (keyName, value) => {
 }
 
 const getItemFromBrowserStorage = (keyName) => {
-    if (supportsSessionStorage()) {
+    if (isSessionStorageAvailable()) {
         return window.sessionStorage.getItem(keyName)
     }
 
@@ -60,7 +44,7 @@ const getItemFromBrowserStorage = (keyName) => {
 }
 
 const removeItemFromBrowserStorage = (keyName) => {
-    if (supportsSessionStorage()) {
+    if (isSessionStorageAvailable()) {
         window.sessionStorage.removeItem(keyName)
     } else {
         removeCookieValue(keyName)
