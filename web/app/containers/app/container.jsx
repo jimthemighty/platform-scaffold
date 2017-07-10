@@ -141,8 +141,8 @@ class App extends React.Component {
                         {isRunningInAstro && <NativeConnector />}
 
                         {messagingEnabled && [
-                            <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
-                            <DefaultAsk key="ask" showOnPageCount={2} />
+                            <PushMessagingController key="controller" dimScreenOnSystemAsk />,
+                            <DefaultAsk key="ask" showOnPageCount={2} deferOnDismissal={1} />
                         ]}
 
                         <div id="app-header" className="u-flex-none" role="banner">
