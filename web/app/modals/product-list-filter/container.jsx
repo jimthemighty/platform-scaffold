@@ -40,7 +40,7 @@ class ProductListFilterModal extends React.Component {
     }
 
     render() {
-        const {closeModal, filters, isOpen, changeFilter, duration} = this.props
+        const {closeModal, filters, isOpen, duration} = this.props
 
         return (
             <Sheet
@@ -106,11 +106,6 @@ class ProductListFilterModal extends React.Component {
 }
 
 ProductListFilterModal.propTypes = {
-    /**
-     * Updates the current filter
-     */
-    changeFilter: PropTypes.func,
-
     /**
      * A function used to set the filter sheet's state to closed
      */

@@ -69,7 +69,7 @@ export const filterParser = ($, $html) => {
                 // characters from obfuscating the meaning of the query. For
                 // example, prevent `price10-20` from becoming `price1020`, because
                 // what would that mean: 10-20, 0-1020 or 1020-Infinity?
-                
+
                 query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '') // 'price10to20'
             } else if (query.includes('color')) { // color ruleset
                 const colorCode = query.split('=')[1]
