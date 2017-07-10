@@ -12,8 +12,13 @@ const chalk = require('chalk')
 const gzipSize = require('gzip-size')
 
 /* eslint-disable no-undef */
+/* Path to build directory */
+const buildDir = process.argv[2] || 'build'
+
+/* Path to JSON containing file size thresholds */
+const configFile = process.argv[3] || path.resolve(__dirname, 'file-size-config.json')
 /* Parse file-size-config.json file */
-const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'file-size-config.json'), 'utf8'))
+const config = JSON.parse(fs.readFileSync(configFile, 'utf8'))
 const files = config.bundleSize.files
 
 // A number denoting maximum file size in bytes.
@@ -68,12 +73,12 @@ const options = {
     }
 }
 
-if (fs.existsSync('build')) {
+if (fs.existsSync(buildDir)) {
     console.log(`Verifying individual minified file sizes in the build are less than ${FILE_SIZE_LIMIT} bytes...`)
-    console.log(`Verifying gzipped build files are not larger than threshold from file-size-config.json...`)
-    walk.walkSync('build', options)
+    console.log(`Verifying gzipped build files are not larger than thresholds from ${configFile}...`)
+    walk.walkSync(buildDir, options)
 } else {
-    console.log(`Run 'npm run prod:build' to generate a build.`)
+    console.log(`Run 'npm run prod:build' to generate a build, then 'npm run test:build-size path/to/build/output path/to/config/file'`)
 }
 
 if (failure) {
