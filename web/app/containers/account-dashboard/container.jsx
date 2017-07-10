@@ -6,7 +6,6 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import template from '../../template'
 
-import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import List from 'progressive-web-sdk/dist/components/list'
 import Icon from 'progressive-web-sdk/dist/components/icon'
@@ -18,14 +17,7 @@ const DashboardLinks = ({link: {text, href}}) => {
             href={href}
             endAction={<Icon name="chevron-right" />}
         >
-            {text ?
-                <div>{text}</div>
-            :
-                <SkeletonText
-                    style={{lineHeight: '20px', height: '10px'}}
-                    width="100px"
-                />
-            }
+            <div>{text}</div>
         </ListTile>
     )
 }
@@ -43,6 +35,22 @@ const AccountDashboard = () => {
         {
             text: 'Account Information',
             href: '/customer/account/edit/'
+        },
+        {
+            text: 'Address Book',
+            href: '/customer/address/'
+        },
+        {
+            text: 'My Orders',
+            href: '/sales/order/history/'
+        },
+        {
+            text: 'My Wish List',
+            href: '/wishlist/'
+        },
+        {
+            text: 'My Subscriptions',
+            href: '/newsletter/manage/'
         }
     ]
 

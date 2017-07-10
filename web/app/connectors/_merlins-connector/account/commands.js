@@ -13,7 +13,6 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    recieveAccountDashboardUIData,
     recieveAccountInfoUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
@@ -21,7 +20,7 @@ import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, parseDashboard, parseAccountInfo} from './parsers'
+import {isFormResponseInvalid, parseAccountInfo} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -37,13 +36,6 @@ export const initRegisterPage = (url) => (dispatch) => {
         })
 }
 
-export const initAccountDashboardPage = (url) => (dispatch) => {
-    return dispatch(fetchPageData(url))
-        .then((res) => {
-            const [$, $response] = res
-            return dispatch(recieveAccountDashboardUIData(parseDashboard($, $response)))
-        })
-}
 
 export const initAccountInfoPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -51,6 +43,10 @@ export const initAccountInfoPage = (url) => (dispatch) => {
             const [$, $response] = res
             return dispatch(recieveAccountInfoUIData(parseAccountInfo($, $response)))
         })
+}
+
+export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'

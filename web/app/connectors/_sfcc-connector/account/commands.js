@@ -169,6 +169,6 @@ export const updateBillingAddress = (formValues) => (dispatch) => {
     return addAddress(formValues, 'billing_address')
 }
 
-export const initAccountDashboard = (url) => (dispatch) => { // eslint-disable-line
+export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
