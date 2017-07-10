@@ -52,6 +52,16 @@ export const getCart = () => (dispatch) => {
         })
 }
 
+/**
+ * @function addToCart
+ * @param {String} productId
+ * @param {Number} quantity
+ * @param {Object} variant
+ * @param {Number} variant.id the unique product combination's ID
+ * @param {Object} variant.values map of attribute slugs & selected values, (ex. color: 8, size: 6)
+ * @param {Object} variant.attributeIds map of options to option IDs, (ex. color: 90)
+ * where optionID is Magento's numerical representation of the attribute
+ */
 export const addToCart = (productId, quantity, variant) => (dispatch, getState) => {
     const formInfo = getFormInfoByProductId(productId)(getState())
     const hiddenInputs = formInfo.get('hiddenInputs')
