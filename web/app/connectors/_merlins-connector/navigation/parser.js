@@ -9,8 +9,12 @@ import {
     LOGGED_IN_NAV
 } from '../../../modals/navigation/constants'
 
-// We hard-code this since it is only parseable from non-checkout pages.
-const SIGN_IN_HREF = '/customer/account/login/'
+import {
+    MY_ACCOUNT_URL,
+    WISHLIST_URL,
+    SIGN_IN_URL
+} from '../config'
+
 
 export const parseNavigation = ($, $content, isLoggedIn) => {
     const root = {title: 'Root', path: '/', children: []}
@@ -43,7 +47,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
                     icon: 'user',
                     className: 'u-margin-top-md u-border-top'
                 },
-                path: '/customer/account/'
+                path: MY_ACCOUNT_URL
             },
             {
                 type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
@@ -51,7 +55,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
                 options: {
                     icon: 'star'
                 },
-                path: '/wishlist/'
+                path: WISHLIST_URL
             },
             {
                 ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
@@ -59,7 +63,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
                     icon: isLoggedIn ? 'lock' : 'user',
                     className: !isLoggedIn ? 'u-margin-top-md u-border-top' : ''
                 },
-                path: SIGN_IN_HREF
+                path: SIGN_IN_URL
             }
         ])
 
