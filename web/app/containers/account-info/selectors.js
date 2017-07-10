@@ -3,14 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import Immutable from 'immutable'
-import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getUi} from '../../store/selectors'
 
-export const getAccountInfo = createSelector(
-    getUi,
-    ({accountInfo}) => accountInfo
-)
-
-export const getTitle = createGetSelector(getAccountInfo, 'title')
-export const getFormInfo = createGetSelector(getAccountInfo, 'formInfo', Immutable.List())
+export const getAccountInfo = createGetSelector(getUi, 'accountInfo', Immutable.Map())
+export const getAccountFormInfo = createGetSelector(getAccountInfo, 'accountFormInfo', Immutable.Map())

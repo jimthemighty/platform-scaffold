@@ -14,13 +14,10 @@ import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
 import Button from 'progressive-web-sdk/dist/components/button'
 
 
-import {getTitle, getFormInfo} from './selectors'
+import {getAccountFormInfo} from './selectors'
 // import * as accountInfoActions from './actions'
 
-const AccountInfoForm = ({initialValues}) => {
-    const initValues = {
-        names: 'blah blah'
-    }
+const AccountInfoForm = () => {
     return (
         <div className="t-account-info">
             <div className="t-account-info__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
@@ -41,7 +38,6 @@ const AccountInfoForm = ({initialValues}) => {
                             component={Field}
                             label="First & Last Name"
                             name="names"
-                            initialValues={initValues}
                         >
                             <input
                                 className="t-account-info-input"
@@ -54,7 +50,6 @@ const AccountInfoForm = ({initialValues}) => {
                             component={Field}
                             label="Email"
                             name="email"
-                            initialValues={initValues}
                         >
                             <input
                                 className="t-account-info-input"
@@ -72,7 +67,6 @@ const AccountInfoForm = ({initialValues}) => {
                             component={Field}
                             label="Current Password"
                             name="currentPassword"
-                            initialValues={initValues}
                         >
                             <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
                         </ReduxForm.Field>
@@ -82,7 +76,6 @@ const AccountInfoForm = ({initialValues}) => {
                             component={Field}
                             label="New Password"
                             name="newPassword"
-                            initialValues={initValues}
                         >
                             <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
                         </ReduxForm.Field>
@@ -101,12 +94,11 @@ const AccountInfoForm = ({initialValues}) => {
 }
 
 AccountInfoForm.propTypes = {
-    handleSubmit: PropTypes.func,
-    initialValues: PropTypes.object,
+    handleSubmit: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
-    initialValues: getFormInfo
+    initialValues: getAccountFormInfo
 })
 
 const mapDispatchToProps = {
