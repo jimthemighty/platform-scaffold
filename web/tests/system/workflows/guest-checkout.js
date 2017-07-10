@@ -19,6 +19,7 @@ let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
+const ENV = process.env.NODE_ENV || 'local'
 
 export default {
     '@tags': ['checkout'],
@@ -39,8 +40,14 @@ export default {
     // The following tests are conducted in sequence within the same session.
 
     'Checkout - Guest - Navigate to Home': (browser) => {
+        if (ENV === 'production') {
+            browser.url(process.env.npm_package_siteUrl)
+        } else {
+            console.log(ENV)
+            console.log('Running preview against siteUrl.')
+            browser.preview()
+        }
         browser
-            .preview()
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },
