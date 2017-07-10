@@ -202,7 +202,7 @@ npm run test:pwa-preview
 
 ## Analyze Bundle Size
 
-Set a maximum file size for built assets by specifying a value for `file_size_limit` in `package.json`. To verify that the contents of `build` are not over this size limit:
+Set a maximum file size for built assets by specifying a value for `max` in `tests/system/test-scripts/file-size-config.json`, or specify individual thresholds for files. To verify that the contents of `build` are not over this size limit:
 
 ```
 npm run prod:build
