@@ -14,7 +14,14 @@ import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/che
 import {parseCategories, parseSearchSuggestions} from '../parsers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
-import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL} from '../config'
+import {
+    getSignInURL,
+    getCheckoutShippingURL,
+    getCartURL,
+    getWishlistURL,
+    getMyAccountURL,
+    buildSearchURL
+} from '../config'
 import {
     ACCOUNT_LINK,
     SIGNED_OUT_ACCOUNT_LINK,
@@ -38,7 +45,7 @@ export const fetchNavigationData = () => (dispatch) => {
                         icon: 'user',
                         className: 'u-margin-top-md u-border-top'
                     },
-                    path: '/customer/account/'
+                    path: getMyAccountURL()
                 },
                 {
                     type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
@@ -46,7 +53,7 @@ export const fetchNavigationData = () => (dispatch) => {
                     options: {
                         icon: 'star'
                     },
-                    path: '/wishlist/'
+                    path: getWishlistURL()
                 },
                 {
                     ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
