@@ -15,7 +15,12 @@ import {parseCategories, parseSearchSuggestions} from '../parsers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL} from '../config'
-import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from '../../../modals/navigation/constants'
+import {
+    ACCOUNT_LINK,
+    SIGNED_OUT_ACCOUNT_LINK,
+    GUEST_NAV,
+    LOGGED_IN_NAV
+} from '../../../modals/navigation/constants'
 
 
 export const fetchNavigationData = () => (dispatch) => {
@@ -24,33 +29,41 @@ export const fetchNavigationData = () => (dispatch) => {
         .then(({categories}) => {
             const navData = parseCategories(categories)
 
-            const accountNode = utils.isUserLoggedIn(utils.getAuthToken())
-                ? {
-                    title: 'Sign Out',
-                    type: SIGNED_IN_NAV_ITEM_TYPE
+            const isLoggedIn = utils.isUserLoggedIn(utils.getAuthToken())
+            const accountNode = [
+                {
+                    type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
+                    title: 'My Account',
+                    options: {
+                        icon: 'user',
+                        className: 'u-margin-top-md u-border-top'
+                    },
+                    path: '/customer/account/'
+                },
+                {
+                    type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
+                    title: 'Wishlist',
+                    options: {
+                        icon: 'star'
+                    },
+                    path: '/wishlist/'
+                },
+                {
+                    ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
+                    options: {
+                        icon: isLoggedIn ? 'lock' : 'user',
+                        className: !isLoggedIn ? 'u-margin-top-md u-border-top' : ''
+                    },
+                    path: getSignInURL()
                 }
-                : {
-                    title: 'Sign In',
-                    type: GUEST_NAV_ITEM_TYPE
-                }
-
-            // Long story. The nav system ignores the `path` property when the user is
-            // logged in. Until we rework this, we always send the login path so the
-            // reducer in the `containers/navigation/` area can just flip the account
-            // node type and title and not worry about switching/adding/deleting the
-            // `path` attribute.
-            // See also `modals/navigation/container.jsx`'s `itemFactory()` function.
-            accountNode.path = getSignInURL()
+            ]
 
             return dispatch(receiveNavigationData({
                 path: '/',
                 root: {
                     title: 'root',
                     path: '/',
-                    children: [
-                        accountNode,
-                        ...navData
-                    ]
+                    children: navData.concat(accountNode)
                 }
             }))
         })

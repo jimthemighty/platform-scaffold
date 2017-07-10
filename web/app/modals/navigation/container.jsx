@@ -19,7 +19,11 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import IconLabelButton from '../../components/icon-label-button'
 import {AccountNavItem, NavItemWithOnClick} from '../../components/nav-item'
 import * as selectors from './selectors'
-import {SIGNED_IN_LOGOUT_ITEM, SIGNED_OUT_NAV_ITEM_TYPE, HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE} from './constants'
+import {
+    ACCOUNT_LINK,
+    SIGN_OUT_LINK,
+    SIGNED_OUT_ACCOUNT_LINK
+} from './constants'
 import {NAVIGATION_MODAL} from '../constants'
 import {signOut} from '../../containers/app/actions'
 import {setNavigationPath} from './actions'
@@ -53,11 +57,11 @@ const Navigation = (props) => {
      */
     const itemFactory = (type, props) => {
         switch (type) {
-            case HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE:
+            case SIGNED_OUT_ACCOUNT_LINK:
                 return null
-            case SIGNED_OUT_NAV_ITEM_TYPE:
+            case ACCOUNT_LINK:
                 return <AccountNavItem {...props} />
-            case SIGNED_IN_LOGOUT_ITEM:
+            case SIGN_OUT_LINK:
                 return (
                     <NavItemWithOnClick
                         {...props}

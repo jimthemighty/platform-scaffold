@@ -3,10 +3,10 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {
-    LOGGED_IN_NAV,
+    ACCOUNT_LINK,
+    SIGNED_OUT_ACCOUNT_LINK,
     GUEST_NAV,
-    SIGNED_OUT_NAV_ITEM_TYPE,
-    HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE
+    LOGGED_IN_NAV
 } from '../../../modals/navigation/constants'
 
 // We hard-code this since it is only parseable from non-checkout pages.
@@ -37,7 +37,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
     root.children = root.children.concat(
         [
             {
-                type: isLoggedIn ? SIGNED_OUT_NAV_ITEM_TYPE : HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE,
+                type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
                 title: 'My Account',
                 options: {
                     icon: 'user',
@@ -46,7 +46,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
                 path: '/customer/account/'
             },
             {
-                type: isLoggedIn ? SIGNED_OUT_NAV_ITEM_TYPE : HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE,
+                type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
                 title: 'Wishlist',
                 options: {
                     icon: 'star'

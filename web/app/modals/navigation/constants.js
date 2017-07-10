@@ -5,18 +5,19 @@
 export const SIGN_IN_LINK_TEXT = 'Sign In'
 export const SIGN_OUT_LINK_TEXT = 'Sign Out'
 
-export const SIGNED_IN_LOGOUT_ITEM = 'AccountLogoutNavItem'
 
-export const SIGNED_OUT_NAV_ITEM_TYPE = 'AccountNavItem'
-export const HIDDEN_SIGNED_OUT_NAV_ITEM_TYPE = 'HiddenAccountItem'
+
+export const ACCOUNT_LINK = 'AccountNavItem'
+export const SIGN_OUT_LINK = 'AccountLogoutNavItem'
+export const SIGNED_OUT_ACCOUNT_LINK = 'HiddenAccountItem'
 
 
 export const LOGGED_IN_NAV = {
-    type: SIGNED_IN_LOGOUT_ITEM,
+    type: SIGN_OUT_LINK,
     title: SIGN_OUT_LINK_TEXT
 }
 
 export const GUEST_NAV = {
-    type: SIGNED_OUT_NAV_ITEM_TYPE,
+    type: ACCOUNT_LINK,
     title: SIGN_IN_LINK_TEXT
 }
