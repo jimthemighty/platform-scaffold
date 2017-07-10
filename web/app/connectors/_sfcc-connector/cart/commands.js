@@ -18,6 +18,11 @@ const addToCartRequest = (productId, quantity, basketId) => {
     return makeApiJsonRequest(`/baskets/${basketId}/items`, requestBody, {method: 'POST'})
 }
 
+/**
+ * @function addToCart
+ * @param {String} productId The product's ID
+ * @param {Number} quantity The quantity to add
+ */
 export const addToCart = (productId, quantity) => (dispatch) => (
     createBasket()
         .then((basket) => addToCartRequest(productId, quantity, basket.basket_id))

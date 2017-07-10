@@ -54,9 +54,9 @@ export const getCart = () => (dispatch) => {
 
 /**
  * @function addToCart
- * @param {String} productId
- * @param {Number} quantity
- * @param {Object} variant
+ * @param {String} productId The product's ID
+ * @param {Number} quantity The quantity to add
+ * @param {Object} variant The variant object (required for this connector)
  * @param {Number} variant.id the unique product combination's ID
  * @param {Object} variant.values map of attribute slugs & selected values, (ex. color: 8, size: 6)
  * @param {Object} variant.attributeIds map of options to option IDs, (ex. color: 90)
