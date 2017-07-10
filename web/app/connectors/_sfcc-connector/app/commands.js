@@ -23,8 +23,8 @@ import {
     buildSearchURL
 } from '../config'
 import {
-    ACCOUNT_LINK,
-    SIGNED_OUT_ACCOUNT_LINK,
+    ACCOUNT_NAV_ITEM,
+    SIGNED_OUT_ACCOUNT_NAV_ITEM,
     GUEST_NAV,
     LOGGED_IN_NAV
 } from '../../../modals/navigation/constants'
@@ -39,7 +39,7 @@ export const fetchNavigationData = () => (dispatch) => {
             const isLoggedIn = utils.isUserLoggedIn(utils.getAuthToken())
             const accountNode = [
                 {
-                    type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
+                    type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
                     title: 'My Account',
                     options: {
                         icon: 'user',
@@ -48,7 +48,7 @@ export const fetchNavigationData = () => (dispatch) => {
                     path: getMyAccountURL()
                 },
                 {
-                    type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
+                    type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
                     title: 'Wishlist',
                     options: {
                         icon: 'star'

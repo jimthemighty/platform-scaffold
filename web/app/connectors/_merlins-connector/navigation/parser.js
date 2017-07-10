@@ -3,8 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {
-    ACCOUNT_LINK,
-    SIGNED_OUT_ACCOUNT_LINK,
+    ACCOUNT_NAV_ITEM,
+    SIGNED_OUT_ACCOUNT_NAV_ITEM,
     GUEST_NAV,
     LOGGED_IN_NAV
 } from '../../../modals/navigation/constants'
@@ -30,8 +30,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
         root.children.push({
             title: $link.text().trim(),
             path: $link.attr('href'),
-            isCategoryLink: true,
-            icon: 'lock'
+            isCategoryLink: true
         })
         if ($item.hasClass('active')) {
             path = $link.attr('href')
@@ -41,7 +40,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
     root.children = root.children.concat(
         [
             {
-                type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
+                type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
                 title: 'My Account',
                 options: {
                     icon: 'user',
@@ -50,7 +49,7 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
                 path: MY_ACCOUNT_URL
             },
             {
-                type: isLoggedIn ? ACCOUNT_LINK : SIGNED_OUT_ACCOUNT_LINK,
+                type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
                 title: 'Wishlist',
                 options: {
                     icon: 'star'

@@ -20,9 +20,9 @@ import IconLabelButton from '../../components/icon-label-button'
 import {AccountNavItem, NavItemWithOnClick} from '../../components/nav-item'
 import * as selectors from './selectors'
 import {
-    ACCOUNT_LINK,
-    SIGN_OUT_LINK,
-    SIGNED_OUT_ACCOUNT_LINK
+    ACCOUNT_NAV_ITEM,
+    SIGN_OUT_NAV_ITEM,
+    SIGNED_OUT_ACCOUNT_NAV_ITEM
 } from './constants'
 import {NAVIGATION_MODAL} from '../constants'
 import {signOut} from '../../containers/app/actions'
@@ -57,11 +57,11 @@ const Navigation = (props) => {
      */
     const itemFactory = (type, props) => {
         switch (type) {
-            case SIGNED_OUT_ACCOUNT_LINK:
+            case SIGNED_OUT_ACCOUNT_NAV_ITEM:
                 return null
-            case ACCOUNT_LINK:
+            case ACCOUNT_NAV_ITEM:
                 return <AccountNavItem {...props} />
-            case SIGN_OUT_LINK:
+            case SIGN_OUT_NAV_ITEM:
                 return (
                     <NavItemWithOnClick
                         {...props}
