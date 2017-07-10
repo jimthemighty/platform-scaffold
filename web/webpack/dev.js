@@ -10,6 +10,7 @@ const ip = require('ip')
 const loaderConfig = require('./base.loader')
 const mainConfig = require('./base.main')
 const workerConfig = require('./base.worker')
+const nonPWAConfig = require('./base.non-pwa')
 const onboardingConfig = require('./base.onboarding')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
@@ -43,4 +44,10 @@ workerConfig.plugins = workerConfig.plugins.concat([
     })
 ])
 
-module.exports = [mainConfig, loaderConfig, workerConfig, onboardingConfig]
+nonPWAConfig.plugins = nonPWAConfig.plugins.concat([
+    new webpack.DefinePlugin({
+        DEBUG: true
+    })
+])
+
+module.exports = [mainConfig, loaderConfig, workerConfig, nonPWAConfig, onboardingConfig]

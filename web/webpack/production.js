@@ -11,6 +11,7 @@ const assign = require('lodash.assign')
 const baseLoaderConfig = require('./base.loader')
 const baseMainConfig = require('./base.main')
 const workerConfig = require('./base.worker')
+const nonPWAConfig = require('./base.non-pwa')
 const onboardingConfig = require('./base.onboarding')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
@@ -46,4 +47,10 @@ workerConfig.plugins = workerConfig.plugins.concat([
     })
 ])
 
-module.exports = [productionMainConfig, baseLoaderConfig, workerConfig, onboardingConfig]
+nonPWAConfig.plugins = nonPWAConfig.plugins.concat([
+    new webpack.DefinePlugin({
+        DEBUG: true
+    })
+])
+
+module.exports = [productionMainConfig, baseLoaderConfig, workerConfig, nonPWAConfig, onboardingConfig]
