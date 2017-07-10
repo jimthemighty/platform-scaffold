@@ -63,6 +63,7 @@
     "exports-loader": "0.6.4",
     "express": "4.15.2",
     "extract-text-webpack-plugin": "2.1.0",
+    "gzip-size": "3.0.0",
     "html-to-json": "0.6.0",
     "html-webpack-plugin": "2.28.0",
     "http-proxy": "1.15.1",
@@ -107,8 +108,7 @@
   },
   "config": {
     "sdk_generator_version": 2,
-    "min_lighthouse_score": 80,
-    "file_size_limit": 2000000
+    "min_lighthouse_score": 80
   },
   "scripts": {
     "add:component": "sdk-generate component",
