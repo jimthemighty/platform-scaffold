@@ -25,7 +25,7 @@ import analyticsManager from 'progressive-web-sdk/dist/analytics/analytics-manag
 
 analyticsManager.init({
     projectSlug: AJS_SLUG,              // eslint-disable-line no-undef
-    mobifyGAID: 'UA-53825302-1',
+    mobifyGAID: MOBIFY_GA_ID,
     ecommerceLibrary: 'ec',
     debug: DEBUG                        // eslint-disable-line no-undef
 })

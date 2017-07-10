@@ -73,7 +73,8 @@ const config = {
             MESSAGING_ENABLED: `${webPackageJson.messagingEnabled}`,
             // These are defined as string constants
             PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
-            AJS_SLUG: `'${webPackageJson.aJSSlug}'`
+            AJS_SLUG: `'${webPackageJson.aJSSlug}'`,
+            MOBIFY_GA_ID: `'${webPackageJson.mobifyGAID}'`
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
