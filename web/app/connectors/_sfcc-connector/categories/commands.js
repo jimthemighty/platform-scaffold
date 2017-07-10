@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {urlToPathKey, urlToBasicPathKey} from 'progressive-web-sdk/dist/utils/utils'
+import {urlToPathKey, urlToBasicPathKey, validatePageNumber} from 'progressive-web-sdk/dist/utils/utils'
 import {makeApiRequest} from '../utils'
 import {
     receiveCategoryContents,
@@ -93,7 +93,7 @@ export const initProductListPage = (url) => (dispatch) => {
         q: '',
         expand: 'availability,images,prices',
         [REFINE_CATEGORY]: extractCategoryId(url),
-        start: (parseInt(extractPageNumber(url)) - 1) * ITEMS_PER_PAGE,
+        start: (parseInt(validatePageNumber(extractPageNumber(url))) - 1) * ITEMS_PER_PAGE,
         count: ITEMS_PER_PAGE,
         sort: extractSortOption(url),
         refine_2: extractFilterOption(url) // support only one filter option now

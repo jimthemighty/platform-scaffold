@@ -9,6 +9,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCategoryItemCount} from '../../../store/categories/selectors'
 import * as selectors from '../selectors'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
+import {validatePageNumber} from 'progressive-web-sdk/dist/utils/utils'
 import {PRODUCT_LIST_FILTER_MODAL} from '../../../modals/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
@@ -79,8 +80,9 @@ const ProductListContents = ({
 }) => {
     const location = browserHistory.getCurrentLocation()
     const pathname = location.pathname
-    const page = location.query.p ? parseInt(location.query.p) : 1
     const selectedSortOption = location.query.sort ? location.query.sort : 'default'
+    const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
+    const page = validatePageNumber(location.query.p, pageCount)
 
     const updateURL = (queryObject) => {
         const query = Object.assign({}, location.query, queryObject)
@@ -103,8 +105,6 @@ const ProductListContents = ({
         delete query.filters
         browserHistory.push({pathname, query})
     }
-
-    const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
 
     return (
         <div>
