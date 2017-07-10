@@ -2,6 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+
 export const loadScript = ({id, src, onload, isAsync = true, onerror}) => {
     const script = document.createElement('script')
 
@@ -57,17 +59,6 @@ export const prefetchLink = ({href}) => {
     link.rel = 'prefetch'
 
     document.getElementsByTagName('head')[0].appendChild(link)
-}
-
-export const isLocalStorageAvailable = () => {
-    try {
-        const x = '__test_key__'
-        localStorage.setItem(x, x)
-        localStorage.removeItem(x)
-        return true
-    } catch (e) {
-        return false
-    }
 }
 
 const MESSAGING_PWA_CLIENT_PATH = 'https://webpush-cdn.mobify.net/pwa-messaging-client.js'
