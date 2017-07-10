@@ -14,7 +14,7 @@ const INITIAL_ROOT = new Array(CATEGORY_PLACEHOLDER_COUNT).fill({
 })
 
 // Insert blank object at start to act as placeholder for "sign in"
-INITIAL_ROOT.unshift({})
+INITIAL_ROOT.push({})
 
 export const initialState = Immutable.fromJS({
     path: undefined,

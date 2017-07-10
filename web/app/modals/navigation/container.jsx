@@ -17,7 +17,7 @@ import {withRouter} from 'progressive-web-sdk/dist/routing'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import IconLabelButton from '../../components/icon-label-button'
-import {AccountNavItem, NavItemWithOnClick} from '../../components/nav-item'
+import {AccountNavItem, NavItemWithOnClick, NavItemIcon} from '../../components/nav-item'
 import * as selectors from './selectors'
 import {
     ACCOUNT_NAV_ITEM,
@@ -72,7 +72,10 @@ const Navigation = (props) => {
                     />
                 )
             default:
-                return <NavItem {...props} />
+                return (<NavItem
+                    {...props}
+                    childIcon={<NavItemIcon name="chevron-right" />}
+                />)
         }
     }
 
