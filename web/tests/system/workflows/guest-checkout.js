@@ -43,7 +43,6 @@ export default {
         if (ENV === 'production') {
             browser.url(process.env.npm_package_siteUrl)
         } else {
-            console.log(ENV)
             console.log('Running preview against siteUrl.')
             browser.preview()
         }
