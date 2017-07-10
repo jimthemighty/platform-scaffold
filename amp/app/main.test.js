@@ -34,7 +34,7 @@ describe('Renders valid AMP', () => {
     test('ProductList', () => {
         const req = httpMocks.createRequest({
             method: 'GET',
-            url: '/potions.html'
+            url: '/s/2017refresh/mens'
         })
         return handle(req).then((res) => validateAmp(res._getData()))
     })
@@ -42,7 +42,7 @@ describe('Renders valid AMP', () => {
     test('ProductDetails', () => {
         const req = httpMocks.createRequest({
             method: 'GET',
-            url: '/eye-of-newt.html'
+            url: '/s/2017refresh/11736753.html'
         })
         return handle(req).then((res) => validateAmp(res._getData()))
     })
