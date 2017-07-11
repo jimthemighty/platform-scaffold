@@ -140,25 +140,6 @@ export const initCartPage = (url) => (dispatch, getState) => {
         })
 }
 
-export const addToWishlist = (productId, productURL) => (dispatch, getState) => {
-    const currentState = getState()
-    const payload = {
-        product: productId,
-        // This won't always be defined, but add to wishlist will still work
-        // if it's missing
-        uenc: getUenc(urlToPathKey(productURL))(currentState)
-    }
-
-    return submitForm(ADD_TO_WISHLIST_URL, payload, {method: 'POST'})
-        .then(jqueryResponse)
-        .then(([$, $response]) => { // eslint-disable-line no-unused-vars
-            // The response is the HTML of the wishlist page, so check for the item we added
-            if (!$response.find(`.product-item-link[href="${productURL}"]`).length) {
-                throw new Error('Add Request Failed')
-            }
-        })
-}
-
 const getCartTotals = (address, shippingMethod) => (dispatch, getState) => {
     const cartBaseUrl = getCartBaseUrl(getState())
 
