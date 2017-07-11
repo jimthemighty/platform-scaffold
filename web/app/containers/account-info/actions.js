@@ -8,3 +8,7 @@ export const receiveData = createAction('Receive AccountInfo data')
 
 // This action will change the `title` key in the local private state
 export const changeTitle = createAction('Change AccountInfo title', 'title')
+
+export const submitAccountInfoForm = (formValues) => (dispatch) => {
+    return formValues
+}

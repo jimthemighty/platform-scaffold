@@ -12,12 +12,12 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
 import Button from 'progressive-web-sdk/dist/components/button'
-
+import {submitAccountInfoForm} from './actions'
 
 import {getAccountInfoInitialValues} from './selectors'
 // import * as accountInfoActions from './actions'
 
-const AccountInfoForm = () => {
+const AccountInfoForm = ({handleSubmit, onSubmit}) => {
     return (
         <div className="t-account-info">
             <div className="t-account-info__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
@@ -28,7 +28,7 @@ const AccountInfoForm = () => {
                     <h1 className="t-account-info__title u-text-uppercase u-width-1of2">Edit Account</h1>
                 </div>
             </div>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="t-account-info__section">
                     Change name / email
                 </div>
@@ -82,6 +82,7 @@ const AccountInfoForm = () => {
                     </FieldRow>
                     <FieldRow>
                         <Button
+                            type="submit"
                             className="pw--primary u-width-full"
                         >
                         Save
@@ -94,7 +95,8 @@ const AccountInfoForm = () => {
 }
 
 AccountInfoForm.propTypes = {
-    handleSubmit: PropTypes.func
+    handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
@@ -102,7 +104,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    // setTitle: accountInfoActions.setTitle
+    onSubmit: submitAccountInfoForm
 }
 
 const AccountInfo = ReduxForm.reduxForm({
