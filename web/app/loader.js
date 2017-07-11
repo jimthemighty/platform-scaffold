@@ -276,13 +276,6 @@ const attemptToInitializeApp = () => {
     initCacheManifest(cacheHashManifest)
     triggerAppStartEvent(true)
 
-    // When the PWA is running in an Astro app, hide the preloader because apps
-    // have their own splash screen.
-    if (!isRunningInAstro) {
-        displayPreloader(preloadCSS, preloadHTML, preloadJS)
-    }
-
-
     /* eslint-disable max-len */
     loadAsset('meta', {
         name: 'viewport',
@@ -327,11 +320,31 @@ const attemptToInitializeApp = () => {
         document.write('<body>')
     }
 
-    // Create React mounting target
-    const body = document.getElementsByTagName('body')[0]
-    const reactTarget = document.createElement('div')
-    reactTarget.className = 'react-target'
-    body.appendChild(reactTarget)
+    const waitForBody = new Promise((resolve) => {
+        const checkForBody = () => {
+            if (document.querySelectorAll('body').length > 0) {
+                resolve()
+            } else {
+                setTimeout(checkForBody, 50)
+            }
+        }
+        checkForBody()
+    })
+
+    // Display the Preloader to indicate progress to the user (except when running
+    // in an Astro app, hide the preloader because apps have their own splash screen).
+    waitForBody.then(() => {
+        if (!isRunningInAstro) {
+            displayPreloader(preloadCSS, preloadHTML, preloadJS)
+        }
+
+        // Create React mounting target
+        const body = document.getElementsByTagName('body')[0]
+        const reactTarget = document.createElement('div')
+        reactTarget.className = 'react-target'
+        body.appendChild(reactTarget)
+    })
+    
 
     /**
      * This must be called before vendor.js is loaded (or before the Webpack
