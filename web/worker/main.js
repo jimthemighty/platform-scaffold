@@ -5,24 +5,41 @@
 /* global PROJECT_SLUG, DEBUG */
 /* eslint-env worker, serviceworker */
 
+import toolbox from 'sw-toolbox'
 import worker from 'progressive-web-sdk/dist/worker/main'
 
-const workerParams = worker({
-    slug: PROJECT_SLUG,
-    isDebug: DEBUG
-})
+// Check if we're in PWA mode or not. The pwa parameter in the URL used
+// to register this worker will tell us. We reverse the logic here, so that
+// if the URL does not contain a PWA parameter, we assume pwa mode as the
+// default. If we're in PWA mode, init the PWA worker. In non-PWA mode,
+// the PWA worker code is still loaded, but does nothing. This allows us
+// to use the same worker code in both modes.
+if (!/pwa=0/.test(self.location.toString())) {
+    worker({
+        slug: PROJECT_SLUG,
+        isDebug: DEBUG
+    })
+}
 
-// Load the Messaging worker code if we're not running under Astro
+// Load the Messaging worker code, unless we're running under Astro
 import isRunningIn from '../app/vendor/astro-detect'
 if (!isRunningIn.app()) {
     try {
+        // We always load the latest version of the Messaging worker code.
+        // If the version changes, then the URL used to register
+        // this worker code will change, prompting a re-download of the
+        // new code.
         self.importScripts('https://webpush-cdn.mobify.net/pwa-messaging-service-worker.js')
-        // Pass the toolbox module used by the SDK worker to the Messaging
-        // worker, so it's shared.
+
+        // We must pass the *same* toolbox module instance to the
+        // Messaging worker as is used in the PWA support code. The
+        // Messaging worker script is webpacked separately, so it
+        // has its own copies of imported modules. We therefore
+        // pass it a reference to our copy of sw-toolbox.
         self.MessagingServiceWorker.messagingWorkerMain(
             {
-                toolbox: workerParams.toolbox,
-                isDebug: workerParams.isDebug
+                toolbox,
+                isDebug: DEBUG
             }
         )
     } catch (e) {
