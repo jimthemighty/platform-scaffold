@@ -203,7 +203,7 @@ export const updateAccountInfo = ({names, email}) => (dispatch) => {
         email
     }
 
-    return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'POST"'})
+    return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'PATCH'})
         .then(({first_name, last_name, login}) => {
             const result = {
                 accountFormInfo: {
