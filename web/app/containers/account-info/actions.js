@@ -3,6 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
+import {validateFullName} from '../../utils/utils'
+import {updateAccountInfo} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 
 export const receiveData = createAction('Receive AccountInfo data')
 
@@ -10,5 +12,7 @@ export const receiveData = createAction('Receive AccountInfo data')
 export const changeTitle = createAction('Change AccountInfo title', 'title')
 
 export const submitAccountInfoForm = (formValues) => (dispatch) => {
-    return formValues
+    if (validateFullName(formValues.names)) {
+        dispatch(updateAccountInfo(formValues))
+    }
 }

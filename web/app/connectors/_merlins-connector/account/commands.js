@@ -199,3 +199,9 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 
 
 }
+
+export const updateAccountInfo = ({names, email}) => (dispatch) => {
+    debugger
+    debugger
+    submitForm('/customer/account/editPost/', formData, '.form-login')
+}
