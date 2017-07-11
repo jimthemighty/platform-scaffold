@@ -186,6 +186,12 @@ To verify that changes do not break the guest and registered checkout flows:
 npm run smoke-test
 ```
 
+To run end-to-end tests on the production environment:
+
+```
+npm run test:e2e-prod
+```
+
 ## Lighthouse tests
 
 You can run [Lighthouse](https://github.com/GoogleChrome/lighthouse) test against production with:
