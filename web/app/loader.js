@@ -447,7 +447,7 @@ if (shouldPreview()) {
                         // we reach this point when the Messaging client has been
                         // loaded and initialized, and the non-pwa.js script has
                         // been loaded. We can now init the non-pwa script
-                        .then(() => window.Mobify.WebPush.NonPWA.initNonPWA())
+                        .then(() => window.Mobify.NonPWA.init())
                 }
 
                 // We're loaded in a script located in <head> but we need to inject

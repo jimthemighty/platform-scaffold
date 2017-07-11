@@ -2,9 +2,9 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {init} from 'progressive-web-sdk/dist/non-pwa/messaging'
+import {init as initMessaging} from 'progressive-web-sdk/dist/non-pwa/messaging'
 
-const configuration = {
+const messagingConfiguration = {
     defaultAsk: {
         options: {
             body: 'Subscribe now to push notifications',
@@ -16,12 +16,13 @@ const configuration = {
     }
 }
 
-const initNonPWA = () => init(configuration)
+const init = () => {
+    initMessaging(messagingConfiguration)
+}
 
 window.Mobify = window.Mobify || {}
-window.Mobify.WebPush = window.Mobify.WebPush || {}
-window.Mobify.WebPush.NonPWA = {
+window.Mobify.NonPWA = {
     // exported for possible testing
-    configuration,
-    initNonPWA
+    messagingConfiguration,
+    init
 }
