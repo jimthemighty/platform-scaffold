@@ -14,7 +14,7 @@ import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
 import Button from 'progressive-web-sdk/dist/components/button'
 
 
-import {getAccountFormInfo} from './selectors'
+import {getAccountInfoInitialValues} from './selectors'
 // import * as accountInfoActions from './actions'
 
 const AccountInfoForm = () => {
@@ -98,7 +98,7 @@ AccountInfoForm.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    initialValues: getAccountFormInfo
+    initialValues: getAccountInfoInitialValues
 })
 
 const mapDispatchToProps = {
