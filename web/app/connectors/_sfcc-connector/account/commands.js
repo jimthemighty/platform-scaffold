@@ -3,7 +3,11 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {
+    setRegisterLoaded,
+    setSigninLoaded,
+    recieveAccountInfoUIData
+} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createOrderAddressObject} from '../checkout/utils'
 import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
@@ -171,4 +175,20 @@ export const updateBillingAddress = (formValues) => (dispatch) => {
 
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
+}
+
+/* eslint-disable camelcase */
+export const initAccountInfoPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    return makeApiJsonRequest(`/customers/${customerId}`)
+        .then(({first_name, last_name, login}) => {
+            const result = {
+                accountFormInfo: {
+                    names: `${first_name} ${last_name}`,
+                    email: login
+                }
+            }
+            dispatch(recieveAccountInfoUIData((result)))
+        })
 }
