@@ -181,7 +181,6 @@ const setupMessagingClient = (serviceWorkerSupported) => {
             // supported and loaded, and messaging is enabled, so we can load
             // and initialize the Messaging client, returning the promise
             // from init().
-            createGlobalMessagingClientInitPromise(messagingEnabled)
             return loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
         }
     }
@@ -383,8 +382,6 @@ const attemptToInitializeApp = () => {
         ? loadWorker(true)
         : Promise.resolve(false)
     ).then((serviceWorkerSupported) => {
-
-
         setupMessagingClient(serviceWorkerSupported, messagingEnabled)
     })
 
@@ -426,30 +423,41 @@ if (shouldPreview()) {
             ]
         )
             .then((results) => {
+                // This is called early so that the Promise is available
+                // to any scripts that need to chain from it. It gets
+                // resolved when setupMessagingClient completes.
                 createGlobalMessagingClientInitPromise(messagingEnabled)
-                const serviceWorkerLoadedAndReady = results[0]
+
+                const completeSetup = () => {
+                    // Set up the Messaging client integration (we do this after
+                    // analytics is set up, so that window.Sandy.instance is
+                    // available to Messaging). The serviceWorkerLoadedAndReady
+                    // result from loadWorker is available as results[0].
+                    // We ignore the Promise returned from this call, since
+                    // we want to continue to load and setup the non-pwa
+                    // script anyway, whether Messaging succeeds or not.
+                    setupMessagingClient(results[0])
+
+                    return loadScriptAsPromise({
+                        id: 'mobify-non-pwa-script',
+                        src: getAssetUrl('non-pwa.js'),
+                        // We do nothing if the script fails
+                        rejectOnError: true
+                    })
+                        // we reach this point when the Messaging client has been
+                        // loaded and initialized, and the non-pwa.js script has
+                        // been loaded. We can now init the non-pwa script
+                        .then(() => window.Mobify.WebPush.NonPWA.initNonPWA())
+                }
 
                 // We're loaded in a script located in <head> but we need to inject
                 // scripts using `loadScript` which places them in <body> - so
                 // we must wait until <body> exists
-                document.addEventListener('DOMContentLoaded', () => {
-                    //Set up the Messaging client integration (we do this after
-                // analytics is set up, so that window.Sandy.instance is
-                // available to Messaging).
-                 setupMessagingClient(serviceWorkerLoadedAndReady)
-
-                return loadScriptAsPromise({
-                    id: 'mobify-non-pwa-script',
-                    src: getAssetUrl('non-pwa.js'),
-                    // We must do nothing if the script fails
-                    rejectOnError: true
-                })
-                    .then(() => {
-                        // we reach this point when the Messaging client has been
-                        // loaded and initialized, and the non-pwa.js script has
-                        // been loaded. We can now init the non-pwa script
-                        window.Mobify.WebPush.NonPWA.initNonPWA()
-                })
+                if (document.readyState === 'interactive') {
+                    completeSetup()
+                } else {
+                    document.addEventListener('DOMContentLoaded', completeSetup)
+                }
             })
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
