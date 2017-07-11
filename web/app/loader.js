@@ -198,8 +198,21 @@ const setupMessagingClient = (serviceWorkerSupported) => {
  * timing that any tracking pixels are downloaded as the app initializes.
  * More specifically, downloading of any tracking pixels should not delay
  * the downloading of any other scripts (i.e. service workers, etc.)
+ *
+ * @param pwaMode {Boolean} true for PWA mode, false for nonPWA mode. This
+ * affects the set of dimensions configured on the tracker, and whether
+ * an initial timing point is collected (it's done in PWA mode only).
+ *
+ * @returns {Promise.<*>} resolved when setup is complete and any app
+ * start events have been sent.
  */
 const triggerAppStartEvent = (pwaMode) => {
+
+    let resolver
+    const resultPromise = new Promise((resolve) => {
+        resolver = resolve
+    })
+
     setTimeout(
         () => {
             Sandy.init(window)
@@ -219,11 +232,17 @@ const triggerAppStartEvent = (pwaMode) => {
                 }
             }
 
-            // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client
-            // We are restoring it here for now and will revisit this when we rewrite sandy tracking pixel client
+            // The act of running Sandy.init() blows away the binding of
+            // window.sandy.instance in the pixel client. We are restoring it
+            // here for now and will revisit this when we rewrite the Sandy
+            // tracking pixel client
             window.sandy.instance = Sandy
+
+            resolver()
         }, 0
     )
+
+    return resultPromise
 }
 
 const attemptToInitializeApp = () => {
@@ -318,7 +337,7 @@ const attemptToInitializeApp = () => {
         src: getAssetUrl('vendor.js'),
         docwrite: loadScriptsSynchronously,
         isAsync: false,
-        onerror: function(){ alert('test') } // TODO: make this load the non-sync way!
+        onerror: () => alert('test')    // TODO: make this load the non-sync way!
     })
 
     loadScript({
@@ -399,16 +418,25 @@ if (shouldPreview()) {
         }
     } else if (isSupportedNonPWABrowser()) {
         // This a browser that supports our non-PWA mode, so we can assume that
-        // service workers are supported. Load the worker in non-PWA mode.
-        loadWorker(false)
-            .then((serviceWorkerLoadedAndReady) => {
-                // Start up analytics (in nonPWA mode)
+        // service workers are supported. Load the worker in non-PWA mode, and
+        // (in parallel) initialize analytics.
+        // We assume that the browsers supporting nonPWA mode do not need any
+        // polyfills. If any are needed, this would be the point to load them.
+        Promise.all(
+            [
+                loadWorker(false),
                 triggerAppStartEvent(false)
+            ]
+        )
+            .then((results) => {
+                const serviceWorkerLoadedAndReady = results[0]
+
                 // Set up the Messaging client integration (we do this after
                 // analytics is set up, so that window.Sandy.instance is
                 // available to Messaging). The messagingInitPromise is the
                 // value
                 const messagingStatePromise = setupMessagingClient(serviceWorkerLoadedAndReady)
+
                 return loadScriptAsPromise({
                     id: 'mobify-non-pwa-script',
                     src: getAssetUrl('non-pwa/non-pwa.js'),
