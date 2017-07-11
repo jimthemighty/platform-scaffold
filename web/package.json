@@ -2,6 +2,7 @@
   "name": "progressive-web-scaffold",
   "projectSlug": "progressive-web-scaffold",
   "aJSSlug": "merlinspotions-2",
+  "mobifyGAID": "UA-53825302-1",
   "messagingSiteId": "merlinspotions",
   "messagingEnabled": true,
   "repository": {
