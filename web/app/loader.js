@@ -17,7 +17,6 @@ import {
     getMessagingSWVersion,
     loadAndInitMessagingClient,
     createGlobalMessagingClientInitPromise,
-    updateMessagingSWVersion,
     isLocalStorageAvailable,
     prefetchLink
 } from './utils/loader-utils'
@@ -111,7 +110,7 @@ const getServiceWorkerURL = (pwaMode) => {
     // does not, then we may assume we're running in some situation
     // like incognito mode, in which case there is no point getting
     // Messaging worker version data, we can just use the base URL.
-    if (isLocalStorageAvailable()) {
+    if (messagingEnabled && isLocalStorageAvailable()) {
         const swVersion = getMessagingSWVersion()
         if (swVersion) {
             workerPathElements.push(`msg_sw_version=${swVersion}`)
@@ -178,14 +177,12 @@ const setupMessagingClient = (serviceWorkerSupported) => {
         window.Mobify.WebPush = window.Mobify.WebPush || {}
         window.Mobify.WebPush.PWAClient = {}
 
-        // Update the Messaging worker version data.
-        updateMessagingSWVersion()
-
         if (messagingEnabled) {
             // We know we're not running in Astro, that the service worker is
             // supported and loaded, and messaging is enabled, so we can load
             // and initialize the Messaging client, returning the promise
             // from init().
+            createGlobalMessagingClientInitPromise(messagingEnabled)
             return loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
         }
     }
@@ -277,12 +274,12 @@ const attemptToInitializeApp = () => {
     loadAsset('meta', {
         name: 'theme-color',
         content: '#4e439b'
-    });
+    })
 
     loadAsset('meta', {
         name: 'charset',
         content: 'utf-8'
-    });
+    })
 
     loadAsset('link', {
         href: getAssetUrl('main.css'),
@@ -337,7 +334,8 @@ const attemptToInitializeApp = () => {
         src: getAssetUrl('vendor.js'),
         docwrite: loadScriptsSynchronously,
         isAsync: false,
-        onerror: () => alert('test')    // TODO: make this load the non-sync way!
+        // TODO: make this load the non-sync way!
+        onerror: () => alert('test')    // eslint-disable-line no-alert
     })
 
     loadScript({
@@ -433,13 +431,12 @@ if (shouldPreview()) {
 
                 // Set up the Messaging client integration (we do this after
                 // analytics is set up, so that window.Sandy.instance is
-                // available to Messaging). The messagingInitPromise is the
-                // value
+                // available to Messaging).
                 const messagingStatePromise = setupMessagingClient(serviceWorkerLoadedAndReady)
 
                 return loadScriptAsPromise({
                     id: 'mobify-non-pwa-script',
-                    src: getAssetUrl('non-pwa/non-pwa.js'),
+                    src: getAssetUrl('non-pwa.js'),
                     // We must do nothing if the script fails
                     rejectOnError: true
                 })
@@ -450,10 +447,11 @@ if (shouldPreview()) {
                         // passing messagingStatePromise, which resolves to the
                         // initial Messaging state when it's available, or
                         // to null if Messaging could not be initialized.
-                        initNonPWA({
-                            // The Messaging initialization Promise
-                            messagingStatePromise
-                            // todo - other stuff?
+                        console.log('...and now we would init non-pwa.js')
+                        messagingStatePromise.then((state) => {
+                            console.log(
+                                `messagingStatePromise resolved to ${JSON.stringify(state)}`
+                            )
                         })
                     })
             })

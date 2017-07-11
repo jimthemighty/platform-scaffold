@@ -37,7 +37,7 @@ const logMessagingSetupError = () => console.error('`LoaderUtils.createGlobalMes
 let clientInitResolver = logMessagingSetupError
 let clientInitRejecter = logMessagingSetupError
 export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
-    if (!messagingEnabled) {
+    if (!messagingEnabled || window.Progressive.MessagingClientInitPromise) {
         return
     }
 
@@ -52,6 +52,7 @@ export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
  * storing a Promise in window.Progressive.MessagingClientInitPromise that
  * is resolved when the load and initialization is complete. If either load
  * or init fails, the Promise is rejected.
+ * @returns {Promise.<*>} the same Promise
  */
 export const loadAndInitMessagingClient = (debug, siteId) => {
     loadScriptAsPromise({
@@ -59,14 +60,12 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
         src: MESSAGING_PWA_CLIENT_PATH,
         rejectOnError: true
     })
-        .then(() => {
+        .then(() => (
             // We assume window.Progressive will exist at this point.
-            const messagingClient = window.Progressive.MessagingClient || {}
-
-            return messagingClient
+            window.Progressive.MessagingClient
                 .init({debug, siteId})
                 .then(clientInitResolver)
-        })
+        ))
         /**
          * Potential errors:
          * - URIError thrown by `loadScriptAsPromise` rejection
@@ -74,6 +73,8 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
          * - expected error if Messaging is unavailable on the device (i.e. Safari)
          */
         .catch(clientInitRejecter)
+
+    return window.Progressive.MessagingClientInitPromise
 }
 
 const MESSAGING_PWA_SW_VERSION_PATH = 'https://webpush-cdn.mobify.net/pwa-serviceworker-version.json'
@@ -89,10 +90,19 @@ export const updateMessagingSWVersion = () => {
         .then((response) => response.json())
         .then((versionData) => {
             // Persist the result in localStorage
-            if (isLocalStorageAvailable() && versionData) {
-                localStorage.setItem(
+            if (isLocalStorageAvailable()) {
+                if (versionData) {
+                    localStorage.setItem(
+                        messagingSWVersionKey,
+                        `${versionData.SERVICE_WORKER_CURRENT_VERSION || ''}_${versionData.SERVICE_WORKER_CURRENT_HASH || ''}`
+                    )
+                }
+
+                // Update the sessionStorage marker that tells us we
+                // successfully checked. See getMessagingSWVersion
+                sessionStorage.setItem(
                     messagingSWVersionKey,
-                    `${versionData.SERVICE_WORKER_CURRENT_VERSION || ''}_${versionData.SERVICE_WORKER_CURRENT_HASH || ''}`
+                    'checked'
                 )
             }
             return versionData
@@ -101,4 +111,15 @@ export const updateMessagingSWVersion = () => {
         .catch((error) => { console.log(error) })
 }
 
-export const getMessagingSWVersion = () => localStorage.getItem(messagingSWVersionKey) || ''
+export const getMessagingSWVersion = () => {
+    // Once per session (as defined by sessionStorage lifetime), update
+    // the messaging service worker version data.
+    if (isLocalStorageAvailable()) {
+        // A string is available in sessionStorage if a previous
+        // check for the version completed successfully.
+        if (!sessionStorage.getItem(messagingSWVersionKey)) {
+            updateMessagingSWVersion()
+        }
+    }
+    return localStorage.getItem(messagingSWVersionKey) || ''
+}
