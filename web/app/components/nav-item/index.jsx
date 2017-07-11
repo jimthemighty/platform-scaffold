@@ -25,7 +25,7 @@ NavItemIcon.propTypes = {
  * Project-specific NavItem which displays an icon on the left.
  */
 export const NavItemWithIcon = (props) => (
-    <NavItem {...props} className="pw--with-icon" />
+    <NavItem {...props} className={`${props.className} pw--with-icon`} />
 )
 
 NavItemWithIcon.propTypes = NavItem.propTypes
@@ -34,11 +34,16 @@ NavItemWithIcon.propTypes = NavItem.propTypes
 /**
  * Project-specific NavItem which displays an icon on the left.
  */
-export const NavItemWithOnClick = (props) => (
-    <ListTile {...props} className="c-nav-item c--with-icon" startAction={<NavItemIcon name="user" />}>
-        {props.title}
-    </ListTile>
-)
+export const NavItemWithOnClick = (props) => {
+    const {title, options} = props
+    return (
+        <ListTile {...props}
+            className="c-nav-item c--with-icon"
+            startAction={<NavItemIcon name={options ? options.icon : null} />}>
+            {title}
+        </ListTile>
+    )
+}
 
 NavItemWithOnClick.propTypes = NavItem.propTypes
 
@@ -46,9 +51,13 @@ NavItemWithOnClick.propTypes = NavItem.propTypes
 /**
  * Project-specific NavItem which displays an account icon on the left.
  */
-export const AccountNavItem = (props) => (
-    <NavItemWithIcon {...props}
-        beforeContent={<NavItemIcon name="user" />} />
-)
+export const AccountNavItem = (props) => {
+    const {options} = props
+    return (
+        <NavItemWithIcon {...props}
+            className={options ? options.className : ''}
+            beforeContent={<NavItemIcon name={options ? options.icon : null} />} />
+    )
+}
 
 AccountNavItem.propTypes = NavItem.propTypes

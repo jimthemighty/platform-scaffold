@@ -186,6 +186,12 @@ To verify that changes do not break the guest and registered checkout flows:
 npm run smoke-test
 ```
 
+To run end-to-end tests on the production environment:
+
+```
+npm run test:e2e-prod
+```
+
 ## Lighthouse tests
 
 You can run [Lighthouse](https://github.com/GoogleChrome/lighthouse) test against production with:
@@ -202,7 +208,7 @@ npm run test:pwa-preview
 
 ## Analyze Bundle Size
 
-Set a maximum file size for built assets by specifying a value for `file_size_limit` in `package.json`. To verify that the contents of `build` are not over this size limit:
+Set a maximum file size for built assets by specifying a value for `max` in `tests/system/test-scripts/file-size-config.json`, or specify individual thresholds for files. To verify that the contents of `build` are not over this size limit:
 
 ```
 npm run prod:build
