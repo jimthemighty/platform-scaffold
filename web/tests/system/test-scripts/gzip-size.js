@@ -33,8 +33,6 @@ const options = {
     listeners: {
         file: (root, fileStats, next) => {
             const filePath = path.join(root, fileStats.name)
-            const fileStat = fs.statSync(filePath)
-
             /* Checks the file - if it's in the list of files in the file-size-config.json */
             for (const file in files) {
                 if (fileStats.name === file) {
