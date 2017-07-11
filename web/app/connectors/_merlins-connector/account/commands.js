@@ -200,19 +200,26 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 
 }
 
-export const updateAccountInfo = ({names, email}) => (dispatch, getState) => {
+/* eslint-disable camelcase */
+export const updateAccountInfo = ({names, email, current_password, new_password}) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
-
+debugger
+debugger
     const formData = {
         firstname: names.split(' ')[0],
         lastname: names.split(' ')[1],
         email,
-        current_password: '',
-        new_password: '',
+        current_password: current_password ? current_password : '',
+        new_password: new_password ? new_password : '',
         form_key: formKey
     }
 
     dispatch(recieveAccountInfoUIData({accountFormInfo: {names, email}}))
     return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
+}
+
+
+export const updateAccountPassword = (formValues) => (dispatch) => {
+    dispatch(updateAccountInfo(formValues))
 }
