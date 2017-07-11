@@ -21,7 +21,7 @@ test:
             pwd: web
 deployment:
     bundle:
-        branch: develop, push-ci-bundle
+        branch: [develop, push-ci-bundle]
         commands:
             - npm install
             - npm run push -- -t ci-develop -m "CI build #${CIRCLE_BUILD_NUM} on ${CIRCLE_BRANCH} (${CIRCLE_SHA1})"
