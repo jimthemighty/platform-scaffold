@@ -14,7 +14,7 @@ import {getCurrentProductId, getProductVariants, getProductVariationCategories, 
 import {getAddToCartFormValues} from '../../store/form/selectors'
 
 import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
-import {getProductVariantData} from 'progressive-web-sdk/dist/integration-manager/products/commands'
+import {getProductVariantData, addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
@@ -97,4 +97,24 @@ export const onVariationChange = () => (dispatch, getStore) => {
     } = variationChangeSelector(getStore())
 
     return dispatch(getProductVariantData(variationSelections, variants, categoryIds))
+}
+
+
+export const addToWishlist = () => (dispatch, getState) => {
+    const productID = getCurrentProductId(getState())
+    // check if user is logged in
+    // add loading state to wishlist btn
+    return dispatch(addItemToWishlist(productID, window.location.href))
+        .then(() => console.log('**** ITEM ADDED TO WISHLIST ****'))
+        .catch((error) => {
+            if (/Failed to fetch|Add Request Failed|Unable to add item/i.test(error.message)) {
+                dispatch(addNotification(
+                    'cartWishlistError',
+                    'Unable to add item to wishlist.',
+                    true
+                ))
+            } else {
+                throw error
+            }
+        })
 }

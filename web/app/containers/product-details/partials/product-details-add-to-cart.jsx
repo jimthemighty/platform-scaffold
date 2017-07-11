@@ -16,7 +16,7 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, handleSubmit}) => {
+const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, handleSubmit, addToWishlist}) => {
     const stepperProps = {
         decrementIcon: 'minus',
         disabled,
@@ -59,6 +59,15 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                     data-analytics-name={UI_NAME.addToCart}
                 />
             }
+            <Button
+                icon="like"
+                title="Wishlist"
+                iconClassName="pw--small u-margin-end"
+                showIconText={true}
+                className="pw--tertiary u-width-full"
+                onClick={addToWishlist}
+                data-analytics-name={UI_NAME.wishlist}
+            />
         </form>
     )
 }
@@ -83,7 +92,8 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     setQuantity: actions.setItemQuantity,
-    onSubmit: actions.submitCartForm
+    onSubmit: actions.submitCartForm,
+    addToWishlist: actions.addToWishlist
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({
