@@ -14,5 +14,9 @@ export const changeTitle = createAction('Change AccountInfo title', 'title')
 export const submitAccountInfoForm = (formValues) => (dispatch) => {
     if (validateFullName(formValues.names)) {
         dispatch(updateAccountInfo(formValues))
+            .then((path) => {
+                // need to dispatch updated accountInfo from response
+                return path
+            })
     }
 }

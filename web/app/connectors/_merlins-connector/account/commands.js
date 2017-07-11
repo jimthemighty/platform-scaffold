@@ -56,7 +56,7 @@ const clearMessageCookie = () => {
 const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
 const EXISTING_ACCT_REGEX = /already an account/
 
-const submitForm = (href, formValues, formSelector) => {
+const submitForm = (href, formValues, formSelector, responseUrl) => {
     clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
@@ -82,7 +82,7 @@ const submitForm = (href, formValues, formSelector) => {
                     _error: message
                 })
             }
-            return '/customer/account'
+            return responseUrl
         })
 }
 
@@ -101,7 +101,7 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
         formData.persistent_remember_me = 'on'
     }
 
-    return submitForm(LOGIN_POST_URL, formData, '.form-login')
+    return submitForm(LOGIN_POST_URL, formData, '.form-login', '/customer/account')
 }
 
 export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
@@ -119,7 +119,7 @@ export const registerUser = (firstname, lastname, email, password, rememberMe) =
     if (rememberMe) {
         formData.persistent_remember_me = 'on'
     }
-    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account')
+    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account', '/customer/account')
 }
 
 const findPathForRoute = (routes, routeName) => {
@@ -200,8 +200,18 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 
 }
 
-export const updateAccountInfo = ({names, email}) => (dispatch) => {
-    debugger
-    debugger
-    submitForm('/customer/account/editPost/', formData, '.form-login')
+export const updateAccountInfo = ({names, email}) => (dispatch, getState) => {
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+
+    const formData = {
+        firstname: names.split(' ')[0],
+        lastname: names.split(' ')[1],
+        email,
+        current_password: '',
+        new_password: '',
+        form_key: formKey
+    }
+
+    return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
 }
