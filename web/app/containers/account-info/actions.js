@@ -5,6 +5,8 @@
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {validateFullName} from '../../utils/utils'
 import {updateAccountInfo} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {recieveAccountInfoUIData} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 
 export const receiveData = createAction('Receive AccountInfo data')
 
@@ -14,9 +16,13 @@ export const changeTitle = createAction('Change AccountInfo title', 'title')
 export const submitAccountInfoForm = (formValues) => (dispatch) => {
     if (validateFullName(formValues.names)) {
         dispatch(updateAccountInfo(formValues))
-            .then((path) => {
-                // need to dispatch updated accountInfo from response
-                return path
+            .then(() => {
+                dispatch(recieveAccountInfoUIData({accountFormInfo: formValues}))
+                return dispatch(addNotification(
+                    'accountInfoUpdated',
+                    'Successfully updated account information',
+                    true
+                ))
             })
     }
 }
