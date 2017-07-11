@@ -28,13 +28,11 @@ class ProductListFilterModal extends React.Component {
     }
 
     updateURL(searchKey) {
-        const key = searchKey.split('=')[0]
-        const value = searchKey.split('=')[1]
         const pathname = browserHistory.getCurrentLocation().pathname
         const query = Object.assign(
             {},
             browserHistory.getCurrentLocation().query,
-            {filters: `${key}=${value}`}
+            {filters: searchKey}
         )
         browserHistory.push({pathname, query})
     }
