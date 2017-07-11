@@ -9,15 +9,11 @@ import Carousel from '../../../components/carousel'
 // Selectors
 import {getProductImages} from 'progressive-web-sdk/dist/store/products/selectors'
 
-import {staticURL} from '../../../utils'
-
 const ProductDetailsCarousel = ({images}) => {
 
     return (
         <Carousel
             id="product-details-carousel"
-            previousIcon={staticURL('chevron-left')}
-            nextIcon={staticURL('chevron-right')}
             className="a--frame a--side-controls t-product-details__carousel u-padding-md u-bg-color-neutral-10"
             height="330"
             width="330"
