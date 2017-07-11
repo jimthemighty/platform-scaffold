@@ -4,6 +4,16 @@ import { loadScriptAsPromise } from 'progressive-web-sdk/dist/utils/utils'
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+let loaderDebug = false
+
+export const loaderLog = (...args) => {
+    if (loaderDebug) {
+        console.log('[Loader]', ...args)
+    }
+}
+
+export const setLoaderDebug = (debug) => { loaderDebug = debug }
+
 export const prefetchLink = ({href}) => {
     const link = document.createElement('link')
 
@@ -79,6 +89,7 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
 
 const MESSAGING_PWA_SW_VERSION_PATH = 'https://webpush-cdn.mobify.net/pwa-serviceworker-version.json'
 const messagingSWVersionKey = 'messagingServiceWorkerVersion'
+const messagingSWUpdateKey = 'messagingSWVersionUpdate'
 
 /**
  * Kick off a fetch for the service worker version, returning a Promise
@@ -86,6 +97,7 @@ const messagingSWVersionKey = 'messagingServiceWorkerVersion'
  * @returns {*|Promise.<T>}
  */
 export const updateMessagingSWVersion = () => {
+    loaderLog(`Updating ${MESSAGING_PWA_SW_VERSION_PATH}`)
     return fetch(MESSAGING_PWA_SW_VERSION_PATH)
         .then((response) => response.json())
         .then((versionData) => {
@@ -101,7 +113,7 @@ export const updateMessagingSWVersion = () => {
                 // Update the sessionStorage marker that tells us we
                 // successfully checked. See getMessagingSWVersion
                 sessionStorage.setItem(
-                    messagingSWVersionKey,
+                    messagingSWUpdateKey,
                     'checked'
                 )
             }
@@ -111,15 +123,44 @@ export const updateMessagingSWVersion = () => {
         .catch((error) => { console.log(error) })
 }
 
+/**
+ * Get the current Messaging service worker version. The semantics of this
+ * are a little complex.
+ *
+ * On the first call of a session, this function will return whatever
+ * version it has stored in localStorage, and *also* kick off a network
+ * request to update that. However, it will continue to return that same
+ * initial version for all calls in the same session, so that the service
+ * worker URL remains the same for that session. If there is a newer version,
+ * it will be registered on the first call of the *next* session. This avoids
+ * the service worker being unnecessarily updated during a session.
+ *
+ * @return {string}
+ */
 export const getMessagingSWVersion = () => {
     // Once per session (as defined by sessionStorage lifetime), update
     // the messaging service worker version data.
-    if (isLocalStorageAvailable()) {
-        // A string is available in sessionStorage if a previous
-        // check for the version completed successfully.
-        if (!sessionStorage.getItem(messagingSWVersionKey)) {
-            updateMessagingSWVersion()
-        }
+    if (!isLocalStorageAvailable()) {
+        return ''
     }
-    return localStorage.getItem(messagingSWVersionKey) || ''
+
+    // If we have not yet kicked off an async update of the version data,
+    // do that now. The flag we check is set in session storage
+    // when an update completes, so it will be done once per session.
+    if (!sessionStorage.getItem(messagingSWUpdateKey)) {
+        updateMessagingSWVersion()
+    }
+
+    // If we have stored a version string in session storage, return
+    // that now. This will be true after the first call of a session.
+    let version = sessionStorage.getItem(messagingSWVersionKey) || ''
+    if (version) {
+        return version
+    }
+
+    // Grab any version string stored in localStorage, update sessionStorage
+    // and return it.
+    version = localStorage.getItem(messagingSWVersionKey) || 'latest'
+    sessionStorage.setItem(messagingSWVersionKey, version)
+    return version
 }

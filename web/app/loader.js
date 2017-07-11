@@ -13,11 +13,13 @@ import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
 import {
-    getMessagingSWVersion,
-    loadAndInitMessagingClient,
     createGlobalMessagingClientInitPromise,
+    getMessagingSWVersion,
     isLocalStorageAvailable,
-    prefetchLink
+    loadAndInitMessagingClient,
+    loaderLog,
+    prefetchLink,
+    setLoaderDebug
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
 import ReactRegexes from './loader-routes'
@@ -34,6 +36,14 @@ const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
 const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
 const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
+
+//  This needs to be based on whether this is a CDN environment, rather than
+//  a preview environment. `web/service-worker-loader.js` will use this value
+//  to determine whether it should load from a local development server, or
+//  from the CDN.
+const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+
+setLoaderDebug(DEBUG || IS_LOCAL_PREVIEW)
 
 const isPWARoute = () => {
     return ReactRegexes.some((regex) => regex.test(window.location.pathname))
@@ -70,16 +80,12 @@ const isSupportedNonPWABrowser = () => {
  * This is based on the SW_LOADER_PATH but may have additional
  * query parameters added that act as cachebreakers for the
  * Messaging part of the worker.
+ *
  * @param pwaMode {Boolean} true to register the worker with a URL that
  * enables PWA mode, false if not.
  * @returns String
  */
 const getServiceWorkerURL = (pwaMode) => {
-    //  This needs to be based on whether this is a CDN environment, rather than
-    //  a preview environment. `web/service-worker-loader.js` will use this value
-    //  to determine whether it should load from a local development server, or
-    //  from the CDN.
-    const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
     /**
      * This needs to be based on whether this is a CDN environment, rather than
      * a preview environment. `web/service-worker-loader.js` will use this value
@@ -103,13 +109,8 @@ const getServiceWorkerURL = (pwaMode) => {
     // will find nothing in localStorage, and return the URL without
     // any Messaging-worker parameters, but we'll do an asynchronous
     // fetch to update the parameters, which will then be used on the
-    // next run.
-
-    // We expect supported browsers to have local storage. If the browser
-    // does not, then we may assume we're running in some situation
-    // like incognito mode, in which case there is no point getting
-    // Messaging worker version data, we can just use the base URL.
-    if (messagingEnabled && isLocalStorageAvailable()) {
+    // next run. See getMessagingSWVersion for the exact semantics.
+    if (messagingEnabled) {
         const swVersion = getMessagingSWVersion()
         if (swVersion) {
             workerPathElements.push(`msg_sw_version=${swVersion}`)
@@ -121,19 +122,36 @@ const getServiceWorkerURL = (pwaMode) => {
 }
 
 /**
- * Load the service worker
+ * Load the service worker.
+ *
+ * In nonPWA mode, this will be called on every page. This is safe;
+ * to quote https://developers.google.com/web/fundamentals/getting-started/primers/service-workers:
+ * "You can call register() every time a page loads without concern;
+ * the browser will figure out if the service worker is already registered
+ * or not and handle it accordingly".
+ *
+ * Note, though, that this assumes the URL returned by getServiceWorkerURL
+ * doesn't change between pages. If it does, then the worker will be
+ * re-registered with a different URL, causing it to restart.
+ *
  * @param pwaMode {Boolean} true if the worker should be loaded in
  * PWA mode, false if not
  * @returns Promise.<Boolean> true when the worker is loaded and ready,
  * false if the worker fails to register, load or become ready.
  */
-const loadWorker = (pwaMode) => (
-    navigator.serviceWorker.register(getServiceWorkerURL(pwaMode))
+const loadWorker = (pwaMode) => {
+    const url = getServiceWorkerURL(pwaMode)
+    loaderLog(`Registering service worker ${url}`)
+
+    // Note that we do not provide a scope to this call; we assume
+    // the worker loader is served at the root of the site, so that
+    // it controls the entire site.
+    return navigator.serviceWorker.register(url)
         .then(() => navigator.serviceWorker.ready)
         .then(() => true)
         // We're intentionally swallowing errors here
         .catch(() => false)
-)
+}
 
 const asyncInitApp = () => {
     window.webpackJsonpAsync = (module, exports, webpackRequire) => {
