@@ -9,6 +9,7 @@ import {createOrderAddressObject} from '../checkout/utils'
 import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 
+import {fetchNavigationData} from '../app/commands'
 import {getHomeURL, getApiEndPoint, getRequestHeaders} from '../config'
 
 const initLoginData = () => (dispatch) => {
@@ -58,6 +59,7 @@ export const login = (username, password) => (dispatch) => {
             customerID = responseJSON.customer_id
             storeAuthToken(authorization)
             dispatch(setLoggedIn(true))
+            dispatch(fetchNavigationData())
             deleteBasketID()
             return initSfccSession(authorization)
         })
@@ -104,6 +106,7 @@ export const logout = () => (dispatch) => {
             deleteBasketID()
             deleteAuthToken()
             dispatch(setLoggedIn(false))
+            dispatch(fetchNavigationData())
         })
 }
 
