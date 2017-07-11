@@ -148,7 +148,10 @@ const loadWorker = (pwaMode) => {
     // it controls the entire site.
     return navigator.serviceWorker.register(url)
         .then(() => navigator.serviceWorker.ready)
-        .then(() => true)
+        .then(() => {
+            loaderLog('Service worker is ready')
+            return true
+        })
         // We're intentionally swallowing errors here
         .catch(() => false)
 }
@@ -250,7 +253,7 @@ const triggerAppStartEvent = (pwaMode) => {
             // here for now and will revisit this when we rewrite the Sandy
             // tracking pixel client
             window.sandy.instance = Sandy
-
+            loaderLog('Sandy initialization done')
             resolver()
         }, 0
     )
@@ -447,6 +450,7 @@ if (shouldPreview()) {
                 createGlobalMessagingClientInitPromise(messagingEnabled)
 
                 const completeSetup = () => {
+                    loaderLog('Completing setup for nonPWA mode')
                     // Set up the Messaging client integration (we do this after
                     // analytics is set up, so that window.Sandy.instance is
                     // available to Messaging). The serviceWorkerLoadedAndReady
@@ -472,8 +476,10 @@ if (shouldPreview()) {
                 // scripts using `loadScript` which places them in <body> - so
                 // we must wait until <body> exists
                 if (document.readyState === 'interactive') {
+                    loaderLog('Calling completeSetup directly...')
                     completeSetup()
                 } else {
+                    loaderLog('Calling completeSetup on DCL...')
                     document.addEventListener('DOMContentLoaded', completeSetup)
                 }
             })
