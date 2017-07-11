@@ -58,9 +58,18 @@ export const getCart = () => (dispatch) => {
  * @param {Number} quantity The quantity to add
  * @param {Object} variant The variant object (required for this connector)
  * @param {Number} variant.id the unique product combination's ID
- * @param {Object} variant.values map of attribute slugs & selected values, (ex. color: 8, size: 6)
- * @param {Object} variant.attributeIds map of options to option IDs, (ex. color: 90)
- * where optionID is Magento's numerical representation of the attribute
+ * @param {Object} variant.values map of attribute slugs & selected values
+ * @example
+ * {
+ *     color: 8,
+ *     size: 6
+ * }
+ * @param {Object} variant.attributeIds map of options to option IDs, where optionID is Magento's attribute ID
+ * @example
+ * {
+ *     color: 90,
+ *     size: 131
+ * }
  */
 export const addToCart = (productId, quantity, variant) => (dispatch, getState) => {
     const formInfo = getFormInfoByProductId(productId)(getState())

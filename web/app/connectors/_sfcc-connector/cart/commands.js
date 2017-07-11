@@ -20,7 +20,7 @@ const addToCartRequest = (productId, quantity, basketId) => {
 
 /**
  * @function addToCart
- * @param {String} productId The product's ID
+ * @param {String} productId The product's ID - if the product supports variants then this is the variant ID (cannot be master product ID)
  * @param {Number} quantity The quantity to add
  */
 export const addToCart = (productId, quantity) => (dispatch) => (
