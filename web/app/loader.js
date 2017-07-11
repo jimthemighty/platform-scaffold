@@ -2,7 +2,6 @@
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
-    initNonPWA,
     isSamsungBrowser,
     isFirefoxBrowser,
     loadScript,
@@ -62,7 +61,7 @@ const isSupportedNonPWABrowser = () => {
     if (!('serviceWorker' in navigator)) {
         return false
     }
-    const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+    const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
     return raw ? (parseInt(raw[2], 10) >= MINIMUM_NON_PWA_CHROME) : false
 }
 
@@ -427,12 +426,17 @@ if (shouldPreview()) {
             ]
         )
             .then((results) => {
+                createGlobalMessagingClientInitPromise(messagingEnabled)
                 const serviceWorkerLoadedAndReady = results[0]
 
-                // Set up the Messaging client integration (we do this after
+                // We're loaded in a script located in <head> but we need to inject
+                // scripts using `loadScript` which places them in <body> - so
+                // we must wait until <body> exists
+                document.addEventListener('DOMContentLoaded', () => {
+                    //Set up the Messaging client integration (we do this after
                 // analytics is set up, so that window.Sandy.instance is
                 // available to Messaging).
-                const messagingStatePromise = setupMessagingClient(serviceWorkerLoadedAndReady)
+                 setupMessagingClient(serviceWorkerLoadedAndReady)
 
                 return loadScriptAsPromise({
                     id: 'mobify-non-pwa-script',
@@ -443,17 +447,9 @@ if (shouldPreview()) {
                     .then(() => {
                         // we reach this point when the Messaging client has been
                         // loaded and initialized, and the non-pwa.js script has
-                        // been loaded. We can now init the non-pwa script,
-                        // passing messagingStatePromise, which resolves to the
-                        // initial Messaging state when it's available, or
-                        // to null if Messaging could not be initialized.
-                        console.log('...and now we would init non-pwa.js')
-                        messagingStatePromise.then((state) => {
-                            console.log(
-                                `messagingStatePromise resolved to ${JSON.stringify(state)}`
-                            )
-                        })
-                    })
+                        // been loaded. We can now init the non-pwa script
+                        window.Mobify.WebPush.NonPWA.initNonPWA()
+                })
             })
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
