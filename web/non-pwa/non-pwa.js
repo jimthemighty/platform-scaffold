@@ -16,6 +16,10 @@ const messagingConfiguration = {
     }
 }
 
+/**
+ * This method is invoked after this script file is successfully requested and
+ * loaded by `loader.js`
+ */
 const init = () => {
     initMessaging(messagingConfiguration)
 }
