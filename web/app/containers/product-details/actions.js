@@ -54,6 +54,7 @@ const submitCartFormSelector = createPropsSelector({
 
 /**
  * @param {Object} formValues form values of selected variant options
+ * @example
  * {
  *	"color": "8",
  *	"size": "6"
