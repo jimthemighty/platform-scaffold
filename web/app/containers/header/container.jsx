@@ -9,15 +9,16 @@ import throttle from 'lodash.throttle'
 import classnames from 'classnames'
 
 import * as headerActions from './actions'
-import * as miniCartActions from '../mini-cart/actions'
+import * as miniCartActions from '../../modals/mini-cart/actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {NAVIGATION_MODAL} from '../navigation/constants'
+import {NAVIGATION_MODAL} from '../../modals/constants'
 import * as selectors from './selectors'
-import {getCartSummaryCount} from '../../store/cart/selectors'
+import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
 
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Search from 'progressive-web-sdk/dist/components/search'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import NavigationAction from './partials/navigation-action'
 import HeaderTitle from './partials/header-title'
@@ -121,7 +122,7 @@ class Header extends React.Component {
                     onClear={clearSuggestions}
                     termSuggestions={searchSuggestions}
                     submitButtonProps={{
-                        className: 'c--secondary t-header__search-submit-button',
+                        className: 'pw--secondary t-header__search-submit-button',
                         children: searchIcon
                     }}
                     inputProps={{
@@ -164,7 +165,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    onMenuClick: () => openModal(NAVIGATION_MODAL),
+    onMenuClick: () => openModal(NAVIGATION_MODAL, UI_NAME.menu),
     onMiniCartClick: miniCartActions.requestOpenMiniCart,
     onSearchOpenClick: headerActions.openSearch,
     onSearchCloseClick: headerActions.closeSearch,

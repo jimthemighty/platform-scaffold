@@ -14,9 +14,11 @@ import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
 import {
     getMessagingSWVersion,
-    isLocalStorageAvailable,
     loadAndInitMessagingClient,
-    updateMessagingSWVersion
+    createGlobalMessagingClientInitPromise,
+    updateMessagingSWVersion,
+    isLocalStorageAvailable,
+    prefetchLink
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
 import ReactRegexes from './loader-routes'
@@ -47,80 +49,6 @@ const isSupportedBrowser = () => {
 }
 
 /**
- * Get the URL that should be used to load the service worker.
- * This is based on the SW_LOADER_PATH but may have additional
- * query parameters added that act as cachebreakers for the
- * Messaging part of the worker.
- * @returns String
- */
-const getServiceWorkerURL = () => {
-    const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
-    /**
-     * This needs to be based on whether this is a CDN environment, rather than
-     * a preview environment. `web/service-worker-loader.js` will use this value
-     * to determine whether it should load from a local development server, or
-     * from the CDN.
-     */
-    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}`
-
-    // In order to load the worker, we need to get the current Messaging
-    // PWA service-worker version so that we can include it in the URL
-    // (meaning that we will register a 'new' worker when that version
-    // number changes).
-    // The implementation here is designed to avoid adding an extra fetch
-    // and slowing down the *first* run of the app. On the first run, we
-    // will find nothing in localStorage, and return the URL without
-    // any Messaging-worker parameters, but we'll do an asynchronous
-    // fetch to update the parameters, which will then be used on the
-    // next run.
-
-    // We expect supported browsers to have local storage. If the browser
-    // does not, then we may assume we're running in some situation
-    // like incognito mode, in which case there is no point getting
-    // Messaging worker version data, we can just use the base URL.
-    if (!isLocalStorageAvailable()) {
-        return SW_LOADER_PATH
-    }
-
-    const workerPathElements = [SW_LOADER_PATH]
-
-    const swVersion = getMessagingSWVersion()
-    if (swVersion) {
-        workerPathElements.push(`msg_sw_version=${swVersion}`)
-    }
-
-    // Return the service worker path
-    return workerPathElements.join('&')
-}
-
-/**
- * Load the service worker
- * @returns Promise.<Boolean> true when the worker is loaded and ready
- */
-const loadWorker = () => (
-    navigator.serviceWorker.register(getServiceWorkerURL())
-        .then(() => navigator.serviceWorker.ready)
-        .then(() => true)
-        .catch(() => {
-        })
-)
-
-const asyncInitApp = () => {
-    window.webpackJsonpAsync = (module, exports, webpackRequire) => {
-        const runJsonpAsync = () => {
-            if (window.webpackJsonp) {
-                // Run app
-                window.webpackJsonp(module, exports, webpackRequire)
-            } else {
-                setTimeout(runJsonpAsync, 50)
-            }
-        }
-
-        runJsonpAsync()
-    }
-}
-
-/**
  * Do the preloading preparation for the Messaging client.
  * This includes any work that does not require a network fetch or
  * otherwise slow down initialization.
@@ -129,7 +57,7 @@ const asyncInitApp = () => {
  * Messaging PWA client. The Messaging service worker code is
  * still included, but won't be configured and will do nothing.
  */
-const setupMessagingClient = (serviceWorkerSupported) => {
+const setupMessagingClient = (serviceWorkerSupported, messagingEnabled) => {
     if ((!serviceWorkerSupported) || isRunningInAstro) {
         return
     }
@@ -153,7 +81,13 @@ const setupMessagingClient = (serviceWorkerSupported) => {
     }
 }
 
-const triggerAppStartEvent = () => {
+/**
+ * A setTimeout wraps this trigger function in order to control the exact
+ * timing that any tracking pixels are downloaded as the app initializes.
+ * More specifically, downloading of any tracking pixels should not delay
+ * the downloading of any other scripts (i.e. service workers, etc.)
+ */
+const triggerAppStartEvent = () => setTimeout(() => {
     // Collect timing put for when app has started loading in order to
     // determine % dropoff of users who don't make it to the "pageview" event.
     Sandy.init(window)
@@ -171,6 +105,75 @@ const triggerAppStartEvent = () => {
     // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client
     // We are restoring it here for now and will revisit this when we rewrite sandy tracking pixel client
     window.sandy.instance = Sandy
+}, 0)
+
+/**
+ * Get the URL that should be used to load the service worker.
+ * This is based on the SW_LOADER_PATH but may have additional
+ * query parameters added that act as cachebreakers for the
+ * Messaging part of the worker.
+ * @returns String
+ */
+const getServiceWorkerURL = () => {
+    //  This needs to be based on whether this is a CDN environment, rather than
+    //  a preview environment. `web/service-worker-loader.js` will use this value
+    //  to determine whether it should load from a local development server, or
+    //  from the CDN.
+    const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}`
+
+    const workerPathElements = [SW_LOADER_PATH]
+
+    // In order to load the worker, we need to get the current Messaging
+    // PWA service-worker version so that we can include it in the URL
+    // (meaning that we will register a 'new' worker when that version
+    // number changes).
+    // The implementation here is designed to avoid adding an extra fetch
+    // and slowing down the *first* run of the app. On the first run, we
+    // will find nothing in localStorage, and return the URL without
+    // any Messaging-worker parameters, but we'll do an asynchronous
+    // fetch to update the parameters, which will then be used on the
+    // next run.
+
+    // We expect supported browsers to have local storage. If the browser
+    // does not, then we may assume we're running in some situation
+    // like incognito mode, in which case there is no point getting
+    // Messaging worker version data, we can just use the base URL.
+    if (isLocalStorageAvailable()) {
+        const swVersion = getMessagingSWVersion()
+        if (swVersion) {
+            workerPathElements.push(`msg_sw_version=${swVersion}`)
+        }
+    }
+
+    // Return the service worker path
+    return workerPathElements.join('&')
+}
+
+/**
+ * Load the service worker
+ * @returns Promise.<Boolean> true when the worker is loaded and ready
+ */
+const loadWorker = () => (
+    navigator.serviceWorker.register(getServiceWorkerURL())
+        .then(() => navigator.serviceWorker.ready)
+        .then(() => true)
+        .catch(() => { /* We're intentially swallowing errors here */ })
+)
+
+const asyncInitApp = () => {
+    window.webpackJsonpAsync = (module, exports, webpackRequire) => {
+        const runJsonpAsync = () => {
+            if (window.webpackJsonp) {
+                // Run app
+                window.webpackJsonp(module, exports, webpackRequire)
+            } else {
+                setTimeout(runJsonpAsync, 50)
+            }
+        }
+
+        runJsonpAsync()
+    }
 }
 
 const attemptToInitializeApp = () => {
@@ -245,13 +248,21 @@ const attemptToInitializeApp = () => {
     reactTarget.className = 'react-target'
     body.appendChild(reactTarget)
 
+    /**
+     * This must be called before vendor.js is loaded (or before the Webpack
+     * chunk that contains Messaging React components is loaded)
+     *
+     * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
+     * which will be resolved or rejected later by the method `setupMessagingClient`
+     */
+    createGlobalMessagingClientInitPromise(messagingEnabled)
+
     // The following scripts are loaded async via document.write, in order
     // for the browser to increase the priority of these scripts. If the scripts
     // are loaded async, the browser will not consider them high priority and
     // queue them while waiting for other high priority resources to finish
     // loading. This delay can go all the way up to 5 seconds on a Moto G4 on a
     // 3G connection.
-
     loadScript({
         id: 'progressive-web-vendor',
         src: getAssetUrl('vendor.js'),
@@ -306,10 +317,13 @@ const attemptToInitializeApp = () => {
         ? loadWorker()
         : Promise.resolve(false)
     ).then((serviceWorkerSupported) => {
-
-        // Set up the Messaging client integration
-        setupMessagingClient(serviceWorkerSupported)
+        setupMessagingClient(serviceWorkerSupported, messagingEnabled)
     })
+
+    // Prefetch analytics - it's something that we will be downloading later,
+    // and thus we want to fetch it so execution is not delayed to prevent
+    // time to interactive from being delayed.
+    prefetchLink({href: '//www.google-analytics.com/analytics.js'})
 
     // We insert a <plaintext> tag at the end of loading the scripts, in order
     // to ensure that the original site does not execute anything.

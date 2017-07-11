@@ -17,6 +17,7 @@ import {getSavedAddresses} from '../../../store/checkout/shipping/selectors'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import ShippingAddressFields from './shipping-address-fields'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ShippingAddressForm = ({
     handleShowAddNewAddress,
@@ -68,6 +69,7 @@ const ShippingAddressForm = ({
                         type="radio"
                         noValidate
                         value={id}
+                        data-analytics-name={UI_NAME.savedAddress}
                     />
                 </ReduxForm.Field>
             </FieldRow>
@@ -104,6 +106,7 @@ const ShippingAddressForm = ({
                                 type="radio"
                                 noValidate
                                 value={ADD_NEW_ADDRESS_FIELD}
+                                data-analytics-name={UI_NAME.addNewAddress}
                             />
                         </ReduxForm.Field>
 

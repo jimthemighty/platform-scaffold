@@ -8,7 +8,6 @@ import {isRunningInAstro} from '../../utils/astro-integration'
 import ProductListHeader from './partials/product-list-header'
 import SearchResultHeader from './partials/search-result-header'
 import ProductListContents from './partials/product-list-contents'
-import ProductListFilterModal from './partials/product-list-filter-modal'
 
 const ProductList = ({route: {routeName}}) => {
     return (
@@ -23,7 +22,6 @@ const ProductList = ({route: {routeName}}) => {
                 </div>
             }
             <ProductListContents routeName={routeName} />
-            <ProductListFilterModal />
         </div>
     )
 }

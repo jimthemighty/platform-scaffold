@@ -6,8 +6,8 @@
 import {submitRegisterForm} from './actions'
 import Immutable from 'immutable'
 
-jest.mock('../../integration-manager/account/commands')
-import {registerUser, updateShippingAddress} from '../../integration-manager/account/commands'
+jest.mock('progressive-web-sdk/dist/integration-manager/account/commands')
+import {registerUser, updateShippingAddress} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 jest.mock('progressive-web-sdk/dist/store/notifications/actions')
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {CONFIRMATION_FORM_NAME} from '../../store/form/constants'
