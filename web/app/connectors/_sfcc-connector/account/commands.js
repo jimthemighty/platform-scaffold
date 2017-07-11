@@ -192,3 +192,25 @@ export const initAccountInfoPage = () => (dispatch) => {
             dispatch(recieveAccountInfoUIData((result)))
         })
 }
+
+
+export const updateAccountInfo = ({names, email}) => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    const requestBody = {
+        first_name: names.split(' ')[0],
+        last_name: names.split(' ')[1],
+        email
+    }
+
+    return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'POST"'})
+        .then(({first_name, last_name, login}) => {
+            const result = {
+                accountFormInfo: {
+                    names: `${first_name} ${last_name}`,
+                    email: login
+                }
+            }
+            dispatch(recieveAccountInfoUIData((result)))
+        })
+}
