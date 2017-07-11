@@ -4,7 +4,9 @@
 // @TODO: Come back and clean up the below selectors when working on onboarding.
 
 .t-onboarding {
-    .c-carousel,
+    height: 100vh;
+
+    .pw-carousel,
     .carousel-item {
         height: 100%;
     }
@@ -51,7 +53,7 @@
         padding-top: 0;
     }
 
-    .c-carousel__inner {
+    .pw-carousel__inner {
         height: 95%;
     }
 }

@@ -7,10 +7,10 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getPaymentBillingFormValues} from '../../store/form/selectors'
 import {getEmailAddress} from '../../store/checkout/selectors'
 import {getShippingAddress} from '../../store/checkout/shipping/selectors'
-import {submitPayment as submitPaymentCommand, initCheckoutPaymentPage} from '../../integration-manager/checkout/commands'
+import {submitPayment as submitPaymentCommand, initCheckoutPaymentPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {splitFullName} from '../../utils/utils'
 import {handleCartExpiryError} from '../app/actions'
-import {receiveBillingAddress, receiveBillingSameAsShipping} from '../../integration-manager/checkout/results'
+import {receiveBillingAddress, receiveBillingSameAsShipping} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 export const receiveContents = createAction('Received CheckoutPayment Contents')
 export const toggleLoadingState = createAction('Toggled the spinner inside of "Place Order" button', ['isLoading'])

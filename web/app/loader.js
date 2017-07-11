@@ -15,9 +15,11 @@ import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
 import {
     getMessagingSWVersion,
-    isLocalStorageAvailable,
     loadAndInitMessagingClient,
-    updateMessagingSWVersion
+    createGlobalMessagingClientInitPromise,
+    updateMessagingSWVersion,
+    isLocalStorageAvailable,
+    prefetchLink
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
 import ReactRegexes from './loader-routes'
@@ -75,6 +77,10 @@ const isSupportedNonPWABrowser = () => {
  * @returns String
  */
 const getServiceWorkerURL = (pwaMode) => {
+    //  This needs to be based on whether this is a CDN environment, rather than
+    //  a preview environment. `web/service-worker-loader.js` will use this value
+    //  to determine whether it should load from a local development server, or
+    //  from the CDN.
     const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
     /**
      * This needs to be based on whether this is a CDN environment, rather than
@@ -87,6 +93,8 @@ const getServiceWorkerURL = (pwaMode) => {
     // The 'pwa=1' or 'pwa=0' parameter in this URL should not change format - the
     // worker does a regex test to match the exact string.
     const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}&pwa=${pwaMode ? 1 : 0}`
+
+    const workerPathElements = [SW_LOADER_PATH]
 
     // In order to load the worker, we need to get the current Messaging
     // PWA service-worker version so that we can include it in the URL
@@ -103,15 +111,11 @@ const getServiceWorkerURL = (pwaMode) => {
     // does not, then we may assume we're running in some situation
     // like incognito mode, in which case there is no point getting
     // Messaging worker version data, we can just use the base URL.
-    if (!isLocalStorageAvailable()) {
-        return SW_LOADER_PATH
-    }
-
-    const workerPathElements = [SW_LOADER_PATH]
-
-    const swVersion = getMessagingSWVersion()
-    if (swVersion) {
-        workerPathElements.push(`msg_sw_version=${swVersion}`)
+    if (isLocalStorageAvailable()) {
+        const swVersion = getMessagingSWVersion()
+        if (swVersion) {
+            workerPathElements.push(`msg_sw_version=${swVersion}`)
+        }
     }
 
     // Return the service worker path
@@ -129,6 +133,7 @@ const loadWorker = (pwaMode) => (
     navigator.serviceWorker.register(getServiceWorkerURL(pwaMode))
         .then(() => navigator.serviceWorker.ready)
         .then(() => true)
+        // We're intentionally swallowing errors here
         .catch(() => false)
 )
 
@@ -163,7 +168,7 @@ const asyncInitApp = () => {
  * that would lead to console warnings about uncaught rejections)
  */
 const setupMessagingClient = (serviceWorkerSupported) => {
-    if (serviceWorkerSupported &&  (!isRunningInAstro)) {
+    if (serviceWorkerSupported && (!isRunningInAstro)) {
         // We need to create window.Mobify.WebPush.PWAClient
         // at this point. If a project is configured to use
         // non-progressive Messaging, it will load the
@@ -188,27 +193,37 @@ const setupMessagingClient = (serviceWorkerSupported) => {
     return Promise.resolve(null)
 }
 
+/**
+ * A setTimeout wraps this trigger function in order to control the exact
+ * timing that any tracking pixels are downloaded as the app initializes.
+ * More specifically, downloading of any tracking pixels should not delay
+ * the downloading of any other scripts (i.e. service workers, etc.)
+ */
 const triggerAppStartEvent = (pwaMode) => {
-    Sandy.init(window)
-    Sandy.create(AJS_SLUG, 'auto') // eslint-disable-line no-undef
-    const tracker = Sandy.trackers[Sandy.DEFAULT_TRACKER_NAME]
-    tracker.set('mobify_adapted', pwaMode)
-    tracker.set('platform', pwaMode ? 'PWA' : 'nonPWA')
+    setTimeout(
+        () => {
+            Sandy.init(window)
+            Sandy.create(AJS_SLUG, 'auto') // eslint-disable-line no-undef
+            const tracker = Sandy.trackers[Sandy.DEFAULT_TRACKER_NAME]
+            tracker.set('mobify_adapted', pwaMode)
+            tracker.set('platform', pwaMode ? 'PWA' : 'nonPWA')
 
-    if (pwaMode) {
-        // Collect timing point for when app has started loading in order to
-        // determine % dropoff of users who don't make it to the "pageview" event.
-        const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
-        const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
-        const timingStart = navigationStart || mobifyStart
-        if (timingStart) {
-            window.sandy('send', 'timing', 'timing', 'appStart', '', Date.now() - timingStart)
-        }
-    }
+            if (pwaMode) {
+                // Collect timing point for when app has started loading in order to
+                // determine % dropoff of users who don't make it to the "pageview" event.
+                const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
+                const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
+                const timingStart = navigationStart || mobifyStart
+                if (timingStart) {
+                    window.sandy('send', 'timing', 'timing', 'appStart', '', Date.now() - timingStart)
+                }
+            }
 
-    // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client
-    // We are restoring it here for now and will revisit this when we rewrite sandy tracking pixel client
-    window.sandy.instance = Sandy
+            // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client
+            // We are restoring it here for now and will revisit this when we rewrite sandy tracking pixel client
+            window.sandy.instance = Sandy
+        }, 0
+    )
 }
 
 const attemptToInitializeApp = () => {
@@ -283,13 +298,21 @@ const attemptToInitializeApp = () => {
     reactTarget.className = 'react-target'
     body.appendChild(reactTarget)
 
+    /**
+     * This must be called before vendor.js is loaded (or before the Webpack
+     * chunk that contains Messaging React components is loaded)
+     *
+     * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
+     * which will be resolved or rejected later by the method `setupMessagingClient`
+     */
+    createGlobalMessagingClientInitPromise(messagingEnabled)
+
     // The following scripts are loaded async via document.write, in order
     // for the browser to increase the priority of these scripts. If the scripts
     // are loaded async, the browser will not consider them high priority and
     // queue them while waiting for other high priority resources to finish
     // loading. This delay can go all the way up to 5 seconds on a Moto G4 on a
     // 3G connection.
-
     loadScript({
         id: 'progressive-web-vendor',
         src: getAssetUrl('vendor.js'),
@@ -344,9 +367,15 @@ const attemptToInitializeApp = () => {
         ? loadWorker(true)
         : Promise.resolve(false)
     ).then((serviceWorkerSupported) => {
-        // Set up the Messaging client integration
-        setupMessagingClient(serviceWorkerSupported)
+
+
+        setupMessagingClient(serviceWorkerSupported, messagingEnabled)
     })
+
+    // Prefetch analytics - it's something that we will be downloading later,
+    // and thus we want to fetch it so execution is not delayed to prevent
+    // time to interactive from being delayed.
+    prefetchLink({href: '//www.google-analytics.com/analytics.js'})
 
     // We insert a <plaintext> tag at the end of loading the scripts, in order
     // to ensure that the original site does not execute anything.

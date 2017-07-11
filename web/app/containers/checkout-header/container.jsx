@@ -12,6 +12,7 @@ import {getIsLoggedIn} from '../../store/user/selectors'
 import Button from 'progressive-web-sdk/dist/components/button'
 import {HeaderBar, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const CheckoutHeader = function({headerHasSignIn, isLoggedIn}) {
     if (isRunningInAstro) {
@@ -35,6 +36,7 @@ const CheckoutHeader = function({headerHasSignIn, isLoggedIn}) {
                             className="u-text-letter-spacing-normal"
                             href="/customer/account/login/"
                             innerClassName="u-color-neutral-10"
+                            data-analytics-name={UI_NAME.goToSignIn}
                             >
                             <Icon name="user" className="u-margin-end-sm" />
                             <span>Sign in</span>

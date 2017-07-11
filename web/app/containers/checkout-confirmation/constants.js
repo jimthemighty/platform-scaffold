@@ -7,5 +7,4 @@ export const GRID_SETTINGS = {
     desktop: {span: 6, pre: 3, post: 3}
 }
 
-export const CHECKOUT_CONFIRMATION_MODAL = 'checkout-confirmation-modal'
 export const CHECKOUT_CONFIRMATION_REGISTRATION_FAILED = 'checkount confirmation registration failed'

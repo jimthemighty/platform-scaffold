@@ -44,4 +44,31 @@ PushMessaging.prototype.acceptDefaultAsk = function() {
     return this
 }
 
+PushMessaging.prototype.assertSubscribed = function() {
+    const self = this
+    this.browser
+        .executeAsync((_, done) => {
+            // 10 attempts; 200ms after each failure - 2 seconds total
+            let attempt = 1
+
+            const checkForSubscription = () => {
+                const status = window.Progressive.MessagingClient.LocalStorage.get('mobifyMessagingClientSubscriptionStatus')
+
+                if (status === 'subscribed' || attempt >= 10) {
+                    done(status)
+                } else {
+                    attempt++
+                    setTimeout(checkForSubscription, 200)
+                }
+            }
+
+            checkForSubscription()
+        },
+        ['unusedValue'], // see https://github.com/nightwatchjs/nightwatch/issues/616
+        ({value}) => {
+            self.browser.assert.equal(value, 'subscribed')
+        })
+    return this
+}
+
 export default PushMessaging
