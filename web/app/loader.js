@@ -486,6 +486,7 @@ if (shouldPreview()) {
                 // we want to continue to load and setup the non-pwa
                 // script anyway, whether Messaging succeeds or not.
                 setupMessagingClient(results[0])
+                    .then((state) => loaderLog(`Messaging init complete with state ${JSON.stringify(state)}`))
 
                 // This load will execute in parallel with setup of the
                 // Messaging client.
