@@ -29,8 +29,8 @@ const AccountInfoForm = ({handleSubmit, onSubmit}) => {
                 </div>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="t-account-info__section">
-                    Change name / email
+                <div className="t-account-info__section u-bg-color-neutral-10 u-padding-top-lg u-padding-bottom-md u-padding-start-md u-padding-end-md u-border-top u-border-bottom">
+                    <h2 className="u-h5 u-text-family">Change name / email</h2>
                 </div>
                 <div className="t-account-info__section-content u-padding-md">
                     <FieldRow>
@@ -58,8 +58,8 @@ const AccountInfoForm = ({handleSubmit, onSubmit}) => {
                         </ReduxForm.Field>
                     </FieldRow>
                 </div>
-                <div className="t-account-info__section">
-                    Change password (Optional)
+                <div className="t-account-info__section u-bg-color-neutral-10 u-padding-top-lg u-padding-bottom-md u-padding-start-md u-padding-end-md u-border-top u-border-bottom">
+                    <h2 className="u-h5 u-text-family">Change password (Optional)</h2>
                 </div>
                 <div className="t-account-info__section-content u-padding-md">
                     <FieldRow>
