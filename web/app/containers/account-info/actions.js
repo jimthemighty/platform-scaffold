@@ -14,12 +14,30 @@ export const receiveData = createAction('Receive AccountInfo data')
 export const changeTitle = createAction('Change AccountInfo title', 'title')
 
 export const submitAccountInfoForm = (formValues) => (dispatch) => {
-    const {currentPassword, newPassword, names} = formValues
+    const {currentPassword, newPassword, names, email} = formValues
+
+
+    if (!validateFullName(names)) {
+        return Promise.reject(new SubmissionError({
+            _error: {
+                names: 'Enter a different a valid full name'
+            }
+        }))
+    }
+
+    if (!(currentPassword && newPassword && email)) {
+        return Promise.reject(new SubmissionError({
+            _error: {
+                email: 'Please enter an email'
+            }
+        }))
+    }
+
 
     if (currentPassword && !newPassword) {
         return Promise.reject(new SubmissionError({
             _error: {
-                newPassword: 'please enter your new password'
+                newPassword: 'Please enter a new password'
             }
         }))
     }
@@ -40,19 +58,19 @@ export const submitAccountInfoForm = (formValues) => (dispatch) => {
         }))
     }
 
-    if (validateFullName(names)) {
-        dispatch(updateAccountInfo(formValues))
-            .then(() => dispatch(updateAccountPassword(formValues)))
-            .then(() => dispatch(addNotification(
-                    'accountInfoUpdated',
-                    'Successfully updated account information',
-                    true
-                )))
-    }
 
-    return Promise.reject(new SubmissionError({
-        _error: {
-            newPassword: 'please enter a valid full name'
-        }
-    }))
+    return dispatch(updateAccountInfo(formValues))
+        .then(() => dispatch(updateAccountPassword(formValues)))
+        .then(() => dispatch(addNotification(
+                'accountInfoUpdated',
+                'Successfully updated account information',
+                true
+            )))
+        .catch((err) => {
+            dispatch(addNotification(
+                'accountInfoError',
+                err.errors._error,
+                true
+            ))
+        })
 }
