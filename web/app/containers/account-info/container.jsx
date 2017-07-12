@@ -38,6 +38,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="First & Last Name"
                             name="names"
+                            error={error && error.names}
                         >
                             <input
                                 className="t-account-info-input"
@@ -50,6 +51,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="Email"
                             name="email"
+                            error={error && error.email}
                         >
                             <input
                                 className="t-account-info-input"
