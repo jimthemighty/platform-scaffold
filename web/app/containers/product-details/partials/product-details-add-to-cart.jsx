@@ -54,20 +54,22 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                     iconClassName="pw--small u-margin-end"
                     title={isInCheckout ? 'Update Cart' : 'Add to Cart'}
                     showIconText={true}
-                    className="pw--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"
+                    className="pw--primary u-width-full u-text-uppercase t-product-details__add-to-cart"
                     disabled={disabled}
                     data-analytics-name={UI_NAME.addToCart}
                 />
             }
-            <Button
-                icon="like"
-                title="Wishlist"
-                iconClassName="pw--small u-margin-end"
-                showIconText={true}
-                className="pw--tertiary u-width-full"
-                onClick={addToWishlist}
-                data-analytics-name={UI_NAME.wishlist}
-            />
+            <div className="u-flexbox u-margin-bottom-lg">
+                <Button
+                    icon="like"
+                    title="Wishlist"
+                    iconClassName="u-margin-end"
+                    showIconText={true}
+                    className="u-border-light u-color-brand u-text-letter-spacing-normal  u-width-full"
+                    onClick={addToWishlist}
+                    data-analytics-name={UI_NAME.wishlist}
+                />
+            </div>
         </form>
     )
 }
