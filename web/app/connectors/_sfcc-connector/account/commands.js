@@ -217,3 +217,13 @@ export const updateAccountInfo = ({names, email}) => (dispatch) => {
             dispatch(recieveAccountInfoUIData((result)))
         })
 }
+
+export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    const requestBody = {
+        current_password: currentPassword,
+        password: newPassword
+    }
+    return makeApiJsonRequest(`/customers/${customerId}/password`, requestBody, {method: 'PUT'})
+}

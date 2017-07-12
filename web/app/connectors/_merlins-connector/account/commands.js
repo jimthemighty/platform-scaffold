@@ -201,17 +201,17 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 }
 
 /* eslint-disable camelcase */
-export const updateAccountInfo = ({names, email, current_password, new_password}) => (dispatch, getState) => {
+export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
-debugger
-debugger
     const formData = {
         firstname: names.split(' ')[0],
         lastname: names.split(' ')[1],
         email,
-        current_password: current_password ? current_password : '',
-        new_password: new_password ? new_password : '',
+        change_password: currentPassword && newPassword ? 1 : '',
+        current_password: currentPassword ? currentPassword : '',
+        password: newPassword ? newPassword : '',
+        password_confirmation: newPassword ? newPassword : '',
         form_key: formKey
     }
 
