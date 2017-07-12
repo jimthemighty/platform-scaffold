@@ -25,7 +25,7 @@ deployment:
         commands:
             - cd web
             - npm install
-            - npm run save-credentials -u "${MOBIFY_CLIENT_USER}" -k "${MOBIFY_CLIENT_API_KEY}"
+            - npm run save-credentials -- -u "${MOBIFY_CLIENT_USER}" -k "${MOBIFY_CLIENT_API_KEY}"
             - npm run push -- -t ci-develop -m "CI build \#${CIRCLE_BUILD_NUM} on ${CIRCLE_BRANCH} (${CIRCLE_SHA1})"
 experimental:
     notify:
