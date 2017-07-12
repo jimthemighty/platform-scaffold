@@ -23,7 +23,7 @@ CIRCLE_BRANCH=${CIRCLE_BRANCH:?"Need to set CIRCLE_BRANCH"}
 CIRCLE_SHA1=${CIRCLE_SHA1:?"Need to set CIRCLE_SHA1"}
 
 # Upload the bundle to Cloud *to a separate project*:
-npm run save_credentials -- \
+npm run save-credentials -- \
     --user "${MOBIFY_CLIENT_USER}" \
     --key "${MOBIFY_CLIENT_API_KEY}"
 
