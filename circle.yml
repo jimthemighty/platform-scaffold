@@ -19,6 +19,12 @@ test:
     post:
         - ./scripts/upload-artifacts-ci.sh:
             pwd: web
+deployment:
+    bundle:
+        branch: [develop, release-*]
+        commands:
+            - scripts/ci-deploy.sh:
+                pwd: web
 experimental:
     notify:
         branches:
