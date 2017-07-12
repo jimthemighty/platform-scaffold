@@ -8,10 +8,11 @@ import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {getItemQuantity} from './selectors'
-import {getCartURL} from '../app/selectors'
+import {getCartURL, getWishlistURL, getSignInURL} from '../app/selectors'
 import {getCurrentPathKey} from 'progressive-web-sdk/dist/store/app/selectors'
 import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
+import {getIsLoggedIn} from '../../store/user/selectors'
 
 import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {getProductVariantData, addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
@@ -22,6 +23,7 @@ import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 
+export const setIsWishlistAdded = createAction('Set is wishlist added', ['isWishlistAdded'])
 export const receiveNewItemQuantity = createAction('Set item quantity')
 export const setItemQuantity = (quantity) => (dispatch, getStore) => {
     dispatch(receiveNewItemQuantity({
@@ -43,6 +45,15 @@ export const goToCheckout = () => (dispatch, getState) => {
     } else {
         browserHistory.push(getCartURL(getState()))
     }
+}
+
+export const goToWishlist = () => (dispatch, getState) => {
+    dispatch(setIsWishlistAdded(false))
+    dispatch(closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
+
+    browserHistory.push({
+        pathname: getWishlistURL(getState())
+    })
 }
 
 const submitCartFormSelector = createPropsSelector({
@@ -71,7 +82,10 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     dispatch(addToCartStarted())
 
     return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], qty, productId) : addToCart(productId, qty))
-        .then(() => dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart)))
+        .then(() => {
+            dispatch(setIsWishlistAdded(false))
+            return dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
+        })
         .catch((error) => {
             console.error('Error adding to cart', error)
             return dispatch(addNotification(
@@ -100,12 +114,28 @@ export const onVariationChange = () => (dispatch, getStore) => {
 }
 
 
+const addToWishlistSelector = createPropsSelector({
+    productID: getCurrentProductId,
+    isLoggedIn: getIsLoggedIn,
+    signInURL: getSignInURL
+})
+
 export const addToWishlist = () => (dispatch, getState) => {
-    const productID = getCurrentProductId(getState())
+    const {productID, isLoggedIn, signInURL} = addToWishlistSelector(getState())
     // check if user is logged in
     // add loading state to wishlist btn
+    if (!isLoggedIn) {
+        browserHistory.push({
+            pathname: signInURL
+        })
+        return Promise.resolve()
+    }
+
     return dispatch(addItemToWishlist(productID, window.location.href))
-        .then(() => console.log('**** ITEM ADDED TO WISHLIST ****'))
+        .then(() => {
+            dispatch(setIsWishlistAdded(true))
+            return dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
+        })
         .catch((error) => {
             if (/Failed to fetch|Add Request Failed|Unable to add item/i.test(error.message)) {
                 dispatch(addNotification(

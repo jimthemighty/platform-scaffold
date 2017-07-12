@@ -32,6 +32,7 @@ export const getSignInURL = () => `${getBaseURL()}Account-Show`
 export const getSignOutURL = () => `${getBaseURL()}Logout-Logout`
 export const getCheckoutShippingURL = () => `${getBaseURL()}COShipping-Start`
 export const getCartURL = () => `${getBaseURL()}Cart-Show`
+export const getWishlistURL = () => `${getBaseURL()}Wishlist-Show`
 export const getPaymentURL = () => `${getBaseURL()}COBilling-Start`
 export const getConfirmationURL = () => `${getBaseURL()}COSummary-Submit`
 

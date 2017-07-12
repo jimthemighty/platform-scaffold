@@ -8,13 +8,15 @@ import {
     receiveSearchSuggestions,
     setLoggedIn,
     setCheckoutShippingURL,
-    setCartURL
+    setCartURL,
+    setSignInURL,
+    setWishlistURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {parseCategories, parseSearchSuggestions} from '../parsers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
-import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL} from '../config'
+import {getSignInURL, getCheckoutShippingURL, getCartURL, buildSearchURL, getWishlistURL} from '../config'
 import {SIGNED_IN_NAV_ITEM_TYPE, GUEST_NAV_ITEM_TYPE} from '../../../modals/navigation/constants'
 
 
@@ -78,6 +80,8 @@ export const initApp = () => (dispatch) => {
             const customerData = utils.getCustomerData(utils.getAuthToken())
             dispatch(setCheckoutShippingURL(getCheckoutShippingURL()))
             dispatch(setCartURL(getCartURL()))
+            dispatch(setWishlistURL(getWishlistURL()))
+            dispatch(setSignInURL(getSignInURL()))
             if (!customerData.guest) {
                 dispatch(setLoggedIn(true))
                 return utils.makeApiRequest(`/customers/${customerData.customer_id}`, {method: 'GET'})
