@@ -39,7 +39,7 @@ Occasionally when you are developing a feature in the SDK it may be useful to ha
   _**Note**: The version used in this step must match the version specified in step #2 and the tag used in step #3!_
 5. Commit the change and push so that CircleCI runs a build. CircleCI will install the "beta" version of the progressive-web-sdk npm module which is your in-progress work.
 
-Once you are done testing it is good practice to unpublish the 
+This will leave these "beta" npm modules sitting around in the npm registry but that is probably safe as you can't use it unless you specifically install it by tag name. We could investigate `npm unpublish` if we're concerned about that. 
   
 ## Swapping Integration Managers
 
