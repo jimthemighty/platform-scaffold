@@ -15,7 +15,6 @@ import {isRunningInAstro} from './utils/astro-integration'
 import {
     createGlobalMessagingClientInitPromise,
     getMessagingSWVersion,
-    isLocalStorageAvailable,
     loadAndInitMessagingClient,
     loaderLog,
     prefetchLink,

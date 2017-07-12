@@ -5,8 +5,7 @@
 /* global PROJECT_SLUG, DEBUG */
 /* eslint-env worker, serviceworker */
 
-import toolbox from 'sw-toolbox'
-import worker from 'progressive-web-sdk/dist/worker/main'
+import {worker, getToolbox} from 'progressive-web-sdk/dist/worker/main'
 
 // Check if we're in PWA mode or not. The pwa parameter in the URL used
 // to register this worker will tell us. We reverse the logic here, so that
@@ -34,11 +33,10 @@ if (!isRunningIn.app()) {
         // We must pass the *same* toolbox module instance to the
         // Messaging worker as is used in the PWA support code. The
         // Messaging worker script is webpacked separately, so it
-        // has its own copies of imported modules. We therefore
-        // pass it a reference to our copy of sw-toolbox.
+        // has its own copies of imported modules.
         self.MessagingServiceWorker.messagingWorkerMain(
             {
-                toolbox,
+                toolbox: getToolbox(),
                 isDebug: DEBUG
             }
         )
