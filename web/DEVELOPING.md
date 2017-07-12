@@ -25,19 +25,26 @@ npm run dev
 Occasionally when you are developing a feature in the SDK it may be useful to have CircleCI do a full build using your branch of the SDK. To do this you will need to publish a custom version of the `progressive-web-sdk` node module based on your branch:
 
 1. Check out your branch of the SDK
+
 2. Ensure that the SDK's `package.json` is newer than the currently published version (you double-check what is "latest" [here](https://www.npmjs.com/package/progressive-web-sdk).). Bump the *patch* up if you need to.
    For example: if npmjs.com shows the SDK being at v0.17.2 you would change the `package.json`'s version to be 0.17.3.
+
 3. Run `npm publish --tag betaX` (where "`X`" is an increasing integer as you test)
+
 4. Update the scaffold `package.json` so that the `"progressive-web-sdk"` dependency is specified as follows:
-  ```json
-  "devDependencies": {
-      ...
-      "progressive-web-sdk": "0.17.0@betaX"
-      ...
-  }
-  ```
+   ```json
+   "devDependencies": {
+       ...
+       "progressive-web-sdk": "0.17.0@betaX"
+       ...
+   }
+   ```
+   
   _**Note**: The version used in this step must match the version specified in step #2 and the tag used in step #3!_
+  
 5. Commit the change and push so that CircleCI runs a build. CircleCI will install the "beta" version of the progressive-web-sdk npm module which is your in-progress work.
+
+_**Note**: You will receive an error when publishing the beta package if another developer is also testing SDK changes with the scaffold and has used the number you chose for the betaX. If that happens you can either just try the next number (so if you tried @beta1 and it failed, try @beta2) or you can jump on Slack and ask what the last-numbered @beta is.
 
 This will leave these "beta" npm modules sitting around in the npm registry but that is probably safe as you can't use it unless you specifically install it by tag name. We could investigate `npm unpublish` if we're concerned about that. 
   
