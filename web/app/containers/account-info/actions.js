@@ -15,49 +15,37 @@ export const changeTitle = createAction('Change AccountInfo title', 'title')
 
 export const submitAccountInfoForm = (formValues) => (dispatch) => {
     const {currentPassword, newPassword, names, email} = formValues
-
+    const errors = {}
 
     if (!validateFullName(names)) {
-        return Promise.reject(new SubmissionError({
-            _error: {
-                names: 'Enter a different a valid full name'
-            }
-        }))
+        errors.names = 'Enter a valid full name'
     }
 
-    if (!(currentPassword && newPassword && email)) {
-        return Promise.reject(new SubmissionError({
-            _error: {
-                email: 'Please enter an email'
-            }
-        }))
+    if (!email) {
+        errors.email = 'Please enter an email'
     }
 
 
     if (currentPassword && !newPassword) {
-        return Promise.reject(new SubmissionError({
-            _error: {
-                newPassword: 'Please enter a new password'
-            }
-        }))
+        errors.newPassword = 'Please enter a new password'
     }
 
     if (!currentPassword && newPassword) {
-        return Promise.reject(new SubmissionError({
-            _error: {
-                currentPassword: 'Please enter your current password'
-            }
-        }))
+        errors.currentPassword = 'Please enter your current password'
     }
 
-    if (currentPassword === newPassword) {
+
+    if (Object.keys(errors).length) {
+        return Promise.reject(new SubmissionError(errors))
+    }
+
+    if (currentPassword && newPassword && currentPassword === newPassword) {
         return Promise.reject(new SubmissionError({
             _error: {
                 newPassword: 'Enter a different new password'
             }
         }))
     }
-
 
     return dispatch(updateAccountInfo(formValues))
         .then(() => dispatch(updateAccountPassword(formValues)))
