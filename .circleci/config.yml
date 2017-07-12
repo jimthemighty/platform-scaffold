@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
-    workDir: /home/ubuntu/platform-scaffold/
+    workDir: /home/ubuntu/platform-scaffold/web
     steps:
       - checkout
       - run:
@@ -15,14 +15,14 @@ jobs:
             - /home/ubuntu/platform-scaffold/web/node_modules
       - run:
           name: Install Dependencies
-          command: cd web && npm install
+          command: npm install
       - save_cache:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
       - run:
           name: Accept Cert
-          command: bash ./accept-cert-ci.sh
+          command: bash ./scripts/accept-cert-ci.sh
   test:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
