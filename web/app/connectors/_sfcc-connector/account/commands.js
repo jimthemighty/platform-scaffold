@@ -226,4 +226,7 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
         password: newPassword
     }
     return makeApiJsonRequest(`/customers/${customerId}/password`, requestBody, {method: 'PUT'})
+        .catch(() => {
+            throw new SubmissionError({_error: 'Some error message'})
+        })
 }

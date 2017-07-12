@@ -17,7 +17,7 @@ import {submitAccountInfoForm} from './actions'
 import {getAccountInfoInitialValues} from './selectors'
 // import * as accountInfoActions from './actions'
 
-const AccountInfoForm = ({handleSubmit, onSubmit}) => {
+const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
     return (
         <div className="t-account-info">
             <div className="t-account-info__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
@@ -95,6 +95,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit}) => {
 }
 
 AccountInfoForm.propTypes = {
+    error: PropTypes.object,
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func
 }

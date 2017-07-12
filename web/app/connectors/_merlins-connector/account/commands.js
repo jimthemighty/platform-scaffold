@@ -217,6 +217,9 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
 
     dispatch(recieveAccountInfoUIData({accountFormInfo: {names, email}}))
     return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
+        .catch(() => {
+            throw new SubmissionError({_error: 'Some error message'})
+        })
 }
 
 
