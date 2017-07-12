@@ -12,14 +12,23 @@ const selectors = {
 const ProductDetails = function(browser) {
     this.browser = browser
     this.selectors = selectors
+    this.inStock = true
 }
 
 ProductDetails.prototype.addItemToCart = function() {
     // Add an item to the cart
+    const self = this
     this.browser
         .log('Adding item to cart')
-        .waitForElementVisible(selectors.addItem)
-        .click(selectors.addItem)
+        .element('css selector', selectors.addItem, (result) => {
+            if (result.value && result.value.ELEMENT) {
+                self.browser
+                    .waitForElementVisible(selectors.addItem)
+                    .click(selectors.addItem)
+            } else {
+                self.inStock = false
+            }
+        })
         .waitUntilMobified()
     return this
 }
