@@ -27,6 +27,14 @@ npm run save-credentials -- \
     --user "${MOBIFY_CLIENT_USER}" \
     --key "${MOBIFY_CLIENT_API_KEY}"
 
+MESSAGE="build #${CIRCLE_BUILD_NUM} on ${CIRCLE_BRANCH} (${CIRCLE_SHA1})"
+
+if [ "$CIRCLE_BRANCH" == "develop" ]; then
+    MESSAGE="CI $MESSAGE"
+else
+    MESSAGE="Release $MESSAGE"
+fi
+
 npm run push -- \
-    --message "CI build #${CIRCLE_BUILD_NUM} on ${CIRCLE_BRANCH} (${CIRCLE_SHA1})" \
+    --message "$MESSAGE" \
     --target "ci-$CIRCLE_BRANCH"
