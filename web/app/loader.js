@@ -469,7 +469,10 @@ if (shouldPreview()) {
                 // resolved when setupMessagingClient completes.
                 createGlobalMessagingClientInitPromise(messagingEnabled)
 
-                const completeSetup = () => {
+                // We're loaded in a script located in <head> but we need to inject
+                // scripts using `loadScript` which places them in <body> - so
+                // we must wait until <body> exists
+                waitForBody().then(() => {
                     loaderLog('Completing setup for nonPWA mode')
                     // Set up the Messaging client integration (we do this after
                     // analytics is set up, so that window.Sandy.instance is
@@ -490,24 +493,13 @@ if (shouldPreview()) {
                         // loaded and initialized, and the non-pwa.js script has
                         // been loaded. We can now init the non-pwa script
                         .then(() => window.Mobify.NonPWA.init())
-                }
-
-                // We're loaded in a script located in <head> but we need to inject
-                // scripts using `loadScript` which places them in <body> - so
-                // we must wait until <body> exists
-                if (document.readyState === 'interactive') {
-                    loaderLog('Calling completeSetup directly...')
-                    completeSetup()
-                } else {
-                    loaderLog('Calling completeSetup on DCL...')
-                    document.addEventListener('DOMContentLoaded', completeSetup)
-                }
+                })
             })
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
         waitForBody().then(() => {
-                loadScript({
+            loadScript({
                 id: 'ajs',
                 src: `https://a.mobify.com/${AJS_SLUG}/a.js`
             })
