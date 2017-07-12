@@ -28,7 +28,7 @@ export const getCategoryProductIds = createGetSelector(getSelectedCategory, 'pro
 export const getCategoryItemCount = createGetSelector(getSelectedCategory, 'itemCount')
 export const getCategoryTitle = createGetSelector(getCategory, 'title')
 export const getCategoryParentID = createGetSelector(getCategory, 'parentId', null)
-export const getCategorySearchTerm = createGetSelector(getSelectedCategory, 'searchTerm')
+export const getCategorySearchTerm = createGetSelector(getCategory, 'searchTerm')
 export const getCategoryCustomContent = createGetSelector(getSelectedCategory, 'custom', Immutable.Map())
 export const getCategoryDescription = createGetSelector(getSelectedCategory, 'description')
 
