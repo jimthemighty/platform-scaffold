@@ -39,6 +39,8 @@ PushMessaging.prototype.acceptDefaultAsk = function() {
                     .waitForElementVisible(selectors.yesPlease)
                     .click(selectors.yesPlease)
                     .waitForElementNotPresent(selectors.yesPlease)
+
+                self.assertSubscribed()
             }
         })
     return this
