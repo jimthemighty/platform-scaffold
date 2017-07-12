@@ -13,7 +13,7 @@ import {createOrderAddressObject} from '../checkout/utils'
 import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 
-import {getHomeURL, getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
+import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
 
 const initLoginData = () => (dispatch) => {

@@ -59,7 +59,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit}) => {
                     </FieldRow>
                 </div>
                 <div className="t-account-info__section u-bg-color-neutral-10 u-padding-top-lg u-padding-bottom-md u-padding-start-md u-padding-end-md u-border-top u-border-bottom">
-                    <h2 className="u-h5 u-text-family">Change password (Optional)</h2>
+                    <h2 className="u-h5 u-text-family">Change password (optional)</h2>
                 </div>
                 <div className="t-account-info__section-content u-padding-md">
                     <FieldRow>
