@@ -20,7 +20,27 @@ npm link progressive-web-sdk
 npm run dev
 ```
 
+## Running CircleCI using an in-progress SDK branch
 
+Occasionally when you are developing a feature in the SDK it may be useful to have CircleCI do a full build using your branch of the SDK. To do this you will need to publish a custom version of the `progressive-web-sdk` node module based on your branch:
+
+1. Check out your branch of the SDK
+2. Ensure that the SDK's `package.json` is newer than the currently published version (you double-check what is "latest" [here](https://www.npmjs.com/package/progressive-web-sdk).). Bump the *patch* up if you need to.
+   For example: if npmjs.com shows the SDK being at v0.17.2 you would change the `package.json`'s version to be 0.17.3.
+3. Run `npm publish --tag betaX` (where "`X`" is an increasing integer as you test)
+4. Update the scaffold `package.json` so that the `"progressive-web-sdk"` dependency is specified as follows:
+  ```json
+  "devDependencies": {
+      ...
+      "progressive-web-sdk": "0.17.0@betaX"
+      ...
+  }
+  ```
+  _**Note**: The version used in this step must match the version specified in step #2 and the tag used in step #3!_
+5. Commit the change and push so that CircleCI runs a build. CircleCI will install the "beta" version of the progressive-web-sdk npm module which is your in-progress work.
+
+Once you are done testing it is good practice to unpublish the 
+  
 ## Swapping Integration Managers
 
 Note: This should make it's way into the Tutorial eventually, but this is here for now.
