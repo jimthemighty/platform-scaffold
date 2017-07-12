@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
-    workDir: /home/ubuntu/platform-scaffold/web/
+    workDir: /home/ubuntu/platform-scaffold/
     steps:
       - checkout
       - run:
@@ -15,7 +15,7 @@ jobs:
             - /home/ubuntu/platform-scaffold/web/node_modules
       - run:
           name: Install Dependencies
-          command: npm install
+          command: cd web && npm install
       - save_cache:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
