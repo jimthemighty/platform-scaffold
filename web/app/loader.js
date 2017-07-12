@@ -452,49 +452,56 @@ if (shouldPreview()) {
             attemptToInitializeApp()
         }
     } else if (isSupportedNonPWABrowser()) {
+        loaderLog('Starting setup for nonPWA mode')
         // This a browser that supports our non-PWA mode, so we can assume that
         // service workers are supported. Load the worker in non-PWA mode, and
         // (in parallel) initialize analytics.
         // We assume that the browsers supporting nonPWA mode do not need any
         // polyfills. If any are needed, this would be the point to load them.
         Promise.all(
+            // There are a number of steps that we can run simultaneously;
+            // initializing the worker, initializing Analytics and waiting
+            // for the <body> tag to exist.
             [
                 loadWorker(false),
-                triggerAppStartEvent(false)
+                triggerAppStartEvent(false),
+                // We're loaded in a script located in <head> but we need to inject
+                // scripts using `loadScript` which places them in <body> - so
+                // we must wait until <body> exists.
+                waitForBody()
             ]
         )
             .then((results) => {
+                loaderLog('Completing setup for nonPWA mode')
+
                 // This is called early so that the Promise is available
                 // to any scripts that need to chain from it. It gets
                 // resolved when setupMessagingClient completes.
                 createGlobalMessagingClientInitPromise(messagingEnabled)
 
-                // We're loaded in a script located in <head> but we need to inject
-                // scripts using `loadScript` which places them in <body> - so
-                // we must wait until <body> exists
-                waitForBody().then(() => {
-                    loaderLog('Completing setup for nonPWA mode')
-                    // Set up the Messaging client integration (we do this after
-                    // analytics is set up, so that window.Sandy.instance is
-                    // available to Messaging). The serviceWorkerLoadedAndReady
-                    // result from loadWorker is available as results[0].
-                    // We ignore the Promise returned from this call, since
-                    // we want to continue to load and setup the non-pwa
-                    // script anyway, whether Messaging succeeds or not.
-                    setupMessagingClient(results[0])
+                // Set up the Messaging client integration (we do this after
+                // analytics is set up, so that window.Sandy.instance is
+                // available to Messaging). The serviceWorkerLoadedAndReady
+                // result from loadWorker is available as results[0].
+                // We ignore the Promise returned from this call, since
+                // we want to continue to load and setup the non-pwa
+                // script anyway, whether Messaging succeeds or not.
+                setupMessagingClient(results[0])
 
-                    return loadScriptAsPromise({
-                        id: 'mobify-non-pwa-script',
-                        src: getAssetUrl('non-pwa.js'),
-                        // We do nothing if the script fails
-                        rejectOnError: true
-                    })
-                        // we reach this point when the Messaging client has been
-                        // loaded and initialized, and the non-pwa.js script has
-                        // been loaded. We can now init the non-pwa script
-                        .then(() => window.Mobify.NonPWA.init())
+                // This load will execute in parallel with setup of the
+                // Messaging client.
+                return loadScriptAsPromise({
+                    id: 'mobify-non-pwa-script',
+                    src: getAssetUrl('non-pwa.js'),
+                    // We do nothing if the script fails
+                    rejectOnError: true
                 })
             })
+            // we reach this point when the Messaging client has been
+            // loaded and initialized, and the non-pwa.js script has
+            // been loaded. We can now init the non-pwa script.
+            .then(() => window.Mobify.NonPWA.init())
+
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
