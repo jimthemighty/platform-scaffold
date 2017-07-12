@@ -24,6 +24,8 @@ jobs:
           name: Accept Cert
           command: bash ./accept-cert-ci.sh
   test:
+    docker:
+      - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/web/
     steps:
       - run: 
@@ -52,6 +54,3 @@ workflows:
       - test:
           requires:
             - build
-          filters:
-            branches:
-              only: master
