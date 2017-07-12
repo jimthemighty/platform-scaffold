@@ -20,5 +20,7 @@
         most significant changes)
 - [ ] Merge `master` into `develop` (no need for review on PR, just merge).
 - [ ] Log into cloud.mobify.com and publish the latest bundle in the
-      `ci-release` target for this release (there may be multiple for this
-      release if you made more than one commit on the release branch).
+      `ci-release` target for this release to the Production target.
+      _**Note**: There may be multiple for this release under the `release-ci` 
+      target if you made more than one commit on the release branch. Publish
+      the most recent bundle._
