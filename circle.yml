@@ -21,7 +21,7 @@ test:
             pwd: web
 deployment:
     bundle:
-        branch: [develop, ci-bundle-push, release-*]
+        branch: [develop, push-ci-bundle, release-*]
         commands:
             - scripts/ci-deploy.sh:
                 pwd: web
