@@ -176,6 +176,25 @@ const asyncInitApp = () => {
     }
 }
 
+let waitForBodyPromise
+const waitForBody = () => {
+    waitForBodyPromise = waitForBodyPromise || new Promise((resolve) => {
+        const bodyEl = document.getElementsByTagName('body')
+
+        const checkForBody = () => {
+            if (bodyEl.length > 0) {
+                resolve()
+            } else {
+                setTimeout(checkForBody, 50)
+            }
+        }
+
+        checkForBody()
+    })
+
+    return waitForBodyPromise
+}
+
 const attemptToInitializeApp = () => {
     if (getNeededPolyfills().length) {
         return
@@ -235,20 +254,9 @@ const attemptToInitializeApp = () => {
         document.write('<body>')
     }
 
-    const waitForBody = new Promise((resolve) => {
-        const checkForBody = () => {
-            if (document.querySelectorAll('body').length > 0) {
-                resolve()
-            } else {
-                setTimeout(checkForBody, 50)
-            }
-        }
-        checkForBody()
-    })
-
     // Display the Preloader to indicate progress to the user (except when running
     // in an Astro app, hide the preloader because apps have their own splash screen).
-    waitForBody.then(() => {
+    waitForBody().then(() => {
         if (!isRunningInAstro) {
             displayPreloader(preloadCSS, preloadHTML, preloadJS)
         }
@@ -259,7 +267,6 @@ const attemptToInitializeApp = () => {
         reactTarget.className = 'react-target'
         body.appendChild(reactTarget)
     })
-    
 
     /**
      * This must be called before vendor.js is loaded (or before the Webpack
@@ -361,9 +368,11 @@ if (shouldPreview()) {
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
-        loadScript({
-            id: 'ajs',
-            src: `https://a.mobify.com/${AJS_SLUG}/a.js`
+        waitForBody().then(() => {
+                loadScript({
+                id: 'ajs',
+                src: `https://a.mobify.com/${AJS_SLUG}/a.js`
+            })
         })
     }
 }
