@@ -15,22 +15,29 @@ export const changeTitle = createAction('Change AccountInfo title', 'title')
 
 export const submitAccountInfoForm = (formValues) => (dispatch) => {
     const {currentPassword, newPassword, names} = formValues
-    // const errors = {}
 
     if (currentPassword && !newPassword) {
         return Promise.reject(new SubmissionError({
             _error: {
-                newPassword: 'please neter an ew pasword'
+                newPassword: 'please enter your new password'
             }
         }))
     }
 
     if (!currentPassword && newPassword) {
-        throw new SubmissionError({_error: 'Please enter your current password'})
+        return Promise.reject(new SubmissionError({
+            _error: {
+                currentPassword: 'Please enter your current password'
+            }
+        }))
     }
 
     if (currentPassword === newPassword) {
-        throw new SubmissionError({_error: 'Please enter your current password'})
+        return Promise.reject(new SubmissionError({
+            _error: {
+                newPassword: 'Enter a different new password'
+            }
+        }))
     }
 
     if (validateFullName(names)) {
@@ -42,4 +49,10 @@ export const submitAccountInfoForm = (formValues) => (dispatch) => {
                     true
                 )))
     }
+
+    return Promise.reject(new SubmissionError({
+        _error: {
+            newPassword: 'please enter a valid full name'
+        }
+    }))
 }

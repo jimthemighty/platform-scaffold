@@ -67,6 +67,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="Current Password"
                             name="currentPassword"
+                            error={error && error.currentPassword}
                         >
                             <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
                         </ReduxForm.Field>
@@ -76,6 +77,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="New Password"
                             name="newPassword"
+                            error={error && error.newPassword}
                         >
                             <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
                         </ReduxForm.Field>
