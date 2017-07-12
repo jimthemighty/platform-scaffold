@@ -18,6 +18,8 @@ export default {
     before: (browser) => {
         home = new Home(browser)
         pushMessaging = new PushMessaging(browser)
+        // Allow pushMessaging.assertSubscribed to run for 2 seconds
+        browser.timeoutsAsyncScript(2000)
     },
 
     after: (browser) => {
