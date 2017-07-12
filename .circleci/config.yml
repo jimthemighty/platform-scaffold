@@ -1,0 +1,57 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: mobify/cci-docker-primary:0.0.15
+    workDir: /home/ubuntu/platform-scaffold/web/
+    steps:
+      - checkout
+      - run:
+          name: Pre-Dep
+          command: mkdir /home/ubuntu/artifacts
+      - restore_cache:
+          key: platform-scaffold-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - /home/ubuntu/platform-scaffold/web/node_modules
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - save_cache:
+          key: platform-scaffold-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - /home/ubuntu/platform-scaffold/web/node_modules
+      - run:
+          name: Accept Cert
+          command: bash ./accept-cert-ci.sh
+  test:
+    workDir: /home/ubuntu/platform-scaffold/web/
+    steps:
+      - run: 
+          name: Smoke-test
+          command: xvfb-run -a npm run smoke-test
+          when: always
+      - run:
+          name: Lighthouse Tests
+          command: xvfb-run -a npm run test:pwa-preview
+          when: always
+      - store_artifacts:
+          path: lighthouse/audit-local.html
+          when: always
+      - store_artifacts:
+          path: tests/reports/
+          when: always
+      - store_artifacts:
+          path: tests/screenshots/system/workflows/
+          when: always
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
