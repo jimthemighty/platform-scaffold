@@ -208,29 +208,48 @@ npm run test:pwa-preview
 
 ## Analyze Bundle Size
 
-Verify that built assets are below a specified size threshold using a file-size-config.json file, eg:
+Verify that built assets are below a specified size threshold, to ensure you meet performance requirements.
 
-```
-{
-    "bundleSize": {
-        "max": 2000000,
-        "files": {
-        	"loader.js": 217523,
-        	"main.css": 212000,
-            "main.js": 240000,
-            "vendor.js": 374000
-        }
-    }
-}
-```
-All **minified** build files will be compared against the `max` size. In addition, the user can list specific files and maximum **gzipped** sizes for those files. The default behaviour is to examine the contents of the `build` folder against thresholds in `tests/system/test-scripts/file-size-config.json`.
+Firstly, generate a build:
 
 ```
 npm run prod:build
+```
+
+Then verify that the minified contents of the build directory are less than a specified maximum file size defined in `package.json`. For example, a maximum size of 2MB:
+
+```
+  "config": {
+    "file_size_limit": 2000000
+  }
+```
+
+Run this command: 
+
+```
+npm run test:max-file-size
+```
+
+The user can also list specific files and maximum **gzipped** sizes for those files. The default behaviour is to examine the contents of the `build` folder against thresholds in `tests/system/test-scripts/gzip-size-config.json`:
+
+```
+{
+    "files": {
+        "loader.js": 217523,
+        "main.css": 212000,
+        "main.js": 240000,
+        "vendor.js": 374000
+    }
+}
+```
+
+Run this command:
+
+```
 npm run test:build-size path/to/build/directory path/to/config/json
 ```
 
-To visualize bundle script content, run:
+To visualize the sizes of your dependencies, run:
 
 ```
 npm run analyze-build
