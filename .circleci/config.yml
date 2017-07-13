@@ -11,19 +11,20 @@ jobs:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
+      - run: cd web
       - run:
           name: Install Dependencies
-          command: cd web && npm install
+          command: npm install
       - save_cache:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
       - run:
           name: Accept Cert
-          command: bash ./web/scripts/accept-cert-ci.sh
+          command: bash ./scripts/accept-cert-ci.sh
       - run:
           name: Lint
-          command: cd web && npm run lint     
+          command: npm run lint     
       - persist_to_workspace:
           root: .
           paths: .
@@ -37,15 +38,17 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/ubuntu/platform-scaffold/
+      - run: cd web
       - run:
           name: Start Test Server
-          command: bash ./web/tests/system/test-scripts/start-test-server.sh
+          command: bash ./tests/system/test-scripts/start-test-server.sh
           background: true
       - run:
           name: Wait for Server
-          command: bash ./web/scripts/wait-for-dependencies.sh
+          command: bash ./scripts/wait-for-dependencies.sh
       - run:
-          cd web && bash ./web/tests/system/test-scripts/run-all-tests-on-ci.sh
+          name: Run-All-Tests
+          command: bash ./tests/system/test-scripts/run-all-tests-on-ci.sh
   
 workflows:
   version: 2
