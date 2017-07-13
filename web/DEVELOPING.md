@@ -22,34 +22,74 @@ npm run dev
 
 ## Running CircleCI using an in-progress SDK branch
 
-Occasionally when you are developing a feature in the SDK it may be useful to have CircleCI do a full build using your branch of the SDK. To do this you will need to publish a custom version of the `progressive-web-sdk` package based on your branch:
+Occasionally when you are developing a feature in the SDK it may be useful to have CircleCI do a full build using your branch of the SDK. 
 
-1. Check out your branch of the SDK
+***Note**: If you only need to build and test locally, you should use `npm link` instead of the process outlined here.*
 
-2. Ensure that the SDK's `package.json` is newer than the currently published version (you double-check what is "latest" [here](https://www.npmjs.com/package/progressive-web-sdk).). Bump the *patch* up if you need to.
-   For example: if `npm view progressive-web-sdk version` shows the SDK being at v0.17.2, you would change the `package.json`'s version to be 0.17.3.
+To do this you can use a custom npm [distribution tag](https://docs.npmjs.com/cli/dist-tag). The basic process is that you will mark the `package.json` with the next patch version but as a prerelease and then publish it using a distribution tag named after your SDK branch. 
 
-3. Run `npm publish --tag betaX` (where "`X`" is an increasing integer as you test). You can check what the latest `betaX` tag is by running: `npm view progressive-web-sdk versions`  Check if the patch version you're working on has any tags, and if it does, use a number greater than the largest `betaX` for your version. 
+### Getting started
 
-   _**Note**: Do not use a version that has already been published. If the published version of 
-   progressive-web-sdk is 0.17.2 when you begin, make sure you follow step #2 and bump it to 0.17.3!_
+To get started with an SDK branch that you want to test with the scaffold you'll need to do some setup once. After that you can make changes to the SDK branch, publish, and test in the scaffold *without* redoing this work.
 
-4. Update the scaffold `package.json` so that the `"progressive-web-sdk"` dependency is specified as follows:
+1. [**SDK**] Check out your branch of the SDK
+
+2. [**SDK**] Run `npm view progressive-web-sdk version` to check the latest published version of the SDK
+
+3. [**SDK**] If the `package.json` version is the same as Step #2, bump the *patch* version:
+
+   ```sh
+   npm version patch --no-git-tag-version
+   git add package*.json
+   git commit -m "Test version $(node -e "console.log(require('./package.json').version)")"   
+   ```
+   
+4. [**SDK**] Make sure the version in `package.json` is suffixed with your SDK branch name. Open `package.json` in your text editor and append a dash and your branch name behind the version. For example:
+
+   ```json
+       "version": "0.17.3"
+   ```
+   
+   Would become:
+   
+   ```json
+       "version": "0.17.3-non-pwa-messaging"
+   ```
+
+5. [**Scaffold**] Update the scaffold `package.json` so that the `"progressive-web-sdk"` dependency is tracking your distribution tag instead of the default:
+   
    ```json
    "devDependencies": {
        ...
-       "progressive-web-sdk": "0.17.0@betaX"
+       "progressive-web-sdk": "0.17.3@your-branch-name"
        ...
    }
    ```
    
-  _**Note**: The version used in this step must match the version specified in step #2 and the tag used in step #3!_
+   *Note: once you update the scaffold to track your distribution tag, it will automatically install the latest version published against that tag, which is why this step only needs to be done once during setup.*
+   
+### Testing SDK changes
+
+As you make changes to your SDK branch, you can test them in the scaffold using the following steps:
+
+1. [**SDK**] Update the pre-release version: 
+
+   ```sh
+   npm version prerelease --no-git-tag-version
+   git add package*.json
+   git commit -m "Test version $(node -e "console.log(require('./package.json').version)")"
+   ```
+   
+   The version that npm prints should be what you specified in Step #4 of the *Getting Started* section but with an added `.X` number behind it. Eg. `0.17.3-non-pwa-messaging.0` (the first pre-release of your distribution tag).
+
+2. [**SDK**] Publish your SDK branch under a distribution tag named after the branch:
+   ```sh
+   npm publish --tag $(git branch | grep \* | cut -d ' ' -f2-)
+   ```
   
-5. Commit the change and push so that CircleCI runs a build. CircleCI will install the "beta" version of the progressive-web-sdk npm module which is your in-progress work.
+3. [**Scaffold**] Commit a change and push so that CircleCI runs a build (or just go to the CircleCI dashboard and hit **Rebuild** on the most recent build of your scaffold branch. CircleCI will install the distribution tag version of the progressive-web-sdk package, which is your in-progress work.
 
-_**Note**: You will receive an error when publishing the beta package if another developer is also testing SDK changes with the scaffold and has used the number you chose for the betaX. If that happens you can either just try the next number (so if you tried @beta1 and it failed, try @beta2) or you can jump on Slack and ask what the last-numbered @beta is.
-
-This will leave these "beta" npm modules sitting around in the npm registry but that is probably safe as you can't use it unless you specifically install it by tag name. We could investigate `npm unpublish` if we're concerned about that. 
+*Final note. This will leave these "beta" distribution tags sitting around in the npm registry but that is probably safe as you can't use it unless you specifically install it by tag name. We could investigate `npm unpublish` if we're concerned about that.*
   
 ## Swapping Integration Managers
 
