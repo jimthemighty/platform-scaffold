@@ -28,10 +28,10 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
     }
 
     return (
-        <form className="u-padding-start-md u-padding-end-md" onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <ProductDetailsVariations />
 
-            <div className="u-margin-top-lg">
+            <div className="u-margin-top-lg u-padding-start-md u-padding-end-md">
                 <label htmlFor="quantity">Quantity</label>
 
                 <div className="u-flexbox u-margin-bottom-lg u-margin-top">
@@ -48,26 +48,30 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
 
             {/* Note that the "Update Cart" feature doesn't actually do that.. */}
             {available &&
-                <Button
-                    type="submit"
-                    icon="plus"
-                    iconClassName="pw--small u-margin-end"
-                    title={isInCheckout ? 'Update Cart' : 'Add to Cart'}
-                    showIconText={true}
-                    className="pw--primary u-width-full u-text-uppercase t-product-details__add-to-cart"
-                    disabled={disabled}
-                    data-analytics-name={UI_NAME.addToCart}
-                />
+                <div className="u-padding-start-md u-padding-end-md">
+                    <Button
+                        type="submit"
+                        icon="plus"
+                        iconClassName="pw--small u-margin-end"
+                        title={isInCheckout ? 'Update Cart' : 'Add to Cart'}
+                        showIconText={true}
+                        className="pw--primary u-width-full u-text-uppercase t-product-details__add-to-cart"
+                        disabled={disabled}
+                        data-analytics-name={UI_NAME.addToCart}
+                    />
+                </div>
             }
-            <Button
-                icon="wishlist-add"
-                title="Wishlist"
-                iconClassName="u-margin-end"
-                showIconText={true}
-                className="u-border-light u-color-brand u-text-letter-spacing-normal  u-width-full u-margin-bottom-lg"
-                onClick={addToWishlist}
-                data-analytics-name={UI_NAME.wishlist}
-            />
+            <div className="u-border-light-top u-border-light-bottom u-margin-top-md">
+                <Button
+                    icon="wishlist-add"
+                    title="Wishlist"
+                    iconClassName="u-margin-end"
+                    showIconText={true}
+                    className="u-color-brand u-text-letter-spacing-normal u-width-full"
+                    onClick={addToWishlist}
+                    data-analytics-name={UI_NAME.wishlist}
+                />
+            </div>
         </form>
     )
 }
