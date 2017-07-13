@@ -28,21 +28,6 @@ jobs:
           root: .
           paths: .
 
-  test-server:
-    docker:
-      - image: mobify/cci-docker-primary:0.0.15
-    workDir: /home/ubuntu/platform-scaffold/
-    steps:
-      - attach_workspace:
-          at: /home/ubuntu/platform-scaffold/
-      - run:
-          name: Start Test Server
-          command: bash ./web/tests/system/test-scripts/start-test-server.sh
-          background: true
-      - run:
-          name: Wait for Server
-          command: bash ./web/scripts/wait-for-dependencies.sh
-
   test-unit:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
@@ -89,6 +74,10 @@ jobs:
       - run:
           name: Build Project
           command: cd web && npm run prod:build
+          background: true
+      - run:
+          name: Start Test Server
+          command: bash ./web/tests/system/test-scripts/start-test-server.sh
           background: true
       - run:
           name: Wait for Server
