@@ -6,6 +6,7 @@
 
 import {combineReducers} from 'redux'
 
+import navigation from '../modals/navigation/reducer' // navigation is a special case, since it's not in the containers directory
 import app from './app/reducer'
 import cart from './cart/reducer'
 import checkoutConfirmation from './checkout-confirmation/reducer'
@@ -15,11 +16,13 @@ import footer from './footer/reducer'
 import header from './header/reducer'
 import home from './home/reducer'
 import login from './login/reducer'
-import navigation from '../modals/navigation/reducer'
 import productDetails from './product-details/reducer'
 import productList from './product-list/reducer'
+import wishlist from './wishlist/reducer'
+
 
 const uiReducer = combineReducers({
+    navigation,
     app,
     cart,
     checkoutConfirmation,
@@ -29,9 +32,10 @@ const uiReducer = combineReducers({
     header,
     home,
     login,
-    navigation,
     productDetails,
-    productList
+    productList,
+    wishlist,
+
 })
 
 export default uiReducer
