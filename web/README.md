@@ -246,7 +246,7 @@ The user can also list specific files and maximum **gzipped** sizes for those fi
 Run this command:
 
 ```
-npm run test:build-size path/to/build/directory path/to/config/json
+npm run test:max-file-size path/to/build/directory path/to/config/json
 ```
 
 To visualize the sizes of your dependencies, run:

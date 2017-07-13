@@ -137,7 +137,6 @@
     "smoke-test": "bash ./tests/system/test-scripts/smoke-test.sh",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
-    "test:gzip-size": "node tests/system/test-scripts/gzip-size.js",
     "test:max-file-size": "node tests/system/test-scripts/max-file-size.js",
     "test:check-lighthouse-score": "node tests/system/test-scripts/check-lighthouse-score.js",
     "test:e2e": "cross-env NODE_ENV=test node ./node_modules/nightwatch/bin/runner.js -c ./tests/system/nightwatch-config.js --suiteRetries 1",
