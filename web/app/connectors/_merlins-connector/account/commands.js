@@ -36,7 +36,6 @@ export const initRegisterPage = (url) => (dispatch) => {
         })
 }
 
-
 export const initAccountInfoPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then((res) => {

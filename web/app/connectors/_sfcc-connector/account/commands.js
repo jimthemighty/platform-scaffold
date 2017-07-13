@@ -232,3 +232,4 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
             throw new SubmissionError({_error: 'Password Change Failed'})
         })
 }
+

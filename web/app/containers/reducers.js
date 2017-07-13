@@ -9,6 +9,7 @@ import {combineReducers} from 'redux'
 import navigation from '../modals/navigation/reducer' // navigation is a special case, since it's not in the containers directory
 import accountDashboard from './account-dashboard/reducer'
 import accountInfo from './account-info/reducer'
+
 import app from './app/reducer'
 import cart from './cart/reducer'
 import checkoutConfirmation from './checkout-confirmation/reducer'
