@@ -20,7 +20,7 @@ import {initHomePage} from 'progressive-web-sdk/dist/integration-manager/home/co
 import {initCartPage} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manager/products/commands'
-import {initRegisterPage, initLoginPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {initRegisterPage, initLoginPage, initWishlistPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
 import {initPaymentPage} from './containers/checkout-payment/actions'
@@ -72,7 +72,7 @@ const Router = ({store}) => (
                 {/* Careful. The routeName on this 'configure' route is used to change how the ProductDetails component renders */}
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
-                <Route component={Wishlist} path="wishlist/" routeName="wishlist" />
+                <Route component={Wishlist} path="wishlist/" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"
