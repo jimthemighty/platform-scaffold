@@ -225,5 +225,10 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
         current_password: currentPassword,
         password: newPassword
     }
+
     return makeApiJsonRequest(`/customers/${customerId}/password`, requestBody, {method: 'PUT'})
+        .then(checkForResponseFault)
+        .catch(() => {
+            throw new SubmissionError({_error: 'Password Change Failed'})
+        })
 }
