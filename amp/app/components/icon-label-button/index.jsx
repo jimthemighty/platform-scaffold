@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
-import Button from '../button'
-import IconLabel from '../icon-label'
-import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
+import Button from 'mobify-amp-sdk/dist/components/button'
+import IconLabel from 'mobify-amp-sdk/dist/components/icon-label'
 
 const IconLabelButton = (props) => {
     const {

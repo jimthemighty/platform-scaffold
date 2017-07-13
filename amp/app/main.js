@@ -14,7 +14,7 @@ import {Provider} from 'react-redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
 
-import Analytics from './components/analytics'
+import Analytics from 'mobify-amp-sdk/dist/components/analytics'
 import ProductDetails from './containers/product-details/container'
 import ProductList from './containers/product-list/container'
 import App from './containers/app/container'
