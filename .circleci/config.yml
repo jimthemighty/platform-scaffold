@@ -25,7 +25,7 @@ jobs:
           root: .
           paths: .
 
-  test-e2e:
+  test-server:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
@@ -36,11 +36,17 @@ jobs:
           name: Start Test Server
           command: bash ./web/tests/system/test-scripts/start-test-server.sh
           background: true
-          when: always
       - run:
           name: Wait for Server
           command: bash ./web/scripts/wait-for-dependencies.sh
-          background: true
+
+  test-e2e:
+    docker:
+      - image: mobify/cci-docker-primary:0.0.15
+    workDir: /home/ubuntu/platform-scaffold/
+    steps:
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
       - run: 
           name: Run end2end Test
           command: cd web && xvfb-run -a npm run test:e2e
@@ -60,15 +66,6 @@ jobs:
       - attach_workspace:
           at: /home/ubuntu/platform-scaffold/
       - run:
-          name: Accept Cert
-          command: bash ./web/scripts/accept-cert-ci.sh
-          when: always
-      - run:
-          name: Start Test Server
-          command: bash ./web/tests/system/test-scripts/start-test-server.sh
-          background: true
-          when: always
-      - run:
           name: Lighthouse Tests
           command: cd web && xvfb-run -a npm run test:pwa-preview
           when: always
@@ -81,6 +78,9 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - test-server:
+          requires:
+            - build
       - test-e2e:
           requires:
             - build
