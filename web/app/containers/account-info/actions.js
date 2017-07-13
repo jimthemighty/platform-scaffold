@@ -54,10 +54,10 @@ export const submitAccountInfoForm = (formValues) => (dispatch) => {
                 'Successfully updated account information',
                 true
             )))
-        .catch((err) => {
+        .catch(({errors}) => {
             dispatch(addNotification(
                 'accountInfoError',
-                err.errors._error,
+                errors._error,
                 true
             ))
         })
