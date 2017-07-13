@@ -75,6 +75,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
 ProductDetailsAddToCart.propTypes = {
     setQuantity: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
+    addToWishlist: PropTypes.func,
     available: PropTypes.bool,
     disabled: PropTypes.bool,
     handleSubmit: PropTypes.func,
