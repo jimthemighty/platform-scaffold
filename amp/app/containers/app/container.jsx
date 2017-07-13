@@ -1,4 +1,6 @@
 import React, {PropTypes} from 'react'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
+
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
 // Partials
@@ -9,8 +11,6 @@ import ProductListFilterModal from '../product-list/partials/product-list-filter
 
 // Components
 import SkipLinks from '../../components/skip-links'
-
-import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 const App = ({children}) => {
 
