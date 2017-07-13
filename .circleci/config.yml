@@ -19,6 +19,9 @@ jobs:
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
       - run:
+          name: Accept Cert
+          command: bash ./web/scripts/accept-cert-ci.sh
+      - run:
           name: Lint
           command: cd web && npm run lint     
       - persist_to_workspace:
@@ -40,6 +43,17 @@ jobs:
           name: Wait for Server
           command: bash ./web/scripts/wait-for-dependencies.sh
 
+  test-unit:
+    docker:
+      - image: mobify/cci-docker-primary:0.0.15
+    workDir: /home/ubuntu/platform-scaffold/
+    steps:
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
+      - run:
+          name: Run Unit Tests
+          command: cd web && npm test -- --runInBand
+  
   test-e2e:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
@@ -47,6 +61,13 @@ jobs:
     steps:
       - attach_workspace:
           at: /home/ubuntu/platform-scaffold/
+      - run:
+          name: Start Test Server
+          command: bash ./web/tests/system/test-scripts/start-test-server.sh
+          background: true
+      - run:
+          name: Wait for Server
+          command: bash ./web/scripts/wait-for-dependencies.sh
       - run: 
           name: Run end2end Test
           command: cd web && xvfb-run -a npm run test:e2e
@@ -66,6 +87,13 @@ jobs:
       - attach_workspace:
           at: /home/ubuntu/platform-scaffold/
       - run:
+          name: Build Project
+          command: cd web && npm run prod:build
+          background: true
+      - run:
+          name: Wait for Server
+          command: bash ./web/scripts/wait-for-dependencies.sh
+      - run:
           name: Lighthouse Tests
           command: cd web && xvfb-run -a npm run test:pwa-preview
           when: always
@@ -78,6 +106,9 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - test-unit:
+          requires:
+            - build
       - test-server:
           requires:
             - build
