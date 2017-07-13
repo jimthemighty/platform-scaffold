@@ -43,6 +43,7 @@ export const prefetchTemplateChunks = () => {
     }
 }
 
+export const AccountDashboard = PWALoadable(() => import('./account-dashboard/container' /* webpackChunkName: "account" */), 'account-dashboard')
 export const Cart = PWALoadable(() => import('./cart/container' /* webpackChunkName: "cart" */), 'cart')
 export const CheckoutConfirmation = PWALoadable(() => import('./checkout-confirmation/container' /* webpackChunkName: "checkout-confirmation" */), 'checkout-confirmation')
 export const CheckoutPayment = PWALoadable(() => import('./checkout-payment/container' /* webpackChunkName: "checkout-payment" */), 'checkout-payment')
