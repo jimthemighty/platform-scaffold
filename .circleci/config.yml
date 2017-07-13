@@ -18,10 +18,41 @@ jobs:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
+      - run:
+          name: Lint
+          command: cd web && npm run lint     
       - persist_to_workspace:
           root: .
           paths: .
-  teste2e:
+
+  test-E2E:
+    docker:
+      - image: mobify/cci-docker-primary:0.0.15
+    workDir: /home/ubuntu/platform-scaffold/
+    steps:
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
+      - run:
+          name: Start Test Server
+          command: bash ./web/tests/system/test-scripts/start-test-server.sh
+          background: true
+          when: always
+      - run:
+          name: Wait for Server
+          command: bash ./web/scripts/wait-for-dependencies.sh
+          background: true
+      - run: 
+          name: Run end2end Test
+          command: cd web && xvfb-run -a npm run test:e2e
+          when: always
+      - store_artifacts:
+          path: web/tests/reports/
+          when: always
+      - store_artifacts:
+          path: web/tests/screenshots/system/workflows/
+          when: always
+      
+  test-Performance:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
@@ -38,25 +69,11 @@ jobs:
           background: true
           when: always
       - run:
-          name: Wait for Server
-          command: bash ./web/scripts/wait-for-dependencies.sh
-          background: true
-      - run: 
-          name: Smoke-test
-          command: cd web && xvfb-run -a npm run test:e2e
-          when: always
-      - run:
           name: Lighthouse Tests
           command: cd web && xvfb-run -a npm run test:pwa-preview
           when: always
       - store_artifacts:
           path: web/tests/system/test-scripts/lighthouse/reports/
-          when: always
-      - store_artifacts:
-          path: web/tests/reports/
-          when: always
-      - store_artifacts:
-          path: web/tests/screenshots/system/workflows/
           when: always
 
 workflows:
@@ -64,6 +81,9 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - teste2e:
+          requires:
+            - build
       - teste2e:
           requires:
             - build

@@ -8,4 +8,4 @@ trap 'kill $(jobs -pr)' EXIT
 echo "Building project"
 cd web && npm run prod:build
 echo "Running Test Server."
-cd web && npm run test:server
+npm run test:server
