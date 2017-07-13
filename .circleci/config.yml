@@ -25,7 +25,7 @@ jobs:
           root: .
           paths: .
 
-  test-E2E:
+  test-e2e:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
@@ -52,7 +52,7 @@ jobs:
           path: web/tests/screenshots/system/workflows/
           when: always
       
-  test-Performance:
+  test-performance:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
@@ -81,9 +81,9 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - teste2e:
+      - test-e2e:
           requires:
             - build
-      - teste2e:
+      - test-performance:
           requires:
             - build
