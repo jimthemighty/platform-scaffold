@@ -27,7 +27,7 @@ Occasionally when you are developing a feature in the SDK it may be useful to ha
 1. Check out your branch of the SDK
 
 2. Ensure that the SDK's `package.json` is newer than the currently published version (you double-check what is "latest" [here](https://www.npmjs.com/package/progressive-web-sdk).). Bump the *patch* up if you need to.
-   For example: if npmjs.com shows the SDK being at v0.17.2 you would change the `package.json`'s version to be 0.17.3.
+   For example: if `npm view progressive-web-sdk version` shows the SDK being at v0.17.2, you would change the `package.json`'s version to be 0.17.3.
 
 3. Run `npm publish --tag betaX` (where "`X`" is an increasing integer as you test). You can check what the latest `betaX` tag is by running: `npm view progressive-web-sdk versions`  Check if the patch version you're working on has any tags, and if it does, use a number greater than the largest `betaX` for your version. 
 
