@@ -98,9 +98,6 @@ workflows:
       - test-unit:
           requires:
             - build
-      - test-server:
-          requires:
-            - build
       - test-e2e:
           requires:
             - build
