@@ -2,7 +2,7 @@
   "name": "progressive-web-scaffold",
   "projectSlug": "progressive-web-scaffold",
   "aJSSlug": "merlinspotions-2",
-  "mobifyGAID": "UA-53825302-1",
+  "mobifyGAID": "UA-78284797-2",
   "messagingSiteId": "merlinspotions",
   "messagingEnabled": true,
   "repository": {
@@ -84,7 +84,7 @@
     "nightwatch-commands": "2.1.0",
     "node-sass": "4.5.2",
     "postcss-loader": "1.3.3",
-    "progressive-web-sdk": "~0.17.0",
+    "progressive-web-sdk": "~0.17.2",
     "prompt": "1.0.0",
     "raw-loader": "0.5.1",
     "react-addons-test-utils": "15.4.2",
