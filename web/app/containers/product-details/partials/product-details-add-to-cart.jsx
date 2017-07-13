@@ -59,17 +59,15 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                     data-analytics-name={UI_NAME.addToCart}
                 />
             }
-            <div className="u-flexbox u-margin-bottom-lg">
-                <Button
-                    icon="wishlist-add"
-                    title="Wishlist"
-                    iconClassName="u-margin-end"
-                    showIconText={true}
-                    className="u-border-light u-color-brand u-text-letter-spacing-normal  u-width-full"
-                    onClick={addToWishlist}
-                    data-analytics-name={UI_NAME.wishlist}
-                />
-            </div>
+            <Button
+                icon="wishlist-add"
+                title="Wishlist"
+                iconClassName="u-margin-end"
+                showIconText={true}
+                className="u-border-light u-color-brand u-text-letter-spacing-normal  u-width-full u-margin-bottom-lg"
+                onClick={addToWishlist}
+                data-analytics-name={UI_NAME.wishlist}
+            />
         </form>
     )
 }
