@@ -56,3 +56,8 @@ export const updateBillingAddress = (formValues) => (dispatch) => {
     console.log('[Stub Connector] Called updateBillingAddress stub with parameters:', formValues)
     return Promise.resolve()
 }
+
+export const initAccountDashboard = (url) => (dispatch) => {
+    console.log('[Stub Connector] Called initAccountDashboard stub with parameters:', url)
+    return Promise.resolve()
+}
