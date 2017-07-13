@@ -6,6 +6,6 @@ set -o nounset
 # Kill background processes when this script exits.
 trap 'kill $(jobs -pr)' EXIT
 echo "Building project"
-npm run prod:build
+cd web && npm run prod:build
 echo "Running Test Server."
-npm run test:server
+cd web && npm run test:server

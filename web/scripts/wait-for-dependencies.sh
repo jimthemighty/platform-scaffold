@@ -25,7 +25,7 @@ if git rev-parse ; then
         exit 0 
     else
         echo "Waiting for npm prod:build to complete"
-        while [ ! -f build/loader.js ]; do
+        while [ ! -f web/build/loader.js ]; do
             if [[ "$counter" -gt 40 ]]; then
                 cat logs/startTestServer.log
                 echo 'Build Failed.'

@@ -1,49 +1,62 @@
 version: 2
+
 jobs:
   build:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
-    workDir: /home/ubuntu/platform-scaffold/web
+    workDir: /home/ubuntu/platform-scaffold/
     steps:
       - checkout
-      - run:
-          name: Pre-Dep
-          command: mkdir /home/ubuntu/artifacts
       - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "package.json" }}
+          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
       - run:
           name: Install Dependencies
-          command: npm install
+          command: cd web && npm install
       - save_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "package.json" }}
+          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
-      - run:
-          name: Accept Cert
-          command: bash ./scripts/accept-cert-ci.sh
-  test:
+      - persist_to_workspace:
+          root: .
+          paths: .
+  teste2e:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
-    workDir: /home/ubuntu/platform-scaffold/web/
+    workDir: /home/ubuntu/platform-scaffold/
     steps:
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
+      - run:
+          name: Accept Cert
+          command: bash ./web/scripts/accept-cert-ci.sh
+          when: always
+      - run:
+          name: Start Test Server
+          command: bash ./web/tests/system/test-scripts/start-test-server.sh
+          background: true
+          when: always
+      - run:
+          name: Wait for Server
+          command: bash ./web/scripts/wait-for-dependencies.sh
+          background: true
       - run: 
           name: Smoke-test
-          command: xvfb-run -a npm run smoke-test
+          command: cd web && xvfb-run -a npm run test:e2e
           when: always
       - run:
           name: Lighthouse Tests
-          command: xvfb-run -a npm run test:pwa-preview
+          command: cd web && xvfb-run -a npm run test:pwa-preview
           when: always
       - store_artifacts:
-          path: lighthouse/audit-local.html
+          path: web/tests/system/test-scripts/lighthouse/reports/
           when: always
       - store_artifacts:
-          path: tests/reports/
+          path: web/tests/reports/
           when: always
       - store_artifacts:
-          path: tests/screenshots/system/workflows/
+          path: web/tests/screenshots/system/workflows/
           when: always
 
 workflows:
@@ -51,6 +64,6 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test:
+      - teste2e:
           requires:
             - build
