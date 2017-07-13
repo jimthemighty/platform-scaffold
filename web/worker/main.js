@@ -14,7 +14,8 @@ import worker from 'progressive-web-sdk/dist/worker/main'
 // default. If we're in PWA mode, init the PWA worker. In non-PWA mode,
 // the PWA worker code is still loaded, but does nothing. This allows us
 // to use the same worker code in both modes.
-if (!/pwa=0/.test(self.location.toString())) {
+const pwaMode = (!/pwa=0/.test(self.location.toString()))
+if (pwaMode) {
     worker({
         slug: PROJECT_SLUG,
         isDebug: DEBUG
@@ -40,7 +41,8 @@ if (!isRunningIn.app()) {
         self.MessagingServiceWorker.messagingWorkerMain(
             {
                 toolbox,
-                isDebug: DEBUG
+                isDebug: DEBUG,
+                pwaMode
             }
         )
     } catch (e) {

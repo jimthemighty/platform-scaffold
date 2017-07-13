@@ -179,13 +179,16 @@ const asyncInitApp = () => {
  * Messaging PWA client. The Messaging service worker code is
  * still included, but won't be configured and will do nothing.
  *
+ * @param serviceWorkerSupported {Boolean} true if the service worker
+ * has successfully loaded and is ready. False if there was a failure.
+ * @param pwaMode {Boolean} passed to the Messaging client initialization.
  * @returns {Promise.<*>} that resolves when the client is loaded and
  * initialized, with the initial messaging state value (from
  * the Messaging client's init()). If messaging is not enabled,
  * returns a Promise that resolves to null (we don't reject because
  * that would lead to console warnings about uncaught rejections)
  */
-const setupMessagingClient = (serviceWorkerSupported) => {
+const setupMessagingClient = (serviceWorkerSupported, pwaMode) => {
     if (serviceWorkerSupported && (!isRunningInAstro)) {
         // We need to create window.Mobify.WebPush.PWAClient
         // at this point. If a project is configured to use
@@ -201,7 +204,7 @@ const setupMessagingClient = (serviceWorkerSupported) => {
             // supported and loaded, and messaging is enabled, so we can load
             // and initialize the Messaging client, returning the promise
             // from init().
-            return loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
+            return loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID, pwaMode)
         }
     }
 
@@ -422,7 +425,7 @@ const attemptToInitializeApp = () => {
         ? loadWorker(true)
         : Promise.resolve(false)
     ).then((serviceWorkerSupported) => {
-        setupMessagingClient(serviceWorkerSupported, messagingEnabled)
+        setupMessagingClient(serviceWorkerSupported, true)
     })
 
     // Prefetch analytics - it's something that we will be downloading later,
@@ -485,7 +488,7 @@ if (shouldPreview()) {
                 // We ignore the Promise returned from this call, since
                 // we want to continue to load and setup the non-pwa
                 // script anyway, whether Messaging succeeds or not.
-                setupMessagingClient(results[0])
+                setupMessagingClient(results[0], false)
                     .then((state) => loaderLog(`Messaging init complete with state ${JSON.stringify(state)}`))
 
                 // This load will execute in parallel with setup of the

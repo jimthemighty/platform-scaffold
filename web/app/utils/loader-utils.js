@@ -64,7 +64,7 @@ export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
  * or init fails, the Promise is rejected.
  * @returns {Promise.<*>} the same Promise
  */
-export const loadAndInitMessagingClient = (debug, siteId) => {
+export const loadAndInitMessagingClient = (debug, siteId, pwaMode) => {
     loadScriptAsPromise({
         id: 'progressive-web-messaging-client',
         src: MESSAGING_PWA_CLIENT_PATH,
@@ -73,7 +73,7 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
         .then(() => (
             // We assume window.Progressive will exist at this point.
             window.Progressive.MessagingClient
-                .init({debug, siteId})
+                .init({debug, siteId, pwaMode})
                 .then(clientInitResolver)
         ))
         /**
