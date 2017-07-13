@@ -15,38 +15,19 @@ import {getIsLoggedIn} from '../../../store/user/selectors'
 import {noop} from 'progressive-web-sdk/dist/utils/utils'
 
 import Button from 'progressive-web-sdk/dist/components/button'
-import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
-import Image from 'progressive-web-sdk/dist/components/image'
 import List from 'progressive-web-sdk/dist/components/list'
+import ItemQuantityStepper from '../../../components/item-quantity-stepper'
+import ItemPrice from '../../../components/item-price'
 import ProductItem from '../../../components/product-item'
-import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
-import Stepper from 'progressive-web-sdk/dist/components/stepper'
+import ProductImage from '../../../components/product-image'
+import ProductSkeleton from '../../../components/product-skeleton'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const productItemClassNames = 'u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end'
 
-const ProductImage = ({src, alt}) => (
-    <Image src={src} alt={alt} width="104px" height="104px" />
-)
 
-ProductImage.propTypes = {
-    alt: PropTypes.string,
-    src: PropTypes.string
-}
-
-const ProductSkeleton = () => (
-    <ProductItem
-        className={productItemClassNames}
-        title={<SkeletonText type="h3" className="u-margin-bottom-sm" />}
-        image={<ProductImage src="null" alt="null" />}
-    >
-        <SkeletonText width="60%" style={{lineHeight: '20px'}} />
-        <SkeletonText width="60%" style={{lineHeight: '20px'}} className="u-margin-bottom-sm" />
-        <div className="t-cart__product-content-placeholder" />
-    </ProductItem>
-)
 /* eslint-disable camelcase */
 
 class CartProductItem extends React.Component {
@@ -89,24 +70,13 @@ class CartProductItem extends React.Component {
                 >
 
                 <FieldRow className="u-align-bottom">
-                    <Field label="Quantity" idFor={`quantity-${cartItemId}`}>
-                        <Stepper
-                            className="pw--simple t-cart__product-stepper"
-                            idForLabel={`quantity-${cartItemId}`}
-                            incrementIcon="plus"
-                            decrementIcon="minus"
-                            initialValue={quantity}
-                            minimumValue={1}
-                            onChange={this.changeQuantity}
-                            />
-                    </Field>
+                    <ItemQuantityStepper
+                        cartItemId={cartItemId}
+                        changeQuantity={this.changeQuantity}
+                        quantity={quantity}
+                    />
 
-                    <Field>
-                        <div className="u-text-align-end u-flex">
-                            <div className="u-h5 u-color-accent u-text-weight-bold">{linePrice}</div>
-                            <div className="u-text-quiet"><em>{itemPrice} each</em></div>
-                        </div>
-                    </Field>
+                    <ItemPrice linePrice={linePrice} itemPrice={itemPrice} />
                 </FieldRow>
 
                 <div className="u-flexbox">
@@ -187,7 +157,7 @@ const CartProductList = ({items, isLoggedIn, summaryCount, onSaveLater, onUpdate
             </div>
 
             <List className="u-bg-color-neutral-00 u-border-light-top u-border-light-bottom">
-                {isCartEmpty && <ProductSkeleton />}
+                {isCartEmpty && <ProductSkeleton productItemClassNames={productItemClassNames} />}
                 {items.map((item) => (
                     <CartProductItem {...item}
                         cartItemId={item.id}

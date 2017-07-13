@@ -17,38 +17,46 @@ const ProductItem = ({
     image,
     price,
     title,
-    customWidth
+    customWidth,
+    footerContent
 }) => {
-    const classes = classNames('c-product-item', 'u-flexbox', 'u-direction-row-reverse', className)
+    const classes = classNames('c-product-item', className)
 
     return (
         <article className={classes}>
-            <div className="u-flex">
-                {!!category &&
-                    <p className="c-product-item__category u-margin-bottom-sm u-color-brand">
-                        {category}
-                    </p>
-                }
+            <div className="u-flexbox u-direction-row-reverse">
+                <div className="u-flex">
+                    {!!category &&
+                        <p className="c-product-item__category u-margin-bottom-sm u-color-brand">
+                            {category}
+                        </p>
+                    }
 
-                <div className="u-margin-bottom-sm u-text-capitilize">
-                    {title}
+                    <div className="u-margin-bottom-sm u-text-capitilize">
+                        {title}
+                    </div>
+
+                    {!!price &&
+                        <div>{price}</div>
+                    }
+
+                    {!!children &&
+                        <div>
+                            {children}
+                        </div>
+                    }
                 </div>
 
-                {!!price &&
-                    <div>{price}</div>
-                }
 
-                {!!children &&
-                    <div>
-                        {children}
+                {image &&
+                    <div className="u-padding-end u-flex-none" style={{width: customWidth}}>
+                        {image}
                     </div>
                 }
             </div>
-
-
-            {image &&
-                <div className="u-padding-end u-flex-none" style={{width: customWidth}}>
-                    {image}
+            {!!footerContent &&
+                <div className="u-full-width">
+                    {footerContent}
                 </div>
             }
         </article>
@@ -81,6 +89,10 @@ ProductItem.propTypes = {
      * Designates the custom width that accepets valid css units
      */
     customWidth: PropTypes.string,
+    /**
+     * Content to be added at the bottom of the item
+    */
+    footerContent: PropTypes.node,
 
     /**
      * Image of the product. Usually an `<img />` tag or `<Image />` component

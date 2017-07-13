@@ -13,13 +13,15 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
+    receiveWishlistData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid} from './parsers'
+import {isFormResponseInvalid, parseWishlistProducts} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -38,6 +40,20 @@ export const initRegisterPage = (url) => (dispatch) => {
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
+
+export const initWishlistPage = (url) => (dispatch) => {
+    return (dispatch(fetchPageData(url)))
+        .then(([$, $response]) => {
+            const productData = parseWishlistProducts($, $response)
+            const wishlistData = {
+                title: $response.find('.page-title').text(),
+                products: Object.keys(productData)
+            }
+            dispatch(receiveWishlistData(wishlistData))
+            dispatch(receiveProductsData(productData))
+        })
+}
+
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
