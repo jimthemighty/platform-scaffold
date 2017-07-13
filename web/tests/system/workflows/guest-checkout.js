@@ -80,7 +80,7 @@ export default {
                 .waitForElementVisible(cart.selectors.cartTemplateIdentifier)
                 .assert.visible(cart.selectors.cartTemplateIdentifier)
         } else {
-            browser.log('Item is out of stock. Try changing PRODUCT_INDEX. It is currently ' + PRODUCT_INDEX)
+            browser.log(`Item is out of stock. Try changing PRODUCT_INDEX. It is currently ${PRODUCT_INDEX}`)
         }
     },
 
