@@ -61,7 +61,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
             }
             <div className="u-flexbox u-margin-bottom-lg">
                 <Button
-                    icon="like"
+                    icon="wishlist-add"
                     title="Wishlist"
                     iconClassName="u-margin-end"
                     showIconText={true}
