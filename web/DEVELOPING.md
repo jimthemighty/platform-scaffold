@@ -53,7 +53,7 @@ This will leave these "beta" npm modules sitting around in the npm registry but 
   
 ## Swapping Integration Managers
 
-Note: This should make it's way into the Tutorial eventually, but this is here for now.
+Note: This should make its way into the Tutorial eventually, but this is here for now.
 
 ### Running against custom Merlin's connector:
 
