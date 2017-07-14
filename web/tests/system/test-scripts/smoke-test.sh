@@ -36,7 +36,7 @@ fi
 VALUE=${CIRCLECI:-}
 
 if [[  -z "${VALUE}" ]]; then
-    npm run test:e2e
+    npm run test:e2e -- --test tests/system/workflows/push-subscribe.js
 else
   testfiles=$(find ./tests/system/workflows/ -name '*.js'| sort | awk "NR % ${CIRCLE_NODE_TOTAL} == ${CIRCLE_NODE_INDEX}")
   if [ -z "$testfiles" ]
