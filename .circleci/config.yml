@@ -11,10 +11,10 @@ jobs:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
-      - run: cd web
       - run:
           name: Install Dependencies
           command: npm install
+          working_directory: /home/ubuntu/platform-scaffold/web/
       - save_cache:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
@@ -22,39 +22,101 @@ jobs:
       - run:
           name: Accept Cert
           command: bash ./scripts/accept-cert-ci.sh
-      - run:
-          name: Lint
-          command: npm run lint     
+          working_directory: /home/ubuntu/platform-scaffold/web/    
       - persist_to_workspace:
           root: .
           paths: .
 
-  run-all-tests:
+  test-unit:
+    docker:
+      - image: mobify/cci-docker-primary:0.0.15
+    workDir: /home/ubuntu/platform-scaffold/
+    steps:
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
+      - run:
+          name: Lint
+          command: npm run lint
+          working_directory: /home/ubuntu/platform-scaffold/web/ 
+      - run:
+          name: Run Unit Tests
+          command: npm test -- --runInBand
+          working_directory: /home/ubuntu/platform-scaffold/web/
+  
+  test-e2e:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
     parallelism: 3
-    resource_class: large
     steps:
       - attach_workspace:
           at: /home/ubuntu/platform-scaffold/
-      - run: cd web
       - run:
           name: Start Test Server
           command: bash ./tests/system/test-scripts/start-test-server.sh
           background: true
+          working_directory: /home/ubuntu/platform-scaffold/web/
       - run:
           name: Wait for Server
           command: bash ./scripts/wait-for-dependencies.sh
+          working_directory: /home/ubuntu/platform-scaffold/web/
+      - run: 
+          name: Run end2end Test
+          command: xvfb-run -a ./tests/system/test-scripts/run-e2e-in-parallel.sh
+          when: always
+          working_directory: /home/ubuntu/platform-scaffold/web/
+      - store_artifacts:
+          path: web/tests/reports/
+          when: always
+      - store_artifacts:
+          path: web/tests/screenshots/system/workflows/
+          when: always
+      
+  test-performance:
+    docker:
+      - image: mobify/cci-docker-primary:0.0.15
+    workDir: /home/ubuntu/platform-scaffold/
+    steps:
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
       - run:
-          name: Run-All-Tests
-          command: bash ./tests/system/test-scripts/run-all-tests-on-ci.sh
-  
+          name: Build Project
+          command: npm run prod:build
+          background: true
+          working_directory: /home/ubuntu/platform-scaffold/web/
+      - run:
+          name: Start Test Server
+          command: bash ./tests/system/test-scripts/start-test-server.sh
+          background: true
+          working_directory: /home/ubuntu/platform-scaffold/web/
+      - run:
+          name: Wait for Server
+          command: bash ./scripts/wait-for-dependencies.sh
+          working_directory: /home/ubuntu/platform-scaffold/web/
+      - run:
+          name: Analyzing Build Size
+          command: npm run test:build-size
+          working_directory: /home/ubuntu/platform-scaffold/web/
+      - run:
+          name: Lighthouse Tests
+          command: xvfb-run -a npm run test:pwa-preview
+          when: always
+          working_directory: /home/ubuntu/platform-scaffold/web/
+      - store_artifacts:
+          path: web/tests/system/test-scripts/lighthouse/reports/
+          when: always
+
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
-      - run-all-tests:
+      - test-unit:
+          requires:
+            - build
+      - test-e2e:
+          requires:
+            - build
+      - test-performance:
           requires:
             - build
