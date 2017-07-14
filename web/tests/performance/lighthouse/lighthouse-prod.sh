@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-OUTPUT_PATH=tests/e2e/test-scripts/lighthouse/reports/audit-prod
+OUTPUT_PATH=tests/performance/lighthouse/reports/audit-prod
 # See package.json's siteUrl key.
 URL=${1-$npm_package_siteUrl}
 
