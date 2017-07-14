@@ -10,6 +10,7 @@ let home
 let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
+const ENV = process.env.NODE_ENV || 'test'
 
 export default {
     '@tags': ['messaging'],
@@ -24,8 +25,13 @@ export default {
     },
 
     'Push Subscribe - Home': (browser) => {
+        if (ENV === 'production') {
+            browser.url(process.env.npm_package_siteUrl)
+        } else {
+            console.log('Running preview.')
+            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+        }
         browser
-            .preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },

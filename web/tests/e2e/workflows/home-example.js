@@ -5,6 +5,7 @@
 import Home from '../page-objects/home'
 
 let home
+const ENV = process.env.NODE_ENV || 'test'
 
 // On the homepage, at least the following skip
 // links should be present on the page...
@@ -24,8 +25,13 @@ export default {
     },
 
     'Home Page': (browser) => {
+        if (ENV === 'production') {
+            browser.url(process.env.npm_package_siteUrl)
+        } else {
+            console.log('Running preview.')
+            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+        }
         browser
-            .preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },

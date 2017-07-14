@@ -44,7 +44,7 @@ export const getCart = () => (dispatch) => {
         }
     }
 
-    // For more information on the shape of the expected data, see ../../cart/types
+    // For more information on the shape of the expected data, see progressive-web-sdk/integration-manager/cart/types
     dispatch(receiveCartContents(exampleCartData))
     dispatch(receiveCartProductData(exampleCartProducts))
     return Promise.resolve()
