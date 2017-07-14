@@ -16,7 +16,6 @@ PushMessaging.prototype.dismissDefaultAsk = function() {
     const self = this
     this.browser
         .log('Checking if Push Messaging is enabled')
-        .saveScreenshot('tests/screenshots')
         .element('css selector', selectors.dismissButton, (result) => {
             if (result.value && result.value.ELEMENT) {
                 self.browser
@@ -40,8 +39,6 @@ PushMessaging.prototype.acceptDefaultAsk = function() {
                     .waitForElementVisible(selectors.yesPlease)
                     .click(selectors.yesPlease)
                     .waitForElementNotPresent(selectors.yesPlease)
-
-                self.assertSubscribed()
             }
         })
     return this

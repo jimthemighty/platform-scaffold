@@ -49,5 +49,6 @@ export default {
         // by this point.
         pushMessaging
             .acceptDefaultAsk()
+            .assertSubscribed()
     }
 }
