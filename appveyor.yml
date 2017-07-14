@@ -11,7 +11,6 @@ branches:
   only:
     - master
     - develop
-    - e2e-subscribe-windows
 
 # Install scripts. (runs after repo cloning)
 install:
