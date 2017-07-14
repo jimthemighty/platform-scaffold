@@ -5,8 +5,6 @@ set -o nounset
 # Run automated end-to-end (e2e) tests to verify that checkout still works.
 
 # This script starts the local dev server if the current branch is not master.
-# The TEST_PROFILE environment variable defines which testing environment
-# should be used in tests/e2e/site.js.
 
 # If the project is not using git, assume we want to test the local build.
 
@@ -22,12 +20,11 @@ if [ "$CURRENT_BRANCH" != "master" ]; then
     echo "Running tests against local build"
     # Kill background processes when this script exits.
     trap 'kill $(jobs -p)' EXIT > /dev/null 2>&1
-    export TEST_PROFILE=local
     npm run prod:build
     npm run test:server > /dev/null 2>&1 &
 else
     echo "Running tests against production"
-    export TEST_PROFILE=production
+    export NODE_ENV=production
 fi
 
 # Run the tests to verify that checkout flow still works.

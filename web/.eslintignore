@@ -6,6 +6,5 @@ app/vendor/astro-client.js
 app/vendor/astro-detect.js
 proxy
 tests/e2e/nightwatch-config.js
-tests/e2e/site.js
 tests/jest-setup.js
 tests/jest-preprocessor.js
