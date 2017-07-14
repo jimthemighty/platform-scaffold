@@ -36,7 +36,7 @@ const Wishlist = ({title, itemCount, products}) => (
                                 <Button
                                     className="pw--primary u-width-full u-text-uppercase u-margin-bottom-lg"
                                     text="Add To Cart"
-                                    onClick={() => { alert('ADD TO CART CLICKED') }}
+                                    onClick={() => { console.log('ADD TO CART CLICKED') }}
                                     data-analytics-name={UI_NAME.addToCart}
                                 />
                             }
@@ -57,14 +57,14 @@ const Wishlist = ({title, itemCount, products}) => (
                                     innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
                                     href={'test/url'}
                                     data-analytics-name={UI_NAME.editItem}
-                                    onClick={() => alert('test edit button')}
+                                    onClick={() => console.log('test edit button')}
                                     >
                                     Edit
                                 </Button>
                                 <Button
                                     className="u-text-size-small u-color-brand u-text-letter-spacing-normal qa-cart__remove-item"
                                     innerClassName="u-padding-end-0 u-padding-bottom-0 u-padding-start-0"
-                                    onClick={() => alert('test remove button')}
+                                    onClick={() => console.log('test remove button')}
                                     data-analytics-name={UI_NAME.removeItem}
                                     >
                                     Remove
