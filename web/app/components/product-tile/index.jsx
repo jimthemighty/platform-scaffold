@@ -9,6 +9,7 @@ import Image from 'progressive-web-sdk/dist/components/image'
 import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import ProductItem from '../product-item'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
+import Card from '../card'
 
 /**
  * Product Tile represents a product and it's basic information: image,
@@ -48,13 +49,15 @@ const ProductTile = ({className, thumbnail, href, price, title, onClick}) => {
         : <SkeletonBlock height="22px" width="50px" />
 
     return (
-        <ListTile className="c-product-tile u-card" onClick={onClick} href={href}>
-            <ProductItem customWidth="45%"
-                className={classNames('u-align-center', className)}
-                title={titleElement}
-                price={priceElement}
-                image={productImage} />
-        </ListTile>
+        <Card className="c--shadow">
+            <ListTile className="c-product-tile c--shadow" onClick={onClick} href={href}>
+                <ProductItem customWidth="45%"
+                    className={classNames('u-align-center', className)}
+                    title={titleElement}
+                    price={priceElement}
+                    image={productImage} />
+            </ListTile>
+        </Card>
     )
 }
 

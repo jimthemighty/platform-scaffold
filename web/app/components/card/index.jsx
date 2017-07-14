@@ -15,22 +15,22 @@ const Card = ({
     children,
     footer
 }) => {
-    const classes = classNames('c-card u-border', className)
+    const classes = classNames('c-card', className)
 
     return (
         <article className={classes}>
             <div className="c-card__inner">
                 {header &&
-                    <header className="c-card__header u-padding-md">
+                    <header className="c-card__header">
                         {header}
                     </header>
                 }
-                <div className="c-card__content u-padding-md">
+                <div className="c-card__content">
                     {children}
                 </div>
 
                 {footer &&
-                    <footer className="c-card__footer u-border-top">
+                    <footer className="c-card__footer">
                         {footer}
                     </footer>
                 }

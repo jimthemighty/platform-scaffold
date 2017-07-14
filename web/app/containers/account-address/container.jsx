@@ -31,17 +31,18 @@ const AccountAddress = ({title}) => (
         </div>
         <div className="t-account-address__content u-padding-md">
             <Card
+                className="c--border"
                 header={
-                    <h3>placeholder header</h3>
+                    <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">placeholder header</h3>
                 }
                 children={
-                    <div>Address placeholder</div>
+                    <div className="u-padding-md">Address placeholder</div>
                 }
                 footer={
                     <Button
                         type="button"
                         title="Change Address"
-                        className="u-width-full u-color-brand"
+                        className="u-width-full u-color-brand u-border-top"
                         icon="edit"
                         showIconText={true}
                         iconClassName="u-margin-end"
@@ -54,11 +55,12 @@ const AccountAddress = ({title}) => (
         </div>
         <div className="t-account-address__content u-padding-md">
             <Card
+                className="c--border"
                 header={
-                    <h3>placeholder header</h3>
+                    <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">placeholder header</h3>
                 }
                 children={
-                    <div>Address 1</div>
+                    <div className="u-padding-md">Address 1</div>
                 }
                 footer={
                     <div className="u-flexbox">
@@ -66,7 +68,7 @@ const AccountAddress = ({title}) => (
                             <Button
                                 type="button"
                                 title="Edit"
-                                className="u-width-full u-color-brand"
+                                className="u-width-full u-color-brand u-border-top"
                                 icon="edit"
                                 showIconText={true}
                                 iconClassName="u-margin-end"
@@ -76,7 +78,7 @@ const AccountAddress = ({title}) => (
                             <Button
                                 type="button"
                                 title="Delete"
-                                className="u-width-full u-color-brand"
+                                className="u-width-full u-color-brand u-border-top"
                                 icon="trash"
                                 showIconText={true}
                                 iconClassName="u-margin-end"
