@@ -5,9 +5,9 @@
 import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID} from '../utils'
 import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
+import {receiveCartContents, receiveCartItems} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 
-import {getProductById, getProductThumbnailSrcById, getProductThumbnailById} from 'progressive-web-sdk/dist/store/products/selectors'
+import {getProductById, getProductThumbnailSrcById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from '../parsers'
 import {parseCartProducts, parseCartContents} from './parsers'
 
@@ -63,7 +63,7 @@ const imageFromJson = (imageJson, name, description) => ({
  * Fetches product images for items that are in the cart and don't already
  * have them.
  */
-export const fetchCartItemImages = () => (dispatch, getState) => {
+export const fetchCartItemData = () => (dispatch, getState) => {
 
     /* TODO: The `view_type` is configurable per instance. This is something that
     *       might have to be configurable in the connector to say what `view_type`
@@ -72,43 +72,62 @@ export const fetchCartItemImages = () => (dispatch, getState) => {
     const largeViewType = 'large'
 
     const currentState = getState()
-    const items = getCartItems(currentState)
+
+    const items = getCartItems(currentState).toJS()
+
     const updatedProducts = {}
+    const updatedCartItems = []
 
-    // We use the .thumbnail as an indicator of whether the product has images already
     return Promise.all(
-        items.filter((cartItem) => getProductThumbnailById(cartItem.get('productId'))(currentState).size === 0)
-            .map((cartItem) => {
-                const productId = cartItem.get('productId')
+        items.map((cartItem) => {
+            const productId = cartItem.productId
+            return makeApiRequest(`/products/${productId}?expand=images,variations&all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
+                .then((response) => response.json())
+                .then(({image_groups, name, page_title, short_description, variation_values, variation_attributes}) => {
+                    const productHref = getProductHref(productId)
+                    const productState = getProductById(productId)(currentState).toJS()
+                    const options = variation_attributes.map((attribute) => {
+                        const selectedId = variation_values[attribute.id]
+                        const selectedVariant = attribute.values.find((val) => val.value === selectedId) // eslint-disable-line
 
-                return makeApiRequest(`/products/${productId}/images?all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
-                    .then((response) => response.json())
-                    .then(({image_groups, name, page_title, short_description}) => {
-                        const productHref = getProductHref(productId)
-                        const productState = getProductById(productId)(currentState).toJS()
-                        const product = {
-                            ...productState,
-                            id: productId,
-                            title: page_title,
-                            available: true,
-                            href: productHref,
-                            price: productState.price || ''
+                        return {
+                            label: attribute.name,
+                            value: selectedVariant.name
                         }
-
-                        const thumbnail = image_groups.find((group) => group.view_type === thumbnailViewType)
-                        if (thumbnail) {
-                            product.thumbnail = imageFromJson(thumbnail.images[0], name, short_description)
-                        }
-                        const largeGroup = image_groups.find((group) => group.view_type === largeViewType)
-                        if (largeGroup) {
-                            product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
-                        }
-                        updatedProducts[productHref] = product
                     })
-            })
+
+                    const product = {
+                        ...productState,
+                        id: productId,
+                        title: page_title,
+                        available: true,
+                        href: productHref,
+                        price: productState.price || ''
+                    }
+
+                    const thumbnail = image_groups.find((group) => group.view_type === thumbnailViewType)
+                    if (thumbnail) {
+                        product.thumbnail = imageFromJson(thumbnail.images[0], name, short_description)
+                    }
+                    const largeGroup = image_groups.find((group) => group.view_type === largeViewType)
+                    if (largeGroup) {
+                        product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
+                    }
+
+                    updatedProducts[productId] = product
+
+                    updatedCartItems.push({
+                        ...cartItem,
+                        options,
+                        thumbnail: product.thumbnail,
+                        title: product.title
+                    })
+                })
+        })
     )
     .then(() => {
         dispatch(receiveCartProductData(updatedProducts))
+        dispatch(receiveCartItems(updatedCartItems))
     })
 }
 
@@ -136,7 +155,7 @@ export const handleCartData = (basket) => (dispatch) => {
     dispatch(receiveCartProductData(parseCartProducts(basket)))
     dispatch(receiveCartContents(parseCartContents(basket)))
 
-    return dispatch(fetchCartItemImages())
+    return dispatch(fetchCartItemData())
 }
 
 
