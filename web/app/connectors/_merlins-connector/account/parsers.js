@@ -7,6 +7,7 @@ export const isFormResponseInvalid = ($response, formSelector) => $response.find
 
 export const parseWishlistProducts = ($, $response) => {
     const products = {}
+    const wishlistItems = []
 
     $response.find('#wishlist-view-form .product-item').each((_, productTile) => {
         const $productTile = $(productTile)
@@ -21,7 +22,15 @@ export const parseWishlistProducts = ($, $response) => {
             title: $productTile.find('.product-item-name').text(),
             id
         }
+
+        wishlistItems.push({
+            quantity: $productTile.find('input.qty').val(),
+            id
+        })
     })
 
-    return products
+    return {
+        products,
+        wishlistItems
+    }
 }

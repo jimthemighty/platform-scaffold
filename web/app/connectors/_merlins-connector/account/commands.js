@@ -44,13 +44,16 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 export const initWishlistPage = (url) => (dispatch) => {
     return (dispatch(fetchPageData(url)))
         .then(([$, $response]) => {
-            const productData = parseWishlistProducts($, $response)
+            const {
+                wishlistItems,
+                products
+            } = parseWishlistProducts($, $response)
             const wishlistData = {
                 title: $response.find('.page-title').text(),
-                products: Object.keys(productData)
+                products: wishlistItems
             }
+            dispatch(receiveProductsData(products))
             dispatch(receiveWishlistData(wishlistData))
-            dispatch(receiveProductsData(productData))
         })
 }
 
