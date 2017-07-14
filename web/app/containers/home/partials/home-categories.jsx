@@ -78,7 +78,7 @@ HomeCategory.propTypes = {
 const HomeCategories = ({categories}) => {
     return (
         <div className="t-home__category u-padding-start u-padding-end u-padding-bottom-md">
-            <Card className="c--shadow">
+            <Card hasShadow>
                 {categories.map((category, index) => <HomeCategory category={category} key={index} />)}
             </Card>
         </div>

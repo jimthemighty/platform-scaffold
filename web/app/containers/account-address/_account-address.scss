@@ -1,7 +1,22 @@
-// AccountAddress
+// Account Address Theme
 // ===
 
-.t-account-address {
-    // Root Class. Contains all core styles, typically for the template's
-    // wrapper element.
+// Account Address Sub-heading
+// ---
+//
+.t-account-address__sub-heading {
+    padding: $unit*2 $unit*1.5 $unit*1.5;
+    border-top: $border;
+    border-bottom: $border;
+    background-color: $neutral-10;
+}
+
+
+// Account Address Content
+// ---
+//
+.t-account-address__content {
+    .c-card + .c-card {
+        margin-top: $unit*1.5;
+    }
 }

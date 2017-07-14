@@ -67,7 +67,7 @@ class ProductNearestStores extends React.Component {
 
         return (
             <div className="t-product-details__nearest-stores">
-                <Card className="c--shadow">
+                <Card hasShadow>
                     <div className="u-padding-md u-padding-top-lg u-padding-bottom-lg">
                         {title &&
                             <div className="u-flexbox u-align-center u-padding-bottom-md u-border-light-bottom">

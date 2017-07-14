@@ -26,12 +26,12 @@ const AccountAddress = ({title}) => (
                 className="pw--tertiary u-margin-top-lg u-width-full u-text-weight-medium"
             />
         </div>
-        <div className="t-account-address__section u-bg-color-neutral-10 u-padding-top-lg u-padding-bottom-md u-padding-start-md u-padding-end-md u-border-top u-border-bottom">
+        <div className="t-account-address__sub-heading">
             <h2 className="u-h5 u-text-family">Default address</h2>
         </div>
         <div className="t-account-address__content u-padding-md">
             <Card
-                className="c--border"
+                hasBorder
                 header={
                     <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">placeholder header</h3>
                 }
@@ -50,12 +50,12 @@ const AccountAddress = ({title}) => (
                 }
             />
         </div>
-        <div className="t-account-address__section u-bg-color-neutral-10 u-padding-top-lg u-padding-bottom-md u-padding-start-md u-padding-end-md u-border-top u-border-bottom">
+        <div className="t-account-address__sub-heading">
             <h2 className="u-h5 u-text-family">Other saved addresses</h2>
         </div>
         <div className="t-account-address__content u-padding-md">
             <Card
-                className="c--border"
+                hasBorder
                 header={
                     <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">placeholder header</h3>
                 }

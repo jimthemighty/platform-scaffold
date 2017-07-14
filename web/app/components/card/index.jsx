@@ -13,9 +13,14 @@ const Card = ({
     className,
     header,
     children,
-    footer
+    footer,
+    hasShadow,
+    hasBorder
 }) => {
-    const classes = classNames('c-card', className)
+    const classes = classNames('c-card', {
+        'c--shadow': hasShadow,
+        'c--border': hasBorder,
+    }, className)
 
     return (
         <article className={classes}>
@@ -55,6 +60,16 @@ Card.propTypes = {
      * Footer content of the card
      */
     footer: PropTypes.node,
+
+    /**
+     * Determines if card has border
+     */
+    hasBorder: PropTypes.bool,
+
+    /**
+     * Determines if card has box-shadow
+     */
+    hasShadow: PropTypes.bool,
 
     /**
      * Header content of the card
