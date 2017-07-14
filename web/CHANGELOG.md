@@ -1,3 +1,6 @@
+## TO BE RELEASED
+- Handling `product_search` SFCC API request not necessary having `image` object in the response.
+
 ## 0.17.3 (July 7, 2017)
 - Moved a pair of browser storage detection methods to SDK [#850](https://github.com/mobify/platform-scaffold/pull/850)
 - Dismissal config is via DefaultAsk prop now [#863](https://github.com/mobify/platform-scaffold/pull/863)
