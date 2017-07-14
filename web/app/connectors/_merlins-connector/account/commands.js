@@ -39,6 +39,10 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
+export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
+}
+
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
     document.cookie = `${MAGENTO_MESSAGE_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
@@ -186,6 +190,4 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
             console.error(error)
             throw new Error('Unable to save Billing Address')
         })
-
-
 }
