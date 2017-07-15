@@ -13,7 +13,7 @@ const chalk = require('chalk')
 
 let fileName
 let failure = false
-const reportsDir = 'tests/system/test-scripts/lighthouse/reports/'
+const reportsDir = 'tests/performance/lighthouse/reports/'
 
 if (fs.existsSync(`${reportsDir}audit-local.report.html`)) {
     fileName = 'audit-local'
