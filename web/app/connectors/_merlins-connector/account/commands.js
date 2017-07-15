@@ -48,9 +48,11 @@ export const initWishlistPage = (url) => (dispatch) => {
                 wishlistItems,
                 products
             } = parseWishlistProducts($, $response)
+            const formURL = $response.find('#wishlist-view-form').attr('action')
             const wishlistData = {
                 title: $response.find('.page-title').text(),
-                products: wishlistItems
+                products: wishlistItems,
+                shareURL: formURL ? formURL.replace('update', 'share') : ''
             }
             dispatch(receiveProductsData(products))
             dispatch(receiveWishlistData(wishlistData))
