@@ -230,7 +230,7 @@ Run this command:
 npm run test:max-file-size
 ```
 
-The user can also list specific files and maximum **gzipped** sizes for those files. The default behaviour is to examine the contents of the `build` folder against thresholds in `tests/system/test-scripts/gzip-size-config.json`:
+The user can also list specific files and maximum **gzipped** sizes for those files. The default behaviour is to examine the contents of the `build` folder against thresholds in `tests/performance/gzip-size-config.json`:
 
 ```
 {
