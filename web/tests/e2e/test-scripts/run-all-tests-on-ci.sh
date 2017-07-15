@@ -10,7 +10,7 @@ if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   npm test -- --runInBand
   ./scripts/wait-for-dependencies.sh
   echo 'Verify built files sizes'
-  npm run test:max-file-size -- build tests/system/test-scripts/gzip-size-config.json
+  npm run test:max-file-size -- build tests/performance/gzip-size-config.json
   echo 'Starting Lighthouse Tests.'
   ./tests/performance/lighthouse/run-lighthouse.sh
   echo 'Running End to End Tests'
@@ -38,7 +38,7 @@ else
 
       ./scripts/wait-for-dependencies.sh
       echo 'Verify built files sizes'
-      npm run test:max-file-size -- build tests/system/test-scripts/gzip-size-config.json
+      npm run test:max-file-size -- build tests/performance/gzip-size-config.json
     
       echo 'Running End to End Tests'
       #If we have nodes > 2, it will be part of the division to run another test:e2e
