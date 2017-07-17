@@ -6,13 +6,11 @@ import React, {PropTypes} from 'react'
 import template from '../../template'
 import WishlistContents from './partials/wishlist-contents'
 import WishlistHeader from './partials/wishlist-header'
-import WishlistShareButton from './partials/wishlist-share'
 
 const Wishlist = () => (
     <div className="t-wishlist">
         <WishlistHeader />
         <WishlistContents />
-        <WishlistShareButton />
     </div>
 )
 

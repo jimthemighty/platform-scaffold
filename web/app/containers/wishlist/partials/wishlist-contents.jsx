@@ -16,6 +16,7 @@ import ItemQuantityStepper from '../../../components/item-quantity-stepper'
 import ItemPrice from '../../../components/item-price'
 import ProductItem from '../../../components/product-item'
 import ProductImage from '../../../components/product-image'
+import WishlistShareButton from './wishlist-share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const WishlistItems = ({products}) => (
@@ -71,7 +72,7 @@ const WishlistItems = ({products}) => (
                 )
             })
         :
-            <SkeletonBlock height="60px" />
+            <NoWishlistItems />
         }
     </List>
 )
@@ -83,21 +84,18 @@ WishlistItems.propTypes = {
 const NoWishlistItems = () => (
     <div className="u-flexbox u-direction-column u-align-center">
         <Icon
-            title="wishlist-add"
-            className="u-flex-none"
-            alt="Empty Wishlist"
-            width="122px"
-            height="110px"
+            name="wishlist-add"
+            className="u-color-brand"
+            size="large"
         />
 
         <div className=" u-text-align-center">
             You have no items in your wishlist.
             Start adding items by browsing the product catalogue
         </div>
-        <Button text="Continue Shopping" href="/" className="u-width-full" />
+        <Button text="Continue Shopping" href="/" className="pw--tertiary u-width-full u-text-uppercase " />
     </div>
 )
-
 
 const WishlistContents = ({
     products,
@@ -107,7 +105,10 @@ const WishlistContents = ({
         {contentLoaded ?
             <WishlistItems products={products} />
         :
-            <NoWishlistItems />
+            <SkeletonBlock height="60px" />
+        }
+        {products.length > 0 &&
+            <WishlistShareButton />
         }
     </div>
 )
