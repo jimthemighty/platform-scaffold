@@ -20,7 +20,7 @@ import WishlistShareButton from './wishlist-share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const WishlistItems = ({products}) => (
-    <List className="pw--borderless">
+    <List>
         {products.length ?
             products.map((product) => {
                 const {id, thumbnail, title, quantity, price} = product
@@ -28,6 +28,7 @@ const WishlistItems = ({products}) => (
                     <ProductItem
                         key={id}
                         customWidth="40%"
+                        className="u-padding-top-md"
                         title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{title}</h2>}
                         image={<ProductImage {...thumbnail} />}
                         footerContent={
@@ -82,14 +83,13 @@ WishlistItems.propTypes = {
 }
 
 const NoWishlistItems = () => (
-    <div className="u-flexbox u-direction-column u-align-center">
+    <div className="u-flexbox u-direction-column u-align-center ">
         <Icon
             name="wishlist-add"
             className="u-color-brand"
             size="large"
         />
-
-        <div className=" u-text-align-center">
+        <div className="u-text-align-center u-padding-lg">
             You have no items in your wishlist.
             Start adding items by browsing the product catalogue
         </div>
@@ -101,12 +101,14 @@ const WishlistContents = ({
     products,
     contentLoaded
 }) => (
-    <div>
-        {contentLoaded ?
-            <WishlistItems products={products} />
-        :
-            <SkeletonBlock height="60px" />
-        }
+    <div >
+        <div className="u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
+            {contentLoaded ?
+                <WishlistItems products={products} />
+            :
+                <SkeletonBlock height="60px" />
+            }
+        </div>
         {products.length > 0 &&
             <WishlistShareButton />
         }
