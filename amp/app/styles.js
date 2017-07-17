@@ -77,6 +77,9 @@ import ProductItemBase from './components/product-item/_base.scss'
 import ProductTile from './components/product-tile/index'
 import ProductTileBase from './components/product-tile/_base.scss'
 
+import Lightbox from './components/lightbox/index'
+import LightboxBase from './components/lightbox/_base.scss'
+
 
 // Containers
 import Footer from './containers/footer/container'
@@ -122,6 +125,7 @@ styles.set(SkipLinks, [SkipLinksBase])
 styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
+styles.set(Lightbox, [LightboxBase])
 
 
 // Containers

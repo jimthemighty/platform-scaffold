@@ -2,34 +2,28 @@
 
 // Lightbox
 // ===
-//
-// Component description here
-
-
-// Variables
-// ---
 
 
 // Lightbox root
 // ---
 
 .a-lightbox {
-    // Root Class. Contains all core styles, typically for the component's
-    // wrapper element.
+    -webkit-tap-highlight-color: transparent;
 }
 
 
-// Modifiers
+// Mask
 // ---
-//
-// .a-lightbox.a--modifier {
-//     ...
-// }
 
+.a-lightbox__mask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $z4-depth - 1;
 
-// Sub components
-// ---
-//
-// .a-lightbox__sub-component {
-//     ...
-// }
+    background-color: rgba(0, 0, 0, 0.5);
+
+    -webkit-tap-highlight-color: transparent;
+}
