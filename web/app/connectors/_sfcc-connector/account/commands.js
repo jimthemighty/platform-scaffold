@@ -179,9 +179,10 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 export const initAccountAddressPage = () => (dispatch) => {
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
-    return makeApiJsonRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
-        .then((res) => {
-            return res
+
+    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
+        .then((res) => res.json())
+        .then(({data}) => {
+            return data
         })
-        .catch(() => { throw Error('Unable to save address') })
 }
