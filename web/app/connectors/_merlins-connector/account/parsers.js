@@ -32,9 +32,9 @@ const parseAddressInfo = ($address) => {
 export const accountAddressParser = ($, $html) => {
     return {
         defaultAddress: parseAddressInfo($html.find('.box-address-billing address')),
-        addresses: $html.find('.block-addresses-list address').map((_, address) => {
+        addresses: $.makeArray($html.find('.block-addresses-list address').map((_, address) => {
             const $address = $(address)
             return parseAddressInfo($address)
-        })
+        }))
     }
 }

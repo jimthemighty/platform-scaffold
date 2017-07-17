@@ -10,10 +10,10 @@ import Card from '../../components/card'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
-import {getDefaultAddress} from './selectors'
+import {getDefaultAddress, getAddresses} from './selectors'
 // import {getTitle} from './selectors'
 
-const AccountAddress = ({defaultAddress}) => {
+const AccountAddress = ({defaultAddress, addresses}) => {
     const {
         firstname,
         lastname,
@@ -51,8 +51,7 @@ const AccountAddress = ({defaultAddress}) => {
                         <div className="u-padding-md">
                             <p>{firstname} {lastname}</p>
                             <p>{addressLine1}</p>
-                            <p>{city}</p>
-                            <p>{postcode}</p>
+                            <p>{city}, {regionId}, {postcode}</p>
                             <p>{countryId}</p>
                             <p>{telephone}</p>
                         </div>
@@ -73,49 +72,58 @@ const AccountAddress = ({defaultAddress}) => {
                 <h2 className="u-h5 u-text-family">Other saved addresses</h2>
             </div>
             <div className="t-account-address__content u-padding-md">
-                <Card
-                    hasBorder
-                    header={
-                        <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">placeholder header</h3>
-                    }
-                    children={
-                        <div className="u-padding-md">Address 1</div>
-                    }
-                    footer={
-                        <div className="u-flexbox">
-                            <div className="u-flex u-border-end">
-                                <Button
-                                    type="button"
-                                    title="Edit"
-                                    className="u-width-full u-color-brand u-border-top"
-                                    icon="edit"
-                                    showIconText={true}
-                                    iconClassName="u-margin-end"
-                                />
-                            </div>
-                            <div className="u-flex">
-                                <Button
-                                    type="button"
-                                    title="Delete"
-                                    className="u-width-full u-color-brand u-border-top"
-                                    icon="trash"
-                                    showIconText={true}
-                                    iconClassName="u-margin-end"
-                                />
-                            </div>
-                        </div>
-                    }
-                />
+                {addresses.map(({firstname, lastname, addressLine1, city, countryId, postcode, telephone, regionId, idx}) => {
+                    return (
+                        <Card key={idx}
+                            hasBorder
+                            children={
+                                <div className="u-padding-md">
+                                    <p>{firstname} {lastname}</p>
+                                    <p>{addressLine1}</p>
+                                    <p>{city}, {regionId}, {postcode}</p>
+                                    <p>{countryId}</p>
+                                    <p>{telephone}</p>
+                                </div>
+                            }
+                            footer={
+                                <div className="u-flexbox">
+                                    <div className="u-flex u-border-end">
+                                        <Button
+                                            type="button"
+                                            title="Edit"
+                                            className="u-width-full u-color-brand u-border-top"
+                                            icon="edit"
+                                            showIconText={true}
+                                            iconClassName="u-margin-end"
+                                        />
+                                    </div>
+                                    <div className="u-flex">
+                                        <Button
+                                            type="button"
+                                            title="Delete"
+                                            className="u-width-full u-color-brand u-border-top"
+                                            icon="trash"
+                                            showIconText={true}
+                                            iconClassName="u-margin-end"
+                                        />
+                                    </div>
+                                </div>
+                            }
+                        />
+                    )
+                })}
             </div>
         </div>
     )
 }
 
 AccountAddress.propTypes = {
+    addresses: PropTypes.array,
     defaultAddress: PropTypes.object
 }
 
 const mapStateToProps = createPropsSelector({
+    addresses: getAddresses,
     defaultAddress: getDefaultAddress
 })
 
