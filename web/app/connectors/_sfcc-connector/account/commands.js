@@ -175,3 +175,13 @@ export const updateBillingAddress = (formValues) => (dispatch) => {
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
+
+export const initAccountAddressPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    return makeApiJsonRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
+        .then((res) => {
+            return res
+        })
+        .catch(() => { throw Error('Unable to save address') })
+}
