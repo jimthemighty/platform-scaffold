@@ -14,7 +14,7 @@ const WishlistShareButton = ({
 }) => (
     <Button
         title="Share Wish List"
-        icon="like"
+        icon="share"
         showIconText={true}
         href={shareURL}
         className="u-color-brand u-text-letter-spacing-normal u-width-full"

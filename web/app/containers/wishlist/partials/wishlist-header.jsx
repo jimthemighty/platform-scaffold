@@ -12,7 +12,7 @@ const WishlistHeader = ({
     itemCount,
     title
 }) => (
-    <h1 className="t-wishlist__title">{title} ({itemCount})</h1>
+    <h1 className="t-wishlist__title">{title ? title : 'My Wishlist'} ({itemCount})</h1>
 )
 
 

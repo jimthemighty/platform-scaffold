@@ -13,7 +13,8 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    receiveWishlistData
+    receiveWishlistData,
+    receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {buildFormData, createAddressRequestObject} from './utils'
@@ -56,6 +57,7 @@ export const initWishlistPage = (url) => (dispatch) => {
             }
             dispatch(receiveProductsData(products))
             dispatch(receiveWishlistData(wishlistData))
+            dispatch(receiveWishlistUIData({contentLoaded: true}))
         })
 }
 
