@@ -14,7 +14,8 @@ const reducer = handleActions({
     [productDetailsActions.addToCartStarted]: (state) => state.set('addToCartInProgress', true),
     [productDetailsActions.addToCartComplete]: (state) => state.set('addToCartInProgress', false),
     [receiveProductDetailsUIData]: mergePayload,
-    [productDetailsActions.receiveNewItemQuantity]: mergePayload
+    [productDetailsActions.receiveNewItemQuantity]: mergePayload,
+    [productDetailsActions.setIsWishlistAdded]: mergePayload
 }, Immutable.Map())
 
 export default reducer

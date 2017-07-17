@@ -1,4 +1,5 @@
-## TO BE RELEASED
+## To be released
+- Add product variation support to Merlin's connector [#800](https://github.com/mobify/platform-scaffold/pull/800)
 - Handling `product_search` SFCC API request not necessarily having `image` object in the response [#888](https://github.com/mobify/platform-scaffold/pull/888)
 
 ## 0.17.3 (July 7, 2017)
