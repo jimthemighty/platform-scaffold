@@ -43,8 +43,7 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => {
-            dispatch(recieveAccountAddressUIData(
-            accountAddressParser($, $response)))
+            dispatch(recieveAccountAddressUIData(accountAddressParser($, $response)))
         })
 }
 

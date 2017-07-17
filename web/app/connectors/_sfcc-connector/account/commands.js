@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {setRegisterLoaded, setSigninLoaded, recieveAccountAddressUIData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createOrderAddressObject} from '../checkout/utils'
 import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
@@ -183,6 +183,8 @@ export const initAccountAddressPage = () => (dispatch) => {
     return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
         .then((res) => res.json())
         .then(({data}) => {
-            return data
+            // TODO
+            // match address schema with this data object
+            dispatch(recieveAccountAddressUIData(data))
         })
 }
