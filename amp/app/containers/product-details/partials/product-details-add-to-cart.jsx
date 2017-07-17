@@ -4,7 +4,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {canonicalURL} from '../../../utils'
 
 // Components
-import Button from '../../../components/button'
+import Button from 'mobify-amp-sdk/dist/components/button'
 
 // Selectors
 import {getCurrentUrl} from 'progressive-web-sdk/dist/store/app/selectors'

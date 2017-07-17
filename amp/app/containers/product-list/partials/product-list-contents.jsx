@@ -6,10 +6,10 @@ import URL from 'url'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import Button from '../../../components/button'
-import Form from '../../../components/form'
-import Field from '../../../components/field'
-import List from '../../../components/list'
+import Button from 'mobify-amp-sdk/dist/components/button'
+import Form from 'mobify-amp-sdk/dist/components/form'
+import Field from 'mobify-amp-sdk/dist/components/field'
+import List from 'mobify-amp-sdk/dist/components/list'
 import ProductTile from '../../../components/product-tile'
 
 // Selectors
