@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
-
+import {APP_ID, MAIN_NAV, FILTER_SHEET} from './constants'
 import sprite from '../../static/svg/sprite-dist/sprite.svg'
 
 // Partials
@@ -11,7 +11,6 @@ import ProductListFilterModal from '../product-list/partials/product-list-filter
 
 // Components
 import SkipLinks from 'mobify-amp-sdk/dist/components/skip-links'
-import Button from 'mobify-amp-sdk/dist/components/button'
 import Lightbox from '../../components/lightbox'
 
 const App = ({children}) => {
@@ -28,28 +27,21 @@ const App = ({children}) => {
         {target: '#app-footer', label: 'Skip to footer'},
     ]
 
-    // Important note: dont remove or rename "app" in body ID because we need this ID to work with sharing styles from PWA.
-    const appId = 'app'
-
-    // IDs for Sheet components
-    const navId = 'main-nav'
-    const filterSheetId = 'filter-sheet'
-
     return (
         <body
-            id={appId}
+            id={APP_ID}
             className="t-app"
         >
             <div hidden dangerouslySetInnerHTML={{__html: sprite}} />
 
-            <Navigation id={navId} />
-            <ProductListFilterModal sheetId={filterSheetId} />
+            <Navigation id={MAIN_NAV} />
+            <ProductListFilterModal sheetId={FILTER_SHEET} />
 
             <SkipLinks items={skipLinksItems} />
 
             <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
                 <div id="app-header" className="u-flex-none" role="banner">
-                    <Header navId={navId} />
+                    <Header navId={MAIN_NAV} />
                 </div>
 
                 <main id="app-main" className="u-flex" role="main">
@@ -57,7 +49,6 @@ const App = ({children}) => {
                 </main>
 
                 <div id="app-footer" className="u-flex-none">
-
                     <Footer />
                 </div>
             </div>
