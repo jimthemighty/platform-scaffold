@@ -16,7 +16,7 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, handleSubmit}) => {
+const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, error, handleSubmit}) => {
     const stepperProps = {
         decrementIcon: 'minus',
         disabled,
@@ -29,7 +29,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
 
     return (
         <form className="u-padding-start-md u-padding-end-md" onSubmit={handleSubmit(onSubmit)}>
-            <ProductDetailsVariations />
+            <ProductDetailsVariations error={error} />
 
             <div className="u-margin-top-lg">
                 <label htmlFor="quantity">Quantity</label>
@@ -68,6 +68,7 @@ ProductDetailsAddToCart.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     available: PropTypes.bool,
     disabled: PropTypes.bool,
+    error: PropTypes.object,
     handleSubmit: PropTypes.func,
     initialValues: PropTypes.object,
     isInCheckout: PropTypes.bool,
