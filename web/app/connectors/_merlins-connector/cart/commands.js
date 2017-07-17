@@ -50,7 +50,26 @@ export const getCart = () => (dispatch) => {
         })
 }
 
-export const addToCart = (productId, quantity) => (dispatch, getState) => {
+/**
+ * @function addToCart
+ * @param {String} productId The product's ID
+ * @param {Number} quantity The quantity to add
+ * @param {Object} variant The variant object (required for this connector)
+ * @param {Number} variant.id the unique product combination's ID
+ * @param {Object} variant.values map of attribute slugs & selected values
+ * @example
+ * {
+ *     color: 8,
+ *     size: 6
+ * }
+ * @param {Object} variant.attributeIds map of options to option IDs, where optionID is Magento's attribute ID
+ * @example
+ * {
+ *     color: 90,
+ *     size: 131
+ * }
+ */
+export const addToCart = (productId, quantity, variant) => (dispatch, getState) => {
     const formInfo = getFormInfoByProductId(productId)(getState())
     const hiddenInputs = formInfo.get('hiddenInputs')
 
@@ -63,6 +82,16 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
         qty: quantity
     }
 
+    if (variant) {
+        formValues.selected_configurable_option = parseInt(variant.id)
+        Object.keys(variant.values).forEach((key) => {
+            const superAttribute = variant.attributeIds[key]
+            const selectedSuper = variant.values[key]
+
+            formValues[`super_attribute[${superAttribute}]`] = parseInt(selectedSuper)
+        })
+    }
+
     return submitForm(
             formInfo.get('submitUrl'),
             formValues,
@@ -72,9 +101,9 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
 }
 
 
-export const updateCartItem = (itemId, quantity, productId) => (dispatch) => (
+export const updateCartItem = (itemId, quantity, productId, variant) => (dispatch) => (
     // merlin's uses the standard addToCart to update cart items
-    dispatch(addToCart(productId, quantity))
+    dispatch(addToCart(productId, quantity, variant))
 )
 
 /**

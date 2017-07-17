@@ -31,10 +31,11 @@ export const parseCartProducts = ({items}) => { /* Products */
 
 export const parseCart = ({items, subtotal}) => { /* Cart */
     return {
-        items: items.map(({item_id, product_id, product_url, qty, product_price}) => ({
+        items: items.map(({item_id, product_id, product_url, qty, product_price, options}) => ({
             id: item_id,
             productId: product_id,
             href: product_url,
+            options,
             quantity: qty,
             itemPrice: textFromFragment(product_price),
             linePrice: productSubtotal(textFromFragment(product_price), qty),
