@@ -47,7 +47,7 @@ jobs:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
-    parallelism: 3
+    parallelism: 2
     steps:
       - attach_workspace:
           at: /home/ubuntu/platform-scaffold/
