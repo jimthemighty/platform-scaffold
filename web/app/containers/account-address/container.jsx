@@ -72,7 +72,7 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                 <h2 className="u-h5 u-text-family">Other saved addresses</h2>
             </div>
             <div className="t-account-address__content u-padding-md">
-                {addresses.map(({firstname, lastname, addressLine1, city, countryId, postcode, telephone, regionId, idx}) => {
+                {addresses.map(({firstname, lastname, addressLine1, city, countryId, postcode, telephone, regionId}, idx) => {
                     return (
                         <Card key={idx}
                             hasBorder
