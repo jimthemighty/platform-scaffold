@@ -14,6 +14,7 @@ const Header = (props) => {
 
     const {navId} = props
     const openNav = `tap:${navId}.toggle`
+    const openSearch = `tap:search-lightbox`
 
     return (
         <header className="t-header">
@@ -25,7 +26,7 @@ const Header = (props) => {
                         </Button>
                     </HeaderBarActions>
                     <HeaderBarActions>
-                        <Button innerClassName="u-padding-0">
+                        <Button innerClassName="u-padding-0" on={openSearch}>
                             <IconLabel iconName="search" label="Search" iconSize="medium" />
                         </Button>
                     </HeaderBarActions>
@@ -44,6 +45,33 @@ const Header = (props) => {
                     </HeaderBarActions>
                 </HeaderBar>
             </div>
+
+            {/* <Search
+                className="t-header__search"
+                isOverlay
+                onClickSuggestion={onSearchCloseClick}
+                isOpen={searchIsOpen}
+                onChange={this.onChangeSearchQuery}
+                onClose={onSearchCloseClick}
+                onSubmit={this.onSearchSubmit}
+                onClear={clearSuggestions}
+                termSuggestions={searchSuggestions}
+                submitButtonProps={{
+                    className: 'c--secondary t-header__search-submit-button',
+                    children: searchIcon
+                }}
+                inputProps={{
+                    placeholder: 'Search the entire store',
+                    name: 'query'
+                }}
+                closeButtonProps={{
+                    className: 'u-visually-hidden'
+                }}
+                clearButtonProps={{
+                    className: 'u-color-brand',
+                    children: clearIcon
+                }}
+            /> */}
         </header>
     )
 }
