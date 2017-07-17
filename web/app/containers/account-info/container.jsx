@@ -12,6 +12,8 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
 import Button from 'progressive-web-sdk/dist/components/button'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
 import {submitAccountInfoForm} from './actions'
 
 import {getAccountInfoInitialValues} from './selectors'
@@ -43,6 +45,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             <input
                                 className="t-account-info-input"
                                 type="text"
+                                data-analytics-name={UI_NAME.customerName}
                             />
                         </ReduxForm.Field>
                     </FieldRow>
@@ -56,6 +59,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             <input
                                 className="t-account-info-input"
                                 type="text"
+                                data-analytics-name={UI_NAME.email}
                             />
                         </ReduxForm.Field>
                     </FieldRow>
@@ -71,7 +75,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             name="currentPassword"
                             error={error && error.currentPassword}
                         >
-                            <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
+                            <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" analyticsName={UI_NAME.currentPassword} />
                         </ReduxForm.Field>
                     </FieldRow>
                     <FieldRow>
@@ -81,7 +85,7 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             name="newPassword"
                             error={error && error.newPassword}
                         >
-                            <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" />
+                            <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" analyticsName={UI_NAME.password} />
                         </ReduxForm.Field>
                     </FieldRow>
                     <FieldRow>
