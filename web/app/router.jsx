@@ -9,7 +9,16 @@ import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
 // Containers
 import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
-import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails} from './containers/templates'
+import {
+    AccountDashboard,
+    Cart,
+    CheckoutConfirmation,
+    CheckoutPayment,
+    CheckoutShipping,
+    Login,
+    ProductList,
+    ProductDetails
+} from './containers/templates'
 
 // We build this into the app so we can load the home page right away
 import Home from './containers/home/container'
@@ -20,7 +29,11 @@ import {initHomePage} from 'progressive-web-sdk/dist/integration-manager/home/co
 import {initCartPage} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manager/products/commands'
-import {initRegisterPage, initLoginPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {
+    initRegisterPage,
+    initLoginPage,
+    initAccountDashboardPage
+} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
 import {initPaymentPage} from './containers/checkout-payment/actions'
@@ -62,6 +75,8 @@ const Router = ({store}) => (
                 <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initPage(initCartPage)} />
                 <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initPage(initRegisterPage)} />
+
+                <Route component={AccountDashboard} path="customer/account" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
@@ -132,6 +147,7 @@ const Router = ({store}) => (
                     fetchAction={initPage(initPaymentPage)}
                 />
                 <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initPage(initLoginPage)} />
+                <Route component={AccountDashboard} path="*/Dashboard-Show" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 
                 <Route
