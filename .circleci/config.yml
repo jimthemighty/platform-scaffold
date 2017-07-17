@@ -25,9 +25,7 @@ jobs:
           working_directory: /home/ubuntu/platform-scaffold/web/    
       - persist_to_workspace:
           root: .
-          paths: 
-            - "*"
-            - web
+          paths: .
 
   test-unit:
     docker:
@@ -35,7 +33,7 @@ jobs:
     workDir: /home/ubuntu/platform-scaffold/
     steps:
       - attach_workspace:
-          at: /home/ubuntu/platform-scaffold/web/
+          at: /home/ubuntu/platform-scaffold/
       - run:
           name: Lint
           command: npm run lint
@@ -52,7 +50,7 @@ jobs:
     parallelism: 3
     steps:
       - attach_workspace:
-          at: /home/ubuntu/platform-scaffold/web/
+          at: /home/ubuntu/platform-scaffold/
       - run:
           name: Start Test Server
           command: bash ./tests/system/test-scripts/start-test-server.sh
@@ -80,7 +78,7 @@ jobs:
     workDir: /home/ubuntu/platform-scaffold/
     steps:
       - attach_workspace:
-          at: /home/ubuntu/platform-scaffold/web/
+          at: /home/ubuntu/platform-scaffold/
       - run:
           name: Build Project
           command: npm run prod:build
