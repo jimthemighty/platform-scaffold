@@ -1,5 +1,5 @@
 // SDK Components
-import Accordion from 'mobify-amp-sdk/dist/components/accordion/index'
+import {Accordion} from 'mobify-amp-sdk/dist/components/accordion/index'
 import AccordionBase from 'mobify-amp-sdk/dist/components/accordion/_base.scss'
 import AccordionTheme from './styles/themes/amp-components/_accordion.scss'
 
