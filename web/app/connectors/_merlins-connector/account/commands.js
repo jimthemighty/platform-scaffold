@@ -13,7 +13,7 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    receiveAccountAddressData
+    recieveAccountAddressUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
@@ -43,10 +43,8 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => {
-            // need this reducer in SDK
-            // dispatch(receiveAccountAddressData(
-            accountAddressParser($, $response)
-            // ))
+            dispatch(recieveAccountAddressUIData(
+            accountAddressParser($, $response)))
         })
 }
 
