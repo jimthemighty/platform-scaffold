@@ -13,13 +13,14 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
+    receiveAccountAddressData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid} from './parsers'
+import {isFormResponseInvalid, accountAddressParser} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -40,7 +41,13 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    return Promise.resolve()
+    return dispatch(fetchPageData(url))
+        .then(([$, $response]) => {
+            // need this reducer in SDK
+            // dispatch(receiveAccountAddressData(
+            accountAddressParser($, $response)
+            // ))
+        })
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
