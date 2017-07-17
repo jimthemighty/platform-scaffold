@@ -44,7 +44,7 @@ const checkLighthouse = function(jsonResults) {
 * Display some important performance metrics.
 */
 const checkTTI = function(jsonResults) {
-    console.log(`Time to interactive: ${jsonResults.audits['first-interactive'].displayValue}`)
+    console.log(`Time to first interactive: ${jsonResults.audits['first-interactive'].displayValue}`)
     console.log(`Analyzing total bundle size...`)
     console.log(`${jsonResults.audits['total-byte-weight'].displayValue}`)
 }
