@@ -14,13 +14,7 @@ else
 
     # The other cirlce_node_index worker will run the rest of the tests
     if [ $CIRCLE_NODE_INDEX -gt 0 ]; then
-      echo 'Running Unit Tests'
-      npm test -- --runInBand
-
       ./scripts/wait-for-dependencies.sh
-      echo 'Verify built files sizes'
-      npm run test:build-size
-    
       echo 'Running End to End Tests'
       #If we have nodes > 2, it will be part of the division to run another test:e2e
       i=0
