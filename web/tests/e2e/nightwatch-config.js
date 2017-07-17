@@ -13,7 +13,7 @@ var notificationSettings = {
 require('babel-core/register');
 
 module.exports = {
-    'src_folders': ['./tests/system'],
+    'src_folders': ['./tests/e2e'],
     'output_folder': reportsPath,
     'custom_commands_path': './node_modules/nightwatch-commands/commands',
     'custom_assertions_path': './node_modules/nightwatch-commands/assertions',
@@ -35,7 +35,7 @@ module.exports = {
             'end_session_on_fail': false,
             'silent': true,
             'output': true,
-            'exclude': ['page-objects', 'test-scripts', 'site.js'],
+            'exclude': ['page-objects', 'test-scripts'],
             'screenshots': {
                 'enabled': true,
                 'path': screenshotsPath,
@@ -74,7 +74,7 @@ module.exports = {
                     }
                 }
             },
-            'filter': 'tests/system/workflows/push-subscribe.js'
+            'filter': 'tests/e2e/workflows/push-subscribe.js'
         },
     }
 };

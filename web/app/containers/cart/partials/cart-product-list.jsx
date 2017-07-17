@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {openRemoveItemModal, saveToWishlist, updateItem} from '../actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {getCartItems, getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {getCartItemsFull, getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 
 import {noop} from 'progressive-web-sdk/dist/utils/utils'
@@ -48,26 +48,39 @@ class CartProductItem extends React.Component {
     }
 
     saveForLater() {
-        this.props.onSaveLater(this.props.productId, this.props.cartItemId, this.props.product.href)
+        this.props.onSaveLater(this.props.productId, this.props.cartItemId, this.props.href)
     }
 
     render() {
         const {
             cartItemId,
             configureUrl,
-            product,
             quantity,
             itemPrice,
             linePrice,
+            thumbnail,
+            title,
+            options,
+            productId,
             setCurrentProduct
         } = this.props
 
         return (
             <ProductItem customWidth="40%"
                 className={productItemClassNames}
-                title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{product.title}</h2>}
-                image={<ProductImage {...product.thumbnail} />}
+                title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{title}</h2>}
+                image={<ProductImage {...thumbnail} />}
                 >
+
+                {options &&
+                    <div className="u-margin-bottom-sm">
+                        {options.map((option) => (
+                            <p key={option.value} className="u-color-neutral-50">
+                                {option.label} - {option.value}
+                            </p>
+                        ))}
+                    </div>
+                }
 
                 <FieldRow className="u-align-bottom">
                     <ItemQuantityStepper
@@ -85,7 +98,7 @@ class CartProductItem extends React.Component {
                         innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
                         href={configureUrl}
                         data-analytics-name={UI_NAME.editItem}
-                        onClick={() => setCurrentProduct(product.id)}
+                        onClick={() => setCurrentProduct(productId)}
                         >
                         Edit
                     </Button>
@@ -124,10 +137,12 @@ CartProductItem.propTypes = {
     itemPrice: PropTypes.string,
     linePrice: PropTypes.string,
     openRemoveItemModal: PropTypes.func,
-    product: PropTypes.object, /* Product */
+    options: PropTypes.array,
     productId: PropTypes.string,
     quantity: PropTypes.number,
     setCurrentProduct: PropTypes.func,
+    thumbnail: PropTypes.object,
+    title: PropTypes.string,
     onQtyChange: PropTypes.func,
     onSaveLater: PropTypes.func
 
@@ -184,7 +199,7 @@ CartProductList.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    items: getCartItems,
+    items: getCartItemsFull,
     summaryCount: getCartSummaryCount,
     isLoggedIn: getIsLoggedIn
 })

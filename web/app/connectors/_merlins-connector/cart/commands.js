@@ -3,11 +3,9 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeRequest, makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getUenc, getCartBaseUrl, getFormInfoByProductId} from '../selectors'
+import {getCartBaseUrl, getFormInfoByProductId} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {getSelectedShippingMethod, getShippingAddress} from '../../../store/checkout/shipping/selectors'
 import {receiveCartContents, receiveCartTotals} from 'progressive-web-sdk/dist/integration-manager/cart/results'
@@ -19,7 +17,7 @@ import {fetchShippingMethodsEstimate} from 'progressive-web-sdk/dist/integration
 import {fetchPageData} from '../app/commands'
 import {parseCart, parseCartProducts, parseCartTotals} from './parser'
 import {parseCheckoutEntityID, extractMagentoJson} from '../../../utils/magento-utils'
-import {ADD_TO_WISHLIST_URL, PROMO_ERROR} from '../../../containers/cart/constants'
+import {PROMO_ERROR} from '../../../containers/cart/constants'
 
 const LOAD_CART_SECTION_URL = '/customer/section/load/?sections=cart%2Cmessages&update_section_id=true'
 const REMOVE_CART_ITEM_URL = '/checkout/sidebar/removeItem/'
@@ -52,7 +50,26 @@ export const getCart = () => (dispatch) => {
         })
 }
 
-export const addToCart = (productId, quantity) => (dispatch, getState) => {
+/**
+ * @function addToCart
+ * @param {String} productId The product's ID
+ * @param {Number} quantity The quantity to add
+ * @param {Object} variant The variant object (required for this connector)
+ * @param {Number} variant.id the unique product combination's ID
+ * @param {Object} variant.values map of attribute slugs & selected values
+ * @example
+ * {
+ *     color: 8,
+ *     size: 6
+ * }
+ * @param {Object} variant.attributeIds map of options to option IDs, where optionID is Magento's attribute ID
+ * @example
+ * {
+ *     color: 90,
+ *     size: 131
+ * }
+ */
+export const addToCart = (productId, quantity, variant) => (dispatch, getState) => {
     const formInfo = getFormInfoByProductId(productId)(getState())
     const hiddenInputs = formInfo.get('hiddenInputs')
 
@@ -65,6 +82,16 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
         qty: quantity
     }
 
+    if (variant) {
+        formValues.selected_configurable_option = parseInt(variant.id)
+        Object.keys(variant.values).forEach((key) => {
+            const superAttribute = variant.attributeIds[key]
+            const selectedSuper = variant.values[key]
+
+            formValues[`super_attribute[${superAttribute}]`] = parseInt(selectedSuper)
+        })
+    }
+
     return submitForm(
             formInfo.get('submitUrl'),
             formValues,
@@ -74,9 +101,9 @@ export const addToCart = (productId, quantity) => (dispatch, getState) => {
 }
 
 
-export const updateCartItem = (itemId, quantity, productId) => (dispatch) => (
+export const updateCartItem = (itemId, quantity, productId, variant) => (dispatch) => (
     // merlin's uses the standard addToCart to update cart items
-    dispatch(addToCart(productId, quantity))
+    dispatch(addToCart(productId, quantity, variant))
 )
 
 /**
@@ -137,25 +164,6 @@ export const initCartPage = (url) => (dispatch, getState) => {
             dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
 
             return dispatch(fetchShippingMethodsEstimate(shippingAddress || {}))
-        })
-}
-
-export const addToWishlist = (productId, productURL) => (dispatch, getState) => {
-    const currentState = getState()
-    const payload = {
-        product: productId,
-        // This won't always be defined, but add to wishlist will still work
-        // if it's missing
-        uenc: getUenc(urlToPathKey(productURL))(currentState)
-    }
-
-    return submitForm(ADD_TO_WISHLIST_URL, payload, {method: 'POST'})
-        .then(jqueryResponse)
-        .then(([$, $response]) => { // eslint-disable-line no-unused-vars
-            // The response is the HTML of the wishlist page, so check for the item we added
-            if (!$response.find(`.product-item-link[href="${productURL}"]`).length) {
-                throw new Error('Add Request Failed')
-            }
         })
 }
 
