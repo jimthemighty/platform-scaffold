@@ -41,12 +41,18 @@ const checkLighthouse = function(jsonResults) {
 }
 
 /**
-* Display some important performance metrics.
+* Verify time to interactive/first interactive
 */
 const checkTTI = function(jsonResults) {
-    console.log(`Time to first interactive: ${jsonResults.audits['first-interactive'].displayValue}`)
-    console.log(`Analyzing total bundle size...`)
-    console.log(`${jsonResults.audits['total-byte-weight'].displayValue}`)
+    const actualValue = jsonResults.audits['first-interactive'].rawValue
+
+    if (actualValue > 10000) {
+        console.error(chalk.red(`Time to first interactive exceeds the target of 10s. Actual value: ${actualValue} ms`))
+        failure = true
+    } else {
+        console.log(`Time to first interactive is fine (${actualValue} ms)`)
+    }
+
 }
 
 const jsonResults = JSON.parse(fs.readFileSync(`${reportsDir}${fileName}.report.json`, 'utf8'))
