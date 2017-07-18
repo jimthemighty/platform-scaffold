@@ -183,26 +183,38 @@ export const initAccountAddressPage = () => (dispatch) => {
     return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
         .then((res) => res.json())
         .then(({data}) => {
-            dispatch(recieveAccountAddressUIData({addresses: data.map((address) => {
-                const {
-                    first_name,
-                    last_name,
-                    phone,
-                    postal_code,
-                    address1,
-                    city,
-                    state_code
-                } = address
+            const addresses = data
+                        .map((address) => {
+                            const {
+                                first_name,
+                                last_name,
+                                phone,
+                                postal_code,
+                                address1,
+                                city,
+                                state_code,
+                                preferred
+                            } = address
 
-                return {
-                    firstname: first_name,
-                    lastname: last_name,
-                    telephone: phone,
-                    postcode: postal_code,
-                    addressLine1: address1,
-                    city,
-                    regionId: state_code
+                            return {
+                                firstname: first_name,
+                                lastname: last_name,
+                                telephone: phone,
+                                postcode: postal_code,
+                                addressLine1: address1,
+                                default: preferred,
+                                city,
+                                regionId: state_code
+                            }
+                        })
+
+            const defaultAddress = addresses.filter((address) => address.default)[0]
+
+            return dispatch(recieveAccountAddressUIData(
+                {
+                    defaultAddress,
+                    addresses: addresses.filter((address) => !address.default)
                 }
-            })}))
+            ))
         })
 }
