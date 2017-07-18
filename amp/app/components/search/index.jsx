@@ -24,89 +24,77 @@ const searchId = (() => {
  * This component is commonly used in the header.
  */
 
-class Search extends React.Component {
-    constructor(props) {
-        super(props)
+const Search = ({
+    accessibleLabel,
+    className,
+    inputProps,
+    isOverlay,
+    searchIcon,
+    submitButtonProps,
+    formProps,
+    lightboxId
+}) => {
+    const id = `search-${searchId()}`
+    const classes = classNames('a-search', className)
 
-        this.state = {
-            searchValue: '',
-            id: `search-${searchId()}`
-        }
-    }
-
-    render() {
-        const {
-            accessibleLabel,
-            className,
-            inputProps,
-            isOverlay,
-            searchIcon,
-            submitButtonProps,
-            formProps,
-            lightboxId
-        } = this.props
-
-        const {
-            searchValue,
-            id
-        } = this.state
-
-        const classes = classNames('a-search', className)
-
-        const SearchForm = () => {
-            return (
-                <div className="a-search__inner">
-                    <Form
-                        className="a-search__form"
-                        {...formProps}
-                    >
-                        <div className="a-search__bar">
-                            <div className="a-search__icon">
-                                <Icon className="a-search__icon-content" name={searchIcon} />
-                            </div>
-
-                            <div className="a-search__field">
-                                <label
-                                    htmlFor={id}
-                                    className="u-visually-hidden"
-                                >
-                                    {accessibleLabel}
-                                </label>
-
-                                <input className="a-search__input"
-                                    ref={(el) => { this.input = el }}
-                                    id={id}
-                                    value={searchValue}
-                                    type="search"
-                                    name="query"
-                                    {...inputProps}
-                                />
-                            </div>
-
-                            <div className="a-search__button-submit">
-                                <Button
-                                    type="submit"
-                                    {...submitButtonProps}
-                                />
-                            </div>
-                        </div>
-                    </Form>
-                </div>
-            )
-        }
-
+    const SearchForm = () => {
         return (
-            <div className={classes} role="search">
-                {isOverlay ?
-                    <Lightbox id={lightboxId}>
-                        <SearchForm />
-                    </Lightbox>
-                :
-                    <SearchForm />
-                }
+            <div className="a-search__inner">
+                <Form
+                    className="a-search__form"
+                    {...formProps}
+                >
+                    <div className="a-search__bar">
+                        <div className="a-search__icon">
+                            <Icon
+                                className="a-search__icon-content"
+                                name={searchIcon}
+                            />
+                        </div>
+
+                        <div className="a-search__field">
+                            <label
+                                htmlFor={id}
+                                className="u-visually-hidden"
+                            >
+                                {accessibleLabel}
+                            </label>
+
+                            <input
+                                className="a-search__input"
+                                id={id}
+                                type="search"
+                                name="query"
+                                {...inputProps}
+                            />
+                        </div>
+
+                        <div className="a-search__button-submit">
+                            <Button
+                                type="submit"
+                                {...submitButtonProps}
+                            />
+                        </div>
+                    </div>
+                </Form>
             </div>
         )
     }
+
+    return (
+        <div
+            className={classes}
+            role="search"
+        >
+            {isOverlay ?
+                <Lightbox id={lightboxId}>
+                    <SearchForm />
+                </Lightbox>
+            :
+                <SearchForm />
+            }
+        </div>
+    )
 }
 
 Search.defaultProps = {
@@ -116,7 +104,6 @@ Search.defaultProps = {
     },
     searchIcon: 'search'
 }
-
 
 Search.propTypes = {
     /**
