@@ -65,10 +65,6 @@ export const updateItemQuantity = (itemID, quantity) => (dispatch) => {
     return Promise.resolve()
 }
 
-export const addToWishlist = (productId, productURL) => (dispatch) => {
-    console.log('[Stub Connector] Called addToWishlist stub with arguments:', productId, productURL)
-    return Promise.resolve()
-}
 
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch) => {
     console.log('[Stub Connector] Called fetchTaxEstimate stub with arguments:', address, shippingMethod)
