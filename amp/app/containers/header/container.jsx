@@ -1,20 +1,29 @@
 import React, {PropTypes} from 'react'
+import {connect} from 'react-redux'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
+
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
 import Button from 'mobify-amp-sdk/dist/components/button'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'mobify-amp-sdk/dist/components/header-bar'
+import Icon from 'mobify-amp-sdk/dist/components/icon'
 import IconLabel from 'mobify-amp-sdk/dist/components/icon-label'
+import Search from '../../components/search'
+
+// Selectors
+import * as selectors from '../../../../web/app/containers/header/selectors'
 
 // Utils
 import {staticURL, canonicalURL} from '../../utils'
 
 const Header = (props) => {
-
-    const {navId} = props
+    const {navId, searchIsOpen} = props
     const openNav = `tap:${navId}.toggle`
     const openSearch = `tap:search-lightbox`
+
+    const searchIcon = <Icon name="search" title="Submit search" />
 
     return (
         <header className="t-header">
@@ -46,16 +55,15 @@ const Header = (props) => {
                 </HeaderBar>
             </div>
 
-            {/* <Search
+            <Search
                 className="t-header__search"
                 isOverlay
-                onClickSuggestion={onSearchCloseClick}
                 isOpen={searchIsOpen}
-                onChange={this.onChangeSearchQuery}
-                onClose={onSearchCloseClick}
-                onSubmit={this.onSearchSubmit}
-                onClear={clearSuggestions}
-                termSuggestions={searchSuggestions}
+                formProps={{
+                    method: 'POST',
+                    // action-xhr: '#',
+                    target: '_top'
+                }}
                 submitButtonProps={{
                     className: 'c--secondary t-header__search-submit-button',
                     children: searchIcon
@@ -67,17 +75,20 @@ const Header = (props) => {
                 closeButtonProps={{
                     className: 'u-visually-hidden'
                 }}
-                clearButtonProps={{
-                    className: 'u-color-brand',
-                    children: clearIcon
-                }}
-            /> */}
+            />
         </header>
     )
 }
 
 Header.propTypes = {
-    navId: PropTypes.string
+    navId: PropTypes.string,
+    searchIsOpen: PropTypes.bool
 }
 
-export default ampComponent(Header)
+const mapStateToProps = createPropsSelector({
+    searchIsOpen: selectors.getSearchIsOpen
+})
+
+export default ampComponent(
+    connect(mapStateToProps)(Header)
+)
