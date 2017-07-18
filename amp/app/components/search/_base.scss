@@ -84,55 +84,6 @@ $suggestions__height: 70vh;
 }
 
 
-// Modifier isOverlay
-// ---
-//
-// 1. Hide the search while it is an overall and inactive
-
-.a-search.a--is-overlay {
-    .a-search__inner {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-
-        opacity: 0; // 1
-
-        transform: translateY(-100%);
-
-        transition: 0.3s transform ease-out;
-    }
-}
-
-
-// Search Suggestions
-// ---
-//
-// 1. Relative to '.a-search__inner'
-// 2. To allow dismissing it by clicking outside of the search suggestions
-
-.a-search__suggestions {
-    position: absolute; // 1
-    top: 100%;
-    right: 0;
-    left: 0;
-    z-index: $z1-depth;
-
-    overflow-y: auto;
-    max-height: $suggestions__height; // 2
-
-    background-color: $neutral-00;
-
-    transition: max-height 0.3s ease-out ;
-
-    -webkit-overflow-scrolling: touch;
-
-    &.a--is-empty {
-        max-height: 0;
-    }
-}
-
-
 // Modifier active
 // ---
 //
