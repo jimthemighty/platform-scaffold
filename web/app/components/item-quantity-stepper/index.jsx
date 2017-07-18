@@ -13,10 +13,11 @@ import Field from 'progressive-web-sdk/dist/components/field'
 const ItemQuantityStepper = ({
     cartItemId,
     quantity,
-    changeQuantity
+    changeQuantity,
+    className
 }) => {
     return (
-        <Field label="Quantity" idFor={`quantity-${cartItemId}`}>
+        <Field label="Quantity" idFor={`quantity-${cartItemId}`} className={className}>
             <Stepper
                 className="pw--simple t-cart__product-stepper"
                 idForLabel={`quantity-${cartItemId}`}
@@ -34,6 +35,7 @@ const ItemQuantityStepper = ({
 ItemQuantityStepper.propTypes = {
     cartItemId: PropTypes.string,
     changeQuantity: PropTypes.func,
+    className: PropTypes.string,
     quantity: PropTypes.number
 
 }

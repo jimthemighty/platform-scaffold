@@ -18,14 +18,26 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import List from 'progressive-web-sdk/dist/components/list'
+import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import ItemQuantityStepper from '../../../components/item-quantity-stepper'
 import ItemPrice from '../../../components/item-price'
 import ProductItem from '../../../components/product-item'
 import ProductImage from '../../../components/product-image'
-import ProductSkeleton from '../../../components/product-skeleton'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const productItemClassNames = 'u-padding-top-lg u-padding-bottom-lg u-padding-start u-padding-end'
+
+const ProductSkeleton = () => (
+    <ProductItem
+        className={productItemClassNames}
+        title={<SkeletonText type="h3" className="u-margin-bottom-sm" />}
+        image={<ProductImage src="null" alt="null" />}
+    >
+        <SkeletonText width="60%" style={{lineHeight: '20px'}} />
+        <SkeletonText width="60%" style={{lineHeight: '20px'}} className="u-margin-bottom-sm" />
+        <div className="t-cart__product-content-placeholder" />
+    </ProductItem>
+)
 
 
 /* eslint-disable camelcase */
@@ -172,7 +184,7 @@ const CartProductList = ({items, isLoggedIn, summaryCount, onSaveLater, onUpdate
             </div>
 
             <List className="u-bg-color-neutral-00 u-border-light-top u-border-light-bottom">
-                {isCartEmpty && <ProductSkeleton productItemClassNames={productItemClassNames} />}
+                {isCartEmpty && <ProductSkeleton className={productItemClassNames} />}
                 {items.map((item) => (
                     <CartProductItem {...item}
                         cartItemId={item.id}
