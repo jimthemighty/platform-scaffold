@@ -87,7 +87,6 @@ class Search extends React.Component {
                             <div className="a-search__button-submit">
                                 <Button
                                     type="submit"
-                                    disabled={searchValue.trim().length === 0}
                                     {...submitButtonProps}
                                 />
                             </div>
