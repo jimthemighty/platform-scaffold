@@ -185,6 +185,26 @@ export const initAccountAddressPage = () => (dispatch) => {
         .then(({data}) => {
             // TODO
             // match address schema with this data object
-            dispatch(recieveAccountAddressUIData(data))
+            dispatch(recieveAccountAddressUIData(data.map((address) => {
+                const {
+                    first_name,
+                    last_name,
+                    phone,
+                    postal_code,
+                    address1,
+                    city,
+                    state_code
+                } = address
+
+                return {
+                    first_name,
+                    last_name,
+                    phone,
+                    postal_code,
+                    address1,
+                    city,
+                    state_code
+                }
+            })))
         })
 }
