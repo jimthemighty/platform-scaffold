@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react'
-import {connect} from 'react-redux'
-import {createPropsSelector} from 'reselect-immutable-helpers'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
-
+import {SEARCH_LIGHTBOX} from './constants'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
@@ -13,15 +11,14 @@ import IconLabel from 'mobify-amp-sdk/dist/components/icon-label'
 import Search from '../../components/search'
 
 // Selectors
-import * as selectors from '../../../../web/app/containers/header/selectors'
 
 // Utils
 import {staticURL, canonicalURL} from '../../utils'
 
 const Header = (props) => {
-    const {navId, searchIsOpen} = props
+    const {navId} = props
     const openNav = `tap:${navId}.toggle`
-    const openSearch = `tap:search-lightbox`
+    const openSearch = `tap:${SEARCH_LIGHTBOX}`
 
     const searchIcon = <Icon name="search" title="Submit search" />
 
@@ -58,11 +55,12 @@ const Header = (props) => {
             <Search
                 className="t-header__search"
                 isOverlay
-                isOpen={searchIsOpen}
+                lightboxId={SEARCH_LIGHTBOX}
+                isOpen={true}
                 formProps={{
                     method: 'POST',
-                    // action-xhr: '#',
-                    target: '_top'
+                    target: '_top',
+                    'action-xhr': '#'
                 }}
                 submitButtonProps={{
                     className: 'c--secondary t-header__search-submit-button',
@@ -85,10 +83,4 @@ Header.propTypes = {
     searchIsOpen: PropTypes.bool
 }
 
-const mapStateToProps = createPropsSelector({
-    searchIsOpen: selectors.getSearchIsOpen
-})
-
-export default ampComponent(
-    connect(mapStateToProps)(Header)
-)
+export default ampComponent(Header)
