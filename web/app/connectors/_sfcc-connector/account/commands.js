@@ -183,9 +183,7 @@ export const initAccountAddressPage = () => (dispatch) => {
     return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
         .then((res) => res.json())
         .then(({data}) => {
-            // TODO
-            // match address schema with this data object
-            dispatch(recieveAccountAddressUIData(data.map((address) => {
+            dispatch(recieveAccountAddressUIData({addresses: data.map((address) => {
                 const {
                     first_name,
                     last_name,
@@ -197,14 +195,14 @@ export const initAccountAddressPage = () => (dispatch) => {
                 } = address
 
                 return {
-                    first_name,
-                    last_name,
-                    phone,
-                    postal_code,
-                    address1,
+                    firstname: first_name,
+                    lastname: last_name,
+                    telephone: phone,
+                    postcode: postal_code,
+                    addressLine1: address1,
                     city,
-                    state_code
+                    regionId: state_code
                 }
-            })))
+            })}))
         })
 }
