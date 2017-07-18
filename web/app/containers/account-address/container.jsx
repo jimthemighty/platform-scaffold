@@ -84,6 +84,7 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                             icon="edit"
                             showIconText={true}
                             iconClassName="u-margin-end"
+                            data-analytics-name={UI_NAME.editSavedAddress}
                         />
                     }
                 />
@@ -102,6 +103,7 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                                             icon="edit"
                                             showIconText={true}
                                             iconClassName="u-margin-end"
+                                            data-analytics-name={UI_NAME.editSavedAddress}
                                         />
                                     </div>
                                     <div className="u-flex">
@@ -112,6 +114,7 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                                             icon="trash"
                                             showIconText={true}
                                             iconClassName="u-margin-end"
+                                            data-analytics-name={UI_NAME.removeSavedAddress}
                                         />
                                     </div>
                                 </div>
