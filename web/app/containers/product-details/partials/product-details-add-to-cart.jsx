@@ -16,7 +16,7 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, error, handleSubmit}) => {
+const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, error, handleSubmit, addToWishlist}) => {
     const stepperProps = {
         decrementIcon: 'minus',
         disabled,
@@ -28,10 +28,10 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
     }
 
     return (
-        <form className="u-padding-start-md u-padding-end-md" onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <ProductDetailsVariations error={error} />
 
-            <div className="u-margin-top-lg">
+            <div className="u-margin-top-lg u-padding-start-md u-padding-end-md">
                 <label htmlFor="quantity">Quantity</label>
 
                 <div className="u-flexbox u-margin-bottom-lg u-margin-top">
@@ -48,17 +48,30 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
 
             {/* Note that the "Update Cart" feature doesn't actually do that.. */}
             {available &&
-                <Button
-                    type="submit"
-                    icon="plus"
-                    iconClassName="pw--small u-margin-end"
-                    title={isInCheckout ? 'Update Cart' : 'Add to Cart'}
-                    showIconText={true}
-                    className="pw--primary u-width-full u-text-uppercase u-margin-bottom-lg t-product-details__add-to-cart"
-                    disabled={disabled}
-                    data-analytics-name={UI_NAME.addToCart}
-                />
+                <div className="u-padding-start-md u-padding-end-md">
+                    <Button
+                        type="submit"
+                        icon="plus"
+                        iconClassName="pw--small u-margin-end"
+                        title={isInCheckout ? 'Update Cart' : 'Add to Cart'}
+                        showIconText={true}
+                        className="pw--primary u-width-full u-text-uppercase t-product-details__add-to-cart"
+                        disabled={disabled}
+                        data-analytics-name={UI_NAME.addToCart}
+                    />
+                </div>
             }
+            <div className="u-border-light-top u-border-light-bottom u-margin-top-md">
+                <Button
+                    icon="wishlist-add"
+                    title="Wishlist"
+                    iconClassName="u-margin-end"
+                    showIconText={true}
+                    className="u-color-brand u-text-letter-spacing-normal u-width-full"
+                    onClick={addToWishlist}
+                    data-analytics-name={UI_NAME.wishlist}
+                />
+            </div>
         </form>
     )
 }
@@ -66,6 +79,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
 ProductDetailsAddToCart.propTypes = {
     setQuantity: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
+    addToWishlist: PropTypes.func,
     available: PropTypes.bool,
     disabled: PropTypes.bool,
     error: PropTypes.object,
@@ -84,7 +98,8 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     setQuantity: actions.setItemQuantity,
-    onSubmit: actions.submitCartForm
+    onSubmit: actions.submitCartForm,
+    addToWishlist: actions.addToWishlist
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({

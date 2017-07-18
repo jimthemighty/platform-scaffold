@@ -9,7 +9,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {parseLoginStatus, parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-import {CHECKOUT_SHIPPING_URL, CART_URL, buildQueryURL, buildSearchURL} from '../config'
+import {CHECKOUT_SHIPPING_URL, WISHLIST_URL, SIGN_IN_URL, CART_URL, buildQueryURL, buildSearchURL} from '../config'
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
@@ -20,7 +20,9 @@ import {
     receiveSearchSuggestions,
     setCheckoutShippingURL,
     setCartURL,
-    setLoggedIn
+    setWishlistURL,
+    setLoggedIn,
+    setSignInURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 const requestCapturedDoc = () => {
@@ -84,5 +86,7 @@ export const initApp = () => (dispatch) => {
     dispatch(receiveFormKey(formKey))
 
     dispatch(setCheckoutShippingURL(CHECKOUT_SHIPPING_URL))
+    dispatch(setWishlistURL(WISHLIST_URL))
+    dispatch(setSignInURL(SIGN_IN_URL))
     return dispatch(setCartURL(CART_URL))
 }

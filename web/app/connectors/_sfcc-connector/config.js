@@ -33,10 +33,10 @@ export const getDashboardURL = () => `${getBaseURL()}Dashboard-Show`
 export const getSignOutURL = () => `${getBaseURL()}Logout-Logout`
 export const getCheckoutShippingURL = () => `${getBaseURL()}COShipping-Start`
 export const getCartURL = () => `${getBaseURL()}Cart-Show`
+export const getWishlistURL = () => `${getBaseURL()}Wishlist-Show`
 export const getPaymentURL = () => `${getBaseURL()}COBilling-Start`
 export const getConfirmationURL = () => `${getBaseURL()}COSummary-Submit`
 
 export const getMyAccountURL = () => `${getBaseURL()}/customer/account/`
-export const getWishlistURL = () => `${getBaseURL()}/wishlist/`
 
 export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`
