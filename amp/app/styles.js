@@ -82,6 +82,7 @@ import LightboxBase from './components/lightbox/_base.scss'
 
 import Search from './components/search/index'
 import SearchBase from './components/search/_base.scss'
+import SearchTheme from './styles/themes/amp-components/_search.scss'
 
 
 // Containers
@@ -129,7 +130,7 @@ styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
 styles.set(Lightbox, [LightboxBase])
-styles.set(Search, [SearchBase])
+styles.set(Search, [SearchBase, SearchTheme])
 
 
 // Containers
