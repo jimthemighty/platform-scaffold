@@ -30,9 +30,15 @@ import initConnector from './init-merlins-connector'
 // import initConnector from './init-sfcc-connector'
 // import initConnector from './init-stub-connector'
 
+import {registerDefaultLocale, registerTranslations} from 'progressive-web-sdk/dist/utils/i18n-utils'
+import translations from './config/translations'
+
 initConnector()
 
 initCacheManifest(cacheHashManifest)
+
+registerDefaultLocale('en-CA')
+registerTranslations(translations)
 
 const store = configureStore()
 
