@@ -1,4 +1,6 @@
 ## To be released
+- Add view wishlist page to app [#891](https://github.com/mobify/platform-scaffold/pull/891)
+    - Add initWishlist page commands to SFCC, merlins and stub connectors
 - Add product variation support to Merlin's connector [#800](https://github.com/mobify/platform-scaffold/pull/800)
 
 ## 0.17.3 (July 7, 2017)
