@@ -23,10 +23,7 @@ const parseAddressInfo = ($address) => {
         countryId: text[3].trim(),
         postcode,
         telephone: text[4].trim(),
-        // addressLine2: 'Text',
-        // We expect one of these two "region" fields to be non-null
-        regionId,
-        // region: 'Text'
+        regionId
     }
 }
 export const accountAddressParser = ($, $html) => {

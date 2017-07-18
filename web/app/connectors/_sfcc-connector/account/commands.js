@@ -184,18 +184,17 @@ export const initAccountAddressPage = () => (dispatch) => {
         .then((res) => res.json())
         .then(({data}) => {
             const addresses = data
-                        .map((address) => {
-                            const {
-                                first_name,
-                                last_name,
-                                phone,
-                                postal_code,
-                                address1,
-                                city,
-                                state_code,
-                                preferred,
-                                country_code
-                            } = address
+                        .map(({
+                            first_name,
+                            last_name,
+                            phone,
+                            postal_code,
+                            address1,
+                            city,
+                            state_code,
+                            preferred,
+                            country_code
+                        }) => {
 
                             return {
                                 firstname: first_name,
@@ -210,11 +209,9 @@ export const initAccountAddressPage = () => (dispatch) => {
                             }
                         })
 
-            const defaultAddress = addresses.filter((address) => address.default)[0]
-
             return dispatch(recieveAccountAddressUIData(
                 {
-                    defaultAddress,
+                    defaultAddress: addresses.filter((address) => address.default)[0],
                     addresses: addresses.filter((address) => !address.default)
                 }
             ))
