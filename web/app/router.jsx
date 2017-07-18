@@ -132,6 +132,7 @@ const Router = ({store}) => (
                 <Route component={ProductList} path="*/gift-certificates*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/top-seller*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/Search-Show?*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={Wishlist} path="*/Wishlist-Show" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="*/COShipping-Start*"
