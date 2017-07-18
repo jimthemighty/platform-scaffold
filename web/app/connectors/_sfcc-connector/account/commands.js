@@ -175,3 +175,13 @@ export const updateBillingAddress = (formValues) => (dispatch) => {
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
+
+export const deleteAddress = (id) => (dispatch) => { // eslint-disable-line
+    // DELETE	/customers/{customer_id}/addresses/{address_name}	Deletes a customer's address by address name.
+    return Promise.resolve()
+}
+
+export const editAddress = (id) => (dispatch) => { // eslint-disable-line
+    // PATCH	/customers/{customer_id}/addresses/{address_name}	Updates a customer's address by address name.
+    return Promise.resolve()
+}

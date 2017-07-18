@@ -189,3 +189,82 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 
 
 }
+
+export const deleteAddress = (id) => (dispatch) => { // eslint-disable-line
+    /*
+        https://www.merlinspotions.com/customer/address/delete/id/6/form_key/4urFpCoWc9DN3MnF SUBMIT FORM HERE
+    */
+    return Promise.resolve()
+}
+
+export const editAddress = (id) => (dispatch) => { // eslint-disable-line
+    /*
+        Request URL: https://www.merlinspotions.com/customer/address/formPost/id/8/
+        Request Method: POST
+
+        BODY
+
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="form_key"
+
+        4urFpCoWc9DN3MnF
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="success_url"
+
+
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="error_url"
+
+
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="firstname"
+
+        test
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="lastname"
+
+        test
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="company"
+
+
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="telephone"
+
+        (431) 423-4234
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="fax"
+
+
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="street[]"
+
+        1234 test street
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="street[]"
+
+
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="city"
+
+        Seattle
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="region_id"
+
+        62
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="region"
+
+        Washington
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="postcode"
+
+        98121
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
+        Content-Disposition: form-data; name="country_id"
+
+        US
+        ------WebKitFormBoundaryRf7bsKxE0uB73FsY--
+    */
+    return Promise.resolve()
+}
