@@ -1,0 +1,81 @@
+@import 'component-base';
+
+// Search Theme
+// ===
+
+
+// Search Inner
+// ---
+//
+// 1. Ensure search bar is above site's fixed header
+
+.a-search__inner {
+    z-index: $z2-depth + 1; // 1
+}
+
+
+// Search Form
+// ---
+
+.a-search__form {
+    position: relative;
+    z-index: $z1-depth + 1;
+
+    border-bottom: $border;
+}
+
+
+// Search Icon
+// ---
+
+.a-search__icon {
+    display: none;
+}
+
+
+// Search Input Field
+// ---
+//
+// 1. Override iOS styles
+
+.a-search__input {
+    min-height: $header-height;
+    padding: $unit*1.5;
+    border: 0;
+
+    &[type] {
+        box-shadow: none; // 1
+    }
+}
+
+
+// Submit
+// ---
+
+.a-search__button-submit {
+    order: 2;
+}
+
+
+// Search Suggestion Heading
+// ---
+
+.a-search__suggestion-heading {
+    @include visually-hidden;
+}
+
+
+// Search Suggestion
+// ---
+
+.a-search__suggestion + .a-search__suggestion {
+    border-top: $border;
+}
+
+
+// Search Shade
+// ---
+
+.a-search__shade {
+    background: rgba(0, 0, 0, 0.5);
+}
