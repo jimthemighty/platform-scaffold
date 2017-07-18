@@ -11,7 +11,6 @@ import ProductListFilterModal from '../product-list/partials/product-list-filter
 
 // Components
 import SkipLinks from 'mobify-amp-sdk/dist/components/skip-links'
-import Lightbox from '../../components/lightbox'
 
 const App = ({children}) => {
 
@@ -52,10 +51,6 @@ const App = ({children}) => {
                     <Footer />
                 </div>
             </div>
-
-            <Lightbox id="search-lightbox">
-                <h1>Something here </h1>
-            </Lightbox>
         </body>
     )
 }
