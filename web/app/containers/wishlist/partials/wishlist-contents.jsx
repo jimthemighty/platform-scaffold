@@ -28,7 +28,7 @@ const WishlistItems = ({products}) => (
                     <ProductItem
                         key={id}
                         customWidth="40%"
-                        className="u-padding-top-md"
+                        className="u-padding-md"
                         title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{title}</h2>}
                         image={<ProductImage {...thumbnail} />}
                         footerContent={
@@ -101,8 +101,8 @@ const WishlistContents = ({
     products,
     contentLoaded
 }) => (
-    <div >
-        <div className="u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
+    <div className="t-wishlist__container u-padding-top-md u-bg-color-neutral-10">
+        <div className="u-border-light-top u-border-light-bottom u-bg-color-neutral-00">
             {contentLoaded ?
                 <WishlistItems products={products} />
             :

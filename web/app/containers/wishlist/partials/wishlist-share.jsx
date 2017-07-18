@@ -12,14 +12,16 @@ import {getWishlistShareURL} from '../../../store/user/selectors'
 const WishlistShareButton = ({
     shareURL
 }) => (
-    <div className="u-padding-top-md u-padding-bottom-md">
-        <Button
-            title="Share Wish List"
-            icon="share"
-            showIconText={true}
-            href={shareURL}
-            className="u-color-brand u-text-letter-spacing-normal u-width-full"
-        />
+    <div className="u-bg-color-neutral-10 u-border-light-bottom u-padding-top-md u-padding-bottom-md">
+        <div className="u-border-light-top u-border-light-bottom u-bg-color-neutral-00">
+            <Button
+                title="Share Wish List"
+                icon="share"
+                showIconText={true}
+                href={shareURL}
+                className="u-color-brand u-text-letter-spacing-normal u-width-full"
+            />
+        </div>
     </div>
 )
 

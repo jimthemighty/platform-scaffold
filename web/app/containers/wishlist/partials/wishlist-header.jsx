@@ -15,9 +15,13 @@ const WishlistHeader = ({
     itemCount,
     title
 }) => (
-    <div className="u-padding-top-lg u-padding-bottom-lg u-padding-start-md">
-        <Breadcrumbs items={[{text: 'Back to Dashboard', href: dashboardURL}]} />
-        <h1 className="t-wishlist__title">{title ? title : 'My Wish List'} ({itemCount} Items)</h1>
+    <div className="u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md u-border-light-bottom">
+        <div>
+            <Breadcrumbs items={[{text: 'Back to Dashboard', href: dashboardURL}]} />
+        </div>
+        <div className="u-margin-top-md">
+            <h1 className="t-wishlist__title u-text-uppercase">{title ? title : 'My Wish List'} ({itemCount} Items)</h1>
+        </div>
     </div>
 )
 
