@@ -63,7 +63,7 @@ const Header = (props) => {
                     'action-xhr': '#'
                 }}
                 submitButtonProps={{
-                    className: 'c--secondary t-header__search-submit-button',
+                    className: 'a--secondary t-header__search-submit-button',
                     children: searchIcon
                 }}
                 inputProps={{
