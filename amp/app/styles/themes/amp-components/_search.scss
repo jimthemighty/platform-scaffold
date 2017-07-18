@@ -4,16 +4,6 @@
 // ===
 
 
-// Search Inner
-// ---
-//
-// 1. Ensure search bar is above site's fixed header
-
-.a-search__inner {
-    z-index: $z2-depth + 1; // 1
-}
-
-
 // Search Form
 // ---
 
@@ -54,28 +44,4 @@
 
 .a-search__button-submit {
     order: 2;
-}
-
-
-// Search Suggestion Heading
-// ---
-
-.a-search__suggestion-heading {
-    @include visually-hidden;
-}
-
-
-// Search Suggestion
-// ---
-
-.a-search__suggestion + .a-search__suggestion {
-    border-top: $border;
-}
-
-
-// Search Shade
-// ---
-
-.a-search__shade {
-    background: rgba(0, 0, 0, 0.5);
 }
