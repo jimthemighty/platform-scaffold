@@ -25,9 +25,6 @@ jobs:
           name: Accept Cert
           command: bash ./scripts/accept-cert-ci.sh
           working_directory: /home/ubuntu/platform-scaffold/web/    
-      - persist_to_workspace:
-          root: .
-          paths: .
 
   test-unit:
     docker:
