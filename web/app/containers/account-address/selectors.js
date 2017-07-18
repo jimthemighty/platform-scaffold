@@ -12,6 +12,10 @@ export const getAccountAddress = createSelector(
     ({accountAddress}) => accountAddress
 )
 
+const PLACEHOLDER = {
+    text: undefined
+}
+
 export const getTitle = createGetSelector(getAccountAddress, 'title')
 export const getDefaultAddress = createGetSelector(getAccountAddress, 'defaultAddress', Immutable.Map())
-export const getAddresses = createGetSelector(getAccountAddress, 'addresses', Immutable.List())
+export const getAddresses = createGetSelector(getAccountAddress, 'addresses', Immutable.List(new Array(5).fill(PLACEHOLDER)))
