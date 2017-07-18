@@ -33,7 +33,7 @@ test('renders the contents of the className prop if present', () => {
 })
 
 test('`scrollable` prop set as true, it should add scrollable attribute', () => {
-    const wrapper = mount(<Lightbox id="id" height="10" scrollable={true} />)
+    const wrapper = mount(<Lightbox id="id" scrollable={true} />)
 
     expect(wrapper.find('#id').prop('scrollable')).toBe('')
 })
