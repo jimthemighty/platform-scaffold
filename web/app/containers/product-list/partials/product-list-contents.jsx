@@ -178,7 +178,7 @@ const ProductListContents = ({
                             }
                         </div>
                     :
-                        <SkeletonBlock height="20px" />
+                        <SkeletonBlock height="66px" />
                     }
                 </div>
 
