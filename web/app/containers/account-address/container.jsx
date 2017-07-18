@@ -31,27 +31,27 @@ const AccountAddress = ({defaultAddress, addresses}) => {
         {firstname ?
             <p>{firstname} {lastname}</p>
             :
-            <SkeletonText width="50%" type="p" style={{lineHeight: '20px'}} />
+            <SkeletonText width="50%" style={{lineHeight: '20px'}} />
         }
         {addressLine1 ?
             <p>{addressLine1}</p>
             :
-            <SkeletonText width="60%" type="p" style={{lineHeight: '20px'}} />
+            <SkeletonText width="60%" style={{lineHeight: '20px'}} />
         }
         {city ?
             <p>{city}, {regionId}, {postcode}</p>
             :
-            <SkeletonText width="70%" type="p" style={{lineHeight: '20px'}} />
+            <SkeletonText width="70%" style={{lineHeight: '20px'}} />
         }
         {countryId ?
             <p>{countryId}</p>
             :
-            <SkeletonText width="40%" type="p" style={{lineHeight: '20px'}} />
+            <SkeletonText width="40%" style={{lineHeight: '20px'}} />
         }
         {telephone ?
             <p>{telephone}</p>
             :
-            <SkeletonText width="50%" type="p" style={{lineHeight: '20px'}} />
+            <SkeletonText width="50%" style={{lineHeight: '20px'}} />
         }
     </div>)
     return (
