@@ -3,18 +3,16 @@
 // Search
 // ===
 
-// Variables
-// ---
-
-$suggestions__height: 70vh;
 
 // Search Inner
 // ---
 //
 // 1. Position relative is required to align search suggestions
+// 2. Ensure search bar is above lightbox
 
 .a-search__inner {
     position: relative; // 1
+    z-index: $z4-depth + 1; // 2
 }
 
 
@@ -57,7 +55,6 @@ $suggestions__height: 70vh;
 // ---
 
 .a-search__button-submit,
-.a-search__button-clear,
 .a-search__button-close {
     flex: 0 0 auto;
 }
@@ -81,23 +78,4 @@ $suggestions__height: 70vh;
     width: $tap-size;
 
     pointer-events: none;
-}
-
-
-// Modifier active
-// ---
-//
-// Note: This modifier makes the search look active by adding the shade
-//
-// 1. Search shade appears
-// 2. Search itself appears
-
-.a-search.a--is-active {
-    .a-search__inner {
-        z-index: $z4-depth;
-
-        opacity: 1; // 2
-
-        transform: translateY(0%);
-    }
 }

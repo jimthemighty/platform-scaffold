@@ -4,13 +4,13 @@
 
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import {UI_NAME} from '../../analytics/data-objects/'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
-import Button from '../button'
-import Icon from '../icon'
+import Button from 'mobify-amp-sdk/dist/components/button' // change to '../button' when move to SDK
+import Icon from 'mobify-amp-sdk/dist/components/icon' // change to '../icon' when move to SDK
+import Form from 'mobify-amp-sdk/dist/components/form' // change to '../form' when move to SDK
 import Lightbox from '../lightbox/index'
-import Form from 'mobify-amp-sdk/dist/components/form'
 
 const searchId = (() => {
     let i = 0
@@ -43,7 +43,8 @@ class Search extends React.Component {
             searchIcon,
             submitButtonProps,
             closeButtonProps,
-            formProps
+            formProps,
+            lightboxId
         } = this.props
 
         const {
@@ -51,9 +52,7 @@ class Search extends React.Component {
             id
         } = this.state
 
-        const classes = classNames('a-search', {
-            'a--is-overlay': isOverlay
-        }, className)
+        const classes = classNames('a-search', className)
 
         const SearchForm = () => {
             return (
@@ -81,7 +80,6 @@ class Search extends React.Component {
                                     value={searchValue}
                                     type="search"
                                     name="query"
-                                    data-analytics-name={UI_NAME.search}
                                     {...inputProps}
                                 />
                             </div>
@@ -91,7 +89,6 @@ class Search extends React.Component {
                                     type="submit"
                                     disabled={searchValue.trim().length === 0}
                                     {...submitButtonProps}
-                                    data-analytics-name={UI_NAME.search}
                                 />
                             </div>
 
@@ -99,7 +96,6 @@ class Search extends React.Component {
                                 <div className="a-search__button-close">
                                     <Button
                                         {...closeButtonProps}
-                                        data-analytics-name={UI_NAME.dismissSearch}
                                     />
                                 </div>
                             }
@@ -111,13 +107,13 @@ class Search extends React.Component {
 
         return (
             <div className={classes} role="search">
-                {isOverlay &&
-                    <Lightbox id="search-lightbox">
+                {isOverlay ?
+                    <Lightbox id={lightboxId}>
                         <SearchForm />
                     </Lightbox>
+                :
+                    <SearchForm />
                 }
-
-                <SearchForm />
             </div>
         )
     }
@@ -168,6 +164,11 @@ Search.propTypes = {
     isOverlay: PropTypes.bool,
 
     /**
+     * A unique identifer for the lightbox.
+     */
+    lightboxId: PropTypes.string,
+
+    /**
      * Icon name for search.
      */
     searchIcon: PropTypes.string,
@@ -178,4 +179,4 @@ Search.propTypes = {
     submitButtonProps: PropTypes.object
 }
 
-export default Search
+export default ampComponent(Search)

@@ -1,9 +1,6 @@
 ```js
 // JS, importing the SDK component
-import Search from 'progressive-web-sdk/dist/components/search'
-
-// SCSS, importing the SDK component styles to app/styles/_components.scss
-@import 'node_modules/progressive-web-sdk/dist/components/search/base';
+import Search from 'mobify-amp-sdk/dist/components/search'
 ```
 
 
