@@ -1,0 +1,150 @@
+// Search
+// ===
+
+// Variables
+// ---
+
+$suggestions__height: 70vh;
+
+// Search Inner
+// ---
+//
+// 1. Position relative is required to align search suggestions
+
+.a-search__inner {
+    position: relative; // 1
+}
+
+
+// Search Bar
+// ---
+//
+// 1. Position context for below `.a-search__icon`
+
+.a-search__bar {
+    position: relative; // 1
+
+    display: flex;
+    align-items: center;
+}
+
+
+// Search Form
+// ---
+
+.a-search__form {
+    background: $neutral-00;
+}
+
+
+// Search Input
+// ---
+//
+// 1. Make room for the absolutely positioned `.a-search__icon`
+
+.a-search__input {
+    padding-left: $tap-size; // 1
+}
+
+.a-search__field {
+    flex: 1 1 auto;
+}
+
+
+// Search Buttons
+// ---
+
+.a-search__button-submit,
+.a-search__button-clear,
+.a-search__button-close {
+    flex: 0 0 auto;
+}
+
+
+// Search Icon
+// ---
+//
+// 1. Position relative to the above `.a-search__bar`
+
+.a-search__icon {
+    position: absolute; // 1
+    top: 0; // 1
+    bottom: 0; // 1
+    left: 0; // 1
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 auto;
+    width: $tap-size;
+
+    pointer-events: none;
+}
+
+
+// Modifier isOverlay
+// ---
+//
+// 1. Hide the search while it is an overall and inactive
+
+.a-search.a--is-overlay {
+    .a-search__inner {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+
+        opacity: 0; // 1
+
+        transform: translateY(-100%);
+
+        transition: 0.3s transform ease-out;
+    }
+}
+
+
+// Search Suggestions
+// ---
+//
+// 1. Relative to '.a-search__inner'
+// 2. To allow dismissing it by clicking outside of the search suggestions
+
+.a-search__suggestions {
+    position: absolute; // 1
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: $z1-depth;
+
+    overflow-y: auto;
+    max-height: $suggestions__height; // 2
+
+    background-color: $neutral-00;
+
+    transition: max-height 0.3s ease-out ;
+
+    -webkit-overflow-scrolling: touch;
+
+    &.a--is-empty {
+        max-height: 0;
+    }
+}
+
+
+// Modifier active
+// ---
+//
+// Note: This modifier makes the search look active by adding the shade
+//
+// 1. Search shade appears
+// 2. Search itself appears
+
+.a-search.a--is-active {
+    .a-search__inner {
+        z-index: $z4-depth;
+
+        opacity: 1; // 2
+
+        transform: translateY(0%);
+    }
+}
