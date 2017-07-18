@@ -10,6 +10,7 @@ import {getWishlistProducts} from '../../../store/user/selectors'
 import List from 'progressive-web-sdk/dist/components/list'
 import Button from 'progressive-web-sdk/dist/components/button'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
+import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import ItemQuantityStepper from '../../../components/item-quantity-stepper'
@@ -18,6 +19,22 @@ import ProductItem from '../../../components/product-item'
 import ProductImage from '../../../components/product-image'
 import WishlistShareButton from './wishlist-share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
+const productItemClassNames = 'u-padding-md u-padding-top-lg u-padding-bottom-lg u-border-light-top'
+
+const ProductSkeleton = () => (
+    <ProductItem
+        className={productItemClassNames}
+        title={<SkeletonText type="h3" className="u-margin-bottom-sm" />}
+        image={<ProductImage src="null" alt="null" />}
+        footerContent={
+            <SkeletonBlock height="40px" width="100%" className="u-margin-top-md" />
+        }
+    >
+        <SkeletonText width="60%" style={{lineHeight: '20px'}} />
+        <SkeletonText width="60%" style={{lineHeight: '20px'}} className="u-margin-bottom-sm" />
+    </ProductItem>
+)
 
 const WishlistItems = ({products}) => (
     <List>
@@ -28,12 +45,12 @@ const WishlistItems = ({products}) => (
                     <ProductItem
                         key={id}
                         customWidth="40%"
-                        className="u-padding-md"
+                        className={productItemClassNames}
                         title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{title}</h2>}
                         image={<ProductImage {...thumbnail} />}
                         footerContent={
                             <Button
-                                className="pw--primary u-width-full u-text-uppercase u-margin-bottom-lg"
+                                className="pw--primary u-width-full u-text-uppercase u-margin-top-md"
                                 text="Add To Cart"
                                 onClick={() => { console.log('ADD TO CART CLICKED') }}
                                 data-analytics-name={UI_NAME.addToCart}
@@ -83,7 +100,7 @@ WishlistItems.propTypes = {
 }
 
 const NoWishlistItems = () => (
-    <div className="u-flexbox u-direction-column u-align-center ">
+    <div className="t-wishlist__empty u-padding-md u-flexbox u-direction-column u-align-center u-justify-center">
         <Icon
             name="wishlist-add"
             className="u-color-brand"
@@ -101,12 +118,12 @@ const WishlistContents = ({
     products,
     contentLoaded
 }) => (
-    <div className="t-wishlist__container u-padding-top-md u-bg-color-neutral-10">
-        <div className="u-border-light-top u-border-light-bottom u-bg-color-neutral-00">
+    <div className="u-padding-top-md u-bg-color-neutral-10">
+        <div className="u-border-light-bottom u-bg-color-neutral-00">
             {contentLoaded ?
                 <WishlistItems products={products} />
             :
-                <SkeletonBlock height="60px" />
+                <ProductSkeleton />
             }
         </div>
         {products.length > 0 &&

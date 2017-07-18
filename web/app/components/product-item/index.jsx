@@ -24,7 +24,7 @@ const ProductItem = ({
 
     return (
         <article className={classes}>
-            <div className="u-flexbox u-direction-row-reverse">
+            <div className="u-flexbox u-direction-row-reverse u-align-center">
                 <div className="u-flex">
                     {!!category &&
                         <p className="c-product-item__category u-margin-bottom-sm u-color-brand">
