@@ -28,7 +28,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
     }
 
     return (
-        <form className="u-padding-start-md u-padding-end-md" onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <ProductDetailsVariations error={error} />
 
             <div className="u-margin-top-lg u-padding-start-md u-padding-end-md">
