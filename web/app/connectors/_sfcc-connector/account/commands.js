@@ -193,7 +193,8 @@ export const initAccountAddressPage = () => (dispatch) => {
                                 address1,
                                 city,
                                 state_code,
-                                preferred
+                                preferred,
+                                country_code
                             } = address
 
                             return {
@@ -204,6 +205,7 @@ export const initAccountAddressPage = () => (dispatch) => {
                                 addressLine1: address1,
                                 default: preferred,
                                 city,
+                                countryId: country_code.toUpperCase(),
                                 regionId: state_code
                             }
                         })
