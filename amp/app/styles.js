@@ -80,6 +80,9 @@ import ProductTileBase from './components/product-tile/_base.scss'
 import Lightbox from './components/lightbox/index'
 import LightboxBase from './components/lightbox/_base.scss'
 
+import Search from './components/search/index'
+import SearchBase from './components/search/_base.scss'
+
 
 // Containers
 import Footer from './containers/footer/container'
@@ -126,6 +129,7 @@ styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
 styles.set(Lightbox, [LightboxBase])
+styles.set(Search, [SearchBase])
 
 
 // Containers
