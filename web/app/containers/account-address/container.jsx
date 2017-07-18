@@ -12,7 +12,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import {getDefaultAddress, getAddresses} from './selectors'
-// import {getTitle} from './selectors'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const AccountAddress = ({defaultAddress, addresses}) => {
     const {
@@ -66,16 +66,14 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                 <Button
                     text="Add new address"
                     className="pw--tertiary u-margin-top-lg u-width-full u-text-weight-medium"
+                    data-analytics-name={UI_NAME.addNewAddress}
                 />
-            </div>
-            <div className="t-account-address__sub-heading">
-                <h2 className="u-h5 u-text-family">Default address</h2>
             </div>
             <div className="t-account-address__content u-padding-md">
                 <Card
                     hasBorder
                     header={
-                        <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">placeholder header</h3>
+                        <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">Default address</h3>
                     }
                     children={addressBlock}
                     footer={
@@ -89,11 +87,6 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                         />
                     }
                 />
-            </div>
-            <div className="t-account-address__sub-heading">
-                <h2 className="u-h5 u-text-family">Other saved addresses</h2>
-            </div>
-            <div className="t-account-address__content u-padding-md">
                 {addresses.map(({firstname, lastname, addressLine1, city, countryId, postcode, telephone, regionId}, idx) => {
                     return (
                         <Card key={idx}
