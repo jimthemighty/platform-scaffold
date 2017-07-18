@@ -42,7 +42,6 @@ class Search extends React.Component {
             isOverlay,
             searchIcon,
             submitButtonProps,
-            closeButtonProps,
             formProps,
             lightboxId
         } = this.props
@@ -90,14 +89,6 @@ class Search extends React.Component {
                                     {...submitButtonProps}
                                 />
                             </div>
-
-                            {isOverlay &&
-                                <div className="a-search__button-close">
-                                    <Button
-                                        {...closeButtonProps}
-                                    />
-                                </div>
-                            }
                         </div>
                     </Form>
                 </div>
@@ -123,9 +114,6 @@ Search.defaultProps = {
     submitButtonProps: {
         text: 'Submit search'
     },
-    closeButtonProps: {
-        text: 'Close search'
-    },
     searchIcon: 'search'
 }
 
@@ -141,11 +129,6 @@ Search.propTypes = {
      * Adds values to the `class` attribute of the root element.
      */
     className: PropTypes.string,
-
-    /**
-     * The properties for close button.
-     */
-    closeButtonProps: PropTypes.object,
 
     /**
      * The properties for form.
