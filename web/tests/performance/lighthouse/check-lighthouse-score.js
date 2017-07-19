@@ -27,12 +27,8 @@ if (fs.existsSync(`${reportsDir}audit-local.report.html`)) {
 /**
 * Verify the Lighthouse score
 */
-const checkLighthouse = function(htmlReport) {
-    // Still needed because JSON report does not have overall score.
-    // I confirm that I read & accept http://stackoverflow.com/a/1732454/899937
-    const results = htmlReport.match(/<span class="section-result__points">(.*)<\/span>/)
-
-    const actualLighthouseScore = parseInt(results[1])
+const checkLighthouse = function(jsonResults) {
+    const actualLighthouseScore = Math.round(jsonResults.score)
     // min_lighthouse_score can be adjusted in CI
     const minimumLighthouseScore = parseInt(process.env.min_lighthouse_score || process.env.npm_package_config_min_lighthouse_score)
 
@@ -48,16 +44,15 @@ const checkLighthouse = function(htmlReport) {
 * Display some important performance metrics.
 */
 const checkTTI = function(jsonResults) {
-    console.log(`Time to interactive: ${jsonResults.audits['time-to-interactive'].displayValue}`)
+    console.log(`Time to first interactive: ${jsonResults.audits['first-interactive'].displayValue}`)
     console.log(`Analyzing total bundle size...`)
     console.log(`${jsonResults.audits['total-byte-weight'].displayValue}`)
 }
 
 const jsonResults = JSON.parse(fs.readFileSync(`${reportsDir}${fileName}.report.json`, 'utf8'))
-const htmlReport = fs.readFileSync(`${reportsDir}${fileName}.report.html`, 'utf8')
 
 checkTTI(jsonResults)
-checkLighthouse(htmlReport)
+checkLighthouse(jsonResults)
 
 if (failure) {
     process.exit(1)
