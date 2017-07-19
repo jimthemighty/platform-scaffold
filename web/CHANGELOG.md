@@ -1,4 +1,5 @@
 ## To be released
+- Bump Lighthouse to version 2.2.1 [889](https://github.com/mobify/platform-scaffold/pull/889)
 - Add product variation support to Merlin's connector [#800](https://github.com/mobify/platform-scaffold/pull/800)
 - Handling `product_search` SFCC API request not necessarily having `image` object in the response [#888](https://github.com/mobify/platform-scaffold/pull/888)
 
