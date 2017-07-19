@@ -6,7 +6,7 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 const initConnector = () => {
     registerConnector(Connector({
         jqueryResponse
-    }))
+    }), connectorExtension)
 }
 
 export default initConnector
