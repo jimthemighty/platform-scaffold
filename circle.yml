@@ -16,7 +16,7 @@ dependencies:
         #    pwd: native
 test:
     override:
-        - ./tests/system/test-scripts/run-all-tests-on-ci.sh:
+        - ./tests/e2e/test-scripts/run-all-tests-on-ci.sh:
             pwd: web
             parallel: true
         - npm run test:all:
@@ -24,6 +24,12 @@ test:
     post:
         - ./scripts/upload-artifacts-ci.sh:
             pwd: web
+deployment:
+    bundle:
+        branch: [develop, release-*]
+        commands:
+            - scripts/ci-deploy.sh:
+                pwd: web
 experimental:
     notify:
         branches:

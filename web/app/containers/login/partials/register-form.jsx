@@ -92,7 +92,7 @@ class RegisterForm extends React.Component {
                 </FieldSet>
 
                 <Button
-                    className="c--primary u-width-full u-margin-top-lg"
+                    className="pw--primary u-width-full u-margin-top-lg"
                     type="submit"
                     disabled={submitting || !isFormLoaded}
                     data-analytics-name={UI_NAME.register}

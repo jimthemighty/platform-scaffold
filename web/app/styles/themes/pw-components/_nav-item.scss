@@ -9,13 +9,12 @@
 
 $nav-item__active-color: #f1f0f7;
 
-.pw-nav-item,
-.c-nav-item {
+.pw-nav-item {
     display: block;
     height: $unit * 5.5;
-    border: 0;
+    border-bottom: $border;
 
-    background: none;
+    background-color: $neutral-00;
 
     color: $neutral-60;
     font-size: 15px;
@@ -34,55 +33,43 @@ $nav-item__active-color: #f1f0f7;
 .pw-nav-item:hover,
 .pw-nav-item:active,
 .pw-nav-item:visited,
-.pw-nav-item:focus,
-.c-nav-item:hover,
-.c-nav-item:active,
-.c-nav-item:visited,
-.c-nav-item:focus {
+.pw-nav-item:focus {
     color: $neutral-60;
 }
 
-.pw-nav-item.pw--selected,
-.c-nav-item.c--selected {
+.pw-nav-item.pw--selected {
     background-color: $nav-item__active-color;
 
     color: $brand-color;
 }
 
 
-.pw-nav-item--with-before-icon,
-.c-nav-item--with-before-icon {
+.pw-nav-item--with-before-icon {
     padding: 0;
 }
 
 
-.pw-nav-item--with-before-icon.pw--selected,
-.c-nav-item--with-before-icon.c--selected {
+.pw-nav-item--with-before-icon.pw--selected {
     background-color: $nav-item__active-color;
 
     color: $neutral-60;
 }
 
 .pw-nav-item--with-before-icon,
-.pw-nav-item--sign-in.pw--selected,
-.c-nav-item--with-before-icon,
-.c-nav-item--sign-in.c--selected {
+.pw-nav-item--sign-in.pw--selected {
     background-color: $neutral-10;
 }
 
-.pw-nav-item__inner,
-.c-nav-item__inner {
+.pw-nav-item__inner {
     height: 100%;
 }
 
-.pw-nav-item__before-icon,
-.c-nav-item__before-icon {
+.pw-nav-item__before-icon {
     width: $unit * 2;
     height: $unit * 2;
 }
 
-.pw-nav-item__icon,
-.c-nav-item__icon {
+.pw-nav-item__icon {
     position: relative; // 1
 
     width: $unit * 5.5;
@@ -90,8 +77,7 @@ $nav-item__active-color: #f1f0f7;
 }
 
 
-.pw-nav-item__icon-content,
-.c-nav-item__icon-content {
+.pw-nav-item__icon-content {
     position: absolute; // 2
     top: 50%;
     left: 50%;
@@ -103,12 +89,8 @@ $nav-item__active-color: #f1f0f7;
 }
 
 
-.pw-nav-item.pw--with-icon,
-.c-nav-item.c--with-icon {
-    background-color: $neutral-10;
-
-    .pw-nav-item__inner,
-    .c-nav-item__inner {
+.pw-nav-item.pw--with-icon {
+    .pw-nav-item__inner {
         padding: 0;
     }
 }

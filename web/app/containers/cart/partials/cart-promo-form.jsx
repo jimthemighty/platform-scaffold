@@ -32,13 +32,13 @@ const CartPromoForm = (props) => {
                     />
                 </ReduxForm.Field>
                 {isPromoSubmitting ?
-                    <Button className="c--tertiary u-margin-0">
+                    <Button className="pw--tertiary u-margin-0">
                         <InlineLoader className="pw--small" title="Submitting" />
                     </Button>
                 :
                     <Button
                         type="submit"
-                        className="c--tertiary u-margin-0 u-text-uppercase"
+                        className="pw--tertiary u-margin-0 u-text-uppercase"
                         disabled={disabled || submitting}
                         data-analytics-name={UI_NAME.submitPromoCode}
                     >

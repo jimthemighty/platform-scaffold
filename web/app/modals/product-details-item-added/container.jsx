@@ -19,13 +19,21 @@ import ProductItem from '../../components/product-item'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout}) => (
-    <Sheet open={open} onDismiss={onDismiss} effect="slide-bottom" className="m-product-details__item-added-modal" coverage="50%" shrinkToContent>
+const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, onGoToWishlist, duration, isWishlistAdded}) => (
+    <Sheet
+        open={open}
+        onDismiss={onDismiss}
+        duration={duration}
+        effect="slide-bottom"
+        className="m-product-details__item-added-modal"
+        coverage="50%"
+        shrinkToContent
+    >
         {/* Modal header */}
         <div className="u-flex-none u-border-bottom">
             <div className="u-flexbox u-align-center">
                 <h1 className="u-flex u-padding-lg u-h4 u-text-uppercase">
-                    Product Added to Cart
+                    {`Product Added to ${isWishlistAdded ? 'Wishlist' : 'Cart'}`}
                 </h1>
 
                 <div className="m-product-details__item-added-modal-close u-flexbox u-flex-none u-align-center u-justify-center">
@@ -57,15 +65,15 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
             {/* Buttons */}
             <div className="u-flex-none">
                 <Button
-                    onClick={onGoToCheckout}
-                    className="c--primary u-width-full u-margin-bottom-md u-text-uppercase"
+                    onClick={isWishlistAdded ? onGoToWishlist : onGoToCheckout}
+                    className="pw--primary u-width-full u-margin-bottom-md u-text-uppercase"
                     innerClassName="u-text-align-center"
-                    data-analytics-name={UI_NAME.checkout}
+                    data-analytics-name={isWishlistAdded ? UI_NAME.wishlist : UI_NAME.checkout}
                 >
-                    Go To Checkout
+                    {isWishlistAdded ? 'View Wishlist' : 'Go To Checkout'}
                 </Button>
                 <Button
-                    className="c--tertiary u-width-full u-text-uppercase"
+                    className="pw--tertiary u-width-full u-text-uppercase"
                     onClick={onDismiss}
                     data-analytics-name={UI_NAME.continueShopping}
                 >
@@ -77,6 +85,11 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
 )
 
 ProductDetailsItemAddedModal.propTypes = {
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
+    isWishlistAdded: PropTypes.bool,
     open: PropTypes.bool,
     price: PropTypes.string,
     quantity: PropTypes.number,
@@ -87,9 +100,11 @@ ProductDetailsItemAddedModal.propTypes = {
     title: PropTypes.string,
     onDismiss: PropTypes.func,
     onGoToCheckout: PropTypes.func,
+    onGoToWishlist: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
+    isWishlistAdded: selectors.getIsWishlistAdded,
     thumbnail: getProductThumbnail,
     open: isModalOpen(PRODUCT_DETAILS_ITEM_ADDED_MODAL),
     quantity: selectors.getItemQuantity,
@@ -99,6 +114,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     onGoToCheckout: productDetailsActions.goToCheckout,
+    onGoToWishlist: productDetailsActions.goToWishlist,
     onDismiss: stripEvent(() => closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
 }
 
