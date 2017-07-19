@@ -1,12 +1,13 @@
 /* global AJS_SLUG NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
-    isSamsungBrowser,
+    documentWriteSupported,
+    isLocalStorageAvailable,
     isFirefoxBrowser,
-    preventDesktopSiteFromRendering,
+    isSamsungBrowser,
     loadScript,
     loadScriptAsPromise,
-    documentWriteSupported
+    preventDesktopSiteFromRendering
 } from 'progressive-web-sdk/dist/utils/utils'
 import {shouldPreview, loadPreview, isV8Tag} from 'progressive-web-sdk/dist/utils/preview-utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
@@ -17,7 +18,6 @@ import {
     loadAndInitMessagingClient,
     createGlobalMessagingClientInitPromise,
     updateMessagingSWVersion,
-    isLocalStorageAvailable,
     prefetchLink
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
@@ -213,7 +213,7 @@ const attemptToInitializeApp = () => {
     /* eslint-disable max-len */
     loadAsset('meta', {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'
+        content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'
     })
     /* eslint-enable max-len */
 
@@ -352,15 +352,13 @@ const attemptToInitializeApp = () => {
     preventDesktopSiteFromRendering()
 }
 
-// Apply polyfills
-const neededPolyfills = getNeededPolyfills()
-
 if (shouldPreview()) {
     // If preview is being used, load a completely different file from this one and do nothing.
     loadPreview()
 } else {
     // Run the app.
     if (isSupportedBrowser() && isPWARoute()) {
+        const neededPolyfills = getNeededPolyfills()
         if (neededPolyfills.length) {
             neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
         } else {
@@ -374,9 +372,7 @@ if (shouldPreview()) {
                 {
                     id: 'ajs',
                     src: `https://a.mobify.com/${AJS_SLUG}/a.js`
-                }
-            )
+                })
         })
     }
 }
-

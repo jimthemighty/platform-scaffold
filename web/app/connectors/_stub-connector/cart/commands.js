@@ -44,7 +44,7 @@ export const getCart = () => (dispatch) => {
         }
     }
 
-    // For more information on the shape of the expected data, see ../../cart/types
+    // For more information on the shape of the expected data, see progressive-web-sdk/integration-manager/cart/types
     dispatch(receiveCartContents(exampleCartData))
     dispatch(receiveCartProductData(exampleCartProducts))
     return Promise.resolve()
@@ -65,10 +65,6 @@ export const updateItemQuantity = (itemID, quantity) => (dispatch) => {
     return Promise.resolve()
 }
 
-export const addToWishlist = (productId, productURL) => (dispatch) => {
-    console.log('[Stub Connector] Called addToWishlist stub with arguments:', productId, productURL)
-    return Promise.resolve()
-}
 
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch) => {
     console.log('[Stub Connector] Called fetchTaxEstimate stub with arguments:', address, shippingMethod)

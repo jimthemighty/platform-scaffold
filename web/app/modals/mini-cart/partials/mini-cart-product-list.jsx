@@ -69,15 +69,15 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
             </Button>
 
             <List>
-                {items.map(({product, itemPrice, linePrice, quantity}) => {
-                    const src = product.thumbnail ? product.thumbnail.src : ''
-                    const alt = product.thumbnail ? product.thumbnail.alt : ''
+                {items.map(({itemPrice, linePrice, quantity, id, thumbnail, title}) => {
+                    const src = thumbnail ? thumbnail.src : ''
+                    const alt = thumbnail ? thumbnail.alt : ''
                     return (
                         <ProductItem
                             className={productListClasses}
-                            title={<h2 className="u-h3">{product.name}</h2>}
+                            title={<h2 className="u-h3">{title}</h2>}
                             price={itemPrice}
-                            key={product.id}
+                            key={id}
                             image={<Image src={src} alt={alt} width="64px" height="64px" />}
                         >
                             <div>
@@ -105,7 +105,7 @@ MiniCartProductList.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     cartURL: getCartURL,
-    items: selectors.getCartItems,
+    items: selectors.getCartItemsFull,
     orderTotal: selectors.getOrderTotal
 })
 

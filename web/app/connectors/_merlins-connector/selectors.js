@@ -14,7 +14,7 @@ export const getFormKey = createGetSelector(getIntegrationManager, 'formKey')
 export const getFormInfo = createGetSelector(getIntegrationManager, 'formInfo', Immutable.Map())
 export const getFormInfoByPathKey = (pathKey) => createGetSelector(getFormInfo, pathKey, Immutable.Map())
 export const getFormInfoByProductId = (id) => createGetSelector(getFormInfo, id, Immutable.Map())
-export const getUenc = (pathKey) => createGetSelector(getFormInfoByPathKey(pathKey), 'uenc')
+export const getUenc = (id) => createGetSelector(getFormInfoByProductId(id), 'uenc')
 
 export const getCartBaseUrl = createSelector(
     getIsLoggedIn,

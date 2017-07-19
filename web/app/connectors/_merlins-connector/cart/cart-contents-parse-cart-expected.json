@@ -7,7 +7,8 @@
             "configureUrl": "/checkout/cart/configure/id/1659/product_id/7/",
             "quantity": 1,
             "itemPrice": "$24.00",
-            "linePrice": "$24.00"
+            "linePrice": "$24.00",
+            "options": []
         },
         {
             "id": "1658",
@@ -16,7 +17,8 @@
             "configureUrl": "/checkout/cart/configure/id/1658/product_id/1/",
             "quantity": 2,
             "itemPrice": "$12.00",
-            "linePrice": "$24.00"
+            "linePrice": "$24.00",
+            "options": []
         }
     ],
     "subtotal": "$50.40",

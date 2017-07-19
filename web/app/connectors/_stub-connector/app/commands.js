@@ -12,7 +12,9 @@ import {getCart} from '../cart/commands'
 
 import {
     receiveNavigationData,
-    setCartURL
+    setCartURL,
+    setWishlistURL,
+    setSignInURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 /**
@@ -87,5 +89,7 @@ export const initApp = () => (dispatch) => {
     dispatch(receiveNavigationData(exampleNavigationData))
     dispatch(getCart())
     dispatch(setCartURL('/checkout/cart/'))
+    dispatch(setWishlistURL('/wishlist/'))
+    dispatch(setSignInURL('/customer/account/login/'))
     return Promise.resolve()
 }

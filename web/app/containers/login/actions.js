@@ -110,7 +110,9 @@ export const submitSignInForm = (formValues) => (dispatch) => {
     } = formValues
 
     return dispatch(login(username, password, persistent_remember_me))
-        .then(handleLoginSuccess)
+        .then((href) => {
+            return handleLoginSuccess(href)
+        })
 }
 
 export const submitRegisterForm = (formValues) => (dispatch) => {
