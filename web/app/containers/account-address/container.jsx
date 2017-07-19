@@ -15,7 +15,6 @@ import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const AccountAddress = ({defaultAddress, addresses}) => {
-
     return (
         <div className="t-account-address">
             <div className="t-account-address__heading u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">

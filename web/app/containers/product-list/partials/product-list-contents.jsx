@@ -23,6 +23,7 @@ import Field from 'progressive-web-sdk/dist/components/field'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import ProductTile from '../../../components/product-tile'
+import Card from '../../../components/card'
 
 const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
@@ -30,11 +31,12 @@ const emptySearchText = 'Your search returned no results. Please check your spel
 const ResultList = ({products, setCurrentProduct}) => (
     <List className="pw--borderless">
         {products.map((product, idx) => (
-            <ProductTile
-                onClick={product ? () => setCurrentProduct(product.id) : null}
-                key={product ? product.id : idx}
-                {...product}
-            />
+            <Card hasShadow key={product ? product.id : idx}>
+                <ProductTile
+                    onClick={product ? () => setCurrentProduct(product.id) : null}
+                    {...product}
+                />
+            </Card>
         ))}
     </List>
 )
