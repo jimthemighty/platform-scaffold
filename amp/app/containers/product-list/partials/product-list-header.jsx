@@ -4,7 +4,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import Breadcrumbs from '../../../components/breadcrumbs'
+import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs'
 
 // Selectors
 import {getCategoryTitle, getCategoryParentTitle, getCategoryParentHref} from '../../../../../web/app/store/categories/selectors'

@@ -1,10 +1,10 @@
 import React from 'react'
 
 // Components
-import Button from '../../../components/button'
-import Form from '../../../components/form'
-import Field from '../../../components/field'
-import FieldRow from '../../..//components/field-row'
+import Button from 'mobify-amp-sdk/dist/components/button'
+import Form from 'mobify-amp-sdk/dist/components/form'
+import Field from 'mobify-amp-sdk/dist/components/field'
+import FieldRow from 'mobify-amp-sdk/dist/components/field-row'
 
 const NewsletterForm = ({disabled, submitting}) => {
     return (

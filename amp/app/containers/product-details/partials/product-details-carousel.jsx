@@ -4,7 +4,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import Carousel from '../../../components/carousel'
+import Carousel from 'mobify-amp-sdk/dist/components/carousel'
 
 // Selectors
 import {getProductImages} from 'progressive-web-sdk/dist/store/products/selectors'

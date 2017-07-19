@@ -4,7 +4,7 @@ import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
 import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import ListTile from '../list-tile'
+import ListTile from 'mobify-amp-sdk/dist/components/list-tile'
 import ProductItem from '../product-item'
 
 /**
