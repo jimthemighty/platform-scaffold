@@ -16,7 +16,7 @@ import {
     receiveWishlistData,
     receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
@@ -55,7 +55,7 @@ export const initWishlistPage = (url) => (dispatch) => {
                 products: wishlistItems,
                 shareURL: formURL ? formURL.replace('update', 'share') : ''
             }
-            dispatch(receiveProductsData(products))
+            dispatch(receiveWishlistProductData(products))
             dispatch(receiveWishlistData(wishlistData))
             dispatch(receiveWishlistUIData({contentLoaded: true}))
         })

@@ -10,7 +10,7 @@ import {
     receiveWishlistData,
     receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from '../parsers'
 import {createOrderAddressObject} from '../checkout/utils'
 import {
@@ -205,7 +205,7 @@ export const initWishlistPage = () => (dispatch) => {
 
             return dispatch(fetchItemData(wishlistItems))
                 .then(({updatedProducts}) => {
-                    dispatch(receiveProductsData(updatedProducts))
+                    dispatch(receiveWishlistProductsData(updatedProducts))
                     dispatch(receiveWishlistData({
                         title: wishlistData.name,
                         products: wishlistItems
