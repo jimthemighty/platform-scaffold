@@ -57,9 +57,9 @@ const Header = (props) => {
                 isOverlay
                 lightboxId={SEARCH_LIGHTBOX}
                 formProps={{
-                    method: 'POST',
+                    method: 'GET',
                     target: '_top',
-                    'action-xhr': '#'
+                    action: 'https://www.merlinspotions.com/catalogsearch/result/'
                 }}
                 submitButtonProps={{
                     className: 'a--secondary t-header__search-submit-button',
@@ -67,7 +67,7 @@ const Header = (props) => {
                 }}
                 inputProps={{
                     placeholder: 'Search the entire store',
-                    name: 'query'
+                    name: 'q'
                 }}
                 closeButtonProps={{
                     className: 'u-visually-hidden'
