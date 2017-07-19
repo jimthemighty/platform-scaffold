@@ -36,8 +36,8 @@ export const getCartURL = () => `${getBaseURL()}Cart-Show`
 export const getWishlistURL = () => `${getBaseURL()}Wishlist-Show`
 export const getPaymentURL = () => `${getBaseURL()}COBilling-Start`
 export const getConfirmationURL = () => `${getBaseURL()}COSummary-Submit`
-export const getAccountAddressURL = () => `${getBaseURL()}/Address-List`
-export const getAccountInfoURL = () => `${getBaseURL()}/Account-EditProfile`
+export const getAccountAddressURL = () => `${getBaseURL()}Address-List`
+export const getAccountInfoURL = () => `${getBaseURL()}Account-EditProfile`
 
 export const getMyAccountURL = () => `${getBaseURL()}/customer/account/`
 
