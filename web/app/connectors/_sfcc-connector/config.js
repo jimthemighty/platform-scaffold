@@ -36,8 +36,6 @@ export const getCartURL = () => `${getBaseURL()}Cart-Show`
 export const getWishlistURL = () => `${getBaseURL()}Wishlist-Show`
 export const getPaymentURL = () => `${getBaseURL()}COBilling-Start`
 export const getConfirmationURL = () => `${getBaseURL()}COSummary-Submit`
-
 export const getMyAccountURL = () => `/customer/account`
-export const getWishlistURL = () => `${getBaseURL()}wishlist/`
 
 export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`

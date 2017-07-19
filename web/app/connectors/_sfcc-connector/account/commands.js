@@ -10,9 +10,19 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createOrderAddressObject} from '../checkout/utils'
-import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
+import {
+    initSfccSession,
+    deleteAuthToken,
+    storeAuthToken,
+    makeApiRequest,
+    makeApiJsonRequest,
+    checkForResponseFault,
+    deleteBasketID,
+    storeBasketID,
+    getAuthTokenPayload
+} from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
-
+import {splitFullName} from '../../../utils/utils'
 import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
 
@@ -181,41 +191,37 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 /* eslint-disable camelcase */
+const handleAccountInfoData = ({first_name, last_name, login}) => (
+    {
+        accountFormInfo: {
+            names: `${first_name} ${last_name}`,
+            email: login
+        }
+    }
+)
+/* eslint-enable camelcase */
+
 export const initAccountInfoPage = () => (dispatch) => {
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
     return makeApiJsonRequest(`/customers/${customerId}`)
-        .then(({first_name, last_name, login}) => {
-            const result = {
-                accountFormInfo: {
-                    names: `${first_name} ${last_name}`,
-                    email: login
-                }
-            }
-            dispatch(recieveAccountInfoUIData((result)))
-        })
+        .then((res) => dispatch(recieveAccountInfoUIData((handleAccountInfoData(res)))))
 }
 
 
 export const updateAccountInfo = ({names, email}) => (dispatch) => {
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
+    const splitNames = splitFullName(names)
+
     const requestBody = {
-        first_name: names.split(' ')[0],
-        last_name: names.split(' ')[1],
+        first_name: splitNames.firstname,
+        last_name: splitNames.lastname,
         email
     }
 
     return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'PATCH'})
-        .then(({first_name, last_name, login}) => {
-            const result = {
-                accountFormInfo: {
-                    names: `${first_name} ${last_name}`,
-                    email: login
-                }
-            }
-            dispatch(recieveAccountInfoUIData((result)))
-        })
+        .then((res) => dispatch(recieveAccountInfoUIData((handleAccountInfoData(res)))))
 }
 
 export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
