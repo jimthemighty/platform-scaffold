@@ -5,6 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import classNames from 'classnames'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCategoryItemCount} from '../../../store/categories/selectors'
 import * as selectors from '../selectors'
@@ -19,8 +20,6 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import List from 'progressive-web-sdk/dist/components/list'
 import Image from 'progressive-web-sdk/dist/components/image'
 import Pagination from 'progressive-web-sdk/dist/components/pagination'
-// import Icon from 'progressive-web-sdk/dist/components/icon'
-import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Field from 'progressive-web-sdk/dist/components/field'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {ITEMS_PER_PAGE, DEFAULT_SORT_OPTION} from '../constants'
@@ -83,6 +82,7 @@ const ProductListContents = ({
     const selectedSortOption = location.query.sort ? location.query.sort : 'default'
     const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
     const page = validatePageNumber(location.query.p, pageCount)
+    const hasActiveFilters = activeFilters.length > 0
 
     const updateURL = (queryObject) => {
         const query = Object.assign({}, location.query, queryObject)
@@ -106,18 +106,22 @@ const ProductListContents = ({
         browserHistory.push({pathname, query})
     }
 
+    const filtersClasses = classNames('u-flexbox u-align-center u-border-light-top t-product-list__active-filter-container', {
+        't--is-active': hasActiveFilters
+    })
+
     return (
         <div>
-            {contentsLoaded && activeFilters.length > 0 && (
-                <div className="u-flexbox u-align-center u-border-light-top">
-                    <div className="u-flex u-padding-start-md">
+            <div className={filtersClasses}>
+                {hasActiveFilters && [
+                    <div key="ruleset" className="u-flex u-padding-start-md">
                         {activeFilters.map(({label, query, ruleset}) =>
                             <div className="t-product-list__active-filter" key={query}>
                                 <strong>{ruleset}</strong>: {label}
                             </div>
                         )}
-                    </div>
-                    <div className="u-flex-none">
+                    </div>,
+                    <div key="clear" className="u-flex-none">
                         <Button
                             className="u-color-brand"
                             icon="trash"
@@ -127,58 +131,52 @@ const ProductListContents = ({
                             Clear
                         </Button>
                     </div>
-                </div>
-            )}
+                ]}
+            </div>
 
             <div className="t-product-list__container u-padding-end u-padding-bottom-lg u-padding-start">
                 <div className="t-product-list__num-results u-padding-md u-padding-start-sm u-padding-end-sm">
-                    {contentsLoaded ?
-                        <div>
-                            {products.length > 0 &&
-                                <div className="u-flexbox">
-                                    <div className="t-product-list__filter u-flex u-margin-end-md">
-                                        <Field
-                                            idForLabel="filterButton"
-                                            label={`${numItems} Items`}
-                                        >
-                                            <Button
-                                                className="pw--tertiary u-width-full u-text-uppercase"
-                                                onClick={openModal}
-                                                disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
-                                                id="filterButton"
-                                                data-analytics-name={UI_NAME.showFilters}
-                                            >
-                                                Filter
-                                            </Button>
-                                        </Field>
-                                    </div>
+                    {products.length > 0 &&
+                        <div className="u-flexbox">
+                            <div className="t-product-list__filter u-flex u-margin-end-md">
+                                <Field
+                                    idForLabel="filterButton"
+                                    label={contentsLoaded ? `${numItems} Items` : `Loading...`}
+                                >
+                                    <Button
+                                        className="pw--tertiary u-width-full u-text-uppercase"
+                                        onClick={openModal}
+                                        disabled={routeName === 'searchResultPage' || hasActiveFilters}
+                                        id="filterButton"
+                                        data-analytics-name={UI_NAME.showFilters}
+                                    >
+                                        Filter
+                                    </Button>
+                                </Field>
+                            </div>
 
-                                    {sortOptions &&
-                                        <div className="t-product-list__sort u-flex">
-                                            <Field
-                                                className="pw--has-select"
-                                                idForLabel="sort"
-                                                label="Sort by"
-                                            >
-                                                <select
-                                                    className="u-color-neutral-60"
-                                                    value={selectedSortOption}
-                                                    onChange={(e) => { updateURL({sort: e.target.value}) }}
-                                                    onBlur={(e) => { updateURL({sort: e.target.value}) }}
-                                                    data-analytics-name={UI_NAME.sortBy}
-                                                >
-                                                    {sortOptions.map((choice, index) =>
-                                                        <option key={index} value={choice.id}>{choice.label}</option>
-                                                    )}
-                                                </select>
-                                            </Field>
-                                        </div>
-                                    }
+                            {sortOptions &&
+                                <div className="t-product-list__sort u-flex">
+                                    <Field
+                                        className="pw--has-select"
+                                        idForLabel="sort"
+                                        label="Sort by"
+                                    >
+                                        <select
+                                            className="u-color-neutral-60"
+                                            value={selectedSortOption}
+                                            onChange={(e) => { updateURL({sort: e.target.value}) }}
+                                            onBlur={(e) => { updateURL({sort: e.target.value}) }}
+                                            data-analytics-name={UI_NAME.sortBy}
+                                        >
+                                            {sortOptions.map((choice, index) =>
+                                                <option key={index} value={choice.id}>{choice.label}</option>
+                                            )}
+                                        </select>
+                                    </Field>
                                 </div>
                             }
                         </div>
-                    :
-                        <SkeletonBlock height="66px" />
                     }
                 </div>
 
@@ -201,7 +199,6 @@ const ProductListContents = ({
         </div>
     )
 }
-
 
 ProductListContents.propTypes = {
     products: PropTypes.array.isRequired,
@@ -230,7 +227,6 @@ const mapDispatchToProps = {
     openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
     setCurrentProduct: receiveCurrentProductId
 }
-
 
 export default connect(
     mapStateToProps,
