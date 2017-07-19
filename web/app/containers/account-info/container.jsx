@@ -18,7 +18,7 @@ import {submitAccountInfoForm} from './actions'
 
 import {getAccountInfoInitialValues} from './selectors'
 
-const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
+const AccountInfoForm = ({handleSubmit, onSubmit}) => {
     return (
         <div className="t-account-info">
             <div className="t-account-info__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
@@ -39,7 +39,6 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="First & Last Name"
                             name="names"
-                            error={error && error.names}
                         >
                             <input
                                 className="t-account-info-input"
@@ -53,7 +52,6 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="Email"
                             name="email"
-                            error={error && error.email}
                         >
                             <input
                                 className="t-account-info-input"
@@ -72,7 +70,6 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="Current Password"
                             name="currentPassword"
-                            error={error && error.currentPassword}
                         >
                             <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" analyticsName={UI_NAME.currentPassword} />
                         </ReduxForm.Field>
@@ -82,7 +79,6 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
                             component={Field}
                             label="New Password"
                             name="newPassword"
-                            error={error && error.newPassword}
                         >
                             <PasswordInput isText buttonTextHide="hide" buttonTextShow="show" analyticsName={UI_NAME.password} />
                         </ReduxForm.Field>
@@ -102,7 +98,6 @@ const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
 }
 
 AccountInfoForm.propTypes = {
-    error: PropTypes.object,
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func
 }
