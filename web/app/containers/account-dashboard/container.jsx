@@ -10,6 +10,11 @@ import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import List from 'progressive-web-sdk/dist/components/list'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 
+import {
+    getAddressUrl,
+    getAccountInfoUrl
+} from '../app/selectors'
+
 const DashboardLinks = ({link: {text, href}}) => {
     return (
         <ListTile
@@ -30,7 +35,7 @@ DashboardLinks.propTypes = {
 }
 
 
-const AccountDashboard = () => {
+const AccountDashboard = ({addressUrl, accountInfoUrl}) => {
     const links = [
         {
             text: 'Account Information',
@@ -38,7 +43,7 @@ const AccountDashboard = () => {
         },
         {
             text: 'Address Book',
-            href: '/customer/address/'
+            href: addressUrl
         },
         {
             text: 'My Orders',
@@ -65,4 +70,11 @@ const AccountDashboard = () => {
 }
 
 
-export default template(connect()(AccountDashboard))
+const mapStateToProps = {
+    addressUrl: getAddressUrl,
+    accountInfoUrl: getAccountInfoUrl
+
+}
+export default template(connect(
+    mapStateToProps
+)(AccountDashboard))
