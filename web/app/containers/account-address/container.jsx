@@ -50,11 +50,11 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                         />
                     }
                 />
-                {addresses.map(({firstname, lastname, addressLine1, city, countryId, postcode, telephone, regionId}, idx) => {
+                {addresses.map((address, idx) => {
                     return (
                         <Card key={idx}
                             hasBorder
-                            children={<AddressBlock {...addresses} />}
+                            children={<AddressBlock {...address} />}
                             footer={
                                 <div className="u-flexbox">
                                     <div className="u-flex u-border-end">
