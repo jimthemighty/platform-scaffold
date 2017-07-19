@@ -11,7 +11,7 @@ import Card from '../../components/card'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import AddressBlock from './partials/account-address-block'
-import {getDefaultAddress, getAddresses} from './selectors'
+import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const AccountAddress = ({defaultAddress, addresses}) => {
