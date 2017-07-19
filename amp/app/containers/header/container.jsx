@@ -56,7 +56,6 @@ const Header = (props) => {
                 className="t-header__search"
                 isOverlay
                 lightboxId={SEARCH_LIGHTBOX}
-                isOpen={true}
                 formProps={{
                     method: 'POST',
                     target: '_top',
