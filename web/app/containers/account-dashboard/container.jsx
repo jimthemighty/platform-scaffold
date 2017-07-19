@@ -9,10 +9,11 @@ import template from '../../template'
 import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import List from 'progressive-web-sdk/dist/components/list'
 import Icon from 'progressive-web-sdk/dist/components/icon'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {
-    getAddressUrl,
-    getAccountInfoUrl
+    getAccountAddressURL,
+    getAccountInfoURL
 } from '../app/selectors'
 
 const DashboardLinks = ({link: {text, href}}) => {
@@ -39,7 +40,7 @@ const AccountDashboard = ({addressUrl, accountInfoUrl}) => {
     const links = [
         {
             text: 'Account Information',
-            href: '/customer/account/edit/'
+            href: accountInfoUrl
         },
         {
             text: 'Address Book',
@@ -73,11 +74,11 @@ AccountDashboard.propTypes = {
     accountInfoUrl: PropTypes.string,
     addressUrl: PropTypes.string
 }
-const mapStateToProps = {
-    addressUrl: getAddressUrl,
-    accountInfoUrl: getAccountInfoUrl
+const mapStateToProps = createPropsSelector({
+    addressUrl: getAccountAddressURL,
+    accountInfoUrl: getAccountInfoURL
+})
 
-}
 export default template(connect(
     mapStateToProps
 )(AccountDashboard))
