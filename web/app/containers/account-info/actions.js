@@ -42,7 +42,12 @@ export const submitAccountInfoForm = (formValues) => (dispatch) => {
     }
 
     return dispatch(updateAccountInfo(formValues))
-        .then(() => dispatch(updateAccountPassword(formValues)))
+        .then(() => {
+            if (formValues.currentPassword && formValues.newPassword) {
+                return dispatch(updateAccountPassword(formValues))
+            }
+            return Promise.resolve()
+        })
         .then(() => dispatch(addNotification(
                 'accountInfoUpdated',
                 'Successfully updated account information',
