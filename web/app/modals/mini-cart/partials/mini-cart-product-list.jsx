@@ -62,22 +62,22 @@ const MiniCartProductList = ({items, orderTotal, cartURL}) => {
         <div className="u-padding-md">
             <Button
                 href={cartURL}
-                className="c--tertiary u-width-full u-margin-bottom u-text-capitalize"
+                className="pw--tertiary u-width-full u-margin-bottom u-text-capitalize"
                 data-analytics-name={UI_NAME.goToCart}
             >
                 View and edit cart
             </Button>
 
             <List>
-                {items.map(({product, itemPrice, linePrice, quantity}) => {
-                    const src = product.thumbnail ? product.thumbnail.src : ''
-                    const alt = product.thumbnail ? product.thumbnail.alt : ''
+                {items.map(({itemPrice, linePrice, quantity, id, thumbnail, title}) => {
+                    const src = thumbnail ? thumbnail.src : ''
+                    const alt = thumbnail ? thumbnail.alt : ''
                     return (
                         <ProductItem
                             className={productListClasses}
-                            title={<h2 className="u-h3">{product.name}</h2>}
+                            title={<h2 className="u-h3">{title}</h2>}
                             price={itemPrice}
-                            key={product.id}
+                            key={id}
                             image={<Image src={src} alt={alt} width="64px" height="64px" />}
                         >
                             <div>
@@ -105,7 +105,7 @@ MiniCartProductList.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     cartURL: getCartURL,
-    items: selectors.getCartItems,
+    items: selectors.getCartItemsFull,
     orderTotal: selectors.getOrderTotal
 })
 

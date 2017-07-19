@@ -45,3 +45,5 @@ export const getProductDetailsBreadcrumbs = createGetSelector(
     'breadcrumbs',
     PLACEHOLDER_BREADCRUMBS
 )
+export const getIsWishlistAdded = createGetSelector(getProductDetails, 'isWishlistAdded')
+
