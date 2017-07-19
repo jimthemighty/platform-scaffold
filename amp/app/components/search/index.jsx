@@ -4,13 +4,13 @@
 
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk' // change when move to SDK
 
 // Components
 import Button from 'mobify-amp-sdk/dist/components/button' // change to '../button' when move to SDK
 import Icon from 'mobify-amp-sdk/dist/components/icon' // change to '../icon' when move to SDK
 import Form from 'mobify-amp-sdk/dist/components/form' // change to '../form' when move to SDK
-import Lightbox from '../lightbox/index'
+import Lightbox from '../lightbox/index' // change when move to SDK
 
 const searchId = (() => {
     let i = 0

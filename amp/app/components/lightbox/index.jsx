@@ -4,7 +4,7 @@
 
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
-import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk' // change when move to SDK
 
 /**
  * Allows for a “lightbox” or similar experience where upon user interaction, a
