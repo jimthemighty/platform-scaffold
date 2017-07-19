@@ -1,4 +1,4 @@
-import { loadScriptAsPromise } from 'progressive-web-sdk/dist/utils/utils'
+import {loadScriptAsPromise} from 'progressive-web-sdk/dist/utils/utils'
 
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */

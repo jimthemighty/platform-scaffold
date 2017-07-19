@@ -1,4 +1,4 @@
-/* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
+/* global AJS_SLUG NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     isSamsungBrowser,
@@ -220,12 +220,12 @@ const attemptToInitializeApp = () => {
     loadAsset('meta', {
         name: 'theme-color',
         content: '#4e439b'
-    });
+    })
 
     loadAsset('meta', {
         name: 'charset',
         content: 'utf-8'
-    });
+    })
 
     loadAsset('link', {
         href: getAssetUrl('main.css'),
@@ -288,7 +288,8 @@ const attemptToInitializeApp = () => {
         src: getAssetUrl('vendor.js'),
         docwrite: loadScriptsSynchronously,
         isAsync: false,
-        onerror: function(){ alert('test') } // TODO: make this load the non-sync way!
+        // TODO: make this load the non-sync way!
+        onerror: () => alert('test')    // eslint-disable-line no-alert
     })
 
     loadScript({
@@ -369,10 +370,12 @@ if (shouldPreview()) {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
         waitForBody().then(() => {
-                loadScript({
-                id: 'ajs',
-                src: `https://a.mobify.com/${AJS_SLUG}/a.js`
-            })
+            loadScript(
+                {
+                    id: 'ajs',
+                    src: `https://a.mobify.com/${AJS_SLUG}/a.js`
+                }
+            )
         })
     }
 }
