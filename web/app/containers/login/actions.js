@@ -10,6 +10,8 @@ import {login, registerUser} from 'progressive-web-sdk/dist/integration-manager/
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import isReactRoute from 'progressive-web-sdk/dist/routing/is-react-route'
 
+import {sendFormFieldValidationErrorsAnalytics} from 'progressive-web-sdk/dist/analytics/actions'
+
 const validateSignInForm = (formValues) => {
     const errors = {
     }
@@ -100,6 +102,7 @@ const handleLoginSuccess = (href) => {
 export const submitSignInForm = (formValues) => (dispatch) => {
     const errors = validateSignInForm(formValues)
     if (errors._error || Object.keys(errors).length) {
+        sendFormFieldValidationErrorsAnalytics(errors)
         return Promise.reject(new SubmissionError(errors))
     }
 
@@ -118,6 +121,7 @@ export const submitSignInForm = (formValues) => (dispatch) => {
 export const submitRegisterForm = (formValues) => (dispatch) => {
     const errors = validateRegisterForm(formValues)
     if (errors._error || Object.keys(errors).length) {
+        sendFormFieldValidationErrorsAnalytics(errors)
         return Promise.reject(new SubmissionError(errors))
     }
 
