@@ -44,3 +44,17 @@ test('if isOverlay is true and lightboxId is required', () => {
 
     expect(wrapper.prop('lightboxId')).toBe(lightboxIdString)
 })
+
+test('check for formProps to be working', () => {
+    const get = 'GET'
+    const target = '_top'
+    const action = '#'
+
+    const wrapper = mount(<Search formProps={{method: {get}, target: {target}, action: {action}}} />)
+    const getFormProps = wrapper.props()
+    const formPropsObject = getFormProps.formProps
+
+    expect(formPropsObject.method.get).toBe(get)
+    expect(formPropsObject.target.target).toBe(target)
+    expect(formPropsObject.action.action).toBe(action)
+})
