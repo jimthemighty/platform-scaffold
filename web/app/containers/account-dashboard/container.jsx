@@ -69,7 +69,10 @@ const AccountDashboard = ({addressUrl, accountInfoUrl}) => {
     )
 }
 
-
+AccountDashboard.propTypes = {
+    accountInfoUrl: PropTypes.string,
+    addressUrl: PropTypes.string
+}
 const mapStateToProps = {
     addressUrl: getAddressUrl,
     accountInfoUrl: getAccountInfoUrl
