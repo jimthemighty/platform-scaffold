@@ -13,6 +13,7 @@ import ReactDOMServer from 'react-dom/server'
 import {Provider} from 'react-redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
+import {staticURL} from './utils'
 
 import Analytics from './components/analytics'
 import ProductDetails from './containers/product-details/container'
@@ -65,7 +66,10 @@ const render = (req, res, store, component) => {
         title: state.app.get(PAGE_TITLE),
         canonicalURL: getFullUrl(req),
         body,
-        css: styleIncludes.map((x) => x.toString().trim()).join('\n'),
+        css: styleIncludes.map((x) => x.toString()
+                                       .trim()
+                                       .replace(/\/static\//g, staticURL('')))
+                                       .join('\n'),
         scriptIncludes: scriptIncludes.join('\n'),
         fontIncludes: fonts.join('\n')
     })
