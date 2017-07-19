@@ -148,8 +148,10 @@ const Router = ({store}) => (
                     Footer={CheckoutFooter}
                     fetchAction={initPage(initPaymentPage)}
                 />
-                <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initPage(initLoginPage)} />
-                <Route component={AccountDashboard} path="*/Dashboard-Show" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+
+                <Route component={Login} path="*/Account-Show" routeName="signin" fetchAction={initPage(initLoginPage)} />
+                <Route component={AccountDashboard} path="*/Account-Show?dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 
                 <Route
