@@ -42,6 +42,7 @@ const main = () => {
             const outputZip = outputDir + '.zip'
             const staticOutDir = path.join(outputDir, 'static')
             const serverOutDir = path.join(outputDir, 'server')
+            const fileIgnoreFilter = (filename) => { return !filename.endsWith('.DS_Store') }
 
             return Promise.resolve()
                 .tap(() => info('Cleaning build directory'))
@@ -53,7 +54,7 @@ const main = () => {
                 .then(() => fs.mkdirAsync(serverOutDir))
 
                 .tap(() => info('Copying static assets'))
-                .then(() => ncp(staticInDir, staticOutDir))
+                .then(() => ncp(staticInDir, staticOutDir, {filter: fileIgnoreFilter}))
 
                 .tap(() => info('Installing dependencies'))
                 .then(() => ncp(path.join(ampRootDir, 'package.json'), path.join(serverOutDir, 'package.json')))
