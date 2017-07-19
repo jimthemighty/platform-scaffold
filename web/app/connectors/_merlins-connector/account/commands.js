@@ -6,6 +6,7 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
+import {fetchCustomerAddresses} from '../checkout/commands'
 import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -16,11 +17,11 @@ import {
     recieveAccountAddressData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
-import {jqueryAjaxWrapper} from '../utils'
+import {jqueryAjaxWrapper, parseAddress} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, accountAddressParser} from './parsers'
+import {isFormResponseInvalid} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -41,9 +42,14 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    return dispatch(fetchPageData(url))
-        .then(([$, $response]) => {
-            dispatch(recieveAccountAddressData(accountAddressParser($, $response)))
+    return fetchCustomerAddresses()
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            const addressInfo = {
+                addresses: parsedAddresses.filter((address) => !address.default),
+                defaultAddress: parsedAddresses.filter((address) => address.default)[0]
+            }
+            return dispatch(recieveAccountAddressData(addressInfo))
         })
 }
 

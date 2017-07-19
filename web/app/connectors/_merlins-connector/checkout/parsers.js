@@ -12,9 +12,6 @@ const removeUndefinedAddressKeys = (addressData) => {
     return addressData
 }
 
-export const getNameValue = (firstname, lastname) =>
-      [firstname, lastname].filter((item) => item).join(' ')
-
 export const parseShippingInitialValues = (shippingFieldData) => {
     const fieldData = shippingFieldData.toJS()
     const streetFields = fieldData.street.children
