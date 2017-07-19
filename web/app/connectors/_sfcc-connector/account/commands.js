@@ -221,7 +221,11 @@ export const updateAccountInfo = ({names, email}) => (dispatch) => {
     }
 
     return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'PATCH'})
+        .then(checkForResponseFault)
         .then((res) => dispatch(recieveAccountInfoUIData((handleAccountInfoData(res)))))
+        .catch(() => {
+            throw new SubmissionError({_error: 'Account Info Update Failed'})
+        })
 }
 
 export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
