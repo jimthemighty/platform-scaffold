@@ -15,7 +15,11 @@ const NewsletterForm = ({handleSubmit, disabled, submitting, onSubmit}) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <FieldRow className="u-align-top">
-                <ReduxForm.Field component={Field} name="email">
+                <ReduxForm.Field
+                    component={Field}
+                    name="email"
+                    label="Email"
+                >
                     <input
                         type="email"
                         placeholder="Enter your email..."

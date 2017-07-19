@@ -19,6 +19,7 @@ let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
+const ENV = process.env.NODE_ENV || 'test'
 
 export default {
     '@tags': ['checkout'],
@@ -40,8 +41,13 @@ export default {
     // The following tests are conducted in sequence within the same session.
 
     'Checkout - Registered - Navigate to Home': (browser) => {
+        if (ENV === 'production') {
+            browser.url(process.env.npm_package_siteUrl)
+        } else {
+            console.log('Running preview.')
+            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+        }
         browser
-            .preview()
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },
@@ -64,52 +70,63 @@ export default {
             .assert.visible(productDetails.selectors.productDetailsTemplateIdentifier)
     },
 
-    'Checkout - Registered - Add item to Shopping Cart': (browser) => {
+    'Checkout - Registered - Add item to Shopping Cart': () => {
         productDetails.addItemToCart()
-        browser
-            .waitForElementVisible(productDetails.selectors.itemAdded)
-            .assert.visible(productDetails.selectors.itemAdded)
     },
 
     'Checkout - Registered - Navigate from ProductDetails to Cart': (browser) => {
-        productDetails.navigateToCart()
-        browser
-            .waitForElementVisible(cart.selectors.cartTemplateIdentifier)
-            .assert.visible(cart.selectors.cartTemplateIdentifier)
+        if (productDetails.inStock) {
+            productDetails.navigateToCart()
+            browser
+                .waitForElementVisible(cart.selectors.cartTemplateIdentifier)
+                .assert.visible(cart.selectors.cartTemplateIdentifier)
+        } else {
+            browser.log(`Item is out of stock. Try changing PRODUCT_INDEX. It is currently ${PRODUCT_INDEX}`)
+        }
     },
 
     'Checkout - Registered - Navigate from Cart to Checkout': (browser) => {
-        cart.navigateToCheckout()
-        browser
-            .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
-            .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
-            // Email field should have email input type
-            .waitForElementVisible(`${checkout.selectors.email}[type="email"]`)
+        if (productDetails.inStock) {
+            cart.navigateToCheckout()
+            browser
+                .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
+                .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
+                // Email field should have email input type
+                .waitForElementVisible(`${checkout.selectors.email}[type="email"]`)
+        }
     },
 
     'Checkout - Registered - Continue to Registered Checkout': (browser) => {
-        checkout.continueAsRegistered()
-        browser
-            .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
-            .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
+        if (productDetails.inStock) {
+            checkout.continueAsRegistered()
+            browser
+                .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
+                .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
+        }
     },
 
     'Checkout - Registered - Choose shipping info': (browser) => {
-        checkout.chooseShippingInfo()
-        browser.waitForElementVisible(`${checkout.selectors.addressListOption} .pw--checked`)
+        if (productDetails.inStock) {
+            checkout.chooseShippingInfo()
+            browser.waitForElementVisible(`${checkout.selectors.addressListOption} .pw--checked`)
+        }
     },
 
     'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {
-        checkout.continueToPayment()
-        checkout.fillPaymentInfo()
-        browser
-            .waitForElementVisible(checkout.selectors.cvv)
-            .assert.valueContains(checkout.selectors.cvv, checkout.userData.cvv)
+        if (productDetails.inStock) {
+            checkout.continueToPayment()
+            checkout.fillPaymentInfo()
+            browser
+                .waitForElementVisible(checkout.selectors.cvv)
+                .assert.valueContains(checkout.selectors.cvv, checkout.userData.cvv)
+        }
     },
 
     'Checkout - Registered - Verify Submit Order button is visible': (browser) => {
-        browser
-            .waitForElementVisible(checkout.selectors.placeOrder)
-            .assert.visible(checkout.selectors.placeOrder)
+        if (productDetails.inStock) {
+            browser
+                .waitForElementVisible(checkout.selectors.placeOrder)
+                .assert.visible(checkout.selectors.placeOrder)
+        }
     }
 }

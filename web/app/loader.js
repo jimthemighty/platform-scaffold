@@ -2,8 +2,10 @@
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
+    isLocalStorageAvailable,
     isSamsungBrowser,
     isFirefoxBrowser,
+    isSamsungBrowser,
     loadScript,
     loadScriptAsPromise,
     preventDesktopSiteFromRendering
@@ -300,7 +302,7 @@ const attemptToInitializeApp = () => {
     /* eslint-disable max-len */
     loadAsset('meta', {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'
+        content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'
     })
     /* eslint-enable max-len */
 
@@ -439,15 +441,13 @@ const attemptToInitializeApp = () => {
     preventDesktopSiteFromRendering()
 }
 
-// Apply polyfills
-const neededPolyfills = getNeededPolyfills()
-
 if (shouldPreview()) {
     // If preview is being used, load a completely different file from this one and do nothing.
     loadPreview()
 } else {
     // Run the app.
     if (isSupportedPWABrowser() && isPWARoute()) {
+        const neededPolyfills = getNeededPolyfills()
         if (neededPolyfills.length) {
             neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
         } else {
@@ -509,10 +509,11 @@ if (shouldPreview()) {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
         waitForBody().then(() => {
-            loadScript({
-                id: 'ajs',
-                src: `https://a.mobify.com/${AJS_SLUG}/a.js`
-            })
+            loadScript(
+                {
+                    id: 'ajs',
+                    src: `https://a.mobify.com/${AJS_SLUG}/a.js`
+                })
         })
     }
 }

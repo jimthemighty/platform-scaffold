@@ -130,7 +130,8 @@ class Header extends React.Component {
                         name: 'query'
                     }}
                     closeButtonProps={{
-                        className: 'u-visually-hidden'
+                        className: 'u-visually-hidden',
+                        children: 'Dismiss search'
                     }}
                     clearButtonProps={{
                         className: 'u-color-brand',
