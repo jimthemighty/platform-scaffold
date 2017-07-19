@@ -147,7 +147,7 @@ select {
 
     border-radius: 0;
 
-    color: $brand-color;
+    color: $brand-color; // ui_kit_value: $font-color;
     font: inherit; // 5
     text-transform: none; // 3
 

@@ -34,5 +34,5 @@ export const getAvailableRegions = (formKey) => createSelector(
 
 export const getShippingMethods = createGetSelector(getCheckout, 'shippingMethods', Immutable.List())
 
-export const getCheckoutCustomContent = createGetSelector(getCheckout, 'custom')
-export const getLocationsCustomContent = createGetSelector(getLocations, 'custom')
+export const getCheckoutCustomContent = createGetSelector(getCheckout, 'custom', Immutable.Map())
+export const getLocationsCustomContent = createGetSelector(getLocations, 'custom', Immutable.Map())

@@ -12,8 +12,8 @@
 // 1. Ensure the box-shadow at bottom of container is visible
 
 .t-product-list__container {
-    background-color: $background-color;
-    box-shadow: $inset-box-shadow;
+    background-color: $background-color; // ui_kit_value: transparent;
+    box-shadow: $inset-box-shadow; // ui_kit_value: none;
 }
 
 
