@@ -10,50 +10,12 @@ import Card from '../../components/card'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
-import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
+import AddressBlock from './partials/account-address-block'
 import {getDefaultAddress, getAddresses} from './selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const AccountAddress = ({defaultAddress, addresses}) => {
-    const {
-        firstname,
-        lastname,
-        addressLine1,
-        city,
-        countryId,
-        postcode,
-        telephone,
-        regionId
-    } = defaultAddress
 
-    const addressBlock =
-    (<div className="u-padding-md">
-        {firstname ?
-            <p>{firstname} {lastname}</p>
-            :
-            <SkeletonText width="50%" style={{lineHeight: '20px'}} />
-        }
-        {addressLine1 ?
-            <p>{addressLine1}</p>
-            :
-            <SkeletonText width="60%" style={{lineHeight: '20px'}} />
-        }
-        {city ?
-            <p>{city}, {regionId}, {postcode}</p>
-            :
-            <SkeletonText width="70%" style={{lineHeight: '20px'}} />
-        }
-        {countryId ?
-            <p>{countryId}</p>
-            :
-            <SkeletonText width="40%" style={{lineHeight: '20px'}} />
-        }
-        {telephone ?
-            <p>{telephone}</p>
-            :
-            <SkeletonText width="50%" style={{lineHeight: '20px'}} />
-        }
-    </div>)
     return (
         <div className="t-account-address">
             <div className="t-account-address__heading u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
@@ -75,7 +37,7 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                     header={
                         <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">Default address</h3>
                     }
-                    children={addressBlock}
+                    children={<AddressBlock {...defaultAddress} />}
                     footer={
                         <Button
                             type="button"
@@ -92,7 +54,7 @@ const AccountAddress = ({defaultAddress, addresses}) => {
                     return (
                         <Card key={idx}
                             hasBorder
-                            children={addressBlock}
+                            children={<AddressBlock {...addresses} />}
                             footer={
                                 <div className="u-flexbox">
                                     <div className="u-flex u-border-end">
