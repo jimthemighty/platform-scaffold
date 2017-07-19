@@ -28,7 +28,7 @@ const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
 
 const ResultList = ({products, setCurrentProduct}) => (
-    <List className="c--borderless">
+    <List className="pw--borderless">
         {products.map((product, idx) => (
             <ProductTile
                 onClick={product ? () => setCurrentProduct(product.id) : null}
@@ -109,7 +109,7 @@ const ProductListContents = ({
                                         label={`${products.length} Items`}
                                     >
                                         <Button
-                                            className="c--tertiary u-width-full u-text-uppercase"
+                                            className="pw--tertiary u-width-full u-text-uppercase"
                                             onClick={openModal}
                                             disabled={routeName === 'searchResultPage' || activeFilters.length > 0}
                                             id="filterButton"
@@ -130,6 +130,7 @@ const ProductListContents = ({
                                             className="u-color-neutral-60"
                                             onChange={(e) => { sortChange(e.target.value) }}
                                             onBlur={(e) => { sortChange(e.target.value) }}
+                                            data-analytics-name={UI_NAME.sortBy}
                                         >
                                             {/* This list of options corresponds to the functions in app/utils/sort-utils.js */}
                                             <option value="position">Position</option>

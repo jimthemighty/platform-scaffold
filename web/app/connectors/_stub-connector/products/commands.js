@@ -68,3 +68,8 @@ export const getProductVariantData = (variationSelections, variants, categoryIds
     console.log('[Stub Connector] Called getProductVariantData stub with arguments:', variationSelections, variants, categoryIds)
     return Promise.resolve()
 }
+
+export const addItemToWishlist = (productId, productURL) => (dispatch) => {
+    console.log('[Stub Connector] Called addItemToWishlist stub with arguments:', productId, productURL)
+    return Promise.resolve()
+}

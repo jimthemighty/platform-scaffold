@@ -6,6 +6,7 @@ import React, {PropTypes} from 'react'
 
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/dist/components/header-bar'
 import IconLabelButton from '../../../components/icon-label-button'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const MiniCartHeader = ({closeMiniCart}) => (
     <HeaderBar>
@@ -16,7 +17,7 @@ const MiniCartHeader = ({closeMiniCart}) => (
         </HeaderBarTitle>
 
         <HeaderBarActions>
-            <IconLabelButton iconName="close" label="close" onClick={closeMiniCart}>Close</IconLabelButton>
+            <IconLabelButton iconName="close" label="close" onClick={closeMiniCart} analyticsName={UI_NAME.dismissModal}>Close</IconLabelButton>
         </HeaderBarActions>
     </HeaderBar>
 )

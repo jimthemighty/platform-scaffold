@@ -26,7 +26,7 @@ const Offline = (props, context) => {
             <p>next page on this connection.</p>
             <p>Please try again.</p>
             <Button
-                className="c--tertiary u-width-full u-text-uppercase u-margin-top-lg"
+                className="pw--tertiary u-width-full u-text-uppercase u-margin-top-lg"
                 onClick={reload}
                 data-analytics-name={UI_NAME.retryConnection}
             >

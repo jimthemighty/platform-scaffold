@@ -4,9 +4,9 @@
 // Root
 // ---
 //
-// 1. `pw-card-input` is used inside `c-field__input` which has `display: flex`
+// 1. `pw-card-input` is used inside `pw-field__input` which has `display: flex`
 //    using `flex: 1 1 auto` so card input will stretch and fill the available space
-// 2. Nesting classes to increase specificity to override `c-icon` styles
+// 2. Nesting classes to increase specificity to override `pw-icon` styles
 
 .pw-card-input {
     flex: 1 1 auto; // 1
@@ -23,4 +23,3 @@
         display: none;
     }
 }
-

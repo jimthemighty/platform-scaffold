@@ -8,6 +8,7 @@
 
 ## Todos
 - [ ] (if applicable) analytics events instrumented to measure impact of change
+- [ ] Add a high-level description of your changes to the CHANGELOG.md, including a link to the PR with your changes
 
 ## How to test-drive this PR
 - (necessary config changes)

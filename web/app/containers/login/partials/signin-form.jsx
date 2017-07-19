@@ -64,7 +64,7 @@ class SignInForm extends React.Component {
                         />
                     <FieldRow>
                         <Button
-                            className="c--primary u-width-full"
+                            className="pw--primary u-width-full"
                             type="submit"
                             disabled={submitting || !isFormLoaded}
                             data-analytics-name={UI_NAME.login}
