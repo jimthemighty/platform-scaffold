@@ -23,6 +23,7 @@
     "classnames": "2.2.5",
     "copy": "0.3.0",
     "cross-env": "4.0.0",
+    "cross-env-test": "^0.1.1",
     "css-loader": "0.28.1",
     "enzyme": "2.8.2",
     "eslint": "3.19.0",
@@ -84,7 +85,7 @@
     "test:all": "npm run lint && npm test -- --coverage",
     "build": "cross-env NODE_ENV=production node ./scripts/build/build.js",
     "deploy": "node ./scripts/deploy.js",
-    "postinstall": "node ./scripts/postinstall.js"
+    "postinstall": "cross-env-test NODE_ENV=production || node ./scripts/postinstall.js"
   },
   "jest": {
     "setupFiles": [
