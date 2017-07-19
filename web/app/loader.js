@@ -2,8 +2,6 @@
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
-    isLocalStorageAvailable,
-    isSamsungBrowser,
     isFirefoxBrowser,
     isSamsungBrowser,
     loadScript,
@@ -284,11 +282,11 @@ const waitForBody = () => {
     return waitForBodyPromise
 }
 
+/**
+ * Initialize the app. Assumes that all needed polyfills have been
+ * loaded.
+ */
 const attemptToInitializeApp = () => {
-    if (getNeededPolyfills().length) {
-        return
-    }
-
     window.Progressive = {
         AstroPromise: Promise.resolve({}),
         Messaging: {
@@ -427,6 +425,8 @@ const attemptToInitializeApp = () => {
         ? loadWorker(true)
         : Promise.resolve(false)
     ).then((serviceWorkerSupported) => {
+        // Start the process of fetching and initializing the
+        // Messaging client, in PWA mode.
         setupMessagingClient(serviceWorkerSupported, true)
     })
 
@@ -448,8 +448,15 @@ if (shouldPreview()) {
     // Run the app.
     if (isSupportedPWABrowser() && isPWARoute()) {
         const neededPolyfills = getNeededPolyfills()
-        if (neededPolyfills.length) {
-            neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
+        let polyfillsToLoad = neededPolyfills.length
+        if (polyfillsToLoad) {
+            loaderLog(`Loading ${polyfillsToLoad} polyfills`)
+            const callback = () => {
+                if (--polyfillsToLoad <= 0) {
+                    attemptToInitializeApp()
+                }
+            }
+            neededPolyfills.forEach((polyfill) => polyfill.load(callback))
         } else {
             attemptToInitializeApp()
         }
