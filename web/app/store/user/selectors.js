@@ -9,7 +9,6 @@ export const getIsLoggedIn = createGetSelector(getUser, 'isLoggedIn')
 
 export const getUserCustomContent = createGetSelector(getUser, 'custom', Immutable.Map())
 
-
 const PLACEHOLDER = {
     text: undefined
 }
