@@ -2,31 +2,39 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {init as initMessaging} from 'progressive-web-sdk/dist/non-pwa/messaging'
+/**
+ * This file is the entry point for the `non-pwa.js` script which is loaded on
+ * desktop environments by `/web/app/loader.js`.
+ */
+
+import stylesheet from './stylesheet.scss' // eslint-disable-line no-unused-vars
+
+// Push Messaging
+import {initMessaging} from 'progressive-web-sdk/dist/non-pwa/messaging'
+import defaultAskHtml from './default-ask.html'
 
 const messagingConfiguration = {
     defaultAsk: {
-        options: {
-            body: 'Subscribe now to push notifications',
-            yesButtonText: 'Yes, Please!',
-            showOnPageCount: 1,
-            deferOnDismissal: 0,
-            channelName: 'shampoo'
-        }
+        html: defaultAskHtml,
+        options: false
     }
 }
 
 /**
- * This method is invoked after this script file is successfully requested and
- * loaded by `loader.js`
+ * This is called after this script file has successfully loaded, and must exist
+ * on `window.Mobify.NonPWA`. Include your own methods if needed.
  */
 const init = () => {
-    initMessaging(messagingConfiguration)
+    // This initializes the Push Messaging feature, including the default ask
+    // iframe which prompts visitors to subscribe.
+    initMessaging(messagingConfiguration).then(({askFrame}) => {
+        // TODO: Guard this based on page count and/or visit countdown
+        askFrame.show()
+    })
 }
 
 window.Mobify = window.Mobify || {}
 window.Mobify.NonPWA = {
-    // exported for possible testing
-    messagingConfiguration,
     init
 }
+

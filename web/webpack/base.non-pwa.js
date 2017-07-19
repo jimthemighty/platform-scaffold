@@ -6,15 +6,22 @@
 
 const webpack = require('webpack')
 const path = require('path')
+const baseCommon = require('./base.common')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+const NonPWAConst = require('progressive-web-sdk/dist/non-pwa/messaging/const').default
 
 const webPackageJson = require('../package.json')
 
 module.exports = {
     devtool: 'cheap-source-map',
-    entry: './non-pwa/non-pwa.js',
+    entry: {
+        'non-pwa': './non-pwa/non-pwa.js',
+        'non-pwa-ask': path.resolve(process.cwd(), 'non-pwa', NonPWAConst.ASK_SCRIPT)
+    },
     output: {
         path: path.resolve(process.cwd(), 'build'),
-        filename: 'non-pwa.js'
+        filename: '[name].js'
     },
     module: {
         rules: [
@@ -27,6 +34,22 @@ module.exports = {
                         cacheDirectory: `${__dirname}/tmp`
                     }
                 }
+            },
+            {
+                test: /\.html$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'html-loader'
+                }
+            },
+            {
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract(['css-loader?-autoprefixer&-url', 'postcss-loader', 'sass-loader']),
+                include: [
+                    /node_modules\/progressive-web-sdk/,
+                    /app/,
+                    /non-pwa/
+                ]
             }
         ]
     },
@@ -37,6 +60,14 @@ module.exports = {
             MESSAGING_SITE_ID: `'${webPackageJson.messagingSiteId}'`,
             PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
             AJS_SLUG: `'${webPackageJson.aJSSlug}'`
+        }),
+        new ExtractTextPlugin({
+            filename: NonPWAConst.ASK_CSS
+        }),
+        new webpack.LoaderOptionsPlugin({
+            options: {
+                postcss: baseCommon.postcss
+            }
         })
     ]
 }
