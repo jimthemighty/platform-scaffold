@@ -17,7 +17,6 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {submitAccountInfoForm} from './actions'
 
 import {getAccountInfoInitialValues} from './selectors'
-// import * as accountInfoActions from './actions'
 
 const AccountInfoForm = ({handleSubmit, onSubmit, error}) => {
     return (
