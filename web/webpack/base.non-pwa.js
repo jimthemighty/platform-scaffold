@@ -41,15 +41,6 @@ module.exports = {
                 use: {
                     loader: 'html-loader'
                 }
-            },
-            {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract(['css-loader?-autoprefixer&-url', 'postcss-loader', 'sass-loader']),
-                include: [
-                    /node_modules\/progressive-web-sdk/,
-                    /app/,
-                    /non-pwa/
-                ]
             }
         ]
     },

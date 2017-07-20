@@ -47,9 +47,19 @@ workerConfig.plugins = workerConfig.plugins.concat([
     })
 ])
 
+nonPWAConfig.module.rules = nonPWAConfig.module.rules.concat({
+    test: /\.scss$/,
+    loader: ExtractTextPlugin.extract(['css-loader?-autoprefixer&-url&minification', 'postcss-loader', 'sass-loader']),
+    include: [
+        /node_modules\/progressive-web-sdk/,
+        /app/,
+        /non-pwa/
+    ]
+})
+
 nonPWAConfig.plugins = nonPWAConfig.plugins.concat([
     new webpack.DefinePlugin({
-        DEBUG: true
+        DEBUG: false
     })
 ])
 
