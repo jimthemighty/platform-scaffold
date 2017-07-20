@@ -337,7 +337,7 @@ const attemptToInitializeApp = () => {
     // Force create the body element in order to render content. This is necessary
     // because we load scripts synchronously in order to speed up loading, which
     // by default would throw them in head, where as we need them in body.
-    if (loadScriptsSynchronously) {
+    if (window.loadScriptsSynchronously) {
         document.write('<body>')
     }
 
@@ -379,7 +379,11 @@ const attemptToInitializeApp = () => {
             isAsync: false,
             // If there is an error loading the script, then it must be a document.write issue,
             // so in that case, retry the loading asynchronously.
-            onerror: function(){ console.warn('[Mobify.Progressive.Loader] document.write was blocked from loading 3rd party scripts. Loading scripts asynchronously instead.'); window.loadScriptsSynchronously = false; window.loadCriticalScripts() }
+            onerror: () => {
+                console.warn('[Mobify.Progressive.Loader] document.write was blocked from loading 3rd party scripts. Loading scripts asynchronously instead.')
+                window.loadScriptsSynchronously = false
+                window.loadCriticalScripts()
+            }
         })
 
         loadScript({
