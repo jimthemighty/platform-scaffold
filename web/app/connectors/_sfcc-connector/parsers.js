@@ -179,11 +179,14 @@ export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
 }
 
 export const parseWishlistProducts = (wishlistData) => {
-    return wishlistData.customer_product_list_items.map((wishlistItem) => {
-        const id = wishlistItem.product_id
-        return {
-            id,
-            quantity: wishlistItem.quantity
-        }
-    })
+    if (wishlistData.customer_product_list_items) {
+        return wishlistData.customer_product_list_items.map((wishlistItem) => {
+            const id = wishlistItem.product_id
+            return {
+                id,
+                quantity: wishlistItem.quantity
+            }
+        })
+    }
+    return []
 }

@@ -20,7 +20,7 @@ const WishlistHeader = ({
             <Breadcrumbs items={[{text: 'Back to Dashboard', href: dashboardURL}]} />
         </div>
         <div className="u-margin-top-md">
-            <h1 className="t-wishlist__title u-text-uppercase">{title ? title : 'My Wish List'} ({itemCount} Items)</h1>
+            <h1 className="t-wishlist__title u-text-uppercase">{title} ({itemCount} Items)</h1>
         </div>
     </div>
 )

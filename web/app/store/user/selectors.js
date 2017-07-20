@@ -14,7 +14,7 @@ export const getUserCustomContent = createGetSelector(getUser, 'custom', Immutab
 
 export const getWishlist = createGetSelector(getUser, 'wishlist', Immutable.Map())
 
-export const getWishlistTitle = createGetSelector(getWishlist, 'title')
+export const getWishlistTitle = createGetSelector(getWishlist, 'title', 'My Wish List')
 
 export const getWishlistShareURL = createGetSelector(getWishlist, 'shareURL')
 

@@ -207,16 +207,18 @@ export const initWishlistPage = () => (dispatch) => {
                 }))
                 return dispatch(receiveWishlistUIData({contentLoaded: true}))
             }
-            const wishlistData = data[0]
-            const wishlistItems = parseWishlistProducts(wishlistData)
+            const wishlistResponse = data[0]
+            const wishlistItems = parseWishlistProducts(wishlistResponse)
+            const wishlistData = {products: wishlistItems}
+
+            if (wishlistResponse.name) {
+                wishlistData.title = wishlistResponse.name
+            }
 
             return dispatch(fetchItemData(wishlistItems))
                 .then(({updatedProducts}) => {
                     dispatch(receiveWishlistProductData(updatedProducts))
-                    dispatch(receiveWishlistData({
-                        title: wishlistData.name,
-                        products: wishlistItems
-                    }))
+                    dispatch(receiveWishlistData(wishlistData))
                     dispatch(receiveWishlistUIData({contentLoaded: true}))
 
                 })
