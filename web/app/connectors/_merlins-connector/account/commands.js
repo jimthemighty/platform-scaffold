@@ -6,6 +6,7 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
+import {fetchCustomerAddresses} from '../checkout/commands'
 import {getCookieValue} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -13,9 +14,10 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
+    receiveAccountAddressData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
-import {jqueryAjaxWrapper} from '../utils'
+import {jqueryAjaxWrapper, parseAddress} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
@@ -37,6 +39,18 @@ export const initRegisterPage = (url) => (dispatch) => {
 
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
+}
+
+export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
+    return fetchCustomerAddresses()
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            const addressInfo = {
+                addresses: parsedAddresses.filter((address) => !address.default),
+                defaultAddress: parsedAddresses.filter((address) => address.default)[0]
+            }
+            return dispatch(receiveAccountAddressData(addressInfo))
+        })
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
@@ -186,8 +200,6 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
             console.error(error)
             throw new Error('Unable to save Billing Address')
         })
-
-
 }
 
 export const deleteAddress = (id) => (dispatch) => { // eslint-disable-line

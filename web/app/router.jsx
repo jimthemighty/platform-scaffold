@@ -11,6 +11,7 @@ import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
 import {
     AccountDashboard,
+    AccountAddress,
     Cart,
     CheckoutConfirmation,
     CheckoutPayment,
@@ -32,7 +33,8 @@ import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manag
 import {
     initRegisterPage,
     initLoginPage,
-    initAccountDashboardPage
+    initAccountDashboardPage,
+    initAccountAddressPage
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
@@ -77,6 +79,7 @@ const Router = ({store}) => (
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initPage(initRegisterPage)} />
 
                 <Route component={AccountDashboard} path="customer/account" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+                <Route component={AccountAddress} path="customer/address" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
@@ -148,6 +151,7 @@ const Router = ({store}) => (
                 />
                 <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={AccountDashboard} path="*/Dashboard-Show" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+                <Route component={AccountAddress} path="*/Address-List" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 
                 <Route

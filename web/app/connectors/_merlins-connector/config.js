@@ -12,6 +12,8 @@ export const PAYMENT_URL = '/checkout/payment/'
 export const CREATE_ACCOUNT_POST_URL = '/customer/account/createpost/'
 export const LOGIN_POST_URL = '/customer/account/loginPost/'
 export const MY_ACCOUNT_URL = '/customer/account/'
+export const ACCOUNT_ADDRESS_URL = '/customer/address/'
+export const ACCOUNT_INFO_URL = '/customer/account/edit/'
 
 export const buildQueryURL = (query) => `/search/ajax/suggest/?q=${buildQueryString(query)}&_=${Date.now()}`
 export const buildSearchURL = (query) => `/catalogsearch/result/?q=+${buildQueryString(query)}`

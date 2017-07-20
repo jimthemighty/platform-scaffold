@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {setRegisterLoaded, setSigninLoaded, recieveAccountAddressData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createOrderAddressObject} from '../checkout/utils'
 import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
@@ -184,4 +184,48 @@ export const deleteAddress = (id) => (dispatch) => { // eslint-disable-line
 export const editAddress = (id) => (dispatch) => { // eslint-disable-line
     // PATCH	/customers/{customer_id}/addresses/{address_name}	Updates a customer's address by address name.
     return Promise.resolve()
+}
+
+export const initAccountAddressPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
+        .then((res) => res.json())
+        .then(({data}) => {
+            const addresses = data
+                        .map(({
+                            first_name,
+                            last_name,
+                            phone,
+                            postal_code,
+                            address1,
+                            address2,
+                            city,
+                            state_code,
+                            preferred,
+                            country_code
+                        }) => {
+
+                            return {
+                                firstname: first_name,
+                                lastname: last_name,
+                                telephone: phone,
+                                postcode: postal_code,
+                                addressLine1: address1,
+                                addressLine2: address2,
+                                default: preferred,
+                                city,
+                                countryId: country_code.toUpperCase(),
+                                regionId: state_code
+                            }
+                        })
+
+            return dispatch(recieveAccountAddressData(
+                {
+                    defaultAddress: addresses.filter((address) => address.default)[0],
+                    addresses: addresses.filter((address) => !address.default)
+                }
+            ))
+        })
 }

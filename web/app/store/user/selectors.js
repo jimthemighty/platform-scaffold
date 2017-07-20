@@ -8,3 +8,10 @@ import {getUser} from '../../store/selectors'
 export const getIsLoggedIn = createGetSelector(getUser, 'isLoggedIn')
 
 export const getUserCustomContent = createGetSelector(getUser, 'custom', Immutable.Map())
+
+const PLACEHOLDER = {
+    text: undefined
+}
+
+export const getDefaultAddress = createGetSelector(getUser, 'defaultAddress', Immutable.Map())
+export const getAddresses = createGetSelector(getUser, 'addresses', Immutable.List(new Array(5).fill(PLACEHOLDER)))
