@@ -35,9 +35,7 @@ export const submitAccountInfoForm = (formValues) => (dispatch) => {
 
     if (currentPassword && newPassword && currentPassword === newPassword) {
         return Promise.reject(new SubmissionError({
-            _error: {
-                newPassword: 'Enter a different new password'
-            }
+            newPassword: 'Enter a different new password'
         }))
     }
 
