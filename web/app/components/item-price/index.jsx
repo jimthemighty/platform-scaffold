@@ -7,7 +7,8 @@ import classnames from 'classnames'
 import Field from 'progressive-web-sdk/dist/components/field'
 
 /**
- * INSERT_DESCRIPTION_HERE
+ * Displays the price for an item
+ * Accepts both the linePrice and itemPrice
  */
 
 const ItemPrice = ({
@@ -31,7 +32,13 @@ const ItemPrice = ({
 
 ItemPrice.propTypes = {
     className: PropTypes.string,
+    /**
+     * The Unit price for the line item
+     */
     itemPrice: PropTypes.string,
+    /**
+     * The full price for the line item (unit price * quantity)
+    */
     linePrice: PropTypes.string
 }
 
