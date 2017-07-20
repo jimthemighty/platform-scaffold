@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react'
+import packagejson from '../../../package.json'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 import {SEARCH_LIGHTBOX} from './constants'
 
@@ -9,8 +10,6 @@ import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'mobify-amp-sdk/dist/c
 import Icon from 'mobify-amp-sdk/dist/components/icon'
 import IconLabel from 'mobify-amp-sdk/dist/components/icon-label'
 import Search from '../../components/search'
-
-// Selectors
 
 // Utils
 import {staticURL, canonicalURL} from '../../utils'
@@ -59,7 +58,7 @@ const Header = (props) => {
                 formProps={{
                     method: 'GET',
                     target: '_top',
-                    action: 'https://www.merlinspotions.com/catalogsearch/result/'
+                    action: `${packagejson.siteUrl}/catalogsearch/result/`
                 }}
                 submitButtonProps={{
                     className: 'a--secondary t-header__search-submit-button',
