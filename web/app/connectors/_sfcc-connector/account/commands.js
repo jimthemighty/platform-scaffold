@@ -6,7 +6,7 @@ import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {
     setRegisterLoaded,
     setSigninLoaded,
-    recieveAccountInfoUIData
+    receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createOrderAddressObject} from '../checkout/utils'
@@ -205,7 +205,7 @@ export const initAccountInfoPage = () => (dispatch) => {
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
     return makeApiJsonRequest(`/customers/${customerId}`)
-        .then((res) => dispatch(recieveAccountInfoUIData((handleAccountInfoData(res)))))
+        .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
 }
 
 
@@ -222,7 +222,7 @@ export const updateAccountInfo = ({names, email}) => (dispatch) => {
 
     return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'PATCH'})
         .then(checkForResponseFault)
-        .then((res) => dispatch(recieveAccountInfoUIData((handleAccountInfoData(res)))))
+        .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
         .catch(() => {
             throw new SubmissionError({_error: 'Account Info Update Failed'})
         })
@@ -236,7 +236,18 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
         password: newPassword
     }
 
-    return makeApiJsonRequest(`/customers/${customerId}/password`, requestBody, {method: 'PUT'})
+    return makeApiRequest(`/customers/${customerId}/password`, {method: 'PUT', body: JSON.stringify(requestBody)})
+        .then((res) => {
+            if (res.status >= 200 && res.status < 400) {
+                // NOTE: res.json() on a successful PUT throws
+                // "Uncaught (in promise) SyntaxError: Unexpected end of JSON input"
+                // we need to resolve if the request is successful
+                Promise.resolve()
+            }
+
+            return res
+        })
+        .then((res) => res.json())
         .then(checkForResponseFault)
         .catch(() => {
             throw new SubmissionError({_error: 'Password Change Failed'})

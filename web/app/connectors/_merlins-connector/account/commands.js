@@ -13,7 +13,7 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    recieveAccountInfoUIData
+    receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
@@ -40,7 +40,7 @@ export const initAccountInfoPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res
-            return dispatch(recieveAccountInfoUIData(parseAccountInfo($, $response)))
+            return dispatch(receiveAccountInfoData(parseAccountInfo($, $response)))
         })
 }
 
@@ -214,7 +214,7 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
         form_key: formKey
     }
 
-    dispatch(recieveAccountInfoUIData({accountFormInfo: {names, email}}))
+    dispatch(receiveAccountInfoData({accountFormInfo: {names, email}}))
     return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
 }
 
