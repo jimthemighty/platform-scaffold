@@ -240,7 +240,7 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
                 // NOTE: res.json() on a successful PUT throws
                 // "Uncaught (in promise) SyntaxError: Unexpected end of JSON input"
                 // we need to resolve if the request is successful
-                Promise.resolve()
+                return Promise.resolve()
             }
 
             return res
