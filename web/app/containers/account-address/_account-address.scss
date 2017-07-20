@@ -10,3 +10,13 @@
         margin-top: $unit*1.5;
     }
 }
+
+
+// Account Address Empty
+// ---
+//
+.t-account-address__empty {
+    min-height: $content-height;
+
+    background-color: $neutral-10;
+}
