@@ -72,7 +72,7 @@ const submitForm = (href, formValues, formSelector) => {
                     _error: message
                 })
             }
-            return '/customer/account'
+            return Promise.resolve('/customer/account')
         })
 }
 
@@ -92,6 +92,11 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
     }
 
     return submitForm(LOGIN_POST_URL, formData, '.form-login')
+    .then((href) => {
+        dispatch(setLoggedIn(true))
+        dispatch(fetchPageData(window.location.href))
+        return href
+    })
 }
 
 export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
@@ -110,6 +115,11 @@ export const registerUser = (firstname, lastname, email, password, rememberMe) =
         formData.persistent_remember_me = 'on'
     }
     return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account')
+    .then((href) => {
+        dispatch(setLoggedIn(true))
+        dispatch(fetchPageData(window.location.href))
+        return href
+    })
 }
 
 const findPathForRoute = (routes, routeName) => {
