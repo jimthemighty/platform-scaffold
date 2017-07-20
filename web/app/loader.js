@@ -1,12 +1,13 @@
-/* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
+/* global AJS_SLUG NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
-    isSamsungBrowser,
+    documentWriteSupported,
+    isLocalStorageAvailable,
     isFirefoxBrowser,
-    preventDesktopSiteFromRendering,
+    isSamsungBrowser,
     loadScript,
     loadScriptAsPromise,
-    documentWriteSupported
+    preventDesktopSiteFromRendering
 } from 'progressive-web-sdk/dist/utils/utils'
 import {shouldPreview, loadPreview, isV8Tag} from 'progressive-web-sdk/dist/utils/preview-utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
@@ -17,7 +18,6 @@ import {
     loadAndInitMessagingClient,
     createGlobalMessagingClientInitPromise,
     updateMessagingSWVersion,
-    isLocalStorageAvailable,
     prefetchLink
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
@@ -176,6 +176,25 @@ const asyncInitApp = () => {
     }
 }
 
+let waitForBodyPromise
+const waitForBody = () => {
+    waitForBodyPromise = waitForBodyPromise || new Promise((resolve) => {
+        const bodyEl = document.getElementsByTagName('body')
+
+        const checkForBody = () => {
+            if (bodyEl.length > 0) {
+                resolve()
+            } else {
+                setTimeout(checkForBody, 50)
+            }
+        }
+
+        checkForBody()
+    })
+
+    return waitForBodyPromise
+}
+
 const attemptToInitializeApp = () => {
     if (getNeededPolyfills().length) {
         return
@@ -194,19 +213,19 @@ const attemptToInitializeApp = () => {
     /* eslint-disable max-len */
     loadAsset('meta', {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'
+        content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'
     })
     /* eslint-enable max-len */
 
     loadAsset('meta', {
         name: 'theme-color',
         content: '#4e439b'
-    });
+    })
 
     loadAsset('meta', {
         name: 'charset',
         content: 'utf-8'
-    });
+    })
 
     loadAsset('link', {
         href: getAssetUrl('main.css'),
@@ -235,20 +254,9 @@ const attemptToInitializeApp = () => {
         document.write('<body>')
     }
 
-    const waitForBody = new Promise((resolve) => {
-        const checkForBody = () => {
-            if (document.querySelectorAll('body').length > 0) {
-                resolve()
-            } else {
-                setTimeout(checkForBody, 50)
-            }
-        }
-        checkForBody()
-    })
-
     // Display the Preloader to indicate progress to the user (except when running
     // in an Astro app, hide the preloader because apps have their own splash screen).
-    waitForBody.then(() => {
+    waitForBody().then(() => {
         if (!isRunningInAstro) {
             displayPreloader(preloadCSS, preloadHTML, preloadJS)
         }
@@ -259,7 +267,6 @@ const attemptToInitializeApp = () => {
         reactTarget.className = 'react-target'
         body.appendChild(reactTarget)
     })
-    
 
     /**
      * This must be called before vendor.js is loaded (or before the Webpack
@@ -351,15 +358,13 @@ const attemptToInitializeApp = () => {
     preventDesktopSiteFromRendering()
 }
 
-// Apply polyfills
-const neededPolyfills = getNeededPolyfills()
-
 if (shouldPreview()) {
     // If preview is being used, load a completely different file from this one and do nothing.
     loadPreview()
 } else {
     // Run the app.
     if (isSupportedBrowser() && isPWARoute()) {
+        const neededPolyfills = getNeededPolyfills()
         if (neededPolyfills.length) {
             neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
         } else {
@@ -368,10 +373,12 @@ if (shouldPreview()) {
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
-        loadScript({
-            id: 'ajs',
-            src: `https://a.mobify.com/${AJS_SLUG}/a.js`
+        waitForBody().then(() => {
+            loadScript(
+                {
+                    id: 'ajs',
+                    src: `https://a.mobify.com/${AJS_SLUG}/a.js`
+                })
         })
     }
 }
-

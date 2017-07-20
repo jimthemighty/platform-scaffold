@@ -35,12 +35,12 @@ const ROOT_CLASS = 't-product-details__description'
 test('renders the component class correctly', () => {
     const wrapper = shallow(<ProductDetailsDescription />)
 
-    expect(wrapper.hasClass(ROOT_CLASS)).toBe(true)
+    expect(wrapper.find(`.${ROOT_CLASS}`).length).toBe(1)
 })
 
 test('renders the Product Description AccordionItem Header correctly', () => {
     const wrapper = shallow(<ProductDetailsDescription />)
-    const accordion = wrapper
+    const accordion = wrapper.children().first()
     expect(accordion.type()).toBe(Accordion)
 
     expect(accordion.children().length).toBe(1)

@@ -15,8 +15,8 @@
 .t-home__container {
     position: relative; // 1
 
-    background-color: $background-color;
-    box-shadow: $inset-box-shadow;
+    background-color: $background-color; // ui_kit_value: transparent;
+    box-shadow: $inset-box-shadow; // ui_kit_value: none;
 
     font-family: $header-font-family;
 
