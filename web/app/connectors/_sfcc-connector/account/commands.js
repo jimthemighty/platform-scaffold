@@ -246,7 +246,12 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
             return res
         })
         .then((res) => res.json())
-        .then(checkForResponseFault)
+        .then((res) => {
+            if (res.fault && res.fault.type === 'InvalidCustomerException') {
+                return new SubmissionError({_error: 'Your session has expired'})
+            }
+            return checkForResponseFault(res)
+        })
         .catch(() => {
             throw new SubmissionError({_error: 'Password Change Failed'})
         })
