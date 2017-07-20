@@ -55,7 +55,7 @@ const ProductItem = ({
                 }
             </div>
             {!!footerContent &&
-                <div className="u-full-width">
+                <div>
                     {footerContent}
                 </div>
             }
