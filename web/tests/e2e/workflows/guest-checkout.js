@@ -42,6 +42,10 @@ export default {
     'Checkout - Guest - Navigate to Home': (browser) => {
         if (ENV === 'production') {
             browser.url(process.env.npm_package_siteUrl)
+        }
+        if (ENV === 'sfcc') {
+            console.log('Running SFCC connector')
+            browser.preview('https://mobify-tech-prtnr-na03-dw.demandware.net/on/demandware.store/Sites-2017refresh-Site/default/Home-Show', 'https://localhost:8443/loader.js')
         } else {
             console.log('Running preview.')
             browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')

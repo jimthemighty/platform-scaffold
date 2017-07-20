@@ -27,6 +27,10 @@ export default {
     'Home Page': (browser) => {
         if (ENV === 'production') {
             browser.url(process.env.npm_package_siteUrl)
+        }
+        if (ENV === 'sfcc') {
+            console.log('Running SFCC connector')
+            browser.preview('process.env.npm_package_sfccUrl', 'https://localhost:8443/loader.js')
         } else {
             console.log('Running preview.')
             browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
