@@ -77,6 +77,10 @@ import ProductItemBase from './components/product-item/_base.scss'
 import ProductTile from './components/product-tile/index'
 import ProductTileBase from './components/product-tile/_base.scss'
 
+import Pagination from './components/pagination/index'
+import PaginationBase from './components/pagination/_base.scss'
+import PaginationTheme from './styles/themes/amp-components/_pagination.scss'
+
 
 // Containers
 import Footer from './containers/footer/container'
@@ -122,6 +126,7 @@ styles.set(SkipLinks, [SkipLinksBase])
 styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
+styles.set(Pagination, [PaginationBase, PaginationTheme])
 
 
 // Containers
