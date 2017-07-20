@@ -462,6 +462,8 @@ if (shouldPreview()) {
         }
     } else if (isSupportedNonPWABrowser()) {
         loaderLog('Starting setup for nonPWA mode')
+        initCacheManifest(cacheHashManifest)
+
         // This a browser that supports our non-PWA mode, so we can assume that
         // service workers are supported. Load the worker in non-PWA mode, and
         // (in parallel) initialize analytics.
