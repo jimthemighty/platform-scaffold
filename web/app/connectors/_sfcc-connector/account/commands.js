@@ -240,16 +240,20 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
                 // NOTE: res.json() on a successful PUT throws
                 // "Uncaught (in promise) SyntaxError: Unexpected end of JSON input"
                 // we need to resolve if the request is successful
+                return Promise.resolve(true)
+            }
+
+            return res.json()
+        })
+        .then((res) => {
+            if (res === true) {
                 return Promise.resolve()
             }
 
-            return res
-        })
-        .then((res) => res.json())
-        .then((res) => {
             if (res.fault && res.fault.type === 'InvalidCustomerException') {
                 return new SubmissionError({_error: 'Your session has expired'})
             }
+
             return checkForResponseFault(res)
         })
         .catch(() => {
