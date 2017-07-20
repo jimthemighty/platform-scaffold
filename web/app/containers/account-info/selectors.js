@@ -3,8 +3,11 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createSelector} from 'reselect'
-import {createGetSelector} from 'reselect-immutable-helpers'
-import {getUi} from '../../store/selectors'
+import {getUser} from '../../store/selectors'
 
-export const getAccountInfo = createSelector(getUi, ({accountInfo}) => accountInfo)
-export const getAccountInfoInitialValues = createGetSelector(getAccountInfo, 'accountFormInfo')
+export const getAccountInfoInitialValues = createSelector(getUser, (user) => {
+    return user.get('names') ? {
+        names: user.get('names'),
+        email: user.get('email')
+    } : null
+})

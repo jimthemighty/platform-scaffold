@@ -15,9 +15,7 @@ export const parseAccountInfo = ($, $html) => {
 
     return {
         title: getTextFrom($mainContent, '.page-title > span'),
-        accountFormInfo: {
-            names: `${firstName} ${lastName}`,
-            email
-        }
+        names: `${firstName} ${lastName}`,
+        email
     }
 }

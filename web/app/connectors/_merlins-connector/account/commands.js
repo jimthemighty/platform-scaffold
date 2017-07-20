@@ -214,7 +214,7 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
         form_key: formKey
     }
 
-    dispatch(receiveAccountInfoData({accountFormInfo: {names, email}}))
+    dispatch(receiveAccountInfoData({names, email}))
     return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
 }
 

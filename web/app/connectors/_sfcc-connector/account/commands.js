@@ -193,10 +193,8 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 /* eslint-disable camelcase */
 const handleAccountInfoData = ({first_name, last_name, login}) => (
     {
-        accountFormInfo: {
-            names: `${first_name} ${last_name}`,
-            email: login
-        }
+        names: `${first_name} ${last_name}`,
+        email: login
     }
 )
 /* eslint-enable camelcase */
