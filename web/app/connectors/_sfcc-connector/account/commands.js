@@ -205,7 +205,7 @@ export const initWishlistPage = () => (dispatch) => {
 
             return dispatch(fetchItemData(wishlistItems))
                 .then(({updatedProducts}) => {
-                    dispatch(receiveWishlistProductsData(updatedProducts))
+                    dispatch(receiveWishlistProductData(updatedProducts))
                     dispatch(receiveWishlistData({
                         title: wishlistData.name,
                         products: wishlistItems
