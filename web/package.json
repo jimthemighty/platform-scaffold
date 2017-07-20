@@ -77,7 +77,7 @@
     "jsdoc": "^3.4.3",
     "jsdom": "9.12.0",
     "json-loader": "0.5.4",
-    "lighthouse": "1.6.5",
+    "lighthouse": "2.2.1",
     "minimist": "1.2.0",
     "mobify-code-style": "2.8.1",
     "nightwatch": "0.9.8",
@@ -157,7 +157,7 @@
       "!app/vendor/*.js",
       "!app/containers/{templates,reducers}.js",
       "!app/**/{container,constants,selectors}.{js,jsx}",
-      "!{dev-server,proxy,lighthouse,coverage,build,tests,webpack,worker}/**/*.js",
+      "!{dev-server,lighthouse,coverage,build,tests,webpack,worker}/**/*.js",
       "!styleguide/**/*.{js,jsx}",
       "!app/loader-routes.js",
       "!service-worker-loader.js"
@@ -188,7 +188,6 @@
       "/app/static/",
       "/app/vendor/",
       "/dev-server/",
-      "/lighthouse/",
       "/coverage/"
     ],
     "testRegex": "\\.?(test|spec)\\.jsx?$"
