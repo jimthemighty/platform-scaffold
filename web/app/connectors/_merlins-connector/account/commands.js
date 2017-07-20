@@ -14,7 +14,7 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    recieveAccountAddressData
+    receiveAccountAddressData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper, parseAddress} from '../utils'
@@ -49,7 +49,7 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
                 addresses: parsedAddresses.filter((address) => !address.default),
                 defaultAddress: parsedAddresses.filter((address) => address.default)[0]
             }
-            return dispatch(recieveAccountAddressData(addressInfo))
+            return dispatch(receiveAccountAddressData(addressInfo))
         })
 }
 
