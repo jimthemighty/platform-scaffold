@@ -106,9 +106,7 @@ const ProductListContents = ({
         browserHistory.push({pathname, query})
     }
 
-    const filtersClasses = classNames('u-flexbox u-align-center u-border-light-top t-product-list__active-filter-container', {
-        't--is-active': hasActiveFilters
-    })
+    const filtersClasses = classNames('u-flexbox u-align-center u-border-light-top t-product-list__active-filter-container')
 
     return (
         <div>

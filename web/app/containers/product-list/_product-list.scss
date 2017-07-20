@@ -51,13 +51,6 @@ $product-list__custom-ease-out: cubic-bezier(0.35, 0.35, 0.32, 1);
 // Active Filter Container
 // ---
 .t-product-list__active-filter-container {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s $product-list__custom-ease-out;
-}
-
-.t-product-list__active-filter-container.t--is-active {
-    max-height: 44px;
 }
 
 
