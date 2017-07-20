@@ -54,3 +54,19 @@ import initConnector from './init-sfcc-connector'
 3. Open Preview using the following link:
 
 https://preview.mobify.com/?url=https%3A%2F%2Fmobify-tech-prtnr-na03-dw.demandware.net%2Fon%2Fdemandware.store%2FSites-2017refresh-Site%2Fdefault%2FHome-Show&site_folder=https%3A%2F%2Flocalhost%3A8443%2Floader.js&disabled=0&domain=&scope=1
+
+### Running against Hybris:
+
+1. Open `app/main.jsx`.
+2. Import the Hybris connector:
+
+```javascript
+// import initConnector from './init-merlins-connector'
+// import initConnector from './init-sfcc-connector'
+import initConnector from './init-hybris-connector'
+// import initConnector from './init-stub-connector'
+```
+
+3. Open Preview using the following link:
+
+!!!TBD!!!
