@@ -77,6 +77,13 @@ import ProductItemBase from './components/product-item/_base.scss'
 import ProductTile from './components/product-tile/index'
 import ProductTileBase from './components/product-tile/_base.scss'
 
+import Lightbox from './components/lightbox/index'
+import LightboxBase from './components/lightbox/_base.scss'
+
+import Search from './components/search/index'
+import SearchBase from './components/search/_base.scss'
+import SearchTheme from './styles/themes/amp-components/_search.scss'
+
 
 // Containers
 import Footer from './containers/footer/container'
@@ -122,6 +129,8 @@ styles.set(SkipLinks, [SkipLinksBase])
 styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
+styles.set(Lightbox, [LightboxBase])
+styles.set(Search, [SearchBase, SearchTheme])
 
 
 // Containers
