@@ -6,7 +6,7 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
-import {getCookieValue} from '../../../utils/utils'
+import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
@@ -203,9 +203,10 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
+    const splitName = splitFullName(names)
     const formData = {
-        firstname: names.split(' ')[0],
-        lastname: names.split(' ')[1],
+        firstname: splitName.firstname,
+        lastname: splitName.lastname,
         email,
         change_password: currentPassword && newPassword ? 1 : '',
         current_password: currentPassword ? currentPassword : '',
