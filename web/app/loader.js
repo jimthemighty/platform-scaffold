@@ -332,7 +332,7 @@ const attemptToInitializeApp = () => {
 
     // On poor connections, we don't want to load via document.write, otherwise
     // document.write will fail to work
-    const loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
+    window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
 
     // Force create the body element in order to render content. This is necessary
     // because we load scripts synchronously in order to speed up loading, which
@@ -364,52 +364,58 @@ const attemptToInitializeApp = () => {
      */
     createGlobalMessagingClientInitPromise(messagingEnabled)
 
-    // The following scripts are loaded async via document.write, in order
-    // for the browser to increase the priority of these scripts. If the scripts
-    // are loaded async, the browser will not consider them high priority and
-    // queue them while waiting for other high priority resources to finish
-    // loading. This delay can go all the way up to 5 seconds on a Moto G4 on a
-    // 3G connection.
-    loadScript({
-        id: 'progressive-web-vendor',
-        src: getAssetUrl('vendor.js'),
-        docwrite: loadScriptsSynchronously,
-        isAsync: false,
-        // TODO: make this load the non-sync way!
-        onerror: () => alert('test')    // eslint-disable-line no-alert
-    })
-
-    loadScript({
-        id: 'progressive-web-main',
-        src: getAssetUrl('main.js'),
-        docwrite: loadScriptsSynchronously
-    })
-
-    loadScript({
-        id: 'progressive-web-jquery',
-        src: getAssetUrl('static/js/jquery.min.js'),
-        docwrite: loadScriptsSynchronously
-    })
-
-    window.Progressive.capturedDocHTMLPromise = new Promise((resolve) => {
-        // The reason we bound this to window is because the "onload" method below
-        // is added to the document via document.write, this "onload" is toString'ed,
-        // meaning it doesn't have accessed to closure variables.
-        window.captureResolve = resolve
+    window.loadCriticalScripts = () => {
+        // The following scripts are loaded async via document.write, in order
+        // for the browser to increase the priority of these scripts. If the scripts
+        // are loaded async, the browser will not consider them high priority and
+        // queue them while waiting for other high priority resources to finish
+        // loading. This delay can go all the way up to 5 seconds on a Moto G4 on a
+        // 3G connection. More information can be found here:
+        // https://developers.google.com/web/updates/2016/08/removing-document-write
         loadScript({
-            id: 'progressive-web-capture',
-            src: CAPTURING_CDN,
-            docwrite: loadScriptsSynchronously,
-            onload: () => {
-                window.Capture.init((capture) => {
-                    // NOTE: by this time, the captured doc has changed a little
-                    // bit from original desktop. It now has some of our own
-                    // assets (e.g. main.css) but they can be safely ignored.
-                    window.captureResolve(capture.enabledHTMLString())
-                })
-            }
+            id: 'progressive-web-vendor',
+            src: getAssetUrl('vendor.js'),
+            docwrite: window.loadScriptsSynchronously,
+            isAsync: false,
+            // If there is an error loading the script, then it must be a document.write issue,
+            // so in that case, retry the loading asynchronously.
+            onerror: function(){ console.warn('[Mobify.Progressive.Loader] document.write was blocked from loading 3rd party scripts. Loading scripts asynchronously instead.'); window.loadScriptsSynchronously = false; window.loadCriticalScripts() }
         })
-    })
+
+        loadScript({
+            id: 'progressive-web-main',
+            src: getAssetUrl('main.js'),
+            docwrite: window.loadScriptsSynchronously
+        })
+
+        loadScript({
+            id: 'progressive-web-jquery',
+            src: getAssetUrl('static/js/jquery.min.js'),
+            docwrite: window.loadScriptsSynchronously
+        })
+
+        window.Progressive.capturedDocHTMLPromise = new Promise((resolve) => {
+            // The reason we bound this to window is because the "onload" method below
+            // is added to the document via document.write, this "onload" is toString'ed,
+            // meaning it doesn't have accessed to closure variables.
+            window.captureResolve = resolve
+            loadScript({
+                id: 'progressive-web-capture',
+                src: CAPTURING_CDN,
+                docwrite: window.loadScriptsSynchronously,
+                onload: () => {
+                    window.Capture.init((capture) => {
+                        // NOTE: by this time, the captured doc has changed a little
+                        // bit from original desktop. It now has some of our own
+                        // assets (e.g. main.css) but they can be safely ignored.
+                        window.captureResolve(capture.enabledHTMLString())
+                    })
+                }
+            })
+        })
+    }
+
+    window.loadCriticalScripts()
 
     if (isRunningInAstro) {
         window.Progressive.AstroPromise = loadScriptAsPromise({
