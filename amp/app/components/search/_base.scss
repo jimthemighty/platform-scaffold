@@ -1,0 +1,80 @@
+@import 'component-base';
+
+// Search
+// ===
+
+
+// Search Inner
+// ---
+//
+// 1. Position relative is required to align search suggestions
+// 2. Ensure search bar is above lightbox
+
+.a-search__inner {
+    position: relative; // 1
+    z-index: $z4-depth + 1; // 2
+}
+
+
+// Search Bar
+// ---
+//
+// 1. Position context for below `.a-search__icon`
+
+.a-search__bar {
+    position: relative; // 1
+
+    display: flex;
+    align-items: center;
+}
+
+
+// Search Form
+// ---
+
+.a-search__form {
+    background: $neutral-00;
+}
+
+
+// Search Input
+// ---
+//
+// 1. Make room for the absolutely positioned `.a-search__icon`
+
+.a-search__input {
+    padding-left: $tap-size; // 1
+}
+
+.a-search__field {
+    flex: 1 1 auto;
+}
+
+
+// Search Buttons
+// ---
+
+.a-search__button-submit {
+    flex: 0 0 auto;
+}
+
+
+// Search Icon
+// ---
+//
+// 1. Position relative to the above `.a-search__bar`
+
+.a-search__icon {
+    position: absolute; // 1
+    top: 0; // 1
+    bottom: 0; // 1
+    left: 0; // 1
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 auto;
+    width: $tap-size;
+
+    pointer-events: none;
+}
