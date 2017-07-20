@@ -7,7 +7,7 @@ import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import Field from 'progressive-web-sdk/dist/components/field'
 
 /**
- * INSERT_DESCRIPTION_HERE
+ * A quantity stepper for products
  */
 
 const ItemQuantityStepper = ({
@@ -33,9 +33,21 @@ const ItemQuantityStepper = ({
 
 
 ItemQuantityStepper.propTypes = {
+    /**
+     * The id for the item associated with the stepper
+     */
     cartItemId: PropTypes.string,
+    /**
+     * A callback function that will update the quantity for the item
+     */
     changeQuantity: PropTypes.func,
+    /**
+     * Additional classes to apply to the component
+     */
     className: PropTypes.string,
+    /**
+     * The current quantity of the item
+     */
     quantity: PropTypes.number
 
 }
