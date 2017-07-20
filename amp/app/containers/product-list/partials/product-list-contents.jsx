@@ -11,6 +11,7 @@ import Form from 'mobify-amp-sdk/dist/components/form'
 import Field from 'mobify-amp-sdk/dist/components/field'
 import List from 'mobify-amp-sdk/dist/components/list'
 import ProductTile from '../../../components/product-tile'
+import Pagination from '../../../components/pagination'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
@@ -131,6 +132,31 @@ const ProductListContents = (props) => {
                 :
                     <NoResultsList routeName={routeName} />
                 }
+
+                <Pagination
+                    className="u-margin-top"
+                    isSelect
+                    currentPage={2}
+                    pageCount={4}
+                    showPageButtons={false}
+                    showCurrentPageMessage={false}
+                    prevButton={{
+                        props: {
+                            href: '#',
+                            icon: 'chevron-left',
+                            title: 'Previous Page',
+                            className: 'a-pagination__button a--secondary'
+                        }
+                    }}
+                    nextButton={{
+                        props: {
+                            href: '#',
+                            icon: 'chevron-right',
+                            title: 'Next Page',
+                            className: 'a-pagination__button a--secondary'
+                        }
+                    }}
+                />
             </div>
         </div>
     )
