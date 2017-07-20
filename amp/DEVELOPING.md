@@ -73,3 +73,30 @@ This this is possible, but it is a manual configuration step. See
 
   - [Custom domains](http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html)
   - [Requesting certificates](http://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request.html)
+
+
+## Logging and CloudWatch
+
+Since the AMP backend is a [Node.js](https://nodejs.org/en/) app deployed on AWS Lambda, all application logs
+invoked by any of the ***console*** object's `log(), warn(), error()`, and `info()` methods can be found on
+[Amazon CloudWatch](https://aws.amazon.com/cloudwatch/). In order to get read access to the logs, first ensure
+that you have access to the AWS console for Mobify, and then ensure that you have access to Lambda, CloudWatch, and
+CloudFormation. Then:
+
+1) Login to your [AWS Console](http://console.aws.amazon.com) account, switch to [CloudFormation](https://aws.amazon.com/cloudformation/)
+and choose which AMP Lambda instance you want to investigate from the displayed stack.
+For [Merlins Potions](http://merlinspotions.com), we currently have `amp--mobify-merlinspotions-production`
+and `amp--mobify-merlinspotions-staging`.
+
+2) Click on your chosen lambda instance and you'll be redirected to a `stack-detail`
+page. Click to expand the `Outputs` section, and you should see a link to
+`LambdaFunctionConsoleUrl`; click on the URL within the value field, this will
+take you to the appropriate Lambda function home page.
+
+3) Once you're at the appropriate Lambda function home page, switch to the
+monitoring tab, and click `View logs in CloudWatch`. You should now be in the right CloudWatch
+page for your log group. Choose a log stream according to an expected log event, and you should be able to
+see the associated logs for the Lambda instance sorted by time.
+
+4) Each new request is wrapped with a `START` and `END` message within the list of logs.
+  This should help you find what you're looking for faster.
