@@ -200,6 +200,13 @@ export const initWishlistPage = () => (dispatch) => {
     return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
         .then((response) => response.json())
         .then(({data}) => {
+            if (!data) {
+                // wishlist is empty, handle the empty case
+                dispatch(receiveWishlistData({
+                    title: 'My Wish List'
+                }))
+                return dispatch(receiveWishlistUIData({contentLoaded: true}))
+            }
             const wishlistData = data[0]
             const wishlistItems = parseWishlistProducts(wishlistData)
 
