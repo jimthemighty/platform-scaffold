@@ -22,7 +22,7 @@ import {reducer as formReducer} from 'redux-form'
 
 import analytics from 'redux-analytics'
 import analyticsManager from 'progressive-web-sdk/dist/analytics/analytics-manager'
-import {sendFormFieldValidationErrorsAnalytics} from 'progressive-web-sdk/dist/analytics/actions'
+import {ReduxFormPluginOption} from 'progressive-web-sdk/dist/analytics/actions'
 
 analyticsManager.init({
     projectSlug: AJS_SLUG,              // eslint-disable-line no-undef
@@ -48,17 +48,7 @@ const configureStore = (initialState) => {
         checkout: checkoutReducer,
         offline: offlineReducer,
         integrationManager: imReducer,
-        form: formReducer.plugin({
-            all: (state, action) => {
-                if (action.type === 'redux-form/STOP_SUBMIT') {
-                    sendFormFieldValidationErrorsAnalytics({
-                        formId: action.meta.form,
-                        fields: action.payload
-                    })
-                }
-                return state
-            }
-        }),
+        form: formReducer.plugin(ReduxFormPluginOption),
         pushMessaging: pushMessagingReducer
     })
 
