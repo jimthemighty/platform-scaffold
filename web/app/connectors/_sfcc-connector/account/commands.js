@@ -3,13 +3,13 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded, recieveAccountAddressData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveWishlistData,
-    receiveWishlistUIData
+    receiveWishlistUIData,
+    recieveAccountAddressData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from '../parsers'
@@ -236,7 +236,7 @@ export const initAccountAddressPage = () => (dispatch) => {
                     addresses: addresses.filter((address) => !address.default)
                 }
             ))
-    })
+        })
 }
 
 export const initWishlistPage = () => (dispatch) => {
