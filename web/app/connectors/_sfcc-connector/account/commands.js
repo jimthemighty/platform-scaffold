@@ -187,15 +187,12 @@ export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-li
         })
 }
 
-export const editAddress = (addressId, newAddress) => (dispatch) => { // eslint-disable-line
+export const editAddress = (address) => (dispatch) => { // eslint-disable-line
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
 
-    const requestBody = {
-        ...newAddress
-    }
 
-    return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, requestBody, {method: 'PATCH'})
+    return makeApiJsonRequest(`/customers/${customerId}/addresses/${address.id}`, {address}, {method: 'PATCH'})
         .then((res) => {
             return res
         })

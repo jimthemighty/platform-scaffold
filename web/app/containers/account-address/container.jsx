@@ -10,6 +10,9 @@ import Card from '../../components/card'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
+
+import {deleteAddress} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import AddressBlock from './partials/account-address-block'
@@ -50,7 +53,8 @@ class AccountAddress extends React.Component {
     render() {
         const {
             defaultAddress,
-            addresses
+            addresses,
+            removeAddress
         } = this.props
 
         return (
@@ -112,6 +116,7 @@ class AccountAddress extends React.Component {
                                                     <Button
                                                         type="button"
                                                         title="Delete"
+                                                        onClick={() => removeAddress(address)}
                                                         className="u-width-full u-color-brand u-border-top"
                                                         icon="trash"
                                                         showIconText={true}
@@ -137,7 +142,8 @@ class AccountAddress extends React.Component {
 AccountAddress.propTypes = {
     addresses: PropTypes.array,
     defaultAddress: PropTypes.object,
-    openAddAddressModal: PropTypes.func
+    openAddAddressModal: PropTypes.fun,
+    removeAddress: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
@@ -146,7 +152,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    openAddAddressModal: () => openModal(ADD_ADDRESS_MODAL)
+    openAddAddressModal: () => openModal(ADD_ADDRESS_MODAL),
+    removeAddress: deleteAddress
 }
 
 export default template(
