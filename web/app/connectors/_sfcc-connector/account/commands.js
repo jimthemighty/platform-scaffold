@@ -3,13 +3,15 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveWishlistData,
     receiveWishlistUIData,
-    recieveAccountAddressData
+    recieveAccountAddressData,
+    receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from '../parsers'
@@ -27,7 +29,7 @@ import {
     fetchItemData
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
-
+import {splitFullName} from '../../../utils/utils'
 import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
 
@@ -236,6 +238,72 @@ export const initAccountAddressPage = () => (dispatch) => {
                     addresses: addresses.filter((address) => !address.default)
                 }
             ))
+    })
+  )
+/* eslint-disable camelcase */
+const handleAccountInfoData = ({first_name, last_name, login}) => (
+    {
+        names: `${first_name} ${last_name}`,
+        email: login
+    }
+)
+/* eslint-enable camelcase */
+
+export const initAccountInfoPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    return makeApiJsonRequest(`/customers/${customerId}`)
+        .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
+}
+
+
+export const updateAccountInfo = ({names, email}) => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    const {firstname, lastname} = splitFullName(names)
+
+    const requestBody = {
+        first_name: firstname,
+        last_name: lastname,
+        email
+    }
+
+    return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'PATCH'})
+        .then(checkForResponseFault)
+        .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
+        .catch(() => {
+            throw new SubmissionError({_error: 'Account Info Update Failed'})
+        })
+}
+
+export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    const requestBody = {
+        current_password: currentPassword,
+        password: newPassword
+    }
+
+    // NOTE: res.json() on a successful PUT throws
+    // "Uncaught (in promise) SyntaxError: Unexpected end of JSON input"
+    // because it returns an empty response, thus we need to use res.text()
+    return makeApiRequest(`/customers/${customerId}/password`, {method: 'PUT', body: JSON.stringify(requestBody)})
+        .then((res) => res.text())
+        .then((responseString) => {
+            if (!responseString.length) {
+                return Promise.resolve()
+            }
+
+            const res = JSON.parse(responseString)
+
+            if (res.fault && res.fault.type === 'InvalidCustomerException') {
+                return new SubmissionError({_error: 'Your session has expired'})
+            }
+
+            return checkForResponseFault(res)
+        })
+        .catch(() => {
+            throw new SubmissionError({_error: 'Password Change Failed'})
         })
 }
 
