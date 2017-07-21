@@ -32,7 +32,7 @@ import {PAGE_TITLE} from './constants'
 
 const jsdom = Promise.promisifyAll(_jsdom)
 
-const jqueryDir = process.env.NODE_ENV === 'production' ? '.' : './app/data-integration'
+const jqueryDir = process.env.NODE_ENV === 'production' ? '.' : './app/vendor'
 const jquery = fs.readFileSync(`${jqueryDir}/jquery.min.js`, 'utf-8')
 
 export const jsdomEnv = () => jsdom.envAsync('', [], {src: jquery})
