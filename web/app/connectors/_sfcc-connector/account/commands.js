@@ -234,6 +234,9 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
         password: newPassword
     }
 
+    // NOTE: res.json() on a successful PUT throws
+    // "Uncaught (in promise) SyntaxError: Unexpected end of JSON input"
+    // because it returns an empty response, thus we need to use res.text()
     return makeApiRequest(`/customers/${customerId}/password`, {method: 'PUT', body: JSON.stringify(requestBody)})
         .then((res) => res.text())
         .then((responseString) => {
