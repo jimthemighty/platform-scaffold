@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
@@ -29,7 +33,7 @@ const ProductListHeader = ({title, parentName, parentHref}) => (
                 alt="Heading logo"
                 height="60"
                 width="60"
-                src={staticURL(`/img/categories/${title.trim().replace(/\s+/g, '-')
+                src={staticURL(`img/categories/${title.trim().replace(/\s+/g, '-')
                 .toLowerCase()}@2x.png`)}
                 layout="fixed"
             />

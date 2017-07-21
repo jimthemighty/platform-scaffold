@@ -1,9 +1,14 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
 import {waitForResolves} from 'react-redux-resolve'
 import thunk from 'redux-thunk'
 import {fromJS} from 'immutable'
 import Promise from 'bluebird'
 import _jsdom from 'jsdom'
+import fs from 'fs'
 
 // DO NOT USE! Merlins Connector is an example connector that is for demo only
 import {Connector} from '../../../web/app/connectors/_merlins-connector'
@@ -27,7 +32,10 @@ import {PAGE_TITLE} from './constants'
 
 const jsdom = Promise.promisifyAll(_jsdom)
 
-export const jsdomEnv = () => jsdom.envAsync('', ['http://code.jquery.com/jquery.js']) // TODO: Use local copy
+const jqueryDir = process.env.NODE_ENV === 'production' ? '.' : './app/vendor'
+const jquery = fs.readFileSync(`${jqueryDir}/jquery.min.js`, 'utf-8')
+
+export const jsdomEnv = () => jsdom.envAsync('', [], {src: jquery})
 
 export const initializeStore = (fullUrl, container) => {
     return jsdomEnv().then((window) => {

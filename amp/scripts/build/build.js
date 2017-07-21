@@ -61,6 +61,7 @@ const main = () => {
 
                 .tap(() => info('Building app'))
                 .then(() => webpack(serverOutDir))
+                .then(() => ncp(path.join(ampRootDir, 'app/vendor/jquery.min.js'), path.join(serverOutDir, 'jquery.min.js')))
 
                 .tap(() => info('Copying configs'))
                 .then(() => ncp(path.join(here, 'cloudformation.yaml'), path.join(outputDir, 'cloudformation.yaml')))
