@@ -9,16 +9,19 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {parseLoginStatus, parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
+
 import {
     CHECKOUT_SHIPPING_URL,
     WISHLIST_URL,
     SIGN_IN_URL,
     CART_URL,
+    MY_ACCOUNT_URL,
     ACCOUNT_ADDRESS_URL,
     ACCOUNT_INFO_URL,
     buildQueryURL,
     buildSearchURL
 } from '../config'
+
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
@@ -33,7 +36,8 @@ import {
     setLoggedIn,
     setSignInURL,
     setAccountAddressURL,
-    setAccountInfoURL
+    setAccountInfoURL,
+    setAccountURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 const requestCapturedDoc = () => {
@@ -87,7 +91,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const searchProducts = (query) => (dispatch) => {
-    browserHistory.push({pathname: buildSearchURL(query)})
+    browserHistory.push(buildSearchURL(query))
 }
 
 
@@ -101,5 +105,6 @@ export const initApp = () => (dispatch) => {
     dispatch(setCheckoutShippingURL(CHECKOUT_SHIPPING_URL))
     dispatch(setWishlistURL(WISHLIST_URL))
     dispatch(setSignInURL(SIGN_IN_URL))
+    dispatch(setAccountURL(MY_ACCOUNT_URL))
     return dispatch(setCartURL(CART_URL))
 }

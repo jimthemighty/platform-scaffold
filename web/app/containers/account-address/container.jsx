@@ -17,6 +17,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import AddressBlock from './partials/account-address-block'
 import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
+import {getAccountURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {ADD_ADDRESS_MODAL} from '../../modals/constants'
@@ -24,7 +25,6 @@ import {ADD_ADDRESS_MODAL} from '../../modals/constants'
 class AccountAddress extends React.Component {
     constructor(props) {
         super(props)
-
         this.addAddress = this.addAddress.bind(this)
     }
 
@@ -145,11 +145,13 @@ AccountAddress.propTypes = {
     defaultAddress: PropTypes.object,
     openAddAddressModal: PropTypes.fun,
     removeAddress: PropTypes.func
+    dashboardURL: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
     addresses: getAddresses,
-    defaultAddress: getDefaultAddress
+    defaultAddress: getDefaultAddress,
+    dashboardURL: getAccountURL,
 })
 
 const mapDispatchToProps = {
