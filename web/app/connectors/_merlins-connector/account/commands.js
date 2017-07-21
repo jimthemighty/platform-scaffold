@@ -6,13 +6,14 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
-import {getCookieValue} from '../../../utils/utils'
+import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
+    receiveAccountInfoData,
     receiveWishlistData,
     receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
@@ -22,7 +23,7 @@ import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, parseWishlistProducts} from './parsers'
+import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -35,6 +36,14 @@ export const initRegisterPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then(() => {
             dispatch(setRegisterLoaded())
+        })
+}
+
+export const initAccountInfoPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+        .then((res) => {
+            const [$, $response] = res
+            return dispatch(receiveAccountInfoData(parseAccountInfo($, $response)))
         })
 }
 
@@ -69,7 +78,7 @@ const clearMessageCookie = () => {
 const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
 const EXISTING_ACCT_REGEX = /already an account/
 
-const submitForm = (href, formValues, formSelector) => {
+const submitForm = (href, formValues, formSelector, responseUrl) => {
     clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
@@ -95,7 +104,7 @@ const submitForm = (href, formValues, formSelector) => {
                     _error: message
                 })
             }
-            return '/customer/account'
+            return responseUrl
         })
 }
 
@@ -114,7 +123,7 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
         formData.persistent_remember_me = 'on'
     }
 
-    return submitForm(LOGIN_POST_URL, formData, '.form-login')
+    return submitForm(LOGIN_POST_URL, formData, '.form-login', '/customer/account')
 }
 
 export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
@@ -132,7 +141,7 @@ export const registerUser = (firstname, lastname, email, password, rememberMe) =
     if (rememberMe) {
         formData.persistent_remember_me = 'on'
     }
-    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account')
+    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account', '/customer/account')
 }
 
 const findPathForRoute = (routes, routeName) => {
@@ -211,4 +220,29 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
         })
 
 
+}
+
+/* eslint-disable camelcase */
+export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+    const {firstname, lastname} = splitFullName(names)
+    const formData = {
+        firstname,
+        lastname,
+        email,
+        change_password: currentPassword && newPassword ? 1 : '',
+        current_password: currentPassword ? currentPassword : '',
+        password: newPassword ? newPassword : '',
+        password_confirmation: newPassword ? newPassword : '',
+        form_key: formKey
+    }
+
+    dispatch(receiveAccountInfoData({names, email}))
+    return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
+}
+
+
+export const updateAccountPassword = (formValues) => (dispatch) => {
+    dispatch(updateAccountInfo(formValues))
 }
