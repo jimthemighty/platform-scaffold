@@ -2,13 +2,13 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID} from '../utils'
+import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID, fetchItemData} from '../utils'
 import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {receiveCartContents, receiveCartItems} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 
-import {getProductById, getProductThumbnailSrcById} from 'progressive-web-sdk/dist/store/products/selectors'
-import {getProductHref} from '../parsers'
+import {getProductThumbnailSrcById} from 'progressive-web-sdk/dist/store/products/selectors'
+
 import {parseCartProducts, parseCartContents} from './parsers'
 
 export const createBasket = (basketContents) => {
@@ -52,83 +52,18 @@ export const getProductImage = (item, currentState) => {
         }))
 }
 
-const imageFromJson = (imageJson, name, description) => ({
-    /* Image */
-    src: imageJson.link,
-    alt: `${name} - ${description}`,
-    caption: imageJson.title
-})
-
 /**
  * Fetches product images for items that are in the cart and don't already
  * have them.
  */
 export const fetchCartItemData = () => (dispatch, getState) => {
+    const items = getCartItems(getState()).toJS()
 
-    /* TODO: The `view_type` is configurable per instance. This is something that
-    *       might have to be configurable in the connector to say what `view_type`
-    *       is a thumbnail and which one is the large image type. */
-    const thumbnailViewType = 'medium'
-    const largeViewType = 'large'
-
-    const currentState = getState()
-
-    const items = getCartItems(currentState).toJS()
-
-    const updatedProducts = {}
-    const updatedCartItems = []
-
-    return Promise.all(
-        items.map((cartItem) => {
-            const productId = cartItem.productId
-            return makeApiRequest(`/products/${productId}?expand=images,variations&all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
-                .then((response) => response.json())
-                .then(({image_groups, name, page_title, short_description, variation_values, variation_attributes}) => {
-                    const productHref = getProductHref(productId)
-                    const productState = getProductById(productId)(currentState).toJS()
-                    const options = variation_attributes.map((attribute) => {
-                        const selectedId = variation_values[attribute.id]
-                        const selectedVariant = attribute.values.find((val) => val.value === selectedId) // eslint-disable-line
-
-                        return {
-                            label: attribute.name,
-                            value: selectedVariant.name
-                        }
-                    })
-
-                    const product = {
-                        ...productState,
-                        id: productId,
-                        title: page_title,
-                        available: true,
-                        href: productHref,
-                        price: productState.price || ''
-                    }
-
-                    const thumbnail = image_groups.find((group) => group.view_type === thumbnailViewType)
-                    if (thumbnail) {
-                        product.thumbnail = imageFromJson(thumbnail.images[0], name, short_description)
-                    }
-                    const largeGroup = image_groups.find((group) => group.view_type === largeViewType)
-                    if (largeGroup) {
-                        product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
-                    }
-
-                    updatedProducts[productId] = product
-
-                    updatedCartItems.push({
-                        ...cartItem,
-                        options,
-                        thumbnail: product.thumbnail,
-                        title: product.title
-                    })
-                })
+    return dispatch(fetchItemData(items))
+        .then(({updatedProducts, updatedCartItems}) => {
+            dispatch(receiveCartProductData(updatedProducts))
+            dispatch(receiveCartItems(updatedCartItems))
         })
-    )
-    .then(() => {
-        dispatch(receiveCartProductData(updatedProducts))
-        dispatch(receiveCartItems(updatedCartItems))
-    })
 }
 
 export const requestCartData = (noRetry) => (

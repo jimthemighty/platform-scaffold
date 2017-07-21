@@ -187,6 +187,19 @@ export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     return suggestions
 }
 
+export const parseWishlistProducts = (wishlistData) => {
+    if (wishlistData.customer_product_list_items) {
+        return wishlistData.customer_product_list_items.map((wishlistItem) => {
+            const id = wishlistItem.product_id
+            return {
+                id,
+                quantity: wishlistItem.quantity
+            }
+        })
+    }
+    return []
+}
+
 export const parseFilterOptions = (refinements) => {
     return refinements.reduce((filters, filter) => {
         if (filter.attribute_id !== 'cgid' && filter.values) {
