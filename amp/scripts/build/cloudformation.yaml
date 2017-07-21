@@ -90,13 +90,14 @@ Resources:
     Properties:
       CodeUri: ./server/
       Handler: main.handler
-      MemorySize: 128
+      MemorySize: 256
       Role: !GetAtt LambdaExecutionRole.Arn
       Runtime: nodejs6.10
       Timeout: 30
       Environment:
         Variables:
           STATIC_URL: !Ref StaticUrl
+          NODE_ENV: 'production'
       Events:
         ProxyApiRoot:
           Type: Api

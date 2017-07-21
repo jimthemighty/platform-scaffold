@@ -33,7 +33,7 @@ const ProductListHeader = ({title, parentName, parentHref}) => (
                 alt="Heading logo"
                 height="60"
                 width="60"
-                src={staticURL(`/img/categories/${title.trim().replace(/\s+/g, '-')
+                src={staticURL(`img/categories/${title.trim().replace(/\s+/g, '-')
                 .toLowerCase()}@2x.png`)}
                 layout="fixed"
             />
