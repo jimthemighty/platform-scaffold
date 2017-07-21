@@ -87,7 +87,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const searchProducts = (query) => (dispatch) => {
-    browserHistory.push({pathname: buildSearchURL(query)})
+    browserHistory.push(buildSearchURL(query))
 }
 
 
