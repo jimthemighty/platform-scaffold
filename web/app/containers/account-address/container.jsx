@@ -14,6 +14,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import AddressBlock from './partials/account-address-block'
 import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
+import {getAccountURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const NoAddress = () => (
@@ -32,14 +33,14 @@ const NoAddress = () => (
     </div>
 )
 
-const AccountAddress = ({defaultAddress, addresses}) => {
+const AccountAddress = ({defaultAddress, addresses, dashboardURL}) => {
     return (
         <div>
             {defaultAddress ?
                 <div className="t-account-address">
                     <div className="t-account-address__heading u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
                         <div className="t-account-address__breadcrumb">
-                            <Breadcrumbs items={[{text: 'Back to Dashboard', href: '/customer/account'}]} />
+                            <Breadcrumbs items={[{text: 'Back to Dashboard', href: dashboardURL}]} />
                         </div>
                         <div className="u-margin-top-md">
                             <h1 className="t-account-info__title u-text-uppercase u-width-1of2">Address Book</h1>
@@ -114,12 +115,14 @@ const AccountAddress = ({defaultAddress, addresses}) => {
 
 AccountAddress.propTypes = {
     addresses: PropTypes.array,
+    dashboardURL: PropTypes.string,
     defaultAddress: PropTypes.object
 }
 
 const mapStateToProps = createPropsSelector({
     addresses: getAddresses,
-    defaultAddress: getDefaultAddress
+    defaultAddress: getDefaultAddress,
+    dashboardURL: getAccountURL,
 })
 
 const mapDispatchToProps = {}
