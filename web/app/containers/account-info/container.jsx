@@ -13,17 +13,18 @@ import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import PasswordInput from 'progressive-web-sdk/dist/components/password-input'
 import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {getAccountURL} from '../app/selectors'
 
 import {submitAccountInfoForm} from './actions'
 
 import {getAccountInfoInitialValues} from './selectors'
 
-const AccountInfoForm = ({handleSubmit, onSubmit}) => {
+const AccountInfoForm = ({handleSubmit, onSubmit, dashboardURL}) => {
     return (
         <div className="t-account-info">
             <div className="t-account-info__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
                 <div className="t-account-info__breadcrumb">
-                    <Breadcrumbs items={[{text: 'Back to Dashboard', href: '/customer/account'}]} />
+                    <Breadcrumbs items={[{text: 'Back to Dashboard', href: dashboardURL}]} />
                 </div>
                 <div className="u-margin-top-md">
                     <h1 className="t-account-info__title u-text-uppercase u-width-1of2">Edit Account</h1>
@@ -98,11 +99,13 @@ const AccountInfoForm = ({handleSubmit, onSubmit}) => {
 }
 
 AccountInfoForm.propTypes = {
+    dashboardURL: PropTypes.string,
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
+    dashboardURL: getAccountURL,
     initialValues: getAccountInfoInitialValues
 })
 
