@@ -18,7 +18,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper, parseAddress} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
+import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import {isFormResponseInvalid} from './parsers'
@@ -202,81 +202,35 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
         })
 }
 
-export const deleteAddress = (id) => (dispatch) => { // eslint-disable-line
-    /*
-        https://www.merlinspotions.com/customer/address/delete/id/6/form_key/4urFpCoWc9DN3MnF SUBMIT FORM HERE
-    */
-    return Promise.resolve()
+export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+
+
+    return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
 }
 
-export const editAddress = (id) => (dispatch) => { // eslint-disable-line
+export const editAddress = (addressId) => (dispatch) => { // eslint-disable-line
     /*
         Request URL: https://www.merlinspotions.com/customer/address/formPost/id/8/
         Request Method: POST
 
         BODY
-
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="form_key"
-
-        4urFpCoWc9DN3MnF
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="success_url"
-
-
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="error_url"
-
-
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="firstname"
-
-        test
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="lastname"
-
-        test
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="company"
-
-
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="telephone"
-
-        (431) 423-4234
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="fax"
-
-
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="street[]"
-
-        1234 test street
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="street[]"
-
-
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="city"
-
-        Seattle
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="region_id"
-
-        62
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="region"
-
-        Washington
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="postcode"
-
-        98121
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY
-        Content-Disposition: form-data; name="country_id"
-
-        US
-        ------WebKitFormBoundaryRf7bsKxE0uB73FsY--
-    */
+        name="form_key" 4urFpCoWc9DN3MnF
+        name="success_url"
+        name="error_url"
+        name="firstname" test
+        name="lastname" test
+        name="company"
+        name="telephone" (431) 423-4234
+        name="fax"
+        name="street[]" 1234 test street
+        name="street[]"
+        name="city" Seattle
+        name="region_id" 62
+        name="region" Washington
+        name="postcode" 98121
+        name="country_id" US
+*/
     return Promise.resolve()
 }

@@ -18,6 +18,8 @@ export const ACCOUNT_INFO_URL = '/customer/account/edit/'
 export const buildQueryURL = (query) => `/search/ajax/suggest/?q=${buildQueryString(query)}&_=${Date.now()}`
 export const buildSearchURL = (query) => `/catalogsearch/result/?q=+${buildQueryString(query)}`
 
+export const getDeleteAddressURL = (addressId, formKey) => `https://www.merlinspotions.com/customer/address/delete/id/${addressId}/form_key/${formKey}`
+
 // configuration is not currently used by the Merlin's connector
 let config = {} // eslint-disable-line
 
