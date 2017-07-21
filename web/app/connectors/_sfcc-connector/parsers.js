@@ -160,6 +160,15 @@ export const parseProductListData = (products) => {
     return productListData
 }
 
+export const parseSortedProductKeys = (products) => {
+    const sortedProductKeys = []
+
+    products.forEach((productHit) => {
+        sortedProductKeys.push(productHit.product_id)
+    })
+    return sortedProductKeys
+}
+
 export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     if (!products) {
         return []
@@ -176,4 +185,30 @@ export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     })
 
     return suggestions
+}
+
+export const parseFilterOptions = (refinements) => {
+    return refinements.reduce((filters, filter) => {
+        if (filter.attribute_id !== 'cgid' && filter.values) {
+            let uniqueKey = 0
+            const ruleset = filter.attribute_id
+
+            const kinds = filter.values.map((kind) => {
+                return {
+                    count: kind.hit_count,
+                    label: kind.label,
+                    query: kind.presentation_id ? kind.presentation_id : `${uniqueKey++}`,
+                    ruleset: filter.label,
+                    searchKey: `${ruleset}=${kind.value}`
+                }
+            })
+
+            filters.push({
+                label: filter.label,
+                ruleset,
+                kinds,
+            })
+        }
+        return filters
+    }, [])
 }
