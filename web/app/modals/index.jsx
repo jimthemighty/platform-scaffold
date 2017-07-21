@@ -14,6 +14,7 @@ import ProductDetailsItemAddedModal from './product-details-item-added/container
 import CartEstimateShippingModal from './cart-estimate-shipping/container'
 import CartWishlistModal from './cart-wishlist/container'
 import CartRemoveItemModal from './cart-remove-item/container'
+import AccountAddressModal from './account-add-address/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
@@ -30,6 +31,7 @@ const modals = {
     [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
     [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
+    [MODAL.ADD_ADDRESS_MODAL]: {content: <AccountAddressModal />},
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }
 
