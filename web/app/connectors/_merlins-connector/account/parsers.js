@@ -11,20 +11,20 @@ export const parseWishlistProducts = ($, $response) => {
 
     $response.find('#wishlist-view-form .product-item').each((_, productTile) => {
         const $productTile = $(productTile)
-        const $priceBox = $productTile.find('.price-box')
-        const id = $priceBox.attr('data-product-id')
+        const id = $productTile.attr('id').replace('item_', '')
         const $photo = $productTile.find('.product-item-photo')
 
         products[id] = {
-            price: $priceBox.find('.price').text(),
+            price: $productTile.find('.price-box .price').text(),
             href: $photo.attr('href'),
             thumbnail: parseImage($photo.find('img')),
             title: $productTile.find('.product-item-name').text(),
-            id
+            id,
+            available: !$productTile.find('.unavailable').length
         }
 
         wishlistItems.push({
-            quantity: $productTile.find('input.qty').val(),
+            quantity: parseInt($productTile.find('input.qty').val()),
             id
         })
     })
