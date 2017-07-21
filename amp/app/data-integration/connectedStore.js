@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux'
 import {waitForResolves} from 'react-redux-resolve'
 import thunk from 'redux-thunk'
@@ -28,7 +32,7 @@ import {PAGE_TITLE} from './constants'
 
 const jsdom = Promise.promisifyAll(_jsdom)
 
-const jqueryDir = process.env.NODE_ENV === 'production' ? '.' : './app/data-integration'
+const jqueryDir = process.env.NODE_ENV === 'production' ? '.' : './app/vendor'
 const jquery = fs.readFileSync(`${jqueryDir}/jquery.min.js`, 'utf-8')
 
 export const jsdomEnv = () => jsdom.envAsync('', [], {src: jquery})
