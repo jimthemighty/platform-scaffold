@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import Img from 'mobify-amp-sdk/dist/components/img'
 import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs'
 
 // Selectors
@@ -28,7 +28,7 @@ const ProductListHeader = ({title, parentName, parentHref}) => (
         </div>
 
         {title &&
-            <AmpImage
+            <Img
                 className="u-flex-none u-padding-end u-padding-bottom-sm"
                 alt="Heading logo"
                 height="60"

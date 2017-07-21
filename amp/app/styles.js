@@ -3,8 +3,8 @@ import {Accordion} from 'mobify-amp-sdk/dist/components/accordion/index'
 import AccordionBase from 'mobify-amp-sdk/dist/components/accordion/_base.scss'
 import AccordionTheme from './styles/themes/amp-components/_accordion.scss'
 
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image/index'
-import AmpImageBase from 'mobify-amp-sdk/dist/components/amp-image/_base.scss'
+import Img from 'mobify-amp-sdk/dist/components/img/index'
+import ImgBase from 'mobify-amp-sdk/dist/components/img/_base.scss'
 
 import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs/index'
 import BreadcrumbsBase from 'mobify-amp-sdk/dist/components/breadcrumbs/_base.scss'
@@ -106,7 +106,7 @@ const styles = new Map()
 
 // SDK Components
 styles.set(Accordion, [AccordionBase, AccordionTheme])
-styles.set(AmpImage, [AmpImageBase])
+styles.set(Img, [ImgBase])
 styles.set(Breadcrumbs, [BreadcrumbsBase, BreadcrumbsTheme])
 styles.set(Button, [ButtonBase, ButtonTheme])
 styles.set(Carousel, [CarouselBase, CarouselTheme])

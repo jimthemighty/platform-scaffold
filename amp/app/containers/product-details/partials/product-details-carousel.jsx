@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import Img from 'mobify-amp-sdk/dist/components/img'
 import Carousel from 'mobify-amp-sdk/dist/components/carousel'
 
 // Selectors
@@ -23,7 +23,7 @@ const ProductDetailsCarousel = ({images}) => {
             width="330"
         >
             {images.map(({src, alt = ''}) => (
-                <AmpImage
+                <Img
                     className="u-display-block"
                     height="330"
                     width="330"
