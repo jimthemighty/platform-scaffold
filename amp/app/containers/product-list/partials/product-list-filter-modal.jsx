@@ -79,7 +79,7 @@ ProductListFilterModal.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    filters: selectors.getFilters
+    filters: selectors.getCategoryFilterOptions
 })
 
 export default connect(

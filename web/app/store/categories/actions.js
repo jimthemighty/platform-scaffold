@@ -2,21 +2,21 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {getCurrentPathKey} from 'progressive-web-sdk/dist/store/app/selectors'
-import {getSelectedCategory} from './selectors'
+import {getCurrentPathKeyWithoutQuery} from 'progressive-web-sdk/dist/store/app/selectors'
+import {getCategoryFilterOptions} from '../../containers/product-list/selectors'
 
 export const changeFilter = createAction('Change Filter')
 
-export const changeFilterTo = (filterQuery) => (dispatch, getStore) => {
+export const changeFilterTo = (searchKey) => (dispatch, getStore) => {
     const currentState = getStore()
-    const categoryData = getSelectedCategory(currentState).toJS()
+    const filters = getCategoryFilterOptions(currentState).toJS()
 
-    categoryData.filters.forEach((filter) =>
+    filters.forEach((filter) =>
         filter.kinds.forEach((kind) => {
-            kind.active = kind.query === filterQuery
+            kind.active = kind.searchKey === searchKey
         })
     )
 
-    const newCategories = {[getCurrentPathKey(currentState)]: categoryData}
-    dispatch(changeFilter(newCategories))
+    const updatedFilter = {filterOptions: {[getCurrentPathKeyWithoutQuery(currentState)]: filters}}
+    dispatch(changeFilter(updatedFilter))
 }
