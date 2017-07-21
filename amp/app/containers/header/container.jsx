@@ -13,7 +13,7 @@ import Button from 'mobify-amp-sdk/dist/components/button'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'mobify-amp-sdk/dist/components/header-bar'
 import Icon from 'mobify-amp-sdk/dist/components/icon'
 import IconLabel from 'mobify-amp-sdk/dist/components/icon-label'
-import Search from '../../components/search'
+import Search from 'mobify-amp-sdk/dist/components/search'
 
 // Utils
 import {staticURL, canonicalURL} from '../../utils'

@@ -38,6 +38,9 @@ import IconLabel from 'mobify-amp-sdk/dist/components/icon-label/index'
 import IconLabelBase from 'mobify-amp-sdk/dist/components/icon-label/_base.scss'
 import IconLabelTheme from './styles/themes/amp-components/_icon-label.scss'
 
+import Lightbox from 'mobify-amp-sdk/dist/components/lightbox/index'
+import LightboxBase from 'mobify-amp-sdk/dist/components/lightbox/_base.scss'
+
 import Link from 'mobify-amp-sdk/dist/components/link/index'
 
 import List from 'mobify-amp-sdk/dist/components/list/index'
@@ -59,6 +62,10 @@ import NavMenu from 'mobify-amp-sdk/dist/components/nav-menu/index'
 import NavMenuBase from 'mobify-amp-sdk/dist/components/nav-menu/_base.scss'
 import NavMenuTheme from './styles/themes/amp-components/_nav-menu.scss'
 
+import Search from 'mobify-amp-sdk/dist/components/search/index'
+import SearchBase from 'mobify-amp-sdk/dist/components/search/_base.scss'
+import SearchTheme from './styles/themes/amp-components/_search.scss'
+
 import Sheet from 'mobify-amp-sdk/dist/components/sheet/index'
 import SheetBase from 'mobify-amp-sdk/dist/components/sheet/_base.scss'
 import SheetTheme from './styles/themes/amp-components/_sheet.scss'
@@ -76,13 +83,6 @@ import ProductItemBase from './components/product-item/_base.scss'
 
 import ProductTile from './components/product-tile/index'
 import ProductTileBase from './components/product-tile/_base.scss'
-
-import Lightbox from './components/lightbox/index'
-import LightboxBase from './components/lightbox/_base.scss'
-
-import Search from './components/search/index'
-import SearchBase from './components/search/_base.scss'
-import SearchTheme from './styles/themes/amp-components/_search.scss'
 
 
 // Containers
@@ -115,12 +115,14 @@ styles.set(FieldRow, [FieldRowBase, FieldRowTheme])
 styles.set(HeaderBar, [HeaderBarBase, HeaderBarTheme])
 styles.set(Icon, [IconBase, IconTheme])
 styles.set(IconLabel, [IconLabelBase, IconLabelTheme])
+styles.set(Lightbox, [LightboxBase])
 styles.set(Link)
 styles.set(List, [ListTheme])
 styles.set(ListTile, [ListTileBase, ListTileTheme])
 styles.set(Nav, [NavBase, NavTheme])
 styles.set(NavItem, [NavItemBase, NavItemTheme])
 styles.set(NavMenu, [NavMenuBase, NavMenuTheme])
+styles.set(Search, [SearchBase, SearchTheme])
 styles.set(Sheet, [SheetBase, SheetTheme])
 styles.set(SkipLinks, [SkipLinksBase])
 
@@ -129,8 +131,6 @@ styles.set(SkipLinks, [SkipLinksBase])
 styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
-styles.set(Lightbox, [LightboxBase])
-styles.set(Search, [SearchBase, SearchTheme])
 
 
 // Containers
