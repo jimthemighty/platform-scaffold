@@ -111,6 +111,7 @@
   "config": {
     "sdk_generator_version": 2,
     "min_lighthouse_score": 80,
+    "max_first_interactive": 15000,
     "file_size_limit": 2000000
   },
   "scripts": {

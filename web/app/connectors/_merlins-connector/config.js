@@ -3,6 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {buildQueryString} from '../../utils/utils'
 
+const SEARCH_URL = '/catalogsearch/result/'
+const SEARCH_SUGGESTION_URL = '/search/ajax/suggest/'
 
 export const CHECKOUT_SHIPPING_URL = '/checkout/'
 export const CART_URL = '/checkout/cart/'
@@ -13,8 +15,8 @@ export const CREATE_ACCOUNT_POST_URL = '/customer/account/createpost/'
 export const LOGIN_POST_URL = '/customer/account/loginPost/'
 export const MY_ACCOUNT_URL = '/customer/account/'
 
-export const buildQueryURL = (query) => `/search/ajax/suggest/?q=${buildQueryString(query)}&_=${Date.now()}`
-export const buildSearchURL = (query) => `/catalogsearch/result/?q=+${buildQueryString(query)}`
+export const buildQueryURL = (query) => `${SEARCH_SUGGESTION_URL}${buildQueryString(query)}&_=${Date.now()}`
+export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`
 
 // configuration is not currently used by the Merlin's connector
 let config = {} // eslint-disable-line
