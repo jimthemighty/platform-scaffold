@@ -41,18 +41,27 @@ const checkLighthouse = function(jsonResults) {
 }
 
 /**
-* Display some important performance metrics.
+* Verify time to first interactive
 */
-const checkTTI = function(jsonResults) {
-    console.log(`Time to first interactive: ${jsonResults.audits['first-interactive'].displayValue}`)
-    console.log(`Analyzing total bundle size...`)
-    console.log(`${jsonResults.audits['total-byte-weight'].displayValue}`)
+const checkFirstInteractive = function(jsonResults) {
+    const actualValue = jsonResults.audits['first-interactive'].rawValue
+    // max_first_interactive can be adjusted in CI or in package.json
+    // Baseline threshold should be 10000
+    const maxFirstInteractive = parseInt(process.env.max_first_interactive || process.env.npm_package_config_max_first_interactive)
+
+    if (actualValue > maxFirstInteractive) {
+        console.error(chalk.red(`Time to first interactive exceeds the target of ${maxFirstInteractive} ms. Actual value: ${actualValue} ms`))
+        failure = true
+    } else {
+        console.log(`Time to first interactive is fine (${actualValue} ms)`)
+    }
+
 }
 
 const jsonResults = JSON.parse(fs.readFileSync(`${reportsDir}${fileName}.report.json`, 'utf8'))
 
-checkTTI(jsonResults)
 checkLighthouse(jsonResults)
+checkFirstInteractive(jsonResults)
 
 if (failure) {
     process.exit(1)
