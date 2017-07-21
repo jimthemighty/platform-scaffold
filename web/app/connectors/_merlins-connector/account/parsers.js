@@ -1,10 +1,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
-import {parseImage} from '../../../utils/parser-utils'
-
-
-import {getTextFrom} from '../../../utils/parser-utils'
+import {parseImage, getTextFrom} from '../../../utils/parser-utils'
 
 export const isFormResponseInvalid = ($response, formSelector) => $response.find(formSelector).length
 
