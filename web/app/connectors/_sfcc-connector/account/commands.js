@@ -235,20 +235,13 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
     }
 
     return makeApiRequest(`/customers/${customerId}/password`, {method: 'PUT', body: JSON.stringify(requestBody)})
-        .then((res) => {
-            if (res.status >= 200 && res.status < 400) {
-                // NOTE: res.json() on a successful PUT throws
-                // "Uncaught (in promise) SyntaxError: Unexpected end of JSON input"
-                // we need to resolve if the request is successful
-                return Promise.resolve(true)
-            }
-
-            return res.json()
-        })
-        .then((res) => {
-            if (res === true) {
+        .then((res) => res.text())
+        .then((responseString) => {
+            if (!responseString.length) {
                 return Promise.resolve()
             }
+
+            const res = JSON.parse(responseString)
 
             if (res.fault && res.fault.type === 'InvalidCustomerException') {
                 return new SubmissionError({_error: 'Your session has expired'})
