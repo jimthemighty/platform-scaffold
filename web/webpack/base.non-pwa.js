@@ -9,7 +9,7 @@ const path = require('path')
 const baseCommon = require('./base.common')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-const NonPWAConst = require('progressive-web-sdk/dist/non-pwa/messaging/const').default
+const NonPWAConst = require('progressive-web-sdk/dist/non-pwa/messaging/constants').default
 
 const webPackageJson = require('../package.json')
 
