@@ -1,6 +1,8 @@
 ## To be released
 - Bump Lighthouse to version 2.2.1 [889](https://github.com/mobify/platform-scaffold/pull/889)
 - Add product variation support to Merlin's connector [#800](https://github.com/mobify/platform-scaffold/pull/800)
+- Added a verification that time to First Interactive is below a given threshold. [896](https://github.com/mobify/platform-scaffold/pull/896)
+- Added pagination to PLP and search result page [825](https://github.com/mobify/platform-scaffold/pull/825)
 - Update loggedIn state in login and register commands[#901](https://github.com/mobify/platform-scaffold/pull/901)
 
 ## 0.17.3 (July 7, 2017)
