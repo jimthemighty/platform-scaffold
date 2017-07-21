@@ -142,10 +142,10 @@ class AccountAddress extends React.Component {
 
 AccountAddress.propTypes = {
     addresses: PropTypes.array,
+    dashboardURL: PropTypes.string,
     defaultAddress: PropTypes.object,
     openAddAddressModal: PropTypes.fun,
-    removeAddress: PropTypes.func,
-    dashboardURL: PropTypes.string
+    removeAddress: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
