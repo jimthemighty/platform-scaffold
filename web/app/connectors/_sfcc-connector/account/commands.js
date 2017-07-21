@@ -176,14 +176,29 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
-export const deleteAddress = (id) => (dispatch) => { // eslint-disable-line
-    // DELETE	/customers/{customer_id}/addresses/{address_name}	Deletes a customer's address by address name.
-    return Promise.resolve()
+export const deleteAddress = (addressName) => (dispatch) => { // eslint-disable-line
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerId}/addresses/${addressName}`, {method: 'DELETE'})
+        .then((res) => res.json())
+        .then((res) => {
+            return res
+        })
 }
 
-export const editAddress = (id) => (dispatch) => { // eslint-disable-line
-    // PATCH	/customers/{customer_id}/addresses/{address_name}	Updates a customer's address by address name.
-    return Promise.resolve()
+export const editAddress = (addressName, newAddress) => (dispatch) => { // eslint-disable-line
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+
+    const requestBody = {
+        ...newAddress
+    }
+
+    return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'PATCH'})
+        .then((res) => {
+            return res
+        })
 }
 
 export const initAccountAddressPage = () => (dispatch) => {
