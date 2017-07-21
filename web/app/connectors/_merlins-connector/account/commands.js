@@ -13,13 +13,16 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
+    receiveWishlistData,
+    receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid} from './parsers'
+import {isFormResponseInvalid, parseWishlistProducts} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -38,6 +41,26 @@ export const initRegisterPage = (url) => (dispatch) => {
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
+
+export const initWishlistPage = (url) => (dispatch) => {
+    return (dispatch(fetchPageData(url)))
+        .then(([$, $response]) => {
+            const {
+                wishlistItems,
+                products
+            } = parseWishlistProducts($, $response)
+            const formURL = $response.find('#wishlist-view-form').attr('action')
+            const wishlistData = {
+                title: $response.find('.page-title').text(),
+                products: wishlistItems,
+                shareURL: formURL ? formURL.replace('update', 'share') : ''
+            }
+            dispatch(receiveWishlistProductData(products))
+            dispatch(receiveWishlistData(wishlistData))
+            dispatch(receiveWishlistUIData({contentLoaded: true}))
+        })
+}
+
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
