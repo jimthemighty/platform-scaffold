@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded, recieveAccountAddressData} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {setRegisterLoaded, setSigninLoaded, receiveAccountAddressData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createOrderAddressObject} from '../checkout/utils'
 import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
@@ -236,7 +236,7 @@ export const initAccountAddressPage = () => (dispatch) => {
                             }
                         })
 
-            return dispatch(recieveAccountAddressData(
+            return dispatch(receiveAccountAddressData(
                 {
                     defaultAddress: addresses.filter((address) => address.default)[0],
                     addresses: addresses.filter((address) => !address.default)
