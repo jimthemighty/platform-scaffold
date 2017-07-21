@@ -18,26 +18,8 @@ import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import AddressBlock from './partials/account-address-block'
 import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {openAddAddressModal} from './actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {ADD_ADDRESS_MODAL} from '../../modals/constants'
-
-
-const NoAddress = () => (
-    <div className="t-account-address__empty u-padding-md u-flexbox u-direction-column u-align-center u-justify-center">
-        <Image
-            className="u-flex-none"
-            alt="Crystal Ball"
-            width="122px"
-            height="110px"
-            src={getAssetUrl('static/img/onboarding/location.png')}
-        />
-        <div className="u-text-align-center u-padding-lg">
-            You have no saved addresses.
-        </div>
-        <Button text="Add a new address" href="/" className="pw--tertiary u-width-full u-text-uppercase " />
-    </div>
-)
 
 class AccountAddress extends React.Component {
     constructor(props) {
@@ -57,6 +39,25 @@ class AccountAddress extends React.Component {
             removeAddress
         } = this.props
 
+        const NoAddress = () => (
+            <div className="t-account-address__empty u-padding-md u-flexbox u-direction-column u-align-center u-justify-center">
+                <Image
+                    className="u-flex-none"
+                    alt="Crystal Ball"
+                    width="122px"
+                    height="110px"
+                    src={getAssetUrl('static/img/onboarding/location.png')}
+                />
+                <div className="u-text-align-center u-padding-lg">
+                    You have no saved addresses.
+                </div>
+                <Button text="Add a new address"
+                    className="pw--tertiary u-width-full u-text-uppercase"
+                    data-analytics-name={UI_NAME.addNewAddress}
+                    onClick={this.addAddress}
+                />
+            </div>
+        )
         return (
             <div>
                 {defaultAddress ?
