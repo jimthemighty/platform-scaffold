@@ -152,7 +152,7 @@ ProductListContents.propTypes = {
 const mapStateToProps = createPropsSelector({
     activeFilters: selectors.getActiveFilters,
     numItems: getCategoryItemCount,
-    products: selectors.getFilteredAndSortedListProducts,
+    products: selectors.getSortedListProducts,
     currentUrl: getCurrentUrl
 })
 
