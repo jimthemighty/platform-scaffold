@@ -18,7 +18,8 @@ import {
     CheckoutShipping,
     Login,
     ProductList,
-    ProductDetails
+    ProductDetails,
+    Wishlist
 } from './containers/templates'
 
 // We build this into the app so we can load the home page right away
@@ -34,7 +35,8 @@ import {
     initRegisterPage,
     initLoginPage,
     initAccountDashboardPage,
-    initAccountAddressPage
+    initAccountAddressPage,
+    initWishlistPage
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
@@ -90,6 +92,7 @@ const Router = ({store}) => (
                 {/* Careful. The routeName on this 'configure' route is used to change how the ProductDetails component renders */}
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
+                <Route component={Wishlist} path="wishlist/" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"
@@ -132,6 +135,7 @@ const Router = ({store}) => (
                 <Route component={ProductList} path="*/gift-certificates*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/top-seller*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/Search-Show?*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={Wishlist} path="*/Wishlist-Show" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="*/COShipping-Start*"

@@ -5,8 +5,27 @@ import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {setRegisterLoaded, setSigninLoaded, recieveAccountAddressData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
+import {
+    setSigninLoaded,
+    setRegisterLoaded,
+    receiveWishlistData,
+    receiveWishlistUIData
+} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {parseWishlistProducts} from '../parsers'
 import {createOrderAddressObject} from '../checkout/utils'
-import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
+import {
+    initSfccSession,
+    deleteAuthToken,
+    storeAuthToken,
+    makeApiRequest,
+    makeApiJsonRequest,
+    checkForResponseFault,
+    deleteBasketID,
+    storeBasketID,
+    getAuthTokenPayload,
+    fetchItemData
+} from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 
 import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
@@ -217,5 +236,37 @@ export const initAccountAddressPage = () => (dispatch) => {
                     addresses: addresses.filter((address) => !address.default)
                 }
             ))
+    })
+}
+
+export const initWishlistPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerID = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
+        .then((response) => response.json())
+        .then(({data}) => {
+            if (!data) {
+                // wishlist is empty, handle the empty case
+                dispatch(receiveWishlistData({
+                    title: 'My Wish List'
+                }))
+                return dispatch(receiveWishlistUIData({contentLoaded: true}))
+            }
+            const wishlistResponse = data[0]
+            const wishlistItems = parseWishlistProducts(wishlistResponse)
+            const wishlistData = {products: wishlistItems}
+
+            if (wishlistResponse.name) {
+                wishlistData.title = wishlistResponse.name
+            }
+
+            return dispatch(fetchItemData(wishlistItems))
+                .then(({updatedProducts}) => {
+                    dispatch(receiveWishlistProductData(updatedProducts))
+                    dispatch(receiveWishlistData(wishlistData))
+                    dispatch(receiveWishlistUIData({contentLoaded: true}))
+
+                })
         })
 }
