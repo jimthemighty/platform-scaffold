@@ -16,7 +16,7 @@ import defaultAskHtml from './default-ask.html'
 const messagingConfiguration = {
     defaultAsk: {
         html: defaultAskHtml,
-        options: false
+        auto: true
     }
 }
 
@@ -27,10 +27,7 @@ const messagingConfiguration = {
 const init = () => {
     // This initializes the Push Messaging feature, including the default ask
     // iframe which prompts visitors to subscribe.
-    initMessaging(messagingConfiguration).then(({askFrame}) => {
-        // TODO: Guard this based on page count and/or visit countdown
-        askFrame.show()
-    })
+    initMessaging(messagingConfiguration)
 }
 
 window.Mobify = window.Mobify || {}
