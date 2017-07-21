@@ -69,7 +69,7 @@ export const getProductVariantData = (variationSelections, variants, categoryIds
 
 const NEW_WISHILIST_PAYLOAD = {
     type: 'wish_list',
-    name: 'Saved for Later'
+    name: 'My Wish List'
 }
 
 export const addItemToWishlist = (productId) => (dispatch) => {

@@ -21,10 +21,13 @@ import home from './home/reducer'
 import login from './login/reducer'
 import productDetails from './product-details/reducer'
 import productList from './product-list/reducer'
+import wishlist from './wishlist/reducer'
+
 
 
 const uiReducer = combineReducers({
     navigation,
+
     accountDashboard,
     accountInfo,
     app,
@@ -38,6 +41,7 @@ const uiReducer = combineReducers({
     login,
     productDetails,
     productList,
+    wishlist,
 
 })
 
