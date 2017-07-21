@@ -203,10 +203,10 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
-    const splitName = splitFullName(names)
+    const {firstname, lastname} = splitFullName(names)
     const formData = {
-        firstname: splitName.firstname,
-        lastname: splitName.lastname,
+        firstname,
+        lastname,
         email,
         change_password: currentPassword && newPassword ? 1 : '',
         current_password: currentPassword ? currentPassword : '',

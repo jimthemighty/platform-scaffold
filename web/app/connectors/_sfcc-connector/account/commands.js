@@ -210,11 +210,11 @@ export const initAccountInfoPage = () => (dispatch) => {
 export const updateAccountInfo = ({names, email}) => (dispatch) => {
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
-    const splitNames = splitFullName(names)
+    const {firstname, lastname} = splitFullName(names)
 
     const requestBody = {
-        first_name: splitNames.firstname,
-        last_name: splitNames.lastname,
+        first_name: firstname,
+        last_name: lastname,
         email
     }
 
