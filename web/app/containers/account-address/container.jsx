@@ -144,7 +144,7 @@ AccountAddress.propTypes = {
     addresses: PropTypes.array,
     defaultAddress: PropTypes.object,
     openAddAddressModal: PropTypes.fun,
-    removeAddress: PropTypes.func
+    removeAddress: PropTypes.func,
     dashboardURL: PropTypes.string
 }
 
