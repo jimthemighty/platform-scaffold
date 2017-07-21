@@ -13,7 +13,7 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    receiveAccountInfoData
+    receiveAccountInfoData,
     receiveWishlistData,
     receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
