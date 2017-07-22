@@ -3,7 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded, receiveAccountAddressData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {
@@ -11,7 +10,7 @@ import {
     setRegisterLoaded,
     receiveWishlistData,
     receiveWishlistUIData,
-    recieveAccountAddressData,
+    receiveAccountAddressData,
     receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
