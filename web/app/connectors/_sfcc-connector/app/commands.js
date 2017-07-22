@@ -23,10 +23,10 @@ import {
     getCheckoutShippingURL,
     getCartURL,
     getWishlistURL,
-    getMyAccountURL,
     buildSearchURL,
     getAccountAddressURL,
-    getAccountInfoURL
+    getAccountInfoURL,
+    getDashboardURL,
 } from '../config'
 import {
     ACCOUNT_NAV_ITEM,
@@ -51,7 +51,7 @@ export const fetchNavigationData = () => (dispatch) => {
                         icon: 'user',
                         className: 'u-margin-top-md u-border-top'
                     },
-                    path: getMyAccountURL()
+                    path: getDashboardURL()
                 },
                 {
                     type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
