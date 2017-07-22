@@ -238,8 +238,8 @@ export const initAccountAddressPage = () => (dispatch) => {
                     addresses: addresses.filter((address) => !address.default)
                 }
             ))
-    })
-  )
+        })
+}
 /* eslint-disable camelcase */
 const handleAccountInfoData = ({first_name, last_name, login}) => (
     {

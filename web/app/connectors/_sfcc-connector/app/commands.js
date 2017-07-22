@@ -23,12 +23,10 @@ import {
     getCheckoutShippingURL,
     getCartURL,
     getWishlistURL,
-    getMyAccountURL,
     buildSearchURL,
     getAccountAddressURL,
     getAccountInfoURL,
     getDashboardURL,
-    buildSearchURL
 } from '../config'
 import {
     ACCOUNT_NAV_ITEM,
