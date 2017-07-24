@@ -11,6 +11,7 @@ import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
+import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
     setSigninLoaded,
     setRegisterLoaded,
@@ -54,6 +55,15 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
+    const ESTIMATE_FIELD_PATH = ['#country', 'regionUpdater', 'regionJson']
+
+    makeRequest(`${url}new`)
+        .then(jqueryResponse)
+        .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
+            dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+        })
+
     return fetchCustomerAddresses()
         .then(({customer: {addresses}}) => {
             const parsedAddresses = addresses.map((address) => parseAddress(address))
