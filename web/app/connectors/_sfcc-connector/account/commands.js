@@ -197,12 +197,11 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
-export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-line
+export const deleteAddress = (address) => (dispatch) => { // eslint-disable-line
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
 
-    return makeApiRequest(`/customers/${customerId}/addresses/${addressId}`, {method: 'DELETE'})
-        .then((res) => res.json())
+    return makeApiRequest(`/customers/${customerId}/addresses/${address.id}`, {method: 'DELETE'})
         .then((res) => {
             return res
         })
@@ -237,7 +236,8 @@ export const initAccountAddressPage = () => (dispatch) => {
                             city,
                             state_code,
                             preferred,
-                            country_code
+                            country_code,
+                            address_id
                         }) => {
 
                             return {
@@ -248,6 +248,7 @@ export const initAccountAddressPage = () => (dispatch) => {
                                 addressLine1: address1,
                                 addressLine2: address2,
                                 default: preferred,
+                                id: address_id,
                                 city,
                                 countryId: country_code.toUpperCase(),
                                 regionId: state_code
