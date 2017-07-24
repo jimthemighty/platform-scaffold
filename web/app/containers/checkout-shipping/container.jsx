@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import React from 'react'
-import {connect} from 'react-redux'
+// import {connect} from 'react-redux'
 import template from '../../template'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import classNames from 'classnames'
