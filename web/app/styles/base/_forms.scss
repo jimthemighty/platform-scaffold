@@ -15,7 +15,7 @@ $base__radio-checkmark: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2
 //    elements.
 // 5. Correct font properties not being inherited.
 // 6. Address margins set differently in Firefox 4+, Safari, and Chrome.
-// 7. Set font-size to 16px to avoid zooming in on iOS
+// 7. Set font-size to 16px to avoid zooming in on iOS (https://stackoverflow.com/questions/11064237/prevent-iphone-from-zooming-form)
 
 fieldset {
     min-width: 0;
