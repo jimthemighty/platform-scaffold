@@ -35,35 +35,62 @@ const priceParser = (value) => {
     return {floor, ceiling}
 }
 
-export const priceFilterParser = ($, $html) => {
-    const $priceOptions = $html.find('.filter-options .item')
+export const filterParser = ($, $html) => {
+    const $filters = $html.find('.filter-options .filter-options-item')
+    const filters = []
 
-    return [{
-        label: 'Price',
-        ruleset: 'price',
-        kinds: $priceOptions.map((idx, kind) => {
+    // eslint-disable-next-line array-callback-return
+    $filters.map((idx, filter) => {
+        const filterObject = {}
+
+        filterObject.label = $(filter).find('.filter-options-title').text()
+        filterObject.ruleset = filterObject.label.toLowerCase()
+
+        const kindArray = []
+
+        // eslint-disable-next-line array-callback-return
+        $(filter).find('.filter-options-content .item').map((idx, kind) => {
             const $kind = $(kind)
+
             let query = $kind.find('a')[0].search
-            const price = query.split('=')[1]
+            const searchKey = query.split('&')[0].replace('?', '')
+            let criteria = ''
+            let label = $kind.clone().find('span').remove().end().text()
             const $count = $kind.find('.count').remove()
             const count = $count.text().replace(REGEX_NON_NUM, '')
 
-            // Replace `-` with `to` to prevent the replacement of non alpha-num
-            // characters from obfuscating the meaning of the query. For
-            // example, prevent `price10-20` from becoming `price1020`, because
-            // what would that mean: 10-20, 0-1020 or 1020-Infinity?
-            query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '')
+            // price ruleset
+            if ($kind.has('.price').length > 0) {
+                const price = query.split('=')[1]
+                criteria = priceParser(price) // priceParser('10-20')
+                label = $kind.text().trim() // '$10.00 - $19.99'
 
-            return {
-                count, // 2
-                criteria: priceParser(price), // priceParser('10-20')
-                label: $kind.text().trim(), // '$10.00 - $19.99'
-                ruleset: 'price', // we only have one ruleset at the moment
-                href: $kind.find('a').attr('href'), // filter link
-                query // 'price10to20'
+                // Replace `-` with `to` to prevent the replacement of non alpha-num
+                // characters from obfuscating the meaning of the query. For
+                // example, prevent `price10-20` from becoming `price1020`, because
+                // what would that mean: 10-20, 0-1020 or 1020-Infinity?
+
+                query = query.replace(REGEX_DASH, 'to').replace(REGEX_NON_ALPHA_NUM, '') // 'price10to20'
+            } else if (query.includes('color')) { // color ruleset
+                const colorCode = query.split('=')[1]
+                // Color code is represented by a integer on Merlins
+                // i.e. Green is `11` and Red is `8`
+                criteria = {colorCode}
             }
-        }).toArray()
-    }]
+
+            kindArray.push({
+                count,
+                criteria,
+                label,
+                ruleset: filterObject.ruleset,
+                query,
+                searchKey
+            })
+        })
+        filterObject.kinds = kindArray
+        filters.push(filterObject)
+    })
+    return filters
 }
 
 
@@ -78,6 +105,24 @@ const categoryProductsParser = ($, $html) => {
         itemCount: $numItems.length > 0 ? parseInt($numItems.text(), 10) : 0,
         products: productIds
     }
+}
+
+export const parseSortOptions = ($, $html) => {
+    const $select = $html.find('select.sorter-options').first()
+    const sortOptions = []
+    $select.children().each((index, option) => {
+        sortOptions.push({
+            id: option.value,
+            label: option.text
+        })
+    })
+    return sortOptions
+}
+
+export const hasFilter = ($, $html) => {
+    const currentFilter = $html.has('.filter-current').length
+
+    return currentFilter
 }
 
 export default categoryProductsParser

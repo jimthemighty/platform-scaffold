@@ -7,7 +7,7 @@ import classNames from 'classnames'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import Img from 'mobify-amp-sdk/dist/components/img'
 import ListTile from 'mobify-amp-sdk/dist/components/list-tile'
 import ProductItem from '../product-item'
 
@@ -25,7 +25,7 @@ const titleClassName = classNames(
 )
 
 const ProductImage = ({src, alt}) => (
-    <AmpImage
+    <Img
         src={src}
         alt={alt}
         layout="fixed"

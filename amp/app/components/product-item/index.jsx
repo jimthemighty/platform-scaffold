@@ -78,7 +78,7 @@ ProductItem.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Image of the product. An `<AmpImage />` component.
+     * Image of the product. An `<Img />` component.
      */
     image: PropTypes.node,
 
