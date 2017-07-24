@@ -22,7 +22,7 @@ const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
 const ENV = process.env.NODE_ENV || 'test'
 
 export default {
-    '@tags': ['checkout'],
+    '@tags': ['sfcc'],
 
     before: (browser) => {
         home = new Home(browser)
@@ -34,25 +34,23 @@ export default {
     },
 
     after: (browser) => {
-        // cart.removeItems()
         browser.end()
     },
 
     // The following tests are conducted in sequence within the same session.
-
-    'Checkout - Registered - Navigate to Home': (browser) => {
+    'Checkout - Guest - Navigate to Home': (browser) => {
         if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
+            browser.url(process.env.npm_package_sfccUrl)
         } else {
             console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+            browser.preview(process.env.npm_package_sfccUrl, 'https://localhost:8443/loader.js')
         }
         browser
             .waitForElementVisible(home.selectors.wrapper)
             .assert.visible(home.selectors.wrapper)
     },
 
-    'Checkout - Registered - Navigate from Home to ProductList': (browser) => {
+    'Checkout - Guest - Navigate from Home to ProductList': (browser) => {
         home.navigateToProductList(PRODUCT_LIST_INDEX)
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
@@ -63,18 +61,18 @@ export default {
         pushMessaging.dismissDefaultAsk()
     },
 
-    'Checkout - Registered - Navigate from ProductList to ProductDetails': (browser) => {
+    'Checkout - Guest - Navigate from ProductList to ProductDetails': (browser) => {
         productList.navigateToProductDetails(PRODUCT_INDEX)
         browser
             .waitForElementVisible(productDetails.selectors.productDetailsTemplateIdentifier)
             .assert.visible(productDetails.selectors.productDetailsTemplateIdentifier)
     },
 
-    'Checkout - Registered - Add item to Shopping Cart': () => {
+    'Checkout - Guest - Add item to Shopping Cart': () => {
         productDetails.addItemToCart()
     },
 
-    'Checkout - Registered - Navigate from ProductDetails to Cart': (browser) => {
+    'Checkout - Guest - Navigate from ProductDetails to Cart': (browser) => {
         if (productDetails.inStock) {
             productDetails.navigateToCart()
             browser
@@ -85,34 +83,27 @@ export default {
         }
     },
 
-    'Checkout - Registered - Navigate from Cart to Checkout': (browser) => {
+    'Checkout - Guest - Navigate from Cart to Checkout': (browser) => {
         if (productDetails.inStock) {
             cart.navigateToCheckout()
             browser
                 .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
                 .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
-                // Email field should have email input type
-                .waitForElementVisible(`${checkout.selectors.email}[type="email"]`)
         }
     },
 
-    'Checkout - Registered - Continue to Registered Checkout': (browser) => {
+    'Checkout - Guest - Fill out Guest Checkout Shipping Info form': (browser) => {
         if (productDetails.inStock) {
-            checkout.continueAsRegistered()
+            checkout.fillShippingInfo()
             browser
-                .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
-                .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
+                // Phone field should have numeric input type
+                .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
+                .waitForElementVisible(checkout.selectors.address)
+                .assert.valueContains(checkout.selectors.address, checkout.userData.address)
         }
     },
 
-    'Checkout - Registered - Choose shipping info': (browser) => {
-        if (productDetails.inStock) {
-            checkout.chooseShippingInfo()
-            browser.waitForElementVisible(`${checkout.selectors.addressListOption} .pw--checked`)
-        }
-    },
-
-    'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {
+    'Checkout - Guest - Fill out Guest Checkout Payment Details form': (browser) => {
         if (productDetails.inStock) {
             checkout.continueToPayment()
             checkout.fillPaymentInfo()
@@ -122,7 +113,7 @@ export default {
         }
     },
 
-    'Checkout - Registered - Verify Submit Order button is visible': (browser) => {
+    'Checkout - Guest - Verify Place Your Order button is visible': (browser) => {
         if (productDetails.inStock) {
             browser
                 .waitForElementVisible(checkout.selectors.placeOrder)

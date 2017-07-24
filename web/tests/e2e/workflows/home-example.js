@@ -16,6 +16,8 @@ const skipLinkTargets = {
 }
 
 export default {
+    '@tags': ['home'],
+
     before: (browser) => {
         home = new Home(browser)
     },

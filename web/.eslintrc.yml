@@ -9,7 +9,6 @@ plugins:
   - 'merlins-connector'
 rules:
   react/react-in-jsx-scope: error
-  merlins-connector/use-merlins: error
 globals:
   process: false
 parser: "babel-eslint"

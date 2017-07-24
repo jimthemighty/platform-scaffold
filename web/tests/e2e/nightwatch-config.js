@@ -2,49 +2,49 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-var reportsPath = process.env.CIRCLE_TEST_REPORTS || './tests/reports';
-var screenshotsPath = process.env.CIRCLE_ARTIFACTS || './tests/screenshots';
+let reportsPath = process.env.CIRCLE_TEST_REPORTS || './tests/reports'
+var screenshotsPath = process.env.CIRCLE_ARTIFACTS || './tests/screenshots'
 
 var notificationSettings = {
     ALLOW: 1,
     BLOCK: 2
-};
+}
 
-require('babel-core/register');
+require('babel-core/register')
 
 module.exports = {
-    'src_folders': ['./tests/e2e'],
-    'output_folder': reportsPath,
-    'custom_commands_path': './node_modules/nightwatch-commands/commands',
-    'custom_assertions_path': './node_modules/nightwatch-commands/assertions',
-    'selenium': {
-        'start_process': true,
-        'server_path': './node_modules/nightwatch-commands/selenium/selenium-server.jar',
-        'log_path': './node_modules/nightwatch-commands/selenium/',
-        'cli_args': {
+    src_folders: ['./tests/e2e'],
+    output_folder: reportsPath,
+    custom_commands_path: './node_modules/nightwatch-commands/commands',
+    custom_assertions_path: './node_modules/nightwatch-commands/assertions',
+    selenium: {
+        start_process: true,
+        server_path: './node_modules/nightwatch-commands/selenium/selenium-server.jar',
+        log_path: './node_modules/nightwatch-commands/selenium/',
+        cli_args: {
             'webdriver.chrome.driver': './node_modules/nightwatch-commands/selenium/drivers/chromedriver'
         }
     },
 
-    'test_settings': {
-        'default': {
-            'globals' : {
-                'waitForConditionTimeout' : 10000,
-                'waitForConditionPollInterval': 500,
+    test_settings: {
+        default: {
+            globals: {
+                waitForConditionTimeout: 10000,
+                waitForConditionPollInterval: 500,
             },
-            'end_session_on_fail': false,
-            'silent': true,
-            'output': true,
-            'exclude': ['page-objects', 'test-scripts'],
-            'screenshots': {
-                'enabled': true,
-                'path': screenshotsPath,
-                'on_failure': true,
+            end_session_on_fail: false,
+            silent: true,
+            output: true,
+            exclude: ['page-objects', 'test-scripts'],
+            screenshots: {
+                enabled: true,
+                path: screenshotsPath,
+                on_failure: true,
             },
-            'desiredCapabilities': {
-                'browserName': 'chrome',
-                'chromeOptions': {
-                    'args': [
+            desiredCapabilities: {
+                browserName: 'chrome',
+                chromeOptions: {
+                    args: [
                         /**
                          * To facilitate testing of Push notifications, we need
                          * a user agent that is supported. Unfortunately, Selenium
@@ -60,21 +60,21 @@ module.exports = {
                         'profile.default_content_setting_values.notifications': 1
                     }
                 },
-                'javascriptEnabled': true,
-                'acceptSslCerts': true
+                javascriptEnabled: true,
+                acceptSslCerts: true
             }
         },
         // For testing push messaging.
         // Always Allow browser notifications
-        'subscribe': {
-            'desiredCapabilities': {
-                'chromeOptions': {
-                    'prefs': {
+        subscribe: {
+            desiredCapabilities: {
+                chromeOptions: {
+                    prefs: {
                         'profile.default_content_setting_values.notifications': notificationSettings.ALLOW
                     }
                 }
             },
-            'filter': 'tests/e2e/workflows/push-subscribe.js'
+            filter: 'tests/e2e/workflows/push-subscribe.js'
         },
     }
-};
+}

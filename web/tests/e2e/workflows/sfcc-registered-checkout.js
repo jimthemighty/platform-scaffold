@@ -22,7 +22,7 @@ const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
 const ENV = process.env.NODE_ENV || 'test'
 
 export default {
-    '@tags': ['checkout'],
+    '@tags': ['sfcc'],
 
     before: (browser) => {
         home = new Home(browser)
@@ -39,13 +39,12 @@ export default {
     },
 
     // The following tests are conducted in sequence within the same session.
-
     'Checkout - Registered - Navigate to Home': (browser) => {
         if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
+            browser.url(process.env.npm_package_sfccUrl)
         } else {
             console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+            browser.preview(process.env.npm_package_sfccUrl, 'https://localhost:8443/loader.js')
         }
         browser
             .waitForElementVisible(home.selectors.wrapper)
