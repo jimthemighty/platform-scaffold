@@ -10,6 +10,7 @@ import {fetchCustomerAddresses} from '../checkout/commands'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
+import {parseLocations} from '../checkout/parsers'
 import {getCart} from '../cart/commands'
 import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
@@ -21,11 +22,11 @@ import {
     receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {buildFormData, createAddressRequestObject} from './utils'
 import {jqueryAjaxWrapper, parseAddress} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-
 import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
@@ -55,11 +56,12 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    const ESTIMATE_FIELD_PATH = ['#country', 'regionUpdater', 'regionJson']
-
-    makeRequest(`${url}new`)
+    // we're going to fetch the cart page so we can re-use the country
+    // parsing functionality from initCartPage
+    makeRequest('https://www.merlinspotions.com/checkout/cart/')
         .then(jqueryResponse)
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
             const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
             dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
         })
