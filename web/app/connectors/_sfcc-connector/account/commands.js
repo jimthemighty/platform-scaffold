@@ -10,7 +10,7 @@ import {
     setRegisterLoaded,
     receiveWishlistData,
     receiveWishlistUIData,
-    recieveAccountAddressData,
+    receiveAccountAddressData,
     receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
@@ -232,12 +232,7 @@ export const initAccountAddressPage = () => (dispatch) => {
                             }
                         })
 
-            return dispatch(recieveAccountAddressData(
-                {
-                    defaultAddress: addresses.filter((address) => address.default)[0],
-                    addresses: addresses.filter((address) => !address.default)
-                }
-            ))
+            return dispatch(receiveAccountAddressData(addresses))
         })
 }
 /* eslint-disable camelcase */

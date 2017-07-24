@@ -60,11 +60,7 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
     return fetchCustomerAddresses()
         .then(({customer: {addresses}}) => {
             const parsedAddresses = addresses.map((address) => parseAddress(address))
-            const addressInfo = {
-                addresses: parsedAddresses.filter((address) => !address.default),
-                defaultAddress: parsedAddresses.filter((address) => address.default)[0]
-            }
-            return dispatch(receiveAccountAddressData(addressInfo))
+            return dispatch(receiveAccountAddressData(parsedAddresses))
         })
 }
 

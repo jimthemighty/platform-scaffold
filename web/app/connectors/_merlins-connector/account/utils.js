@@ -3,6 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getCookieValue} from '../../../utils/utils'
+import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const buildFormData = (formValues) => {
     const formData = new FormData()
