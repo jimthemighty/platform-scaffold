@@ -278,6 +278,10 @@ export const editAddress = (addressId) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
 
+export const addAddress = (address) => (dispatch) => {
+    return address
+}
+
 /* eslint-disable camelcase */
 export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
     const currentState = getState()

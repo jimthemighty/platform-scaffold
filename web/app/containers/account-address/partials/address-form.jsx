@@ -8,6 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 import {ADDRESS_FORM_NAME} from '../../../store/form/constants'
 import Button from 'progressive-web-sdk/dist/components/button'
+import {submitAddAddress} from '../actions'
 
 import AccountAddressFields from './account-address-fields'
 
@@ -34,45 +35,24 @@ const validate = (values, props) => {
     return errors
 }
 
-class AccountAddressForm extends React.Component {
-    constructor(props) {
-        super(props)
-        this.onSubmit = this.onSubmit.bind(this)
-    }
-
-    onSubmit(values) {
-        return new Promise((resolve, reject) => {
-            const errors = validate(values, this.props)
-            if (!Object.keys(errors).length) {
-                return this.props.submitAddress()
-            }
-            return reject(new ReduxForm.SubmissionError(errors))
-        })
-    }
-
-    render() {
-        const {
-            handleSubmit,
-        } = this.props
-
-        return (
-            <form onSubmit={handleSubmit(this.onSubmit)} noValidate>
-                <AccountAddressFields />
-                <div className="u-padding-md">
-                    <Button
-                        className="pw--primary u-width-full u-margin-bottom-md"
-                        type="submit"
-                        text="Save"
-                    />
-                    <Button
-                        className="pw--tertiary u-width-full"
-                        type="button"
-                        text="Cancel"
-                    />
-                </div>
-            </form>
-        )
-    }
+export const AccountAddressForm = ({handleSubmit, submitAddress}) => {
+    return (
+        <form onSubmit={handleSubmit(submitAddress)} noValidate>
+            <AccountAddressFields />
+            <div className="u-padding-md">
+                <Button
+                    className="pw--primary u-width-full u-margin-bottom-md"
+                    type="submit"
+                    text="Save"
+                />
+                <Button
+                    className="pw--tertiary u-width-full"
+                    type="button"
+                    text="Cancel"
+                />
+            </div>
+        </form>
+    )
 }
 
 AccountAddressForm.propTypes = {
@@ -91,6 +71,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
+    submitAddress: submitAddAddress
 }
 
 
