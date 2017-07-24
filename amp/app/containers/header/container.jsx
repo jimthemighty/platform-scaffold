@@ -8,12 +8,12 @@ import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 import {SEARCH_LIGHTBOX} from './constants'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import Img from 'mobify-amp-sdk/dist/components/img'
 import Button from 'mobify-amp-sdk/dist/components/button'
 import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'mobify-amp-sdk/dist/components/header-bar'
 import Icon from 'mobify-amp-sdk/dist/components/icon'
 import IconLabel from 'mobify-amp-sdk/dist/components/icon-label'
-import Search from '../../components/search'
+import Search from 'mobify-amp-sdk/dist/components/search'
 
 // Utils
 import {staticURL, canonicalURL} from '../../utils'
@@ -40,7 +40,7 @@ const Header = (props) => {
                         </Button>
                     </HeaderBarActions>
                     <HeaderBarTitle href="/">
-                        <AmpImage src={staticURL('svg/logo.svg')} width="67" height="28" layout="fixed" />
+                        <Img src={staticURL('svg/logo.svg')} width="67" height="28" layout="fixed" />
                     </HeaderBarTitle>
                     <HeaderBarActions>
                         <Button href="https://locations.merlinspotions.com/" className="t-header__link" innerClassName="u-padding-0">

@@ -9,7 +9,7 @@ import {canonicalURL, staticURL} from '../../../utils'
 import URL from 'url'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import Img from 'mobify-amp-sdk/dist/components/img'
 import Button from 'mobify-amp-sdk/dist/components/button'
 import Form from 'mobify-amp-sdk/dist/components/form'
 import Field from 'mobify-amp-sdk/dist/components/field'
@@ -57,7 +57,7 @@ ResultList.propTypes = {
 
 const NoResultsList = ({routeName}) => (
     <div className="u-flexbox u-direction-column u-align-center">
-        <AmpImage
+        <Img
             className="u-flex-none"
             alt="Crystal Ball"
             width="122"
