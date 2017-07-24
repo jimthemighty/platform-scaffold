@@ -12,7 +12,8 @@ import {
     setSignInURL,
     setWishlistURL,
     setAccountInfoURL,
-    setAccountAddressURL
+    setAccountAddressURL,
+    setAccountURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {parseCategories, parseSearchSuggestions} from '../parsers'
@@ -108,6 +109,7 @@ export const initApp = () => (dispatch) => {
             dispatch(setSignInURL(getSignInURL()))
             dispatch(setAccountAddressURL(getAccountAddressURL()))
             dispatch(setAccountInfoURL(getAccountInfoURL()))
+            dispatch(setAccountURL(getDashboardURL()))
             if (!customerData.guest) {
                 dispatch(setLoggedIn(true))
                 return utils.makeApiRequest(`/customers/${customerData.customer_id}`, {method: 'GET'})

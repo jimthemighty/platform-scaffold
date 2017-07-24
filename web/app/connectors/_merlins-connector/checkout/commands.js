@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {makeJsonEncodedRequest, makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
@@ -34,6 +34,7 @@ import {
     prepareEstimateAddress,
     parseAddress
 } from '../utils'
+import {fetchCustomerAddresses} from '../account/utils'
 
 const INITIAL_SHIPPING_ADDRESS = {
     countryId: 'us',
@@ -70,12 +71,6 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
             })) // set initial values for the shipping form
             dispatch(receiveSelectedShippingMethod(selectedShippingMethodId || shippingMethods[0].id))
         })
-}
-
-export const fetchCustomerAddresses = () => {
-    const fetchURL = `/rest/default/V1/carts/mine`
-    return makeRequest(fetchURL, {method: 'GET'})
-        .then((response) => response.json())
 }
 
 export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {

@@ -6,6 +6,7 @@
 - Add account pages
     - Account Dashboard[#834](https://github.com/mobify/platform-scaffold/pull/834)
     - Account Addresses[#886](https://github.com/mobify/platform-scaffold/pull/886)
+- Handling `product_search` SFCC API request not necessarily having `image` object in the response [#888](https://github.com/mobify/platform-scaffold/pull/888)
 - Added a verification that time to First Interactive is below a given threshold. [896](https://github.com/mobify/platform-scaffold/pull/896)
 - Added pagination to PLP and search result page [825](https://github.com/mobify/platform-scaffold/pull/825)
 

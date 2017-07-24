@@ -255,12 +255,7 @@ export const initAccountAddressPage = () => (dispatch) => {
                             }
                         })
 
-            return dispatch(receiveAccountAddressData(
-                {
-                    defaultAddress: addresses.filter((address) => address.default)[0],
-                    addresses: addresses.filter((address) => !address.default)
-                }
-            ))
+            return dispatch(receiveAccountAddressData(addresses))
         })
 }
 /* eslint-disable camelcase */
