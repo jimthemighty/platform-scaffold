@@ -21,7 +21,7 @@ import {
     getCheckoutShippingURL,
     getCartURL,
     getWishlistURL,
-    getMyAccountURL,
+    getDashboardURL,
     buildSearchURL
 } from '../config'
 import {
@@ -47,7 +47,7 @@ export const fetchNavigationData = () => (dispatch) => {
                         icon: 'user',
                         className: 'u-margin-top-md u-border-top'
                     },
-                    path: getMyAccountURL()
+                    path: getDashboardURL()
                 },
                 {
                     type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
@@ -90,7 +90,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const searchProducts = (query) => (dispatch) => {
-    browserHistory.push({pathname: buildSearchURL(query)})
+    browserHistory.push(buildSearchURL(query))
 }
 
 export const initApp = () => (dispatch) => {
