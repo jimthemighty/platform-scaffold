@@ -42,7 +42,7 @@ const ProductDetailsCarousel = ({images, contentsLoaded}) => {
 
     const imgProps = {
         className: classNames('u-display-block', {
-            'c--is-transitioning': !contentsLoaded // Carousel hasn't received the final images yet
+            'pw--is-transitioning': !contentsLoaded // Carousel hasn't received the final images yet
         }),
         hidePlaceholder: true,
         ratio: {aspect: '1:1'},

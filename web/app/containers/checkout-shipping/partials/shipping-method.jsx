@@ -39,7 +39,7 @@ const ShippingMethod = ({shippingMethods}) => (
             <FieldRow className="u-margin-top-lg">
                 <Button
                     type="submit"
-                    className="c--primary u-width-full u-text-uppercase qa-checkout__continue-to-payment"
+                    className="pw--primary u-width-full u-text-uppercase qa-checkout__continue-to-payment"
                     data-analytics-name={UI_NAME.continueCheckout}
                 >
                     Continue to Payment

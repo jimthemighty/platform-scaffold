@@ -32,8 +32,8 @@ const ShippingAddressFields = ({
 
     const addCompanyButton = (
         <Button
-            className="c--is-anchor"
-            innerClassName="c--no-min-height u-padding-0"
+            className="pw--is-anchor"
+            innerClassName="pw--no-min-height u-padding-0"
             onClick={handleShowCompanyAndApt}
             data-analytics-name={UI_NAME.showMoreAddressFields}
         >

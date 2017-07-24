@@ -1,6 +1,8 @@
 // _product-list.scss
 // ===
 
+$product-list__custom-ease-out: cubic-bezier(0.35, 0.35, 0.32, 1);
+
 .t-product-list {
     //
 }
@@ -12,8 +14,8 @@
 // 1. Ensure the box-shadow at bottom of container is visible
 
 .t-product-list__container {
-    background-color: $background-color;
-    box-shadow: $inset-box-shadow;
+    background-color: $background-color; // ui_kit_value: transparent;
+    box-shadow: $inset-box-shadow; // ui_kit_value: none;
 }
 
 
@@ -46,11 +48,17 @@
 }
 
 
+// Active Filter Container
+// ---
+.t-product-list__active-filter-container {
+}
+
+
 // Active Filter
 // ---
-
 .t-product-list__active-filter {
     font-size: 15px;
+    text-transform: capitalize;
 }
 
 

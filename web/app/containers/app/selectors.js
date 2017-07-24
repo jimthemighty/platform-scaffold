@@ -13,3 +13,6 @@ export const getHideApp = createGetSelector(getApp, 'hideApp')
 
 export const getCheckoutShippingURL = createGetSelector(getApp, 'checkoutShippingURL')
 export const getCartURL = createGetSelector(getApp, 'cartURL')
+export const getWishlistURL = createGetSelector(getApp, 'wishlistURL')
+export const getSignInURL = createGetSelector(getApp, 'signInURL')
+export const getAccountURL = createGetSelector(getApp, 'accountURL')

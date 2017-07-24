@@ -3,13 +3,34 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-import {createOrderAddressObject} from '../checkout/utils'
-import {initSfccSession, deleteAuthToken, storeAuthToken, makeApiRequest, makeApiJsonRequest, checkForResponseFault, deleteBasketID, storeBasketID, getAuthTokenPayload} from '../utils'
-import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 
-import {getHomeURL, getApiEndPoint, getRequestHeaders} from '../config'
+import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
+import {
+    setSigninLoaded,
+    setRegisterLoaded,
+    receiveWishlistData,
+    receiveWishlistUIData,
+    receiveAccountInfoData
+} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {parseWishlistProducts} from '../parsers'
+import {createOrderAddressObject} from '../checkout/utils'
+import {
+    initSfccSession,
+    deleteAuthToken,
+    storeAuthToken,
+    makeApiRequest,
+    makeApiJsonRequest,
+    checkForResponseFault,
+    deleteBasketID,
+    storeBasketID,
+    getAuthTokenPayload,
+    fetchItemData
+} from '../utils'
+import {requestCartData, createBasket, handleCartData} from '../cart/utils'
+import {splitFullName} from '../../../utils/utils'
+import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
+import {fetchNavigationData} from '../app/commands'
 
 const initLoginData = () => (dispatch) => {
     dispatch(setSigninLoaded())
@@ -58,6 +79,7 @@ export const login = (username, password) => (dispatch) => {
             customerID = responseJSON.customer_id
             storeAuthToken(authorization)
             dispatch(setLoggedIn(true))
+            dispatch(fetchNavigationData())
             deleteBasketID()
             return initSfccSession(authorization)
         })
@@ -87,7 +109,7 @@ export const login = (username, password) => (dispatch) => {
         .then(() => {
             // Navigate to the homepage, since we haven't made an account page yet
             // and demandware's account page is at the same URL as their login page
-            return getHomeURL()
+            return getDashboardURL()
         })
 }
 
@@ -104,6 +126,7 @@ export const logout = () => (dispatch) => {
             deleteBasketID()
             deleteAuthToken()
             dispatch(setLoggedIn(false))
+            dispatch(fetchNavigationData())
         })
 }
 
@@ -167,4 +190,107 @@ export const updateShippingAddress = (formValues) => (dispatch) => {
 
 export const updateBillingAddress = (formValues) => (dispatch) => {
     return addAddress(formValues, 'billing_address')
+}
+
+export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
+}
+
+/* eslint-disable camelcase */
+const handleAccountInfoData = ({first_name, last_name, login}) => (
+    {
+        names: `${first_name} ${last_name}`,
+        email: login
+    }
+)
+/* eslint-enable camelcase */
+
+export const initAccountInfoPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    return makeApiJsonRequest(`/customers/${customerId}`)
+        .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
+}
+
+
+export const updateAccountInfo = ({names, email}) => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    const {firstname, lastname} = splitFullName(names)
+
+    const requestBody = {
+        first_name: firstname,
+        last_name: lastname,
+        email
+    }
+
+    return makeApiJsonRequest(`/customers/${customerId}`, requestBody, {method: 'PATCH'})
+        .then(checkForResponseFault)
+        .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
+        .catch(() => {
+            throw new SubmissionError({_error: 'Account Info Update Failed'})
+        })
+}
+
+export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    const requestBody = {
+        current_password: currentPassword,
+        password: newPassword
+    }
+
+    // NOTE: res.json() on a successful PUT throws
+    // "Uncaught (in promise) SyntaxError: Unexpected end of JSON input"
+    // because it returns an empty response, thus we need to use res.text()
+    return makeApiRequest(`/customers/${customerId}/password`, {method: 'PUT', body: JSON.stringify(requestBody)})
+        .then((res) => res.text())
+        .then((responseString) => {
+            if (!responseString.length) {
+                return Promise.resolve()
+            }
+
+            const res = JSON.parse(responseString)
+
+            if (res.fault && res.fault.type === 'InvalidCustomerException') {
+                return new SubmissionError({_error: 'Your session has expired'})
+            }
+
+            return checkForResponseFault(res)
+        })
+        .catch(() => {
+            throw new SubmissionError({_error: 'Password Change Failed'})
+        })
+}
+
+export const initWishlistPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerID = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
+        .then((response) => response.json())
+        .then(({data}) => {
+            if (!data) {
+                // wishlist is empty, handle the empty case
+                dispatch(receiveWishlistData({
+                    title: 'My Wish List'
+                }))
+                return dispatch(receiveWishlistUIData({contentLoaded: true}))
+            }
+            const wishlistResponse = data[0]
+            const wishlistItems = parseWishlistProducts(wishlistResponse)
+            const wishlistData = {products: wishlistItems}
+
+            if (wishlistResponse.name) {
+                wishlistData.title = wishlistResponse.name
+            }
+
+            return dispatch(fetchItemData(wishlistItems))
+                .then(({updatedProducts}) => {
+                    dispatch(receiveWishlistProductData(updatedProducts))
+                    dispatch(receiveWishlistData(wishlistData))
+                    dispatch(receiveWishlistUIData({contentLoaded: true}))
+
+                })
+        })
 }

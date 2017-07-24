@@ -26,8 +26,8 @@ import {getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
-import * as shippingSelectors from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
-import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
+import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
+import {getCartItemsFull} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
 import {prepareEstimateAddress} from '../utils'
@@ -218,7 +218,7 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             if (!responseJSON.payment_methods) {
                 throw new SubmissionError({_error: 'Unable to save shipping address'})
             }
-            const cartItems = getCartItems(state).toJS()
+            const cartItems = getCartItemsFull(state).toJS()
             const cartTotals = parseCartTotals(responseJSON.totals)
             dispatch(receiveCartContents({items: cartItems, ...cartTotals}))
             return PAYMENT_URL
