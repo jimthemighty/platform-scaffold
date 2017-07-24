@@ -55,3 +55,10 @@ export const createAddressRequestObject = (formValues) => {
         country_id: countryId,
     }
 }
+
+
+export const fetchCustomerAddresses = () => {
+    const fetchURL = `/rest/default/V1/carts/mine`
+    return makeRequest(fetchURL, {method: 'GET'})
+        .then((response) => response.json())
+}

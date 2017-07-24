@@ -34,6 +34,7 @@ import {
     prepareEstimateAddress,
     parseAddress
 } from '../utils'
+import {fetchCustomerAddresses} from '../account/utils'
 
 const INITIAL_SHIPPING_ADDRESS = {
     countryId: 'us',
@@ -70,12 +71,6 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
             })) // set initial values for the shipping form
             dispatch(receiveSelectedShippingMethod(selectedShippingMethodId || shippingMethods[0].id))
         })
-}
-
-export const fetchCustomerAddresses = () => {
-    const fetchURL = `/rest/default/V1/carts/mine`
-    return makeRequest(fetchURL, {method: 'GET'})
-        .then((response) => response.json())
 }
 
 export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
