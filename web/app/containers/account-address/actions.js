@@ -9,7 +9,7 @@ import {addAddress, deleteAddress} from 'progressive-web-sdk/dist/integration-ma
 import {ACCOUNT_ADDRESS_MODAL} from '../../modals/constants'
 
 export const setAddressID = createAction('Set Address ID', ['addressID'])
-export const setIsEditting = createAction('Set isEdit', ['isEdit'])
+export const setIsEditing = createAction('Set isEdit', ['isEdit'])
 
 export const openAddressModal = () => {
     return (dispatch) => {
