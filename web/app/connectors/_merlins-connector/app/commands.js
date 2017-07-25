@@ -9,7 +9,19 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {parseLoginStatus, parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-import {CHECKOUT_SHIPPING_URL, WISHLIST_URL, SIGN_IN_URL, CART_URL, buildQueryURL, buildSearchURL, MY_ACCOUNT_URL} from '../config'
+
+import {
+    CHECKOUT_SHIPPING_URL,
+    WISHLIST_URL,
+    SIGN_IN_URL,
+    CART_URL,
+    MY_ACCOUNT_URL,
+    ACCOUNT_ADDRESS_URL,
+    ACCOUNT_INFO_URL,
+    buildQueryURL,
+    buildSearchURL
+} from '../config'
+
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
@@ -23,6 +35,8 @@ import {
     setWishlistURL,
     setLoggedIn,
     setSignInURL,
+    setAccountAddressURL,
+    setAccountInfoURL,
     setAccountURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
@@ -86,6 +100,8 @@ export const initApp = () => (dispatch) => {
     const formKey = getCookieValue('form_key') || generateFormKeyCookie()
     dispatch(receiveFormKey(formKey))
 
+    dispatch(setAccountAddressURL(ACCOUNT_ADDRESS_URL))
+    dispatch(setAccountInfoURL(ACCOUNT_INFO_URL))
     dispatch(setCheckoutShippingURL(CHECKOUT_SHIPPING_URL))
     dispatch(setWishlistURL(WISHLIST_URL))
     dispatch(setSignInURL(SIGN_IN_URL))
