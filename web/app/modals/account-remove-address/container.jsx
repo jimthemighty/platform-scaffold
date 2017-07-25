@@ -10,7 +10,7 @@ import {ACCOUNT_REMOVE_ADDRESS_MODAL} from '../constants'
 import {removeAddress} from '../../containers/account-address/actions'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
-import {getRemoveAddressID} from '../../containers/account-address/selectors'
+import {getAddressID} from '../../containers/account-address/selectors'
 
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Button from 'progressive-web-sdk/dist/components/button'
@@ -91,7 +91,7 @@ AccountRemoveAddressModal.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     isOpen: isModalOpen(ACCOUNT_REMOVE_ADDRESS_MODAL),
-    removeAddressID: getRemoveAddressID
+    removeAddressID: getAddressID
 })
 
 const mapDispatchToProps = {
