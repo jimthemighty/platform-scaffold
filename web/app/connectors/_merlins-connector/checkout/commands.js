@@ -4,7 +4,7 @@
 
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {makeJsonEncodedRequest, makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getCartItemsFull} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 import {
@@ -26,7 +26,7 @@ import {
     receiveBillingSameAsShipping
 } from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
-import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser, getNameValue} from './parsers'
+import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
 import {parseCartTotals} from '../cart/parser'
 import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
 import {getCart} from '../cart/commands'
@@ -37,7 +37,11 @@ import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
-import {prepareEstimateAddress} from '../utils'
+import {
+    prepareEstimateAddress,
+    parseAddress
+} from '../utils'
+import {fetchCustomerAddresses} from '../account/utils'
 
 const INITIAL_SHIPPING_ADDRESS = {
     countryId: 'us',
@@ -78,34 +82,15 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
 
 export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
     return (dispatch) => {
-        const fetchURL = `/rest/default/V1/carts/mine`
-        return makeRequest(fetchURL, {method: 'GET'})
-            .then((response) => response.json())
+        fetchCustomerAddresses()
             .then(({customer}) => {
                 let defaultShippingId
                 const addresses = customer.addresses.map((address) => {
                     if (address.default_shipping) {
                         defaultShippingId = address.id
                     }
-                    const [addressLine1, addressLine2] = address.street
 
-                    // Not spreading `address` because it has key/values that
-                    // we want to rename and remove
-                    return {
-                        city: address.city,
-                        countryId: address.country_id,
-                        id: `${address.id}`,
-                        firstname: address.firstname,
-                        lastname: address.lastname,
-                        fullname: getNameValue(address.firstname, address.lastname),
-                        postcode: address.postcode,
-                        regionId: `${address.region.region_id}`,
-                        region: address.region.region,
-                        regionCode: address.region.region_code,
-                        addressLine1,
-                        addressLine2,
-                        telephone: address.telephone,
-                    }
+                    return parseAddress(address)
                 })
 
                 dispatch(setDefaultShippingAddressId(selectedSavedAddressId || defaultShippingId))
