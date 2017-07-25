@@ -6,48 +6,30 @@
 // Pagination
 // ---
 
-.a-pagination {
-    align-items: center;
-}
-
-
-// Pagination Content
-// ---
-
 .a-pagination__content {
     display: flex;
+    justify-content: center;
     align-items: center;
     flex: 1 1 auto;
-
-    &:not(:only-child) {
-        margin: 0 $unit*1.5;
-    }
 }
-
-
-// Pagination Button
-// ---
 
 .a-pagination__button {
-    flex: 0 0 auto;
-}
+    border: 1px solid $border-color;
 
+    background: $brand-color;
 
-// Modifier: Select
-// ---
+    color: $neutral-00;
 
-.a-pagination__select-wrapper {
-    width: 100%;
-}
+    &:active,
+    &:focus {
+        background: $tertiary-brand-color;
 
-.a-pagination__select {
-    padding-right: $tap-size + $horizontal-input-padding;
-}
+        color: $neutral-00;
+    }
 
-.a-pagination__select-icon {
-    .a-icon {
-        width: $unit*1.5;
-        height: $unit*1.5;
-        padding: 0;
+    &:disabled {
+        background: transparent;
+
+        color: $neutral-60;
     }
 }
