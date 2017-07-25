@@ -38,8 +38,6 @@ class AccountAddress extends React.Component {
     }
 
     removeAddress(address) {
-        debugger
-        debugger
         this.props.openRemoveAddressModal()
         this.props.removeAddressID(address.id)
     }

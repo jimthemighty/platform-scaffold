@@ -27,6 +27,6 @@ export const submitEditAddress = (formValues) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
-export const removeAddress = () => (dispatch) => {
-    dispatch(deleteAddress)
+export const removeAddress = (id) => (dispatch) => {
+    return dispatch(deleteAddress(id))
 }

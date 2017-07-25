@@ -247,11 +247,11 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
         })
 }
 
-export const deleteAddress = (address) => (dispatch, getState) => { // eslint-disable-line
+export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
     const currentState = getState()
     const formKey = getFormKey(currentState)
 
-    return makeRequest(getDeleteAddressURL(address.id, formKey), {method: 'POST'})
+    return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
 }
 
 export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
