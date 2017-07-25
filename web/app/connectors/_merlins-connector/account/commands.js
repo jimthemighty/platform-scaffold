@@ -68,9 +68,9 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
             const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
             const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
-            dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
-        })
 
+            return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+        })
     return fetchCustomerAddresses()
         .then(({customer: {addresses}}) => {
             const parsedAddresses = addresses.map((address) => parseAddress(address))
@@ -114,7 +114,11 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
+            debugger
+            debugger
             if (isFormResponseInvalid($response, formSelector)) {
+                debugger
+                debugger
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
 
                 if (messages.length === 0) {
@@ -254,7 +258,7 @@ export const deleteAddress = (address) => (dispatch, getState) => { // eslint-di
     return makeRequest(getDeleteAddressURL(address.id, formKey), {method: 'POST'})
 }
 
-export const editAddress = (addressId) => (dispatch) => { // eslint-disable-line
+export const editAddress = (address, addressId) => (dispatch) => { // eslint-disable-line
     /*
         Request URL: https://www.merlinspotions.com/customer/address/formPost/id/8/
         Request Method: POST
@@ -279,8 +283,27 @@ export const editAddress = (addressId) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
 
-export const addAddress = (address) => (dispatch) => {
-    return address
+export const addAddress = (address) => (dispatch, getState) => {
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+
+    const {firstname, lastname} = splitFullName(address.name)
+    const formData = {
+        form_key: formKey,
+        firstname,
+        lastname,
+        company: address.company,
+        telephone: address.telephone,
+        fax: address.fax,
+        city: address.city,
+        region_id: address.region,
+        region: address.region,
+        postcode: address.postcode,
+        country_id: address.countryId
+    }
+    formData['street[]'] = address.addressLine1
+
+    return submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/')
 }
 
 /* eslint-disable camelcase */
