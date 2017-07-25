@@ -28,13 +28,18 @@ import preloadHTML from 'raw-loader!./preloader/preload.html'
 import preloadCSS from 'css-loader?minimize!./preloader/preload.css'
 import preloadJS from 'raw-loader!./preloader/preload.js' // eslint-disable-line import/default
 
-window.Progressive = {}
-
 const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
 const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
 const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
 const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
+
+window.Progressive = {
+    AstroPromise: Promise.resolve({}),
+    Messaging: {
+        enabled: messagingEnabled
+    }
+}
 
 const isPWARoute = () => {
     return ReactRegexes.some((regex) => regex.test(window.location.pathname))
@@ -195,12 +200,14 @@ const waitForBody = () => {
     return waitForBodyPromise
 }
 
-const attemptToInitializeApp = () => {
-    // On poor connections, we don't want to load via document.write, otherwise
-    // document.write will fail to work.
-    // We need to check if it's undefined because if it's previously been set to false,
-    // we want it to remain set to false.
+const loadPWA = () => {
+    // We need to check if loadScriptsSynchronously is undefined because if it's
+    // previously been set to false, we want it to remain set to false.
     if (window.loadScriptsSynchronously === undefined) {
+        // On poor connections, the problem is that Chrome doesn't allow writing
+        // script tags via document.write, so we want to detect for poor connections
+        // and load async in those cases. More info can be found here:
+        // https://developers.google.com/web/updates/2016/08/removing-document-write
         window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
     }
 
@@ -213,15 +220,8 @@ const attemptToInitializeApp = () => {
         // document.readyState is "loading"
         preventDesktopSiteFromRendering()
 
-        neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
+        neededPolyfills.forEach((polyfill) => polyfill.load(loadPWA))
         return
-    }
-
-    window.Progressive = {
-        AstroPromise: Promise.resolve({}),
-        Messaging: {
-            enabled: messagingEnabled
-        }
     }
 
     initCacheManifest(cacheHashManifest)
@@ -291,7 +291,7 @@ const attemptToInitializeApp = () => {
     createGlobalMessagingClientInitPromise(messagingEnabled)
 
     window.loadCriticalScripts = () => {
-        // The following scripts are loaded async via document.write, in order
+        // The following scripts are loaded sync via document.write, in order
         // for the browser to increase the priority of these scripts. If the scripts
         // are loaded async, the browser will not consider them high priority and
         // queue them while waiting for other high priority resources to finish
@@ -381,7 +381,7 @@ if (shouldPreview()) {
 } else {
     // Run the app.
     if (isSupportedBrowser() && isPWARoute()) {
-        attemptToInitializeApp()
+        loadPWA()
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
