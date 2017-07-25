@@ -11,7 +11,7 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import AccountAddressReduxForm from '../../containers/account-address/partials/address-form'
 import AddAddressHeader from './partials/add-address-header'
 import {setIsEditing} from '../../containers/account-address/actions'
-import {getIsEditing} from '../../containers/account-address/selectors'
+import {getIsEditing, getAddressFromId} from '../../containers/account-address/selectors'
 
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 // import Button from 'progressive-web-sdk/dist/components/button'
