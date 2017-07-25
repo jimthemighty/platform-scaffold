@@ -32,7 +32,7 @@ const modals = {
     [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
     [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
-    [MODAL.ADD_ADDRESS_MODAL]: {content: <AccountAddressModal />},
+    [MODAL.ACCOUNT_ADDRESS_MODAL]: {content: <AccountAddressModal />},
     [MODAL.ACCOUNT_REMOVE_ADDRESS_MODAL]: {content: <AccountRemoveAddressModal />},
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }

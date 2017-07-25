@@ -21,7 +21,7 @@ import {getAccountURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {
-    ADD_ADDRESS_MODAL,
+    ACCOUNT_ADDRESS_MODAL,
     ACCOUNT_REMOVE_ADDRESS_MODAL
 } from '../../modals/constants'
 import {setRemoveAddressID} from './actions'
@@ -34,12 +34,16 @@ class AccountAddress extends React.Component {
     }
 
     addAddress() {
-        this.props.openAddAddressModal()
+        this.props.openAddressModal()
+    }
+
+    editAddress(address) {
+        debugger
+        debugger
+        this.props.openAddressModal(address.id)
     }
 
     removeAddress(address) {
-        debugger
-        debugger
         this.props.openRemoveAddressModal()
         this.props.removeAddressID(address.id)
     }
@@ -103,6 +107,7 @@ class AccountAddress extends React.Component {
                                         showIconText={true}
                                         iconClassName="u-margin-end"
                                         data-analytics-name={UI_NAME.editSavedAddress}
+                                        onClick={() => this.editAddress(defaultAddress)}
                                     />
                                 }
                             />
@@ -122,6 +127,7 @@ class AccountAddress extends React.Component {
                                                         showIconText={true}
                                                         iconClassName="u-margin-end"
                                                         data-analytics-name={UI_NAME.editSavedAddress}
+                                                        onClick={() => this.editAddress(address)}
                                                     />
                                                 </div>
                                                 <div className="u-flex">
@@ -155,7 +161,7 @@ AccountAddress.propTypes = {
     addresses: PropTypes.array,
     dashboardURL: PropTypes.string,
     defaultAddress: PropTypes.object,
-    openAddAddressModal: PropTypes.func,
+    openAddressModal: PropTypes.func,
     openRemoveAddressModal: PropTypes.func,
     removeAddressID: PropTypes.func
 }
@@ -167,7 +173,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    openAddAddressModal: () => openModal(ADD_ADDRESS_MODAL),
+    openAddressModal: () => openModal(ACCOUNT_ADDRESS_MODAL),
     openRemoveAddressModal: () => openModal(ACCOUNT_REMOVE_ADDRESS_MODAL),
     removeAddressID: setRemoveAddressID,
     removeAddress: deleteAddress
