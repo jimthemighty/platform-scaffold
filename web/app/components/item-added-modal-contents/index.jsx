@@ -40,13 +40,13 @@ const ItemAddedModalContents = ({
                         {headerText}
                     </h1>
 
-                    <div className="m-product-details__item-added-modal-close u-flexbox u-flex-none u-align-center u-justify-center">
+                    <div className="c-item-added-modal-contents__close u-flexbox u-flex-none u-align-center u-justify-center">
                         <Button
                             className="u-text-uppercase"
                             onClick={onDismiss}
                             data-analytics-name={UI_NAME.dismissModal}
                         >
-                            <Icon name="close" title="Close" className="m-product-details__item-added-modal-icon" />
+                            <Icon name="close" title="Close" className="c-item-added-modal-contents__icon" />
                         </Button>
                     </div>
                 </div>

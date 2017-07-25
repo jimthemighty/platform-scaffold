@@ -23,7 +23,7 @@ const WishlistItemAddedModal = ({open, onDismiss, quantity, title, price, thumbn
         onDismiss={onDismiss}
         duration={duration}
         effect="slide-bottom"
-        className="m-product-details__item-added-modal"
+        className="m-wishlist__item-added-modal"
         coverage="50%"
         shrinkToContent
     >

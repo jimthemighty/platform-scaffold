@@ -16,18 +16,13 @@
     // wrapper element.
 }
 
+.c-item-added-modal-contents__close {
+    width: $unit*7; // 1
+    height: $unit*7; // 1
+}
 
-// Modifiers
-// ---
-//
-// .c-item-added-modal-contents.c--modifier {
-//     ...
-// }
+.c-item-added-modal-contents__icon {
+    color: $neutral-30;
 
-
-// Sub components
-// ---
-//
-// .c-item-added-modal-contents__sub-component {
-//     ...
-// }
+    fill: $neutral-30;
+}
