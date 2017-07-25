@@ -17,6 +17,8 @@ const PLACEHOLDER = {
     text: undefined
 }
 
+export const getAllAddresses = createGetSelector(getUser, 'addresses', Immutable.List())
+
 export const getDefaultAddress = createSelector(getUser, (user) => {
     const addresses = user.get('addresses')
     return addresses ? addresses.toJS().find((address) => address.default) : Immutable.Map()

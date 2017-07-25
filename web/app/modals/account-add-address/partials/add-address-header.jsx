@@ -8,11 +8,11 @@ import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'progressive-web-sdk/d
 import IconLabelButton from '../../../components/icon-label-button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const AddAddressHeader = ({closeAddressModal}) => (
+const AddAddressHeader = ({closeAddressModal, title}) => (
     <HeaderBar>
         <HeaderBarTitle className="u-flex u-padding-start u-text-align-start">
             <h2 className="u-text-family-header u-text-uppercase">
-                <span className="u-text-weight-extra-light">Add New Address</span>
+                <span className="u-text-weight-extra-light">{title}</span>
             </h2>
         </HeaderBarTitle>
 
@@ -23,7 +23,8 @@ const AddAddressHeader = ({closeAddressModal}) => (
 )
 
 AddAddressHeader.propTypes = {
-    closeAddressModal: PropTypes.func
+    closeAddressModal: PropTypes.func,
+    title: PropTypes.string
 }
 
 export default AddAddressHeader
