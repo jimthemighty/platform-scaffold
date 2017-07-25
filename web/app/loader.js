@@ -196,7 +196,24 @@ const waitForBody = () => {
 }
 
 const attemptToInitializeApp = () => {
-    if (getNeededPolyfills().length) {
+    // On poor connections, we don't want to load via document.write, otherwise
+    // document.write will fail to work.
+    // We need to check if it's undefined because if it's previously been set to false,
+    // we want it to remain set to false.
+    if (window.loadScriptsSynchronously === undefined) {
+        window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
+    }
+
+    const neededPolyfills = getNeededPolyfills()
+    if (neededPolyfills.length) {
+        // We disable loading scripts sychronously if polyfills are needed,
+        // because the polyfills load async.
+        window.loadScriptsSynchronously = false
+        // But we still need to ensure the desktop script doesn't render while the
+        // document.readyState is "loading"
+        preventDesktopSiteFromRendering()
+
+        neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
         return
     }
 
@@ -243,11 +260,7 @@ const attemptToInitializeApp = () => {
 
     asyncInitApp()
 
-    // On poor connections, we don't want to load via document.write, otherwise
-    // document.write will fail to work
-    window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
-
-    // Force create the body element in order to render content. This is necessary
+    // Force create the body element in order to render the Preloader. This is necessary
     // because we load scripts synchronously in order to speed up loading, which
     // by default would throw them in head, where as we need them in body.
     if (window.loadScriptsSynchronously) {
@@ -368,12 +381,7 @@ if (shouldPreview()) {
 } else {
     // Run the app.
     if (isSupportedBrowser() && isPWARoute()) {
-        const neededPolyfills = getNeededPolyfills()
-        if (neededPolyfills.length) {
-            neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
-        } else {
-            attemptToInitializeApp()
-        }
+        attemptToInitializeApp()
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
