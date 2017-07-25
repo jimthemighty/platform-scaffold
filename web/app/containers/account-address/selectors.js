@@ -18,7 +18,7 @@ export const getAddressID = createGetSelector(getAccountAddress, 'addressID')
 export const getIsEditing = createGetSelector(getAccountAddress, 'isEdit')
 
 export const getAddressFromId = createSelector(
-    getRemoveAddressID,
+    getAddressID,
     getAllAddresses,
     (addressId, addresses) => {
         return ''

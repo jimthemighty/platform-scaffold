@@ -17,7 +17,7 @@ import Sheet from 'progressive-web-sdk/dist/components/sheet'
 // import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit}) => {
+const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit, getAddressFromId}) => {
     return (
         <Sheet
             className="pw--no-shadow"
@@ -34,6 +34,7 @@ const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit
             />
             <AccountAddressReduxForm
                 closeAddressModal={closeModal}
+                initialValues={isEdit ? getAddressFromId() : {}}
             />
         </Sheet>
     )
@@ -68,7 +69,8 @@ AccountAddressModal.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     isOpen: isModalOpen(ACCOUNT_ADDRESS_MODAL),
-    isEdit: getIsEditing
+    isEdit: getIsEditing,
+    getAddressFromId
 })
 
 const mapDispatchToProps = {
