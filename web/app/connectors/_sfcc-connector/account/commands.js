@@ -202,8 +202,12 @@ export const addAddress = (address) => (dispatch) => {
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
 
-    // TODO addressData needs an address_id
-    return makeApiJsonRequest(`/customers/${customerId}/addresses`, {...addressData}, {method: 'POST'})
+    const requestBody = {
+        ...addressData,
+        address_id: Math.floor(Math.random() * 1000)
+    }
+
+    return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
         .then(checkForResponseFault)
         .catch(() => { throw Error('Unable to save address') })
 }
@@ -237,7 +241,7 @@ export const initAccountAddressPage = () => (dispatch) => {
         .then((res) => res.json())
         .then(({data}) => {
             dispatch(populateLocationsData())
-            const addresses = data
+            const addresses = data ? data
                         .map(({
                             first_name,
                             last_name,
@@ -251,7 +255,6 @@ export const initAccountAddressPage = () => (dispatch) => {
                             country_code,
                             address_id
                         }) => {
-
                             return {
                                 firstname: first_name,
                                 lastname: last_name,
@@ -265,7 +268,7 @@ export const initAccountAddressPage = () => (dispatch) => {
                                 countryId: country_code.toUpperCase(),
                                 regionId: state_code
                             }
-                        })
+                        }) : []
 
             return dispatch(receiveAccountAddressData(addresses))
         })
