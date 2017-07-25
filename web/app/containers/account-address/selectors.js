@@ -4,8 +4,11 @@
 
 import {createSelector} from 'reselect'
 import {getUi} from '../../store/selectors'
+import {createGetSelector} from 'reselect-immutable-helpers'
 
 export const getAccountAddress = createSelector(
     getUi,
     ({accountAddress}) => accountAddress
 )
+
+export const getRemoveAddressID = createGetSelector(getAccountAddress, 'removeAddressID')

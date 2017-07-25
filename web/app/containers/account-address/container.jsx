@@ -20,23 +20,34 @@ import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
 import {getAccountURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {ADD_ADDRESS_MODAL} from '../../modals/constants'
+import {
+    ADD_ADDRESS_MODAL,
+    ACCOUNT_REMOVE_ADDRESS_MODAL
+} from '../../modals/constants'
+import {setRemoveAddressID} from './actions'
 
 class AccountAddress extends React.Component {
     constructor(props) {
         super(props)
         this.addAddress = this.addAddress.bind(this)
+        this.removeAddress = this.removeAddress.bind(this)
     }
 
     addAddress() {
         this.props.openAddAddressModal()
     }
 
+    removeAddress(address) {
+        debugger
+        debugger
+        this.props.openRemoveAddressModal()
+        this.props.removeAddressID(address.id)
+    }
+
     render() {
         const {
             defaultAddress,
-            addresses,
-            removeAddress
+            addresses
         } = this.props
 
         const NoAddress = () => (
@@ -117,7 +128,7 @@ class AccountAddress extends React.Component {
                                                     <Button
                                                         type="button"
                                                         title="Delete"
-                                                        onClick={() => removeAddress(address)}
+                                                        onClick={() => this.removeAddress(address)}
                                                         className="u-width-full u-color-brand u-border-top"
                                                         icon="trash"
                                                         showIconText={true}
@@ -145,7 +156,8 @@ AccountAddress.propTypes = {
     dashboardURL: PropTypes.string,
     defaultAddress: PropTypes.object,
     openAddAddressModal: PropTypes.func,
-    removeAddress: PropTypes.func
+    openRemoveAddressModal: PropTypes.func,
+    removeAddressID: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
@@ -156,6 +168,8 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     openAddAddressModal: () => openModal(ADD_ADDRESS_MODAL),
+    openRemoveAddressModal: () => openModal(ACCOUNT_REMOVE_ADDRESS_MODAL),
+    removeAddressID: setRemoveAddressID,
     removeAddress: deleteAddress
 }
 
