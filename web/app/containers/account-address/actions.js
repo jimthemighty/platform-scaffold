@@ -17,11 +17,9 @@ export const openAddAddressModal = () => {
 }
 
 export const submitAddAddress = (formValues) => (dispatch) => {
-    if (formValues.full_name) {
-        const splitNames = splitFullName(formValues.full_name)
-        formValues.firstname = splitNames.firstname
-        formValues.lastname = splitNames.lastname
-    }
+    const splitNames = splitFullName(formValues.name)
+    formValues.firstname = splitNames.firstname
+    formValues.lastname = splitNames.lastname
     return dispatch(addAddress(formValues))
 }
 
