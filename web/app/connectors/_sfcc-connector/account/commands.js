@@ -166,7 +166,7 @@ export const registerUser = (firstname, lastname, email, password) => (dispatch)
 
 }
 
-const addAddress = (formValues, addressName) => {
+const updateCheckoutAddress = (formValues, addressName) => {
     const addressData = createOrderAddressObject(formValues)
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
@@ -186,15 +186,28 @@ const addAddress = (formValues, addressName) => {
 // SFCC doesn't diferentiate between the two address types,
 // so these commands do effectively the same thing
 export const updateShippingAddress = (formValues) => (dispatch) => {
-    return addAddress(formValues, 'shipping_address')
+    return updateCheckoutAddress(formValues, 'shipping_address')
 }
 
 export const updateBillingAddress = (formValues) => (dispatch) => {
-    return addAddress(formValues, 'billing_address')
+    return updateCheckoutAddress(formValues, 'billing_address')
 }
 
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
+}
+
+export const addAddress = (address) => (dispatch) => {
+    const addressData = createOrderAddressObject(address)
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+    const requestBody = {
+        ...addressData,
+        address_id: 'TODO UPDATE ADDRESS NAME'
+    }
+    return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
+        .then(checkForResponseFault)
+        .catch(() => { throw Error('Unable to save address') })
 }
 
 export const deleteAddress = (address) => (dispatch) => { // eslint-disable-line

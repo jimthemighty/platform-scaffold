@@ -18,3 +18,7 @@ export const openAddAddressModal = () => {
 export const submitAddAddress = (formValues) => (dispatch) => {
     return dispatch(addAddress(formValues))
 }
+
+export const submitEditAddress = (formValues) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
+}
