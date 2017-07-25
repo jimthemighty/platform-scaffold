@@ -7,6 +7,7 @@
 import {combineReducers} from 'redux'
 
 import navigation from '../modals/navigation/reducer' // navigation is a special case, since it's not in the containers directory
+import accountAddress from './account-address/reducer'
 import accountDashboard from './account-dashboard/reducer'
 import accountInfo from './account-info/reducer'
 
@@ -27,7 +28,7 @@ import wishlist from './wishlist/reducer'
 
 const uiReducer = combineReducers({
     navigation,
-
+    accountAddress,
     accountDashboard,
     accountInfo,
     app,
