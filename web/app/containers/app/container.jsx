@@ -85,7 +85,7 @@ class App extends React.Component {
         } else {
             console.log("[Mobify.Progressive] Waiting for CSS to be loaded by checking for window.Progressive.stylesheetLoaded")
             counter++
-            setTimeout(() => this.hidePreloaderWhenCSSIsLoaded(counter++), 100)
+            setTimeout(() => this.hidePreloaderWhenCSSIsLoaded(counter), 100)
         }
     }
 
