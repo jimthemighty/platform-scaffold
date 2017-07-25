@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {urlToPathKey, urlToBasicPathKey} from 'progressive-web-sdk/dist/utils/utils'
-import categoryProductsParser, {parseCategoryTitle, parseCategoryId, filterParser, parseSortOptions, hasFilter} from './parser'
+import categoryProductsParser, {parseCategoryTitle, parseCategoryId, filterParser, parseSortOptions, hasFilter, productListPaginationParser} from './parser'
 import {
     receiveCategoryContents,
     receiveCategoryInformation,
@@ -25,6 +25,7 @@ export const initProductListPage = (url) => (dispatch) => {
     const filter = decodeURIComponent(extractFilter(url))
     // Merlins uses 'product_list_order' as URL search key
     const rawURL = url
+    
     url = url.replace('sort', 'product_list_order')
     url = decodeURIComponent(url.replace('filters=', ''))
 
@@ -55,7 +56,8 @@ export const initProductListPage = (url) => (dispatch) => {
                 parentId: null,
                 title,
                 searchTerm: searchTermMatch ? searchTermMatch[0] : null,
-                description: getTextFrom($response, '#text, .category-description')
+                description: getTextFrom($response, '#text, .category-description'),
+                pagination: productListPaginationParser($, $response)
             }))
             dispatch(receiveCategoryContents(pathKey, categoryProductsParser($, $response)))
         })

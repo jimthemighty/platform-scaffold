@@ -5,8 +5,8 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {canonicalURL, staticURL} from '../../../utils'
 import URL from 'url'
+import {canonicalURL, staticURL} from '../../../utils'
 
 // Components
 import Img from 'mobify-amp-sdk/dist/components/img'
@@ -20,7 +20,8 @@ import Pagination from '../../../components/pagination'
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
 import {getCurrentUrl} from 'progressive-web-sdk/dist/store/app/selectors'
-import {getCategoryItemCount} from '../../../../../web/app/store/categories/selectors'
+import {getCategoryItemCount, getPagination} from '../../../../../web/app/store/categories/selectors'
+import {ITEMS_PER_PAGE} from '../../../../../web/app/containers/product-list/constants'
 
 const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
@@ -78,10 +79,12 @@ NoResultsList.propTypes = {
 }
 
 const ProductListContents = (props) => {
-    const {sheetId, products, routeName, activeFilters, currentUrl} = props
+    const {sheetId, products, routeName, activeFilters, currentUrl, numItems, pagination} = props
 
     const toggleFilterSheet = `tap:${sheetId}.toggle`
     const formId = `${sheetId}__form`
+
+    const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
 
     return (
         <div>
@@ -137,30 +140,27 @@ const ProductListContents = (props) => {
                     <NoResultsList routeName={routeName} />
                 }
 
-                <Pagination
-                    className="u-margin-top"
-                    isSelect
-                    currentPage={2}
-                    pageCount={4}
-                    showPageButtons={false}
-                    showCurrentPageMessage={false}
-                    prevButton={{
-                        props: {
-                            href: '#',
-                            icon: 'chevron-left',
-                            title: 'Previous Page',
-                            className: 'a-pagination__button a--secondary'
-                        }
-                    }}
-                    nextButton={{
-                        props: {
-                            href: '#',
-                            icon: 'chevron-right',
-                            title: 'Next Page',
-                            className: 'a-pagination__button a--secondary'
-                        }
-                    }}
-                />
+                {pageCount > 1 &&
+                    <Pagination
+                        className="u-margin-top-lg"
+                        pageCount={pageCount}
+                        currentPage={pagination.current.number}
+                        showCurrentPageMessage={true}
+                        showPageButtons={false}
+                        prevButton={{
+                            props: {
+                                href: pagination.prev.href,
+                                text: 'Prev'
+                            }
+                        }}
+                        nextButton={{
+                            props: {
+                                href: pagination.next.href,
+                                text: 'Next'
+                            }
+                        }}
+                    />
+                }
             </div>
         </div>
     )
@@ -171,15 +171,17 @@ ProductListContents.propTypes = {
     activeFilters: PropTypes.array,
     currentUrl: PropTypes.string,
     numItems: PropTypes.number,
+    pagination: PropTypes.object,
     routeName: PropTypes.string,
     sheetId: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
     activeFilters: selectors.getActiveFilters,
+    currentUrl: getCurrentUrl,
     numItems: getCategoryItemCount,
-    products: selectors.getSortedListProducts,
-    currentUrl: getCurrentUrl
+    pagination: getPagination,
+    products: selectors.getSortedListProducts
 })
 
 export default connect(mapStateToProps)(ProductListContents)
