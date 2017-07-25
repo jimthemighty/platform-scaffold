@@ -204,7 +204,7 @@ export const addAddress = (address) => (dispatch) => {
 
     const requestBody = {
         ...addressData,
-        address_id: Math.floor(Math.random() * 1000)
+        address_id: Math.floor(Math.random() * 1000).toString()
     }
 
     return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
