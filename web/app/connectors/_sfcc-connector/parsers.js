@@ -136,10 +136,11 @@ export const parseCategories = (categories) => {
 export const parseProductHit = ({product_id, product_name, price, prices, orderable, image}) => {
     // Some products don't have _any_ pricing on them!
     const finalPrice = price || (prices && prices['usd-sale-prices']) || undefined
-    const thumbnail = {
+    const thumbnail = image ? {
         alt: image.alt,
         src: image.link
-    }
+    } : undefined
+
     return {
         id: product_id,
         title: product_name,
@@ -185,6 +186,19 @@ export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     })
 
     return suggestions
+}
+
+export const parseWishlistProducts = (wishlistData) => {
+    if (wishlistData.customer_product_list_items) {
+        return wishlistData.customer_product_list_items.map((wishlistItem) => {
+            const id = wishlistItem.product_id
+            return {
+                id,
+                quantity: wishlistItem.quantity
+            }
+        })
+    }
+    return []
 }
 
 export const parseFilterOptions = (refinements) => {
