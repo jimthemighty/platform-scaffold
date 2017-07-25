@@ -10,6 +10,7 @@ import {
     setRegisterLoaded,
     receiveWishlistData,
     receiveWishlistUIData,
+    receiveAccountAddressData,
     receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
@@ -196,6 +197,44 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
+export const initAccountAddressPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
+        .then((res) => res.json())
+        .then(({data}) => {
+            const addresses = data
+                        .map(({
+                            first_name,
+                            last_name,
+                            phone,
+                            postal_code,
+                            address1,
+                            address2,
+                            city,
+                            state_code,
+                            preferred,
+                            country_code
+                        }) => {
+
+                            return {
+                                firstname: first_name,
+                                lastname: last_name,
+                                telephone: phone,
+                                postcode: postal_code,
+                                addressLine1: address1,
+                                addressLine2: address2,
+                                default: preferred,
+                                city,
+                                countryId: country_code.toUpperCase(),
+                                regionId: state_code
+                            }
+                        })
+
+            return dispatch(receiveAccountAddressData(addresses))
+        })
+}
 /* eslint-disable camelcase */
 const handleAccountInfoData = ({first_name, last_name, login}) => (
     {
