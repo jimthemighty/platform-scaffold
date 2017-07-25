@@ -24,7 +24,7 @@ import {
     ACCOUNT_ADDRESS_MODAL,
     ACCOUNT_REMOVE_ADDRESS_MODAL
 } from '../../modals/constants'
-import {setAddressID} from './actions'
+import {setAddressID, setIsEditting} from './actions'
 
 class AccountAddress extends React.Component {
     constructor(props) {
@@ -39,12 +39,13 @@ class AccountAddress extends React.Component {
 
     editAddress(address) {
         this.props.openAddressModal()
-        this.props.addressID(address.id)
+        this.props.setAddressID(address.id)
+        this.props.setIsEditting(true)
     }
 
     removeAddress(address) {
         this.props.openRemoveAddressModal()
-        this.props.addressID(address.id)
+        this.props.setAddressID(address.id)
     }
 
     render() {
@@ -157,13 +158,15 @@ class AccountAddress extends React.Component {
 }
 
 AccountAddress.propTypes = {
-    addressID: PropTypes.func,
     addresses: PropTypes.array,
     dashboardURL: PropTypes.string,
     defaultAddress: PropTypes.object,
     editAddressID: PropTypes.func,
+    isEditting: PropTypes.bool,
     openAddressModal: PropTypes.func,
     openRemoveAddressModal: PropTypes.func,
+    setAddressID: PropTypes.func,
+    setIsEditting: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
@@ -175,7 +178,8 @@ const mapStateToProps = createPropsSelector({
 const mapDispatchToProps = {
     openAddressModal: () => openModal(ACCOUNT_ADDRESS_MODAL),
     openRemoveAddressModal: () => openModal(ACCOUNT_REMOVE_ADDRESS_MODAL),
-    addressID: setAddressID,
+    setAddressID,
+    setIsEditting,
     removeAddress: deleteAddress
 }
 

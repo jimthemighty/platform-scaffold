@@ -26,7 +26,7 @@ const AccountAddressModal = ({closeModal, isOpen, duration}) => {
             coverage="100%"
         >
             <AddAddressHeader closeAddressModal={closeModal} />
-            <AccountAddressReduxForm />
+            <AccountAddressReduxForm closeAddressModal={closeModal} />
         </Sheet>
     )
 }

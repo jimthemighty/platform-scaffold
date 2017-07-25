@@ -35,7 +35,7 @@ const validate = (values, props) => {
     return errors
 }
 
-export const AccountAddressForm = ({handleSubmit, submitAddress}) => {
+export const AccountAddressForm = ({handleSubmit, submitAddress, closeAddressModal}) => {
     return (
         <form onSubmit={handleSubmit(submitAddress)} noValidate>
             <AccountAddressFields />
@@ -49,6 +49,7 @@ export const AccountAddressForm = ({handleSubmit, submitAddress}) => {
                     className="pw--tertiary u-width-full"
                     type="button"
                     text="Cancel"
+                    onClick={closeAddressModal}
                 />
             </div>
         </form>
@@ -56,6 +57,7 @@ export const AccountAddressForm = ({handleSubmit, submitAddress}) => {
 }
 
 AccountAddressForm.propTypes = {
+    closeAddressModal: React.PropTypes.func,
     /**
      * Redux-form internal
      */

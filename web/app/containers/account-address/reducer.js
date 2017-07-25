@@ -5,10 +5,11 @@
 import {handleActions} from 'redux-actions'
 import Immutable from 'immutable'
 import {mergePayload} from 'progressive-web-sdk/dist/utils/reducer-utils'
-import {setAddressID} from './actions'
+import {setAddressID, setIsEditting} from './actions'
 
 const initialState = Immutable.Map()
 
 export default handleActions({
-    [setAddressID]: mergePayload
+    [setAddressID]: mergePayload,
+    [setIsEditting]: mergePayload
 }, initialState)
