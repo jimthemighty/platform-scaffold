@@ -4,6 +4,8 @@
 
 import {createSelector} from 'reselect'
 import {getUi} from '../../store/selectors'
+import {getAllAddresses} from '../../store/user/selectors'
+
 import {createGetSelector} from 'reselect-immutable-helpers'
 
 export const getAccountAddress = createSelector(
@@ -14,3 +16,10 @@ export const getAccountAddress = createSelector(
 export const getRemoveAddressID = createGetSelector(getAccountAddress, 'addressID')
 
 export const getIsEditing = createGetSelector(getAccountAddress, 'isEdit')
+
+export const getAddressFromId = createSelector(
+    getRemoveAddressID,
+    getAllAddresses,
+    (addressId, addresses) => {
+        return ''
+    })
