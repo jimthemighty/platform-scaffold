@@ -15,7 +15,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from '../parsers'
-import {createOrderAddressObject} from '../checkout/utils'
+import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
 import {
     initSfccSession,
     deleteAuthToken,
@@ -238,6 +238,7 @@ export const initAccountAddressPage = () => (dispatch) => {
     return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
         .then((res) => res.json())
         .then(({data}) => {
+            dispatch(populateLocationsData())
             const addresses = data
                         .map(({
                             first_name,
