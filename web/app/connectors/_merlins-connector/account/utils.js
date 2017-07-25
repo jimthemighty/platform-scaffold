@@ -3,6 +3,14 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getCookieValue} from '../../../utils/utils'
+import {
+    receiveWishlistData,
+    receiveWishlistUIData
+} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {parseWishlistProducts} from './parsers'
+import {receiveFormInfo} from '../actions'
+
 
 export const buildFormData = (formValues) => {
     const formData = new FormData()
@@ -54,4 +62,22 @@ export const createAddressRequestObject = (formValues) => {
         region: region || '',
         country_id: countryId,
     }
+}
+
+export const receiveWishlistResponse = ($, $response) => (dispatch) => {
+    const {
+        wishlistItems,
+        products,
+        productsFormInfo
+    } = parseWishlistProducts($, $response)
+    const formURL = $response.find('#wishlist-view-form').attr('action')
+    const wishlistData = {
+        title: $response.find('.page-title').text(),
+        products: wishlistItems,
+        shareURL: formURL ? formURL.replace('update', 'share') : ''
+    }
+    dispatch(receiveWishlistProductData(products))
+    dispatch(receiveWishlistData(wishlistData))
+    dispatch(receiveWishlistUIData({contentLoaded: true}))
+    dispatch(receiveFormInfo(productsFormInfo))
 }

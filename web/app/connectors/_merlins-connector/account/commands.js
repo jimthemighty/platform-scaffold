@@ -6,25 +6,21 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
-import {receiveFormInfo} from '../actions'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
-import {getFormKey} from '../selectors'
+import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveAccountInfoData,
-    receiveWishlistData,
-    receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {buildFormData, createAddressRequestObject} from './utils'
+import {buildFormData, createAddressRequestObject, receiveWishlistResponse} from './utils'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo} from './parsers'
+import {isFormResponseInvalid, parseAccountInfo} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -52,31 +48,31 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
+
+
 export const initWishlistPage = (url) => (dispatch) => {
     return (dispatch(fetchPageData(url)))
-        .then(([$, $response]) => {
-            const {
-                wishlistItems,
-                products,
-                productsFormInfo
-            } = parseWishlistProducts($, $response)
-            const formURL = $response.find('#wishlist-view-form').attr('action')
-            const wishlistData = {
-                title: $response.find('.page-title').text(),
-                products: wishlistItems,
-                shareURL: formURL ? formURL.replace('update', 'share') : ''
-            }
-            dispatch(receiveWishlistProductData(products))
-            dispatch(receiveWishlistData(wishlistData))
-            dispatch(receiveWishlistUIData({contentLoaded: true}))
-            dispatch(receiveFormInfo(productsFormInfo))
-        })
+        .then(([$, $response]) => dispatch(receiveWishlistResponse($, $response)))
 }
 
-export const addToCartFromWishlist = (formValues) => (dispatch) => {
+export const addToCartFromWishlist = ({itemID, quantity}) => (dispatch, getState) => {
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+    const uenc = getUenc(itemID)(currentState)
+    const href = '/wishlist/index/cart/'
+    const requestData = {
+        item: itemID,
+        qty: quantity,
+        uenc,
+        form_key: formKey
+    }
+    return makeFormEncodedRequest(href, requestData, {method: 'POST'})
+        .then(jqueryResponse)
+        .then((res) => {
+            const [$, $response] = res
 
-    debugger
-    return
+            dispatch(receiveWishlistResponse($, $response))
+        })
 }
 
 
