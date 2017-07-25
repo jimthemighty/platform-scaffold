@@ -12,6 +12,7 @@ const baseLoaderConfig = require('./base.loader')
 const baseMainConfig = require('./base.main')
 const workerConfig = require('./base.worker')
 const onboardingConfig = require('./base.onboarding')
+const resetConfig = require('./base.reset')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 // Add production flag to main app config
@@ -46,4 +47,4 @@ workerConfig.plugins = workerConfig.plugins.concat([
     })
 ])
 
-module.exports = [productionMainConfig, baseLoaderConfig, workerConfig, onboardingConfig]
+module.exports = [productionMainConfig, baseLoaderConfig, resetConfig, workerConfig, onboardingConfig]
