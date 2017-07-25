@@ -201,11 +201,9 @@ export const addAddress = (address) => (dispatch) => {
     const addressData = createOrderAddressObject(address)
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
-    const requestBody = {
-        ...addressData,
-        address_id: 'TODO UPDATE ADDRESS NAME'
-    }
-    return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
+
+    // TODO addressData needs an address_id
+    return makeApiJsonRequest(`/customers/${customerId}/addresses`, {...addressData}, {method: 'POST'})
         .then(checkForResponseFault)
         .catch(() => { throw Error('Unable to save address') })
 }
