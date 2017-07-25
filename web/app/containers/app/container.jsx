@@ -71,8 +71,11 @@ class App extends React.Component {
         return {reload: () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)}
     }
 
-    hidePreloaderWhenCSSIsLoaded() {
-        if (window.Progressive.stylesheetLoaded) {
+    hidePreloaderWhenCSSIsLoaded(counter=0) {
+        // We wait to wait, but if we wait too long, we'll assume something
+        // went wrong with setting window.Progressive.stylesheetLoaded so
+        // we'll show the page anyways.
+        if (window.Progressive.stylesheetLoaded || counter === 10) {
             hidePreloader()
 
             // Only after we loaded the CSS can confidently unhide the app.
@@ -80,7 +83,9 @@ class App extends React.Component {
             // a flash of an ugly, unstyled app until the CSS finally loads.
             this.props.toggleHideApp(false)
         } else {
-            setTimeout(this.hidePreloaderWhenCSSIsLoaded, 100)
+            console.log("[Mobify.Progressive] Waiting for CSS to be loaded by checking for window.Progressive.stylesheetLoaded")
+            counter++
+            setTimeout(() => this.hidePreloaderWhenCSSIsLoaded(counter), 100)
         }
     }
 

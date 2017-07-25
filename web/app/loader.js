@@ -287,6 +287,27 @@ const waitForBody = () => {
  * loaded.
  */
 const attemptToInitializeApp = () => {
+    // On poor connections, we don't want to load via document.write, otherwise
+    // document.write will fail to work.
+    // We need to check if it's undefined because if it's previously been set to false,
+    // we want it to remain set to false.
+    if (window.loadScriptsSynchronously === undefined) {
+        window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
+    }
+
+    const neededPolyfills = getNeededPolyfills()
+    if (neededPolyfills.length) {
+        // We disable loading scripts sychronously if polyfills are needed,
+        // because the polyfills load async.
+        window.loadScriptsSynchronously = false
+        // But we still need to ensure the desktop script doesn't render while the
+        // document.readyState is "loading"
+        preventDesktopSiteFromRendering()
+
+        neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
+        return
+    }
+
     window.Progressive = {
         AstroPromise: Promise.resolve({}),
         Messaging: {
@@ -330,11 +351,7 @@ const attemptToInitializeApp = () => {
 
     asyncInitApp()
 
-    // On poor connections, we don't want to load via document.write, otherwise
-    // document.write will fail to work
-    window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
-
-    // Force create the body element in order to render content. This is necessary
+    // Force create the body element in order to render the Preloader. This is necessary
     // because we load scripts synchronously in order to speed up loading, which
     // by default would throw them in head, where as we need them in body.
     if (window.loadScriptsSynchronously) {
@@ -457,19 +474,7 @@ if (shouldPreview()) {
 } else {
     // Run the app.
     if (isSupportedPWABrowser() && isPWARoute()) {
-        const neededPolyfills = getNeededPolyfills()
-        let polyfillsToLoad = neededPolyfills.length
-        if (polyfillsToLoad) {
-            loaderLog(`Loading ${polyfillsToLoad} polyfills`)
-            const callback = () => {
-                if (--polyfillsToLoad <= 0) {
-                    attemptToInitializeApp()
-                }
-            }
-            neededPolyfills.forEach((polyfill) => polyfill.load(callback))
-        } else {
-            attemptToInitializeApp()
-        }
+        attemptToInitializeApp()
     } else if (isSupportedNonPWABrowser()) {
         loaderLog('Starting setup for nonPWA mode')
         initCacheManifest(cacheHashManifest)
@@ -523,7 +528,6 @@ if (shouldPreview()) {
             // loaded and initialized, and the non-pwa.js script has
             // been loaded. We can now init the non-pwa script.
             .then(() => window.Mobify.NonPWA.init())
-
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
