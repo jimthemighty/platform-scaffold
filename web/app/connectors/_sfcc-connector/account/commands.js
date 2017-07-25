@@ -212,11 +212,11 @@ export const addAddress = (address) => (dispatch) => {
         .catch(() => { throw Error('Unable to save address') })
 }
 
-export const deleteAddress = (address) => (dispatch) => { // eslint-disable-line
+export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-line
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
 
-    return makeApiRequest(`/customers/${customerId}/addresses/${address.id}`, {method: 'DELETE'})
+    return makeApiRequest(`/customers/${customerId}/addresses/${addressId}`, {method: 'DELETE'})
         .then((res) => {
             return res
         })

@@ -37,6 +37,7 @@ class AccountAddress extends React.Component {
         this.props.openAddressModal()
     }
 
+
     editAddress(address) {
         debugger
         debugger
