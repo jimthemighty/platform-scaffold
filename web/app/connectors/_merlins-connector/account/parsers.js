@@ -21,11 +21,13 @@ export const parseAccountInfo = ($, $html) => {
 export const parseWishlistProducts = ($, $response) => {
     const products = {}
     const wishlistItems = []
+    const productsFormInfo = {}
 
     $response.find('#wishlist-view-form .product-item').each((_, productTile) => {
         const $productTile = $(productTile)
         const id = $productTile.attr('id').replace('item_', '')
         const $photo = $productTile.find('.product-item-photo')
+        const removeButtonData = JSON.parse($productTile.find('.btn-remove').attr('data-post-remove'))
 
         products[id] = {
             price: $productTile.find('.price-box .price').text(),
@@ -34,6 +36,11 @@ export const parseWishlistProducts = ($, $response) => {
             title: $productTile.find('.product-item-name').text(),
             id,
             available: !$productTile.find('.unavailable').length
+        }
+        if (removeButtonData) {
+            productsFormInfo[id] = {
+                uenc: removeButtonData.data.uenc
+            }
         }
 
         wishlistItems.push({
@@ -44,6 +51,7 @@ export const parseWishlistProducts = ($, $response) => {
 
     return {
         products,
-        wishlistItems
+        wishlistItems,
+        productsFormInfo
     }
 }

@@ -6,6 +6,7 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
+import {receiveFormInfo} from '../actions'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -56,7 +57,8 @@ export const initWishlistPage = (url) => (dispatch) => {
         .then(([$, $response]) => {
             const {
                 wishlistItems,
-                products
+                products,
+                productsFormInfo
             } = parseWishlistProducts($, $response)
             const formURL = $response.find('#wishlist-view-form').attr('action')
             const wishlistData = {
@@ -67,7 +69,14 @@ export const initWishlistPage = (url) => (dispatch) => {
             dispatch(receiveWishlistProductData(products))
             dispatch(receiveWishlistData(wishlistData))
             dispatch(receiveWishlistUIData({contentLoaded: true}))
+            dispatch(receiveFormInfo(productsFormInfo))
         })
+}
+
+export const addToCartFromWishlist = (formValues) => (dispatch) => {
+
+    debugger
+    return
 }
 
 
