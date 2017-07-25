@@ -1,0 +1,59 @@
+<script>
+// Enclosed with a function to prevent any possible leakage on global window.
+(function(window, document) {
+    var optOut = /mobify-path=(;|$)/.test(document.cookie);
+	var Mobify = window.Mobify = {
+		tag: [8,0],
+        points: [+(new Date())],
+        shouldLoadPWA: /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(window.navigator.userAgent),
+        optOut: optOut,
+        disableTag: function() {
+            // This workaround addresses an iOS fallthrough issue, where
+            // iOS 8's "preload top hits" option will load a Mobified page
+            // in the background when typing in an address into the URL bar.
+            // Safari seems to cancel the script download, resulting in
+            // us incorrectly setting the opt-out cookie.
+            //
+            // We get around this by ignoring script failures in a
+            // background tab.
+            //
+            // Related ticket: https://mobify.atlassian.net/browse/RTM-280
+            if (document.visibilityState && document.hidden) {
+                return;
+            }
+
+            // Set the blank mobify-path cookie so that the next time the page
+            // is reloaded, the tag will be disabled for 5 minutes and load the
+            // original website.
+            document.cookie = 'mobify-path=' +
+                    '; expires=' +
+                    // Expiration is 5 minutes ahead of now
+                    new Date(Date.now() + 5 * 60 * 1000).toGMTString() +
+                    '; path=/';
+        }
+    };
+    // If we aren't loading the PWA, prevent our synchronous script loader
+    // from rendering by injecting an HTML comment tag into the page.
+	if (!Mobify.shouldLoadPWA || Mobify.optOut) {
+        document.write('<' + '!--');
+    }
+})(window, document);
+</script>
+<script src='https://cdn.mobify.com/sites/progressive-web-scaffold/production/loader.js' id='mobify-v8-tag' onerror='window.Mobify.disableTag()'></script>
+<script>// --></script>
+<script>
+(function(window, document){
+    if (!window.Mobify.shouldLoadPWA && !Mobify.optOut) {
+        // If we shouldn't load the PWA, then we'll load loader.js async:
+        var loader = document.createElement('script');
+        loader.src = 'https://cdn.mobify.com/sites/progressive-web-scaffold/production/loader.js';
+        loader.id = 'mobify-v8-tag';
+        // Still important for some browsers to set async=true, see:
+        // https://www.html5rocks.com/en/tutorials/speed/script-loading/
+        loader.async = true;
+        loader.onerror = window.Mobify.disableTag;
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(loader, firstScript);
+    }
+})(window, document);
+</script>
