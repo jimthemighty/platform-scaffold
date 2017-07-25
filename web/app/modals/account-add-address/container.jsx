@@ -34,7 +34,7 @@ const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit
             />
             <AccountAddressReduxForm
                 closeAddressModal={closeModal}
-                initialValues={isEdit ? getAddressFromId() : {}}
+                initialValues={isEdit ? getAddressFromId : {}}
             />
         </Sheet>
     )
@@ -49,6 +49,10 @@ AccountAddressModal.propTypes = {
      * Duration will define the time the animation takes to complete.
      */
     duration: React.PropTypes.number,
+    /**
+     * Address to populate "Edit Address" redux form
+     */
+    getAddressFromId: React.PropTypes.object,
     /**
      * Whether the modal is for edittin the address
      */

@@ -21,5 +21,6 @@ export const getAddressFromId = createSelector(
     getAddressID,
     getAllAddresses,
     (addressId, addresses) => {
-        return ''
+        const address = addresses.find((address) => address.get('id') === addressId)
+        return address.set('name', address.get('fullname'))
     })
