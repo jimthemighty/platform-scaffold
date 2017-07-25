@@ -8,7 +8,7 @@ import {splitFullName} from '../../utils/utils'
 import {addAddress, deleteAddress} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {ADD_ADDRESS_MODAL} from '../../modals/constants'
 
-export const setRemoveAddressID = createAction('Set Remove Address ID', ['removerAddressID'])
+export const setRemoveAddressID = createAction('Set Remove Address ID', ['removeAddressID'])
 
 export const openAddAddressModal = () => {
     return (dispatch) => {
@@ -27,6 +27,4 @@ export const submitEditAddress = (formValues) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
-export const removeAddress = (id) => (dispatch) => {
-    return dispatch(deleteAddress(id))
-}
+export const removeAddress = (id) => (dispatch) => dispatch(deleteAddress(id))
