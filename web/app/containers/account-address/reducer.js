@@ -10,5 +10,5 @@ import * as accountAddressActions from './actions'
 const initialState = Immutable.Map()
 
 export default handleActions({
-    [accountAddressActions.receiveData]: mergePayload,
+    [accountAddressActions.setRemoveAddressID]: mergePayload,
 }, initialState)
