@@ -11,6 +11,4 @@ export const getAccountAddress = createSelector(
     ({accountAddress}) => accountAddress
 )
 
-export const getRemoveAddressID = createGetSelector(getAccountAddress, 'removeAddressID')
-
-export const getAddressState = createGetSelector(getAccountAddress, 'isEditingAddress')
+export const getRemoveAddressID = createGetSelector(getAccountAddress, 'addressID')
