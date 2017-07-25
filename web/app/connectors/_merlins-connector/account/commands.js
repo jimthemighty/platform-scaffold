@@ -258,29 +258,27 @@ export const deleteAddress = (address) => (dispatch, getState) => { // eslint-di
     return makeRequest(getDeleteAddressURL(address.id, formKey), {method: 'POST'})
 }
 
-export const editAddress = (address, addressId) => (dispatch) => { // eslint-disable-line
-    /*
-        Request URL: https://www.merlinspotions.com/customer/address/formPost/id/8/
-        Request Method: POST
+export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
 
-        BODY
-        name="form_key" 4urFpCoWc9DN3MnF
-        name="success_url"
-        name="error_url"
-        name="firstname" test
-        name="lastname" test
-        name="company"
-        name="telephone" (431) 423-4234
-        name="fax"
-        name="street[]" 1234 test street
-        name="street[]"
-        name="city" Seattle
-        name="region_id" 62
-        name="region" Washington
-        name="postcode" 98121
-        name="country_id" US
-*/
-    return Promise.resolve()
+    const {firstname, lastname} = splitFullName(address.name)
+    const formData = {
+        form_key: formKey,
+        firstname,
+        lastname,
+        company: address.company,
+        telephone: address.telephone,
+        fax: address.fax,
+        city: address.city,
+        region_id: address.region,
+        region: address.region,
+        postcode: address.postcode,
+        country_id: address.countryId
+    }
+    formData['street[]'] = address.addressLine1
+
+    return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
 }
 
 export const addAddress = (address) => (dispatch, getState) => {
