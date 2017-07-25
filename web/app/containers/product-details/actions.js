@@ -8,7 +8,7 @@ import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {getItemQuantity} from './selectors'
-import {getCartURL, getWishlistURL, getSignInURL} from '../app/selectors'
+import {getWishlistURL, getSignInURL} from '../app/selectors'
 import {getCurrentPathKey} from 'progressive-web-sdk/dist/store/app/selectors'
 import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
@@ -20,8 +20,7 @@ import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actio
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
-
-import {isRunningInAstro, trigger} from '../../utils/astro-integration'
+import * as appActions from '../app/actions'
 
 export const setIsWishlistAdded = createAction('Set is wishlist added', ['isWishlistAdded'])
 export const receiveNewItemQuantity = createAction('Set item quantity')
@@ -36,15 +35,9 @@ export const setItemQuantity = (quantity) => (dispatch, getStore) => {
 export const addToCartStarted = createAction('Add to cart started')
 export const addToCartComplete = createAction('Add to cart complete')
 
-export const goToCheckout = () => (dispatch, getState) => {
+export const goToCheckout = () => (dispatch) => {
     dispatch(closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
-    if (isRunningInAstro) {
-        // If we're running in Astro, we want to dismiss open the cart modal,
-        // otherwise, navigating is taken care of by the button press
-        trigger('open:cart-modal')
-    } else {
-        browserHistory.push(getCartURL(getState()))
-    }
+    dispatch(appActions.goToCheckout())
 }
 
 export const goToWishlist = () => (dispatch, getState) => {

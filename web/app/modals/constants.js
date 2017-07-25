@@ -5,6 +5,7 @@
 export const NAVIGATION_MODAL = 'navigation-modal'
 export const MINI_CART_MODAL = 'mini-cart-modal'
 export const PRODUCT_DETAILS_ITEM_ADDED_MODAL = 'product-details-item-added-modal'
+export const WISHLIST_ITEM_ADDED_MODAL = 'wishlist-item-added-modal'
 export const PRODUCT_LIST_FILTER_MODAL = 'product-list-filter-modal'
 export const CART_ESTIMATE_SHIPPING_MODAL = 'cart-estimate-shipping-modal'
 export const CART_WISHLIST_MODAL = 'cart-wishlist-modal'
