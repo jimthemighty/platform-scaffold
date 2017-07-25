@@ -28,8 +28,13 @@ const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit
             coverage="100%"
             onBeforeClose={() => { return isEdit ? setIsEditing(false) : null }}
         >
-            <AddAddressHeader closeAddressModal={closeModal} />
-            <AccountAddressReduxForm closeAddressModal={closeModal} />
+            <AddAddressHeader
+                closeAddressModal={closeModal}
+                title={isEdit ? 'Edit Address' : 'Add New Address'}
+            />
+            <AccountAddressReduxForm
+                closeAddressModal={closeModal}
+            />
         </Sheet>
     )
 }
