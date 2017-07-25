@@ -14,7 +14,7 @@ const userReducer = handleActions({
     [setLoggedIn]: mergePayload,
     [receiveUserCustomContent]: mergePayload,
     [receiveAccountInfoData]: mergePayload,
-    [receiveWishlistData]: mergePayload
+    [receiveWishlistData]: (state, {payload}) => state.mergeWith(mergeSkipLists, payload),
 }, initialState)
 
 export default userReducer
