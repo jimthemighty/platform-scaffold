@@ -114,11 +114,7 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            debugger
-            debugger
             if (isFormResponseInvalid($response, formSelector)) {
-                debugger
-                debugger
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
 
                 if (messages.length === 0) {
