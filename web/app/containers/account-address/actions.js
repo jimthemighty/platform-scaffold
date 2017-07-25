@@ -11,7 +11,7 @@ import {ACCOUNT_ADDRESS_MODAL} from '../../modals/constants'
 export const setEdittingAddress = createAction('Set isEditting Address', ['isEditingAddress'])
 export const setRemoveAddressID = createAction('Set Remove Address ID', ['removeAddressID'])
 
-export const openAddAddressModal = () => {
+export const openAddressModal = () => {
     return (dispatch) => {
         dispatch(openModal(ACCOUNT_ADDRESS_MODAL))
     }

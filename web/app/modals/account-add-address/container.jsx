@@ -5,7 +5,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {ADD_ADDRESS_MODAL} from '../constants'
+import {ACCOUNT_ADDRESS_MODAL} from '../constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import AccountAddressReduxForm from '../../containers/account-address/partials/address-form'
@@ -51,10 +51,10 @@ AccountAddressModal.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    isOpen: isModalOpen(ADD_ADDRESS_MODAL),
+    isOpen: isModalOpen(ACCOUNT_ADDRESS_MODAL),
 })
 
 const mapDispatchToProps = {
-    closeModal: () => closeModal(ADD_ADDRESS_MODAL, UI_NAME.addNewAddress),
+    closeModal: () => closeModal(ACCOUNT_ADDRESS_MODAL, UI_NAME.addNewAddress),
 }
 export default connect(mapStateToProps, mapDispatchToProps)(AccountAddressModal)
