@@ -1,9 +1,9 @@
 <script>
-// Enclosed with a function to prevent any possible leakage on global window.
+// Enclose with a function to prevent any possible leakage on global window.
 (function(window, document) {
     var optOut = /mobify-path=(;|$)/.test(document.cookie);
 	var Mobify = window.Mobify = {
-		tag: [8,0],
+		tagVersion: [8,0],
         points: [+(new Date())],
         shouldLoadPWA: /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(window.navigator.userAgent),
         optOut: optOut,
@@ -40,7 +40,7 @@
 })(window, document);
 </script>
 <script src='https://cdn.mobify.com/sites/progressive-web-scaffold/production/loader.js' id='mobify-v8-tag' onerror='window.Mobify.disableTag()'></script>
-<script>// --></script>
+<script>// Needed to close opening comment tag to prevent sync loader.js from rendering --></script>
 <script>
 (function(window, document){
     if (!window.Mobify.shouldLoadPWA && !Mobify.optOut) {
