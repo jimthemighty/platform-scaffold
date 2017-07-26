@@ -15,7 +15,7 @@ const skipLinkTargets = {
     footer: '#app-footer',
 }
 
-export default {
+module.exports = { // eslint-disable-line import/no-commonjs
     '@tags': ['home'],
 
     before: (browser) => {

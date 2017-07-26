@@ -21,7 +21,7 @@ const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
 const ENV = process.env.NODE_ENV || 'test'
 
-export default {
+module.exports = { // eslint-disable-line import/no-commonjs
     '@tags': ['sfcc'],
 
     before: (browser) => {
