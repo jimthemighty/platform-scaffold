@@ -3,6 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getCookieValue} from '../../../utils/utils'
+import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const buildFormData = (formValues) => {
     const formData = new FormData()
@@ -54,4 +55,11 @@ export const createAddressRequestObject = (formValues) => {
         region: region || '',
         country_id: countryId,
     }
+}
+
+
+export const fetchCustomerAddresses = () => {
+    const fetchURL = `/rest/default/V1/carts/mine`
+    return makeRequest(fetchURL, {method: 'GET'})
+        .then((response) => response.json())
 }

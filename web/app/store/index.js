@@ -22,6 +22,7 @@ import {reducer as formReducer} from 'redux-form'
 
 import analytics from 'redux-analytics'
 import analyticsManager from 'progressive-web-sdk/dist/analytics/analytics-manager'
+import {ReduxFormPluginOption} from 'progressive-web-sdk/dist/analytics/actions'
 
 analyticsManager.init({
     projectSlug: AJS_SLUG,              // eslint-disable-line no-undef
@@ -47,7 +48,7 @@ const configureStore = (initialState) => {
         checkout: checkoutReducer,
         offline: offlineReducer,
         integrationManager: imReducer,
-        form: formReducer,
+        form: formReducer.plugin(ReduxFormPluginOption),
         pushMessaging: pushMessagingReducer
     })
 

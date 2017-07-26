@@ -14,6 +14,7 @@ import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import LazyLoadContent from '../../../components/lazy-load-content'
+import Card from '../../../components/card'
 import * as selectors from '../selectors'
 
 const CategoryImage = ({alt}) => {
@@ -77,9 +78,9 @@ HomeCategory.propTypes = {
 const HomeCategories = ({categories}) => {
     return (
         <div className="t-home__category u-padding-start u-padding-end u-padding-bottom-md">
-            <div className="u-card">
+            <Card hasShadow>
                 {categories.map((category, index) => <HomeCategory category={category} key={index} />)}
-            </div>
+            </Card>
         </div>
     )
 }

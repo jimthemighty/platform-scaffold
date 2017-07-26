@@ -1,7 +1,14 @@
 // Card
 // ===
 
-.u-card {
+.c-card {
     background-color: $neutral-00;
+}
+
+.c-card.c--shadow {
     box-shadow: $box-shadow;
+}
+
+.c-card.c--border {
+    border: $border;
 }
