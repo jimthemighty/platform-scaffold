@@ -15,9 +15,11 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import Field from 'progressive-web-sdk/dist/components/field'
 
 const AccountAddressFields = ({
-    regions
+    regions,
+    isDefault
 }) => {
-
+    debugger
+    debugger
     return (
         <div className="u-padding-md">
             <FieldRow>
@@ -116,31 +118,39 @@ const AccountAddressFields = ({
                     <input type="tel" noValidate data-analytics-name={UI_NAME.phone} />
                 </ReduxForm.Field>
             </FieldRow>
-            <FieldRow>
-                <ReduxForm.Field
-                    component={Field}
-                    name="useAsDefault"
-                    type="checkbox"
-                    label={<p>Use as my dafault address</p>}
-                >
-                    <input type="checkbox" noValidate />
-                </ReduxForm.Field>
-            </FieldRow>
+            {isDefault ?
+                <div>Default Address</div> :
+                <FieldRow>
+                    <ReduxForm.Field
+                        component={Field}
+                        name="default"
+                        type="checkbox"
+                        label={<p>Use as my default address</p>}
+                    >
+                        <input type="checkbox" noValidate />
+                    </ReduxForm.Field>
+                </FieldRow>
+            }
+
         </div>
     )
 }
 
 AccountAddressFields.propTypes = {
+    formValues: React.PropTypes.string,
     regions: React.PropTypes.arrayOf(React.PropTypes.shape({
         country_id: React.PropTypes.string,
         label: React.PropTypes.string,
         title: React.PropTypes.string,
         value: React.PropTypes.string
-    })),
+    }))
 }
 
-const mapStateToProps = createPropsSelector({
-})
+const mapStateToProps = (state) => {
+    return {
+        isDefault: ReduxForm.formValueSelector('addressForm')(state, 'default')
+    }
+}
 
 export default connect(
     mapStateToProps
