@@ -5,7 +5,7 @@
 import React from 'react'
 import * as ReduxForm from 'redux-form'
 import {connect} from 'react-redux'
-import {createPropsSelector} from 'reselect-immutable-helpers'
+// import {createPropsSelector} from 'reselect-immutable-helpers'
 import {normalizePhone} from '../../../utils/normalize-utils'
 import CountrySelect from '../../../components/country-select'
 import RegionField from '../../../components/region-field'
@@ -18,8 +18,6 @@ const AccountAddressFields = ({
     regions,
     isDefault
 }) => {
-    debugger
-    debugger
     return (
         <div className="u-padding-md">
             <FieldRow>
@@ -137,7 +135,7 @@ const AccountAddressFields = ({
 }
 
 AccountAddressFields.propTypes = {
-    formValues: React.PropTypes.string,
+    isDefault: React.PropTypes.bool,
     regions: React.PropTypes.arrayOf(React.PropTypes.shape({
         country_id: React.PropTypes.string,
         label: React.PropTypes.string,
