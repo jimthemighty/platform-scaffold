@@ -4,7 +4,7 @@
 
 import {createSelector} from 'reselect'
 import {getUi} from '../../store/selectors'
-import {getAllAddresses} from '../../store/user/selectors'
+import {getAllAddresses, getDefaultAddress} from '../../store/user/selectors'
 
 import {createGetSelector} from 'reselect-immutable-helpers'
 
@@ -24,3 +24,8 @@ export const getAddressFromId = createSelector(
         const address = addresses.find((address) => address.get('id') === addressId)
         return address ? address.set('name', address.get('fullname') || address.get('firstname') + address.get('lastname')) : {}
     })
+
+export const getIsDefaultAddressFromId = createSelector(
+    getAddressID,
+    getDefaultAddress,
+    (addressId, address) => address && address.get('id') === addressId)
