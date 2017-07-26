@@ -163,7 +163,7 @@ const loadWorker = () => (
     navigator.serviceWorker.register(getServiceWorkerURL())
         .then(() => navigator.serviceWorker.ready)
         .then(() => true)
-        .catch(() => { /* We're intentially swallowing errors here */ })
+        .catch(() => { /* We're intentionally swallowing errors here */ })
 )
 
 const asyncInitApp = () => {
@@ -353,7 +353,6 @@ const loadPWA = () => {
             src: ASTRO_CLIENT_CDN,
             rejectOnError: false
         }).then(() => window.Astro)
-
     }
 
     // Attempt to load the worker.
