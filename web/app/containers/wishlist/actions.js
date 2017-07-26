@@ -9,8 +9,14 @@ import {WISHLIST_ITEM_ADDED_MODAL} from '../../modals/constants'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import * as appActions from '../app/actions'
+import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
+import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
+
+export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 
 export const addToCartFromWishlist = (itemID, quantity) => (dispatch) => {
+    dispatch(receiveCurrentProductId(itemID))
+    dispatch(receiveWishlistItemQuantity(quantity))
     return dispatch(addToCartFromWishlistCommand({itemID, quantity}))
         .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.addToCart)))
         .catch((error) => {

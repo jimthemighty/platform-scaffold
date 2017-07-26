@@ -5,7 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import * as selectors from '../../containers/product-details/selectors'
+import {getWishlistItemQuantity} from '../../containers/wishlist/selectors'
 import {stripEvent} from '../../utils/utils'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getProductThumbnail, getProductTitle, getProductPrice} from 'progressive-web-sdk/dist/store/products/selectors'
@@ -17,7 +17,7 @@ import ItemAddedModalContents from '../../components/item-added-modal-contents'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const WishlistItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, onGoToWishlist, duration, isWishlistAdded}) => (
+const WishlistItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, duration}) => (
     <Sheet
         open={open}
         onDismiss={onDismiss}
@@ -34,7 +34,7 @@ const WishlistItemAddedModal = ({open, onDismiss, quantity, title, price, thumbn
                 onClick: onGoToCheckout,
                 'data-analytics-name': UI_NAME.checkout
             }}
-            ctaClickHandler={isWishlistAdded ? onGoToWishlist : onGoToCheckout}
+            ctaClickHandler={onGoToCheckout}
             onDismiss={onDismiss}
             title={title}
             thumbnail={thumbnail}
@@ -64,7 +64,7 @@ WishlistItemAddedModal.propTypes = {
 const mapStateToProps = createPropsSelector({
     thumbnail: getProductThumbnail,
     open: isModalOpen(WISHLIST_ITEM_ADDED_MODAL),
-    quantity: selectors.getItemQuantity,
+    quantity: getWishlistItemQuantity,
     title: getProductTitle,
     price: getProductPrice
 })
