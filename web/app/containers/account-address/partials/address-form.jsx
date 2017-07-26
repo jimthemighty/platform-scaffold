@@ -38,7 +38,7 @@ const validate = (values, props) => {
 
 export const AccountAddressForm = ({handleSubmit, submitAddAddress, closeAddressModal, isEditing, submitEditAddress}) => {
     return (
-        <form onSubmit={handleSubmit(isEditing ? submitAddAddress : submitEditAddress)} noValidate>
+        <form onSubmit={handleSubmit(isEditing ? submitEditAddress : submitAddAddress)} noValidate>
             <AccountAddressFields />
             <div className="u-padding-md">
                 <Button
