@@ -250,7 +250,6 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
     const currentState = getState()
     const formKey = getFormKey(currentState)
-
     return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
 }
 
@@ -261,7 +260,6 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
         form_key: formKey,
         ...createAddressRequestObject(address)
     }
-
     return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
 }
 
