@@ -13,13 +13,18 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
+    receiveAccountAddressData,
     receiveAccountInfoData,
     receiveWishlistData,
     receiveWishlistUIData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {buildFormData, createAddressRequestObject} from './utils'
-import {jqueryAjaxWrapper} from '../utils'
+import {
+    buildFormData,
+    createAddressRequestObject,
+    fetchCustomerAddresses
+} from './utils'
+import {jqueryAjaxWrapper, parseAddress} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
@@ -49,6 +54,14 @@ export const initAccountInfoPage = (url) => (dispatch) => {
 
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
+}
+
+export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
+    return fetchCustomerAddresses()
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            return dispatch(receiveAccountAddressData(parsedAddresses))
+        })
 }
 
 export const initWishlistPage = (url) => (dispatch) => {
@@ -218,8 +231,6 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
             console.error(error)
             throw new Error('Unable to save Billing Address')
         })
-
-
 }
 
 /* eslint-disable camelcase */
