@@ -156,11 +156,11 @@ $field__disabled-select-triangle: 'data:image/svg+xml;utf8,<svg xmlns="http://ww
             top: 50%;
             right: 0;
 
-            width: 12px;
+            width: $unit*1.5;
             height: 6px;
 
             background-image: url($field__select-triangle); // @TODO replace with Icon component
-            background-size: 12px 6px;
+            background-size: $unit*1.5 6px;
 
             transform: translate(-100%, -50%);
 
