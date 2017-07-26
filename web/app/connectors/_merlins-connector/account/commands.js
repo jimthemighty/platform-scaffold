@@ -257,20 +257,9 @@ export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-
 export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
     const currentState = getState()
     const formKey = getFormKey(currentState)
-
-    const {firstname, lastname} = splitFullName(address.name)
     const formData = {
         form_key: formKey,
-        firstname,
-        lastname,
-        company: address.company,
-        telephone: address.telephone,
-        fax: address.fax,
-        city: address.city,
-        region_id: address.region,
-        region: address.region,
-        postcode: address.postcode,
-        country_id: address.countryId
+        ...createAddressRequestObject(address)
     }
     formData['street[]'] = address.addressLine1
 
@@ -280,20 +269,9 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
 export const addAddress = (address) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
-
-    const {firstname, lastname} = splitFullName(address.name)
     const formData = {
         form_key: formKey,
-        firstname,
-        lastname,
-        company: address.company,
-        telephone: address.telephone,
-        fax: address.fax,
-        city: address.city,
-        region_id: address.region,
-        region: address.region,
-        postcode: address.postcode,
-        country_id: address.countryId
+        ...createAddressRequestObject(address)
     }
     formData['street[]'] = address.addressLine1
 

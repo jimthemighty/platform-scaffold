@@ -222,12 +222,12 @@ export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-li
         })
 }
 
-export const editAddress = (address) => (dispatch) => { // eslint-disable-line
+export const editAddress = (address, addressId) => (dispatch) => { // eslint-disable-line
+    const addressData = createOrderAddressObject(address)
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
 
-
-    return makeApiJsonRequest(`/customers/${customerId}/addresses/${address.id}`, {address}, {method: 'PATCH'})
+    return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {addressData}, {method: 'PATCH'})
         .then((res) => {
             return res
         })
