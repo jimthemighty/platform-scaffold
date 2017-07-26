@@ -261,6 +261,11 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
         ...createAddressRequestObject(address)
     }
     return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
+        .then(() => fetchCustomerAddresses())
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            return dispatch(receiveAccountAddressData(parsedAddresses))
+        })
 }
 
 export const addAddress = (address) => (dispatch, getState) => {
@@ -271,6 +276,11 @@ export const addAddress = (address) => (dispatch, getState) => {
         ...createAddressRequestObject(address)
     }
     return submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/')
+        .then(() => fetchCustomerAddresses())
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            return dispatch(receiveAccountAddressData(parsedAddresses))
+        })
 }
 
 /* eslint-disable camelcase */
