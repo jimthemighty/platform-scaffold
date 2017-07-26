@@ -8,7 +8,8 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 import {ADDRESS_FORM_NAME} from '../../../store/form/constants'
 import Button from 'progressive-web-sdk/dist/components/button'
-import {submitAddAddress} from '../actions'
+import {getIsEditing} from '../selectors'
+import {submitAddAddress, submitEditAddress} from '../actions'
 
 import AccountAddressFields from './account-address-fields'
 
@@ -35,9 +36,9 @@ const validate = (values, props) => {
     return errors
 }
 
-export const AccountAddressForm = ({handleSubmit, submitAddress, closeAddressModal}) => {
+export const AccountAddressForm = ({handleSubmit, submitAddAddress, closeAddressModal, isEditing, submitEditAddress}) => {
     return (
-        <form onSubmit={handleSubmit(submitAddress)} noValidate>
+        <form onSubmit={handleSubmit(isEditing ? submitAddAddress : submitEditAddress)} noValidate>
             <AccountAddressFields />
             <div className="u-padding-md">
                 <Button
@@ -63,17 +64,26 @@ AccountAddressForm.propTypes = {
      */
     handleSubmit: React.PropTypes.func,
     /**
-    * Submits the address form information to the server
+     * State of whether modal is edit or adding address
+     */
+    isEditing: React.PropTypes.bool,
+    /**
+    * Submits the address form information to the server for adding
     */
-    submitAddress: React.PropTypes.func
+    submitAddAddress: React.PropTypes.func,
+    /**
+    * Submits the address form information to the server for editing
+    */
+    submitEditAddress: React.PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
-    // initialValues: getInitialAddressValues,
+    isEditing: getIsEditing
 })
 
 const mapDispatchToProps = {
-    submitAddress: submitAddAddress
+    submitAddAddress,
+    submitEditAddress
 }
 
 
