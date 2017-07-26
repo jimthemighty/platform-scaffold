@@ -91,7 +91,7 @@ const clearMessageCookie = () => {
 const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
 const EXISTING_ACCT_REGEX = /already an account/
 
-const submitForm = (href, formValues, formSelector, responseUrl) => {
+const submitForm = (href, formValues, formSelector) => {
     clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
