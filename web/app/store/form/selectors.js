@@ -12,15 +12,20 @@ import {
     SHIPPING_FORM_NAME
 } from './constants'
 
+import {getSavedAddresses} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 import {getFormValues} from 'progressive-web-sdk/dist/store/form/selectors'
-
-export const getForm = ({form}) => form
 
 export const getEstimateShippingAddress = getFormValues(ESTIMATE_FORM_NAME)
 
 export const getShippingFormValues = getFormValues(SHIPPING_FORM_NAME)
 
 export const getShippingSavedAddressID = createSelector(getShippingFormValues, ({savedAddress}) => savedAddress)
+
+export const getSelectedSavedShippingAddress = createSelector(
+    getSavedAddresses,
+    getShippingSavedAddressID,
+    (savedAddresses, selectedAddressID) => savedAddresses.find((address) => address.get('id') === selectedAddressID)
+)
 
 export const getShippingEstimateAddress = getFormValues(SHIPPING_FORM_NAME)
 

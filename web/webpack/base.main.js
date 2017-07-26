@@ -46,6 +46,7 @@ const config = {
         }
     },
     plugins: [
+        ...baseCommon.plugins,
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             minChunks: (module) => /node_modules/.test(module.resource)
@@ -72,7 +73,8 @@ const config = {
             MESSAGING_ENABLED: `${webPackageJson.messagingEnabled}`,
             // These are defined as string constants
             PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
-            AJS_SLUG: `'${webPackageJson.aJSSlug}'`
+            AJS_SLUG: `'${webPackageJson.aJSSlug}'`,
+            WEBPACK_MOBIFY_GA_ID: `'${webPackageJson.mobifyGAID}'`
         }),
         new webpack.LoaderOptionsPlugin({
             options: {
@@ -128,7 +130,7 @@ config.plugins.push(function() {
                 }
 
                 const source = children[0]
-                source._value = source._value.replace(/^webpackJsonp/, 'webpackJsonpAsync')
+                source._value = source._value.replace(/^webpackJsonp\w*/, 'webpackJsonpAsync')
             }
         }
 

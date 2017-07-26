@@ -6,17 +6,29 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {SubmissionError} from 'redux-form'
 
-import {getCookieValue} from '../../../utils/utils'
+import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
-import {setSigninLoaded, setRegisterLoaded} from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {buildFormData, createAddressRequestObject} from './utils'
-import {jqueryAjaxWrapper} from '../utils'
+import {
+    setSigninLoaded,
+    setRegisterLoaded,
+    receiveAccountAddressData,
+    receiveAccountInfoData,
+    receiveWishlistData,
+    receiveWishlistUIData
+} from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {
+    buildFormData,
+    createAddressRequestObject,
+    fetchCustomerAddresses
+} from './utils'
+import {jqueryAjaxWrapper, parseAddress} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid} from './parsers/parsers'
+import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -32,6 +44,46 @@ export const initRegisterPage = (url) => (dispatch) => {
         })
 }
 
+export const initAccountInfoPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+        .then((res) => {
+            const [$, $response] = res
+            return dispatch(receiveAccountInfoData(parseAccountInfo($, $response)))
+        })
+}
+
+export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
+}
+
+export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
+    return fetchCustomerAddresses()
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            return dispatch(receiveAccountAddressData(parsedAddresses))
+        })
+}
+
+export const initWishlistPage = (url) => (dispatch) => {
+    return (dispatch(fetchPageData(url)))
+        .then(([$, $response]) => {
+            const {
+                wishlistItems,
+                products
+            } = parseWishlistProducts($, $response)
+            const formURL = $response.find('#wishlist-view-form').attr('action')
+            const wishlistData = {
+                title: $response.find('.page-title').text(),
+                products: wishlistItems,
+                shareURL: formURL ? formURL.replace('update', 'share') : ''
+            }
+            dispatch(receiveWishlistProductData(products))
+            dispatch(receiveWishlistData(wishlistData))
+            dispatch(receiveWishlistUIData({contentLoaded: true}))
+        })
+}
+
+
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
     document.cookie = `${MAGENTO_MESSAGE_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
@@ -39,7 +91,7 @@ const clearMessageCookie = () => {
 const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
 const EXISTING_ACCT_REGEX = /already an account/
 
-const submitForm = (href, formValues, formSelector) => {
+const submitForm = (href, formValues, formSelector, responseUrl) => {
     clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
@@ -65,7 +117,7 @@ const submitForm = (href, formValues, formSelector) => {
                     _error: message
                 })
             }
-            return '/customer/account'
+            return responseUrl
         })
 }
 
@@ -84,7 +136,7 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
         formData.persistent_remember_me = 'on'
     }
 
-    return submitForm(LOGIN_POST_URL, formData, '.form-login')
+    return submitForm(LOGIN_POST_URL, formData, '.form-login', '/customer/account')
 }
 
 export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
@@ -102,7 +154,7 @@ export const registerUser = (firstname, lastname, email, password, rememberMe) =
     if (rememberMe) {
         formData.persistent_remember_me = 'on'
     }
-    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account')
+    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account', '/customer/account')
 }
 
 const findPathForRoute = (routes, routeName) => {
@@ -129,7 +181,7 @@ export const logout = () => (dispatch) => (
         })
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active
-        .then(() => fetchPageData(window.location.href))
+        .then(() => dispatch(fetchPageData(window.location.href)))
 )
 
 export const updateShippingAddress = (shippingData) => (dispatch) => {
@@ -179,6 +231,29 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
             console.error(error)
             throw new Error('Unable to save Billing Address')
         })
+}
+
+/* eslint-disable camelcase */
+export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+    const {firstname, lastname} = splitFullName(names)
+    const formData = {
+        firstname,
+        lastname,
+        email,
+        change_password: currentPassword && newPassword ? 1 : '',
+        current_password: currentPassword ? currentPassword : '',
+        password: newPassword ? newPassword : '',
+        password_confirmation: newPassword ? newPassword : '',
+        form_key: formKey
+    }
+
+    dispatch(receiveAccountInfoData({names, email}))
+    return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
+}
 
 
+export const updateAccountPassword = (formValues) => (dispatch) => {
+    dispatch(updateAccountInfo(formValues))
 }

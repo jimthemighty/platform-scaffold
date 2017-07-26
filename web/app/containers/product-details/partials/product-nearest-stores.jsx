@@ -11,6 +11,7 @@ import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import Card from '../../../components/card'
 
 // Nearby Widget Config
 import NearbyConfig from '../../../config/nearby-config.json'
@@ -66,43 +67,45 @@ class ProductNearestStores extends React.Component {
 
         return (
             <div className="t-product-details__nearest-stores">
-                <div className="u-card u-padding-md u-padding-top-lg u-padding-bottom-lg">
-                    {title &&
-                        <div className="u-flexbox u-align-center u-padding-bottom-md u-border-light-bottom">
-                            <Icon name="check" className="u-color-success" /> <h2 className="u-h3 u-margin-start-md u-text-uppercase">{title}</h2>
+                <Card hasShadow>
+                    <div className="u-padding-md u-padding-top-lg u-padding-bottom-lg">
+                        {title &&
+                            <div className="u-flexbox u-align-center u-padding-bottom-md u-border-light-bottom">
+                                <Icon name="check" className="u-color-success" /> <h2 className="u-h3 u-margin-start-md u-text-uppercase">{title}</h2>
+                            </div>
+                        }
+
+                        <div className="u-margin-bottom-md">
+                            {closestLocations.map((selector, idx) => {
+                                let selectorString = selector.selector
+                                selectorString = selectorString.slice(1, selectorString.length)
+
+                                return (
+                                    <div id={selectorString} key={idx}>
+                                        <ListTile
+                                            className="u-border-light-bottom"
+                                            startAction={<SkeletonBlock height="20px" width="20px" />}
+                                            endAction={<SkeletonBlock height="20px" width="20px" />}
+                                        >
+                                            <SkeletonText
+                                                style={{height: '25px', lineHeight: '20px'}}
+                                                width="100px"
+                                            />
+                                        </ListTile>
+                                    </div>
+                                )
+                            })}
                         </div>
-                    }
 
-                    <div className="u-margin-bottom-md">
-                        {closestLocations.map((selector, idx) => {
-                            let selectorString = selector.selector
-                            selectorString = selectorString.slice(1, selectorString.length)
-
-                            return (
-                                <div id={selectorString} key={idx}>
-                                    <ListTile
-                                        className="u-border-light-bottom"
-                                        startAction={<SkeletonBlock height="20px" width="20px" />}
-                                        endAction={<SkeletonBlock height="20px" width="20px" />}
-                                    >
-                                        <SkeletonText
-                                            style={{height: '25px', lineHeight: '20px'}}
-                                            width="100px"
-                                        />
-                                    </ListTile>
-                                </div>
-                            )
-                        })}
+                        <Button
+                            className="pw--tertiary u-text-uppercase u-width-full"
+                            href={LOCATION_URL}
+                            data-analytics-name={UI_NAME.viewAllStores}
+                        >
+                            {viewAllStoresText}
+                        </Button>
                     </div>
-
-                    <Button
-                        className="c--tertiary u-text-uppercase u-width-full"
-                        href={LOCATION_URL}
-                        data-analytics-name={UI_NAME.viewAllStores}
-                    >
-                        {viewAllStoresText}
-                    </Button>
-                </div>
+                </Card>
             </div>
         )
     }

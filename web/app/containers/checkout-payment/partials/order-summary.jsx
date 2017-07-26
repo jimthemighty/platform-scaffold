@@ -90,7 +90,7 @@ class OrderSummary extends React.Component {
 
         const PlaceOrderButton = (
             <Button
-                className="c--primary u-flex-none u-width-full u-text-uppercase qa-checkout__place-order"
+                className="pw--primary u-flex-none u-width-full u-text-uppercase qa-checkout__place-order"
                 type="button"
                 onClick={submitPayment}
                 disabled={isLoading}
@@ -280,7 +280,7 @@ OrderSummary.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    cartItems: cartSelectors.getCartItems,
+    cartItems: cartSelectors.getCartItemsFull,
     cartshippingRate: cartSelectors.getShippingAmount,
     discountAmount: cartSelectors.getDiscountAmount,
     discountLabel: cartSelectors.getDiscountLabel,

@@ -4,10 +4,10 @@
 
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {PRODUCT_LIST_FILTER_MODAL} from '../constants'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {changeFilterTo} from '../../store/categories/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import * as selectors from '../../containers/product-list/selectors'
 
@@ -27,14 +27,25 @@ class ProductListFilterModal extends React.Component {
         }
     }
 
+    updateURL(searchKey) {
+        const pathname = browserHistory.getCurrentLocation().pathname
+        const query = Object.assign(
+            {},
+            browserHistory.getCurrentLocation().query,
+            {filters: searchKey}
+        )
+        browserHistory.push({pathname, query})
+    }
+
     render() {
-        const {closeModal, filters, isOpen, changeFilter} = this.props
+        const {closeModal, filters, isOpen, duration} = this.props
 
         return (
             <Sheet
                 className="m-product-list__filter-modal"
                 open={isOpen}
                 onDismiss={closeModal}
+                duration={duration}
                 maskOpacity={0.7}
                 effect="slide-right"
                 shrinkToContent={false}
@@ -48,7 +59,7 @@ class ProductListFilterModal extends React.Component {
                     </HeaderBarTitle>
 
                     <HeaderBarActions>
-                        <IconLabelButton iconName="close" label="" onClick={closeModal}>Close</IconLabelButton>
+                        <IconLabelButton iconName="close" label="" onClick={closeModal} analyticsName={UI_NAME.dismissModal}>Close</IconLabelButton>
                     </HeaderBarActions>
                 </HeaderBar>
 
@@ -66,14 +77,14 @@ class ProductListFilterModal extends React.Component {
                                 className="m-product-list__filter-modal-items"
                                 role="presentation"
                             >
-                                {kinds.map(({count, label, query}) =>
+                                {kinds.map(({count, label, query, searchKey}) =>
                                     <Button
                                         key={query}
-                                        className="c--link u-width-full u-text-letter-spacing-normal"
+                                        className="pw--link u-width-full u-text-letter-spacing-normal"
                                         innerClassName="u-justify-start"
                                         id={query}
                                         onClick={() => {
-                                            changeFilter(query)
+                                            this.updateURL(searchKey)
                                             closeModal()
                                         }}
                                         data-analytics-name={UI_NAME.showFilters}
@@ -94,14 +105,14 @@ class ProductListFilterModal extends React.Component {
 
 ProductListFilterModal.propTypes = {
     /**
-     * Updates the current filter
-     */
-    changeFilter: PropTypes.func,
-
-    /**
      * A function used to set the filter sheet's state to closed
      */
     closeModal: PropTypes.func,
+
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
 
     /*
      * An array of filters
@@ -120,12 +131,11 @@ ProductListFilterModal.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    filters: selectors.getFilters,
+    filters: selectors.getCategoryFilterOptions,
     isOpen: isModalOpen(PRODUCT_LIST_FILTER_MODAL)
 })
 
 const mapDispatchToProps = {
-    changeFilter: changeFilterTo,
     closeModal: () => closeModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
     openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters)
 }

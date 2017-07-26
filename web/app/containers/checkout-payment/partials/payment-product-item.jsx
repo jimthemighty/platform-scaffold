@@ -12,10 +12,8 @@ import ProductItem from '../../../components/product-item'
 
 const PaymentProductItem = ({
     id,
-    product: {
-        thumbnail,
-        title
-    },
+    thumbnail,
+    title,
     options,
     itemPrice,
     linePrice,
@@ -83,12 +81,13 @@ PaymentProductItem.propTypes = {
         label: PropTypes.string,
         value: PropTypes.string
     })),
-    product: PropTypes.object, /* Product */
 
     /**
      * Number of items
      */
     quantity: PropTypes.number,
+    thumbnail: PropTypes.object,
+    title: PropTypes.string
 }
 
 export default PaymentProductItem

@@ -2,13 +2,18 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {makeJsonEncodedRequest, makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser, getNameValue} from './parsers'
-import {parseCartTotals} from '../cart/parser'
-import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
-import {getCart} from '../cart/commands'
+import {makeJsonEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {getCartItemsFull} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
+import {
+    getSelectedShippingMethodValue,
+    getIsInitialized,
+    getShippingAddress,
+    getSelectedSavedAddressId,
+    getInitialShippingAddress
+} from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
 import {
     receiveCheckoutLocations,
     receiveShippingAddress,
@@ -20,17 +25,23 @@ import {
     receiveSelectedShippingMethod,
     receiveBillingSameAsShipping
 } from 'progressive-web-sdk/dist/integration-manager/checkout/results'
-import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
+
+import {parseShippingInitialValues, parseLocations, parseShippingMethods, checkoutConfirmationParser} from './parsers'
+import {parseCartTotals} from '../cart/parser'
+import {parseCheckoutEntityID, extractMagentoShippingStepData} from '../../../utils/magento-utils'
+import {getCart} from '../cart/commands'
 import {fetchPageData} from '../app/commands'
 import {getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
 import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
-import * as shippingSelectors from 'progressive-web-sdk/dist/store/checkout/shipping/selectors'
-import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getIsLoggedIn} from '../../../store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
-import {prepareEstimateAddress} from '../utils'
+import {
+    prepareEstimateAddress,
+    parseAddress
+} from '../utils'
+import {fetchCustomerAddresses} from '../account/utils'
 
 const INITIAL_SHIPPING_ADDRESS = {
     countryId: 'us',
@@ -45,7 +56,7 @@ const INITIAL_SHIPPING_ADDRESS = {
 
 const shippingMethodEstimateSelector = createPropsSelector({
     cartBaseUrl: getCartBaseUrl,
-    selectedShippingMethodId: shippingSelectors.getSelectedShippingMethodValue
+    selectedShippingMethodId: getSelectedShippingMethodValue
 })
 
 export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getState) => {
@@ -71,34 +82,15 @@ export const fetchShippingMethodsEstimate = (inputAddress) => (dispatch, getStat
 
 export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
     return (dispatch) => {
-        const fetchURL = `/rest/default/V1/carts/mine`
-        return makeRequest(fetchURL, {method: 'GET'})
-            .then((response) => response.json())
+        fetchCustomerAddresses()
             .then(({customer}) => {
                 let defaultShippingId
                 const addresses = customer.addresses.map((address) => {
                     if (address.default_shipping) {
                         defaultShippingId = address.id
                     }
-                    const [addressLine1, addressLine2] = address.street
 
-                    // Not spreading `address` because it has key/values that
-                    // we want to rename and remove
-                    return {
-                        city: address.city,
-                        countryId: address.country_id,
-                        id: `${address.id}`,
-                        firstname: address.firstname,
-                        lastname: address.lastname,
-                        fullname: getNameValue(address.firstname, address.lastname),
-                        postcode: address.postcode,
-                        regionId: `${address.region.region_id}`,
-                        region: address.region.region,
-                        regionCode: address.region.region_code,
-                        addressLine1,
-                        addressLine2,
-                        telephone: address.telephone,
-                    }
+                    return parseAddress(address)
                 })
 
                 dispatch(setDefaultShippingAddressId(selectedSavedAddressId || defaultShippingId))
@@ -114,10 +106,10 @@ const processShippingData = ($response) => (dispatch, getState) => {
 
     dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
     const state = getState()
-    const isInitialized = shippingSelectors.getIsInitialized(state)
+    const isInitialized = getIsInitialized(state)
 
     if (!isInitialized) {
-        const currentAddressData = shippingSelectors.getShippingAddress(state).toJS()
+        const currentAddressData = getShippingAddress(state).toJS()
         const initializationData = parseShippingInitialValues(magentoFieldData)
 
         // initialize our current state data with the data from Magento
@@ -136,7 +128,7 @@ const processPaymentData = ($response) => (dispatch) => {
 
 const shippingDataSelector = createPropsSelector({
     isLoggedIn: getIsLoggedIn,
-    selectedSavedAddressId: shippingSelectors.getSelectedSavedAddressId
+    selectedSavedAddressId: getSelectedSavedAddressId
 })
 
 export const initCheckoutShippingPage = (url) => (dispatch, getState) => {
@@ -218,7 +210,7 @@ export const submitShipping = (formValues) => (dispatch, getState) => {
             if (!responseJSON.payment_methods) {
                 throw new SubmissionError({_error: 'Unable to save shipping address'})
             }
-            const cartItems = getCartItems(state).toJS()
+            const cartItems = getCartItemsFull(state).toJS()
             const cartTotals = parseCartTotals(responseJSON.totals)
             dispatch(receiveCartContents({items: cartItems, ...cartTotals}))
             return PAYMENT_URL
@@ -229,7 +221,7 @@ export const initCheckoutPaymentPage = (url) => (dispatch, getState) => {
     return dispatch(fetchPageData(url))
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            const addressData = shippingSelectors.getInitialShippingAddress(getState()).toJS()
+            const addressData = getInitialShippingAddress(getState()).toJS()
             dispatch(receiveBillingSameAsShipping(true))
             dispatch(receiveBillingAddress(addressData))
             return dispatch(processPaymentData($response))

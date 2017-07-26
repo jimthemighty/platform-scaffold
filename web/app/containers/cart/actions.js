@@ -13,11 +13,11 @@ import {
     getCart,
     removeFromCart,
     updateItemQuantity,
-    addToWishlist,
     fetchTaxEstimate,
     putPromoCode,
     deletePromoCode
 } from 'progressive-web-sdk/dist/integration-manager/cart/commands'
+import {addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {cartExpired, handleCartExpiryError} from '../app/actions'
 import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
@@ -89,7 +89,7 @@ export const saveToWishlist = (productId, itemId, productURL) => (dispatch, getS
     if (!getIsLoggedIn(getState())) {
         return Promise.resolve()
     }
-    return dispatch(addToWishlist(productId, productURL))
+    return dispatch(addItemToWishlist(productId, productURL))
         .then(() => {
             dispatch(removeItem(itemId))
             dispatch(setIsWishlistComplete(true))
