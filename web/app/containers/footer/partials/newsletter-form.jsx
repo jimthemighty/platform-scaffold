@@ -10,10 +10,11 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {NEWSLETTER_FORM_NAME} from '../../../store/form/constants'
 
 const NewsletterForm = ({handleSubmit, disabled, submitting, onSubmit}) => {
     return (
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form id={NEWSLETTER_FORM_NAME} data-analytics-name={UI_NAME.subscribe} onSubmit={handleSubmit(onSubmit)} noValidate>
             <FieldRow className="u-align-top">
                 <ReduxForm.Field
                     component={Field}
@@ -69,7 +70,7 @@ const validate = (values) => {
 }
 
 const NewsletterReduxForm = ReduxForm.reduxForm({
-    form: 'newsletterForm',
+    form: NEWSLETTER_FORM_NAME,
     validate,
 })(NewsletterForm)
 
