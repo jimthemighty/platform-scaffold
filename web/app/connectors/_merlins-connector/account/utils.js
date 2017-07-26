@@ -51,7 +51,7 @@ export const createAddressRequestObject = (formValues) => {
         postcode,
         city,
         street: addressLine2 ? [addressLine1, addressLine2] : [addressLine1, ''],
-        region_id: regionId,
+        region_id: regionId || '',
         region: region || '',
         country_id: countryId,
     }
