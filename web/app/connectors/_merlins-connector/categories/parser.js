@@ -119,32 +119,6 @@ export const parseSortOptions = ($, $html) => {
     return sortOptions
 }
 
-export const productListPaginationParser = ($, $html) => {
-    const $pagination = $html.find('.products.wrapper ~ .toolbar .pages')
-    const $prev = $pagination.find('.action.previous')
-    const $next = $pagination.find('.action.next')
-    const $current = $pagination.find('.item.current')
-
-    return {
-        current: {
-            label: $current.find('.label').text(),
-            number: parseInt($current.find('span').last().text())
-        },
-        next: {
-            href: $next.attr('href'),
-            title: $next.attr('title'),
-            label: $next.find('.label').text(),
-            text: $next.text()
-        },
-        prev: {
-            href: $prev.attr('href'),
-            title: $prev.attr('title'),
-            label: $prev.find('.label').text(),
-            text: $prev.text()
-        }
-    }
-}
-
 export const hasFilter = ($, $html) => {
     const currentFilter = $html.has('.filter-current').length
 
