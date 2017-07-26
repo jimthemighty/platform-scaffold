@@ -4,7 +4,7 @@
 
 import {SubmissionError} from 'redux-form'
 import {createBasket, handleCartData, requestCartData, createNewBasket, updateExpiredCart} from '../cart/utils'
-import {makeApiRequest, makeApiJsonRequest, getAuthToken, getAuthTokenPayload, checkForResponseFault} from '../utils'
+import {makeApiRequest, makeApiJsonRequest, getCustomerID, checkForResponseFault} from '../utils'
 import {getOrderTotal} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {populateLocationsData, createOrderAddressObject} from './utils'
 import {parseShippingAddressFromBasket} from './parsers'
@@ -115,8 +115,7 @@ export const initCheckoutPaymentPage = () => (dispatch) => {
 }
 
 const setCustomerNameAndEmail = (formValues, basket) => () => {
-    const authToken = getAuthTokenPayload(getAuthToken())
-    const customerID = JSON.parse(authToken.sub).customer_info.customer_id
+    const customerID = getCustomerID()
     const requestBody = {
         email: formValues.username,
         customer_name: formValues.name,

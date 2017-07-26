@@ -19,18 +19,19 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {addToCartFromWishlist} from '../actions'
 
-const AddToCartButton = ({addToCartFromWishlist, id, quantity}) => (
+const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemID}) => (
     <Button
         className="pw--primary u-width-full u-text-uppercase u-margin-top-md"
         text="Add To Cart"
-        onClick={() => addToCartFromWishlist(id, quantity)}
+        onClick={() => addToCartFromWishlist(productId, quantity, itemID)}
         data-analytics-name={UI_NAME.addToCart}
     />
 )
 
 AddToCartButton.propTypes = {
     addToCartFromWishlist: PropTypes.func,
-    id: PropTypes.string,
+    itemID: PropTypes.string,
+    productId: PropTypes.string,
     quantity: PropTypes.Number
 }
 
@@ -42,13 +43,13 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
     <List>
         {products.length ?
             products.map((product) => {
-                const {id, thumbnail, title, quantity, price, available} = product
+                const {productId, thumbnail, itemID, title, quantity, price, available} = product
                 const itemFooter = available ?
-                    <AddToCartButton quantity={quantity} id={id} addToCartFromWishlist={addToCartFromWishlist} />
+                    <AddToCartButton quantity={quantity} productId={productId} addToCartFromWishlist={addToCartFromWishlist} itemID={itemID} />
                     : <OutOfStockMessage />
                 return (
                     <ProductItem
-                        key={id}
+                        key={itemID}
                         customWidth="40%"
                         className={productItemClassNames}
                         title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{title}</h2>}
@@ -57,7 +58,7 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
                     >
                         <FieldRow className="u-align-bottom">
                             <ItemQuantityStepper
-                                cartItemId={id}
+                                cartItemId={productId}
                                 changeQuantity={this.changeQuantity}
                                 quantity={quantity}
                             />

@@ -16,6 +16,8 @@ export const getWishlist = createGetSelector(getUser, 'wishlist', Immutable.Map(
 
 export const getWishlistTitle = createGetSelector(getWishlist, 'title', 'My Wish List')
 
+export const getWishlistID = createGetSelector(getWishlist, 'id', '')
+
 export const getWishlistShareURL = createGetSelector(getWishlist, 'shareURL')
 
 export const getWishlistItems = createGetSelector(getWishlist, 'products', Immutable.List())
@@ -24,9 +26,9 @@ export const getWishlistProducts = createSelector(
     getWishlistItems,
     getProducts,
     (wishlistItems, products) => wishlistItems.map((wishlistItem) => {
-        const productData = products.get(wishlistItem.get('id'))
+        const productData = products.get(wishlistItem.get('productId'))
         if (productData) {
-            return productData.set('quantity', wishlistItem.get('quantity'))
+            return productData.mergeDeep(wishlistItem)
         }
         return Immutable.Map()
     })

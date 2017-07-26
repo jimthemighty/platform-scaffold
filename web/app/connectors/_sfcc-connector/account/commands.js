@@ -10,10 +10,10 @@ import {
     setRegisterLoaded,
     receiveWishlistData,
     receiveWishlistUIData,
-    receiveAccountInfoData
+    receiveAccountInfoData,
+    removeWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts} from '../parsers'
 import {createOrderAddressObject} from '../checkout/utils'
 import {
     initSfccSession,
@@ -24,13 +24,16 @@ import {
     checkForResponseFault,
     deleteBasketID,
     storeBasketID,
-    getAuthTokenPayload,
+    getCustomerID,
     fetchItemData
 } from '../utils'
+import {parseWishlistProducts} from '../parsers'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {splitFullName} from '../../../utils/utils'
 import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
+import {addToCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
+import {removeItemFromWishlist as removeItemFromWishlistCommand} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 
 const initLoginData = () => (dispatch) => {
     dispatch(setSigninLoaded())
@@ -167,8 +170,7 @@ export const registerUser = (firstname, lastname, email, password) => (dispatch)
 
 const addAddress = (formValues, addressName) => {
     const addressData = createOrderAddressObject(formValues)
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     const requestBody = {
         ...addressData,
         address_id: addressName
@@ -206,16 +208,14 @@ const handleAccountInfoData = ({first_name, last_name, login}) => (
 /* eslint-enable camelcase */
 
 export const initAccountInfoPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     return makeApiJsonRequest(`/customers/${customerId}`)
         .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
 }
 
 
 export const updateAccountInfo = ({names, email}) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     const {firstname, lastname} = splitFullName(names)
 
     const requestBody = {
@@ -233,8 +233,7 @@ export const updateAccountInfo = ({names, email}) => (dispatch) => {
 }
 
 export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     const requestBody = {
         current_password: currentPassword,
         password: newPassword
@@ -264,8 +263,7 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
 }
 
 export const initWishlistPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerID = JSON.parse(sub).customer_info.customer_id
+    const customerID = getCustomerID()
 
     return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
         .then((response) => response.json())
@@ -279,7 +277,10 @@ export const initWishlistPage = () => (dispatch) => {
             }
             const wishlistResponse = data[0]
             const wishlistItems = parseWishlistProducts(wishlistResponse)
-            const wishlistData = {products: wishlistItems}
+            const wishlistData = {
+                products: wishlistItems,
+                id: wishlistResponse.id
+            }
 
             if (wishlistResponse.name) {
                 wishlistData.title = wishlistResponse.name
@@ -293,4 +294,27 @@ export const initWishlistPage = () => (dispatch) => {
 
                 })
         })
+}
+
+export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispatch) => {
+    const customerID = getCustomerID()
+
+    debugger
+    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemID}`, {method: 'DELETE'})
+        .then((response) => response.text())
+        .then((responseText) => {
+            if (!responseText.length) {
+                return Promise.resolve({})
+            }
+
+            return JSON.parse(responseText)
+        })
+        .then(checkForResponseFault)
+        .then(() => dispatch(removeWishlistItem(productId)))
+}
+
+export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemID}) => (dispatch) => {
+    // add the item to the cart
+    return dispatch(addToCart(productId, quantity))
+        .then(() => dispatch(removeItemFromWishlistCommand(itemID, wishlistID, productId)))
 }

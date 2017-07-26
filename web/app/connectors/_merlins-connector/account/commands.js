@@ -79,6 +79,8 @@ export const addToCartFromWishlist = ({itemID, quantity}) => (dispatch, getState
         })
 }
 
+export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()
+
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
