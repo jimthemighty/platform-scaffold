@@ -25,7 +25,7 @@ export const initProductListPage = (url) => (dispatch) => {
     const filter = decodeURIComponent(extractFilter(url))
     // Merlins uses 'product_list_order' as URL search key
     const rawURL = url
-    
+
     url = url.replace('sort', 'product_list_order')
     url = decodeURIComponent(url.replace('filters=', ''))
 
