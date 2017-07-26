@@ -28,4 +28,7 @@ export const getAddressFromId = createSelector(
 export const getIsDefaultAddressFromId = createSelector(
     getAddressID,
     getDefaultAddress,
-    (addressId, address) => address && address.get('id') === addressId)
+    (addressId, address) => {
+        return (
+            address && address.id === addressId)
+    })

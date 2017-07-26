@@ -5,7 +5,7 @@
 import React from 'react'
 import * as ReduxForm from 'redux-form'
 import {connect} from 'react-redux'
-// import {createPropsSelector} from 'reselect-immutable-helpers'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {normalizePhone} from '../../../utils/normalize-utils'
 import CountrySelect from '../../../components/country-select'
 import RegionField from '../../../components/region-field'
@@ -13,6 +13,7 @@ import RegionField from '../../../components/region-field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import Field from 'progressive-web-sdk/dist/components/field'
+import {getIsDefaultAddressFromId} from '../selectors'
 
 const AccountAddressFields = ({
     regions,
@@ -117,7 +118,8 @@ const AccountAddressFields = ({
                 </ReduxForm.Field>
             </FieldRow>
             {isDefault ?
-                <div>Default Address</div> :
+                <div className="u-padding-top-md u-text-weight-semi-bold">Default Address</div>
+            :
                 <FieldRow>
                     <ReduxForm.Field
                         component={Field}
@@ -144,11 +146,10 @@ AccountAddressFields.propTypes = {
     }))
 }
 
-const mapStateToProps = (state) => {
-    return {
-        isDefault: ReduxForm.formValueSelector('addressForm')(state, 'default')
-    }
-}
+const mapStateToProps = createPropsSelector({
+    isDefault: getIsDefaultAddressFromId
+})
+
 
 export default connect(
     mapStateToProps
