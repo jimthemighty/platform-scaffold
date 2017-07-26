@@ -47,10 +47,8 @@ const isPWARoute = () => {
 
 const isSupportedBrowser = () => {
     // By default, the PWA will run on all mobile browsers except Samsung and Firefox.
-    // We also allow a special user agent of 'MobifyPreview' which is used sometimes
-    // to force preview on!
     const ua = window.navigator.userAgent
-    return /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile|MobifyPreview/i.test(ua) &&
+    return /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua) &&
             !isSamsungBrowser(ua) &&
             !isFirefoxBrowser(ua)
 }
