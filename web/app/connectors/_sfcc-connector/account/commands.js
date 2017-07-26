@@ -227,7 +227,7 @@ export const editAddress = (address, addressId) => (dispatch) => { // eslint-dis
     const {sub} = getAuthTokenPayload()
     const customerId = JSON.parse(sub).customer_info.customer_id
 
-    return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {addressData}, {method: 'PATCH'})
+    return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {...addressData}, {method: 'PATCH'})
         .then((res) => {
             return res
         })
