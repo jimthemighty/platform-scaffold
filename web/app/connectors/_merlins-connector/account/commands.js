@@ -261,7 +261,6 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
         form_key: formKey,
         ...createAddressRequestObject(address)
     }
-    formData['street[]'] = address.addressLine1
 
     return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
 }
@@ -273,8 +272,6 @@ export const addAddress = (address) => (dispatch, getState) => {
         form_key: formKey,
         ...createAddressRequestObject(address)
     }
-    formData['street[]'] = address.addressLine1
-
     return submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/')
 }
 
