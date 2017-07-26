@@ -35,11 +35,9 @@ import NotificationManager from '../../components/notification-manager'
 
 import {prefetchTemplateChunks} from '../templates'
 
-
 // Offline support
 import Offline from '../offline/container'
 import OfflineBanner from '../offline/partials/offline-banner'
-
 
 class App extends React.Component {
     constructor(props) {
@@ -71,7 +69,7 @@ class App extends React.Component {
         return {reload: () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)}
     }
 
-    hidePreloaderWhenCSSIsLoaded(counter=0) {
+    hidePreloaderWhenCSSIsLoaded(counter = 0) {
         // We wait to wait, but if we wait too long, we'll assume something
         // went wrong with setting window.Progressive.stylesheetLoaded so
         // we'll show the page anyways.
@@ -83,7 +81,7 @@ class App extends React.Component {
             // a flash of an ugly, unstyled app until the CSS finally loads.
             this.props.toggleHideApp(false)
         } else {
-            console.log("[Mobify.Progressive] Waiting for CSS to be loaded by checking for window.Progressive.stylesheetLoaded")
+            console.log('[Mobify.Progressive] Waiting for CSS to be loaded by checking for window.Progressive.stylesheetLoaded')
             counter++
             setTimeout(() => this.hidePreloaderWhenCSSIsLoaded(counter), 100)
         }
