@@ -196,7 +196,6 @@ ProductListContents.propTypes = {
     activeFilters: PropTypes.array,
     currentUrl: PropTypes.string,
     numItems: PropTypes.number,
-    pagination: PropTypes.object,
     routeName: PropTypes.string,
     sheetId: PropTypes.string
 }
