@@ -14,7 +14,7 @@ import {
     receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts} from '../parsers'
+import {parseWishlistProducts, parseAddressResponse} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
 import {
     initSfccSession,
@@ -197,6 +197,17 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
+export const fetchAddressData = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerId = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
+            .then((res) => res.json())
+            .then(({data}) => {
+                const addresses = data ? data.map((address) => parseAddressResponse(address)) : []
+                return dispatch(receiveAccountAddressData(addresses))
+            })
+}
 export const addAddress = (address) => (dispatch) => {
     const addressData = createOrderAddressObject(address)
     const {sub} = getAuthTokenPayload()
@@ -204,11 +215,12 @@ export const addAddress = (address) => (dispatch) => {
 
     const requestBody = {
         ...addressData,
-        address_id: Math.floor(Math.random() * 1000).toString()
+        address_id: address.addressName
     }
 
     return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
         .then(checkForResponseFault)
+        .then(() => dispatch(fetchAddressData()))
         .catch(() => { throw Error('Unable to save address') })
 }
 
@@ -217,9 +229,7 @@ export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-li
     const customerId = JSON.parse(sub).customer_info.customer_id
 
     return makeApiRequest(`/customers/${customerId}/addresses/${addressId}`, {method: 'DELETE'})
-        .then((res) => {
-            return res
-        })
+        .then(() => dispatch(fetchAddressData()))
 }
 
 export const editAddress = (address, addressId) => (dispatch) => { // eslint-disable-line
@@ -228,51 +238,14 @@ export const editAddress = (address, addressId) => (dispatch) => { // eslint-dis
     const customerId = JSON.parse(sub).customer_info.customer_id
 
     return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {...addressData}, {method: 'PATCH'})
-        .then((res) => {
-            return res
-        })
+        .then(() => dispatch(fetchAddressData()))
 }
 
 export const initAccountAddressPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
-
-    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
-        .then((res) => res.json())
-        .then(({data}) => {
-            dispatch(populateLocationsData())
-            const addresses = data ? data
-                        .map(({
-                            first_name,
-                            last_name,
-                            phone,
-                            postal_code,
-                            address1,
-                            address2,
-                            city,
-                            state_code,
-                            preferred,
-                            country_code,
-                            address_id
-                        }) => {
-                            return {
-                                firstname: first_name,
-                                lastname: last_name,
-                                telephone: phone,
-                                postcode: postal_code,
-                                addressLine1: address1,
-                                addressLine2: address2,
-                                default: preferred,
-                                id: address_id,
-                                city,
-                                countryId: country_code.toUpperCase(),
-                                regionId: state_code
-                            }
-                        }) : []
-
-            return dispatch(receiveAccountAddressData(addresses))
-        })
+    dispatch(populateLocationsData())
+    return dispatch(fetchAddressData())
 }
+
 /* eslint-disable camelcase */
 const handleAccountInfoData = ({first_name, last_name, login}) => (
     {

@@ -23,6 +23,16 @@ const AccountAddressFields = ({
             <FieldRow>
                 <ReduxForm.Field
                     component={Field}
+                    name="addressName"
+                    label="Address Name"
+                >
+                    <input type="text" noValidate data-analytics-name={UI_NAME.addressName} />
+                </ReduxForm.Field>
+            </FieldRow>
+
+            <FieldRow>
+                <ReduxForm.Field
+                    component={Field}
                     name="name"
                     label="First & Last Name"
                 >

@@ -114,6 +114,33 @@ export const getCurrentProductID = (url) => {
     return productID
 }
 
+export const parseAddressResponse = ({
+                            first_name,
+                            last_name,
+                            phone,
+                            postal_code,
+                            address1,
+                            address2,
+                            city,
+                            state_code,
+                            preferred,
+                            country_code,
+                            address_id
+                        }) => {
+    return {
+        firstname: first_name,
+        lastname: last_name,
+        telephone: phone,
+        postcode: postal_code,
+        addressLine1: address1,
+        addressLine2: address2,
+        default: preferred,
+        id: address_id,
+        city,
+        countryId: country_code.toUpperCase(),
+        regionId: state_code
+    }
+}
 export const getInitialSelectedVariant = (variants, initialValues) => {
     return variants.find(({values}) => {
         return Object.keys(values).every((key) => {
