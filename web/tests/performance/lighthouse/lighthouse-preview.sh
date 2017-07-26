@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
 # Run the Lighthouse test against the dev build
 
 # Location to save the generated report.
