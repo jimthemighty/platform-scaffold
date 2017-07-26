@@ -71,6 +71,10 @@ export const addToCartFromWishlist = ({itemID, quantity}) => (dispatch, getState
         .then((res) => {
             const [$, $response] = res
 
+            // Don't return this promise because we don't
+            // need to wait until this returns to update the wishlist UI
+            dispatch(getCart())
+
             dispatch(receiveWishlistResponse($, $response))
         })
 }
