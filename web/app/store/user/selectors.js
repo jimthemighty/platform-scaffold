@@ -12,6 +12,21 @@ export const getIsLoggedIn = createGetSelector(getUser, 'isLoggedIn')
 
 export const getUserCustomContent = createGetSelector(getUser, 'custom', Immutable.Map())
 
+
+const PLACEHOLDER = {
+    text: undefined
+}
+
+export const getDefaultAddress = createSelector(getUser, (user) => {
+    const addresses = user.get('addresses')
+    return addresses ? addresses.toJS().find((address) => address.default) : Immutable.Map()
+})
+
+export const getAddresses = createSelector(getUser, (user) => {
+    const addresses = user.get('addresses')
+    return addresses ? addresses.toJS().filter((address) => !address.default) : Immutable.List(new Array(5).fill(PLACEHOLDER))
+})
+
 export const getWishlist = createGetSelector(getUser, 'wishlist', Immutable.Map())
 
 export const getWishlistTitle = createGetSelector(getWishlist, 'title', 'My Wish List')
