@@ -251,6 +251,11 @@ export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-
     const currentState = getState()
     const formKey = getFormKey(currentState)
     return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
+        .then(() => fetchCustomerAddresses())
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            return dispatch(receiveAccountAddressData(parsedAddresses))
+        })
 }
 
 export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
