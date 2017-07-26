@@ -44,6 +44,7 @@ export const prefetchTemplateChunks = () => {
 }
 
 export const AccountDashboard = PWALoadable(() => import('./account-dashboard/container' /* webpackChunkName: "account" */), 'account-dashboard')
+export const AccountInfo = PWALoadable(() => import('./account-info/container' /* webpackChunkName: "account-info" */), 'account-info')
 export const Cart = PWALoadable(() => import('./cart/container' /* webpackChunkName: "cart" */), 'cart')
 export const CheckoutConfirmation = PWALoadable(() => import('./checkout-confirmation/container' /* webpackChunkName: "checkout-confirmation" */), 'checkout-confirmation')
 export const CheckoutPayment = PWALoadable(() => import('./checkout-payment/container' /* webpackChunkName: "checkout-payment" */), 'checkout-payment')
@@ -51,3 +52,5 @@ export const CheckoutShipping = PWALoadable(() => import('./checkout-shipping/co
 export const Login = PWALoadable(() => import('./login/container' /* webpackChunkName: "login" */), 'login')
 export const ProductDetails = PWALoadable(() => import('./product-details/container' /* webpackChunkName: "product-details" */), 'product-details')
 export const ProductList = PWALoadable(() => import('./product-list/container' /* webpackChunkName: "product-list" */), 'product-list')
+export const AccountAddress = PWALoadable(() => import('./account-address/container' /* webpackChunkName: "account-address" */), 'account-address')
+export const Wishlist = PWALoadable(() => import('./wishlist/container' /* webpackChunkName: "wishlist" */), 'wishlist')

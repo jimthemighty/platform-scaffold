@@ -18,6 +18,7 @@ const parseImages = (imageGroups) => {
 const parseVariationCategories = (variation_attributes) => {
     return variation_attributes.map(({id, name, values}) => ({
         id,
+        name: id,
         label: name,
         values: values.map(({name, value}) => ({
             label: name,
@@ -135,10 +136,11 @@ export const parseCategories = (categories) => {
 export const parseProductHit = ({product_id, product_name, price, prices, orderable, image}) => {
     // Some products don't have _any_ pricing on them!
     const finalPrice = price || (prices && prices['usd-sale-prices']) || undefined
-    const thumbnail = {
+    const thumbnail = image ? {
         alt: image.alt,
         src: image.link
-    }
+    } : undefined
+
     return {
         id: product_id,
         title: product_name,
@@ -159,6 +161,15 @@ export const parseProductListData = (products) => {
     return productListData
 }
 
+export const parseSortedProductKeys = (products) => {
+    const sortedProductKeys = []
+
+    products.forEach((productHit) => {
+        sortedProductKeys.push(productHit.product_id)
+    })
+    return sortedProductKeys
+}
+
 export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     if (!products) {
         return []
@@ -175,4 +186,43 @@ export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     })
 
     return suggestions
+}
+
+export const parseWishlistProducts = (wishlistData) => {
+    if (wishlistData.customer_product_list_items) {
+        return wishlistData.customer_product_list_items.map((wishlistItem) => {
+            const id = wishlistItem.product_id
+            return {
+                id,
+                quantity: wishlistItem.quantity
+            }
+        })
+    }
+    return []
+}
+
+export const parseFilterOptions = (refinements) => {
+    return refinements.reduce((filters, filter) => {
+        if (filter.attribute_id !== 'cgid' && filter.values) {
+            let uniqueKey = 0
+            const ruleset = filter.attribute_id
+
+            const kinds = filter.values.map((kind) => {
+                return {
+                    count: kind.hit_count,
+                    label: kind.label,
+                    query: kind.presentation_id ? kind.presentation_id : `${uniqueKey++}`,
+                    ruleset: filter.label,
+                    searchKey: `${ruleset}=${kind.value}`
+                }
+            })
+
+            filters.push({
+                label: filter.label,
+                ruleset,
+                kinds,
+            })
+        }
+        return filters
+    }, [])
 }

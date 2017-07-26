@@ -1,3 +1,16 @@
+## To be released
+- Add view wishlist page to app [#891](https://github.com/mobify/platform-scaffold/pull/891)
+    - Add initWishlist page commands to SFCC, merlins and stub connectors
+- Bump Lighthouse to version 2.2.1 [889](https://github.com/mobify/platform-scaffold/pull/889)
+- Add product variation support to Merlin's connector [#800](https://github.com/mobify/platform-scaffold/pull/800)
+- Add account pages
+    - Account Dashboard[#834](https://github.com/mobify/platform-scaffold/pull/834)
+    - Account Addresses[#886](https://github.com/mobify/platform-scaffold/pull/886)
+- Handling `product_search` SFCC API request not necessarily having `image` object in the response [#888](https://github.com/mobify/platform-scaffold/pull/888)
+- Added a verification that time to First Interactive is below a given threshold. [896](https://github.com/mobify/platform-scaffold/pull/896)
+- Added pagination to PLP and search result page [825](https://github.com/mobify/platform-scaffold/pull/825)
+- Add Redux Form plugin to track form validation errors [897](https://github.com/mobify/platform-scaffold/pull/897)
+
 ## 0.17.3 (July 7, 2017)
 - Moved a pair of browser storage detection methods to SDK [#850](https://github.com/mobify/platform-scaffold/pull/850)
 - Dismissal config is via DefaultAsk prop now [#863](https://github.com/mobify/platform-scaffold/pull/863)
