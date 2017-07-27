@@ -57,7 +57,7 @@ const ItemAddedModalContents = ({
                 <div className="u-flex u-margin-bottom-md">
                     <ProductItem customWidth="20%"
                         title={<h2 className="u-h5 u-text-family u-text-weight-medium">{title}</h2>}
-                        image={<img role="presentation" src={thumbnail.src} alt={thumbnail.alt} width="60px" />}
+                        image={<img role="presentation" {...thumbnail} width="60px" />}
                     >
                         <div className="u-flexbox u-justify-between u-padding-top-sm">
                             <p>Qty: {quantity}</p>
