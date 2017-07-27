@@ -42,10 +42,10 @@ export const setUserAgent = (win, userAgent) => {
  * Creates an iframe containing the provided `html`
  *
  * @param {string} html - the HTML to write to the iframe document
- * @param {object} options
- * @param {string} [options.bodyContent] - HTML to add inside <body> (default: '')
- * @param {number} [id] - #id to add to the <iframe> element created (default: incremented counter)
- * @param {boolean} [setMobileUA] - Whether to set the user agent to mobile (default: desktop)
+ * @param {object}  options
+ * @param {string}  [options.bodyContent] - HTML to add inside <body> (default: '')
+ * @param {number}  [options.id] - #id to add to the <iframe> element created (default: incremented counter)
+ * @param {boolean} [options.setMobileUA] - Whether to set the user agent to mobile (default: desktop)
  * @returns {object} the `window` object of the created iframe
  */
 const START = '<!DOCTYPE html><html><head>'
