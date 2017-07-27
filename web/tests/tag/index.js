@@ -42,7 +42,7 @@ QUnit.test('synchronous loader loading', (assert) => {
     })
 
     assert.deepEqual(iWindow.Mobify.optOut, false, 'window.Mobify.optOut is false')
-    assert.deepEqual(iWindow.Mobify.shouldLoadPWA, true, 'window.Mobify.shouldLoadPWA is false')
+    assert.deepEqual(iWindow.Mobify.shouldLoadPWA, true, 'window.Mobify.shouldLoadPWA is true')
     assert.deepEqual(
         iWindow.document.getElementById('mobify-v8-tag').async,
         false,
