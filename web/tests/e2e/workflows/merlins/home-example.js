@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import Home from '../page-objects/home'
+import Home from '../../page-objects/home'
 
 let home
 const ENV = process.env.NODE_ENV || 'test'
@@ -16,7 +16,7 @@ const skipLinkTargets = {
 }
 
 module.exports = { // eslint-disable-line import/no-commonjs
-    '@tags': ['home'],
+    '@tags': ['e2e'],
 
     before: (browser) => {
         home = new Home(browser)

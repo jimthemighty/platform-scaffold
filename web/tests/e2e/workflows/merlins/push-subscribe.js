@@ -3,9 +3,9 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import process from 'process'
-import Home from '../page-objects/home'
-import ProductList from '../page-objects/product-list'
-import PushMessaging from '../page-objects/push-messaging'
+import Home from '../../page-objects/home'
+import ProductList from '../../page-objects/product-list'
+import PushMessaging from '../../page-objects/push-messaging'
 
 let home
 let productList
@@ -15,7 +15,7 @@ const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const ENV = process.env.NODE_ENV || 'test'
 
 module.exports = { // eslint-disable-line import/no-commonjs
-    '@tags': ['messaging'],
+    '@tags': ['e2e'],
 
     before: (browser) => {
         home = new Home(browser)

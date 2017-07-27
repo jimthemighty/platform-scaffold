@@ -3,16 +3,18 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import process from 'process'
-import Home from '../page-objects/home'
-import ProductList from '../page-objects/product-list'
-import ProductDetails from '../page-objects/product-details'
-import Cart from '../page-objects/cart'
-import PushMessaging from '../page-objects/push-messaging'
+import Home from '../../page-objects/home'
+import ProductList from '../../page-objects/product-list'
+import ProductDetails from '../../page-objects/product-details'
+import Cart from '../../page-objects/cart'
+import Checkout from '../../page-objects/checkout'
+import PushMessaging from '../../page-objects/push-messaging'
 
 let home
 let productList
 let productDetails
 let cart
+let checkout
 let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
@@ -20,13 +22,14 @@ const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
 const ENV = process.env.NODE_ENV || 'test'
 
 module.exports = { // eslint-disable-line import/no-commonjs
-    '@tags': ['stub'],
+    '@tags': ['sfcc'],
 
     before: (browser) => {
         home = new Home(browser)
         productList = new ProductList(browser)
         productDetails = new ProductDetails(browser)
         cart = new Cart(browser)
+        checkout = new Checkout(browser)
         pushMessaging = new PushMessaging(browser)
     },
 
@@ -37,10 +40,10 @@ module.exports = { // eslint-disable-line import/no-commonjs
     // The following tests are conducted in sequence within the same session.
     'Checkout - Guest - Navigate to Home': (browser) => {
         if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
+            browser.url(process.env.npm_package_sfccUrl)
         } else {
             console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+            browser.preview(process.env.npm_package_sfccUrl, 'https://localhost:8443/loader.js')
         }
         browser
             .waitForElementVisible(home.selectors.wrapper)
@@ -77,6 +80,44 @@ module.exports = { // eslint-disable-line import/no-commonjs
                 .assert.visible(cart.selectors.cartTemplateIdentifier)
         } else {
             browser.log(`Item is out of stock. Try changing PRODUCT_INDEX. It is currently ${PRODUCT_INDEX}`)
+        }
+    },
+
+    'Checkout - Guest - Navigate from Cart to Checkout': (browser) => {
+        if (productDetails.inStock) {
+            cart.navigateToCheckout()
+            browser
+                .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
+                .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
+        }
+    },
+
+    'Checkout - Guest - Fill out Guest Checkout Shipping Info form': (browser) => {
+        if (productDetails.inStock) {
+            checkout.fillShippingInfo()
+            browser
+                // Phone field should have numeric input type
+                .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
+                .waitForElementVisible(checkout.selectors.address)
+                .assert.valueContains(checkout.selectors.address, checkout.userData.address)
+        }
+    },
+
+    'Checkout - Guest - Fill out Guest Checkout Payment Details form': (browser) => {
+        if (productDetails.inStock) {
+            checkout.continueToPayment()
+            checkout.fillPaymentInfo()
+            browser
+                .waitForElementVisible(checkout.selectors.cvv)
+                .assert.valueContains(checkout.selectors.cvv, checkout.userData.cvv)
+        }
+    },
+
+    'Checkout - Guest - Verify Place Your Order button is visible': (browser) => {
+        if (productDetails.inStock) {
+            browser
+                .waitForElementVisible(checkout.selectors.placeOrder)
+                .assert.visible(checkout.selectors.placeOrder)
         }
     }
 }

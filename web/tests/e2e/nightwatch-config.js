@@ -2,10 +2,10 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-let reportsPath = process.env.CIRCLE_TEST_REPORTS || './tests/reports'
-var screenshotsPath = process.env.CIRCLE_ARTIFACTS || './tests/screenshots'
+const reportsPath = process.env.CIRCLE_TEST_REPORTS || './tests/reports'
+const screenshotsPath = process.env.CIRCLE_ARTIFACTS || './tests/screenshots'
 
-var notificationSettings = {
+const notificationSettings = {
     ALLOW: 1,
     BLOCK: 2
 }

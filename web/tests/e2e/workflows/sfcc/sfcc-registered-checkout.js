@@ -3,12 +3,12 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import process from 'process'
-import Home from '../page-objects/home'
-import ProductList from '../page-objects/product-list'
-import ProductDetails from '../page-objects/product-details'
-import Cart from '../page-objects/cart'
-import Checkout from '../page-objects/checkout'
-import PushMessaging from '../page-objects/push-messaging'
+import Home from '../../page-objects/home'
+import ProductList from '../../page-objects/product-list'
+import ProductDetails from '../../page-objects/product-details'
+import Cart from '../../page-objects/cart'
+import Checkout from '../../page-objects/checkout'
+import PushMessaging from '../../page-objects/push-messaging'
 
 let home
 let productList

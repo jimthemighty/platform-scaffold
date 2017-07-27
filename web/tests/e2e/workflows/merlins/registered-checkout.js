@@ -3,12 +3,12 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import process from 'process'
-import Home from '../page-objects/home'
-import ProductList from '../page-objects/product-list'
-import ProductDetails from '../page-objects/product-details'
-import Cart from '../page-objects/cart'
-import Checkout from '../page-objects/checkout'
-import PushMessaging from '../page-objects/push-messaging'
+import Home from '../../page-objects/home'
+import ProductList from '../../page-objects/product-list'
+import ProductDetails from '../../page-objects/product-details'
+import Cart from '../../page-objects/cart'
+import Checkout from '../../page-objects/checkout'
+import PushMessaging from '../../page-objects/push-messaging'
 
 let home
 let productList
@@ -22,7 +22,7 @@ const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
 const ENV = process.env.NODE_ENV || 'test'
 
 module.exports = { // eslint-disable-line import/no-commonjs
-    '@tags': ['checkout'],
+    '@tags': ['e2e'],
 
     before: (browser) => {
         home = new Home(browser)
@@ -34,18 +34,15 @@ module.exports = { // eslint-disable-line import/no-commonjs
     },
 
     after: (browser) => {
+        // cart.removeItems()
         browser.end()
     },
 
     // The following tests are conducted in sequence within the same session.
 
-    'Checkout - Guest - Navigate to Home': (browser) => {
+    'Checkout - Registered - Navigate to Home': (browser) => {
         if (ENV === 'production') {
             browser.url(process.env.npm_package_siteUrl)
-        }
-        if (ENV === 'sfcc') {
-            console.log('Running SFCC connector')
-            browser.preview('https://mobify-tech-prtnr-na03-dw.demandware.net/on/demandware.store/Sites-2017refresh-Site/default/Home-Show', 'https://localhost:8443/loader.js')
         } else {
             console.log('Running preview.')
             browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
@@ -55,7 +52,7 @@ module.exports = { // eslint-disable-line import/no-commonjs
             .assert.visible(home.selectors.wrapper)
     },
 
-    'Checkout - Guest - Navigate from Home to ProductList': (browser) => {
+    'Checkout - Registered - Navigate from Home to ProductList': (browser) => {
         home.navigateToProductList(PRODUCT_LIST_INDEX)
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
@@ -66,18 +63,18 @@ module.exports = { // eslint-disable-line import/no-commonjs
         pushMessaging.dismissDefaultAsk()
     },
 
-    'Checkout - Guest - Navigate from ProductList to ProductDetails': (browser) => {
+    'Checkout - Registered - Navigate from ProductList to ProductDetails': (browser) => {
         productList.navigateToProductDetails(PRODUCT_INDEX)
         browser
             .waitForElementVisible(productDetails.selectors.productDetailsTemplateIdentifier)
             .assert.visible(productDetails.selectors.productDetailsTemplateIdentifier)
     },
 
-    'Checkout - Guest - Add item to Shopping Cart': () => {
+    'Checkout - Registered - Add item to Shopping Cart': () => {
         productDetails.addItemToCart()
     },
 
-    'Checkout - Guest - Navigate from ProductDetails to Cart': (browser) => {
+    'Checkout - Registered - Navigate from ProductDetails to Cart': (browser) => {
         if (productDetails.inStock) {
             productDetails.navigateToCart()
             browser
@@ -88,27 +85,34 @@ module.exports = { // eslint-disable-line import/no-commonjs
         }
     },
 
-    'Checkout - Guest - Navigate from Cart to Checkout': (browser) => {
+    'Checkout - Registered - Navigate from Cart to Checkout': (browser) => {
         if (productDetails.inStock) {
             cart.navigateToCheckout()
+            browser
+                .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
+                .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
+                // Email field should have email input type
+                .waitForElementVisible(`${checkout.selectors.email}[type="email"]`)
+        }
+    },
+
+    'Checkout - Registered - Continue to Registered Checkout': (browser) => {
+        if (productDetails.inStock) {
+            checkout.continueAsRegistered()
             browser
                 .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
                 .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
         }
     },
 
-    'Checkout - Guest - Fill out Guest Checkout Shipping Info form': (browser) => {
+    'Checkout - Registered - Choose shipping info': (browser) => {
         if (productDetails.inStock) {
-            checkout.fillShippingInfo()
-            browser
-                // Phone field should have numeric input type
-                .waitForElementVisible(`${checkout.selectors.phone}[type="tel"]`)
-                .waitForElementVisible(checkout.selectors.address)
-                .assert.valueContains(checkout.selectors.address, checkout.userData.address)
+            checkout.chooseShippingInfo()
+            browser.waitForElementVisible(`${checkout.selectors.addressListOption} .pw--checked`)
         }
     },
 
-    'Checkout - Guest - Fill out Guest Checkout Payment Details form': (browser) => {
+    'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {
         if (productDetails.inStock) {
             checkout.continueToPayment()
             checkout.fillPaymentInfo()
@@ -118,7 +122,7 @@ module.exports = { // eslint-disable-line import/no-commonjs
         }
     },
 
-    'Checkout - Guest - Verify Place Your Order button is visible': (browser) => {
+    'Checkout - Registered - Verify Submit Order button is visible': (browser) => {
         if (productDetails.inStock) {
             browser
                 .waitForElementVisible(checkout.selectors.placeOrder)
