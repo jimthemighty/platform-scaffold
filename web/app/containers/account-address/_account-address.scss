@@ -19,4 +19,8 @@
     min-height: $content-height;
 
     background-color: $neutral-10;
+
+    .pw-breadcrumbs::after {
+        background: transparent;
+    }
 }
