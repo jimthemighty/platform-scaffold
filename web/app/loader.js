@@ -444,7 +444,6 @@ const loadPWA = () => {
             src: ASTRO_CLIENT_CDN,
             rejectOnError: false
         }).then(() => window.Astro)
-
     }
 
     // Attempt to load the worker, in PWA mode
