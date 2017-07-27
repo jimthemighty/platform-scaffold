@@ -13,7 +13,7 @@ const initialState = Immutable.Map()
 const userReducer = handleActions({
     [setLoggedIn]: mergePayload,
     [receiveUserCustomContent]: mergePayload,
-    [receiveAccountAddressData]: mergePayload,
+    [receiveAccountAddressData]: (state, {payload}) => Immutable.fromJS(payload),
     [receiveAccountInfoData]: mergePayload,
     [receiveWishlistData]: mergePayload
 }, initialState)
