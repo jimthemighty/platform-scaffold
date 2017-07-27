@@ -29,6 +29,8 @@ const variationSwatch = ({input: {value, onChange}, values, label, error, name, 
                 {values.map(({label, value}) =>
                     <SwatchItem key={value}
                         value={value}
+                        analyticsName={name}
+                        analyticsContent={label}
                     >
                         {label}
                     </SwatchItem>

@@ -48,7 +48,7 @@ const ProductTile = ({className, thumbnail, href, price, title, onClick}) => {
         : <SkeletonBlock height="22px" width="50px" />
 
     return (
-        <ListTile className="c-product-tile u-card" onClick={onClick} href={href}>
+        <ListTile className="c-product-tile" onClick={onClick} href={href}>
             <ProductItem customWidth="45%"
                 className={classNames('u-align-center', className)}
                 title={titleElement}

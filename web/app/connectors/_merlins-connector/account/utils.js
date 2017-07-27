@@ -11,6 +11,7 @@ import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-m
 import {parseWishlistProducts} from './parsers'
 import {receiveFormInfo} from '../actions'
 
+import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const buildFormData = (formValues) => {
     const formData = new FormData()
@@ -80,4 +81,10 @@ export const receiveWishlistResponse = ($, $response) => (dispatch) => {
     dispatch(receiveWishlistData(wishlistData))
     dispatch(receiveWishlistUIData({contentLoaded: true}))
     dispatch(receiveFormInfo(productsFormInfo))
+}
+
+export const fetchCustomerAddresses = () => {
+    const fetchURL = `/rest/default/V1/carts/mine`
+    return makeRequest(fetchURL, {method: 'GET'})
+        .then((response) => response.json())
 }

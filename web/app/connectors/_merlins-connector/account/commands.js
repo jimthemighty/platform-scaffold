@@ -13,10 +13,16 @@ import {getCart} from '../cart/commands'
 import {
     setSigninLoaded,
     setRegisterLoaded,
+    receiveAccountAddressData,
     receiveAccountInfoData,
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {buildFormData, createAddressRequestObject, receiveWishlistResponse} from './utils'
-import {jqueryAjaxWrapper} from '../utils'
+import {
+    buildFormData,
+    createAddressRequestObject,
+    fetchCustomerAddresses,
+    receiveWishlistResponse
+} from './utils'
+import {jqueryAjaxWrapper, parseAddress} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
@@ -48,7 +54,13 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
     return Promise.resolve()
 }
 
-
+export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
+    return fetchCustomerAddresses()
+        .then(({customer: {addresses}}) => {
+            const parsedAddresses = addresses.map((address) => parseAddress(address))
+            return dispatch(receiveAccountAddressData(parsedAddresses))
+        })
+}
 
 export const initWishlistPage = (url) => (dispatch) => {
     return (dispatch(fetchPageData(url)))
@@ -229,8 +241,6 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
             console.error(error)
             throw new Error('Unable to save Billing Address')
         })
-
-
 }
 
 /* eslint-disable camelcase */
