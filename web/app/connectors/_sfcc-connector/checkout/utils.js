@@ -19,6 +19,7 @@ export const populateLocationsData = () => receiveCheckoutLocations({
 export const createOrderAddressObject = (formValues) => {
     const {
         name,
+        addressName,
         firstname,
         lastname,
         company,
@@ -33,6 +34,7 @@ export const createOrderAddressObject = (formValues) => {
     return {
         address1: addressLine1,
         address2: addressLine2,
+        address_id: addressName,
         city,
         country_code: countryId,
         first_name: firstname,
