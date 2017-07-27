@@ -34,7 +34,7 @@ export const parseWishlistProducts = ($, $response) => {
             href: $photo.attr('href'),
             thumbnail: parseImage($photo.find('img')),
             title: $productTile.find('.product-item-name').text(),
-            productId,
+            id: productId,
             available: !$productTile.find('.unavailable').length
         }
         if (removeButtonData) {
