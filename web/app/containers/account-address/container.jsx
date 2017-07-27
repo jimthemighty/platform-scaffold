@@ -9,6 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import Card from '../../components/card'
 
 import Button from 'progressive-web-sdk/dist/components/button'
+import Icon from 'progressive-web-sdk/dist/components/icon'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
@@ -17,23 +18,31 @@ import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
 import {getAccountURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const NoAddress = () => (
-    <div className="t-account-address__empty u-padding-md u-flexbox u-direction-column u-align-center u-justify-center">
-        <Image
-            className="u-flex-none"
-            alt="Crystal Ball"
-            width="122px"
-            height="110px"
-            src={getAssetUrl('static/img/onboarding/location.png')}
-        />
-        <div className="u-text-align-center u-padding-lg">
-            You have no saved addresses.
-        </div>
-        <Button text="Add a new address" href="/" className="pw--tertiary u-width-full u-text-uppercase " />
-    </div>
-)
-
 const AccountAddress = ({defaultAddress, addresses, dashboardURL}) => {
+    const NoAddress = () => (
+        <div className="t-account-address__empty">
+            <div className="t-account-address__heading u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
+                <div className="t-account-address__breadcrumb">
+                    <Breadcrumbs items={[{text: 'Back to Dashboard', href: dashboardURL}]} />
+                </div>
+                <div className="u-margin-top-md">
+                    <h1 className="t-account-info__title u-text-uppercase u-width-1of2">Address Book</h1>
+                </div>
+            </div>
+            <div className="u-padding-md u-margin-top-lg u-flexbox u-direction-column u-align-center u-justify-center">
+                <Icon
+                    name="empty"
+                    className="u-color-brand"
+                    size="huge"
+                />
+                <div className="u-text-align-center u-padding-lg">
+                    You have no saved addresses.
+                </div>
+                <Button text="Add a new address" href="/" className="pw--tertiary u-width-full u-text-uppercase " />
+            </div>
+        </div>
+    )
+
     return (
         <div>
             {defaultAddress ?
