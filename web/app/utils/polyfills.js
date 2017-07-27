@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
-import {loadScript} from './loader-utils'
+import {loadScript} from 'progressive-web-sdk/dist/utils/utils'
 
 export const availablePolyfills = [
     {
