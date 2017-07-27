@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # Run the Lighthouse test against the dev build
 
-set -x
-
 # Location to save the generated report.
 OUTPUT_PATH=tests/performance/lighthouse/reports/audit-local
 # See package.json's siteUrl key.
