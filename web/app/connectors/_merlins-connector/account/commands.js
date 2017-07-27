@@ -16,7 +16,8 @@ import {
     receiveAccountAddressData,
     receiveAccountInfoData,
     receiveWishlistData,
-    receiveWishlistUIData
+    receiveWishlistUIData,
+    receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {
@@ -62,6 +63,10 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
             const parsedAddresses = addresses.map((address) => parseAddress(address))
             return dispatch(receiveAccountAddressData(parsedAddresses))
         })
+}
+
+export const initAccountOrderListPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
 }
 
 export const initWishlistPage = (url) => (dispatch) => {
