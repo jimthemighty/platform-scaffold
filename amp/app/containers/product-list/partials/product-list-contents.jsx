@@ -16,8 +16,9 @@ import Button from 'mobify-amp-sdk/dist/components/button'
 import Form from 'mobify-amp-sdk/dist/components/form'
 import Field from 'mobify-amp-sdk/dist/components/field'
 import List from 'mobify-amp-sdk/dist/components/list'
+import Pagination from 'mobify-amp-sdk/dist/components/pagination'
 import ProductTile from '../../../components/product-tile'
-import Pagination from '../../../components/pagination'
+
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
