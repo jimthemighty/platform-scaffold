@@ -5,12 +5,12 @@
 /* globals QUnit */
 import * as TestUtils from './tag-test-utils'
 
-const MOCK_JS_FILE = 'mock-tag.js'
+const MOCK_LOADER = 'mock-loader.js'
 
 QUnit.test('asynchronous loader loading', (assert) => {
     assert.expect(4)
 
-    const html = TestUtils.replaceLoaderString(MOCK_JS_FILE)
+    const html = TestUtils.replaceLoaderString(MOCK_LOADER)
     const iWindow = TestUtils.createFrame(html, {
         id: 'test-1',
         bodyContent: '<div id="body-content">Tag Test 1</div>',
@@ -35,7 +35,7 @@ QUnit.test('asynchronous loader loading', (assert) => {
 QUnit.test('synchronous loader loading', (assert) => {
     assert.expect(3)
 
-    const html = TestUtils.replaceLoaderString(MOCK_JS_FILE)
+    const html = TestUtils.replaceLoaderString(MOCK_LOADER)
     const iWindow = TestUtils.createFrame(html, {
         id: 'test-2',
         setMobileUA: true

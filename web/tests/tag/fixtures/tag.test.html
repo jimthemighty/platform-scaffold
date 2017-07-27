@@ -9,15 +9,15 @@
     <body>
         <button id="show-iframe-button" style="margin-bottom: 8px;">Show test iframes</button>
         <script type="text/javascript">
-            document.getElementById('show-iframe-button').addEventListener('click', () => {
-                const iframes = document.getElementsByTagName('iframe')
+            /* eslint-disable */
+            document.getElementById('show-iframe-button').addEventListener('click', function() {
+                var iframes = document.getElementsByTagName('iframe');
 
                 Array.prototype.forEach.call(iframes, (frame) => {
-                    const isShown = frame.style.display !== 'none'
-                    frame.style.display = isShown ? 'none' : ''
-                })
-            })
-        /* eslint-disable no-trailing-spaces, eol-last */
+                    var isShown = frame.style.display !== 'none';
+                    frame.style.display = isShown ? 'none' : '';
+                });
+            });
         </script>
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>
