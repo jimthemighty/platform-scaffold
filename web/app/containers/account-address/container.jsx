@@ -10,8 +10,6 @@ import Card from '../../components/card'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
-import Image from 'progressive-web-sdk/dist/components/image'
-import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import AddressBlock from './partials/account-address-block'
 import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
