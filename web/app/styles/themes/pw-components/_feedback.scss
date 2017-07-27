@@ -9,7 +9,9 @@
     color: $error-color;
 }
 
-
+.pw-feedback__content {
+    color: $font-color;
+}
 
 // Themes: Block
 // ---
@@ -19,6 +21,6 @@
     padding: $unit*2;
 
     &.pw--error {
-        background: $light-error-color;
+        background: $feedback-error-color;
     }
 }
