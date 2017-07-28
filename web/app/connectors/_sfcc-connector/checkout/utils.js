@@ -32,6 +32,7 @@ export const createOrderAddressObject = (formValues) => {
         postcode,
         telephone
     } = formValues
+
     return {
         address1: addressLine1,
         address2: addressLine2,
@@ -42,8 +43,7 @@ export const createOrderAddressObject = (formValues) => {
         last_name: lastname,
         full_name: name,
         phone: telephone,
-        default_billing: preferred ? '1' : null,
-        default_shipping: preferred ? '1' : null,
+        preferred,
         postal_code: postcode,
         state_code: regionId,
         company_name: company

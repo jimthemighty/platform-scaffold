@@ -55,6 +55,8 @@ export const createAddressRequestObject = (formValues) => {
         preferred,
         street: addressLine2 ? [addressLine1, addressLine2] : [addressLine1, ''],
         region_id: regionId || '',
+        default_billing: preferred ? '1' : null,
+        default_shipping: preferred ? '1' : null,
         region: region || '',
         country_id: countryId,
     }
