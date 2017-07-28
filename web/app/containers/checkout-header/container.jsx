@@ -33,7 +33,7 @@ const CheckoutHeader = function({headerHasSignIn, isLoggedIn}) {
                 {(!isLoggedIn && headerHasSignIn) &&
                     <div className="u-flex u-text-align-end">
                         <Button
-                            className="u-text-letter-spacing-normal"
+                            className="u-text-letter-spacing-normal qa-checkout-header__sign-in"
                             href="/customer/account/login/"
                             innerClassName="u-color-neutral-10"
                             data-analytics-name={UI_NAME.goToSignIn}

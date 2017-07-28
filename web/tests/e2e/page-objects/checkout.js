@@ -8,6 +8,7 @@ const selectors = {
     email: 'input[name="username"]',
     password: 'input[name="password"][type="password"]',
     signIn: '.qa-checkout__sign-in',
+    headerSignIn: '.qa-checkout-header__sign-in',
 
     // Shipping info
     name: 'input[name="name"]',
@@ -64,7 +65,7 @@ Checkout.prototype.continueAsGuest = function() {
     return this
 }
 
-Checkout.prototype.continueAsRegistered = function() {
+Checkout.prototype.continueAsRegisteredMerlins = function() {
     // Sign in to continue Registered Checkout
     this.browser
         .log('Navigating to Registered Checkout')
@@ -80,6 +81,15 @@ Checkout.prototype.continueAsRegistered = function() {
         // Workaround. The login experience is currently not ideal.
         .pause(3000)
         .refresh()
+    return this
+}
+
+Checkout.prototype.continueAsRegistered = function() {
+    // Sign in to continue Registered Checkout
+    this.browser
+        .log('Navigating to Registered Checkout')
+        .waitForElementVisible(selectors.headerSignIn)
+        .click(selectors.headerSignIn)
     return this
 }
 

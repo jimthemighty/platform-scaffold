@@ -98,7 +98,7 @@ module.exports = { // eslint-disable-line import/no-commonjs
 
     'Checkout - Registered - Continue to Registered Checkout': (browser) => {
         if (productDetails.inStock) {
-            checkout.continueAsRegistered()
+            checkout.continueAsRegisteredMerlins()
             browser
                 .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
                 .assert.visible(checkout.selectors.checkoutTemplateIdentifier)
