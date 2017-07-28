@@ -33,15 +33,15 @@ class AccountAddress extends React.Component {
         this.props.openAddressModal()
     }
 
-    editAddress(address) {
+    editAddress(id) {
         this.props.openAddressModal()
-        this.props.setAddressID(address.id)
+        this.props.setAddressID(id)
         this.props.setIsEditing(true)
     }
 
-    removeAddress(address) {
+    removeAddress(id) {
         this.props.openRemoveAddressModal()
-        this.props.setAddressID(address.id)
+        this.props.setAddressID(id)
     }
 
     render() {
@@ -108,7 +108,7 @@ class AccountAddress extends React.Component {
                                             showIconText={true}
                                             iconClassName="u-margin-end"
                                             data-analytics-name={UI_NAME.editSavedAddress}
-                                            onClick={() => this.editAddress(defaultAddress)}
+                                            onClick={() => this.editAddress(defaultAddress.id)}
                                         />
                                     }
                                 />
@@ -128,14 +128,14 @@ class AccountAddress extends React.Component {
                                                             showIconText={true}
                                                             iconClassName="u-margin-end"
                                                             data-analytics-name={UI_NAME.editSavedAddress}
-                                                            onClick={() => this.editAddress(address)}
+                                                            onClick={() => this.editAddress(address.id)}
                                                         />
                                                     </div>
                                                     <div className="u-flex">
                                                         <Button
                                                             type="button"
                                                             title="Delete"
-                                                            onClick={() => this.removeAddress(address)}
+                                                            onClick={() => this.removeAddress(address.id)}
                                                             className="u-width-full u-color-brand u-border-top"
                                                             icon="trash"
                                                             showIconText={true}
