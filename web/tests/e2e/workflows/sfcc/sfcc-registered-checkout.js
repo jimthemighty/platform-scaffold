@@ -9,6 +9,7 @@ import ProductDetails from '../../page-objects/product-details'
 import Cart from '../../page-objects/cart'
 import Checkout from '../../page-objects/checkout'
 import PushMessaging from '../../page-objects/push-messaging'
+import SignIn from '../../page-objects/sign-in'
 
 let home
 let productList
@@ -16,6 +17,7 @@ let productDetails
 let cart
 let checkout
 let pushMessaging
+let signIn
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
@@ -32,6 +34,7 @@ module.exports = { // eslint-disable-line import/no-commonjs
         cart = new Cart(browser)
         checkout = new Checkout(browser)
         pushMessaging = new PushMessaging(browser)
+        signIn = new SignIn(browser)
     },
 
     after: (browser) => {
@@ -99,6 +102,9 @@ module.exports = { // eslint-disable-line import/no-commonjs
     'Checkout - Registered - Continue to Registered Checkout': (browser) => {
         if (productDetails.inStock) {
             checkout.continueAsRegistered()
+            signIn.signIn()
+            cart.openMiniCart()
+            cart.navigateToCheckout()
             browser
                 .waitForElementVisible(checkout.selectors.checkoutTemplateIdentifier)
                 .assert.visible(checkout.selectors.checkoutTemplateIdentifier)

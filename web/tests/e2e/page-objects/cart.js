@@ -29,6 +29,16 @@ Cart.prototype.navigateToCheckout = function() {
     return this
 }
 
+Cart.prototype.openMiniCart = function() {
+    this.browser
+        .log('Opening mini cart')
+        .waitForElementVisible(selectors.miniCart)
+        .click(selectors.miniCart)
+        .waitForElementVisible(selectors.viewCart)
+        .click(selectors.viewCart)
+    return this
+}
+
 Cart.prototype.removeItems = function() {
     // Remove all items from the cart
     const self = this
