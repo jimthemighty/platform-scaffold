@@ -23,6 +23,7 @@ const validate = (values, props) => {
         'city',
         'countryId',
         'regionId',
+        'region',
         'postcode',
         'telephone'
     ]
