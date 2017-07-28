@@ -11,7 +11,6 @@ const loaderConfig = require('./base.loader')
 const mainConfig = require('./base.main')
 const workerConfig = require('./base.worker')
 const onboardingConfig = require('./base.onboarding')
-const resetConfig = require('./base.reset')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 mainConfig.module.rules = mainConfig.module.rules.concat({
@@ -44,4 +43,4 @@ workerConfig.plugins = workerConfig.plugins.concat([
     })
 ])
 
-module.exports = [mainConfig, loaderConfig, resetConfig, workerConfig, onboardingConfig]
+module.exports = [mainConfig, loaderConfig, workerConfig, onboardingConfig]
