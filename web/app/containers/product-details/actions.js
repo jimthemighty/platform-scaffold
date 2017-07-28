@@ -9,7 +9,6 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {getItemQuantity} from './selectors'
 import {getWishlistURL, getSignInURL} from '../app/selectors'
-import {getCurrentPathKey} from 'progressive-web-sdk/dist/store/app/selectors'
 import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
 import {getIsLoggedIn} from '../../store/user/selectors'
@@ -26,7 +25,7 @@ export const setIsWishlistAdded = createAction('Set is wishlist added', ['isWish
 export const receiveNewItemQuantity = createAction('Set item quantity')
 export const setItemQuantity = (quantity) => (dispatch, getStore) => {
     dispatch(receiveNewItemQuantity({
-        [getCurrentPathKey(getStore())]: {
+        [getCurrentProductId(getStore())]: {
             itemQuantity: quantity
         }
     }))
