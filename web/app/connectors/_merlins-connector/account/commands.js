@@ -103,7 +103,6 @@ export const addToCartFromWishlist = ({productId, quantity}) => (dispatch, getSt
                     })
             }
         })
-        
 }
 
 export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()
