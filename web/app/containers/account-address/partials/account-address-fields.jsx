@@ -127,7 +127,7 @@ const AccountAddressFields = ({
                         type="checkbox"
                         label={<p>Use as my default address</p>}
                     >
-                        <input type="checkbox" noValidate />
+                        <input type="checkbox" noValidate data-analytics-name={UI_NAME.setDefault} />
                     </ReduxForm.Field>
                 </FieldRow>
             }

@@ -47,6 +47,7 @@ const AccountRemoveAddressModal = ({closeModal, isOpen, removeAddress, removeAdd
                     <Button
                         className="pw--tertiary u-text-uppercase u-flex"
                         onClick={closeModal}
+                        data-analytics-name={UI_NAME.cancel}
                     >
                         Cancel
                     </Button>
@@ -57,6 +58,7 @@ const AccountRemoveAddressModal = ({closeModal, isOpen, removeAddress, removeAdd
                             closeModal()
                             removeAddress(removeAddressID)
                         }}
+                        data-analytics-name={UI_NAME.confirmation}
                     >
                         Ok
                     </Button>
