@@ -248,8 +248,7 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 }
 
 export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
-    const currentState = getState()
-    const formKey = getFormKey(currentState)
+    const formKey = getFormKey(getState())
     return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
         .then(() => fetchCustomerAddresses())
         .then(({customer: {addresses}}) => {
@@ -259,8 +258,7 @@ export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-
 }
 
 export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
-    const currentState = getState()
-    const formKey = getFormKey(currentState)
+    const formKey = getFormKey(getState())
     const formData = {
         form_key: formKey,
         ...createAddressRequestObject(address)
@@ -274,8 +272,7 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
 }
 
 export const addAddress = (address) => (dispatch, getState) => {
-    const currentState = getState()
-    const formKey = getFormKey(currentState)
+    const formKey = getFormKey(getState())
     const formData = {
         form_key: formKey,
         ...createAddressRequestObject(address)
@@ -290,8 +287,7 @@ export const addAddress = (address) => (dispatch, getState) => {
 
 /* eslint-disable camelcase */
 export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
-    const currentState = getState()
-    const formKey = getFormKey(currentState)
+    const formKey = getFormKey(getState())
     const {firstname, lastname} = splitFullName(names)
     const formData = {
         firstname,
