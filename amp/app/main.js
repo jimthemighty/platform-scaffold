@@ -34,6 +34,16 @@ const fonts = [
     '<link href="https://fonts.googleapis.com/css?family=Oswald:200,400" rel="stylesheet">'
 ]
 
+const addAnalytics = () => {
+  return (
+    <div>
+      <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+      {ampPackageJson.ampgaAccount !== null &&
+        <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.ampgaAccount} />
+      }
+    </div>
+  )
+}
 
 const getFullUrl = (req) => {
     return `${ampPackageJson.siteUrl}${req.url}`
@@ -46,7 +56,7 @@ const render = (req, res, store, component) => {
         <ampSDK.AmpContext trackRender={components.add.bind(components)}>
             <Provider store={store}>
                 <App>
-                    <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                    {addAnalytics()}
                     {React.createElement(component, {}, null)}
                 </App>
             </Provider>
