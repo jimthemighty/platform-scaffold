@@ -39,13 +39,20 @@ export const setUserAgent = (win, userAgent) => {
 }
 
 /**
- * Creates an iframe containing the provided `html`
+ * Creates an iframe containing the tag `html`. Sets `mobify-path` in document.cookie
+ * to an arbitrary value (in the case that mobify-path was set to empty value for testing)
  *
- * @param {string} html - the HTML to write to the iframe document
- * @param {object}  options
- * @param {string}  [options.bodyContent] - HTML to add inside <body> (default: '')
- * @param {number}  [options.id] - #id to add to the <iframe> element created (default: incremented counter)
- * @param {boolean} [options.setMobileUA] - Whether to set the user agent to mobile (default: desktop)
+ * - Allows for arbitrary HTML to be added inside <body>
+ * - Can have the user agent set to "desktop" or "mobile"
+ * - Can be provided a src string to replace the loader.js src with
+ * - Can be provided a method to run before the document is written (e.g. setting cookies)
+ *
+ * @param {object}    options
+ * @param {string}    [options.bodyContent] - HTML to add inside <body> (default: '')
+ * @param {number}    [options.id] - #id to add to the <iframe> element created (default: incremented counter)
+ * @param {boolean}   [options.setMobileUA] - Whether to set the user agent to mobile (default: desktop)
+ * @param {string}    [options.replaceLoader] - String to replace loader src (default: no replacement)
+ * @param {function}  [options.beforeWrite] - Provided with iframe window object, a method to run before document.write (default: noop)
  * @returns {object} the `window` object of the created iframe
  */
 const START = '<!DOCTYPE html><html><head>'
@@ -54,12 +61,17 @@ const MOBILE_UA = 'Mozilla/5.0 (Linux; Android 5.1.1; Nexus 6 Build/LYZ28E) Appl
 const DESKTOP_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
 let ifrCounter = 0
 
-export const createFrame = (html, options) => {
+export const createFrame = (options) => {
+    document.cookie = 'mobify-path=foobar;'
     options = Object.assign({
         bodyContent: '',
         id: ifrCounter++,
-        setMobileUA: true
+        setMobileUA: true,
+        replaceLoader: false,
+        beforeWrite: () => {}
     }, options)
+
+    const html = typeof options.replaceLoader === 'string' ? replaceLoaderString(options.replaceLoader) : tagHTML
 
     const body = document.getElementsByTagName('body')[0]
     const ifr = document.createElement('iframe')
@@ -71,6 +83,8 @@ export const createFrame = (html, options) => {
     const iWindow = created.contentWindow
 
     setUserAgent(iWindow, options.setMobileUA ? MOBILE_UA : DESKTOP_UA)
+
+    options.beforeWrite(iWindow)
 
     iWindow.document.open()
     iWindow.document.write(START + html + END.replace(/<% bodyContent %>/, options.bodyContent))
