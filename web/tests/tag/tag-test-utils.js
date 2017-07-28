@@ -39,8 +39,7 @@ export const setUserAgent = (win, userAgent) => {
 }
 
 /**
- * Creates an iframe containing the tag `html`. Sets `mobify-path` in document.cookie
- * to an arbitrary value (in the case that mobify-path was set to empty value for testing)
+ * Creates an iframe containing the tag `html`
  *
  * - Allows for arbitrary HTML to be added inside <body>
  * - Can have the user agent set to "desktop" or "mobile"
@@ -53,7 +52,7 @@ export const setUserAgent = (win, userAgent) => {
  * @param {boolean}   [options.setMobileUA] - Whether to set the user agent to mobile (default: desktop)
  * @param {string}    [options.replaceLoader] - String to replace loader src (default: no replacement)
  * @param {function}  [options.beforeWrite] - Provided with iframe window object, a method to run before document.write (default: noop)
- * @returns {object} the `window` object of the created iframe
+ * @returns {Promise} resolves to the `window` object of the created iframe
  */
 const START = '<!DOCTYPE html><html><head>'
 const END = '</head><body><% bodyContent %></body></html>'
@@ -62,7 +61,6 @@ const DESKTOP_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/
 let ifrCounter = 0
 
 export const createFrame = (options) => {
-    document.cookie = 'mobify-path=foobar;'
     options = Object.assign({
         bodyContent: '',
         id: ifrCounter++,
@@ -90,5 +88,27 @@ export const createFrame = (options) => {
     iWindow.document.write(START + html + END.replace(/<% bodyContent %>/, options.bodyContent))
     iWindow.document.close()
 
-    return iWindow
+    if (iWindow.document.readyState === 'complete') {
+        return Promise.resolve(iWindow)
+    } else {
+        let resolver
+        const loadPromise = new Promise((resolve) => {
+            resolver = resolve
+        })
+        iWindow.addEventListener('load', () => {
+            resolver(iWindow)
+        })
+
+        return loadPromise
+    }
+}
+
+/**
+ * Sets `mobify-path` to an arbitrary value with a past expiry
+ *
+ * The tag makes cookie changes, which are global across all iframes. We need to
+ * "reset" the `mobify-path` cookie between each test
+ */
+export const resetMobifyPathCookie = () => {
+    document.cookie = 'mobify-path=foobar; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;'
 }
