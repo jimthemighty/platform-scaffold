@@ -111,6 +111,7 @@ module.exports = { // eslint-disable-line import/no-commonjs
         }
     },
 
+/* https://mobify.atlassian.net/browse/WEBDATA-207
     'Checkout - Registered - Choose shipping info': (browser) => {
         if (productDetails.inStock) {
             checkout.chooseShippingInfo()
@@ -135,4 +136,5 @@ module.exports = { // eslint-disable-line import/no-commonjs
                 .assert.visible(checkout.selectors.placeOrder)
         }
     }
+*/ 
 }
