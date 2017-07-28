@@ -176,8 +176,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    openAddressModal: () => openModal(ACCOUNT_ADDRESS_MODAL),
-    openRemoveAddressModal: () => openModal(ACCOUNT_REMOVE_ADDRESS_MODAL),
+    openAddressModal: () => openModal(ACCOUNT_ADDRESS_MODAL, UI_NAME.address),
+    openRemoveAddressModal: () => openModal(ACCOUNT_REMOVE_ADDRESS_MODAL, UI_NAME.removeSavedAddress),
     setAddressID,
     setIsEditing,
     removeAddress: deleteAddress
