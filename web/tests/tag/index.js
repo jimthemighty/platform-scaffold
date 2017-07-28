@@ -93,7 +93,6 @@ QUnit.test('disableTag is run when a sync script loading error is encountered', 
         replaceLoader: '404-asset.js' // asset doesn't exist - should cause error
     })
     .then((win) => {
-        console.log('I should run first', Date.now())
         assert.deepEqual(win.Mobify.shouldLoadPWA, true, 'window.Mobify.shouldLoadPWA is true')
         assert.deepEqual(
             /mobify-path=(;|$)/.test(document.cookie),
