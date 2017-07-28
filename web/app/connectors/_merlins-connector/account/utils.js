@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+import {parseAddress} from '../utils'
 import {getCookieValue} from '../../../utils/utils'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
@@ -62,4 +63,5 @@ export const fetchCustomerAddresses = () => {
     const fetchURL = `/rest/default/V1/carts/mine`
     return makeRequest(fetchURL, {method: 'GET'})
         .then((response) => response.json())
+        .then(({customer: {addresses}}) => addresses.map((address) => parseAddress(address)))
 }

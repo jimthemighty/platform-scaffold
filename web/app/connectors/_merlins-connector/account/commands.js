@@ -29,7 +29,7 @@ import {
     fetchCustomerAddresses
 } from './utils'
 
-import {jqueryAjaxWrapper, parseAddress} from '../utils'
+import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo} from './parsers'
@@ -71,11 +71,8 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
 
             return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
         })
-        .then(fetchCustomerAddresses)
-        .then(({customer: {addresses}}) => {
-            const parsedAddresses = addresses.map((address) => parseAddress(address))
-            return dispatch(receiveAccountAddressData(parsedAddresses))
-        })
+        .then(() => dispatch(receiveAccountAddressData(fetchCustomerAddresses())))
+
 }
 
 export const initWishlistPage = (url) => (dispatch) => {
@@ -250,11 +247,7 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
     const formKey = getFormKey(getState())
     return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
-        .then(() => fetchCustomerAddresses())
-        .then(({customer: {addresses}}) => {
-            const parsedAddresses = addresses.map((address) => parseAddress(address))
-            return dispatch(receiveAccountAddressData(parsedAddresses))
-        })
+        .then(() => dispatch(receiveAccountAddressData(fetchCustomerAddresses())))
 }
 
 export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
@@ -264,11 +257,7 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
         ...createAddressRequestObject(address)
     }
     return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
-        .then(() => fetchCustomerAddresses())
-        .then(({customer: {addresses}}) => {
-            const parsedAddresses = addresses.map((address) => parseAddress(address))
-            return dispatch(receiveAccountAddressData(parsedAddresses))
-        })
+        .then(() => dispatch(receiveAccountAddressData(fetchCustomerAddresses())))
 }
 
 export const addAddress = (address) => (dispatch, getState) => {
@@ -278,11 +267,7 @@ export const addAddress = (address) => (dispatch, getState) => {
         ...createAddressRequestObject(address)
     }
     return submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/')
-        .then(() => fetchCustomerAddresses())
-        .then(({customer: {addresses}}) => {
-            const parsedAddresses = addresses.map((address) => parseAddress(address))
-            return dispatch(receiveAccountAddressData(parsedAddresses))
-        })
+        .then(() => dispatch(receiveAccountAddressData(fetchCustomerAddresses())))
 }
 
 /* eslint-disable camelcase */
