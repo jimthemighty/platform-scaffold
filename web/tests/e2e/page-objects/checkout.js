@@ -36,15 +36,15 @@ const userData = {
     password: 'p4ssword',
 
     name: 'John Doe',
-    address: '725 Granville St',
-    city: 'Vancouver',
-    state: 'BC',
-    country: 'Canada',
-    postCode: 'V7Y 1L1',
-    phone: '604 343 4696',
+    address: '1 Hacker Way',
+    city: 'Menlo Park',
+    state: 'CA',
+    country: 'United States',
+    postCode: '94025',
+    phone: '6508531300',
 
     creditCardNumber: '4111111111111111',
-    expiry: '0920',
+    expiry: '0922',
     cvv: '123'
 }
 
