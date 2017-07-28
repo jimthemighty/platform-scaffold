@@ -17,7 +17,7 @@ import Sheet from 'progressive-web-sdk/dist/components/sheet'
 // import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit, getAddressFromId}) => {
+const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit, addressInitialValues}) => {
     return (
         <Sheet
             className="pw--no-shadow"
@@ -34,13 +34,17 @@ const AccountAddressModal = ({closeModal, isOpen, duration, setIsEditing, isEdit
             />
             <AccountAddressReduxForm
                 closeAddressModal={closeModal}
-                initialValues={isEdit ? getAddressFromId : {}}
+                initialValues={isEdit ? addressInitialValues : {}}
             />
         </Sheet>
     )
 }
 
 AccountAddressModal.propTypes = {
+    /**
+     * Address to populate "Edit Address" redux form
+     */
+    addressInitialValues: React.PropTypes.object,
     /**
      * A function used to set the navigation-sheet's state to closed
      */
@@ -49,10 +53,6 @@ AccountAddressModal.propTypes = {
      * Duration will define the time the animation takes to complete.
      */
     duration: React.PropTypes.number,
-    /**
-     * Address to populate "Edit Address" redux form
-     */
-    getAddressFromId: React.PropTypes.object,
     /**
      * Whether the modal is for edittin the address
      */
@@ -74,7 +74,7 @@ AccountAddressModal.propTypes = {
 const mapStateToProps = createPropsSelector({
     isOpen: isModalOpen(ACCOUNT_ADDRESS_MODAL),
     isEdit: getIsEditing,
-    getAddressFromId
+    addressInitialValues: getAddressFromId
 })
 
 const mapDispatchToProps = {

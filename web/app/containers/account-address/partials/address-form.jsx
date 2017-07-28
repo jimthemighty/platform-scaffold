@@ -91,9 +91,7 @@ const mapDispatchToProps = {
 
 const AccountAddressReduxForm = ReduxForm.reduxForm({
     form: ADDRESS_FORM_NAME,
-    validate,
-    // keepDirtyOnReinitialize: true,
-    // enableReinitialize: true
+    validate
 })(AccountAddressForm)
 
 export default connect(
