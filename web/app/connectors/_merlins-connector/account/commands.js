@@ -61,17 +61,17 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    // we're going to fetch the cart page so we can re-use the country
-    // parsing functionality from initCartPage
-    makeRequest('https://www.merlinspotions.com/checkout/cart/')
+    return makeRequest('https://www.merlinspotions.com/checkout/cart/')
         .then(jqueryResponse)
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            // we're going to fetch the cart page so we can re-use the country
+            // parsing functionality from initCartPage
             const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
             const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
 
             return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
         })
-    return fetchCustomerAddresses()
+        .then(fetchCustomerAddresses)
         .then(({customer: {addresses}}) => {
             const parsedAddresses = addresses.map((address) => parseAddress(address))
             return dispatch(receiveAccountAddressData(parsedAddresses))
