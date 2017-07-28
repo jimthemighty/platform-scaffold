@@ -125,7 +125,7 @@ const AccountAddressFields = ({
                 <FieldRow>
                     <ReduxForm.Field
                         component={Field}
-                        name="default"
+                        name="preferred"
                         type="checkbox"
                         label={<p>Use as my default address</p>}
                     >
