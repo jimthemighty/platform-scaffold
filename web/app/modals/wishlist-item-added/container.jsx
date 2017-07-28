@@ -71,7 +71,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     onGoToCheckout: wishlistActions.goToCheckout,
-    onDismiss: stripEvent(() => closeModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.addToCart))
+    onDismiss: stripEvent(() => closeModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist))
 }
 
 export default connect(

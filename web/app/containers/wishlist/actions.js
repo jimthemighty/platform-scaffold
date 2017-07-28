@@ -20,7 +20,7 @@ export const addToCartFromWishlist = (productId, quantity, itemID) => (dispatch,
     dispatch(receiveCurrentProductId(productId))
     dispatch(receiveWishlistItemQuantity(quantity))
     return dispatch(addToCartFromWishlistCommand({productId, quantity, wishlistID, itemID}))
-        .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.addToCart)))
+        .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist)))
         .catch(({message}) => {
             if (message.test(/redirect/i)) {
                 return
@@ -35,6 +35,6 @@ export const addToCartFromWishlist = (productId, quantity, itemID) => (dispatch,
 
 
 export const goToCheckout = () => (dispatch) => {
-    dispatch(closeModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.addToCart))
+    dispatch(closeModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist))
     dispatch(appActions.goToCheckout())
 }
