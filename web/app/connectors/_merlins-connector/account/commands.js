@@ -4,7 +4,9 @@
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
+import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
@@ -79,16 +81,29 @@ export const addToCartFromWishlist = ({productId, quantity}) => (dispatch, getSt
         form_key: formKey
     }
     return makeFormEncodedRequest(href, requestData, {method: 'POST'})
-        .then(jqueryResponse)
-        .then((res) => {
-            const [$, $response] = res
+        .then((response) => {
+            if (response.url.includes('configure')) {
+                // the response is a redirect to the PDP
+                // The user needs to select their options
+                browserHistory.push({
+                    pathname: extractPathFromURL(response.url)
+                })
+                // Throw an error to prevent showing the item added modal
+                throw new Error('Redirecting to PDP, item not added')
+            } else {
+                return jqueryResponse(response)
+                    .then((res) => {
+                        const [$, $response] = res
 
-            // Don't return this promise because we don't
-            // need to wait until this returns to update the wishlist UI
-            dispatch(getCart())
+                        // Don't return this promise because we don't
+                        // need to wait until this returns to update the wishlist UI
+                        dispatch(getCart())
 
-            dispatch(receiveWishlistResponse($, $response))
+                        dispatch(receiveWishlistResponse($, $response))
+                    })
+            }
         })
+        
 }
 
 export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()

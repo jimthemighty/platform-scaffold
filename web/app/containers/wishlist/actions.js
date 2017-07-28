@@ -21,13 +21,16 @@ export const addToCartFromWishlist = (productId, quantity, itemID) => (dispatch,
     dispatch(receiveWishlistItemQuantity(quantity))
     return dispatch(addToCartFromWishlistCommand({productId, quantity, wishlistID, itemID}))
         .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.addToCart)))
-        .catch(() => (
+        .catch(({message}) => {
+            if (message.test(/redirect/i)) {
+                return
+            }
             dispatch(addNotification(
                 'addToCartWishlistError',
                 'Unable to add item to the cart.',
                 true
             ))
-        ))
+        })
 }
 
 
