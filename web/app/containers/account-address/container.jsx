@@ -41,7 +41,13 @@ const NoAddress = ({dashboardURL, openAddressModal}) => (
             <div className="u-text-align-center u-padding-lg">
                 You have no saved addresses.
                     </div>
-            <Button text="Add a new address" href="/" onClick={openAddressModal} className="pw--tertiary u-width-full u-text-uppercase" data-analytics-name={UI_NAME.addNewAddress} />
+            <Button
+                text="Add a new address"
+                href="/"
+                onClick={openAddressModal}
+                className="pw--tertiary u-width-full u-text-uppercase"
+                data-analytics-name={UI_NAME.addNewAddress}
+            />
         </div>
     </div>
 )
