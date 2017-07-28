@@ -334,7 +334,7 @@ export const initWishlistPage = () => (dispatch) => {
         })
 }
 
-export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispatch) => {
+export const removeItemFromWishlist = (itemID, wishlistID, productId, quantity) => (dispatch) => {
     const customerID = getCustomerID()
     return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemID}`, {method: 'DELETE'})
         .then((response) => response.text())
@@ -352,5 +352,5 @@ export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispat
 export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemID}) => (dispatch) => {
     // add the item to the cart
     return dispatch(addToCart(productId, quantity))
-        .then(() => dispatch(removeItemFromWishlistCommand(itemID, wishlistID, productId)))
+        .then(() => dispatch(removeItemFromWishlistCommand(itemID, wishlistID, productId, quantity)))
 }

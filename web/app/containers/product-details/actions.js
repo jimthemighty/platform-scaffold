@@ -133,7 +133,7 @@ const addToWishlistSelector = createPropsSelector({
     signInURL: getSignInURL
 })
 
-export const addToWishlist = () => (dispatch, getState) => {
+export const addToWishlist = (quantity) => (dispatch, getState) => {
     const {productID, isLoggedIn, signInURL} = addToWishlistSelector(getState())
     // check if user is logged in
     // add loading state to wishlist btn
@@ -144,7 +144,7 @@ export const addToWishlist = () => (dispatch, getState) => {
         return Promise.resolve()
     }
 
-    return dispatch(addItemToWishlist(productID, window.location.href))
+    return dispatch(addItemToWishlist(productID, window.location.href, quantity))
         .then(() => {
             dispatch(setIsWishlistAdded(true))
             return dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
