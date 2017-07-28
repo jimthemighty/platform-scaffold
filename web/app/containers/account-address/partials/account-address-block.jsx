@@ -15,7 +15,7 @@ const AddressBlock = ({
     countryId,
     postcode,
     telephone,
-    regionId
+    region
 }) => (
     <div className="u-padding-md">
         {firstname ?
@@ -32,7 +32,7 @@ const AddressBlock = ({
             <p>{addressLine2}</p>
         }
         {city ?
-            <p>{city}, {regionId}, {postcode}</p>
+            <p>{city}, {region}, {postcode}</p>
         :
             <SkeletonText width="70%" style={{lineHeight: '20px', display: 'block'}} />
         }
@@ -57,7 +57,7 @@ AddressBlock.propTypes = {
     firstname: PropTypes.string,
     lastname: PropTypes.string,
     postcode: PropTypes.string,
-    regionId: PropTypes.string,
+    region: PropTypes.string,
     telephone: PropTypes.string,
 }
 
