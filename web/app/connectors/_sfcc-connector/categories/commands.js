@@ -143,7 +143,7 @@ export const initProductListPage = (url) => (dispatch) => {
 
             /* eslint-disable camelcase, no-use-before-define */
             if (sorting_options) {
-                sorting_options.unshift({id: DEFAULT_SORT_OPTION, label: ''}) // default sorting option
+                sorting_options.unshift({id: DEFAULT_SORT_OPTION, label: 'Relevance'}) // default sorting option
                 dispatch(receiveCategorySortOptions(pathKeyWithoutQuery, sorting_options))
             }
 
