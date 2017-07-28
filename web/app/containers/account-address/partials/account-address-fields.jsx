@@ -9,6 +9,8 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {normalizePhone} from '../../../utils/normalize-utils'
 import CountrySelect from '../../../components/country-select'
 import RegionField from '../../../components/region-field'
+import {getAvailableRegions} from '../../../store/checkout/selectors'
+import {ADDRESS_FORM_NAME} from '../../../store/form/constants'
 
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
@@ -147,7 +149,8 @@ AccountAddressFields.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    isDefault: getIsDefaultAddressFromId
+    isDefault: getIsDefaultAddressFromId,
+    regions: getAvailableRegions(ADDRESS_FORM_NAME)
 })
 
 
