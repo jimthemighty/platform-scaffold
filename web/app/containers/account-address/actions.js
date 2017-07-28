@@ -18,19 +18,16 @@ export const openAddressModal = () => {
 }
 
 export const submitAddAddress = (formValues) => (dispatch) => {
-    const splitNames = splitFullName(formValues.name)
-    formValues.firstname = splitNames.firstname
-    formValues.lastname = splitNames.lastname
-    return dispatch(addAddress(formValues))
+    const {firstname, lastname} = splitFullName(formValues.name)
+
+    return dispatch(addAddress({...formValues, firstname, lastname}))
         .then(() => dispatch(closeModal(ACCOUNT_ADDRESS_MODAL)))
 }
 
 export const submitEditAddress = (formValues) => (dispatch) => {
-    const splitNames = splitFullName(formValues.name)
-    formValues.firstname = splitNames.firstname
-    formValues.lastname = splitNames.lastname
+    const {firstname, lastname} = splitFullName(formValues.name)
 
-    return dispatch(editAddress(formValues, formValues.id))
+    return dispatch(editAddress({...formValues, firstname, lastname}, formValues.id))
         .then(() => dispatch(closeModal(ACCOUNT_ADDRESS_MODAL)))
 }
 
