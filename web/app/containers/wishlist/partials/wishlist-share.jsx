@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import Button from 'progressive-web-sdk/dist/components/button'
-import {getWishlistShareURL} from '../../../store/user/selectors'
+import {getWishlistShareURL} from 'progressive-web-sdk/dist/store/user/selectors'
 
 
 const WishlistShareButton = ({

@@ -11,7 +11,7 @@ import {getItemQuantity} from './selectors'
 import {getWishlistURL, getSignInURL} from '../app/selectors'
 import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
-import {getIsLoggedIn} from '../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 
 import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {getProductVariantData, addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'

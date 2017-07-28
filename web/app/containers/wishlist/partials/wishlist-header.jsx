@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
-import {getWishlistItemCount, getWishlistTitle} from '../../../store/user/selectors'
+import {getWishlistItemCount, getWishlistTitle} from 'progressive-web-sdk/dist/store/user/selectors'
 import {getAccountURL} from '../../app/selectors'
 
 

@@ -334,7 +334,7 @@ export const initWishlistPage = () => (dispatch) => {
         })
 }
 
-export const removeItemFromWishlist = (itemID, wishlistID, productId, quantity) => (dispatch) => {
+export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispatch) => {
     const customerID = getCustomerID()
     return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemID}`, {method: 'DELETE'})
         .then((response) => response.text())

@@ -5,7 +5,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getWishlistProducts} from '../../../store/user/selectors'
+import {getWishlistProducts} from 'progressive-web-sdk/dist/store/user/selectors'
 import List from 'progressive-web-sdk/dist/components/list'
 import Feedback from 'progressive-web-sdk/dist/components/feedback'
 import Button from 'progressive-web-sdk/dist/components/button'

@@ -11,7 +11,7 @@ import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actio
 import * as appActions from '../app/actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {getWishlistID} from '../../store/user/selectors'
+import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
 
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 
@@ -22,7 +22,7 @@ export const addToCartFromWishlist = (productId, quantity, itemID) => (dispatch,
     return dispatch(addToCartFromWishlistCommand({productId, quantity, wishlistID, itemID}))
         .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist)))
         .catch(({message}) => {
-            if (message.test(/redirect/i)) {
+            if (message && /redirect/i.test(message)) {
                 return
             }
             dispatch(addNotification(
