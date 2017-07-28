@@ -41,7 +41,7 @@ const AccountOrderList = ({dashboardURL}) => (
                                 icon="review"
                                 showIconText={true}
                                 iconClassName="u-margin-end"
-                                data-analytics-name={UI_NAME.editSavedAddress}
+                                data-analytics-name={UI_NAME.view}
                             />
                         </div>
                         <div className="u-flex">
@@ -52,7 +52,7 @@ const AccountOrderList = ({dashboardURL}) => (
                                 icon="cart-v2"
                                 showIconText={true}
                                 iconClassName="u-margin-end"
-                                data-analytics-name={UI_NAME.removeSavedAddress}
+                                data-analytics-name={UI_NAME.reorder}
                             />
                         </div>
                     </div>
