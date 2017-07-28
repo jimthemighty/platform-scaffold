@@ -70,7 +70,12 @@ class AccountAddress extends React.Component {
                     <div className="u-text-align-center u-padding-lg">
                         You have no saved addresses.
                     </div>
-                    <Button text="Add a new address" href="/" className="pw--tertiary u-width-full u-text-uppercase " />
+                    <Button
+                        className="pw--tertiary u-width-full u-text-uppercase "
+                        text="Add a new address"
+                        data-analytics-name={UI_NAME.addNewAddress}
+                        onClick={this.addAddress}
+                    />
                 </div>
             </div>
         )
