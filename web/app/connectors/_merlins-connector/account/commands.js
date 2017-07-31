@@ -267,7 +267,7 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
 export const initAccountOrderListPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
         .then(([$, $response]) => {
-            return receiveAccountOrderListData(parseOrderListData($, $response))
+            return dispatch(receiveAccountOrderListData(parseOrderListData($, $response)))
         })
 }
 
