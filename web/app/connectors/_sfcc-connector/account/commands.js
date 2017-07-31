@@ -205,6 +205,8 @@ export const fetchAddressData = () => (dispatch) => {
             .then((res) => res.json())
             .then(({data}) => {
                 const addresses = data ? data.map((address) => parseAddressResponse(address)) : []
+                debugger
+                debugger
                 return dispatch(receiveAccountAddressData(addresses))
             })
 }
