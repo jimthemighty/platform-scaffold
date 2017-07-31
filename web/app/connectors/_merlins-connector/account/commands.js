@@ -65,10 +65,6 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
         })
 }
 
-export const initAccountOrderListPage = (url) => (dispatch) => {
-    return dispatch(fetchPageData(url))
-}
-
 export const initWishlistPage = (url) => (dispatch) => {
     return (dispatch(fetchPageData(url)))
         .then(([$, $response]) => {
@@ -262,3 +258,8 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
 export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
 }
+
+export const initAccountOrderListPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+}
+
