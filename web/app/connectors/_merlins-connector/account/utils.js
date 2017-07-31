@@ -52,11 +52,10 @@ export const createAddressRequestObject = (formValues) => {
         telephone: telephone ? telephone.replace(/[()\- ]/g, '') : '',
         postcode,
         city,
-        preferred,
         street: addressLine2 ? [addressLine1, addressLine2] : [addressLine1, ''],
         region_id: regionId || '',
-        default_billing: preferred ? '1' : null,
-        default_shipping: preferred ? '1' : null,
+        default_billing: preferred ? '1' : '',
+        default_shipping: preferred ? '1' : '',
         region: region || '',
         country_id: countryId,
     }
