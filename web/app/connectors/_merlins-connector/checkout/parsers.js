@@ -1,6 +1,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+import {getNameValue} from '../utils'
 
 const removeUndefinedAddressKeys = (addressData) => {
     for (const item in addressData) {
@@ -11,9 +12,6 @@ const removeUndefinedAddressKeys = (addressData) => {
 
     return addressData
 }
-
-export const getNameValue = (firstname, lastname) =>
-      [firstname, lastname].filter((item) => item).join(' ')
 
 export const parseShippingInitialValues = (shippingFieldData) => {
     const fieldData = shippingFieldData.toJS()

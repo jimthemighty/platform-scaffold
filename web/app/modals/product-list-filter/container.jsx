@@ -105,10 +105,6 @@ class ProductListFilterModal extends React.Component {
 
 ProductListFilterModal.propTypes = {
     /**
-     */
-    changeFilter: PropTypes.func,
-
-    /**
      * A function used to set the filter sheet's state to closed
      */
     closeModal: PropTypes.func,
