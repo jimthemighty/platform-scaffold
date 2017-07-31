@@ -23,8 +23,7 @@ test:
         #- ./tests/e2e/test-scripts/run-all-tests-on-ci.sh:
         #    pwd: web
         #    parallel: true
-        - npm run test:tag-prod:
-            background: true
+        - nohup bash -c "./scripts/start-tag-server.sh &> logs/startTagTestServer.log &"
         - wget --retry-connrefused --no-check-certificate -T 30 http://localhost:8999
         - ./scripts/run-tag-test.sh:
             pwd: web
