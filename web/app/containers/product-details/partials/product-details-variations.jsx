@@ -10,35 +10,67 @@ import {getProductVariationCategories} from 'progressive-web-sdk/dist/store/prod
 import {onVariationChange} from '../actions'
 
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
-import Field from 'progressive-web-sdk/dist/components/field'
+import {Swatch, SwatchItem} from 'progressive-web-sdk/dist/components/swatch'
 
-const ProductDetailsVariations = ({variations, onVariationChange}) => (
-    <div className={variations.length > 0 && 'u-margin-top-lg'}>
-        {variations.map(({id, label, values = []}) => (
-            <FieldRow key={id}>
+const variationSwatch = ({input: {value, onChange}, values, label, error, name, onVariationChange}) => { // eslint-disable-line
+    const handleChange = (val) => {
+        onChange(value = val)
+        onVariationChange()
+    }
+
+    return (
+        <div>
+            <Swatch
+                label={label}
+                onChange={handleChange}
+                value={value}
+                className={error && !value ? 'pw-swatch__error' : ''}
+            >
+                {values.map(({label, value}) =>
+                    <SwatchItem key={value}
+                        value={value}
+                        analyticsName={name}
+                        analyticsContent={label}
+                    >
+                        {label}
+                    </SwatchItem>
+                )}
+                {error && !value &&
+                    <div className="pw-swatch__error">{error[name]}</div>
+                }
+            </Swatch>
+        </div>
+    )
+}
+
+variationSwatch.propTypes = {
+    input: PropTypes.shape({
+        value: PropTypes.string,
+        onChange: PropTypes.func
+    }),
+    label: PropTypes.string,
+    values: PropTypes.array
+}
+
+const ProductDetailsVariations = ({variations, error, onVariationChange}) => (
+    <div className={variations.length > 0 && 'u-margin-top-lg u-padding-start-md u-padding-end-md'}>
+        {variations.map(({id, name, label, values = []}) => (
+            <FieldRow key={id} error={error}>
                 <ReduxForm.Field
                     label={label}
-                    name={id}
-                    component={Field}
-                    className="pw--has-select"
-                    customEventHandlers={{onChange: onVariationChange}}
-                >
-                    <select name={id}>
-                        <option disabled value="">{label}</option>
-
-                        {values.map(({label, value}) =>
-                            <option value={value} key={value}>
-                                {label}
-                            </option>
-                        )}
-                    </select>
-                </ReduxForm.Field>
+                    name={name}
+                    values={values}
+                    error={error}
+                    component={variationSwatch}
+                    onVariationChange={onVariationChange}
+                />
             </FieldRow>
         ))}
     </div>
 )
 
 ProductDetailsVariations.propTypes = {
+    error: PropTypes.object,
     variations: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string,
         label: PropTypes.string,

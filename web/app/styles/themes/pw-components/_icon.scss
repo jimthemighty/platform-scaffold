@@ -20,4 +20,9 @@
         width: $unit*4; // 32px
         height: $unit*4; // 32px
     }
+
+    &.pw--huge {
+        width: $unit*14; // 112px
+        height: $unit*14; // 112px
+    }
 }
