@@ -19,18 +19,18 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {addToCartFromWishlist} from '../actions'
 
-const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemID}) => (
+const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemId}) => (
     <Button
         className="pw--primary u-width-full u-text-uppercase u-margin-top-md"
         text="Add To Cart"
-        onClick={() => addToCartFromWishlist(productId, quantity, itemID)}
+        onClick={() => addToCartFromWishlist(productId, quantity, itemId)}
         data-analytics-name={UI_NAME.addToCart}
     />
 )
 
 AddToCartButton.propTypes = {
     addToCartFromWishlist: PropTypes.func,
-    itemID: PropTypes.string,
+    itemId: PropTypes.string,
     productId: PropTypes.string,
     quantity: PropTypes.Number
 }
@@ -43,13 +43,13 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
     <List>
         {products.length ?
             products.map((product) => {
-                const {productId, thumbnail, itemID, title, quantity, price, available} = product
+                const {productId, thumbnail, itemId, title, quantity, price, available} = product
                 const itemFooter = available ?
-                    <AddToCartButton quantity={quantity} productId={productId} addToCartFromWishlist={addToCartFromWishlist} itemID={itemID} />
+                    <AddToCartButton quantity={quantity} productId={productId} addToCartFromWishlist={addToCartFromWishlist} itemId={itemId} />
                     : <OutOfStockMessage />
                 return (
                     <ProductItem
-                        key={itemID}
+                        key={itemId}
                         customWidth="40%"
                         className={productItemClassNames}
                         title={<h2 className="u-h5 u-text-family u-text-weight-semi-bold">{title}</h2>}

@@ -15,11 +15,11 @@ import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
 
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 
-export const addToCartFromWishlist = (productId, quantity, itemID) => (dispatch, getState) => {
+export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch, getState) => {
     const wishlistID = getWishlistID(getState())
     dispatch(receiveCurrentProductId(productId))
     dispatch(receiveWishlistItemQuantity(quantity))
-    return dispatch(addToCartFromWishlistCommand({productId, quantity, wishlistID, itemID}))
+    return dispatch(addToCartFromWishlistCommand({productId, quantity, wishlistID, itemId}))
         .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist)))
         .catch(({message}) => {
             if (message && /redirect/i.test(message)) {

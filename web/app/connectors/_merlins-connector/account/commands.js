@@ -69,13 +69,13 @@ export const initWishlistPage = (url) => (dispatch) => {
         .then(([$, $response]) => dispatch(receiveWishlistResponse($, $response)))
 }
 
-export const addToCartFromWishlist = ({productId, quantity}) => (dispatch, getState) => {
+export const addToCartFromWishlist = ({itemId, productId, quantity}) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
     const uenc = getUenc(productId)(currentState)
     const href = '/wishlist/index/cart/'
     const requestData = {
-        item: productId,
+        item: itemId,
         qty: quantity,
         uenc,
         form_key: formKey

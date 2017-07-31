@@ -18,6 +18,13 @@ export const parseAccountInfo = ($, $html) => {
     }
 }
 
+
+const getProductID = ($editLink) => {
+    const productIdMatch = /product_id\/(\d+)\//.exec($editLink.attr('href'))
+
+    return productIdMatch ? productIdMatch[1] : ''
+}
+
 export const parseWishlistProducts = ($, $response) => {
     const products = {}
     const wishlistItems = []
@@ -25,7 +32,8 @@ export const parseWishlistProducts = ($, $response) => {
 
     $response.find('#wishlist-view-form .product-item').each((_, productTile) => {
         const $productTile = $(productTile)
-        const productId = $productTile.attr('id').replace('item_', '')
+        const productId = getProductID($productTile.find('.edit'))
+        const itemId = $productTile.attr('id').replace('item_', '')
         const $photo = $productTile.find('.product-item-photo')
         const removeButtonData = JSON.parse($productTile.find('.btn-remove').attr('data-post-remove'))
 
@@ -45,7 +53,8 @@ export const parseWishlistProducts = ($, $response) => {
 
         wishlistItems.push({
             quantity: parseInt($productTile.find('input.qty').val()),
-            productId
+            productId,
+            itemId
         })
     })
 
