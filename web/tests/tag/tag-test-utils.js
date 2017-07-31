@@ -71,6 +71,9 @@ export const createFrame = (options) => {
 
     const html = typeof options.replaceLoader === 'string' ? replaceLoaderString(options.replaceLoader) : tagHTML
 
+    // Normally, we would append to #qunit-fixture, which would destroy the frame
+    // after each test. However, for debugging purposes, it's nice to keep our
+    // access to the iframe and more importantly, it's `window` context in DevTools
     const body = document.getElementsByTagName('body')[0]
     const ifr = document.createElement('iframe')
 

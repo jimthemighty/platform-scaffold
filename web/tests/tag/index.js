@@ -127,3 +127,32 @@ QUnit.test('disableTag is run when an async script loading error is encountered'
     })
     .then(done)
 })
+
+
+// Boilerplate for providing test reporting in Saucelabs
+const log = []
+
+QUnit.done((results) => {
+    const tests = []
+    for (let i = 0, len = log.length; i < len; i++) {
+        const details = log[i]
+        tests.push({
+            name: details.name,
+            result: details.result,
+            expected: details.expected,
+            actual: details.actual,
+            source: details.source
+        })
+    }
+    results.tests = tests
+    window.global_test_results = results
+})
+
+QUnit.testStart((testDetails) => {
+    QUnit.log((details) => {
+        if (!details.result) {
+            details.name = testDetails.name
+            log.push(details)
+        }
+    })
+})
