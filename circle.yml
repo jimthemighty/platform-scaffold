@@ -24,7 +24,7 @@ test:
         #    pwd: web
         #    parallel: true
         # - nohup bash -c "./scripts/start-tag-server.sh &> logs/startTagTestServer.log &"
-        - curl --retry 10 --retry-delay 2 --retry-connrefused -v http://localhost:8999
+        - wget --retry-connrefused --no-check-certificate -q -t 5 -w 2 http://localhost:8999/ -O /dev/null
         - ./scripts/run-tag-test.sh:
             pwd: web
     post:

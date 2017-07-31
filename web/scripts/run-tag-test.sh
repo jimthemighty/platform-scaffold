@@ -2,7 +2,7 @@
 set -o pipefail
 
 echo 'Sending JS payload to Saucelabs REST API'
-curl -X POST https://saucelabs.com/rest/v1/mquan/js-tests \
+curl -s -S -X POST https://saucelabs.com/rest/v1/mquan/js-tests \
      -u $SAUCE_USERNAME:$SAUCE_ACCESS_KEY \
      -H 'Content-Type: application/json' \
      -d '{
@@ -12,12 +12,10 @@ curl -X POST https://saucelabs.com/rest/v1/mquan/js-tests \
         }' \
 | tee /dev/stderr | tail -1 > js-tests.json
 
-echo 'Waiting for test to finish...'
 while true
 do
   sleep 5
-  echo '...checking status'
-  curl -i -X POST https://saucelabs.com/rest/v1/$SAUCE_USERNAME/js-tests/status \
+  curl -s -S -X POST https://saucelabs.com/rest/v1/$SAUCE_USERNAME/js-tests/status \
        -u $SAUCE_USERNAME:$SAUCE_ACCESS_KEY \
        -H 'Content-Type: application/json' \
        -d @js-tests.json \
@@ -25,7 +23,6 @@ do
 
   # deliberately do `... != false` rather than `... == true`
   # because unexpected values should break rather than infinite loop
-  echo 'Done'
   [ "$(jq .completed <status.json)" != false ] && break
 done
 
