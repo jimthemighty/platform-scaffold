@@ -136,5 +136,5 @@ module.exports = { // eslint-disable-line import/no-commonjs
                 .assert.visible(checkout.selectors.placeOrder)
         }
     }
-*/ 
+*/
 }

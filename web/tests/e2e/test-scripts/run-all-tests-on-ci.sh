@@ -14,7 +14,7 @@ if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   echo 'Starting Lighthouse Tests.'
   ./tests/performance/lighthouse/run-lighthouse.sh
   echo 'Running End to End Tests'
-  npm run test:e2e
+  ./tests/e2e/test-scripts/run-e2e-on-all-connectors.sh
 
 else
   #If the node total is greater than 1 
@@ -41,15 +41,16 @@ else
       npm run test:max-file-size -- build tests/performance/gzip-size-config.json
     
       echo 'Running End to End Tests'
+      ./tests/e2e/test-scripts/run-e2e-on-all-connectors.sh
       #If we have nodes > 2, it will be part of the division to run another test:e2e
-      i=0
-      for testfile in $(find ./tests/e2e/workflows/merlins -name '*.js'| sort); do
-        if [ $(expr $i % $(expr $CIRCLE_NODE_TOTAL - 1)) -eq $(expr $CIRCLE_NODE_INDEX - 1) ]; then
-          echo 'Running test: ' ${testfile}
-          npm run test:e2e --test ${testfile}
-        fi
-        ((i=i+1))
-      done
+      # i=0
+      # for testfile in $(find ./tests/e2e/workflows/merlins -name '*.js'| sort); do
+      #   if [ $(expr $i % $(expr $CIRCLE_NODE_TOTAL - 1)) -eq $(expr $CIRCLE_NODE_INDEX - 1) ]; then
+      #     echo 'Running test: ' ${testfile}
+      #     npm run test:e2e --test ${testfile}
+      #   fi
+      #   ((i=i+1))
+      # done
     fi
   fi
 fi
