@@ -47,3 +47,7 @@ export const parseWishlistProducts = ($, $response) => {
         wishlistItems
     }
 }
+
+export const parseOrderListData = ($, $response) => {
+    return $response
+}
