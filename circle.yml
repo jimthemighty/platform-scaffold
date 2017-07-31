@@ -28,9 +28,9 @@ test:
         - ./scripts/run-tag-test.sh:
             pwd: web
     post:
-        #- ./scripts/upload-artifacts-ci.sh:
-        #    pwd: web
         - killall --wait sc  # wait for Sauce Connect to close the tunnel
+        - ./scripts/upload-artifacts-ci.sh:
+           pwd: web
 deployment:
     bundle:
         branch: [develop, release-*]
