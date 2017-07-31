@@ -20,7 +20,8 @@ import {
     Login,
     ProductList,
     ProductDetails,
-    Wishlist
+    Wishlist,
+    AccountViewOrder
 } from './containers/templates'
 
 // We build this into the app so we can load the home page right away
@@ -95,6 +96,7 @@ const Router = ({store}) => (
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={Wishlist} path="wishlist/" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
+                <Route component={AccountViewOrder} path="*/order/view/order_id/*/" routeName="accountViewOrder" />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"
