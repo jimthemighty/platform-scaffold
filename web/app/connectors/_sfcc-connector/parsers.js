@@ -135,7 +135,7 @@ export const parseAddressResponse = ({
         postcode: postal_code,
         addressLine1: address1,
         addressLine2: address2,
-        default: preferred,
+        preferred,
         id: address_id,
         city,
         countryId: country_code.toUpperCase(),

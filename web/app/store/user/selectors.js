@@ -21,12 +21,12 @@ export const getAllAddresses = createGetSelector(getUser, 'addresses', Immutable
 
 export const getDefaultAddress = createSelector(getUser, (user) => {
     const addresses = user.get('addresses')
-    return addresses ? addresses.toJS().find((address) => address.default) : Immutable.Map()
+    return addresses ? addresses.toJS().find((address) => address.preferred) : Immutable.Map()
 })
 
 export const getAddresses = createSelector(getUser, (user) => {
     const addresses = user.get('addresses')
-    return addresses ? addresses.toJS().filter((address) => !address.default) : Immutable.List(new Array(5).fill(PLACEHOLDER))
+    return addresses ? addresses.toJS().filter((address) => !address.preferred) : Immutable.List(new Array(5).fill(PLACEHOLDER))
 })
 
 export const getWishlist = createGetSelector(getUser, 'wishlist', Immutable.Map())
