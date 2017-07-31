@@ -139,7 +139,8 @@ export const parseAddressResponse = ({
         id: address_id,
         city,
         countryId: country_code.toUpperCase(),
-        regionId: state_code
+        regionId: state_code,
+        region: state_code
     }
 }
 export const getInitialSelectedVariant = (variants, initialValues) => {
