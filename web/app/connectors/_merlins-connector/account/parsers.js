@@ -49,5 +49,19 @@ export const parseWishlistProducts = ($, $response) => {
 }
 
 export const parseOrderListData = ($, $response) => {
-    return $response
+    const ordersMap = {}
+    $response
+        .find('#my-orders-table tbody tr')
+        .each((_, item) => {
+            const $item = $(item)
+            const orderId = $item.find('.id').text()
+
+            ordersMap[orderId] = {
+                date: $item.find('.date').text(),
+                shipTo: $item.find('.shipping').text(),
+                total: $item.find('.total .price').text(),
+                status: $item.find('.status').text()
+            }
+        })
+    return ordersMap
 }
