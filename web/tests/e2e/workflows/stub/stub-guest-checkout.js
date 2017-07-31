@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import process from 'process'
-import Home from '../../page-objects/stub/stub-home'
+import Home from '../../page-objects/home'
 import ProductList from '../../page-objects/product-list'
 import ProductDetails from '../../page-objects/product-details'
 import Cart from '../../page-objects/cart'
@@ -48,7 +48,7 @@ module.exports = { // eslint-disable-line import/no-commonjs
     },
 
     'Checkout - Guest - Navigate from Home to ProductList': (browser) => {
-        home.navigateToProductList(PRODUCT_LIST_INDEX)
+        home.navigateToStubProductList(PRODUCT_LIST_INDEX)
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
             .assert.visible(productList.selectors.productListTemplateIdentifier)

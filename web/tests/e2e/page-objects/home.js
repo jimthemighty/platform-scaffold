@@ -11,6 +11,9 @@ const selectors = {
     productListItem(index) {
         return `.t-home__category .t-home__category-section:nth-child(${index}) .pw--is-loaded`
     },
+    productListItemStub(index) {
+        return `.t-home__category .pw-list-tile:nth-child(${index})`
+    },
     email: '.pw-field__input'
 }
 
@@ -25,6 +28,15 @@ Home.prototype.navigateToProductList = function(PRODUCT_LIST_INDEX) {
         .log('Navigating to ProductList')
         .waitForElementVisible(selectors.productListItem(PRODUCT_LIST_INDEX))
         .click(selectors.productListItem(PRODUCT_LIST_INDEX))
+    return this
+}
+
+Home.prototype.navigateToStubProductList = function(PRODUCT_LIST_INDEX) {
+    // Navigate from Home to ProductList
+    this.browser
+        .log('Navigating to ProductList')
+        .waitForElementVisible(selectors.productListItemStub(PRODUCT_LIST_INDEX))
+        .click(selectors.productListItemStub(PRODUCT_LIST_INDEX))
     return this
 }
 

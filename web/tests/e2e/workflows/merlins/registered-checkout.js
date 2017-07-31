@@ -33,10 +33,10 @@ module.exports = { // eslint-disable-line import/no-commonjs
         pushMessaging = new PushMessaging(browser)
     },
 
-    // after: (browser) => {
-    //     // cart.removeItems()
-    //     browser.end()
-    // },
+    after: (browser) => {
+        // cart.removeItems()
+        browser.end()
+    },
 
     // The following tests are conducted in sequence within the same session.
 
