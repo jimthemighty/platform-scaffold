@@ -1,4 +1,5 @@
 ## To be released
+- Add view wishlist page to app [#892](https://github.com/mobify/platform-scaffold/pull/892)
 - Add view wishlist page to app [#891](https://github.com/mobify/platform-scaffold/pull/891)
     - Add initWishlist page commands to SFCC, merlins and stub connectors
 - Bump Lighthouse to version 2.2.1 [889](https://github.com/mobify/platform-scaffold/pull/889)
