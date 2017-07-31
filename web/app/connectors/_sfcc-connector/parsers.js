@@ -127,9 +127,10 @@ export const parseAddressResponse = ({
                             country_code,
                             address_id
                         }) => {
+
     return {
         firstname: first_name,
-        lastname: last_name,
+        lastname: last_name ? last_name : '', // eslint-disable-line
         telephone: phone,
         postcode: postal_code,
         addressLine1: address1,
