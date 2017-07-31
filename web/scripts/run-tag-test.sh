@@ -27,4 +27,4 @@ do
 done
 
 echo '3. Exit with non-zero status code if any unit tests failed'
-exit "$(jq '.["js tests"][0].result.failures' <status.json)"
+exit "$(jq '.["js tests"][0].result.failed' <status.json)"
