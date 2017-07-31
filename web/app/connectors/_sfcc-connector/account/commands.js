@@ -11,10 +11,11 @@ import {
     receiveWishlistData,
     receiveWishlistUIData,
     receiveAccountAddressData,
-    receiveAccountInfoData
+    receiveAccountInfoData,
+    receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts} from '../parsers'
+import {parseWishlistProducts, parseOrdersResponse} from '../parsers'
 import {createOrderAddressObject} from '../checkout/utils'
 import {
     initSfccSession,
@@ -335,5 +336,10 @@ export const initWishlistPage = () => (dispatch) => {
 }
 
 export const initAccountOrderListPage = () => (dispatch) => {
-    return Promise.resolve()
+    const {sub} = getAuthTokenPayload()
+    const customerID = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerID}/orders`, {method: 'GET'})
+        .then((res) => res.json())
+        .then((res) => dispatch(receiveAccountOrderListData(parseOrdersResponse(res))))
 }

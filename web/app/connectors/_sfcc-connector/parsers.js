@@ -226,3 +226,7 @@ export const parseFilterOptions = (refinements) => {
         return filters
     }, [])
 }
+
+export const parseOrdersResponse = (response) => {
+    return response
+}
