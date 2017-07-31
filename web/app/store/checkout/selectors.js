@@ -29,7 +29,9 @@ export const getSelectedCountryID = (formKey) => createSelector(
 export const getAvailableRegions = (formKey) => createSelector(
     getRegions,
     getSelectedCountryID(formKey),
-    (regions, id) => regions.filter((region) => region.get('countryId').toUpperCase() === id.toUpperCase())
+    (regions, id) => {
+        return id ? regions.filter((region) => region.get('countryId').toUpperCase() === id.toUpperCase()) : []
+    }
 )
 
 export const getShippingMethods = createGetSelector(getCheckout, 'shippingMethods', Immutable.List())
