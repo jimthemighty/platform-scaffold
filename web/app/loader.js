@@ -1,6 +1,15 @@
-/* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
+/* global AJS_SLUG NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
-import {isSamsungBrowser, isFirefoxBrowser, isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+import {
+    documentWriteSupported,
+    isLocalStorageAvailable,
+    isFirefoxBrowser,
+    isSamsungBrowser,
+    loadScript,
+    loadScriptAsPromise,
+    preventDesktopSiteFromRendering
+} from 'progressive-web-sdk/dist/utils/utils'
+import {shouldPreview, loadPreview, isV8Tag} from 'progressive-web-sdk/dist/utils/preview-utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
@@ -8,10 +17,8 @@ import {
     getMessagingSWVersion,
     loadAndInitMessagingClient,
     createGlobalMessagingClientInitPromise,
-    loadScript,
-    loadScriptAsPromise,
-    prefetchLink,
-    updateMessagingSWVersion
+    updateMessagingSWVersion,
+    prefetchLink
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
 import ReactRegexes from './loader-routes'
@@ -21,13 +28,30 @@ import preloadHTML from 'raw-loader!./preloader/preload.html'
 import preloadCSS from 'css-loader?minimize!./preloader/preload.css'
 import preloadJS from 'raw-loader!./preloader/preload.js' // eslint-disable-line import/default
 
-const isReactRoute = () => {
+const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
+const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
+
+const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
+const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
+
+window.Progressive = {
+    AstroPromise: Promise.resolve({}),
+    Messaging: {
+        enabled: messagingEnabled
+    }
+}
+
+const isPWARoute = () => {
     return ReactRegexes.some((regex) => regex.test(window.location.pathname))
 }
 
-window.Progressive = {}
-
-initCacheManifest(cacheHashManifest)
+const isSupportedBrowser = () => {
+    // By default, the PWA will run on all mobile browsers except Samsung and Firefox.
+    const ua = window.navigator.userAgent
+    return /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua) &&
+            !isSamsungBrowser(ua) &&
+            !isFirefoxBrowser(ua)
+}
 
 /**
  * Do the preloading preparation for the Messaging client.
@@ -139,7 +163,7 @@ const loadWorker = () => (
     navigator.serviceWorker.register(getServiceWorkerURL())
         .then(() => navigator.serviceWorker.ready)
         .then(() => true)
-        .catch(() => { /* We're intentially swallowing errors here */ })
+        .catch(() => { /* We're intentionally swallowing errors here */ })
 )
 
 const asyncInitApp = () => {
@@ -157,27 +181,95 @@ const asyncInitApp = () => {
     }
 }
 
-const attemptToInitializeApp = () => {
-    if (getNeededPolyfills().length) {
+let waitForBodyPromise
+const waitForBody = () => {
+    waitForBodyPromise = waitForBodyPromise || new Promise((resolve) => {
+        const bodyEl = document.getElementsByTagName('body')
+
+        const checkForBody = () => {
+            if (bodyEl.length > 0) {
+                resolve()
+            } else {
+                setTimeout(checkForBody, 50)
+            }
+        }
+
+        checkForBody()
+    })
+
+    return waitForBodyPromise
+}
+
+const loadPWA = () => {
+    // We need to check if loadScriptsSynchronously is undefined because if it's
+    // previously been set to false, we want it to remain set to false.
+    if (window.loadScriptsSynchronously === undefined) {
+        // On poor connections, the problem is that Chrome doesn't allow writing
+        // script tags via document.write, so we want to detect for poor connections
+        // and load async in those cases. More info can be found here:
+        // https://developers.google.com/web/updates/2016/08/removing-document-write
+        window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
+    }
+
+    const neededPolyfills = getNeededPolyfills()
+    if (neededPolyfills.length) {
+        // We disable loading scripts sychronously if polyfills are needed,
+        // because the polyfills load async.
+        window.loadScriptsSynchronously = false
+        // But we still need to ensure the desktop script doesn't render while the
+        // document.readyState is "loading"
+        preventDesktopSiteFromRendering()
+
+        neededPolyfills.forEach((polyfill) => polyfill.load(loadPWA))
         return
     }
 
-    const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
-    const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
+    initCacheManifest(cacheHashManifest)
+    triggerAppStartEvent()
 
-    const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
-    const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
+    /* eslint-disable max-len */
+    loadAsset('meta', {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'
+    })
+    /* eslint-enable max-len */
 
-    window.Progressive = {
-        AstroPromise: Promise.resolve({}),
-        Messaging: {
-            enabled: messagingEnabled
-        }
+    loadAsset('meta', {
+        name: 'theme-color',
+        content: '#4e439b'
+    })
+
+    loadAsset('meta', {
+        name: 'charset',
+        content: 'utf-8'
+    })
+
+    loadAsset('link', {
+        href: getAssetUrl('main.css'),
+        rel: 'stylesheet',
+        type: 'text/css',
+        // Tell us when the stylesheet has loaded so we know when it's safe to
+        // display the app! This prevents a flash of unstyled content.
+        onload: 'window.Progressive.stylesheetLoaded = true;'
+    })
+
+    loadAsset('link', {
+        href: getAssetUrl('static/manifest.json'),
+        rel: 'manifest'
+    })
+
+    asyncInitApp()
+
+    // Force create the body element in order to render the Preloader. This is necessary
+    // because we load scripts synchronously in order to speed up loading, which
+    // by default would throw them in head, where as we need them in body.
+    if (window.loadScriptsSynchronously) {
+        document.write('<body>')
     }
 
-    if (isReactRoute() && !isSamsungBrowser(window.navigator.userAgent) && !isFirefoxBrowser(window.navigator.userAgent)) {
-        triggerAppStartEvent()
-
+    // Display the Preloader to indicate progress to the user (except when running
+    // in an Astro app, hide the preloader because apps have their own splash screen).
+    waitForBody().then(() => {
         if (!isRunningInAstro) {
             displayPreloader(preloadCSS, preloadHTML, preloadJS)
         }
@@ -187,130 +279,117 @@ const attemptToInitializeApp = () => {
         const reactTarget = document.createElement('div')
         reactTarget.className = 'react-target'
         body.appendChild(reactTarget)
+    })
 
-        /* eslint-disable max-len */
-        loadAsset('meta', {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0'
-        })
-        /* eslint-enable max-len */
+    /**
+     * This must be called before vendor.js is loaded (or before the Webpack
+     * chunk that contains Messaging React components is loaded)
+     *
+     * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
+     * which will be resolved or rejected later by the method `setupMessagingClient`
+     */
+    createGlobalMessagingClientInitPromise(messagingEnabled)
 
-        loadAsset('meta', {
-            name: 'theme-color',
-            content: '#4e439b'
-        })
-
-        loadAsset('meta', {
-            name: 'charset',
-            content: 'utf-8'
-        })
-
-        loadAsset('link', {
-            href: getAssetUrl('main.css'),
-            rel: 'stylesheet',
-            type: 'text/css',
-            // Tell us when the stylesheet has loaded so we know when it's safe to
-            // display the app! This prevents a flash of unstyled content.
-            onload: 'window.Progressive.stylesheetLoaded = true;'
-        })
-
-        loadAsset('link', {
-            href: getAssetUrl('static/manifest.json'),
-            rel: 'manifest'
-        })
-
-        asyncInitApp()
-
-        window.Progressive.capturedDocHTMLPromise = loadScriptAsPromise({
-            id: 'progressive-web-capture',
-            src: CAPTURING_CDN,
-            rejectOnError: false
-        })
-            // do the init in a then() so that the Promise can resolve
-            // to the enabledHTMLString
-            .then(
-                () => {
-                    return new Promise((resolve) => {
-                        window.Capture.init(
-                            (capture) => {
-                                // NOTE: by this time, the captured doc has changed a little
-                                // bit from original desktop. It now has some of our own
-                                // assets (e.g. main.css) but they can be safely ignored.
-                                resolve(capture.enabledHTMLString())
-                            }
-                        )
-                    })
-                }
-            )
-
+    window.loadCriticalScripts = () => {
+        // The following scripts are loaded sync via document.write, in order
+        // for the browser to increase the priority of these scripts. If the scripts
+        // are loaded async, the browser will not consider them high priority and
+        // queue them while waiting for other high priority resources to finish
+        // loading. This delay can go all the way up to 5 seconds on a Moto G4 on a
+        // 3G connection. More information can be found here:
+        // https://developers.google.com/web/updates/2016/08/removing-document-write
         loadScript({
-            id: 'progressive-web-jquery',
-            src: getAssetUrl('static/js/jquery.min.js')
+            id: 'progressive-web-vendor',
+            src: getAssetUrl('vendor.js'),
+            docwrite: window.loadScriptsSynchronously,
+            isAsync: false,
+            // If there is an error loading the script, then it must be a document.write issue,
+            // so in that case, retry the loading asynchronously.
+            onerror: () => {
+                console.warn('[Mobify.Progressive.Loader] document.write was blocked from loading 3rd party scripts. Loading scripts asynchronously instead.')
+                window.loadScriptsSynchronously = false
+                window.loadCriticalScripts()
+            }
         })
-
-        /**
-         * This must be called before the Webpack chunk that contains Messaging
-         * React components is loaded - right now that's main.js.
-         *
-         * This creates a Promise: `window.Progressive.MessagingClientInitPromise`
-         * which will be resolved or rejected later by the method `setupMessagingClient`
-         */
-        createGlobalMessagingClientInitPromise(messagingEnabled)
 
         loadScript({
             id: 'progressive-web-main',
-            src: getAssetUrl('main.js')
+            src: getAssetUrl('main.js'),
+            docwrite: window.loadScriptsSynchronously
         })
 
-        loadScriptAsPromise({
-            id: 'progressive-web-vendor',
-            src: getAssetUrl('vendor.js')
+        loadScript({
+            id: 'progressive-web-jquery',
+            src: getAssetUrl('static/js/jquery.min.js'),
+            docwrite: window.loadScriptsSynchronously
         })
 
-        if (isRunningInAstro) {
-            window.Progressive.AstroPromise = loadScriptAsPromise({
-                id: 'progressive-web-app',
-                src: ASTRO_CLIENT_CDN,
-                rejectOnError: false
+        window.Progressive.capturedDocHTMLPromise = new Promise((resolve) => {
+            // The reason we bound this to window is because the "onload" method below
+            // is added to the document via document.write, this "onload" is toString'ed,
+            // meaning it doesn't have accessed to closure variables.
+            window.captureResolve = resolve
+            loadScript({
+                id: 'progressive-web-capture',
+                src: CAPTURING_CDN,
+                docwrite: window.loadScriptsSynchronously,
+                onload: () => {
+                    window.Capture.init((capture) => {
+                        // NOTE: by this time, the captured doc has changed a little
+                        // bit from original desktop. It now has some of our own
+                        // assets (e.g. main.css) but they can be safely ignored.
+                        window.captureResolve(capture.enabledHTMLString())
+                    })
+                }
             })
-            .then(() => window.Astro)
-        }
-
-        // Attempt to load the worker.
-        (('serviceWorker' in navigator)
-         ? loadWorker()
-         : Promise.resolve(false)
-        ).then((serviceWorkerSupported) => {
-            setupMessagingClient(serviceWorkerSupported, messagingEnabled)
         })
-
-        // Prefetch analytics - it's something that we will be downloading later,
-        // and thus we want to fetch it so execution is not delayed to prevent
-        // time to interactive from being delayed.
-        prefetchLink({href: '//www.google-analytics.com/analytics.js'})
-    } else {
-        const capturing = document.createElement('script')
-        capturing.async = true
-        capturing.id = 'progressive-web-capture'
-        capturing.src = CAPTURING_CDN
-        document.body.appendChild(capturing)
-
-        const interval = setInterval(() => {
-            if (window.Capture) {
-                clearInterval(interval)
-                window.Capture.init((capture) => {
-                    capture.restore()
-                })
-            }
-        }, 150)
     }
+
+    window.loadCriticalScripts()
+
+    if (isRunningInAstro) {
+        window.Progressive.AstroPromise = loadScriptAsPromise({
+            id: 'progressive-web-app',
+            src: ASTRO_CLIENT_CDN,
+            rejectOnError: false
+        }).then(() => window.Astro)
+    }
+
+    // Attempt to load the worker.
+    (('serviceWorker' in navigator)
+        ? loadWorker()
+        : Promise.resolve(false)
+    ).then((serviceWorkerSupported) => {
+        setupMessagingClient(serviceWorkerSupported, messagingEnabled)
+    })
+
+    // Prefetch analytics - it's something that we will be downloading later,
+    // and thus we want to fetch it so execution is not delayed to prevent
+    // time to interactive from being delayed.
+    prefetchLink({href: '//www.google-analytics.com/analytics.js'})
+
+    // We insert a <plaintext> tag at the end of loading the scripts, in order
+    // to ensure that the original site does not execute anything.
+    // Do not remove!
+    preventDesktopSiteFromRendering()
 }
 
-// Apply polyfills
-const neededPolyfills = getNeededPolyfills()
-
-if (neededPolyfills.length) {
-    neededPolyfills.forEach((polyfill) => polyfill.load(attemptToInitializeApp))
+if (shouldPreview()) {
+    // If preview is being used, load a completely different file from this one and do nothing.
+    loadPreview()
 } else {
-    attemptToInitializeApp()
+    // Run the app.
+    if (isSupportedBrowser() && isPWARoute()) {
+        loadPWA()
+    } else {
+        // If it's not a supported browser or there is no PWA view for this page,
+        // still load a.js to record analytics.
+        waitForBody().then(() => {
+            loadScript(
+                {
+                    id: 'ajs',
+                    src: `https://a.mobify.com/${AJS_SLUG}/a.js`
+                })
+        })
+    }
 }

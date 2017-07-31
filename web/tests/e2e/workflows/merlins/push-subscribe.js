@@ -43,7 +43,7 @@ module.exports = { // eslint-disable-line import/no-commonjs
 
     'Push Subscribe - Navigate and Accept Default Ask': (browser) => {
         home.navigateToProductList(PRODUCT_LIST_INDEX)
-        browser.waitForElementVisible(productList.selectors.productDetailsItem(2))
+        browser.waitForElementVisible(productList.selectors.productDetailsItem(1))
 
         // This is the second page view, the DefaultAsk should be visible
         // by this point.

@@ -85,7 +85,7 @@
     "nightwatch-commands": "3.0.0",
     "node-sass": "4.5.2",
     "postcss-loader": "1.3.3",
-    "progressive-web-sdk": "~0.18.0",
+    "progressive-web-sdk": "~0.18.2",
     "prompt": "1.0.0",
     "raw-loader": "0.5.1",
     "react-addons-test-utils": "15.4.2",
@@ -111,6 +111,7 @@
   "config": {
     "sdk_generator_version": 2,
     "min_lighthouse_score": 80,
+    "max_first_interactive": 15000,
     "file_size_limit": 2000000
   },
   "scripts": {
@@ -136,6 +137,7 @@
     "styleguide": "styleguidist --config webpack/styleguide.config.js server",
     "save-credentials": "sdk-save-credentials",
     "smoke-test": "bash ./tests/e2e/test-scripts/smoke-test.sh",
+    "start": "sdk-get-routes && sdk-create-hash-manifest && node ./dev-server/index.js",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
     "test:check-lighthouse-score": "node tests/performance/lighthouse/check-lighthouse-score.js",

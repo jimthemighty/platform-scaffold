@@ -2,50 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
-
-export const loadScript = ({id, src, onload, isAsync = true, onerror}) => {
-    const script = document.createElement('script')
-
-    // Setting UTF-8 as our encoding ensures that certain strings (i.e.
-    // Japanese text) are not improperly converted to something else. We
-    // do this on the vendor scripts also just in case any libs we
-    // import have localized strings in them.
-    script.charset = 'utf-8'
-    script.async = isAsync
-    script.id = id
-    script.src = src
-    if (typeof onload === 'function') {
-        script.onload = onload
-    }
-    if (typeof onerror === 'function') {
-        script.onerror = onerror
-    }
-
-    document.getElementsByTagName('body')[0].appendChild(script)
-}
-
-export const loadScriptAsPromise = ({id, src, onload, isAsync = true, rejectOnError = true}) => {
-    return new Promise(
-        (resolve, reject) => {
-
-            const resolver = () => {
-                if (typeof onload === 'function') {
-                    onload()
-                }
-                resolve()
-            }
-
-            loadScript({
-                id,
-                src,
-                onload: resolver,
-                isAsync,
-                onerror: rejectOnError ? (e) => reject(new URIError(`The script ${e.target.src} is not accessible.`)) : resolve
-            })
-        }
-    )
-}
+import {isLocalStorageAvailable, loadScriptAsPromise} from 'progressive-web-sdk/dist/utils/utils'
 
 export const prefetchLink = ({href}) => {
     const link = document.createElement('link')
