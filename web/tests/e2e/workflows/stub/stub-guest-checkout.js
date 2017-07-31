@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import process from 'process'
-import Home from '../../page-objects/home'
+import Home from '../../page-objects/stub/stub-home'
 import ProductList from '../../page-objects/product-list'
 import ProductDetails from '../../page-objects/product-details'
 import Cart from '../../page-objects/cart'

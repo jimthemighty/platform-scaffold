@@ -38,7 +38,7 @@ ProductDetails.prototype.navigateToCart = function() {
     this.browser
         .log('Navigating to cart')
         .waitForElementVisible(selectors.goToCheckout)
-        .click(selectors.goToCheckout)
+        .triggerClick(selectors.goToCheckout)
         .waitUntilMobified()
 
     return this
