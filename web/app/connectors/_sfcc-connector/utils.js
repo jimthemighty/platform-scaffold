@@ -6,7 +6,7 @@ import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from './parsers'
-import {getApiEndPoint, getRequestHeaders, getAuthHeaders, getOAuthEndPoint} from './config'
+import {getApiEndPoint, getDataApiEndPoint, getRequestHeaders, getAuthHeaders, getOAuthEndPoint} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
@@ -224,7 +224,7 @@ export const makeDataApiRequest = (path, options) => {
                 ...options,
                 headers
             }
-            return makeRequest(getApiEndPoint() + path, requestOptions)
+            return makeRequest(getDataApiEndPoint() + path, requestOptions)
         })
 }
 

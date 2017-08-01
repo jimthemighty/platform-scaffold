@@ -36,9 +36,10 @@ import {
     LOGGED_IN_NAV
 } from '../../../modals/navigation/constants'
 
+const CATALOG = 'storefront-catalog-en'
 
 export const fetchNavigationData = () => (dispatch) => {
-    return utils.makeUnAuthenticatedApiRequest('/categories/root?levels=2', {method: 'GET'})
+    return utils.makeDataApiRequest(`/catalogs/${CATALOG}/categories?count=1000&select=(**)`, {method: 'GET'})
         .then((response) => response.json())
         .then(({categories}) => {
             const navData = parseCategories(categories)

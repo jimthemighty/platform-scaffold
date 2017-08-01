@@ -3,22 +3,14 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {buildQueryString} from '../../utils/utils'
 
-const API_TYPE = 'shop'
+const SHOP_API = 'shop'
+const DATA_API = 'data'
 const API_VERSION = 'v17_4'
-const CLIENT_ID = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-const CLIENT_PASSWORD = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-const BUSINESS_MANAGER_USER = 'public-data-api-access'
-const BUSINESS_MANAGER_PASSWORD = '6sL!LJOk'
 const GRANT_TYPE = 'urn:demandware:params:oauth:grant-type:client-id:dwsid:dwsecuretoken'
 
 export const SEARCH_URL = '/catalogsearch/result/'
 
-let config = {
-    clientId: CLIENT_ID,
-    clientPassword: CLIENT_PASSWORD,
-    businessManagerUser: BUSINESS_MANAGER_USER,
-    businessManagerPassword: BUSINESS_MANAGER_PASSWORD
-}
+let config = {}
 
 export const registerConfig = (cfg) => {
     config = cfg
@@ -27,8 +19,9 @@ export const registerConfig = (cfg) => {
 export const getSiteID = () => config.siteID
 
 
-export const getApiEndPoint = () => `/s/${getSiteID()}/dw/${API_TYPE}/${API_VERSION}`
-export const getOAuthEndPoint = () => `/dw/oauth2/access_token?client_id=${config.clientId}&grant_type=${GRANT_TYPE}`
+export const getApiEndPoint = () => `/s/${getSiteID()}/dw/${SHOP_API}/${API_VERSION}`
+export const getDataApiEndPoint = () => `/s/-/dw/${DATA_API}/${API_VERSION}`
+export const getOAuthEndPoint = () => `/dw/oauth2/access_token?client_id=${config.dataAPIClientID}&grant_type=${GRANT_TYPE}`
 
 export const getRequestHeaders = () => ({
     'Content-Type': 'application/json',
