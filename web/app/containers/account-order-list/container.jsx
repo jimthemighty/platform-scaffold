@@ -34,10 +34,22 @@ const AccountOrderList = ({dashboardURL, orders}) => {
                         }
                         children={
                             <div className="u-padding-md">
-                                <p>Shipped to: {shipTo}</p>
-                                <p>Date: {date}</p>
-                                <p>Total: {total}</p>
-                                <p>Status: {status}</p>
+                                <p>
+                                    <strong>Shipped to: </strong>
+                                    {shipTo}
+                                </p>
+                                <p>
+                                    <strong>Date: </strong>
+                                    {date}
+                                </p>
+                                <p>
+                                    <strong>Total: </strong>
+                                    {total}
+                                </p>
+                                <p>
+                                    <strong>Status: </strong>
+                                    {status}
+                                </p>
                             </div>
                         }
                         footer={
