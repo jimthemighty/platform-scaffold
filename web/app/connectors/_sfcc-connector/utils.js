@@ -6,10 +6,11 @@ import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from './parsers'
-import {getApiEndPoint, getRequestHeaders} from './config'
+import {getApiEndPoint, getRequestHeaders, getAuthHeaders, getOAuthEndPoint} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
+const DATA_TOKEN_EXIRATION_KEY_NAME = 'mob-data-auth-exp'
 
 const setCookieValue = (keyName, value) => {
     document.cookie = `${keyName}=${value}`
@@ -172,6 +173,58 @@ export const initSfccAuthAndSession = () => {
             authorization = response.headers.get('Authorization')
             storeAuthToken(authorization)
             return initSfccSession(authorization)
+        })
+}
+
+export const initSfccDataAuthAndSession = () => {
+    const authorizationToken = getAuthToken()
+    const tokenExpiration = getItemFromBrowserStorage(DATA_TOKEN_EXIRATION_KEY_NAME)
+
+    if (authorizationToken && tokenExpiration) {
+
+        // Get current Unix time in seconds (not milliseconds)
+        const currentTime = Math.floor(Date.now() / 1000)
+        if (currentTime <= tokenExpiration) {
+            // The token is still valid
+            return Promise.resolve({
+                ...getRequestHeaders(),
+                Authorization: `Bearer ${authorizationToken}`
+            })
+        }
+
+        // Clear token and expiry
+        deleteAuthToken()
+        removeItemFromBrowserStorage(DATA_TOKEN_EXIRATION_KEY_NAME)
+
+        return initSfccDataAuthAndSession()
+    }
+
+    const options = {
+        method: 'POST',
+        headers: getAuthHeaders()
+    }
+
+    let authorization
+
+    return makeRequest(getOAuthEndPoint(), options)
+        .then((response) => response.json())
+        .then((json) => {
+            authorization = json.access_token
+            const tokenExpiration = Math.floor(Date.now() / 1000) + json.expires_in
+            storeAuthToken(authorization)
+            setItemInBrowserStorage(DATA_TOKEN_EXIRATION_KEY_NAME, tokenExpiration)
+            return initSfccDataAuthAndSession(authorization)
+        })
+}
+
+export const makeDataApiRequest = (path, options) => {
+    return initSfccDataAuthAndSession()
+        .then((headers) => {
+            const requestOptions = {
+                ...options,
+                headers
+            }
+            return makeRequest(getApiEndPoint() + path, requestOptions)
         })
 }
 
