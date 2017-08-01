@@ -64,11 +64,11 @@ const isSupportedPWABrowser = () => {
 const MINIMUM_NON_PWA_CHROME = 59   // todo!
 /**
  * Returns true if the browser supports the nonPWA client. Note that
- * isSupportedPWABrowser and isSupportedNonPWABrowser *might* both
+ * isSupportedPWABrowser and isSupportedNonPWAMessagingBrowser *might* both
  * return true for a given browser; support is not mutually exclusive.
  * @returns {boolean}
  */
-const isSupportedNonPWABrowser = () => {
+const isSupportedNonPWAMessagingBrowser = () => {
     // By default, non-PWA mode will run on Chrome (above
     // minimum version numbers).
     // todo - firefox?
@@ -474,7 +474,7 @@ if (shouldPreview()) {
     // Run the app.
     if (isSupportedPWABrowser() && isPWARoute()) {
         loadPWA()
-    } else if (isSupportedNonPWABrowser()) {
+    } else if (isSupportedNonPWAMessagingBrowser()) {
         loaderLog('Starting setup for nonPWA mode')
         initCacheManifest(cacheHashManifest)
 
