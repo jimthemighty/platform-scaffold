@@ -25,15 +25,20 @@ const AccountOrderList = ({dashboardURL, orders}) => {
                 </div>
             </div>
             <div className="t-account-order-list__content u-padding-md">
-                {orders.map((order) => (
+                {orders.map(({id, shipTo, status, total, date}) => (
                     <Card
                         hasBorder
-                        key={order.id}
+                        key={id}
                         header={
-                            <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">{order.id}</h3>
+                            <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">{id}</h3>
                         }
                         children={
-                            <div className="u-padding-md">{order.date}</div>
+                            <div className="u-padding-md">
+                                <p>Shipped to: {shipTo}</p>
+                                <p>Date: {date}</p>
+                                <p>Total: {total}</p>
+                                <p>Status: {status}</p>
+                            </div>
                         }
                         footer={
                             <div className="u-flexbox">
