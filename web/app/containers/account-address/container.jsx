@@ -81,7 +81,10 @@ const AccountAddress = ({
                             text="Add new address"
                             className="pw--tertiary u-margin-top-lg u-width-full u-text-weight-medium"
                             data-analytics-name={UI_NAME.addNewAddress}
-                            onClick={openAddressModal}
+                            onClick={() => {
+                                openAddressModal()
+                                setAddressID('')
+                            }}
                         />
                         <div className="t-account-address__content u-padding-top-md">
                             <Card
