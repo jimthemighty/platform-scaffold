@@ -271,3 +271,6 @@ export const initAccountOrderListPage = (url) => (dispatch) => {
         })
 }
 
+export const reorderPreviousOrder = (orderNumber) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
+}
