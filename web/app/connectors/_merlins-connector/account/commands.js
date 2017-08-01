@@ -70,7 +70,7 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
 
             return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
         })
-        .then(dispatch(updateCustomerAddresses()))
+        .then(() => dispatch(updateCustomerAddresses()))
 }
 
 export const initWishlistPage = (url) => (dispatch) => {
@@ -245,7 +245,7 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
 export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
     const formKey = getFormKey(getState())
     return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
-        .then(dispatch(updateCustomerAddresses()))
+        .then(() => dispatch(updateCustomerAddresses()))
 }
 
 export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
@@ -255,7 +255,7 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
         ...createAddressRequestObject(address)
     }
     return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
-        .then(dispatch(updateCustomerAddresses()))
+        .then(() => dispatch(updateCustomerAddresses()))
 }
 
 export const addAddress = (address) => (dispatch, getState) => {
@@ -265,7 +265,7 @@ export const addAddress = (address) => (dispatch, getState) => {
         ...createAddressRequestObject(address)
     }
     return submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/')
-        .then(dispatch(updateCustomerAddresses()))
+        .then(() => dispatch(updateCustomerAddresses()))
 }
 
 /* eslint-disable camelcase */
