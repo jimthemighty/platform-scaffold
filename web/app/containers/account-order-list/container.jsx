@@ -14,8 +14,6 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getOrderList} from './selectors'
 
 const AccountOrderList = ({dashboardURL, orders}) => {
-    debugger
-    debugger
     return (
         <div className="t-account-order-list">
             <div className="t-account-order-list__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
@@ -71,7 +69,8 @@ const AccountOrderList = ({dashboardURL, orders}) => {
 }
 
 AccountOrderList.propTypes = {
-    dashboardURL: PropTypes.string
+    dashboardURL: PropTypes.string,
+    orders: PropTypes.array
 }
 
 const mapStateToProps = createPropsSelector({
