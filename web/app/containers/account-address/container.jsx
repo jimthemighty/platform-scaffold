@@ -66,17 +66,6 @@ const AccountAddress = ({
     setAddressID
 }) => {
 
-    const editAddress = (id) => {
-        openAddressModal()
-        setAddressID(id)
-        setIsEditing(true)
-    }
-
-    const removeAddress = (id) => {
-        openRemoveAddressModal()
-        setAddressID(id)
-    }
-
     return (
         <div>
             {defaultAddress ?
@@ -110,7 +99,11 @@ const AccountAddress = ({
                                         showIconText={true}
                                         iconClassName="u-margin-end"
                                         data-analytics-name={UI_NAME.editSavedAddress}
-                                        onClick={() => editAddress(defaultAddress.id)}
+                                        onClick={() => {
+                                            openAddressModal()
+                                            setAddressID(defaultAddress.id)
+                                            setIsEditing(true)
+                                        }}
                                     />
                                 }
                             />
@@ -130,14 +123,21 @@ const AccountAddress = ({
                                                         showIconText={true}
                                                         iconClassName="u-margin-end"
                                                         data-analytics-name={UI_NAME.editSavedAddress}
-                                                        onClick={() => editAddress(address.id)}
+                                                        onClick={() => {
+                                                            openAddressModal()
+                                                            setAddressID(address.id)
+                                                            setIsEditing(true)
+                                                        }}
                                                     />
                                                 </div>
                                                 <div className="u-flex">
                                                     <Button
                                                         type="button"
                                                         title="Delete"
-                                                        onClick={() => removeAddress(address.id)}
+                                                        onClick={() => {
+                                                            openRemoveAddressModal()
+                                                            setAddressID(address.id)
+                                                        }}
                                                         className="u-width-full u-color-brand u-border-top"
                                                         icon="trash"
                                                         showIconText={true}
