@@ -37,14 +37,17 @@ import {
 } from '../../../modals/navigation/constants'
 
 const formatCategorySearch = (categoryList) => {
-    if(categoryList.length>1){
-        let listString = ''
-        categoryList.forEach((category) => {
-            listString += category+','
-        })
-        return '(' + listString.slice(0, -1) + ')'
+    if(categoryList.constructor === Array) {
+        if(categoryList.length>1){
+            let listString = ''
+            categoryList.forEach((category) => {
+                listString += category + ','
+            })
+            return `(${listString.slice(0, -1)})`
+        }
+        return categoryList[0]
     }
-    return categoryList[0]
+    return categoryList
 }
 
 const findNonLeafCategories = (categories) => {
@@ -73,30 +76,32 @@ const insertCategory = (categories, newCategory) => {
     return categories
 }
 
-const fetchNextTwoLevels = ({categories, nonLeafCategories}) => {
+const fetchCategories = (categories, nonLeafCategories) => {
     return utils.makeUnAuthenticatedApiRequest(`/categories/${formatCategorySearch(nonLeafCategories)}?levels=2`, {method: 'GET'})
         .then((response) => response.json())
-        .then(({data}) => {
+        .then((response) => {
+            let data
+            if (response.categories) { // the first response for /categoreis/root
+                data = response.categories
+                categories = response.categories
+            } else { // the subsequence responses
+                data = response.data
+            }
+            
             data.forEach((category) => {
                 categories = insertCategory(categories, category)
             })
             nonLeafCategories = findNonLeafCategories(data)
             if(nonLeafCategories.length > 0){
-                return fetchNextTwoLevels({categories, nonLeafCategories})
+                return fetchCategories(categories, nonLeafCategories)
             }
             return categories
         })
 }
 
 export const fetchNavigationData = () => (dispatch) => {
-    return utils.makeUnAuthenticatedApiRequest('/categories/root?levels=2', {method: 'GET'})
-        .then((response) => response.json())
-        .then(({categories}) => {
-            let nonLeafCategories = findNonLeafCategories(categories)
-            return {categories, nonLeafCategories}
-        })
-        .then(fetchNextTwoLevels)
-        .then((categories)=> {
+    return fetchCategories([], 'root')
+        .then((categories) => {
             const navData = parseCategories(categories)
             const isLoggedIn = utils.isUserLoggedIn(utils.getAuthToken())
             const accountNode = [
