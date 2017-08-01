@@ -45,10 +45,10 @@ const render = (req, res, store, component) => {
         <ampSDK.AmpContext trackRender={components.add.bind(components)}>
             <Provider store={store}>
                 <App>
-                  <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
-                  {ampPackageJson.ampgaAccount !== null &&
-                  <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.ampgaAccount} />}
-                  {React.createElement(component, {}, null)}
+                    <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                    {ampPackageJson.ampgaAccount !== null &&
+                    <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.ampgaAccount} />}
+                    {React.createElement(component, {}, null)}
                 </App>
             </Provider>
         </ampSDK.AmpContext>
