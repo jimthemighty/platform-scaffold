@@ -49,7 +49,7 @@ const AccountAddressFields = ({
                     name="addressLine1"
                     label="Address"
                 >
-                    <input type="text" noValidate data-analytics-name={UI_NAME.city} />
+                    <input type="text" noValidate data-analytics-name={UI_NAME.address} />
                 </ReduxForm.Field>
             </FieldRow>
 
