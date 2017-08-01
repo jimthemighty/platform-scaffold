@@ -10,6 +10,8 @@ import ListTile from 'progressive-web-sdk/dist/components/list-tile'
 import ProductItem from '../product-item'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 
+import Waypoint from 'react-waypoint'
+
 /**
  * Product Tile represents a product and it's basic information: image,
  * link and price.
@@ -37,7 +39,7 @@ ProductImage.propTypes = {
     src: PropTypes.string
 }
 
-const ProductTile = ({className, thumbnail, href, price, title, onClick}) => {
+const ProductTile = ({className, id, thumbnail, href, price, title, onClick, sendProductImpression}) => {
     const productImage = (<ProductImage {...thumbnail} />)
 
     const titleElement = title
@@ -48,13 +50,25 @@ const ProductTile = ({className, thumbnail, href, price, title, onClick}) => {
         : <SkeletonBlock height="22px" width="50px" />
 
     return (
-        <ListTile className="c-product-tile" onClick={onClick} href={href}>
-            <ProductItem customWidth="45%"
-                className={classNames('u-align-center', className)}
-                title={titleElement}
-                price={priceElement}
-                image={productImage} />
-        </ListTile>
+
+        <Waypoint
+            topOffset="20%"
+            bottomOffset="20%"
+            onEnter={() => {
+                debugger;
+                sendProductImpression(id)
+            }}
+        >
+            <div>
+                <ListTile className="c-product-tile" onClick={onClick} href={href}>
+                    <ProductItem customWidth="45%"
+                        className={classNames('u-align-center', className)}
+                        title={titleElement}
+                        price={priceElement}
+                        image={productImage} />
+                </ListTile>
+            </div>
+        </Waypoint>
     )
 }
 
@@ -65,6 +79,7 @@ ProductTile.propTypes = {
     className: PropTypes.string,
     href: PropTypes.string,
     price: PropTypes.string,
+    sendProductImpression: PropTypes.func,
     thumbnail: PropTypes.shape({
         alt: PropTypes.string.isRequired,
         src: PropTypes.string.isRequired,

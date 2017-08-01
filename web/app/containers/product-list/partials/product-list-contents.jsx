@@ -15,6 +15,7 @@ import {PRODUCT_LIST_FILTER_MODAL} from '../../../modals/constants'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
+import {sendProductImpressionAnalytics} from 'progressive-web-sdk/dist/analytics/actions'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import List from 'progressive-web-sdk/dist/components/list'
@@ -30,12 +31,13 @@ import Card from '../../../components/card'
 const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
 
-const ResultList = ({products, setCurrentProduct}) => (
+const ResultList = ({products, setCurrentProduct, sendProductImpression}) => (
     <List className="pw--borderless">
         {products.map((product, idx) => (
             <Card hasShadow key={product ? product.id : idx}>
                 <ProductTile
                     onClick={product ? () => setCurrentProduct(product.id) : null}
+                    sendProductImpression={sendProductImpression}
                     {...product}
                 />
             </Card>
@@ -45,7 +47,8 @@ const ResultList = ({products, setCurrentProduct}) => (
 
 ResultList.propTypes = {
     products: PropTypes.array,
-    setCurrentProduct: PropTypes.func
+    setCurrentProduct: PropTypes.func,
+    sendProductImpression: PropTypes.func
 }
 
 const NoResultsList = ({routeName}) => (
@@ -76,6 +79,7 @@ const ProductListContents = ({
     products,
     openModal,
     setCurrentProduct,
+    sendProductImpression,
     sortOptions,
     routeName
 }) => {
@@ -181,7 +185,11 @@ const ProductListContents = ({
                 </div>
 
                 {(products.length > 0 || !contentsLoaded) ?
-                    <ResultList products={products} setCurrentProduct={setCurrentProduct} />
+                    <ResultList
+                        products={products}
+                        setCurrentProduct={setCurrentProduct}
+                        sendProductImpression={sendProductImpression}
+                    />
                 :
                     <NoResultsList routeName={routeName} />
                 }
@@ -225,7 +233,11 @@ const mapStateToProps = createPropsSelector({
 const mapDispatchToProps = {
     clearFilters: () => changeFilterTo(null),
     openModal: () => openModal(PRODUCT_LIST_FILTER_MODAL, UI_NAME.filters),
-    setCurrentProduct: receiveCurrentProductId
+    setCurrentProduct: receiveCurrentProductId,
+    sendProductImpression: (productId) => (dispatch) => {
+       dispatch(sendProductImpressionAnalytics(productId))
+    }
+
 }
 
 export default connect(
