@@ -237,6 +237,7 @@ export const parseOrdersResponse = ({data}) => {
         order_total
     }) => {
         ordersMap[order_no] = {
+            id: order_no,
             date: creation_date,
             shipTo: billing_address,
             total: order_total,

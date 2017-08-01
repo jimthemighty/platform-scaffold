@@ -57,6 +57,7 @@ export const parseOrderListData = ($, $response) => {
             const orderId = $item.find('.id').text()
 
             ordersMap[orderId] = {
+                id: orderId,
                 date: $item.find('.date').text(),
                 shipTo: $item.find('.shipping').text(),
                 total: $item.find('.total .price').text(),
