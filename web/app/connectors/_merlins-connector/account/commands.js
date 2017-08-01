@@ -16,7 +16,8 @@ import {
     receiveAccountAddressData,
     receiveAccountInfoData,
     receiveWishlistData,
-    receiveWishlistUIData
+    receiveWishlistUIData,
+    receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {
@@ -28,7 +29,7 @@ import {jqueryAjaxWrapper, parseAddress} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo} from './parsers'
+import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo, parseOrder} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -259,4 +260,11 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
 }
 
 
-export const initAccountViewOrderPage = (url) => (dispatch) => Promise.resolve()
+export const initAccountViewOrderPage = (url) => (dispatch) => {
+    return (dispatch(fetchPageData(url)))
+        .then(([$, $response]) => {
+            const orderData = parseOrder($response)
+            dispatch(receiveAccountOrderListData({[orderData.id]: orderData}))
+            // set current order ID
+        })
+}

@@ -39,7 +39,8 @@ import {
     initAccountDashboardPage,
     initAccountAddressPage,
     initAccountInfoPage,
-    initWishlistPage
+    initWishlistPage,
+    initAccountViewOrderPage
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
@@ -96,7 +97,7 @@ const Router = ({store}) => (
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={Wishlist} path="wishlist/" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
-                <Route component={AccountViewOrder} path="*/order/view/order_id/*/" routeName="accountViewOrder" />
+                <Route component={AccountViewOrder} path="*/order/view/order_id/*/" routeName="accountViewOrder" fetchAction={initPage(initAccountViewOrderPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"

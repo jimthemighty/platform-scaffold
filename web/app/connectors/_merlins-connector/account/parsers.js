@@ -47,3 +47,15 @@ export const parseWishlistProducts = ($, $response) => {
         wishlistItems
     }
 }
+
+const getOrderId = ($pageTitle) => {
+    const orderIdMatch = /#\s*(\d+)$/.exec($pageTitle.text())
+
+    return orderIdMatch ? orderIdMatch[1] : ''
+}
+
+export const parseOrder = ($response) => {
+    return {
+        id: getOrderId($response.find('.page-title'))
+    }
+}
