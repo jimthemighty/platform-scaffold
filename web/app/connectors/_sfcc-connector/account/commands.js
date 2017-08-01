@@ -166,33 +166,6 @@ export const registerUser = (firstname, lastname, email, password) => (dispatch)
 
 }
 
-const updateCheckoutAddress = (formValues, addressName) => {
-    const addressData = createOrderAddressObject(formValues)
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
-    const requestBody = {
-        ...addressData,
-        address_id: addressName
-    }
-    return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
-        .then(checkForResponseFault)
-        .catch(() => { throw Error('Unable to save address') })
-}
-
-
-// updateShippingAddress and updateBillingAddress are separate commands to
-// support other connectors that require different actions for saving a
-// shipping vs. a billing address
-// SFCC doesn't diferentiate between the two address types,
-// so these commands do effectively the same thing
-export const updateShippingAddress = (formValues) => (dispatch) => {
-    return updateCheckoutAddress(formValues, 'shipping_address')
-}
-
-export const updateBillingAddress = (formValues) => (dispatch) => {
-    return updateCheckoutAddress(formValues, 'billing_address')
-}
-
 export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
     return Promise.resolve()
 }
@@ -239,6 +212,21 @@ export const editAddress = (address, addressId) => (dispatch) => { // eslint-dis
 
     return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {...addressData}, {method: 'PATCH'})
         .then(() => dispatch(fetchAddressData()))
+}
+
+// updateShippingAddress and updateBillingAddress are separate commands to
+// support other connectors that require different actions for saving a
+// shipping vs. a billing address
+// SFCC doesn't diferentiate between the two address types,
+// so these commands do effectively the same thing
+export const updateShippingAddress = (formValues) => (dispatch) => {
+    formValues.addressName = 'shipping_address'
+    return dispatch(addAddress(formValues))
+}
+
+export const updateBillingAddress = (formValues) => (dispatch) => {
+    formValues.addressName = 'billing_address'
+    return dispatch(addAddress(formValues))
 }
 
 export const initAccountAddressPage = () => (dispatch) => {
