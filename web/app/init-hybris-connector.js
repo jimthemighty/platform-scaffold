@@ -7,6 +7,23 @@ const initConnector = () => {
         /* Add configuration data here as needed.
          * This can be accessed within the connector
          */
+        baseSiteId: 'apparel-uk',
+        catalogId: 'apparelProductCatalog',
+        catalogVersionId: 'Online',
+        menuConfig: [
+            {
+                id: 'categories',
+                displayAsNode: false
+            },
+            {
+                id: 'collections',
+                displayAsNode: true,
+            },
+            {
+                id: 'brands',
+                displayAsNode: true
+            }
+        ]
     }))
 }
 

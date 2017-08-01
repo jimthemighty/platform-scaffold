@@ -4,92 +4,101 @@
 
 /* eslint-disable no-unused-vars */
 
-import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
+import {initHybrisAuth, isUserLoggedIn} from '../utils'
+
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {getCart} from '../cart/commands'
+import {getCartURL, getCatalogEndPoint, getMenuConfig, getHomeURL, getMyAccountURL, getRequestHeaders, getSignInURL, getWishlistURL} from '../config'
+import {parseCategories} from '../parsers'
 
 import {
     receiveNavigationData,
+    setCheckoutShippingURL,
     setCartURL,
-    setWishlistURL,
-    setSignInURL
+    setSignInURL,
+    setWishlistURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
-/**
- * When the user first lands on the site, the response from the desktop site is saved
- * This function allows you to get that response
- * You will only need to use this function if you're using HTML scraping as your back end
- */
-const requestCapturedDoc = () => {
-    return window.Progressive.capturedDocHTMLPromise.then((initialCapturedDocHTML) => {
-        const body = new Blob([initialCapturedDocHTML], {type: 'text/html'})
-        const capturedDocResponse = new Response(body, {
-            status: 200,
-            statusText: 'OK'
+import {
+    ACCOUNT_NAV_ITEM,
+    SIGNED_OUT_ACCOUNT_NAV_ITEM,
+    GUEST_NAV,
+    LOGGED_IN_NAV
+} from '../../../modals/navigation/constants'
+
+export const fetchNavigationData = () => (dispatch) => {
+    const requestOptions = {
+        headers: getRequestHeaders()
+    }
+
+    let navData = []
+    const menuItems = getMenuConfig() || []
+    menuItems.reduce((p, menuItem) => {
+        return p.then(() => {
+            return makeRequest(`${getCatalogEndPoint()}/categories/${menuItem.id}`, requestOptions)
+                .then((response) => response.json())
+                .then((json) => {
+                    const node = menuItem.displayAsNode ? [json] : json.subcategories
+                    navData = navData.concat(parseCategories(node))
+                })
         })
-
-        return Promise.resolve(capturedDocResponse)
-    })
-}
-
-let isInitialEntryToSite = true
-
-/**
- * This function is used to fetch data from a desktop page
- * You will only need to use this function if you're using HTML scraping as your back end
- */
-export const fetchPageData = (url) => (dispatch) => {
-    const request = isInitialEntryToSite ? requestCapturedDoc() : makeRequest(url)
-    isInitialEntryToSite = false
-
-    return request
-        .then(jqueryResponse)
-        .then((res) => {
-            const [$, $response] = res
-
-            // Add global actions here
-
-            return res
-        })
-        .catch((error) => {
-            console.info(error.message)
-            if (error.name !== 'FetchError') {
-                throw error
-            } else {
-                dispatch(setPageFetchError(error.message))
+    }, Promise.resolve())
+        .then(() => {
+            const isLoggedIn = isUserLoggedIn()
+            const accountNode = [
+                {
+                    type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
+                    title: 'My Account',
+                    options: {
+                        icon: 'user',
+                        className: 'u-margin-top-md u-border-top'
+                    },
+                    path: getMyAccountURL()
+                },
+                {
+                    type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
+                    title: 'Wishlist',
+                    options: {
+                        icon: 'star'
+                    },
+                    path: getWishlistURL()
+                },
+                {
+                    ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
+                    options: {
+                        icon: isLoggedIn ? 'lock' : 'user',
+                        className: !isLoggedIn ? 'u-margin-top-md u-border-top' : ''
+                    },
+                    path: getSignInURL()
+                }
+            ]
+            const exampleNavigationData = {
+                path: '/',
+                root: {
+                    title: 'Root',
+                    path: getHomeURL(),
+                    children: navData.concat(accountNode)
+                }
             }
+
+            return dispatch(receiveNavigationData(exampleNavigationData))
         })
 }
 
 export const initApp = () => (dispatch) => {
-    console.log('[Hybris Connector] Called initApp stub')
+    return initHybrisAuth()
+        .then(() => dispatch(fetchNavigationData()))
+        .then(() => {
+            // For more information on the shape of the expected data,
+            // see https://docs.mobify.com/progressive-web/latest/components/#!/Nav
+            dispatch(getCart())
+            dispatch(setCartURL(getCartURL()))
+            dispatch(setWishlistURL(getWishlistURL()))
+            dispatch(setSignInURL(getSignInURL()))
+            // dispatch(setCheckoutShippingURL(getCheckoutShippingURL()))
+            return Promise.resolve()
 
-    const exampleNavigationData = {
-        path: '/',
-        root: {
-            title: 'Root',
-            path: '/',
-            children: [{
-                title: 'Category 1',
-                path: '/potions.html'
-            }, {
-                title: 'Category 2',
-                path: '/books.html'
-            }, {
-                title: 'Category 3',
-                path: '/ingredients.html'
-            }]
-        }
-    }
-
-    // For more information on the shape of the expected data,
-    // see https://docs.mobify.com/progressive-web/latest/components/#!/Nav
-    dispatch(receiveNavigationData(exampleNavigationData))
-    dispatch(getCart())
-    dispatch(setCartURL('/checkout/cart/'))
-    dispatch(setWishlistURL('/wishlist/'))
-    dispatch(setSignInURL('/customer/account/login/'))
-    return Promise.resolve()
+        })
 }
+
