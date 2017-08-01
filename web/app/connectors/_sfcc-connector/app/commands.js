@@ -66,11 +66,7 @@ const insertCategory = (categories, newCategory) => {
         if(category.id === newCategory.id){
             category.categories = newCategory.categories
         } else if (category.categories){
-            category.categories.forEach((category) => {
-                if(category.id === newCategory.id){
-                    category.categories = newCategory.categories
-                }
-            })
+            insertCategory(category.categories, newCategory)
         }
     })
     return categories
