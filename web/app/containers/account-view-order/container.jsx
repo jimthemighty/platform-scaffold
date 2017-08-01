@@ -6,18 +6,21 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import template from '../../template'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import AccountViewOrderHeader from './partials/account-view-order-header'
 
 import {getTitle} from './selectors'
 
-const AccountViewOrder = ({title}) => (
+const AccountViewOrder = () => (
     <div className="t-account-view-order">
-        <h1 className="t-account-view-order__title">{title}</h1>
-        <div>This is a newly generated page called: AccountViewOrder</div>
+        <AccountViewOrderHeader />
+
+        <h3>Items Ordered</h3>
+        <h3>Order Information</h3>
+
     </div>
 )
 
 AccountViewOrder.propTypes = {
-    title: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({

@@ -66,3 +66,8 @@ export const initWishlistPage = (url) => (dispatch) => {
     console.log('[Stub Connector] Called initWishlistPage stub with parameters:', url)
     return Promise.resolve()
 }
+
+export const initAccountViewOrderPage = (url) => (dispatch) => {
+    console.log('[Stub Connector] Called initAccountViewOrderPage stub with parameters:', url)
+    return Promise.resolve()
+}

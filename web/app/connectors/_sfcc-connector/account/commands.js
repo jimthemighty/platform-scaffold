@@ -333,3 +333,5 @@ export const initWishlistPage = () => (dispatch) => {
                 })
         })
 }
+
+export const initAccountViewOrderPage = (url) => (dispatch) => Promise.resolve()
