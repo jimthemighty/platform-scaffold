@@ -47,7 +47,7 @@ const render = (req, res, store, component) => {
                 <App>
                     <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
                     {ampPackageJson.ampgaAccount !== null &&
-                    <Analytics projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.ampgaAccount} />}
+                    <Analytics templateName={component.templateName} gaAccount={ampPackageJson.ampgaAccount} />}
                     {React.createElement(component, {}, null)}
                 </App>
             </Provider>
