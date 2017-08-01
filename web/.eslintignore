@@ -8,4 +8,3 @@ proxy
 tests/e2e/nightwatch-config.js
 tests/jest-setup.js
 tests/jest-preprocessor.js
-tests/tag/fixtures/mock-loader.js

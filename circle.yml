@@ -11,24 +11,12 @@ dependencies:
         # Disabling native `npm install` for now as we aren't set up to `npm install` a git dep yet
         #- npm install:
         #    pwd: native
-    post:
-        - wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
-        - tar -xzf sc-latest-linux.tar.gz
 test:
     override:
-        - cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
-            background: true
-        # Wait for tunnel to be ready
-        - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-        #- ./tests/e2e/test-scripts/run-all-tests-on-ci.sh:
-        #    pwd: web
-        #    parallel: true
-        # - nohup bash -c "./scripts/start-tag-server.sh &> logs/startTagTestServer.log &"
-        - wget --retry-connrefused --no-check-certificate -q -t 5 -w 2 http://localhost:8999/ -O /dev/null
-        - ./scripts/run-tag-test.sh:
+        - ./tests/e2e/test-scripts/run-all-tests-on-ci.sh:
             pwd: web
+            parallel: true
     post:
-        - killall --wait sc  # wait for Sauce Connect to close the tunnel
         - ./scripts/upload-artifacts-ci.sh:
             pwd: web
 deployment:

@@ -148,9 +148,6 @@
     "test:pwa-preview": "bash ./tests/performance/lighthouse/lighthouse-preview.sh",
     "test:server": "bash ./scripts/test-server.sh",
     "test:watch": "npm test -- --watch",
-    "test:tag": "webpack-dev-server --open --config webpack/base.tag-test.js --host 0.0.0.0",
-    "test:tag-prod": "webpack --config webpack/base.tag-test.js -p",
-    "test:server:tag": "bash ./scripts/test-tag-server.sh",
     "prod:build": "bash ./scripts/build.sh",
     "prod:reset": "bash ./scripts/reset.sh",
     "update-loader-routes": "sdk-get-routes"

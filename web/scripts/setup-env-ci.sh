@@ -6,9 +6,5 @@ printf "\nInstall Chrome: "
 nohup bash -c "./scripts/update-chrome-accept-cert-ci.sh &> logs/apt-get.log &"
 printf "\nNPM Install: "
 npm install
-
-printf "\napt-get install jq "
-sudo apt-get install jq
-
 printf "\nStart Test Server: "
-nohup bash -c "./scripts/start-tag-server.sh &> logs/startTagTestServer.log &"
+nohup bash -c "./tests/e2e/test-scripts/start-test-server.sh &> logs/startTestServer.log &"
