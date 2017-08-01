@@ -35,10 +35,6 @@ const AccountOrderList = ({dashboardURL, orders}) => {
                         children={
                             <div className="u-padding-md">
                                 <p>
-                                    <strong>Shipped to: </strong>
-                                    {shipTo}
-                                </p>
-                                <p>
                                     <strong>Date: </strong>
                                     {date}
                                 </p>
