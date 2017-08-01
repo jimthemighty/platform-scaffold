@@ -5,6 +5,7 @@
 import {parseAddress} from '../utils'
 import {getCookieValue} from '../../../utils/utils'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {receiveAccountAddressData} from 'progressive-web-sdk/dist/integration-manager/account/results'
 
 export const buildFormData = (formValues) => {
     const formData = new FormData()
@@ -62,9 +63,10 @@ export const createAddressRequestObject = (formValues) => {
 }
 
 
-export const fetchCustomerAddresses = () => {
+export const updateCustomerAddresses = () => (dispatch) => {
     const fetchURL = `/rest/default/V1/carts/mine`
     return makeRequest(fetchURL, {method: 'GET'})
         .then((response) => response.json())
         .then(({customer: {addresses}}) => addresses.map((address) => parseAddress(address)))
+        .then((addresses) => dispatch(receiveAccountAddressData(addresses)))
 }
