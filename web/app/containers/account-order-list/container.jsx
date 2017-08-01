@@ -12,8 +12,9 @@ import Card from '../../components/card'
 import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getOrderList} from './selectors'
+import {reorderPreviousOrder} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 
-const AccountOrderList = ({dashboardURL, orders}) => {
+const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
     return (
         <div className="t-account-order-list">
             <div className="t-account-order-list__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
@@ -67,6 +68,7 @@ const AccountOrderList = ({dashboardURL, orders}) => {
                                         title="Reorder"
                                         className="u-width-full u-color-brand u-border-top"
                                         icon="cart-v2"
+                                        onClick={() => reorderItems(id)}
                                         showIconText={true}
                                         iconClassName="u-margin-end"
                                         data-analytics-name={UI_NAME.reorder}
@@ -83,7 +85,8 @@ const AccountOrderList = ({dashboardURL, orders}) => {
 
 AccountOrderList.propTypes = {
     dashboardURL: PropTypes.string,
-    orders: PropTypes.array
+    orders: PropTypes.array,
+    reorderItems: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
@@ -91,7 +94,9 @@ const mapStateToProps = createPropsSelector({
     orders: getOrderList
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+    reorderItems: reorderPreviousOrder
+}
 
 export default template(
     connect(

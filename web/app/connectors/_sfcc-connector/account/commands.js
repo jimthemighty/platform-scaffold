@@ -30,6 +30,7 @@ import {
     fetchItemData
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
+import {addToCart} from '../cart/commands'
 import {splitFullName} from '../../../utils/utils'
 import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
@@ -341,5 +342,17 @@ export const initAccountOrderListPage = () => (dispatch) => {
 
     return makeApiRequest(`/customers/${customerID}/orders`, {method: 'GET'})
         .then((res) => res.json())
-        .then((res) => dispatch(receiveAccountOrderListData(parseOrdersResponse(res))))
+        .then((res) => {
+            return dispatch(receiveAccountOrderListData(parseOrdersResponse(res)))
+        })
+}
+
+export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
+    return makeApiRequest(`/orders/${orderNumber}`, {method: 'GET'})
+        .then((res) => res.json())
+        .then(({product_items}) => {
+            product_items.forEach(({product_id, quantity}) => {
+                dispatch(addToCart(product_id, quantity))
+            })
+        })
 }
