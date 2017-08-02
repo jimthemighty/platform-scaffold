@@ -11,6 +11,6 @@ export const receiveData = createAction('Receive AccountOrderList data')
 export const reorderItems = (orderId) => (dispatch) => {
     return dispatch(reorderPreviousOrder(orderId))
         .then(() => {
-            browserHistory.push({pathname: '/checkout/cart'})
+            browserHistory.push({pathname: '/checkout/cart/'})
         })
 }
