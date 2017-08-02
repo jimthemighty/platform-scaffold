@@ -20,7 +20,7 @@ references:
         - platform-scaffold
 
   npm_cache_key: &npm_cache_key
-    platform-scaffold-{{ checksum "web/package.json" }}
+    platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
   
   restore_node_modules: &restore_node_modules
     restore_cache:
@@ -48,9 +48,9 @@ jobs:
           paths:
             - .
       - save_cache:
-          key: platform-scaffold-{{ checksum "web/package.json" }}
+          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
-            - /
+            - /home/ubuntu/platform-scaffold/web/node_modules
 
   test-unit:
     docker:
