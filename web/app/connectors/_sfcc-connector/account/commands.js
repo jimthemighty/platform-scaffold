@@ -32,7 +32,7 @@ import {
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {addToCart} from '../cart/commands'
 import {splitFullName} from '../../../utils/utils'
-import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
+import {getDashboardURL, getCartURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
 
 const initLoginData = () => (dispatch) => {
@@ -355,4 +355,5 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
                 dispatch(addToCart(product_id, quantity))
             })
         })
+        .then(() => getCartURL())
 }
