@@ -133,7 +133,6 @@
     "lint:js": "eslint '**/*.{js,jsx}'",
     "lint:sass": "sass-lint -c .sass-lint.yml 'app/**/*.scss' -v",
     "push": "cross-env NODE_ENV=production npm run prod:build && sdk-upload",
-    "reset": "cross-env NODE_ENV=production npm run prod:reset && sdk-upload --reset",
     "styleguide": "styleguidist --config webpack/styleguide.config.js server",
     "save-credentials": "sdk-save-credentials",
     "smoke-test": "bash ./tests/e2e/test-scripts/smoke-test.sh",
@@ -149,7 +148,6 @@
     "test:server": "bash ./scripts/test-server.sh",
     "test:watch": "npm test -- --watch",
     "prod:build": "bash ./scripts/build.sh",
-    "prod:reset": "bash ./scripts/reset.sh",
     "update-loader-routes": "sdk-get-routes"
   },
   "jest": {
