@@ -14,6 +14,7 @@ import {getInitialShippingAddress} from 'progressive-web-sdk/dist/store/checkout
 
 import {submitShipping} from '../actions'
 import {SHIPPING_FORM_NAME} from '../../../store/form/constants'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 import {Grid, GridSpan} from 'progressive-web-sdk/dist/components/grid'
 import ShippingAddress from './shipping-address'
@@ -84,7 +85,7 @@ class CheckoutShippingForm extends React.Component {
         } = this.props
 
         return (
-            <form className="t-checkout-shipping__form" onSubmit={handleSubmit(this.onSubmit)} noValidate>
+            <form id={SHIPPING_FORM_NAME} data-analytics-name={UI_NAME.shippingAddress} className="t-checkout-shipping__form" onSubmit={handleSubmit(this.onSubmit)} noValidate>
                 <Grid className="u-center-piece">
                     <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
                         {!isLoggedIn && <ShippingEmail />}

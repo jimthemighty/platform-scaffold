@@ -99,7 +99,7 @@ class CartEstimateShippingModal extends React.Component {
                 </HeaderBar>
 
                 <div className="u-padding-md">
-                    <form onSubmit={handleSubmit(this.onSubmit)}>
+                    <form id={ESTIMATE_FORM_NAME} data-analytics-name={UI_NAME.estimateShipping} onSubmit={handleSubmit(this.onSubmit)}>
                         <FieldRow>
                             <CountrySelect />
                         </FieldRow>

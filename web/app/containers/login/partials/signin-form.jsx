@@ -17,6 +17,7 @@ import {LoginField} from './common'
 
 const FORGOT_PASSWORD_PATH = '/customer/account/forgotpassword'
 
+import {SIGN_IN_FORM_NAME} from '../../../store/form/constants'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 class SignInForm extends React.Component {
@@ -39,7 +40,7 @@ class SignInForm extends React.Component {
         } = this.props
 
         return (
-            <form noValidate={true} onSubmit={handleSubmit(this.onSubmit)}>
+            <form id={SIGN_IN_FORM_NAME} data-analytics-name={UI_NAME.login} noValidate={true} onSubmit={handleSubmit(this.onSubmit)}>
                 {error &&
                     <div className="u-margin-bottom-md u-color-error">
                         {error}
@@ -88,7 +89,7 @@ SignInForm.propTypes = {
 
 
 const ReduxSignInForm = reduxForm({
-    form: 'signin-form'
+    form: SIGN_IN_FORM_NAME
 })(SignInForm)
 
 const mapStateToProps = createPropsSelector({

@@ -8,6 +8,7 @@ import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {validateFullName, validateCCExpiry, validateCCNumber} from '../../../utils/utils'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 // Selectors
 import {PAYMENT_FORM_NAME} from '../../../store/form/constants'
@@ -95,7 +96,7 @@ class CheckoutPaymentForm extends React.Component {
         return (
             <Grid className="u-center-piece">
                 <GridSpan tablet={{span: 6, pre: 1, post: 1}} desktop={{span: 7}}>
-                    <form className="t-checkout-payment__form" onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                    <form id={PAYMENT_FORM_NAME} data-analytics-name={UI_NAME.payment} className="t-checkout-payment__form" onSubmit={handleSubmit(this.onSubmit)} noValidate>
                         <CreditCardForm />
                         <BillingAddressForm />
                     </form>
