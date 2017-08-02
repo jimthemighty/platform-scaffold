@@ -95,7 +95,7 @@ jobs:
           working_directory: /home/ubuntu/platform-scaffold/web/ 
       - run:
           name: Analyzing Build Size
-          command: npm run test:build-size
+          command: npm run test:max-file-size -- build tests/performance/gzip-size-config.json
           working_directory: /home/ubuntu/platform-scaffold/web/
       - run:
           name: Lighthouse Tests
