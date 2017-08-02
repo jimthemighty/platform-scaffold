@@ -272,5 +272,5 @@ export const initAccountOrderListPage = (url) => (dispatch) => {
 }
 
 export const reorderPreviousOrder = (orderNumber) => (dispatch) => { // eslint-disable-line
-    return Promise.resolve()
+    return makeRequest(`/sales/order/reorder/order_id/${orderNumber}/`, {method: 'POST'})
 }
