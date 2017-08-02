@@ -3,65 +3,71 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 /* eslint-disable no-unused-vars */
-
 import {
     receiveProductDetailsProductData,
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
+import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveFormInfo} from '../actions'
+import {makeApiRequest} from '../utils'
+import {getInitialSelectedVariant, getProductHref, parseProductDetails} from '../parsers'
 
 export const initProductDetailsPage = (url, routeName) => (dispatch) => {
-    console.log('[Hybris Connector] Called initProductDetailsPage stub with arguments:', url, routeName)
+    console.log('[Hybris Connector] Called initProductDetailsPage with arguments:', url, routeName)
+    const splitURL = url.split('/')
+    const productPathKey = splitURL[splitURL.length - 1]
+    const productURL = `/products/${productPathKey}?fields=FULL`
+    return makeApiRequest(productURL, {method: 'GET'})
+        .then((response) => {
+            console.log('## response', response)
+            const productDetailsData = {
+                ...parseProductDetails(response),
+                href: productPathKey
+            }
+            console.log('## productDetailsData', productDetailsData)
+            if (!response.purchasable) {
+                const {variants, initialValues} = productDetailsData
+                const defaultVariant = getInitialSelectedVariant(variants, initialValues)
+                const currentProductHref = defaultVariant.values[response.variantType]
+                dispatch(setCurrentURL(getProductHref(currentProductHref)))
+                dispatch(initProductDetailsPage(currentProductHref))
+            } else {
+                const {id} = productDetailsData
+                const productDetailsMap = {
+                    [id]: productDetailsData
+                }
+                /* TODO review this part */
+                productDetailsData.variants.forEach(({id}) => {
+                    productDetailsMap[id] = productDetailsData
+                })
+                const UIData = {
+                    [id]: {
+                        breadcrumbs: [{
+                            href: '/',
+                            text: 'Home'
+                        }, {
+                            href: response.url,
+                            text: response.name
+                        }],
+                        itemQuantity: 1
+                    }
+                }
+                const exampleFormData = {
+                    [id]: {
+                        submitUrl: 'submit',
+                        method: 'POST',
+                        uenc: '',
+                        hiddenInputs: {}
+                    }
+                }
 
-    const id = '1'
-
-    const image = {
-        src: '//via.placeholder.com/350x350',
-        alt: 'Product 1'
-    }
-
-    const exampleData = {
-        [id]: {
-            price: '$10.00',
-            available: true,
-            href: window.location.href,
-            thumbnail: image,
-            title: 'Product 1',
-            images: [image, image],
-            id: '1',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-        }
-    }
-
-    const exampleUIData = {
-        [id]: {
-            breadcrumbs: [{
-                href: '/',
-                text: 'Home'
-            }, {
-                href: window.location.href,
-                text: 'Product 1'
-            }],
-            itemQuantity: 1
-        }
-    }
-
-    const exampleFormData = {
-        [id]: {
-            submitUrl: 'submit',
-            method: 'POST',
-            uenc: '',
-            hiddenInputs: {}
-        }
-    }
-
-    // For more information on the shape of the expected data, see ../../products/types
-    dispatch(receiveCurrentProductId(id))
-    dispatch(receiveProductDetailsProductData(exampleData))
-    dispatch(receiveProductDetailsUIData(exampleUIData))
-    dispatch(receiveFormInfo(exampleFormData))
-    return Promise.resolve()
+                dispatch(receiveCurrentProductId(id))
+                dispatch(receiveProductDetailsProductData(productDetailsMap))
+                dispatch(receiveProductDetailsUIData(UIData))
+                dispatch(receiveFormInfo(exampleFormData))
+            }
+            return Promise.resolve()
+        })
 }
 
 export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => {

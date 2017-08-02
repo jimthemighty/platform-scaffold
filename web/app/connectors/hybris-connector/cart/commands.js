@@ -32,11 +32,18 @@ export const getCart = () => (dispatch) => {
         src: '//via.placeholder.com/350x350',
         alt: 'Product 1'
     }
+    // const productURL = '300044599' // tools
+    // const productURL = '115195' // watch
+    // const productURL = '115195_shocking_pink';
+    // const productURL = '122811' // t-shirts
+    const productURL = '122811_heather_berry'
+    // const productURL = '300717437'
+    // const productURL = '300720128'
     const exampleCartProducts = {
         '1': { // eslint-disable-line
             price: '$10.00',
             available: true,
-            href: '/product1.html',
+            href: `p/${productURL}`,
             thumbnail: image,
             title: 'Product 1',
             id: '1',
