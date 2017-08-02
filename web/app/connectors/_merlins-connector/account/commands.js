@@ -17,7 +17,8 @@ import {
     receiveAccountInfoData,
     receiveWishlistData,
     receiveWishlistUIData,
-    receiveAccountOrderListData
+    receiveAccountOrderListData,
+    receiveCurrentOrderId
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {
@@ -263,8 +264,9 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
 export const initAccountViewOrderPage = (url) => (dispatch) => {
     return (dispatch(fetchPageData(url)))
         .then(([$, $response]) => {
-            const orderData = parseOrder($response)
-            dispatch(receiveAccountOrderListData({[orderData.id]: orderData}))
+            const orderData = parseOrder($, $response)
             // set current order ID
+            dispatch(receiveCurrentOrderId(orderData.id))
+            dispatch(receiveAccountOrderListData({[orderData.id]: orderData}))
         })
 }

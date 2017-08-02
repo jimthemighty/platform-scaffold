@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {parseImage, getTextFrom} from '../../../utils/parser-utils'
+import {splitFullName} from '../../../utils/utils'
 
 export const isFormResponseInvalid = ($response, formSelector) => $response.find(formSelector).length
 
@@ -54,10 +55,50 @@ const getOrderId = ($pageTitle) => {
     return orderIdMatch ? orderIdMatch[1] : ''
 }
 
-export const parseOrder = ($response) => {
+const parseAddress = ($addressBlock) => {
+    const addressLines = $addressBlock.html().split('<br>')
+    const addressLength = addressLines.length
+    const containsAddressLine2 = addressLength === 6
+    const {firstname, lastname} = splitFullName(addressLines[0])
+    const [city, state, postcode] = addressLines[addressLength - 3].split(',')
+
+    return {
+        firstname,
+        lastname,
+        addressLine1: addressLines[1].trim(),
+        addressLine2: containsAddressLine2 ? addressLines[2].trim() : '',
+        city: city.trim(),
+        state: state.trim(),
+        postcode: postcode.trim(),
+        country: addressLines[addressLength - 2].trim(),
+        telephone: addressLines[addressLength - 1].replace(/T:\s*/, '').trim()
+    }
+}
+
+export const parseOrder = ($, $response) => {
     return {
         id: getOrderId($response.find('.page-title')),
-        date: $response.find('.order-date date').text(),
-        status: $response.find('.order-status').text()
+        date: getTextFrom($response, '.order-date date'),
+        status: getTextFrom($response, '.order-status'),
+        total: getTextFrom($response, '.grand_total .price'),
+        tax: getTextFrom($response, '.totals-tax .price'),
+        shippingTotal: getTextFrom($response, '.shipping .price'),
+        subtotal: getTextFrom($response, 'tfoot .subtotal .price'),
+        paymentMethod: getTextFrom($response, '.box-order-billing-method .box-content'),
+        shippingMethod: getTextFrom($response, '.box-order-shipping-method .box-content'),
+        shippingAddress: parseAddress($response.find('.box-order-shipping-address address')),
+        billingAddress: parseAddress($response.find('.box-order-billing-address address')),
+        items: $response.find('.table-order-items tbody')
+            .children()
+            .get()
+            .map((itemRow) => {
+                const $itemRow = $(itemRow)
+
+                return {
+                    price: getTextFrom($itemRow, '.subtotal .price'),
+                    quantity: getTextFrom($itemRow, '.items-qty .content'),
+                    itemName: getTextFrom($itemRow, '.product-item-name')
+                }
+            })
     }
 }

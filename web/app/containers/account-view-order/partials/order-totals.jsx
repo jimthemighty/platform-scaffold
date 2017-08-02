@@ -8,7 +8,12 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {Ledger, LedgerRow} from 'progressive-web-sdk/dist/components/ledger'
 
-
+import {
+    getOrderTotal,
+    getOrderTax,
+    getOrderShippingTotal,
+    getOrderSubtotal
+} from '../../../store/user/orders/selectors'
 
 const OrderTotals = ({
     subtotal,
@@ -47,11 +52,17 @@ const OrderTotals = ({
 
 
 OrderTotals.propTypes = {
-    orderNumber: PropTypes.string,
-    ordersURL: PropTypes.string
+    shipping: PropTypes.string,
+    subtotal: PropTypes.string,
+    tax: PropTypes.string,
+    total: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
+    subtotal: getOrderSubtotal,
+    shipping: getOrderShippingTotal,
+    tax: getOrderTax,
+    total: getOrderTotal
 })
 
 export default connect(
