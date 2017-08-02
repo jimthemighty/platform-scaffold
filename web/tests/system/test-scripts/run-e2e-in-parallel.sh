@@ -25,5 +25,4 @@ else
       ((i=i+1))
     done
     fi
-  fi
 fi
