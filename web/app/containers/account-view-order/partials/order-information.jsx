@@ -39,9 +39,9 @@ const OrderInformation = ({
 
 
 OrderInformation.propTypes = {
-    billingAddress: PropTypes.string,
+    billingAddress: PropTypes.object,
     paymentMethod: PropTypes.string,
-    shippingAddress: PropTypes.string,
+    shippingAddress: PropTypes.object,
     shippingMethod: PropTypes.string
 }
 

@@ -18,7 +18,7 @@ import {
     receiveWishlistData,
     receiveWishlistUIData,
     receiveAccountOrderListData,
-    receiveCurrentOrderId
+    receiveCurrentOrderNumber
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {
@@ -262,11 +262,24 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
 
 
 export const initAccountViewOrderPage = (url) => (dispatch) => {
+    const idMatch = /order_id\/(\d+)\//.exec(url)
+    const id = idMatch ? idMatch[1] : ''
     return (dispatch(fetchPageData(url)))
         .then(([$, $response]) => {
-            const orderData = parseOrder($, $response)
-            // set current order ID
-            dispatch(receiveCurrentOrderId(orderData.id))
-            dispatch(receiveAccountOrderListData({[orderData.id]: orderData}))
+            const orderData = {
+                ...parseOrder($, $response),
+                id
+            }
+            // set current order Number
+            dispatch(receiveCurrentOrderNumber(orderData.orderNumber))
+            dispatch(receiveAccountOrderListData({[orderData.orderNumber]: orderData}))
         })
 }
+
+export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    const orderId = orderNumber.replace(/^0+/, '')
+    return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
+        .then(() => '/checkout/cart/')
+}
+

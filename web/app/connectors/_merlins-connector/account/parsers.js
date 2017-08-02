@@ -49,7 +49,7 @@ export const parseWishlistProducts = ($, $response) => {
     }
 }
 
-const getOrderId = ($pageTitle) => {
+const getOrderNumber = ($pageTitle) => {
     const orderIdMatch = /#\s*(\d+)$/.exec($pageTitle.text())
 
     return orderIdMatch ? orderIdMatch[1] : ''
@@ -77,7 +77,7 @@ const parseAddress = ($addressBlock) => {
 
 export const parseOrder = ($, $response) => {
     return {
-        id: getOrderId($response.find('.page-title')),
+        orderNumber: getOrderNumber($response.find('.page-title')),
         date: getTextFrom($response, '.order-date date'),
         status: getTextFrom($response, '.order-status'),
         total: getTextFrom($response, '.grand_total .price'),

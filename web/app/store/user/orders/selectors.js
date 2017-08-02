@@ -6,14 +6,15 @@ import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
 import {getUser} from '../../../store/selectors'
 
-export const getCurrentOrderId = createGetSelector(getUser, 'currentOrderId', '')
+export const getCurrentOrderNumber = createGetSelector(getUser, 'currentOrderNumber', '')
 export const getOrders = createGetSelector(getUser, 'orders', Immutable.Map())
 
 export const getCurrentOrder = createSelector(
     getOrders,
-    getCurrentOrderId,
-    (orders, currentOrderId) => orders.get(currentOrderId) || Immutable.Map()
+    getCurrentOrderNumber,
+    (orders, currentOrdeNumber) => orders.get(currentOrdeNumber) || Immutable.Map()
 )
+export const getCurrentOrderId = createGetSelector(getCurrentOrder, 'id', '')
 
 export const getOrderDate = createGetSelector(getCurrentOrder, 'date')
 export const getOrderStatus = createGetSelector(getCurrentOrder, 'status')

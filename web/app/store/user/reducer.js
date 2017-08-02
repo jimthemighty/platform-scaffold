@@ -11,7 +11,7 @@ import {
     receiveAccountAddressData,
     receiveWishlistData,
     receiveAccountOrderListData,
-    receiveCurrentOrderId
+    receiveCurrentOrderNumber
 } from 'progressive-web-sdk/dist/integration-manager/account/results.js'
 
 const initialState = Immutable.Map()
@@ -23,7 +23,7 @@ const userReducer = handleActions({
     [receiveAccountInfoData]: mergePayload,
     [receiveWishlistData]: mergePayload,
     [receiveAccountOrderListData]: mergePayload,
-    [receiveCurrentOrderId]: mergePayload
+    [receiveCurrentOrderNumber]: mergePayload
 }, initialState)
 
 export default userReducer
