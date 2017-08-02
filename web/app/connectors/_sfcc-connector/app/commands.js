@@ -38,11 +38,31 @@ import {
 
 const CATALOG = 'storefront-catalog-en'
 
-export const fetchNavigationData = () => (dispatch) => {
+export const fetchCategories = () => {
     return utils.makeDataApiRequest(`/catalogs/${CATALOG}/categories?count=1000&select=(**)`, {method: 'GET'})
         .then((response) => response.json())
-        .then(({categories}) => {
-            const navData = parseCategories(categories)
+        .then(({data}) => {
+            let categoryTree = {}
+            const lookup = {}
+            data.forEach((category) => {
+                lookup[category.id] = category
+                category.children = []
+            })
+            data.forEach((category) => {
+                if (category.parent_category_id) {
+                    lookup[category.parent_category_id].children.push(category)
+                } else {
+                    categoryTree = category
+                }
+            })
+            return categoryTree
+        })
+}
+
+export const fetchNavigationData = () => (dispatch) => {
+    return fetchCategories()
+        .then((categoryTree) => {
+            const navData = parseCategories(categoryTree.children)
 
             const isLoggedIn = utils.isUserLoggedIn(utils.getAuthToken())
             const accountNode = [

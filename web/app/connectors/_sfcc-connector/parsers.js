@@ -125,10 +125,10 @@ export const getInitialSelectedVariant = (variants, initialValues) => {
 export const parseCategories = (categories) => {
     return categories.map((category) => {
         return {
-            title: category.name,
+            title: category.name.default,
             path: getCategoryPath(category.id),
             isCategoryLink: true,
-            children: category.categories ? parseCategories(category.categories) : []
+            children: category.children ? parseCategories(category.children) : []
         }
     })
 }

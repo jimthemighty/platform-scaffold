@@ -10,6 +10,7 @@ import {getApiEndPoint, getDataApiEndPoint, getRequestHeaders, getAuthHeaders, g
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
+const DATA_AUTH_KEY_NAME = 'mob-data-auth'
 const DATA_TOKEN_EXIRATION_KEY_NAME = 'mob-data-auth-exp'
 
 const setCookieValue = (keyName, value) => {
@@ -59,12 +60,26 @@ export const storeAuthToken = (authorization) => {
     }
 }
 
+export const storeDataAuthToken = (authorization) => {
+    if (authorization) {
+        setItemInBrowserStorage(DATA_AUTH_KEY_NAME, authorization)
+    }
+}
+
 export const getAuthToken = () => {
     return getItemFromBrowserStorage(AUTH_KEY_NAME)
 }
 
+export const getDataAuthToken = () => {
+    return getItemFromBrowserStorage(DATA_AUTH_KEY_NAME)
+}
+
 export const deleteAuthToken = () => {
     removeItemFromBrowserStorage(AUTH_KEY_NAME)
+}
+
+export const deleteDataAuthToken = () => {
+    removeItemFromBrowserStorage(DATA_AUTH_KEY_NAME)
 }
 
 export const deleteBasketID = () => {
@@ -177,7 +192,7 @@ export const initSfccAuthAndSession = () => {
 }
 
 export const initSfccDataAuthAndSession = () => {
-    const authorizationToken = getAuthToken()
+    const authorizationToken = getDataAuthToken()
     const tokenExpiration = getItemFromBrowserStorage(DATA_TOKEN_EXIRATION_KEY_NAME)
 
     if (authorizationToken && tokenExpiration) {
@@ -193,7 +208,7 @@ export const initSfccDataAuthAndSession = () => {
         }
 
         // Clear token and expiry
-        deleteAuthToken()
+        deleteDataAuthToken()
         removeItemFromBrowserStorage(DATA_TOKEN_EXIRATION_KEY_NAME)
 
         return initSfccDataAuthAndSession()
@@ -211,7 +226,7 @@ export const initSfccDataAuthAndSession = () => {
         .then((json) => {
             authorization = json.access_token
             const tokenExpiration = Math.floor(Date.now() / 1000) + json.expires_in
-            storeAuthToken(authorization)
+            storeDataAuthToken(authorization)
             setItemInBrowserStorage(DATA_TOKEN_EXIRATION_KEY_NAME, tokenExpiration)
             return initSfccDataAuthAndSession(authorization)
         })
