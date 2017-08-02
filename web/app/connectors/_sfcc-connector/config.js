@@ -28,7 +28,7 @@ export const getRequestHeaders = () => ({
     'x-dw-client-id': config.clientID
 })
 
-export const getAuthHeaders = () => ({
+export const getDataAuthHeaders = () => ({
     'Content-Type': 'application/x-www-form-urlencoded',
     Authorization: `Basic ${btoa(`${config.businessManagerUser}:${config.businessManagerPassword}:${config.clientPassword}`)}`,
 })

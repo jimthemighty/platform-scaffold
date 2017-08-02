@@ -123,7 +123,7 @@ export const getInitialSelectedVariant = (variants, initialValues) => {
 }
 
 export const parseCategories = (categories) => {
-    return categories.map((category) => {
+    return categories.filter((category) => category.c_showInMenu === true).map((category) => {
         return {
             title: category.name.default,
             path: getCategoryPath(category.id),

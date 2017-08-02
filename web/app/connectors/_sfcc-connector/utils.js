@@ -6,7 +6,7 @@ import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from './parsers'
-import {getApiEndPoint, getDataApiEndPoint, getRequestHeaders, getAuthHeaders, getOAuthEndPoint} from './config'
+import {getApiEndPoint, getDataApiEndPoint, getRequestHeaders, getDataAuthHeaders, getOAuthEndPoint} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
@@ -216,7 +216,7 @@ export const initSfccDataAuthAndSession = () => {
 
     const options = {
         method: 'POST',
-        headers: getAuthHeaders()
+        headers: getDataAuthHeaders()
     }
 
     let authorization
