@@ -1,4 +1,31 @@
 version: 2
+references:
+
+  container_config: &container_config
+    docker:
+      - image: clojure:lein-2.7.1
+    working_directory: /root/frontend
+
+  workspace_root: &workspace_root
+    /tmp/workspace
+    
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - platform-scaffold-{{ .Branch }}
+        - platform-scaffold
+
+  npm_cache_key: &npm_cache_key
+    platform-scaffold-{{ checksum "web/package.json" }}
+  
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      keys:
+        - *npm_cache_key
 
 jobs:
   build:
@@ -7,10 +34,7 @@ jobs:
     workDir: /home/ubuntu/platform-scaffold/
     steps:
       - checkout
-      - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
+      - *restore_node_modules
       - run:
           name: Install Dependencies
           command: npm install
@@ -20,7 +44,7 @@ jobs:
           command: bash ./scripts/accept-cert-ci.sh
           working_directory: /home/ubuntu/platform-scaffold/web/ 
       - save_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
+          key: platform-scaffold-{{ .Branch }}
           paths:
             - .
 
@@ -29,10 +53,7 @@ jobs:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
     steps:
-      - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
+      - *restore_repo
       - run:
           name: Lint
           command: pwd && npm run lint
@@ -48,10 +69,7 @@ jobs:
     workDir: /home/ubuntu/platform-scaffold/
     parallelism: 2
     steps:
-      - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
+      - *restore_repo
       - run:
           name: Start Test Server
           command: bash ./tests/system/test-scripts/start-test-server.sh
@@ -78,10 +96,7 @@ jobs:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
     steps:
-      - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
+      - *restore_repo
       - run:
           name: Build Project
           command: npm run prod:build
