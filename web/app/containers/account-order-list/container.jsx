@@ -12,7 +12,7 @@ import Card from '../../components/card'
 import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getOrderList} from './selectors'
-import {reorderPreviousOrder} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {reorderItems} from './actions'
 
 const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
     return (
@@ -95,7 +95,7 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    reorderItems: reorderPreviousOrder
+    reorderItems
 }
 
 export default template(

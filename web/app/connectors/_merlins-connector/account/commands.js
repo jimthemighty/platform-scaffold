@@ -271,6 +271,8 @@ export const initAccountOrderListPage = (url) => (dispatch) => {
         })
 }
 
-export const reorderPreviousOrder = (orderNumber) => (dispatch) => { // eslint-disable-line
-    return makeRequest(`/sales/order/reorder/order_id/${orderNumber}/`, {method: 'POST'})
+export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    const orderId = orderNumber.replace(/^0+/, '')
+    return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
 }
