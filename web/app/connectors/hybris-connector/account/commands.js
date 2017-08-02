@@ -8,6 +8,7 @@ import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integ
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {getAuthEndPoint, getHomeURL} from '../config'
+import {getRegisterUserErrorData} from './utils'
 
 import {deleteSession, makeApiRequest, makeUnAuthenticatedApiRequest, storeAuthTokenAndExpiration, storeUserType, deleteBasketID, USER_REGISTERED} from '../utils'
 import {fetchNavigationData} from '../app/commands'
@@ -101,21 +102,6 @@ export const logout = () => (dispatch) => {
     return Promise.resolve()
 }
 
-const mapHybrisToMobifyParam = (param) => {
-    switch (param) {
-        case 'email':
-            return 'uid'
-        case 'password':
-            return 'password'
-        case 'firstname':
-            return 'firstName'
-        case 'lastname':
-            return 'lastName'
-        default:
-            return false
-    }
-}
-
 export const registerUser = (firstname, lastname, email, password) => (dispatch) => {
     return makeUnAuthenticatedApiRequest('/titles')
         .then((response) => response.json())
@@ -148,19 +134,7 @@ export const registerUser = (firstname, lastname, email, password) => (dispatch)
         })
         .then((response) => {
             if (response.status !== 201) {
-                const errors = response.errors || {}
-                const errorData = errors.reduce((acc, err) => {
-                    if (err.type === 'DuplicateUidError') {
-                        acc.email = 'This email already exists.'
-                    } else {
-                        const param = mapHybrisToMobifyParam(err.subject)
-                        if (param) {
-                            acc[param] = acc[param] || err.message
-                        }
-                    }
-                    return acc
-                }, {})
-                errorData._error = 'Unable to create account.'
+                const errorData = getRegisterUserErrorData(response)
                 throw new SubmissionError(errorData)
             }
             // Creating a user doesn't sign them in automatically, so dispatch the login command
