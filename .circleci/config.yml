@@ -15,14 +15,14 @@ jobs:
           name: Install Dependencies
           command: npm install
           working_directory: /home/ubuntu/platform-scaffold/web/
+    - save_cache:
+          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
+          paths:
+            - .
       - run:
           name: Accept Cert
           command: bash ./scripts/accept-cert-ci.sh
           working_directory: /home/ubuntu/platform-scaffold/web/
-     - save_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
 
   test-unit:
     docker:
