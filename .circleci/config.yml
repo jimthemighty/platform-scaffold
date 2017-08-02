@@ -10,29 +10,27 @@ jobs:
       - restore_cache:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
-            - .
+            - /home/ubuntu/platform-scaffold/web/node_modules
       - run:
           name: Install Dependencies
           command: npm install
           working_directory: /home/ubuntu/platform-scaffold/web/
-    - save_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
       - run:
           name: Accept Cert
           command: bash ./scripts/accept-cert-ci.sh
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/platform-scaffold/web/ 
+      - save_cache:
+          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
+          paths:
+            - /home/ubuntu/platform-scaffold/web/node_modules   
 
   test-unit:
     docker:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
     steps:
-      - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
       - run:
           name: Lint
           command: pwd && npm run lint
@@ -48,10 +46,8 @@ jobs:
     workDir: /home/ubuntu/platform-scaffold/
     parallelism: 2
     steps:
-      - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
       - run:
           name: Start Test Server
           command: bash ./tests/system/test-scripts/start-test-server.sh
@@ -78,10 +74,8 @@ jobs:
       - image: mobify/cci-docker-primary:0.0.15
     workDir: /home/ubuntu/platform-scaffold/
     steps:
-      - restore_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
-          paths:
-            - .
+      - attach_workspace:
+          at: /home/ubuntu/platform-scaffold/
       - run:
           name: Build Project
           command: npm run prod:build
