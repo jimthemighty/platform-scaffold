@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-mkdir logs
-
 echo "Waiting for Chrome to finish installing"
 baseline="59"
 counter=0

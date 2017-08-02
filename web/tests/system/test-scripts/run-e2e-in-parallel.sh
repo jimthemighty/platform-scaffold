@@ -2,7 +2,7 @@
 set -o pipefail
 set -o nounset
 
-echo 'Running End to End Tests Hello'
+echo 'Running End to End Tests'
 #If we have nodes > 2, it will be part of the division to run another test:e2e
 i=0
 for testfile in $(find ./tests/system/workflows/ -name '*.js'| sort); do
