@@ -26,7 +26,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                 </div>
             </div>
             <div className="t-account-order-list__content u-padding-md">
-                {orders.map(({id, shipTo, status, total, date}) => (
+                {orders.map(({id, shipTo, reorderId, status, total, date}) => (
                     <Card
                         hasBorder
                         key={id}
@@ -68,7 +68,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                                         title="Reorder"
                                         className="u-width-full u-color-brand u-border-top"
                                         icon="cart-v2"
-                                        onClick={() => reorderItems(id)}
+                                        onClick={() => reorderItems(reorderId || id)}
                                         showIconText={true}
                                         iconClassName="u-margin-end"
                                         data-analytics-name={UI_NAME.reorder}
