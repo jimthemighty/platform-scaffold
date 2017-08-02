@@ -56,6 +56,8 @@ const getOrderId = ($pageTitle) => {
 
 export const parseOrder = ($response) => {
     return {
-        id: getOrderId($response.find('.page-title'))
+        id: getOrderId($response.find('.page-title')),
+        date: $response.find('.order-date date').text(),
+        status: $response.find('.order-status').text()
     }
 }
