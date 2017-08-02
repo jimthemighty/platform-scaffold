@@ -34,7 +34,6 @@ const fonts = [
     '<link href="https://fonts.googleapis.com/css?family=Oswald:200,400" rel="stylesheet">'
 ]
 
-
 const getFullUrl = (req) => {
     return `${ampPackageJson.siteUrl}${req.url}`
 }
@@ -47,6 +46,8 @@ const render = (req, res, store, component) => {
             <Provider store={store}>
                 <App>
                     <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                    {ampPackageJson.ampgaAccount !== null &&
+                    <Analytics templateName={component.templateName} gaAccount={ampPackageJson.ampgaAccount} />}
                     {React.createElement(component, {}, null)}
                 </App>
             </Provider>
