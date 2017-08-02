@@ -19,7 +19,7 @@ export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch,
     const wishlistID = getWishlistID(getState())
     dispatch(receiveCurrentProductId(productId))
     dispatch(receiveWishlistItemQuantity(quantity))
-    return dispatch(addToCartFromWishlistCommand({productId, quantity, wishlistID, itemId}))
+    return dispatch(addToCartFromWishlistCommand(productId, {quantity, wishlistID, itemId}))
         .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist)))
         .catch(({message}) => {
             if (message && /redirect/i.test(message)) {
