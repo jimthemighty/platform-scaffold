@@ -10,7 +10,7 @@ jobs:
       - restore_cache:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
-            - /home/ubuntu/platform-scaffold/web/node_modules
+            - .
       - run:
           name: Install Dependencies
           command: npm install
@@ -22,7 +22,7 @@ jobs:
       - save_cache:
           key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
           paths:
-            - /home/ubuntu/platform-scaffold/web/node_modules   
+            - .
 
   test-unit:
     docker:
