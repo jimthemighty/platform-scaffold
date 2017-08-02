@@ -47,6 +47,10 @@ jobs:
           key: platform-scaffold-{{ .Branch }}
           paths:
             - .
+      - save_cache:
+          key: platform-scaffold-{{ checksum "web/package.json" }}
+          paths:
+            - /
 
   test-unit:
     docker:
