@@ -23,7 +23,7 @@ const CheckoutConfirmationForm = ({
 }) => {
 
     return (
-        <form className="t-checkout-confirmation__form" onSubmit={handleSubmit(submitRegistrationForm)} noValidate>
+        <form id={CONFIRMATION_FORM_NAME} data-analytics-name={UI_NAME.register} className="t-checkout-confirmation__form" onSubmit={handleSubmit(submitRegistrationForm)} noValidate>
 
             <FieldRow>
                 <ReduxForm.Field component={Field} name="password" label="Choose Password" caption="More than 5 characters with at least one number">
