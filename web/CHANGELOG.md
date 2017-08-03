@@ -1,4 +1,5 @@
 ## To be released
+- Add Edit, Delete, and Add to account addresses [#892](https://github.com/mobify/platform-scaffold/pull/892)
 - Add view wishlist page to app [#891](https://github.com/mobify/platform-scaffold/pull/891)
     - Add initWishlist page commands to SFCC, merlins and stub connectors
 - Bump Lighthouse to version 2.2.1 [889](https://github.com/mobify/platform-scaffold/pull/889)
@@ -12,6 +13,7 @@
 - Add Redux Form plugin to track form validation errors [897](https://github.com/mobify/platform-scaffold/pull/897)
 - Fix onboarding carousel [#909](https://github.com/mobify/platform-scaffold/pull/909)
 - Update pageview analytics instrumentation [#916](https://github.com/mobify/platform-scaffold/pull/916)
+- Update the Mobify V8 tag [#923](https://github.com/mobify/platform-scaffold/pull/923)
 
 ## 0.17.3 (July 7, 2017)
 - Moved a pair of browser storage detection methods to SDK [#850](https://github.com/mobify/platform-scaffold/pull/850)
