@@ -9,10 +9,10 @@ import {getApiEndPoint, getAuthEndPoint, getRequestHeaders} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const EXPIRES_KEY_NAME = 'mob-expires'
-const BASKET_KEY_NAME = 'mob-basket'
+const CART_KEY_NAME = 'mob-cart'
 const USER_KEY_NAME = 'mob-user'
-export const USER_REGISTERED = 'registered'
-export const USER_GUEST = 'guest'
+export const USER_REGISTERED = 'current'
+export const USER_GUEST = 'anonymous'
 
 const setCookieValue = (keyName, value) => {
     document.cookie = `${keyName}=${value}`
@@ -83,20 +83,20 @@ export const deleteExpiresAt = () => {
     removeItemFromBrowserStorage(EXPIRES_KEY_NAME)
 }
 
-export const deleteBasketID = () => {
-    removeItemFromBrowserStorage(BASKET_KEY_NAME)
+export const deleteCartID = () => {
+    removeItemFromBrowserStorage(CART_KEY_NAME)
 }
 
-export const getBasketID = () => {
-    return getItemFromBrowserStorage(BASKET_KEY_NAME)
+export const getCartID = () => {
+    return getItemFromBrowserStorage(CART_KEY_NAME)
 }
 
-export const storeBasketID = (basketID) => {
-    if (basketID === undefined) {
-        throw new Error('Storing basketID that is undefined!!')
+export const storeCartID = (cartID) => {
+    if (cartID === undefined) {
+        throw new Error('Storing cartID that is undefined!!')
     }
 
-    setItemInBrowserStorage(BASKET_KEY_NAME, basketID)
+    setItemInBrowserStorage(CART_KEY_NAME, cartID)
 }
 
 export const deleteUserType = () => {
@@ -124,7 +124,7 @@ export const isUserLoggedIn = () => getUserType() === USER_REGISTERED
 export const deleteSession = () => {
     deleteAuthToken()
     deleteExpiresAt()
-    deleteBasketID()
+    deleteCartID()
     deleteUserType()
     deleteRefreshToken()
 }
@@ -195,23 +195,17 @@ export const initHybrisAuth = () => {
 
 }
 
-export const makeApiRequest = (path, options) => {
+export const makeApiRequest = (path, options, body) => {
     return initHybrisAuth()
         .then((headers) => {
             const requestOptions = {
                 ...options,
                 headers
             }
-            return makeRequest(getApiEndPoint() + path, requestOptions)
+            return body
+                ? makeFormEncodedRequest(getApiEndPoint() + path, body, requestOptions)
+                : makeRequest(getApiEndPoint() + path, requestOptions)
         })
-}
-
-export const makeApiJsonRequest = (path, body, options) => {
-    return makeApiRequest(path, {
-        ...options,
-        body: JSON.stringify(body)
-    })
-        .then((response) => response.json())
 }
 
 export const makeUnAuthenticatedApiRequest = (path, options) => {

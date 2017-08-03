@@ -14,7 +14,7 @@ import {receiveFormInfo} from '../actions'
 export const initProductDetailsPage = (url, routeName) => (dispatch) => {
     console.log('[Hybris Connector] Called initProductDetailsPage stub with arguments:', url, routeName)
 
-    const id = '1'
+    const id = '300046592'
 
     const image = {
         src: '//via.placeholder.com/350x350',
@@ -29,7 +29,7 @@ export const initProductDetailsPage = (url, routeName) => (dispatch) => {
             thumbnail: image,
             title: 'Product 1',
             images: [image, image],
-            id: '1',
+            id: '300046592',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
         }
     }

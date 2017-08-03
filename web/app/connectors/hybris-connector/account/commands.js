@@ -9,8 +9,17 @@ import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {getAuthEndPoint, getHomeURL} from '../config'
 import {getRegisterUserErrorData} from './utils'
+import {createCart, getCartID, mergeCart} from '../cart/utils'
 
-import {deleteSession, makeApiRequest, makeUnAuthenticatedApiRequest, storeAuthTokenAndExpiration, storeUserType, deleteBasketID, USER_REGISTERED} from '../utils'
+import {
+    deleteCartID,
+    deleteSession,
+    makeApiRequest,
+    makeUnAuthenticatedApiRequest,
+    storeAuthTokenAndExpiration,
+    storeCartID,
+    storeUserType,
+    USER_REGISTERED} from '../utils'
 import {fetchNavigationData} from '../app/commands'
 
 const initLoginData = () => (dispatch) => {
@@ -28,10 +37,6 @@ export const navigateToSection = (router, routes, sectionName) => (dispatch) => 
 }
 
 export const login = (username, password) => (dispatch) => {
-    /* eslint-disable no-unused-vars */
-    let basketContents
-    /* eslint-enable no-unused-vars */
-
     const body = {
         client_id: 'mobile_android',
         grant_type: 'password',
@@ -39,14 +44,7 @@ export const login = (username, password) => (dispatch) => {
         username,
         password
     }
-    const requestCartData = () => Promise.resolve()
-    return requestCartData()
-        .then((basket) => {
-            basketContents = basket
-
-            // Actual login call
-            return makeFormEncodedRequest(getAuthEndPoint(), body, {method: 'POST'})
-        })
+    return makeFormEncodedRequest(getAuthEndPoint(), body, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {
             if (responseJSON.error) {
@@ -61,33 +59,27 @@ export const login = (username, password) => (dispatch) => {
             dispatch(receiveUserEmail(responseJSON.uid))
             storeUserType(USER_REGISTERED)
             dispatch(fetchNavigationData())
-            return deleteBasketID()
+            return deleteCartID()
         })
-        /*
-        // Check if the user has a basket already
+        // Check if the user has a cart already
         .then(() => makeApiRequest(`/users/current/carts`, {method: 'GET'}))
         .then((response) => response.json())
-        .then(({carts: baskets}) => {
-             if (!baskets || baskets.length === 0) {
-             return createBasket(basketContents)
-             }
-
-             const basketID = baskets[0].basket_id
-             storeBasketID(basketID)
-             if (!basketContents.product_items) {
-             // There is no basket to merge, so return the existing one
-             return Promise.resolve(baskets[0])
-             }
-             // update basket with contents (product_items)
-             return makeApiJsonRequest(
-             `/baskets/${basketID}/items`,
-             basketContents.product_items,
-             {method: 'POST'}
-             )
-             .then(checkForResponseFault)
+        .then(({carts}) => {
+            let newCart
+            if (!carts || !carts.length) {
+                newCart = createCart()
+            } else {
+                const userCart = carts[0]
+                if (getCartID()) {
+                    newCart = mergeCart(userCart)
+                } else {
+                    newCart = userCart
+                    storeCartID(newCart.guid)
+                }
+            }
+            return newCart
         })
-        .then((basket) => dispatch(handleCartData(basket)))
-        */
+        .then((cart) => dispatch(handleCartData(cart)))
         .then(() => {
             // Navigate to the homepage, since we haven't made an account page yet
             // and demandware's account page is at the same URL as their login page

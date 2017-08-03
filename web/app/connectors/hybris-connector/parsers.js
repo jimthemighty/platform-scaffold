@@ -4,6 +4,8 @@
 
 import {getCategoryPath} from './config'
 
+export const getProductHref = (productID) => `/p/${productID}`
+
 export const parseCategories = (categories, root = '') => {
     return categories.map((category) => {
         const path = root ? `${root}/${category.id}` : category.id
