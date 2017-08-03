@@ -18,7 +18,7 @@ import {
     MY_ACCOUNT_URL,
     ACCOUNT_ADDRESS_URL,
     ACCOUNT_INFO_URL,
-    ORDERS_URL,
+    ACCOUNT_ORDER_LIST_URL,
     buildQueryURL,
     buildSearchURL
 } from '../config'
@@ -39,7 +39,7 @@ import {
     setAccountAddressURL,
     setAccountInfoURL,
     setAccountURL,
-    setOrdersURL
+    setAccountOrderListURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 const requestCapturedDoc = () => {
@@ -104,10 +104,10 @@ export const initApp = () => (dispatch) => {
 
     dispatch(setAccountAddressURL(ACCOUNT_ADDRESS_URL))
     dispatch(setAccountInfoURL(ACCOUNT_INFO_URL))
+    dispatch(setAccountOrderListURL(ACCOUNT_ORDER_LIST_URL))
     dispatch(setCheckoutShippingURL(CHECKOUT_SHIPPING_URL))
     dispatch(setWishlistURL(WISHLIST_URL))
     dispatch(setSignInURL(SIGN_IN_URL))
     dispatch(setAccountURL(MY_ACCOUNT_URL))
-    dispatch(setOrdersURL(ORDERS_URL))
     return dispatch(setCartURL(CART_URL))
 }
