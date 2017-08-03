@@ -34,11 +34,49 @@ const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
 const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
 
+const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
+const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
+const timingStart = navigationStart || mobifyStart
+
 window.Progressive = {
     AstroPromise: Promise.resolve({}),
     Messaging: {
         enabled: messagingEnabled
+    },
+    PerformanceTiming: {
+        pageStart: navigationStart,
+        mobifyStart,
+        timingStart
     }
+}
+
+// Track First Paint and First Contentful Paint
+if ('PerformanceObserver' in window) {
+    const paintObserver = new window.PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+            const metricName = entry.name
+            const timing = Math.round(entry.startTime + entry.duration)
+            if (metricName === 'first-paint') {
+                window.Progressive.PerformanceTiming.firstPaint = timing
+            } else if (metricName === 'first-contentful-paint') {
+                window.Progressive.PerformanceTiming.firstContentfulPaint = timing
+            }
+        }
+    })
+
+    paintObserver.observe({entryTypes: ['paint']})
+}
+
+// Track Time to Interaction for snippet for tti-ployfill
+// Reference: https://github.com/GoogleChrome/tti-polyfill#usage
+if ('PerformanceLongTaskTiming' in window) {
+    const ttiObserver = window.__tti = {
+        e: []
+    }
+    ttiObserver.o = new window.PerformanceObserver((list) => {
+        ttiObserver.e = ttiObserver.e.concat(list.getEntries())
+    })
+    ttiObserver.o.observe({entryTypes: ['longtask']})
 }
 
 const isPWARoute = () => {
@@ -100,11 +138,11 @@ const triggerAppStartEvent = () => setTimeout(() => {
     const tracker = Sandy.trackers[Sandy.DEFAULT_TRACKER_NAME]
     tracker.set('mobify_adapted', true)
     tracker.set('platform', 'PWA')
-    const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
-    const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
-    const timingStart = navigationStart || mobifyStart
+
     if (timingStart) {
-        window.sandy('send', 'timing', 'timing', 'appStart', '', Date.now() - timingStart)
+        const timing = Date.now() - timingStart
+        window.sandy('send', 'timing', 'timing', 'appStart', '', timing)
+        window.Progressive.PerformanceTiming.appStart = timing
     }
 
     // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client

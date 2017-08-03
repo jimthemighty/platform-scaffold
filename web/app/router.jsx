@@ -49,7 +49,8 @@ import {checkIfOffline} from './containers/app/actions'
 import {getURL} from './utils/utils'
 import {isRunningInAstro, pwaNavigate} from './utils/astro-integration'
 
-import {onPageReady} from 'progressive-web-sdk/dist/analytics/actions'
+import {onPageReady, trackPerformance} from 'progressive-web-sdk/dist/analytics/actions'
+import {PERFORMANCE_METRICS} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 // We define an initial OnChange as a no-op for non-Astro use
 let OnChange = () => {}
@@ -71,7 +72,10 @@ if (isRunningInAstro) {
 const initPage = (initAction) => (url, routeName) => (dispatch) => {
     return dispatch(initAction(url, routeName))
         .then(() => dispatch(setFetchedPage(url)))
-        .then(() => dispatch(onPageReady(routeName)))
+        .then(() => {
+            dispatch(onPageReady(routeName))
+            trackPerformance(PERFORMANCE_METRICS.templateAPIEnd)
+        })
         .catch((error) => console.error(`Error executing fetch action for ${routeName}`, error))
         .then(() => dispatch(checkIfOffline()))
 }
