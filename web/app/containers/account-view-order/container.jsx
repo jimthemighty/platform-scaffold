@@ -11,6 +11,7 @@ import OrderTotals from './partials/order-totals'
 import OrderItems from './partials/order-items'
 import OrderInformation from './partials/order-information'
 import ReorderButton from './partials/reorder-button'
+import PrintButton from './partials/print-button'
 
 
 const AccountViewOrder = () => (
@@ -22,6 +23,7 @@ const AccountViewOrder = () => (
         <ReorderButton />
         <h3>Order Information</h3>
         <OrderInformation />
+        <PrintButton />
     </div>
 )
 

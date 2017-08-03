@@ -11,7 +11,7 @@ import {reorderItem} from '../actions'
 import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const OrderInformation = ({onReorderClick}) => (
+const ReorderButton = ({onReorderClick}) => (
     <div className="">
         <Button
             icon="cart"
@@ -26,7 +26,7 @@ const OrderInformation = ({onReorderClick}) => (
 )
 
 
-OrderInformation.propTypes = {
+ReorderButton.propTypes = {
     onReorderClick: PropTypes.func
 }
 
@@ -41,4 +41,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(OrderInformation)
+)(ReorderButton)
