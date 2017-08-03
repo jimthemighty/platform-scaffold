@@ -14,38 +14,38 @@ const OrderBlock = ({
 }) => (
     <div className="u-padding-md">
         <dl className="u-margin-0">
-            {date ?
-                <div className="u-flexbox">
-                    <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Date</dt>
+            <div className="u-flexbox">
+                <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Date</dt>
+                {date ?
                     <dd className="u-flex">{date}</dd>
-                </div>
-            :
-                <SkeletonText width="40%" style={{lineHeight: '20px', display: 'block'}} />
-            }
-            {shipTo ?
-                <div className="u-flexbox">
-                    <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Ship to</dt>
+                :
+                    <SkeletonText className="u-flex" width="40%" style={{lineHeight: '20px', display: 'block'}} />
+                }
+            </div>
+            <div className="u-flexbox">
+                <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Ship to</dt>
+                {shipTo ?
                     <dd className="u-flex">{shipTo}</dd>
-                </div>
-            :
-                <SkeletonText width="40%" style={{lineHeight: '20px', display: 'block'}} />
-            }
-            {total ?
-                <div className="u-flexbox">
-                    <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Order total</dt>
+                :
+                    <SkeletonText className="u-flex" width="50%" style={{lineHeight: '20px', display: 'block'}} />
+                }
+            </div>
+            <div className="u-flexbox">
+                <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Order total</dt>
+                {total ?
                     <dd className="u-flex">{total}</dd>
-                </div>
-            :
-                <SkeletonText width="40%" style={{lineHeight: '20px', display: 'block'}} />
-            }
-            {status ?
-                <div className="u-flexbox">
-                    <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Status</dt>
+                :
+                    <SkeletonText className="u-flex" width="30%" style={{lineHeight: '20px', display: 'block'}} />
+                }
+            </div>
+            <div className="u-flexbox">
+                <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Status</dt>
+                {status ?
                     <dd className="u-flex">{status}</dd>
-                </div>
-            :
-                <SkeletonText width="50%" style={{lineHeight: '20px', display: 'block'}} />
-            }
+                :
+                    <SkeletonText className="u-flex" width="40%" style={{lineHeight: '20px', display: 'block'}} />
+                }
+            </div>
         </dl>
     </div>
 )

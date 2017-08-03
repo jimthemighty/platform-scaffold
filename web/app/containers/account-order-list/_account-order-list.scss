@@ -16,3 +16,17 @@
         margin-top: $unit*1.5;
     }
 }
+
+
+// Account Order List Empty
+// ---
+//
+.t-account-order-list__empty {
+    min-height: $content-height;
+
+    background-color: $neutral-10;
+
+    .pw-breadcrumbs::after {
+        background: transparent;
+    }
+}
