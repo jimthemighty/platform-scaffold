@@ -30,7 +30,6 @@ import {
     fetchItemData
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
-import {addToCart} from '../cart/commands'
 import {splitFullName} from '../../../utils/utils'
 import {getDashboardURL, getCartURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
