@@ -8,7 +8,7 @@ if [ $CIRCLE_NODE_TOTAL -eq 1 ]; then
   npm run lint
   echo 'Running Unit Tests'
   npm test -- --runInBand
-  ./scripts/wait-for-dependencies.sh
+  # ./scripts/wait-for-dependencies.sh
   echo 'Verify built files sizes'
   npm run test:max-file-size -- build tests/performance/gzip-size-config.json
   # echo 'Starting Lighthouse Tests.'
@@ -26,7 +26,7 @@ else
     if [ $CIRCLE_NODE_INDEX -eq 0 ]; then
       echo 'Running Lint'
       npm run lint
-      ./scripts/wait-for-dependencies.sh
+    #   ./scripts/wait-for-dependencies.sh
     #   echo 'Running Lighthouse Test'
     #   ./tests/performance/lighthouse/run-lighthouse.sh
     fi
@@ -36,7 +36,7 @@ else
       echo 'Running Unit Tests'
       npm test -- --runInBand
 
-      ./scripts/wait-for-dependencies.sh
+    #   ./scripts/wait-for-dependencies.sh
       echo 'Verify built files sizes'
       npm run test:max-file-size -- build tests/performance/gzip-size-config.json
 
