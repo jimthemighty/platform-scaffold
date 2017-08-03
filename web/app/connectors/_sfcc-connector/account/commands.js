@@ -346,13 +346,16 @@ export const initAccountOrderListPage = () => (dispatch) => {
         })
 }
 
+const addItemsToCart = (items) => (dispatch) => {
+    createBasket()
+        .then(({basket_id}) => {
+            return makeApiJsonRequest(`/baskets/${basket_id}/items`, items, {method: 'POST'}) // eslint-disable-line
+        })
+}
+
 export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
     return makeApiRequest(`/orders/${orderNumber}`, {method: 'GET'})
         .then((res) => res.json())
-        .then(({product_items}) => {
-            product_items.forEach(({product_id, quantity}) => {
-                dispatch(addToCart(product_id, quantity))
-            })
-        })
+        .then(({product_items}) => dispatch(addItemsToCart(product_items)))
         .then(() => getCartURL())
 }
