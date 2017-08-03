@@ -13,6 +13,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getOrderList} from './selectors'
 import {reorderItems} from './actions'
+import OrderBlock from './partials/account-order-block'
 
 const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
     return (
@@ -26,29 +27,14 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                 </div>
             </div>
             <div className="t-account-order-list__content u-padding-md">
-                {orders.map(({id, orderNumber, status, total, date}) => (
+                {orders.map((order, id) => (
                     <Card
                         hasBorder
                         key={id}
                         header={
-                            <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">{orderNumber}</h3>
+                            <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">{order.orderNumber}</h3>
                         }
-                        children={
-                            <div className="u-padding-md">
-                                <p>
-                                    <strong>Date: </strong>
-                                    {date}
-                                </p>
-                                <p>
-                                    <strong>Total: </strong>
-                                    {total}
-                                </p>
-                                <p>
-                                    <strong>Status: </strong>
-                                    {status}
-                                </p>
-                            </div>
-                        }
+                        children={<OrderBlock {...order} />}
                         footer={
                             <div className="u-flexbox">
                                 <div className="u-flex u-border-end">
@@ -68,7 +54,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                                         title="Reorder"
                                         className="u-width-full u-color-brand u-border-top"
                                         icon="cart-v2"
-                                        onClick={() => reorderItems(id || orderNumber)}
+                                        onClick={() => reorderItems(order.id || order.orderNumber)}
                                         showIconText={true}
                                         iconClassName="u-margin-end"
                                         data-analytics-name={UI_NAME.reorder}
