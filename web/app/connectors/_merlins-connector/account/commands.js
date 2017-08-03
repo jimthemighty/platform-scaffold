@@ -66,10 +66,9 @@ export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable
             // we're going to fetch the cart page so we can re-use the country
             // parsing functionality from initCartPage
             const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
-            const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
-
-            return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+            return extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
         })
+        .then((res) => dispatch(receiveCheckoutLocations(parseLocations(res))))
         .then(() => dispatch(updateCustomerAddresses()))
 }
 
