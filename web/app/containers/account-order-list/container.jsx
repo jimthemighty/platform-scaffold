@@ -26,10 +26,10 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                 </div>
             </div>
             <div className="t-account-order-list__content u-padding-md">
-                {orders.map(({id, shipTo, orderNumber, status, total, date}) => (
+                {orders.map(({id, orderNumber, status, total, date}) => (
                     <Card
                         hasBorder
-                        key={id}
+                        key={orderNumber}
                         header={
                             <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">{id}</h3>
                         }
