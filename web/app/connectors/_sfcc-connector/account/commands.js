@@ -11,7 +11,9 @@ import {
     receiveWishlistData,
     receiveWishlistUIData,
     receiveAccountAddressData,
-    receiveAccountInfoData
+    receiveAccountInfoData,
+    receiveAccountOrderListData,
+    receiveCurrentOrderNumber
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from '../parsers'
@@ -334,4 +336,13 @@ export const initWishlistPage = () => (dispatch) => {
         })
 }
 
-export const initAccountViewOrderPage = (url) => (dispatch) => Promise.resolve()
+export const initAccountViewOrderPage = (url) => (dispatch) => {
+    const idMatch = /orderID=(\d+)\//.exec(url)
+    const id = idMatch ? idMatch[1] : ''
+    // set current order Number
+    dispatch(receiveCurrentOrderNumber(id))
+    return makeApiJsonRequest(`/orders/${id}`, {}, {method: 'GET'})
+        .then((responseJSON) => {
+            return dispatch(receiveAccountOrderListData(parseOrder(responseJSON)))
+        })
+}

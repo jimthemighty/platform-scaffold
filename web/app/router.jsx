@@ -165,7 +165,7 @@ const Router = ({store}) => (
                 <Route component={Login} path="*/Account-Show" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={AccountDashboard} path="*/Account-Show?dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={AccountAddress} path="*/Address-List" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
-
+                <Route component={AccountViewOrder} path="*/Order-History?orderID*" routeName="accountViewOrder" fetchAction={initPage(initAccountViewOrderPage)} />
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 
                 <Route

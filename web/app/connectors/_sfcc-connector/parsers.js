@@ -226,3 +226,37 @@ export const parseFilterOptions = (refinements) => {
         return filters
     }, [])
 }
+
+export const receiveAccountOrderListData = ({
+    order_no,
+    creation_date,
+    confirmation_status,
+    order_total,
+    tax_total,
+    shipping_total,
+    product_sub_total,
+    billing_address,
+    shipments: [
+        {
+            shipping_method,
+            shipping_address
+        }
+    ]
+}) => {
+    return {
+        [order_no]: {
+            orderNumber: order_no,
+            date: creation_date,
+            status: confirmation_status,
+            total: order_total,
+            tax: tax_total,
+            shippingTotal: shipping_total,
+            subtotal: product_sub_total,
+            paymentMethod: '',
+            shippingMethod: shipping_method,
+            shippingAddress: shipping_address,
+            billingAddress: billing_address,
+            items: []
+        }
+    }
+}
