@@ -46,7 +46,7 @@ const RegionField = ({
             label="State/Province"
         >
             <select data-analytics-name={UI_NAME.region}>
-                <option disabled>Please select a region, state, or province</option>
+                <option disabled value="">Please select a region, state, or province</option>
                 {regions.map(({label, id}) => (
                     <option value={id} key={`${id}-${label}`}>
                         {label}
