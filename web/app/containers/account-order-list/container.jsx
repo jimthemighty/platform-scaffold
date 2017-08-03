@@ -32,7 +32,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                         hasBorder
                         key={id}
                         header={
-                            <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">{order.orderNumber}</h3>
+                            <h3 className="u-padding-top-md u-padding-start-md u-padding-end-md">Order # {order.orderNumber}</h3>
                         }
                         children={<OrderBlock {...order} />}
                         footer={
