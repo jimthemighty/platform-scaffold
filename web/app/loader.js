@@ -28,6 +28,8 @@ import preloadHTML from 'raw-loader!./preloader/preload.html'
 import preloadCSS from 'css-loader?minimize!./preloader/preload.css'
 import preloadJS from 'raw-loader!./preloader/preload.js' // eslint-disable-line import/default
 
+import {baseAMPUrl, validAMPUrls} from './ampUrls'
+
 const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
 const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 
@@ -200,6 +202,17 @@ const waitForBody = () => {
     return waitForBodyPromise
 }
 
+const hasAMPPage = (validUrlList, path) => {
+    for (let x = 0; x < validUrlList.length; x++) {
+        const url = validUrlList[x]
+        const exp = new RegExp(`.*${url}.*`)
+        if (exp.test(path)) {
+            return url
+        }
+    }
+    return false
+}
+
 const loadPWA = () => {
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
@@ -243,6 +256,15 @@ const loadPWA = () => {
         name: 'charset',
         content: 'utf-8'
     })
+
+    // Only add AMP tag for specified URLs
+    const ampPath = hasAMPPage(validAMPUrls, window.location.pathname)
+    if (ampPath !== false) {
+        loadAsset('link', {
+            rel: 'amphtml',
+            href: `${baseAMPUrl}${ampPath}`
+        })
+    }
 
     loadAsset('link', {
         href: getAssetUrl('main.css'),
