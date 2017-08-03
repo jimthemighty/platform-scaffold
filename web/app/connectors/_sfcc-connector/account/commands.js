@@ -15,7 +15,8 @@ import {
     receiveAccountAddressData,
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {createOrderAddressObject} from '../checkout/utils'
+import {parseWishlistProducts, parseAddressResponse} from '../parsers'
+import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
 import {
     initSfccSession,
     deleteAuthToken,
@@ -28,7 +29,6 @@ import {
     getCustomerID,
     fetchItemData
 } from '../utils'
-import {parseWishlistProducts} from '../parsers'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {splitFullName} from '../../../utils/utils'
 import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
@@ -169,18 +169,49 @@ export const registerUser = (firstname, lastname, email, password) => (dispatch)
 
 }
 
-const addAddress = (formValues, addressName) => {
-    const addressData = createOrderAddressObject(formValues)
+export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
+}
+
+export const fetchAddressData = () => (dispatch) => {
     const customerId = getCustomerID()
+
+    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
+            .then((res) => res.json())
+            .then(({data}) => {
+                const addresses = data ? data.map((address) => parseAddressResponse(address)) : []
+                return dispatch(receiveAccountAddressData(addresses))
+            })
+}
+export const addAddress = (address) => (dispatch) => {
+    const addressData = createOrderAddressObject(address)
+    const customerId = getCustomerID()
+
     const requestBody = {
         ...addressData,
-        address_id: addressName
+        address_id: address.addressName
     }
+
     return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
         .then(checkForResponseFault)
+        .then(() => dispatch(fetchAddressData()))
         .catch(() => { throw Error('Unable to save address') })
 }
 
+export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-line
+    const customerId = getCustomerID()
+
+    return makeApiRequest(`/customers/${customerId}/addresses/${addressId}`, {method: 'DELETE'})
+        .then(() => dispatch(fetchAddressData()))
+}
+
+export const editAddress = (address, addressId) => (dispatch) => { // eslint-disable-line
+    const addressData = createOrderAddressObject(address)
+    const customerId = getCustomerID()
+
+    return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {...addressData}, {method: 'PATCH'})
+        .then(() => dispatch(fetchAddressData()))
+}
 
 // updateShippingAddress and updateBillingAddress are separate commands to
 // support other connectors that require different actions for saving a
@@ -188,54 +219,20 @@ const addAddress = (formValues, addressName) => {
 // SFCC doesn't diferentiate between the two address types,
 // so these commands do effectively the same thing
 export const updateShippingAddress = (formValues) => (dispatch) => {
-    return addAddress(formValues, 'shipping_address')
+    formValues.addressName = 'shipping_address'
+    return dispatch(addAddress(formValues))
 }
 
 export const updateBillingAddress = (formValues) => (dispatch) => {
-    return addAddress(formValues, 'billing_address')
-}
-
-export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
-    return Promise.resolve()
+    formValues.addressName = 'billing_address'
+    return dispatch(addAddress(formValues))
 }
 
 export const initAccountAddressPage = () => (dispatch) => {
-    const customerId = getCustomerID()
-
-    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
-        .then((res) => res.json())
-        .then(({data}) => {
-            const addresses = data
-                        .map(({
-                            first_name,
-                            last_name,
-                            phone,
-                            postal_code,
-                            address1,
-                            address2,
-                            city,
-                            state_code,
-                            preferred,
-                            country_code
-                        }) => {
-
-                            return {
-                                firstname: first_name,
-                                lastname: last_name,
-                                telephone: phone,
-                                postcode: postal_code,
-                                addressLine1: address1,
-                                addressLine2: address2,
-                                default: preferred,
-                                city,
-                                countryId: country_code.toUpperCase(),
-                                regionId: state_code
-                            }
-                        })
-
-            return dispatch(receiveAccountAddressData(addresses))
-        })
+    dispatch(populateLocationsData())
+    return dispatch(fetchAddressData())
 }
+
 /* eslint-disable camelcase */
 const handleAccountInfoData = ({first_name, last_name, login}) => (
     {
