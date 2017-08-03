@@ -87,7 +87,7 @@ const Router = ({store}) => (
                 {/* Careful. The routeName on this 'configure' route is used to change how the ProductDetails component renders */}
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
-                <Route component={ProductDetails} path="*/p/*" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
+                <Route component={ProductDetails} path="*/product_id/*" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"

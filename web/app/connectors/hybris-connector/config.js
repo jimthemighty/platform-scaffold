@@ -13,12 +13,17 @@ export const registerConfig = (cfg) => {
 }
 
 export const getBaseSiteId = () => config.baseSiteId
-export const getCatalogId = () => config.catalogId
+export const getCatalogId = () => config.catalogId[getBaseSiteId()]
 export const getCatalogVersionId = () => config.catalogVersionId
-export const getMenuConfig = () => config.menuConfig
+export const getMenuConfig = () => config.menuConfig[getBaseSiteId()]
 export const getApiEndPoint = () => `${API_HOST}/${API_TYPE}/${API_VERSION}/${getBaseSiteId()}`
 export const getCatalogEndPoint = () => `${getApiEndPoint()}/catalogs/${getCatalogId()}/${getCatalogVersionId()}`
 export const getAuthEndPoint = () => `${API_HOST}/authorizationserver/oauth/token`
+
+export const getImageType = (type) => config.imagesTypes[type]
+export const getImageSize = (size) => config.imagesSizes[size]
+export const getVariantQualifier = (variantType) => config.qualifiers[getBaseSiteId()][variantType]
+export const getVariantType = (qualifier) => config.variants[getBaseSiteId()][qualifier]
 
 export const getCategoryPath = (id) => `/s/${getBaseSiteId()}/${id}`
 

@@ -36,16 +36,18 @@ export const getCart = () => (dispatch) => {
     // const productURL = '115195' // watch
     // const productURL = '115195_shocking_pink';
     // const productURL = '122811' // t-shirts
-    const productURL = '122811_heather_berry'
+    // const productURL = '122811_heather_berry'
     // const productURL = '300717437'
     // const productURL = '300720128'
+    // const productURL = '1978440' // electronics
+    const productURL = '779841' // electronics
     const exampleCartProducts = {
         '1': { // eslint-disable-line
             price: '$10.00',
             available: true,
-            href: `p/${productURL}`,
+            href: `product_id/${productURL}`,
             thumbnail: image,
-            title: 'Product 1',
+            title: 'Product testing',
             id: '1',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
         }

@@ -2,8 +2,9 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {IMAGE_SIZES, IMAGE_TYPES, STOCK_STATUS, QUALIFIERS, VARIANTS} from './constants'
-import {getCategoryPath} from './config'
+import {STOCK_STATUS} from './constants'
+import {getCategoryPath, getImageType, getImageSize, getVariantQualifier, getVariantType} from './config'
+
 
 export const parseCategories = (categories, root = '') => {
     return categories.map((category) => {
@@ -20,10 +21,10 @@ export const parseCategories = (categories, root = '') => {
 const parseImages = (images) => {
     let parsedImages = []
     if (images) {
-        const galleryImages = images.filter((image) => image.imageType === IMAGE_TYPES.GALLERY)
-        const productImages = galleryImages.filter((image) => image.format === IMAGE_SIZES.PRODUCT)
-        const thumbnailImages = galleryImages.filter((image) => image.format === IMAGE_SIZES.THUMBNAIL)
-        const zoomImages = galleryImages.filter((image) => image.format === IMAGE_SIZES.ZOOM)
+        const galleryImages = images.filter((image) => image.imageType === getImageType('gallery'))
+        const productImages = galleryImages.filter((image) => image.format === getImageSize('product'))
+        const thumbnailImages = galleryImages.filter((image) => image.format === getImageSize('thumbnail'))
+        const zoomImages = galleryImages.filter((image) => image.format === getImageSize('zoom'))
         parsedImages = productImages.map((media, index) => {
             const thumbMedia = thumbnailImages.find((image) => image.galleryIndex === index)
             const zoomMedia = zoomImages.find((image) => image.galleryIndex === index)
@@ -38,10 +39,14 @@ const parseImages = (images) => {
     return parsedImages
 }
 
-const parseVariantionOptions = (variantOptions = [], qualifierType, variantType) => {
-    const variantQualifier = variantOptions[0].variantOptionQualifiers.find((optionQualifier) => optionQualifier.qualifier === qualifierType)
+export const findOption = (options, attribute, value) => {
+    return options.find((option) => option[attribute] === value) || null
+}
+
+const parseVariantionOptions = (variantOptions, qualifierType, variantType) => {
+    const variantQualifier = findOption(variantOptions[0].variantOptionQualifiers, 'qualifier', qualifierType)
     const values = variantOptions.map((option) => ({
-        label: option.variantOptionQualifiers.find((optionQualifier) => optionQualifier.qualifier === qualifierType).value,
+        label: findOption(option.variantOptionQualifiers, 'qualifier', qualifierType).value,
         value: option.code,
     }))
     const variationCategory = {
@@ -53,31 +58,28 @@ const parseVariantionOptions = (variantOptions = [], qualifierType, variantType)
     return variationCategory
 }
 
-const parseVariationCategories = (product) => {
+const parseVariationCategories = (baseOptions, variantOptions, variantType) => {
     const variationCategories = []
-    const baseOptions = product.baseOptions || []
     if (baseOptions.length) {
         baseOptions.forEach((baseOptions) => {
             const variantType = baseOptions.variantType
-            const parsedVariantionOptions = parseVariantionOptions(baseOptions.options, QUALIFIERS[variantType], variantType)
+            const parsedVariantionOptions = parseVariantionOptions(baseOptions.options, getVariantQualifier(variantType), variantType)
             variationCategories.push(parsedVariantionOptions)
         })
     }
-    if (product.variantOptions) {
-        const variantType = product.variantType
-        const parsedVariantionOptions = parseVariantionOptions(product.variantOptions, QUALIFIERS[variantType], variantType)
+    if (variantOptions.length) {
+        const parsedVariantionOptions = parseVariantionOptions(variantOptions, getVariantQualifier(variantType), variantType)
         variationCategories.push(parsedVariantionOptions)
     }
     return variationCategories
 }
 
-const parseVariants = (product) => {
-    const baseOptions = product.baseOptions || []
+const parseVariants = (baseOptions, variantOptions, variantType) => {
     let variants = []
     if (baseOptions.length) {
-        const styleVariantOptions = baseOptions.find((option) => option.variantType === VARIANTS.STYLE) || null
-        const sizeVariantOptions = baseOptions.find((option) => option.variantType === VARIANTS.SIZE) || null
-        const selectedStyleVariant = styleVariantOptions.selected.code
+        const styleVariantOptions = findOption(baseOptions, 'variantType', getVariantType('style'))
+        const sizeVariantOptions = findOption(baseOptions, 'variantType', getVariantType('size'))
+        const selectedStyleVariant = styleVariantOptions ? styleVariantOptions.selected.code : ''
         if (sizeVariantOptions && styleVariantOptions) {
             variants = sizeVariantOptions.options.map((option) => {
                 const id = option.code
@@ -87,27 +89,30 @@ const parseVariants = (product) => {
                 }
                 return {id, values}
             })
-        } else if (styleVariantOptions && product.variantOptions) {
-            variants = product.variantOptions.map((option) => {
+        } else if (styleVariantOptions && variantOptions) {
+            variants = variantOptions.map((option) => {
                 const id = selectedStyleVariant
                 const values = {
                     [styleVariantOptions.variantType]: selectedStyleVariant,
-                    [product.variantType]: option.code
+                    [variantType]: option.code
                 }
                 return {id, values}
             })
         } else if (styleVariantOptions) {
             variants = styleVariantOptions.options.map((option) => {
                 const id = option.code
-                const values = {[styleVariantOptions.variantType]: id}
+                const values = {
+                    [styleVariantOptions.variantType]: id
+                }
                 return {id, values}
             })
         }
-    } else if (product.variantOptions) {
-        variants = product.variantOptions.map((option) => {
-            const {variantType} = product
+    } else if (variantOptions) {
+        variants = variantOptions.map((option) => {
             const id = option.code
-            const values = {[variantType]: id}
+            const values = {
+                [variantType]: id
+            }
             return {id, values}
         })
     }
@@ -136,22 +141,22 @@ export const getInitialSelectedVariant = (variants, initialValues) => {
     })
 }
 
-export const getProductHref = (productID) => `/p/${productID}`
+export const getProductHref = (productID) => `/product_id/${productID}`
 
-export const parseProductDetails = (product) => {
-    const id = product.code
-    const images = parseImages(product.images)
-    const variationCategories = parseVariationCategories(product)
-    const variants = parseVariants(product)
+export const parseProductDetails = ({baseOptions = [], code, description, images, name, price, stock, variantOptions = [], variantType}) => {
+    const hasVariations = baseOptions.length || variantOptions.length
+    const variationCategories = hasVariations ? parseVariationCategories(baseOptions, variantOptions, variantType) : []
+    const variants = parseVariants(baseOptions, variantOptions, variantType)
+    images = parseImages(images)
     return {
-        id,
-        title: product.name,
-        price: product.price.formattedValue,
-        description: product.description,
-        available: product.purchasable && product.stock.stockLevelStatus !== STOCK_STATUS.OUT_OF_STOCK && product.stock.stockLevel > 0,
+        id: code,
+        title: name,
+        price: price.formattedValue,
+        description,
+        available: stock.stockLevelStatus !== STOCK_STATUS.OUT_OF_STOCK && stock.stockLevel > 0,
         thumbnail: images.length && images[0],
         images,
-        initialValues: variants ? setInitialVariantValues(variants, id, variationCategories) : {},
+        initialValues: variants ? setInitialVariantValues(variants, code, variationCategories) : {},
         variationCategories,
         variants,
     }

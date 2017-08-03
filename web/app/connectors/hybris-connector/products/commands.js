@@ -18,40 +18,44 @@ export const initProductDetailsPage = (url, routeName) => (dispatch) => {
     const productPathKey = splitURL[splitURL.length - 1]
     const productURL = `/products/${productPathKey}?fields=FULL`
     return makeApiRequest(productURL, {method: 'GET'})
-        .then((response) => {
-            console.log('## response', response)
+        .then((response) => response.json())
+        .then((responseJSON) => {
+            console.log('## response', responseJSON)
             const productDetailsData = {
-                ...parseProductDetails(response),
+                ...parseProductDetails(responseJSON),
                 href: productPathKey
             }
             console.log('## productDetailsData', productDetailsData)
-            if (!response.purchasable) {
+            const {id} = productDetailsData
+            if (!responseJSON.purchasable) {
                 const {variants, initialValues} = productDetailsData
                 const defaultVariant = getInitialSelectedVariant(variants, initialValues)
-                const currentProductHref = defaultVariant.values[response.variantType]
-                dispatch(setCurrentURL(getProductHref(currentProductHref)))
+                const currentProductHref = defaultVariant.values[responseJSON.variantType]
                 dispatch(initProductDetailsPage(currentProductHref))
             } else {
-                const {id} = productDetailsData
+                if (window.location.pathname.indexOf(id) < 0) {
+                    dispatch(setCurrentURL(getProductHref(id)))
+                }
                 const productDetailsMap = {
                     [id]: productDetailsData
                 }
                 /* TODO review this part */
-                productDetailsData.variants.forEach(({id}) => {
+                /* productDetailsData.variants.forEach(({id}) => {
                     productDetailsMap[id] = productDetailsData
-                })
+                })*/
                 const UIData = {
                     [id]: {
                         breadcrumbs: [{
                             href: '/',
                             text: 'Home'
                         }, {
-                            href: response.url,
-                            text: response.name
+                            href: responseJSON.url,
+                            text: responseJSON.name
                         }],
                         itemQuantity: 1
                     }
                 }
+                /* TODO review this part */
                 const exampleFormData = {
                     [id]: {
                         submitUrl: 'submit',
