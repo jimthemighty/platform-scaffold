@@ -39,6 +39,17 @@ const parseImages = (images) => {
     return parsedImages
 }
 
+const parseThumbnail = (thumbnail) => {
+    let parsedThumbnail = {}
+    if (thumbnail) {
+        parsedThumbnail = {
+            alt: thumbnail.altText,
+            src: thumbnail.url,
+        }
+    }
+    return parsedThumbnail
+}
+
 export const findOption = (options, attribute, value) => {
     return options.find((option) => option[attribute] === value) || null
 }
@@ -147,6 +158,7 @@ export const parseProductDetails = ({baseOptions = [], code, description, images
     const hasVariations = baseOptions.length || variantOptions.length
     const variationCategories = hasVariations ? parseVariationCategories(baseOptions, variantOptions, variantType) : []
     const variants = parseVariants(baseOptions, variantOptions, variantType)
+    const thumbnail = parseThumbnail(images.find((image) => image.imageType === getImageType('primary') && image.format === getImageSize('thumbnail')))
     images = parseImages(images)
     return {
         id: code,
@@ -154,7 +166,7 @@ export const parseProductDetails = ({baseOptions = [], code, description, images
         price: price.formattedValue,
         description,
         available: stock.stockLevelStatus !== STOCK_STATUS.OUT_OF_STOCK && stock.stockLevel > 0,
-        thumbnail: images.length && images[0],
+        thumbnail,
         images,
         initialValues: variants ? setInitialVariantValues(variants, code, variationCategories) : {},
         variationCategories,

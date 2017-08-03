@@ -8,9 +8,10 @@ import {
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
-import {receiveFormInfo} from '../actions'
 import {makeApiRequest} from '../utils'
 import {getInitialSelectedVariant, getProductHref, parseProductDetails} from '../parsers'
+import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
+
 
 export const initProductDetailsPage = (url, routeName) => (dispatch) => {
     console.log('[Hybris Connector] Called initProductDetailsPage with arguments:', url, routeName)
@@ -20,12 +21,10 @@ export const initProductDetailsPage = (url, routeName) => (dispatch) => {
     return makeApiRequest(productURL, {method: 'GET'})
         .then((response) => response.json())
         .then((responseJSON) => {
-            console.log('## response', responseJSON)
             const productDetailsData = {
                 ...parseProductDetails(responseJSON),
-                href: productPathKey
+                href: getProductHref(productPathKey)
             }
-            console.log('## productDetailsData', productDetailsData)
             const {id} = productDetailsData
             if (!responseJSON.purchasable) {
                 const {variants, initialValues} = productDetailsData
@@ -39,10 +38,6 @@ export const initProductDetailsPage = (url, routeName) => (dispatch) => {
                 const productDetailsMap = {
                     [id]: productDetailsData
                 }
-                /* TODO review this part */
-                /* productDetailsData.variants.forEach(({id}) => {
-                    productDetailsMap[id] = productDetailsData
-                })*/
                 const UIData = {
                     [id]: {
                         breadcrumbs: [{
@@ -55,27 +50,23 @@ export const initProductDetailsPage = (url, routeName) => (dispatch) => {
                         itemQuantity: 1
                     }
                 }
-                /* TODO review this part */
-                const exampleFormData = {
-                    [id]: {
-                        submitUrl: 'submit',
-                        method: 'POST',
-                        uenc: '',
-                        hiddenInputs: {}
-                    }
-                }
-
                 dispatch(receiveCurrentProductId(id))
                 dispatch(receiveProductDetailsProductData(productDetailsMap))
                 dispatch(receiveProductDetailsUIData(UIData))
-                dispatch(receiveFormInfo(exampleFormData))
             }
             return Promise.resolve()
         })
 }
 
-export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => {
-    console.log('[Hybris Connector] Called getProductVariantData stub with arguments:', variationSelections, variants, categoryIds)
+export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch, getState) => {
+    const currentVariantSelection = getState().form[ADD_TO_CART_FORM_NAME].initial
+    Object.keys(currentVariantSelection).forEach((key) => {
+        if (currentVariantSelection[key] !== variationSelections[key]) {
+            const currentProductHref = getProductHref(variationSelections[key])
+            dispatch(setCurrentURL(currentProductHref))
+            dispatch(initProductDetailsPage(currentProductHref))
+        }
+    })
     return Promise.resolve()
 }
 
