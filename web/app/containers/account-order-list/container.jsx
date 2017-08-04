@@ -47,7 +47,7 @@ NoOrder.propTypes = {
 const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
     return (
         <div>
-            {orders ?
+            {orders.length ?
                 <div className="t-account-order-list">
                     <div className="t-account-order-list__headings u-padding-top-lg u-padding-bottom-lg u-padding-start-md u-padding-end-md">
                         <div className="t-account-order-list__breadcrumb">
