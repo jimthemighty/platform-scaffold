@@ -35,7 +35,7 @@ export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch,
 }
 
 export const editWishlistItem = (productId, itemId) => (dispatch, getState) => {
-    return browserHistory.push({
+    browserHistory.push({
         pathname: `/wishlist/index/configure/id/${itemId}/product_id/${productId}/`
     })
 }
