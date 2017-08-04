@@ -203,14 +203,9 @@ const waitForBody = () => {
 }
 
 const hasAMPPage = (validUrlList, path) => {
-    for (let x = 0; x < validUrlList.length; x++) {
-        const url = validUrlList[x]
-        const exp = new RegExp(`.*${url}.*`)
-        if (exp.test(path)) {
-            return url
-        }
-    }
-    return false
+    return validUrlList.some((url) => {
+        return new RegExp(url).test(path)
+    })
 }
 
 const loadPWA = () => {
@@ -259,10 +254,10 @@ const loadPWA = () => {
 
     // Only add AMP tag for specified URLs
     const ampPath = hasAMPPage(validAMPUrls, window.location.pathname)
-    if (ampPath !== false) {
+    if (ampPath) {
         loadAsset('link', {
             rel: 'amphtml',
-            href: `${baseAMPUrl}${ampPath}`
+            href: `${baseAMPUrl}${window.location.pathname}`
         })
     }
 
