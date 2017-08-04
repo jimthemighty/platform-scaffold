@@ -15,6 +15,7 @@ import FieldSet from 'progressive-web-sdk/dist/components/field-set'
 import {LoginField} from './common'
 
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {REGISTER_FORM_NAME} from '../../../store/form/constants'
 
 class RegisterForm extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ class RegisterForm extends React.Component {
         } = this.props
 
         return (
-            <form noValidate={true} onSubmit={handleSubmit(this.onSubmit)}>
+            <form id={REGISTER_FORM_NAME} data-analytics-name={UI_NAME.register} noValidate={true} onSubmit={handleSubmit(this.onSubmit)}>
                 {error &&
                     <div className="u-margin-bottom-md u-color-error">
                         {error}
@@ -92,7 +93,7 @@ class RegisterForm extends React.Component {
                 </FieldSet>
 
                 <Button
-                    className="c--primary u-width-full u-margin-top-lg"
+                    className="pw--primary u-width-full u-margin-top-lg"
                     type="submit"
                     disabled={submitting || !isFormLoaded}
                     data-analytics-name={UI_NAME.register}
@@ -114,7 +115,7 @@ RegisterForm.propTypes = {
 
 
 const ReduxRegisterForm = reduxForm({
-    form: 'register-form'
+    form: REGISTER_FORM_NAME
 })(RegisterForm)
 
 const mapStateToProps = createPropsSelector({

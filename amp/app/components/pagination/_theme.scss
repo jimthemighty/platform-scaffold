@@ -1,0 +1,90 @@
+@import 'component-base';
+
+// Pagination Theme
+// ===
+
+// Pagination
+// ---
+
+.a-pagination {
+    align-items: center;
+}
+
+
+// Pagination Content
+// ---
+
+.a-pagination__content {
+    display: flex;
+    align-items: center;
+
+    &:not(:only-child) {
+        margin: 0 $unit*1.5;
+    }
+}
+
+
+// Pagination Ellipsis
+// ---
+
+.a-pagination__ellipsis {
+    margin: 0 $unit;
+}
+
+
+// Pagination Page Count
+// ---
+
+.a-pagination__page-count {
+    padding: 0 $unit*2;
+}
+
+// Pagination Page
+// ---
+
+.a-pagination__page {
+    background: none;
+
+    color: $secondary-brand-color;
+
+    &:active,
+    &:focus {
+        background: $neutral-10;
+    }
+
+    &.a--active {
+        color: $neutral-70;
+    }
+
+    + .a-pagination__page {
+        margin-left: $sub-unit;
+    }
+}
+
+
+// Pagination Label
+// ---
+
+.a-pagination__hidden-label {
+    font-weight: $regular-font-weight;
+}
+
+
+// Modifier: Select
+// ---
+
+.a-pagination__select-wrapper {
+    width: 100%;
+}
+
+.a-pagination__select {
+    padding-right: $tap-size + $horizontal-input-padding;
+}
+
+.a-pagination__select-icon {
+    border: 1px solid $focused-input-border-color;
+
+    background: $neutral-00;
+
+    color: $focused-input-border-color;
+}

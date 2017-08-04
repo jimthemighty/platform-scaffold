@@ -1,3 +1,38 @@
+## To be released
+- Add Edit, Delete, and Add to account addresses [#892](https://github.com/mobify/platform-scaffold/pull/892)
+- Add view wishlist page to app [#891](https://github.com/mobify/platform-scaffold/pull/891)
+    - Add initWishlist page commands to SFCC, merlins and stub connectors
+- Bump Lighthouse to version 2.2.1 [889](https://github.com/mobify/platform-scaffold/pull/889)
+- Add product variation support to Merlin's connector [#800](https://github.com/mobify/platform-scaffold/pull/800)
+- Add account pages
+    - Account Dashboard[#834](https://github.com/mobify/platform-scaffold/pull/834)
+    - Account Addresses[#886](https://github.com/mobify/platform-scaffold/pull/886)
+- Handling `product_search` SFCC API request not necessarily having `image` object in the response [#888](https://github.com/mobify/platform-scaffold/pull/888)
+- Added a verification that time to First Interactive is below a given threshold. [896](https://github.com/mobify/platform-scaffold/pull/896)
+- Added pagination to PLP and search result page [825](https://github.com/mobify/platform-scaffold/pull/825)
+- Add Redux Form plugin to track form validation errors [897](https://github.com/mobify/platform-scaffold/pull/897)
+- Fix onboarding carousel [#909](https://github.com/mobify/platform-scaffold/pull/909)
+- Update pageview analytics instrumentation [#916](https://github.com/mobify/platform-scaffold/pull/916)
+- Update the Mobify V8 tag [#923](https://github.com/mobify/platform-scaffold/pull/923)
+
+## 0.17.3 (July 7, 2017)
+- Moved a pair of browser storage detection methods to SDK [#850](https://github.com/mobify/platform-scaffold/pull/850)
+- Dismissal config is via DefaultAsk prop now [#863](https://github.com/mobify/platform-scaffold/pull/863)
+  - The latest changes in the SDK introduce a breaking change to Push Messaging
+    component configuration. The visits to wait upon dismissal prop is now
+    configured on the DefaultAsk (or any other component implementing push
+    messaging) via the deferOnDismissal prop
+- Several a11y fixes to improve Lighthouse score [#862](https://github.com/mobify/platform-scaffold/pull/862)
+- Fixed race condition in `loader.js` related to messaging `Promise` [#861](https://github.com/mobify/platform-scaffold/pull/861) and [#855](https://github.com/mobify/platform-scaffold/pull/855)
+- Added default values to selectors of custom Integration Manager data [#857](https://github.com/mobify/platform-scaffold/pull/857)
+- [Amp] Started using the `<Link>` component from the SDK [#856](https://github.com/mobify/platform-scaffold/pull/856)
+- [Amp] Fixed up style paths to work with SDK components [#853](https://github.com/mobify/platform-scaffold/pull/853)
+- [Amp] Fixed up path to chevron assets [#852](https://github.com/mobify/platform-scaffold/pull/852)
+
+## 0.17.2 (June 30, 2017)
+- Upgrade SDK to 0.16.0
+- Bug fixes, analytics improvements and more!
+
 ## 0.17.1 (June 23, 2017)
 - Update Progressive Web SDK to 0.15.5 [#807](https://github.com/mobify/platform-scaffold/pull/807)
 - Add `messaging:testmessage` command to `web/package.json` [#735](https://github.com/mobify/platform-scaffold/pull/735)

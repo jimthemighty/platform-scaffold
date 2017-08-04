@@ -1,9 +1,13 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
-import Breadcrumbs from '../../../components/breadcrumbs'
+import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-details/selectors'

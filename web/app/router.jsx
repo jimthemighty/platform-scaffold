@@ -9,7 +9,19 @@ import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
 // Containers
 import App from './containers/app/container'
 // These templates are code-split out of the main bundle.
-import {Cart, CheckoutConfirmation, CheckoutPayment, CheckoutShipping, Login, ProductList, ProductDetails} from './containers/templates'
+import {
+    AccountDashboard,
+    AccountAddress,
+    AccountInfo,
+    Cart,
+    CheckoutConfirmation,
+    CheckoutPayment,
+    CheckoutShipping,
+    Login,
+    ProductList,
+    ProductDetails,
+    Wishlist
+} from './containers/templates'
 
 // We build this into the app so we can load the home page right away
 import Home from './containers/home/container'
@@ -20,7 +32,14 @@ import {initHomePage} from 'progressive-web-sdk/dist/integration-manager/home/co
 import {initCartPage} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {initProductListPage} from 'progressive-web-sdk/dist/integration-manager/categories/commands'
 import {initProductDetailsPage} from 'progressive-web-sdk/dist/integration-manager/products/commands'
-import {initRegisterPage, initLoginPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {
+    initRegisterPage,
+    initLoginPage,
+    initAccountDashboardPage,
+    initAccountAddressPage,
+    initAccountInfoPage,
+    initWishlistPage
+} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
 import {initPaymentPage} from './containers/checkout-payment/actions'
@@ -29,6 +48,8 @@ import {checkIfOffline} from './containers/app/actions'
 
 import {getURL} from './utils/utils'
 import {isRunningInAstro, pwaNavigate} from './utils/astro-integration'
+
+import {onPageReady} from 'progressive-web-sdk/dist/analytics/actions'
 
 // We define an initial OnChange as a no-op for non-Astro use
 let OnChange = () => {}
@@ -50,6 +71,7 @@ if (isRunningInAstro) {
 const initPage = (initAction) => (url, routeName) => (dispatch) => {
     return dispatch(initAction(url, routeName))
         .then(() => dispatch(setFetchedPage(url)))
+        .then(() => dispatch(onPageReady(routeName)))
         .catch((error) => console.error(`Error executing fetch action for ${routeName}`, error))
         .then(() => dispatch(checkIfOffline()))
 }
@@ -62,16 +84,20 @@ const Router = ({store}) => (
                 <Route component={Cart} path="checkout/cart/" routeName="cart" fetchAction={initPage(initCartPage)} />
                 <Route component={Login} path="customer/account/login/" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={Login} path="customer/account/create/" routeName="register" fetchAction={initPage(initRegisterPage)} />
+                <Route component={AccountInfo} path="customer/account/edit/" routeName="accountInfo" fetchAction={initPage(initAccountInfoPage)} />
+                <Route component={AccountDashboard} path="customer/account" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+                <Route component={AccountAddress} path="customer/address" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="supplies.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="new-arrivals.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="charms.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
-                <Route component={ProductList} path="catalogsearch/result/*" routeName="searchResultPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="catalogsearch/result/" routeName="searchResultPage" fetchAction={initPage(initProductListPage)} />
                 {/* Careful. The routeName on this 'configure' route is used to change how the ProductDetails component renders */}
                 <Route component={ProductDetails} path="checkout/cart/configure/id/*/product_id/*/" routeName="cartEditPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={ProductDetails} path="*.html" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
+                <Route component={Wishlist} path="wishlist/" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="checkout/"
@@ -114,6 +140,7 @@ const Router = ({store}) => (
                 <Route component={ProductList} path="*/gift-certificates*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/top-seller*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="*/Search-Show?*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={Wishlist} path="*/Wishlist-Show" routeName="wishlist" fetchAction={initPage(initWishlistPage)} />
                 <Route
                     component={CheckoutShipping}
                     path="*/COShipping-Start*"
@@ -131,7 +158,11 @@ const Router = ({store}) => (
                     Footer={CheckoutFooter}
                     fetchAction={initPage(initPaymentPage)}
                 />
-                <Route component={Login} path="*/Account-Show*" routeName="signin" fetchAction={initPage(initLoginPage)} />
+
+                <Route component={Login} path="*/Account-Show" routeName="signin" fetchAction={initPage(initLoginPage)} />
+                <Route component={AccountDashboard} path="*/Account-Show?dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+                <Route component={AccountAddress} path="*/Address-List" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
+
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 
                 <Route

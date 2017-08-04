@@ -35,11 +35,9 @@ import NotificationManager from '../../components/notification-manager'
 
 import {prefetchTemplateChunks} from '../templates'
 
-
 // Offline support
 import Offline from '../offline/container'
 import OfflineBanner from '../offline/partials/offline-banner'
-
 
 class App extends React.Component {
     constructor(props) {
@@ -71,8 +69,11 @@ class App extends React.Component {
         return {reload: () => fetchPage(routeProps.fetchAction, window.location.href, routeProps.routeName)}
     }
 
-    hidePreloaderWhenCSSIsLoaded() {
-        if (window.Progressive.stylesheetLoaded) {
+    hidePreloaderWhenCSSIsLoaded(counter = 0) {
+        // We wait to wait, but if we wait too long, we'll assume something
+        // went wrong with setting window.Progressive.stylesheetLoaded so
+        // we'll show the page anyways.
+        if (window.Progressive.stylesheetLoaded || counter === 10) {
             hidePreloader()
 
             // Only after we loaded the CSS can confidently unhide the app.
@@ -80,7 +81,9 @@ class App extends React.Component {
             // a flash of an ugly, unstyled app until the CSS finally loads.
             this.props.toggleHideApp(false)
         } else {
-            setTimeout(this.hidePreloaderWhenCSSIsLoaded, 100)
+            console.log('[Mobify.Progressive] Waiting for CSS to be loaded by checking for window.Progressive.stylesheetLoaded')
+            counter++
+            setTimeout(() => this.hidePreloaderWhenCSSIsLoaded(counter), 100)
         }
     }
 
@@ -141,8 +144,8 @@ class App extends React.Component {
                         {isRunningInAstro && <NativeConnector />}
 
                         {messagingEnabled && [
-                            <PushMessagingController key="controller" dimScreenOnSystemAsk visitsToWaitIfDismissed={1} />,
-                            <DefaultAsk key="ask" showOnPageCount={2} />
+                            <PushMessagingController key="controller" dimScreenOnSystemAsk />,
+                            <DefaultAsk key="ask" showOnPageCount={2} deferOnDismissal={1} />
                         ]}
 
                         <div id="app-header" className="u-flex-none" role="banner">

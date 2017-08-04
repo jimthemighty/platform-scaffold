@@ -1,3 +1,7 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
@@ -74,7 +78,7 @@ ProductItem.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Image of the product. An `<AmpImage />` component.
+     * Image of the product. An `<Img />` component.
      */
     image: PropTypes.node,
 

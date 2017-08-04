@@ -1,7 +1,11 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React from 'react'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
+import Img from 'mobify-amp-sdk/dist/components/img'
 
 // Utils
 import {staticURL} from '../../../utils'
@@ -20,7 +24,7 @@ const NavigationSocialIcons = () => {
             <div className="u-flexbox u-justify-center">
                 {social.map(([url, icon, title]) =>
                     <a href={url} className="t-navigation__social-link" key={url}>
-                        <AmpImage
+                        <Img
                             src={icon}
                             alt={title}
                             height="32"

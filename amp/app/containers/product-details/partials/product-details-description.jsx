@@ -1,9 +1,13 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
-import {Accordion, AccordionItem} from '../../../components/accordion'
+import {Accordion, AccordionItem} from 'mobify-amp-sdk/dist/components/accordion'
 
 // Selectors
 import {getProductDescription} from 'progressive-web-sdk/dist/store/products/selectors'

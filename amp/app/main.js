@@ -13,8 +13,9 @@ import ReactDOMServer from 'react-dom/server'
 import {Provider} from 'react-redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
+import {staticURL} from './utils'
 
-import Analytics from './components/analytics'
+import Analytics from 'mobify-amp-sdk/dist/components/analytics'
 import ProductDetails from './containers/product-details/container'
 import ProductList from './containers/product-list/container'
 import App from './containers/app/container'
@@ -33,7 +34,6 @@ const fonts = [
     '<link href="https://fonts.googleapis.com/css?family=Oswald:200,400" rel="stylesheet">'
 ]
 
-
 const getFullUrl = (req) => {
     return `${ampPackageJson.siteUrl}${req.url}`
 }
@@ -46,6 +46,8 @@ const render = (req, res, store, component) => {
             <Provider store={store}>
                 <App>
                     <Analytics templateName={component.templateName} projectSlug={ampPackageJson.cloudSlug} gaAccount={ampPackageJson.gaAccount} />
+                    {ampPackageJson.ampgaAccount !== null &&
+                    <Analytics templateName={component.templateName} gaAccount={ampPackageJson.ampgaAccount} />}
                     {React.createElement(component, {}, null)}
                 </App>
             </Provider>
@@ -65,7 +67,10 @@ const render = (req, res, store, component) => {
         title: state.app.get(PAGE_TITLE),
         canonicalURL: getFullUrl(req),
         body,
-        css: styleIncludes.map((x) => x.toString().trim()).join('\n'),
+        css: styleIncludes.map((x) => x.toString()
+                                       .trim()
+                                       .replace(/\/static\//g, staticURL('')))
+                                       .join('\n'),
         scriptIncludes: scriptIncludes.join('\n'),
         fontIncludes: fonts.join('\n')
     })

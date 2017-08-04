@@ -1,10 +1,14 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import ListTile from '../list-tile'
+import Img from 'mobify-amp-sdk/dist/components/img'
+import ListTile from 'mobify-amp-sdk/dist/components/list-tile'
 import ProductItem from '../product-item'
 
 /**
@@ -21,7 +25,7 @@ const titleClassName = classNames(
 )
 
 const ProductImage = ({src, alt}) => (
-    <AmpImage
+    <Img
         src={src}
         alt={alt}
         layout="fixed"

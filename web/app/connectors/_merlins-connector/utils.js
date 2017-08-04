@@ -110,3 +110,27 @@ export const prepareEstimateAddress = (inputAddress = {}) => {
 
     return address
 }
+
+export const getNameValue = (firstname, lastname) =>
+      [firstname, lastname].filter((item) => item).join(' ')
+
+
+export const parseAddress = (address) => {
+    const [addressLine1, addressLine2] = address.street
+    return {
+        city: address.city,
+        countryId: address.country_id,
+        preferred: address.default_shipping,
+        id: `${address.id}`,
+        firstname: address.firstname,
+        lastname: address.lastname,
+        fullname: getNameValue(address.firstname, address.lastname),
+        postcode: address.postcode,
+        regionId: `${address.region.region_id}`,
+        region: address.region.region,
+        regionCode: address.region.region_code,
+        addressLine1,
+        addressLine2,
+        telephone: address.telephone,
+    }
+}

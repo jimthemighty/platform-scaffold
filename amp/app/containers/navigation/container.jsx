@@ -1,21 +1,25 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import URL from 'url'
 import {canonicalURL} from '../../utils'
+import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Components
-import Sheet from '../../components/sheet'
-import Nav from '../../components/nav'
-import NavMenu from '../../components/nav-menu'
-import NavItem from '../../components/nav-item'
-import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../components/header-bar'
+import Sheet from 'mobify-amp-sdk/dist/components/sheet'
+import Nav from 'mobify-amp-sdk/dist/components/nav'
+import NavMenu from 'mobify-amp-sdk/dist/components/nav-menu'
+import NavItem from 'mobify-amp-sdk/dist/components/nav-item'
+import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'mobify-amp-sdk/dist/components/header-bar'
+import Icon from 'mobify-amp-sdk/dist/components/icon'
 import IconLabelButton from '../../components/icon-label-button'
-import Icon from '../../components/icon'
 
 // Partials
 import NavigationSocialIcons from './partials/navigation-social-icons'
-import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
 
 // Selectors
 import {getNavigationRoot, getPath} from './selectors'

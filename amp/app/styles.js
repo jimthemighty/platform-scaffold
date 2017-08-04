@@ -1,80 +1,92 @@
-// Components
-import Accordion from './components/accordion/accordion'
-import AccordionBase from './components/accordion/_base.scss'
+// SDK Components
+import {Accordion} from 'mobify-amp-sdk/dist/components/accordion/index'
+import AccordionBase from 'mobify-amp-sdk/dist/components/accordion/_base.scss'
 import AccordionTheme from './styles/themes/amp-components/_accordion.scss'
 
-import Breadcrumbs from './components/breadcrumbs/index'
-import BreadcrumbsBase from './components/breadcrumbs/_base.scss'
+import Img from 'mobify-amp-sdk/dist/components/img/index'
+import ImgBase from 'mobify-amp-sdk/dist/components/img/_base.scss'
+
+import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs/index'
+import BreadcrumbsBase from 'mobify-amp-sdk/dist/components/breadcrumbs/_base.scss'
 import BreadcrumbsTheme from './styles/themes/amp-components/_breadcrumbs.scss'
 
-import Button from './components/button/index'
-import ButtonBase from './components/button/_base.scss'
+import Button from 'mobify-amp-sdk/dist/components/button/index'
+import ButtonBase from 'mobify-amp-sdk/dist/components/button/_base.scss'
 import ButtonTheme from './styles/themes/amp-components/_button.scss'
 
-import Carousel from './components/carousel/index'
-import CarouselBase from './components/carousel/_base.scss'
+import Carousel from 'mobify-amp-sdk/dist/components/carousel/index'
+import CarouselBase from 'mobify-amp-sdk/dist/components/carousel/_base.scss'
 import CarouselTheme from './styles/themes/amp-components/_carousel.scss'
 
-import Field from './components/field/index'
-import FieldBase from './components/field/_base.scss'
+import Field from 'mobify-amp-sdk/dist/components/field/index'
+import FieldBase from 'mobify-amp-sdk/dist/components/field/_base.scss'
 import FieldTheme from './styles/themes/amp-components/_field.scss'
 
-import FieldRow from './components/field-row/index'
-import FieldRowBase from './components/field-row/_base.scss'
+import FieldRow from 'mobify-amp-sdk/dist/components/field-row/index'
+import FieldRowBase from 'mobify-amp-sdk/dist/components/field-row/_base.scss'
 import FieldRowTheme from './styles/themes/amp-components/_field-row.scss'
 
-import {HeaderBar} from './components/header-bar/index'
-import HeaderBarBase from './components/header-bar/_base.scss'
+import {HeaderBar} from 'mobify-amp-sdk/dist/components/header-bar/index'
+import HeaderBarBase from 'mobify-amp-sdk/dist/components/header-bar/_base.scss'
 import HeaderBarTheme from './styles/themes/amp-components/_header-bar.scss'
 
-import Icon from './components/icon/index'
-import IconBase from './components/icon/_base.scss'
+import Icon from 'mobify-amp-sdk/dist/components/icon/index'
+import IconBase from 'mobify-amp-sdk/dist/components/icon/_base.scss'
 import IconTheme from './styles/themes/amp-components/_icon.scss'
 
-import IconLabel from './components/icon-label/index'
-import IconLabelBase from './components/icon-label/_base.scss'
+import IconLabel from 'mobify-amp-sdk/dist/components/icon-label/index'
+import IconLabelBase from 'mobify-amp-sdk/dist/components/icon-label/_base.scss'
 import IconLabelTheme from './styles/themes/amp-components/_icon-label.scss'
 
-import IconLabelButton from './components/icon-label-button/index'
-import IconLabelButtonBase from './components/icon-label-button/_base.scss'
+import Lightbox from 'mobify-amp-sdk/dist/components/lightbox/index'
+import LightboxBase from 'mobify-amp-sdk/dist/components/lightbox/_base.scss'
 
 import Link from 'mobify-amp-sdk/dist/components/link/index'
-import LinkBase from 'mobify-amp-sdk/dist/components/link/_base.scss'
-import LinkTheme from 'mobify-amp-sdk/dist/components/link/_theme.scss'
 
-import List from './components/list/index'
+import List from 'mobify-amp-sdk/dist/components/list/index'
 import ListTheme from './styles/themes/amp-components/_list.scss'
 
-import ListTile from './components/list-tile/index'
-import ListTileBase from './components/list-tile/_base.scss'
+import ListTile from 'mobify-amp-sdk/dist/components/list-tile/index'
+import ListTileBase from 'mobify-amp-sdk/dist/components/list-tile/_base.scss'
 import ListTileTheme from './styles/themes/amp-components/_list-tile.scss'
 
-import Nav from './components/nav/index'
-import NavBase from './components/nav/_base.scss'
+import Nav from 'mobify-amp-sdk/dist/components/nav/index'
+import NavBase from 'mobify-amp-sdk/dist/components/nav/_base.scss'
 import NavTheme from './styles/themes/amp-components/_nav.scss'
 
-import NavItem from './components/nav-item/index'
-import NavItemBase from './components/nav-item/_base.scss'
+import NavItem from 'mobify-amp-sdk/dist/components/nav-item/index'
+import NavItemBase from 'mobify-amp-sdk/dist/components/nav-item/_base.scss'
 import NavItemTheme from './styles/themes/amp-components/_nav-item.scss'
 
-import NavMenu from './components/nav-menu/index'
-import NavMenuBase from './components/nav-menu/_base.scss'
+import NavMenu from 'mobify-amp-sdk/dist/components/nav-menu/index'
+import NavMenuBase from 'mobify-amp-sdk/dist/components/nav-menu/_base.scss'
 import NavMenuTheme from './styles/themes/amp-components/_nav-menu.scss'
+
+import Search from 'mobify-amp-sdk/dist/components/search/index'
+import SearchBase from 'mobify-amp-sdk/dist/components/search/_base.scss'
+import SearchTheme from './styles/themes/amp-components/_search.scss'
+
+import Sheet from 'mobify-amp-sdk/dist/components/sheet/index'
+import SheetBase from 'mobify-amp-sdk/dist/components/sheet/_base.scss'
+import SheetTheme from './styles/themes/amp-components/_sheet.scss'
+
+import SkipLinks from 'mobify-amp-sdk/dist/components/skip-links/index'
+import SkipLinksBase from 'mobify-amp-sdk/dist/components/skip-links/_base.scss'
+
+
+// Local Components
+import IconLabelButton from './components/icon-label-button/index'
+import IconLabelButtonBase from './components/icon-label-button/_base.scss'
 
 import ProductItem from './components/product-item/index'
 import ProductItemBase from './components/product-item/_base.scss'
 
 import ProductTile from './components/product-tile/index'
 import ProductTileBase from './components/product-tile/_base.scss'
-import ProductTileTheme from './styles/themes/amp-components/_product-tile.scss'
 
-import Sheet from './components/sheet/index'
-import SheetBase from './components/sheet/_base.scss'
-import SheetTheme from './components/sheet/_theme.scss'
-
-import SkipLinks from './components/skip-links/index'
-import SkipLinksBase from './components/skip-links/_base.scss'
-import SkipLinksTheme from './components/skip-links/_theme.scss'
+import Pagination from './components/pagination/index'
+import PaginationBase from './components/pagination/_base.scss'
+import PaginationTheme from './styles/themes/amp-components/_pagination.scss'
 
 
 // Containers
@@ -96,28 +108,37 @@ import ProductListStyles from './containers/product-list/_container.scss'
 
 const styles = new Map()
 
+// SDK Components
 styles.set(Accordion, [AccordionBase, AccordionTheme])
+styles.set(Img, [ImgBase])
 styles.set(Breadcrumbs, [BreadcrumbsBase, BreadcrumbsTheme])
 styles.set(Button, [ButtonBase, ButtonTheme])
+styles.set(Carousel, [CarouselBase, CarouselTheme])
 styles.set(Field, [FieldBase, FieldTheme])
 styles.set(FieldRow, [FieldRowBase, FieldRowTheme])
 styles.set(HeaderBar, [HeaderBarBase, HeaderBarTheme])
 styles.set(Icon, [IconBase, IconTheme])
 styles.set(IconLabel, [IconLabelBase, IconLabelTheme])
-styles.set(IconLabelButton, [IconLabelButtonBase])
-styles.set(Link, [LinkBase, LinkTheme])
+styles.set(Lightbox, [LightboxBase])
+styles.set(Link)
 styles.set(List, [ListTheme])
 styles.set(ListTile, [ListTileBase, ListTileTheme])
 styles.set(Nav, [NavBase, NavTheme])
 styles.set(NavItem, [NavItemBase, NavItemTheme])
 styles.set(NavMenu, [NavMenuBase, NavMenuTheme])
-styles.set(ProductItem, [ProductItemBase])
-styles.set(ProductTile, [ProductTileBase, ProductTileTheme])
+styles.set(Search, [SearchBase, SearchTheme])
 styles.set(Sheet, [SheetBase, SheetTheme])
-styles.set(SkipLinks, [SkipLinksBase, SkipLinksTheme])
-styles.set(Carousel, [CarouselBase, CarouselTheme])
+styles.set(SkipLinks, [SkipLinksBase])
 
 
+// Local Components
+styles.set(IconLabelButton, [IconLabelButtonBase])
+styles.set(ProductItem, [ProductItemBase])
+styles.set(ProductTile, [ProductTileBase])
+styles.set(Pagination, [PaginationBase, PaginationTheme])
+
+
+// Containers
 styles.set(Footer, [FooterStyles])
 styles.set(Header, [HeaderStyles])
 styles.set(Navigation, [NavigationStyles])

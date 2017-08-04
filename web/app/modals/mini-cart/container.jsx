@@ -40,7 +40,7 @@ const MiniCartEmpty = () => (
 )
 
 const MiniCartMain = ({hasItems, closeMiniCart, checkoutShippingURL}) => {
-    const buttonClasses = 'c--primary u-width-full u-text-uppercase'
+    const buttonClasses = 'pw--primary u-width-full u-text-uppercase'
 
     return (
         <div className={MINI_CART_CONTENT_CLASSES}>
@@ -102,6 +102,7 @@ class MiniCart extends React.Component {
             cartLoaded,
             isOpen,
             closeMiniCart,
+            duration,
             checkoutShippingURL
         } = this.props
 
@@ -110,6 +111,7 @@ class MiniCart extends React.Component {
                 className="m-mini-cart"
                 open={isOpen}
                 onDismiss={closeMiniCart}
+                duration={duration}
                 maskOpacity={0.7}
                 effect="slide-right"
                 coverage="85%"
@@ -136,6 +138,10 @@ MiniCart.propTypes = {
     cartLoaded: PropTypes.bool,
     checkoutShippingURL: PropTypes.string,
     closeMiniCart: PropTypes.func,
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
     hasItems: PropTypes.bool,
     isOpen: PropTypes.bool,
     requestCartContent: PropTypes.func,

@@ -2,13 +2,13 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID} from '../utils'
+import {makeApiRequest, getBasketID, storeBasketID, deleteBasketID, fetchItemData} from '../utils'
 import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
+import {receiveCartContents, receiveCartItems} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 
-import {getProductById, getProductThumbnailSrcById, getProductThumbnailById} from 'progressive-web-sdk/dist/store/products/selectors'
-import {getProductHref} from '../parsers'
+import {getProductThumbnailSrcById} from 'progressive-web-sdk/dist/store/products/selectors'
+
 import {parseCartProducts, parseCartContents} from './parsers'
 
 export const createBasket = (basketContents) => {
@@ -52,64 +52,18 @@ export const getProductImage = (item, currentState) => {
         }))
 }
 
-const imageFromJson = (imageJson, name, description) => ({
-    /* Image */
-    src: imageJson.link,
-    alt: `${name} - ${description}`,
-    caption: imageJson.title
-})
-
 /**
  * Fetches product images for items that are in the cart and don't already
  * have them.
  */
-export const fetchCartItemImages = () => (dispatch, getState) => {
+export const fetchCartItemData = () => (dispatch, getState) => {
+    const items = getCartItems(getState()).toJS()
 
-    /* TODO: The `view_type` is configurable per instance. This is something that
-    *       might have to be configurable in the connector to say what `view_type`
-    *       is a thumbnail and which one is the large image type. */
-    const thumbnailViewType = 'medium'
-    const largeViewType = 'large'
-
-    const currentState = getState()
-    const items = getCartItems(currentState)
-    const updatedProducts = {}
-
-    // We use the .thumbnail as an indicator of whether the product has images already
-    return Promise.all(
-        items.filter((cartItem) => getProductThumbnailById(cartItem.get('productId'))(currentState).size === 0)
-            .map((cartItem) => {
-                const productId = cartItem.get('productId')
-
-                return makeApiRequest(`/products/${productId}/images?all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
-                    .then((response) => response.json())
-                    .then(({image_groups, name, page_title, short_description}) => {
-                        const productHref = getProductHref(productId)
-                        const productState = getProductById(productId)(currentState).toJS()
-                        const product = {
-                            ...productState,
-                            id: productId,
-                            title: page_title,
-                            available: true,
-                            href: productHref,
-                            price: productState.price || ''
-                        }
-
-                        const thumbnail = image_groups.find((group) => group.view_type === thumbnailViewType)
-                        if (thumbnail) {
-                            product.thumbnail = imageFromJson(thumbnail.images[0], name, short_description)
-                        }
-                        const largeGroup = image_groups.find((group) => group.view_type === largeViewType)
-                        if (largeGroup) {
-                            product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
-                        }
-                        updatedProducts[productHref] = product
-                    })
-            })
-    )
-    .then(() => {
-        dispatch(receiveCartProductData(updatedProducts))
-    })
+    return dispatch(fetchItemData(items))
+        .then(({updatedProducts, updatedCartItems}) => {
+            dispatch(receiveCartProductData(updatedProducts))
+            dispatch(receiveCartItems(updatedCartItems))
+        })
 }
 
 export const requestCartData = (noRetry) => (
@@ -136,7 +90,7 @@ export const handleCartData = (basket) => (dispatch) => {
     dispatch(receiveCartProductData(parseCartProducts(basket)))
     dispatch(receiveCartContents(parseCartContents(basket)))
 
-    return dispatch(fetchCartItemImages())
+    return dispatch(fetchCartItemData())
 }
 
 

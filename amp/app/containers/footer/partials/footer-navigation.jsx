@@ -1,9 +1,12 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React from 'react'
+import {canonicalURL} from '../../../utils'
 
 // Components
 import Link from 'mobify-amp-sdk/dist/components/link'
-
-import {canonicalURL} from '../../../utils'
 
 const footerLinks = [
     {text: 'Privacy and Cookie Policy', href: '/privacy-policy-cookie-restriction-mode/'},

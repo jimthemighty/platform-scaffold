@@ -1,21 +1,29 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {canonicalURL, staticURL} from '../../../utils'
 import URL from 'url'
+import {validatePageNumber} from 'progressive-web-sdk/dist/utils/utils'
+import {canonicalURL, staticURL} from '../../../utils'
+import querystring from 'querystring'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import Button from '../../../components/button'
-import Form from '../../../components/form'
-import Field from '../../../components/field'
-import List from '../../../components/list'
+import Img from 'mobify-amp-sdk/dist/components/img'
+import Button from 'mobify-amp-sdk/dist/components/button'
+import Form from 'mobify-amp-sdk/dist/components/form'
+import Field from 'mobify-amp-sdk/dist/components/field'
+import List from 'mobify-amp-sdk/dist/components/list'
 import ProductTile from '../../../components/product-tile'
+import Pagination from '../../../components/pagination'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
 import {getCurrentUrl} from 'progressive-web-sdk/dist/store/app/selectors'
 import {getCategoryItemCount} from '../../../../../web/app/store/categories/selectors'
+import {ITEMS_PER_PAGE} from '../../../../../web/app/containers/product-list/constants'
 
 const noResultsText = 'We can\'t find products matching the selection'
 const emptySearchText = 'Your search returned no results. Please check your spelling and try searching again.'
@@ -26,6 +34,29 @@ const formAction = (currentUrl) => {
     action.search = null
     action.fragment = null
     return URL.format(action)
+}
+
+export const getCurrentPageNumberFromUrl = (currentUrl, pageCount) => {
+    const parsedUrl = URL.parse(currentUrl, true)
+    return validatePageNumber(parsedUrl.query.p, pageCount)
+}
+
+export const getPaginationHref = (offset, currentUrl, pageCount) => {
+    const currentPageNumber = getCurrentPageNumberFromUrl(currentUrl)
+    const nextPage = currentPageNumber + offset
+
+    // If this button can't take us any further, don't return a link so it will
+    // be rendered as disabled properly
+    if (nextPage < 1 || nextPage > pageCount) {
+        return null
+    }
+
+    const parsedUrl = URL.parse(currentUrl, true)
+
+    parsedUrl.query.p = validatePageNumber(nextPage, pageCount)
+    // url.format won't update based on changes to .query, so we need to rewrite .search
+    parsedUrl.search = `?${querystring.stringify(parsedUrl.query)}`
+    return URL.format(parsedUrl)
 }
 
 const ResultList = ({products}) => (
@@ -53,7 +84,7 @@ ResultList.propTypes = {
 
 const NoResultsList = ({routeName}) => (
     <div className="u-flexbox u-direction-column u-align-center">
-        <AmpImage
+        <Img
             className="u-flex-none"
             alt="Crystal Ball"
             width="122"
@@ -73,10 +104,12 @@ NoResultsList.propTypes = {
 }
 
 const ProductListContents = (props) => {
-    const {sheetId, products, routeName, activeFilters, currentUrl} = props
+    const {sheetId, products, routeName, activeFilters, currentUrl, numItems} = props
 
     const toggleFilterSheet = `tap:${sheetId}.toggle`
     const formId = `${sheetId}__form`
+
+    const pageCount = Math.ceil(numItems / ITEMS_PER_PAGE)
 
     return (
         <div>
@@ -131,6 +164,28 @@ const ProductListContents = (props) => {
                 :
                     <NoResultsList routeName={routeName} />
                 }
+
+                {pageCount > 1 &&
+                    <Pagination
+                        className="u-margin-top-lg"
+                        pageCount={pageCount}
+                        currentPage={getCurrentPageNumberFromUrl(currentUrl, pageCount)}
+                        showCurrentPageMessage={true}
+                        showPageButtons={false}
+                        prevButton={{
+                            props: {
+                                href: getPaginationHref(-1, currentUrl, pageCount),
+                                text: 'Prev'
+                            }
+                        }}
+                        nextButton={{
+                            props: {
+                                href: getPaginationHref(1, currentUrl, pageCount),
+                                text: 'Next'
+                            }
+                        }}
+                    />
+                }
             </div>
         </div>
     )
@@ -147,9 +202,9 @@ ProductListContents.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     activeFilters: selectors.getActiveFilters,
+    currentUrl: getCurrentUrl,
     numItems: getCategoryItemCount,
-    products: selectors.getFilteredAndSortedListProducts,
-    currentUrl: getCurrentUrl
+    products: selectors.getSortedListProducts
 })
 
 export default connect(mapStateToProps)(ProductListContents)

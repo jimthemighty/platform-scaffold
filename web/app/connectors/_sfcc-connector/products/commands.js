@@ -8,7 +8,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
-import {makeApiRequest} from '../utils'
+import {makeApiRequest, makeApiJsonRequest, getAuthTokenPayload, checkForResponseFault} from '../utils'
 import {parseProductDetails, getCurrentProductID, getProductHref, getInitialSelectedVariant} from '../parsers'
 
 export const initProductDetailsPage = (url) => (dispatch) => {
@@ -67,4 +67,44 @@ export const getProductVariantData = (variationSelections, variants, categoryIds
     }
 
     return Promise.resolve()
+}
+
+const NEW_WISHILIST_PAYLOAD = {
+    type: 'wish_list',
+    name: 'My Wish List'
+}
+
+export const addItemToWishlist = (productId) => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerID = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
+        .then((response) => response.json())
+        .then(({count, data}) => {
+            if (count) {
+                return data[0]
+            }
+            // create a list if one doesn't exist
+            return makeApiJsonRequest(
+                `/customers/${customerID}/product_lists`,
+                NEW_WISHILIST_PAYLOAD,
+                {method: 'POST'}
+            )
+            .then(checkForResponseFault)
+        })
+        .then(({id}) => {
+            const requestBody = {
+                type: 'product',
+                product_id: productId,
+                quantity: 1
+            }
+
+            return makeApiJsonRequest(
+                `/customers/${customerID}/product_lists/${id}/items`,
+                requestBody,
+                {method: 'POST'}
+            )
+            .then(checkForResponseFault)
+        })
+        .catch(() => { throw new Error('Unable to add item to wishlist.') })
 }

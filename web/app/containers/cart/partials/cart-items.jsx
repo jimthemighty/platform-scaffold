@@ -31,7 +31,7 @@ const CartItems = ({hasItems, onContinueShopping, onOpenSignIn}) => {
 
                 <div className="u-padding-md u-padding-top-lg u-padding-bottom-lg">
                     <Button
-                        className="c--tertiary u-width-full u-text-uppercase"
+                        className="pw--tertiary u-width-full u-text-uppercase"
                         onClick={onContinueShopping}
                         data-analytics-name={UI_NAME.continueShopping}
                     >

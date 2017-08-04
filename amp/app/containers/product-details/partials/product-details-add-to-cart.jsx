@@ -1,10 +1,14 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {canonicalURL} from '../../../utils'
 
 // Components
-import Button from '../../../components/button'
+import Button from 'mobify-amp-sdk/dist/components/button'
 
 // Selectors
 import {getCurrentUrl} from 'progressive-web-sdk/dist/store/app/selectors'

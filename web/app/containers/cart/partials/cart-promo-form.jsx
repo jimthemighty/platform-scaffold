@@ -16,10 +16,12 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {submitPromoCode} from '../actions'
 import {isPromoSubmitting} from '../selectors'
 
+import {CART_PROMO_FORM_NAME} from '../../../store/form/constants'
+
 const CartPromoForm = (props) => {
     const {handleSubmit, submitPromoCode, disabled, submitting, isPromoSubmitting} = props
     return (
-        <form onSubmit={handleSubmit(submitPromoCode)} noValidate>
+        <form id={CART_PROMO_FORM_NAME} data-analytics-name={UI_NAME.promotionCode} onSubmit={handleSubmit(submitPromoCode)} noValidate>
             <FieldRow>
                 <ReduxForm.Field component={Field} name="promo">
                     <input
@@ -32,13 +34,13 @@ const CartPromoForm = (props) => {
                     />
                 </ReduxForm.Field>
                 {isPromoSubmitting ?
-                    <Button className="c--tertiary u-margin-0">
+                    <Button className="pw--tertiary u-margin-0">
                         <InlineLoader className="pw--small" title="Submitting" />
                     </Button>
                 :
                     <Button
                         type="submit"
-                        className="c--tertiary u-margin-0 u-text-uppercase"
+                        className="pw--tertiary u-margin-0 u-text-uppercase"
                         disabled={disabled || submitting}
                         data-analytics-name={UI_NAME.submitPromoCode}
                     >
@@ -86,7 +88,7 @@ const mapDispatchToProps = {
 }
 
 const CartPromoReduxForm = ReduxForm.reduxForm({
-    form: 'cartPromoForm',
+    form: CART_PROMO_FORM_NAME,
     validate,
 })(CartPromoForm)
 

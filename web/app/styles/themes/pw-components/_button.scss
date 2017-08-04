@@ -28,7 +28,7 @@
 // ---
 //
 // 1. Ensures that the borderless and bordered buttons appear the same size
-// 2. Match the width of the parent `c-button` container
+// 2. Match the width of the parent `pw-button` container
 
 .pw-button__inner {
     display: flex;
@@ -40,11 +40,11 @@
     padding: $unit $unit*1.5;
     border: 1px solid transparent; // 1
 
-    &.c--no-min-width {
+    &.pw--no-min-width {
         min-width: initial;
     }
 
-    &.c--no-min-height {
+    &.pw--no-min-height {
         min-height: initial;
     }
 }
@@ -53,29 +53,29 @@
 // Themes
 // ---
 
-.pw-button.c--primary {
-    background-color: $accent-color;
+.pw-button.pw--primary {
+    background-color: $accent-color; // ui_kit_value: $primary-action-color;
 
     color: #fff;
 
     &:active,
     &:focus {
-        background-color: $dark-accent-color;
+        background-color: $dark-accent-color; // ui_kit_value: $dark-primary-action-color;
     }
 }
 
-.pw-button.c--secondary {
-    background-color: $brand-color;
+.pw-button.pw--secondary {
+    background-color: $brand-color; // ui_kit_value: $secondary-action-color;
 
     color: #fff;
 
     &:active,
     &:focus {
-        background-color: $tertiary-brand-color;
+        background-color: $tertiary-brand-color; // ui_kit_value: $dark-secondary-action-color;
     }
 }
 
-.pw-button.c--tertiary {
+.pw-button.pw--tertiary {
     background-color: transparent;
 
     color: $brand-color;
@@ -102,8 +102,8 @@
     }
 }
 
-.pw-button.c--primary,
-.pw-button.c--secondary {
+.pw-button.pw--primary,
+.pw-button.pw--secondary {
     &[disabled] {
         background-color: $neutral-15;
 
@@ -111,6 +111,6 @@
     }
 }
 
-.pw-button.c--icon-only {
+.pw-button.pw--icon-only {
     line-height: 0;
 }

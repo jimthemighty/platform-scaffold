@@ -18,6 +18,7 @@ const parseImages = (imageGroups) => {
 const parseVariationCategories = (variation_attributes) => {
     return variation_attributes.map(({id, name, values}) => ({
         id,
+        name: id,
         label: name,
         values: values.map(({name, value}) => ({
             label: name,
@@ -113,6 +114,35 @@ export const getCurrentProductID = (url) => {
     return productID
 }
 
+export const parseAddressResponse = ({
+                            first_name,
+                            last_name,
+                            phone,
+                            postal_code,
+                            address1,
+                            address2,
+                            city,
+                            state_code,
+                            preferred,
+                            country_code,
+                            address_id
+                        }) => {
+
+    return {
+        firstname: first_name,
+        lastname: last_name ? last_name : '', // eslint-disable-line
+        telephone: phone,
+        postcode: postal_code,
+        addressLine1: address1,
+        addressLine2: address2,
+        preferred,
+        id: address_id,
+        city,
+        countryId: country_code.toUpperCase(),
+        regionId: state_code,
+        region: state_code
+    }
+}
 export const getInitialSelectedVariant = (variants, initialValues) => {
     return variants.find(({values}) => {
         return Object.keys(values).every((key) => {
@@ -135,10 +165,11 @@ export const parseCategories = (categories) => {
 export const parseProductHit = ({product_id, product_name, price, prices, orderable, image}) => {
     // Some products don't have _any_ pricing on them!
     const finalPrice = price || (prices && prices['usd-sale-prices']) || undefined
-    const thumbnail = {
+    const thumbnail = image ? {
         alt: image.alt,
         src: image.link
-    }
+    } : undefined
+
     return {
         id: product_id,
         title: product_name,
@@ -159,6 +190,15 @@ export const parseProductListData = (products) => {
     return productListData
 }
 
+export const parseSortedProductKeys = (products) => {
+    const sortedProductKeys = []
+
+    products.forEach((productHit) => {
+        sortedProductKeys.push(productHit.product_id)
+    })
+    return sortedProductKeys
+}
+
 export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     if (!products) {
         return []
@@ -175,4 +215,43 @@ export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
     })
 
     return suggestions
+}
+
+export const parseWishlistProducts = (wishlistData) => {
+    if (wishlistData.customer_product_list_items) {
+        return wishlistData.customer_product_list_items.map((wishlistItem) => {
+            const id = wishlistItem.product_id
+            return {
+                id,
+                quantity: wishlistItem.quantity
+            }
+        })
+    }
+    return []
+}
+
+export const parseFilterOptions = (refinements) => {
+    return refinements.reduce((filters, filter) => {
+        if (filter.attribute_id !== 'cgid' && filter.values) {
+            let uniqueKey = 0
+            const ruleset = filter.attribute_id
+
+            const kinds = filter.values.map((kind) => {
+                return {
+                    count: kind.hit_count,
+                    label: kind.label,
+                    query: kind.presentation_id ? kind.presentation_id : `${uniqueKey++}`,
+                    ruleset: filter.label,
+                    searchKey: `${ruleset}=${kind.value}`
+                }
+            })
+
+            filters.push({
+                label: filter.label,
+                ruleset,
+                kinds,
+            })
+        }
+        return filters
+    }, [])
 }

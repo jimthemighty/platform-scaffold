@@ -2,24 +2,22 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {LOGGED_IN_NAV, GUEST_NAV} from '../../../modals/navigation/constants'
+import {
+    ACCOUNT_NAV_ITEM,
+    SIGNED_OUT_ACCOUNT_NAV_ITEM,
+    GUEST_NAV,
+    LOGGED_IN_NAV
+} from '../../../modals/navigation/constants'
 
-// We hard-code this since it is only parseable from non-checkout pages.
-const SIGN_IN_HREF = '/customer/account/login/'
+import {
+    MY_ACCOUNT_URL,
+    WISHLIST_URL,
+    SIGN_IN_URL
+} from '../config'
+
 
 export const parseNavigation = ($, $content, isLoggedIn) => {
     const root = {title: 'Root', path: '/', children: []}
-
-    root.children.push({
-        ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
-        // Long story. The nav system ignores the `path` property when the user is
-        // logged in. Until we rework this, we always send the login path so the
-        // reducer in the `containers/navigation/` area can just flip the account
-        // node type and title and not worry about switching/adding/deleting the
-        // `path` attribute.
-        // See also `modals/navigation/container.jsx`'s `itemFactory()` function.
-        path: SIGN_IN_HREF
-    })
 
     const $navListItems = $content.find('#store\\.menu nav.navigation li')
     let path = root.path
@@ -38,5 +36,35 @@ export const parseNavigation = ($, $content, isLoggedIn) => {
             path = $link.attr('href')
         }
     })
+
+    root.children = root.children.concat(
+        [
+            {
+                type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
+                title: 'My Account',
+                options: {
+                    icon: 'user',
+                    className: 'u-margin-top-md u-border-top'
+                },
+                path: MY_ACCOUNT_URL
+            },
+            {
+                type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
+                title: 'Wishlist',
+                options: {
+                    icon: 'star'
+                },
+                path: WISHLIST_URL
+            },
+            {
+                ...(isLoggedIn ? LOGGED_IN_NAV : GUEST_NAV),
+                options: {
+                    icon: isLoggedIn ? 'lock' : 'user',
+                    className: !isLoggedIn ? 'u-margin-top-md u-border-top' : ''
+                },
+                path: SIGN_IN_URL
+            }
+        ])
+
     return {root, path}
 }

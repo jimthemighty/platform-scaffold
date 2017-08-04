@@ -1,13 +1,17 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
-import Button from '../../../components/button'
-import Sheet from '../../../components/sheet'
-import {HeaderBar, HeaderBarActions, HeaderBarTitle} from '../../../components/header-bar'
+import Button from 'mobify-amp-sdk/dist/components/button'
+import Sheet from 'mobify-amp-sdk/dist/components/sheet'
+import {HeaderBar, HeaderBarActions, HeaderBarTitle} from 'mobify-amp-sdk/dist/components/header-bar'
+import {Accordion, AccordionItem} from 'mobify-amp-sdk/dist/components/accordion'
 import IconLabelButton from '../../../components/icon-label-button'
-import {Accordion, AccordionItem} from '../../../components/accordion'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
@@ -75,7 +79,7 @@ ProductListFilterModal.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    filters: selectors.getFilters
+    filters: selectors.getCategoryFilterOptions
 })
 
 export default connect(

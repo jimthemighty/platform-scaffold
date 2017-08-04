@@ -1,10 +1,14 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 
 // Components
-import AmpImage from 'mobify-amp-sdk/dist/components/amp-image'
-import Breadcrumbs from '../../../components/breadcrumbs'
+import Img from 'mobify-amp-sdk/dist/components/img'
+import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs'
 
 // Selectors
 import {getCategoryTitle, getCategoryParentTitle, getCategoryParentHref} from '../../../../../web/app/store/categories/selectors'
@@ -24,12 +28,12 @@ const ProductListHeader = ({title, parentName, parentHref}) => (
         </div>
 
         {title &&
-            <AmpImage
+            <Img
                 className="u-flex-none u-padding-end u-padding-bottom-sm"
                 alt="Heading logo"
                 height="60"
                 width="60"
-                src={staticURL(`/img/categories/${title.trim().replace(/\s+/g, '-')
+                src={staticURL(`img/categories/${title.trim().replace(/\s+/g, '-')
                 .toLowerCase()}@2x.png`)}
                 layout="fixed"
             />

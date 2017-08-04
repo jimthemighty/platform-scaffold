@@ -3,6 +3,9 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
+import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
+import {getProductHref} from './parsers'
 import {getApiEndPoint, getRequestHeaders, configuredStorageAvailable, setItemInStorage, getItemInStorage, removeItemInStorage, atob} from './config'
 
 const AUTH_KEY_NAME = 'mob-auth'
@@ -23,29 +26,15 @@ const removeCookieValue = (keyName) => {
     document.cookie = `${keyName}=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
 }
 
-// sessionStorage detection as seen in such great libraries as Modernizr
-// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/sessionstorage.js
-let cachedSessionStorageSupport
-const supportsSessionStorage = () => {
-    if (cachedSessionStorageSupport !== undefined) {
-        return cachedSessionStorageSupport
-    }
-    const mod = 'modernizr'
-    try {
-        sessionStorage.setItem(mod, mod)
-        sessionStorage.removeItem(mod)
-        cachedSessionStorageSupport = true
-    } catch (e) {
-        cachedSessionStorageSupport = false
-    }
-    return cachedSessionStorageSupport
-}
-
 const setItemInBrowserStorage = (keyName, value) => {
+    // Use session storage if it's supported
+    if (supportsSessionStorage()) {
     if (configuredStorageAvailable()) {
         setItemInStorage(keyName, value)
     } else if (supportsSessionStorage()) {
         // Use session storage if it's supported
+    // Use session storage if it's supported
+    if (isSessionStorageAvailable()) {
         window.sessionStorage.setItem(keyName, value)
     } else {
         // Use Cookies otherwise
@@ -54,9 +43,11 @@ const setItemInBrowserStorage = (keyName, value) => {
 }
 
 const getItemFromBrowserStorage = (keyName) => {
+    if (supportsSessionStorage()) {
     if (configuredStorageAvailable()) {
         return getItemInStorage(keyName)
     } else if (supportsSessionStorage()) {
+    if (isSessionStorageAvailable()) {
         return window.sessionStorage.getItem(keyName)
     }
 
@@ -64,9 +55,11 @@ const getItemFromBrowserStorage = (keyName) => {
 }
 
 const removeItemFromBrowserStorage = (keyName) => {
+    if (supportsSessionStorage()) {
     if (configuredStorageAvailable()) {
         removeItemInStorage(keyName)
     } else if (supportsSessionStorage()) {
+    if (isSessionStorageAvailable()) {
         window.sessionStorage.removeItem(keyName)
     } else {
         removeCookieValue(keyName)
@@ -236,3 +229,68 @@ export const formatPrice = (price) => {
     }
     return `$${price.toFixed(2)}`
 }
+
+const imageFromJson = (imageJson, name, description) => ({
+    /* Image */
+    src: imageJson.link,
+    alt: `${name} - ${description}`,
+    caption: imageJson.title
+})
+
+export const fetchItemData = (items) => (dispatch, getState) => {
+    /* TODO: The `view_type` is configurable per instance. This is something that
+    *       might have to be configurable in the connector to say what `view_type`
+    *       is a thumbnail and which one is the large image type. */
+    const thumbnailViewType = 'medium'
+    const largeViewType = 'large'
+    const updatedProducts = {}
+    const updatedCartItems = []
+    return Promise.all(
+        items.map((cartItem) => {
+            const productId = cartItem.productId || cartItem.id
+            return makeApiRequest(`/products/${productId}?expand=images,prices,variations&all_images=false&view_type=${largeViewType},${thumbnailViewType}`, {method: 'GET'})
+                .then((response) => response.json())
+                .then(({image_groups, name, page_title, price, short_description, variation_values, variation_attributes}) => {
+                    const productHref = getProductHref(productId)
+                    const productState = getProductById(productId)(getState()).toJS()
+                    const options = variation_attributes.map((attribute) => {
+                        const selectedId = variation_values[attribute.id]
+                        const selectedVariant = attribute.values.find((val) => val.value === selectedId) // eslint-disable-line
+
+                        return {
+                            label: attribute.name,
+                            value: selectedVariant.name
+                        }
+                    })
+
+                    const product = {
+                        ...productState,
+                        id: productId,
+                        title: page_title,
+                        available: true,
+                        href: productHref,
+                        price: productState.price || formatPrice(price)
+                    }
+
+                    const thumbnail = image_groups.find((group) => group.view_type === thumbnailViewType)
+                    if (thumbnail) {
+                        product.thumbnail = imageFromJson(thumbnail.images[0], name, short_description)
+                    }
+                    const largeGroup = image_groups.find((group) => group.view_type === largeViewType)
+                    if (largeGroup) {
+                        product.images = largeGroup.images.map((image) => imageFromJson(image, name, short_description))
+                    }
+
+                    updatedProducts[productId] = product
+
+                    updatedCartItems.push({
+                        ...cartItem,
+                        options,
+                        thumbnail: product.thumbnail,
+                        title: product.title
+                    })
+                })
+        })
+    ).then(() => ({updatedProducts, updatedCartItems}))
+}
+

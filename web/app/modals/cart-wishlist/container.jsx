@@ -39,7 +39,7 @@ const CartWishlistComplete = ({closeModal}) => (
         </p>
 
         <Button
-            className="c--tertiary u-width-full u-text-uppercase"
+            className="pw--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
             data-analytics-name={UI_NAME.confirmation}
         >
@@ -72,7 +72,7 @@ const CartWishlistGuest = ({closeModal}) => (
         </p>
 
         <Button
-            className="c--secondary u-width-full u-text-uppercase u-margin-bottom-lg"
+            className="pw--secondary u-width-full u-text-uppercase u-margin-bottom-lg"
             href="/customer/account/login/"
             data-analytics-name={UI_NAME.goToSignIn}
         >
@@ -80,7 +80,7 @@ const CartWishlistGuest = ({closeModal}) => (
         </Button>
 
         <Button
-            className="c--tertiary u-width-full u-text-uppercase"
+            className="pw--tertiary u-width-full u-text-uppercase"
             onClick={closeModal}
             data-analytics-name={UI_NAME.cancel}
         >
@@ -106,7 +106,7 @@ CartWishlistLoggedIn.propTypes = {
 }
 
 
-const CartWishlistModal = ({closeModal, isOpen, isComplete, isLoggedIn}) => {
+const CartWishlistModal = ({closeModal, duration, isOpen, isComplete, isLoggedIn}) => {
     return (
         <Sheet
             className="pw--no-shadow m-cart__wishlist-modal"
@@ -115,6 +115,7 @@ const CartWishlistModal = ({closeModal, isOpen, isComplete, isLoggedIn}) => {
                 closeModal()
                 setIsWishlistComplete(false)
             }}
+            duration={duration}
             maskOpacity={0.7}
             effect="modal-center"
             shrinkToContent={true}
@@ -135,6 +136,11 @@ CartWishlistModal.propTypes = {
      * A function used to set the navigation-sheet's state to closed
      */
     closeModal: PropTypes.func,
+
+    /**
+     * Duration will define the time the animation takes to complete.
+     */
+    duration: PropTypes.number,
 
     isComplete: PropTypes.bool,
     isLoggedIn: PropTypes.bool,

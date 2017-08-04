@@ -14,40 +14,91 @@ import ProductDetailsItemAddedModal from './product-details-item-added/container
 import CartEstimateShippingModal from './cart-estimate-shipping/container'
 import CartWishlistModal from './cart-wishlist/container'
 import CartRemoveItemModal from './cart-remove-item/container'
+import AccountAddressModal from './account-add-address/container'
+import AccountRemoveAddressModal from './account-remove-address/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
 
 const modals = {
-    [MODAL.NAVIGATION_MODAL]: <Navigation />,
-    [MODAL.OFFLINE_MODAL]: <OfflineModal />,
-    [MODAL.MINI_CART_MODAL]: <MiniCart />,
-    [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: <ProductDetailsItemAddedModal />,
-    [MODAL.PRODUCT_LIST_FILTER_MODAL]: <ProductListFilterModal />,
-    [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: <CartEstimateShippingModal />,
-    [MODAL.CART_WISHLIST_MODAL]: <CartWishlistModal />,
-    [MODAL.CART_REMOVE_ITEM_MODAL]: <CartRemoveItemModal />,
-    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: <CheckoutConfirmationModal />,
+    // You can set transition duration for individual modal:
+    // [MODAL.NAVIGATION_MODAL]: {content: <Navigation />, customDuration: 2000},
+
+    [MODAL.NAVIGATION_MODAL]: {content: <Navigation />},
+    [MODAL.OFFLINE_MODAL]: {content: <OfflineModal />},
+    [MODAL.MINI_CART_MODAL]: {content: <MiniCart />},
+    [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: {content: <ProductDetailsItemAddedModal />},
+    [MODAL.PRODUCT_LIST_FILTER_MODAL]: {content: <ProductListFilterModal />},
+    [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
+    [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},
+    [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
+    [MODAL.ACCOUNT_ADDRESS_MODAL]: {content: <AccountAddressModal />},
+    [MODAL.ACCOUNT_REMOVE_ADDRESS_MODAL]: {content: <AccountRemoveAddressModal />},
+    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }
 
-const ModalManager = (props) => {
-    const {isOpen} = props
-    let openedModal
-    for (const modal in isOpen) {
-        if (isOpen[modal]) {
-            openedModal = modals[modal]
+class ModalManager extends React.Component {
+    shouldComponentUpdate(nextProps) {
+        const nextIsOpen = nextProps.isOpen
+        const {isOpen, duration} = this.props
+
+        for (const nextModal in nextIsOpen) {
+            // Open Modal
+            if (nextIsOpen[nextModal] === true) {
+                return true
+            }
+
+            // Close Modal
+            // Set a delay for modal close animation
+            if (isOpen[nextModal] !== nextIsOpen[nextModal]) {
+                const delay = modals[nextModal].customDuration || duration
+                setTimeout(() => this.forceUpdate(), delay)
+                return false
+            }
         }
+        return true
     }
 
-    return (
-        <div className="m-modal-manager">
-            {openedModal}
-        </div>
-    )
+    onModalChange() {
+        const {isOpen, duration} = this.props
+        let openModal
+        for (const modal in isOpen) {
+            if (isOpen[modal]) {
+                openModal = React.cloneElement(
+                    modals[modal].content,
+                    {duration: modals[modal].customDuration || duration}
+                )
+            }
+        }
+        return openModal
+    }
+
+    render() {
+        const openModal = this.onModalChange()
+        return (
+            <div className="m-modal-manager">
+                {openModal}
+            </div>
+        )
+    }
 }
 
 ModalManager.propTypes = {
-    isOpen: PropTypes.object
+    /**
+     * Duration will define the time animation takes to complete.
+     * It is the default value for all modals in the project.
+     * You can also pass duration to individual modals.
+     */
+    duration: PropTypes.number,
+
+    /**
+     * The object that contains the open/closed flag of all modals.
+     */
+    isOpen: PropTypes.object,
+}
+
+ModalManager.defaultProps = {
+    duration: 200
 }
 
 const mapStateToProps = createPropsSelector({
