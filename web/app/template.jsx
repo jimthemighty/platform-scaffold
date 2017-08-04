@@ -49,6 +49,10 @@ const template = (WrappedComponent) => {
             })
         }
 
+        componentWillUpdate() {
+            trackPerformance(PERFORMANCE_METRICS.templateWillMount)
+        }
+
         componentWillReceiveProps(nextProps) {
             if (getPath(this.props.location) !== getPath(nextProps.location)) {
                 this.dispatchRouteChange(nextProps)
@@ -57,6 +61,7 @@ const template = (WrappedComponent) => {
         }
 
         componentDidUpdate() {
+            trackPerformance(PERFORMANCE_METRICS.templateDidMount)
             astroTrigger('pwa-navigated', {
                 url: getURL(this.props.location),
                 source: 'componentDidUpdate'
