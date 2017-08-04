@@ -9,11 +9,14 @@ import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {getAuthEndPoint, getHomeURL} from '../config'
 import {getRegisterUserErrorData} from './utils'
-import {createCart, getCartID, mergeCart} from '../cart/utils'
+import {createCart, handleCartData, mergeCart} from '../cart/utils'
+import {getCart} from '../cart/commands'
 
 import {
+    calculateCartID,
     deleteCartID,
     deleteSession,
+    getCartID,
     makeApiRequest,
     makeUnAuthenticatedApiRequest,
     storeAuthTokenAndExpiration,
@@ -44,6 +47,7 @@ export const login = (username, password) => (dispatch) => {
         username,
         password
     }
+    let oldCartID
     return makeFormEncodedRequest(getAuthEndPoint(), body, {method: 'POST'})
         .then((response) => response.json())
         .then((responseJSON) => {
@@ -59,6 +63,7 @@ export const login = (username, password) => (dispatch) => {
             dispatch(receiveUserEmail(responseJSON.uid))
             storeUserType(USER_REGISTERED)
             dispatch(fetchNavigationData())
+            oldCartID = getCartID()
             return deleteCartID()
         })
         // Check if the user has a cart already
@@ -70,11 +75,11 @@ export const login = (username, password) => (dispatch) => {
                 newCart = createCart()
             } else {
                 const userCart = carts[0]
-                if (getCartID()) {
-                    newCart = mergeCart(userCart)
+                if (oldCartID) {
+                    newCart = mergeCart(userCart.guid, oldCartID)
                 } else {
                     newCart = userCart
-                    storeCartID(newCart.guid)
+                    storeCartID(calculateCartID(newCart))
                 }
             }
             return newCart
@@ -89,6 +94,7 @@ export const login = (username, password) => (dispatch) => {
 
 export const logout = () => (dispatch) => {
     deleteSession()
+    dispatch(getCart())
     dispatch(setLoggedIn(false))
     dispatch(fetchNavigationData())
     return Promise.resolve()

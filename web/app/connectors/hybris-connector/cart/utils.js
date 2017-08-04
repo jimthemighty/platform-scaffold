@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {deleteCartID, makeApiRequest, getCartID, getUserType, storeCartID} from '../utils'
+import {calculateCartID, deleteCartID, makeApiRequest, getCartID, getUserType, storeCartID} from '../utils'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 
@@ -21,28 +21,28 @@ const makeCartRequest = () => {
 }
 
 export const createCart = () => {
-    const options = {method: 'POST'}
+    let body
     // if there's an previous cart on session, we merge it
     if (getCartID()) {
-        options.body = JSON.stringify({oldCartId: getCartID()})
-    }
-    return makeApiRequest(`/users/${getUserType()}/carts`, options)
-        .then((response) => response.json())
-        .then((cart) => {
-            storeCartID(cart.guid)
-            return makeCartRequest()
-        })
-}
-
-export const mergeCart = (userCart) => {
-    const body = {
-        toMergeCartGuid: userCart.guid,
-        oldCartId: getCartID()
+        body = {oldCartId: getCartID()}
     }
     return makeApiRequest(`/users/${getUserType()}/carts`, {method: 'POST'}, body)
         .then((response) => response.json())
         .then((cart) => {
-            storeCartID(cart.guid)
+            storeCartID(calculateCartID(cart))
+            return makeCartRequest()
+        })
+}
+
+export const mergeCart = (toMergeCartGuid, oldCartId) => {
+    const body = {
+        toMergeCartGuid,
+        oldCartId
+    }
+    return makeApiRequest(`/users/${getUserType()}/carts`, {method: 'POST'}, body)
+        .then((response) => response.json())
+        .then((cart) => {
+            storeCartID(calculateCartID(cart))
             return makeCartRequest()
         })
 }

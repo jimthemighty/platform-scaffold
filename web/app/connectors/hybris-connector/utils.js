@@ -83,6 +83,26 @@ export const deleteExpiresAt = () => {
     removeItemFromBrowserStorage(EXPIRES_KEY_NAME)
 }
 
+export const deleteUserType = () => {
+    removeItemFromBrowserStorage(USER_KEY_NAME)
+}
+
+export const getUserType = () => {
+    return getItemFromBrowserStorage(USER_KEY_NAME) || USER_GUEST
+}
+
+export const storeUserType = (userType) => {
+    if (userType === undefined) {
+        throw new Error('Storing userType that is undefined!!')
+    }
+
+    setItemInBrowserStorage(USER_KEY_NAME, userType)
+}
+
+export const calculateCartID = (cart) => {
+    return getUserType() === USER_REGISTERED ? cart.code : cart.guid
+}
+
 export const deleteCartID = () => {
     removeItemFromBrowserStorage(CART_KEY_NAME)
 }
@@ -97,22 +117,6 @@ export const storeCartID = (cartID) => {
     }
 
     setItemInBrowserStorage(CART_KEY_NAME, cartID)
-}
-
-export const deleteUserType = () => {
-    removeItemFromBrowserStorage(USER_KEY_NAME)
-}
-
-export const getUserType = () => {
-    return getItemFromBrowserStorage(USER_KEY_NAME)
-}
-
-export const storeUserType = (userType) => {
-    if (userType === undefined) {
-        throw new Error('Storing userType that is undefined!!')
-    }
-
-    setItemInBrowserStorage(USER_KEY_NAME, userType)
 }
 
 let refreshToken
