@@ -50,27 +50,40 @@ export const parseWishlistProducts = ($, $response) => {
 
 export const parseAccountLocations = (magentoResponse, $, $response) => {
     const hasRegionDropdown = magentoResponse.getIn(['#country', 'regionUpdater', 'regionJson'])
+    const optionalZipList = magentoResponse.getIn(['#country', 'regionUpdater', 'countriesWithOptionalZip'])
+    const regionRequiredMap = {}
+    const postCodeOptionalMap = {}
+
+    optionalZipList.toJS().forEach((countryId) => {
+        postCodeOptionalMap[countryId] = true
+    })
 
     const regions = []
     hasRegionDropdown.toJS().config.regions_required.forEach((country) => {
         const countryRegions = hasRegionDropdown.toJS()[country]
+        regionRequiredMap[country] = true
+
         Object.keys(countryRegions).forEach((region) => {
             regions.push({
                 countryId: country,
                 id: region,
-                name: countryRegions[region].name
+                label: countryRegions[region].name
             })
         })
     })
 
     const countries = []
-    $response.find('#region_id option').each((_, option) => {
-        return {
-            id: 'AF',
-            label: 'Afghanistan',
-            regionRequired: false,
-            postcodeRequired: true
-        }
+
+    $response.find('select#country option').each((_, option) => {
+        const $option = $(option)
+        const id = $option.val()
+
+        countries.push({
+            id,
+            label: $option.text(),
+            regionRequired: regionRequiredMap[id] || false,
+            postcodeRequired: postCodeOptionalMap[id] || false
+        })
     })
 
     return {
