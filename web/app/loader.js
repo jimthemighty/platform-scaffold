@@ -96,30 +96,40 @@ const trackTTI = () => {
     }
 }
 
-const triggerNonPWAPerformanceEvent = (tracker) => {
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            const timings = window.Progressive.PerformanceTiming
+const sendPerformanceEvent = (tracker) => {
+    setTimeout(() => {
+        const timings = window.Progressive.PerformanceTiming
 
-            tracker.sendEvent({
-                channel: 'web',
-                data: {
-                    action: 'performance',
-                    category: 'timing'
-                },
-                dimensions: {
-                    page_start: navigationStart,
-                    mobify_start: mobifyStart,
-                    first_paint: timings.firstPaint,
-                    first_contentful_paint: timings.firstContentfulPaint,
-                    app_start: timings.appStart,
-                    timing_start: timingStart,
-                    page_contentful_paint: getPerformanceTiming('domContentLoadedEventEnd', timingStart, 'null'),
-                    page_content_load: getPerformanceTiming('loadEventEnd', timingStart, 'null')
-                }
-            })
-        }, 0)
-    })
+        tracker.sendEvent({
+            channel: 'web',
+            data: {
+                action: 'performance',
+                category: 'timing'
+            },
+            dimensions: {
+                page_start: navigationStart,
+                mobify_start: mobifyStart,
+                first_paint: timings.firstPaint,
+                first_contentful_paint: timings.firstContentfulPaint,
+                app_start: timings.appStart,
+                timing_start: timingStart,
+                page_contentful_paint: getPerformanceTiming('domContentLoadedEventEnd', timingStart, 'null'),
+                page_content_load: getPerformanceTiming('loadEventEnd', timingStart, 'null')
+            }
+        })
+    }, 0)
+}
+
+const triggerNonPWAPerformanceEvent = (tracker) => {
+    if (window.addEventListener) {
+        window.addEventListener('load', () => {
+            sendPerformanceEvent(tracker)
+        })
+    } else if (window.attachEvent) { // IE DOM
+        window.attachEvent('onload', () => {
+            sendPerformanceEvent(tracker)
+        })
+    }
 }
 
 const isPWARoute = () => {
