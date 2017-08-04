@@ -63,11 +63,10 @@ if ('PerformanceObserver' in window) {
             }
         }
     })
-
     paintObserver.observe({entryTypes: ['paint']})
 }
 
-// Track Time to Interaction for snippet for tti-ployfill
+// Track Time to Interaction snippet for tti-ployfill
 // Reference: https://github.com/GoogleChrome/tti-polyfill#usage
 if ('PerformanceLongTaskTiming' in window) {
     const ttiObserver = window.__tti = {
