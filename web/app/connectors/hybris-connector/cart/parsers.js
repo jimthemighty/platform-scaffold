@@ -48,7 +48,7 @@ export const parseCartContents = (cart) => {
             totalPrice: {formattedValue: linePrice} = {}} = entry
         return {
             id,
-            href: getProductHref(id),
+            href: getProductHref(productId),
             itemPrice,
             linePrice,
             productId,
