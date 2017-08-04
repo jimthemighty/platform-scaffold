@@ -47,3 +47,30 @@ export const parseWishlistProducts = ($, $response) => {
         wishlistItems
     }
 }
+
+export const parseAccountLocations = (magentoResponse, $, $response) => {
+    const hasRegionDropdown = magentoResponse.getIn(['#country', 'regionUpdater', 'regionJson'])
+
+    const regions = []
+    hasRegionDropdown.toJS().config.regions_required.forEach((country) => {
+        const countryRegions = hasRegionDropdown.toJS()[country]
+        Object.keys(countryRegions).forEach((region) => {
+            regions.push({
+                countryId: country,
+                id: region,
+                name: countryRegions[region].name
+            })
+        })
+    })
+
+    const countries = []
+    $response.find('#region_id option').each((_, option) => {
+        debugger
+        debugger
+    })
+
+    return {
+        countries,
+        regions
+    }
+}
