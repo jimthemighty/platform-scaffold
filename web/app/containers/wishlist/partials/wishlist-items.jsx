@@ -39,7 +39,7 @@ const OutOfStockMessage = () => (
     <Feedback isError icon="caution" isBlock title="out-of-stock" text="This item is out of stock." />
 )
 
-const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames}) => (
+const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, productItemClassNames}) => (
     <List>
         {products.length ?
             products.map((product) => {
