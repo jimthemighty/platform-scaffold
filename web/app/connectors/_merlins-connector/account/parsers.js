@@ -68,7 +68,7 @@ const parseAddress = ($addressBlock) => {
         addressLine1: addressLines[1].trim(),
         addressLine2: containsAddressLine2 ? addressLines[2].trim() : '',
         city: city.trim(),
-        state: state.trim(),
+        region: state.trim(),
         postcode: postcode.trim(),
         country: addressLines[addressLength - 2].trim(),
         telephone: addressLines[addressLength - 1].replace(/T:\s*/, '').trim()
@@ -84,7 +84,7 @@ export const parseOrder = ($, $response) => {
         tax: getTextFrom($response, '.totals-tax .price'),
         shippingTotal: getTextFrom($response, '.shipping .price'),
         subtotal: getTextFrom($response, 'tfoot .subtotal .price'),
-        paymentMethod: getTextFrom($response, '.box-order-billing-method .box-content'),
+        paymentMethods: [getTextFrom($response, '.box-order-billing-method .box-content')],
         shippingMethod: getTextFrom($response, '.box-order-shipping-method .box-content'),
         shippingAddress: parseAddress($response.find('.box-order-shipping-address address')),
         billingAddress: parseAddress($response.find('.box-order-billing-address address')),

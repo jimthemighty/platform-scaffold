@@ -9,7 +9,7 @@ import AddressBlock from '../../../components/address-block'
 import Card from '../../../components/card'
 
 import {
-    getOrderPaymentMethod,
+    getOrderPaymentMethods,
     getOrderBillingAddress,
     getOrderShippingAddress,
     getOrderShippingMethod
@@ -17,7 +17,7 @@ import {
 
 const OrderInformation = ({
     billingAddress,
-    paymentMethod,
+    paymentMethods,
     shippingAddress,
     shippingMethod
 }) => (
@@ -32,7 +32,7 @@ const OrderInformation = ({
             <AddressBlock {...billingAddress} countryId={billingAddress && billingAddress.country} />
         </Card>
         <Card className="c--border" header="Payment Method">
-            {paymentMethod}
+            {paymentMethods.map((paymentMethod) => paymentMethod)}
         </Card>
     </div>
 )
@@ -40,14 +40,14 @@ const OrderInformation = ({
 
 OrderInformation.propTypes = {
     billingAddress: PropTypes.object,
-    paymentMethod: PropTypes.string,
+    paymentMethods: PropTypes.string,
     shippingAddress: PropTypes.object,
     shippingMethod: PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
     billingAddress: getOrderBillingAddress,
-    paymentMethod: getOrderPaymentMethod,
+    paymentMethods: getOrderPaymentMethods,
     shippingAddress: getOrderShippingAddress,
     shippingMethod: getOrderShippingMethod
 })

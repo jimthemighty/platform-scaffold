@@ -16,7 +16,7 @@ import {
     receiveCurrentOrderNumber
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts} from '../parsers'
+import {parseWishlistProducts, parseOrder} from '../parsers'
 import {createOrderAddressObject} from '../checkout/utils'
 import {
     initSfccSession,
@@ -337,11 +337,13 @@ export const initWishlistPage = () => (dispatch) => {
 }
 
 export const initAccountViewOrderPage = (url) => (dispatch) => {
-    const idMatch = /orderID=(\d+)\//.exec(url)
-    const id = idMatch ? idMatch[1] : ''
+    // const idMatch = /orderId=(\d+)\//.exec(url)
+    // const id = idMatch ? idMatch[1] : ''
+    const id = '00004501'
     // set current order Number
     dispatch(receiveCurrentOrderNumber(id))
-    return makeApiJsonRequest(`/orders/${id}`, {}, {method: 'GET'})
+    return makeApiRequest(`/orders/${id}`, {method: 'GET'})
+        .then((response) => response.json())
         .then((responseJSON) => {
             return dispatch(receiveAccountOrderListData(parseOrder(responseJSON)))
         })

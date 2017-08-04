@@ -42,7 +42,6 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
     return defaultVariant
 }
 
-
 export const getProductHref = (productID) => `/s/${getSiteID()}/${productID}.html`
 
 export const parseProductDetails = ({id, name, price, inventory, long_description, image_groups, variants, variation_attributes}) => {
@@ -227,36 +226,68 @@ export const parseFilterOptions = (refinements) => {
     }, [])
 }
 
-export const receiveAccountOrderListData = ({
+/* eslint-disable camelcase */
+const getPaymentMethod = (paymentInstruments) => (
+    paymentInstruments.map(({payment_card: {card_type, masked_number}}) => {
+        return `${card_type} ${masked_number}`
+    })
+)
+
+const parseOrderAddress = (address) => (
+    {
+        firstname: address.first_name,
+        lastname: address.last_name,
+        addressLine1: address.address1,
+        addressLine2: address.address2,
+        city: address.city,
+        region: address.state_code,
+        postcode: address.postal_code,
+        country: address.country_code.toUpperCase(),
+        telephone: address.phone
+    }
+)
+
+export const parseOrder = ({
     order_no,
     creation_date,
     confirmation_status,
     order_total,
     tax_total,
     shipping_total,
+    shipping_total_tax,
     product_sub_total,
     billing_address,
+    product_items,
     shipments: [
         {
             shipping_method,
             shipping_address
         }
-    ]
+    ],
+    payment_instruments
 }) => {
     return {
         [order_no]: {
             orderNumber: order_no,
             date: creation_date,
             status: confirmation_status,
-            total: order_total,
-            tax: tax_total,
-            shippingTotal: shipping_total,
-            subtotal: product_sub_total,
-            paymentMethod: '',
-            shippingMethod: shipping_method,
-            shippingAddress: shipping_address,
-            billingAddress: billing_address,
-            items: []
+            total: formatPrice(order_total),
+            tax: formatPrice(tax_total),
+            shippingTotal: formatPrice(shipping_total + shipping_total_tax),
+            subtotal: formatPrice(product_sub_total),
+            paymentMethods: getPaymentMethod(payment_instruments),
+            shippingMethod: `${shipping_method.name}: ${shipping_method.description}`,
+            shippingAddress: parseOrderAddress(shipping_address),
+            billingAddress: parseOrderAddress(billing_address),
+            items: product_items.map(({item_text, product_id, quantity, price}) => {
+                return {
+                    itemName: item_text,
+                    price: formatPrice(price),
+                    quantity,
+                    productId: product_id
+                }
+            })
         }
     }
 }
+/* eslint-enable camelcase */
