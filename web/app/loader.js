@@ -58,24 +58,25 @@ window.Progressive = {
     }
 }
 
-const trackPerformance = () => {
-    // Track First Paint and First Contentful Paint
-    if ('PerformanceObserver' in window) {
-        const paintObserver = new window.PerformanceObserver((list) => {
-            for (const entry of list.getEntries()) {
-                const metricName = entry.name
-                const timing = Math.round(entry.startTime + entry.duration)
-                if (metricName === 'first-paint') {
-                    window.Progressive.PerformanceTiming.firstPaint = timing
-                } else if (metricName === 'first-contentful-paint') {
-                    window.Progressive.PerformanceTiming.firstContentfulPaint = timing
-                }
+// Track First Paint and First Contentful Paint for PWA and non-PWA
+if ('PerformanceObserver' in window) {
+    const paintObserver = new window.PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+            const metricName = entry.name
+            const timing = Math.round(entry.startTime + entry.duration)
+            if (metricName === 'first-paint') {
+                window.Progressive.PerformanceTiming.firstPaint = timing
+            } else if (metricName === 'first-contentful-paint') {
+                window.Progressive.PerformanceTiming.firstContentfulPaint = timing
             }
-        })
-        paintObserver.observe({entryTypes: ['paint']})
-    }
+        }
+    })
+    paintObserver.observe({entryTypes: ['paint']})
+}
 
+const trackTTI = () => {
     // Track Time to Interaction snippet for tti-ployfill
+    // PWA only metric
     // Reference: https://github.com/GoogleChrome/tti-polyfill#usage
     if ('PerformanceLongTaskTiming' in window) {
         const ttiObserver = window.__tti = {
@@ -86,6 +87,32 @@ const trackPerformance = () => {
         })
         ttiObserver.o.observe({entryTypes: ['longtask']})
     }
+}
+
+const triggerNonPWAPerformanceEvent = (tracker) => {
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const timings = window.Progressive.PerformanceTiming
+
+            tracker.sendEvent({
+                channel: 'web',
+                data: {
+                    action: 'performance',
+                    category: 'timing'
+                },
+                dimensions: {
+                    page_start: navigationStart,
+                    mobify_start: mobifyStart,
+                    first_paint: timings.firstPaint,
+                    first_contentful_paint: timings.firstContentfulPaint,
+                    app_start: timings.appStart,
+                    timing_start: timingStart,
+                    page_contentful_paint: (navigationStart && performance.timing.domContentLoadedEventEnd) - timingStart,
+                    page_content_load: (navigationStart && performance.timing.loadEventEnd) - timingStart
+                }
+            })
+        }, 0)
+    })
 }
 
 const isPWARoute = () => {
@@ -283,17 +310,10 @@ const triggerAppStartEvent = (pwaMode) => {
             tracker.set('mobify_adapted', pwaMode)
             tracker.set('platform', pwaMode ? 'PWA' : 'nonPWA')
 
-            if (pwaMode) {
-                // Collect timing point for when app has started loading in order to
-                // determine % dropoff of users who don't make it to the "pageview" event.
-                const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
-                const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
-                const timingStart = navigationStart || mobifyStart
-                if (timingStart) {
-                    const timing = Date.now() - timingStart
-                    window.sandy('send', 'timing', 'timing', 'appStart', '', timing)
-                    window.Progressive.PerformanceTiming.appStart = timing
-                }
+            if (pwaMode && timingStart) {
+                const timing = Date.now() - timingStart
+                window.sandy('send', 'timing', 'timing', 'appStart', '', timing)
+                window.Progressive.PerformanceTiming.appStart = timing
             }
 
             // The act of running Sandy.init() blows away the binding of
@@ -302,6 +322,11 @@ const triggerAppStartEvent = (pwaMode) => {
             // tracking pixel client
             window.sandy.instance = Sandy
             loaderLog('Sandy initialization done')
+
+            if (!pwaMode) {
+                triggerNonPWAPerformanceEvent(tracker)
+            }
+
             resolver()
         }, 0
     )
@@ -333,7 +358,7 @@ const waitForBody = () => {
  * loaded.
  */
 const loadPWA = () => {
-    trackPerformance()
+    trackTTI()
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
     if (window.loadScriptsSynchronously === undefined) {
@@ -578,6 +603,7 @@ if (shouldPreview()) {
                     id: 'ajs',
                     src: `https://a.mobify.com/${AJS_SLUG}/a.js`
                 })
+            triggerAppStartEvent(false)
         })
     }
 }
