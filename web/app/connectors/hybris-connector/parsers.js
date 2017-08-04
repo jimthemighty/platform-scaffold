@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {STOCK_STATUS} from './constants'
+import {DEFAULT_IMAGE, STOCK_STATUS} from './constants'
 import {getCategoryPath, getImageType, getImageSize, getVariantQualifier, getVariantType} from './config'
 
 
@@ -18,68 +18,62 @@ export const parseCategories = (categories, root = '') => {
     })
 }
 
-const parseImages = (images) => {
-    let parsedImages = []
-    if (images) {
+const parseImages = (images = []) => {
+    if (images.length) {
         const galleryImages = images.filter((image) => image.imageType === getImageType('gallery'))
         const productImages = galleryImages.filter((image) => image.format === getImageSize('product'))
         const thumbnailImages = galleryImages.filter((image) => image.format === getImageSize('thumbnail'))
         const zoomImages = galleryImages.filter((image) => image.format === getImageSize('zoom'))
-        parsedImages = productImages.map((media, index) => {
-            const thumbMedia = thumbnailImages.find((image) => image.galleryIndex === index)
-            const zoomMedia = zoomImages.find((image) => image.galleryIndex === index)
+        return productImages.map(({altText: alt, url: src}, index) => {
+            const {url: thumbnailSrc = ''} = thumbnailImages.find((image) => image.galleryIndex === index)
+            const {url: zoomSrc = ''} = zoomImages.find((image) => image.galleryIndex === index)
             return {
-                alt: media.altText,
-                src: media.url,
-                thumbnailSrc: thumbMedia ? thumbMedia.url : '',
-                zoomSrc: zoomMedia ? zoomMedia.url : '',
+                alt,
+                src,
+                thumbnailSrc,
+                zoomSrc
             }
         })
+    } else {
+        return [DEFAULT_IMAGE]
     }
-    return parsedImages
 }
 
 const parseThumbnail = (thumbnail) => {
-    let parsedThumbnail = {}
     if (thumbnail) {
-        parsedThumbnail = {
+        return {
             alt: thumbnail.altText,
             src: thumbnail.url,
         }
+    } else {
+        return DEFAULT_IMAGE
     }
-    return parsedThumbnail
-}
-
-export const findOption = (options, attribute, value) => {
-    return options.find((option) => option[attribute] === value) || null
 }
 
 const parseVariantionOptions = (variantOptions, qualifierType, variantType) => {
-    const variantQualifier = findOption(variantOptions[0].variantOptionQualifiers, 'qualifier', qualifierType)
-    const values = variantOptions.map((option) => ({
-        label: findOption(option.variantOptionQualifiers, 'qualifier', qualifierType).value,
-        value: option.code,
-    }))
+    const variantQualifier = variantOptions[0].variantOptionQualifiers.find((i) => i.qualifier === qualifierType)
+    const values = variantOptions.map((option) => {
+        const qualifier = option.variantOptionQualifiers.find((i) => i.qualifier === qualifierType)
+        return {
+            label: qualifier ? qualifier.value : '',
+            value: option.code
+        }
+    })
     const variationCategory = {
         id: variantType,
-        label: variantQualifier.name,
+        label: variantQualifier ? variantQualifier.name : '',
         name: variantType,
         values
     }
     return variationCategory
 }
 
-const parseVariationCategories = (baseOptions, variantOptions, variantType) => {
-    const variationCategories = []
-    if (baseOptions.length) {
-        baseOptions.forEach((baseOptions) => {
-            const variantType = baseOptions.variantType
-            const parsedVariantionOptions = parseVariantionOptions(baseOptions.options, getVariantQualifier(variantType), variantType)
-            variationCategories.push(parsedVariantionOptions)
-        })
-    }
+const parseVariationCategories = (baseOptions = [], variantOptions, productVariantType) => {
+    const variationCategories = baseOptions.map(({options, variantType}) =>
+        parseVariantionOptions(options, getVariantQualifier(variantType), variantType))
+
     if (variantOptions.length) {
-        const parsedVariantionOptions = parseVariantionOptions(variantOptions, getVariantQualifier(variantType), variantType)
+        const parsedVariantionOptions = parseVariantionOptions(variantOptions, getVariantQualifier(productVariantType), productVariantType)
         variationCategories.push(parsedVariantionOptions)
     }
     return variationCategories
@@ -88,8 +82,9 @@ const parseVariationCategories = (baseOptions, variantOptions, variantType) => {
 const parseVariants = (baseOptions, variantOptions, variantType) => {
     let variants = []
     if (baseOptions.length) {
-        const styleVariantOptions = findOption(baseOptions, 'variantType', getVariantType('style'))
-        const sizeVariantOptions = findOption(baseOptions, 'variantType', getVariantType('size'))
+        const styleVariantOptions = baseOptions.find((i) => i.variantType === getVariantType('style'))
+        const sizeVariantOptions = baseOptions.find((i) => i.variantType === getVariantType('size'))
+
         const selectedStyleVariant = styleVariantOptions ? styleVariantOptions.selected.code : ''
         if (sizeVariantOptions && styleVariantOptions) {
             variants = sizeVariantOptions.options.map((option) => {
@@ -144,7 +139,7 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
     return defaultVariant
 }
 
-export const getInitialSelectedVariant = (variants, initialValues) => {
+export const getInitialSelectedVariant = (variants = [], initialValues) => {
     return variants.find(({values}) => {
         return Object.keys(values).every((key) => {
             return values[key] === initialValues[key]
@@ -152,24 +147,39 @@ export const getInitialSelectedVariant = (variants, initialValues) => {
     })
 }
 
+export const getDefaultVariantId = (productDetailsData) => {
+    const {variants, initialValues} = productDetailsData
+    const defaultVariant = getInitialSelectedVariant(variants, initialValues)
+    const defaultVariantId = defaultVariant ? defaultVariant.values[productDetailsData.variantType] : null
+    return defaultVariantId
+}
+
 export const getProductHref = (productID) => `/product_id/${productID}`
 
-export const parseProductDetails = ({baseOptions = [], code, description, images, name, price, stock, variantOptions = [], variantType}) => {
+export const getProductIDFromURL = (url) => {
+    const splitURL = url ? url.split('/') : []
+    return splitURL[splitURL.length - 1]
+}
+
+export const parseProductDetails = ({baseOptions = [], code, description, images = [], name, price, purchasable, stock, variantOptions = [], variantType}) => {
     const hasVariations = baseOptions.length || variantOptions.length
     const variationCategories = hasVariations ? parseVariationCategories(baseOptions, variantOptions, variantType) : []
-    const variants = parseVariants(baseOptions, variantOptions, variantType)
+    const variants = hasVariations ? parseVariants(baseOptions, variantOptions, variantType) : []
     const thumbnail = parseThumbnail(images.find((image) => image.imageType === getImageType('primary') && image.format === getImageSize('thumbnail')))
-    images = parseImages(images)
+    const parsedImages = parseImages(images)
     return {
+        href: getProductHref(code),
         id: code,
         title: name,
         price: price.formattedValue,
         description,
         available: stock.stockLevelStatus !== STOCK_STATUS.OUT_OF_STOCK && stock.stockLevel > 0,
         thumbnail,
-        images,
+        images: parsedImages,
         initialValues: variants ? setInitialVariantValues(variants, code, variationCategories) : {},
+        purchasable,
         variationCategories,
         variants,
+        variantType,
     }
 }

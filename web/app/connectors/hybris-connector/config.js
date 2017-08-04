@@ -25,7 +25,7 @@ export const getImageSize = (size) => config.imagesSizes[size]
 export const getVariantQualifier = (variantType) => config.qualifiers[getBaseSiteId()][variantType]
 export const getVariantType = (qualifier) => config.variants[getBaseSiteId()][qualifier]
 
-export const getCategoryPath = (id) => `/s/${getBaseSiteId()}/${id}`
+export const getCategoryPath = (id) => `/c/${id}`
 
 export const getCartURL = () => '/checkout/cart/'
 export const getCheckoutShippingURL = () => '/x1'
