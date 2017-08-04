@@ -38,7 +38,7 @@ const getPerformanceTiming = (type, timeDiff = 0, defaultValue) => {
     if (window.performance && performance.timing && performance.timing[type]) {
         return window.performance.timing[type] - timeDiff
     }
-    return defaultValue || undefined
+    return defaultValue
 }
 
 const navigationStart = getPerformanceTiming('navigationStart')
