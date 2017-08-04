@@ -48,19 +48,19 @@ export const parseWishlistProducts = ($, $response) => {
     }
 }
 
-export const parseAccountLocations = (magentoResponse, $, $response) => {
-    const hasRegionDropdown = magentoResponse.getIn(['#country', 'regionUpdater', 'regionJson'])
-    const optionalZipList = magentoResponse.getIn(['#country', 'regionUpdater', 'countriesWithOptionalZip'])
+export const parseAccountLocations = (magentoResponse, $response) => {
+    const regionDropdownData = magentoResponse.getIn(['#country', 'regionUpdater', 'regionJson']).toJS()
+    const optionalZipList = magentoResponse.getIn(['#country', 'regionUpdater', 'countriesWithOptionalZip']).toJS()
     const regionRequiredMap = {}
     const postCodeOptionalMap = {}
 
-    optionalZipList.toJS().forEach((countryId) => {
+    optionalZipList.forEach((countryId) => {
         postCodeOptionalMap[countryId] = true
     })
 
     const regions = []
-    hasRegionDropdown.toJS().config.regions_required.forEach((country) => {
-        const countryRegions = hasRegionDropdown.toJS()[country]
+    regionDropdownData.config.regions_required.forEach((country) => {
+        const countryRegions = regionDropdownData[country]
         regionRequiredMap[country] = true
 
         Object.keys(countryRegions).forEach((region) => {
@@ -75,12 +75,10 @@ export const parseAccountLocations = (magentoResponse, $, $response) => {
     const countries = []
 
     $response.find('select#country option').each((_, option) => {
-        const $option = $(option)
-        const id = $option.val()
-
+        const id = option.value
         countries.push({
             id,
-            label: $option.text(),
+            label: option.textContent,
             regionRequired: regionRequiredMap[id] || false,
             postcodeRequired: postCodeOptionalMap[id] || false
         })
