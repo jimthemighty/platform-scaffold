@@ -65,8 +65,12 @@ export const parseAccountLocations = (magentoResponse, $, $response) => {
 
     const countries = []
     $response.find('#region_id option').each((_, option) => {
-        debugger
-        debugger
+        return {
+            id: 'AF',
+            label: 'Afghanistan',
+            regionRequired: false,
+            postcodeRequired: true
+        }
     })
 
     return {
