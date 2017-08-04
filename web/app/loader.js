@@ -34,7 +34,14 @@ const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
 const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
 const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
 
-const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
+const getPerformanceTiming = (type, timeDiff = 0, defaultValue) => {
+    if (window.performance && performance.timing && performance.timing[type]) {
+        return window.performance.timing[type] - timeDiff
+    }
+    return defaultValue || undefined
+}
+
+const navigationStart = getPerformanceTiming('navigationStart')
 const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
 const timingStart = navigationStart || mobifyStart
 
@@ -107,8 +114,8 @@ const triggerNonPWAPerformanceEvent = (tracker) => {
                     first_contentful_paint: timings.firstContentfulPaint,
                     app_start: timings.appStart,
                     timing_start: timingStart,
-                    page_contentful_paint: (navigationStart && performance.timing.domContentLoadedEventEnd) - timingStart,
-                    page_content_load: (navigationStart && performance.timing.loadEventEnd) - timingStart
+                    page_contentful_paint: getPerformanceTiming('domContentLoadedEventEnd', timingStart, 'null'),
+                    page_content_load: getPerformanceTiming('loadEventEnd', timingStart, 'null')
                 }
             })
         }, 0)
