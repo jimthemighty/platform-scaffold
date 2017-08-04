@@ -29,10 +29,28 @@ export const addToCart = (code, qty) => (dispatch) => {
         })
 }
 
-export const removeFromCart = (itemID) => (dispatch) => {
-    console.log('[Hybris Connector] Called removeFromCart stub with arguments:', itemID)
-    return Promise.resolve()
-}
+export const removeFromCart = (code) => (dispatch) => (
+    getCartUtility()
+        .then(({entries = []}) => {
+            const productEntry = entries.find((entry) => (entry.product || {}).code === code)
+            if (!productEntry || typeof productEntry.entryNumber === 'undefined') {
+                throw new Error('Unable to delete item from cart')
+            }
+            return productEntry.entryNumber
+        })
+        .then((entryNumber) => makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries/${entryNumber}`, {method: 'DELETE'}))
+        .then((response) => {
+            if (response.status !== 200) {
+                throw new Error('Unable to delete item from cart')
+            }
+        })
+        .then(() => getCartUtility())
+        .then((cart) => dispatch(handleCartData(cart)))
+        .catch((err) => {
+            console.log('Error removing product from cart', err)
+            throw new Error('Unable to delete item from cart')
+        })
+)
 
 export const updateItemQuantity = (itemID, quantity) => (dispatch) => {
     console.log('[Hybris Connector] Called updateItemQuantity stub with arguments:', itemID, quantity)
