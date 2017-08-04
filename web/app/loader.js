@@ -1,8 +1,7 @@
-/* global AJS_SLUG NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
+/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
-    isLocalStorageAvailable,
     isFirefoxBrowser,
     isSamsungBrowser,
     loadScript,
@@ -14,11 +13,12 @@ import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
 import {
+    createGlobalMessagingClientInitPromise,
     getMessagingSWVersion,
     loadAndInitMessagingClient,
-    createGlobalMessagingClientInitPromise,
-    updateMessagingSWVersion,
-    prefetchLink
+    loaderLog,
+    prefetchLink,
+    setLoaderDebug
 } from './utils/loader-utils'
 import {getNeededPolyfills} from './utils/polyfills'
 import ReactRegexes from './loader-routes'
@@ -37,6 +37,14 @@ const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION
 const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
 const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
 const timingStart = navigationStart || mobifyStart
+
+//  This needs to be based on whether this is a CDN environment, rather than
+//  a preview environment. `web/service-worker-loader.js` will use this value
+//  to determine whether it should load from a local development server, or
+//  from the CDN.
+const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+
+setLoaderDebug(DEBUG || IS_LOCAL_PREVIEW)
 
 window.Progressive = {
     AstroPromise: Promise.resolve({}),
@@ -82,7 +90,7 @@ const isPWARoute = () => {
     return ReactRegexes.some((regex) => regex.test(window.location.pathname))
 }
 
-const isSupportedBrowser = () => {
+const isSupportedPWABrowser = () => {
     // By default, the PWA will run on all mobile browsers except Samsung and Firefox.
     const ua = window.navigator.userAgent
     return /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua) &&
@@ -90,79 +98,46 @@ const isSupportedBrowser = () => {
             !isFirefoxBrowser(ua)
 }
 
+const MINIMUM_NON_PWA_CHROME = 59   // todo!
 /**
- * Do the preloading preparation for the Messaging client.
- * This includes any work that does not require a network fetch or
- * otherwise slow down initialization.
- *
- * If messagingEnabled is not truthy, then we don't load the
- * Messaging PWA client. The Messaging service worker code is
- * still included, but won't be configured and will do nothing.
+ * Returns true if the browser supports the nonPWA client. Note that
+ * isSupportedPWABrowser and isSupportedNonPWAMessagingBrowser *might* both
+ * return true for a given browser; support is not mutually exclusive.
+ * @returns {boolean}
  */
-const setupMessagingClient = (serviceWorkerSupported, messagingEnabled) => {
-    if ((!serviceWorkerSupported) || isRunningInAstro) {
-        return
+const isSupportedNonPWAMessagingBrowser = () => {
+    // By default, non-PWA mode will run on Chrome (above
+    // minimum version numbers).
+    // todo - firefox?
+    if (!('serviceWorker' in navigator)) {
+        return false
     }
-    // We need to create window.Mobify.WebPush.PWAClient
-    // at this point. If a project is configured to use
-    // non-progressive Messaging, it will load the
-    // webpush-client-loader, which will then detect that
-    // window.Mobify.WebPush.PWAClient exists and do nothing.
-    window.Mobify = window.Mobify || {}
-    window.Mobify.WebPush = window.Mobify.WebPush || {}
-    window.Mobify.WebPush.PWAClient = {}
-
-    // Update the Messaging worker version data.
-    updateMessagingSWVersion()
-
-    if (messagingEnabled) {
-        // We know we're not running in Astro, that the service worker is
-        // supported and loaded, and messaging is enabled, so we can load
-        // and initialize the Messaging client.
-        loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID)
-    }
+    const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
+    return raw ? (parseInt(raw[2], 10) >= MINIMUM_NON_PWA_CHROME) : false
 }
-
-/**
- * A setTimeout wraps this trigger function in order to control the exact
- * timing that any tracking pixels are downloaded as the app initializes.
- * More specifically, downloading of any tracking pixels should not delay
- * the downloading of any other scripts (i.e. service workers, etc.)
- */
-const triggerAppStartEvent = () => setTimeout(() => {
-    // Collect timing put for when app has started loading in order to
-    // determine % dropoff of users who don't make it to the "pageview" event.
-    Sandy.init(window)
-    Sandy.create(AJS_SLUG, 'auto') // eslint-disable-line no-undef
-    const tracker = Sandy.trackers[Sandy.DEFAULT_TRACKER_NAME]
-    tracker.set('mobify_adapted', true)
-    tracker.set('platform', 'PWA')
-
-    if (timingStart) {
-        const timing = Date.now() - timingStart
-        window.sandy('send', 'timing', 'timing', 'appStart', '', timing)
-        window.Progressive.PerformanceTiming.appStart = timing
-    }
-
-    // The act of running Sandy.init() blows away the binding of window.sandy.instance in the pixel client
-    // We are restoring it here for now and will revisit this when we rewrite sandy tracking pixel client
-    window.sandy.instance = Sandy
-}, 0)
 
 /**
  * Get the URL that should be used to load the service worker.
  * This is based on the SW_LOADER_PATH but may have additional
  * query parameters added that act as cachebreakers for the
  * Messaging part of the worker.
+ *
+ * @param pwaMode {Boolean} true to register the worker with a URL that
+ * enables PWA mode, false if not.
  * @returns String
  */
-const getServiceWorkerURL = () => {
-    //  This needs to be based on whether this is a CDN environment, rather than
-    //  a preview environment. `web/service-worker-loader.js` will use this value
-    //  to determine whether it should load from a local development server, or
-    //  from the CDN.
-    const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
-    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}`
+const getServiceWorkerURL = (pwaMode) => {
+    /**
+     * This needs to be based on whether this is a CDN environment, rather than
+     * a preview environment. `web/service-worker-loader.js` will use this value
+     * to determine whether it should load from a local development server, or
+     * from the CDN.
+     * The PWA parameter is used by the worker to tell if it's loaded to support
+     * a PWA (pwa=1) or not.
+     */
+    // The 'pwa=1' or 'pwa=0' parameter in this URL should not change format - the
+    // worker does a regex test to match the exact string.
+    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}&pwa=${pwaMode ? 1 : 0}`
 
     const workerPathElements = [SW_LOADER_PATH]
 
@@ -175,13 +150,8 @@ const getServiceWorkerURL = () => {
     // will find nothing in localStorage, and return the URL without
     // any Messaging-worker parameters, but we'll do an asynchronous
     // fetch to update the parameters, which will then be used on the
-    // next run.
-
-    // We expect supported browsers to have local storage. If the browser
-    // does not, then we may assume we're running in some situation
-    // like incognito mode, in which case there is no point getting
-    // Messaging worker version data, we can just use the base URL.
-    if (isLocalStorageAvailable()) {
+    // next run. See getMessagingSWVersion for the exact semantics.
+    if (messagingEnabled) {
         const swVersion = getMessagingSWVersion()
         if (swVersion) {
             workerPathElements.push(`msg_sw_version=${swVersion}`)
@@ -193,15 +163,39 @@ const getServiceWorkerURL = () => {
 }
 
 /**
- * Load the service worker
- * @returns Promise.<Boolean> true when the worker is loaded and ready
+ * Load the service worker.
+ *
+ * In nonPWA mode, this will be called on every page. This is safe;
+ * to quote https://developers.google.com/web/fundamentals/getting-started/primers/service-workers:
+ * "You can call register() every time a page loads without concern;
+ * the browser will figure out if the service worker is already registered
+ * or not and handle it accordingly".
+ *
+ * Note, though, that this assumes the URL returned by getServiceWorkerURL
+ * doesn't change between pages. If it does, then the worker will be
+ * re-registered with a different URL, causing it to restart.
+ *
+ * @param pwaMode {Boolean} true if the worker should be loaded in
+ * PWA mode, false if not
+ * @returns Promise.<Boolean> true when the worker is loaded and ready,
+ * false if the worker fails to register, load or become ready.
  */
-const loadWorker = () => (
-    navigator.serviceWorker.register(getServiceWorkerURL())
+const loadWorker = (pwaMode) => {
+    const url = getServiceWorkerURL(pwaMode)
+    loaderLog(`Registering service worker ${url}`)
+
+    // Note that we do not provide a scope to this call; we assume
+    // the worker loader is served at the root of the site, so that
+    // it controls the entire site.
+    return navigator.serviceWorker.register(url)
         .then(() => navigator.serviceWorker.ready)
-        .then(() => true)
-        .catch(() => { /* We're intentionally swallowing errors here */ })
-)
+        .then(() => {
+            loaderLog('Service worker is ready')
+            return true
+        })
+        // We're intentionally swallowing errors here
+        .catch(() => false)
+}
 
 const asyncInitApp = () => {
     window.webpackJsonpAsync = (module, exports, webpackRequire) => {
@@ -216,6 +210,101 @@ const asyncInitApp = () => {
 
         runJsonpAsync()
     }
+}
+
+/**
+ * Do the preloading preparation for the Messaging client.
+ * This includes any work that does not require a network fetch or
+ * otherwise slow down initialization.
+ *
+ * If messagingEnabled is not truthy, then we don't load the
+ * Messaging PWA client. The Messaging service worker code is
+ * still included, but won't be configured and will do nothing.
+ *
+ * @param serviceWorkerSupported {Boolean} true if the service worker
+ * has successfully loaded and is ready. False if there was a failure.
+ * @param pwaMode {Boolean} passed to the Messaging client initialization.
+ * @returns {Promise.<*>} that resolves when the client is loaded and
+ * initialized, with the initial messaging state value (from
+ * the Messaging client's init()). If messaging is not enabled,
+ * returns a Promise that resolves to null (we don't reject because
+ * that would lead to console warnings about uncaught rejections)
+ */
+const setupMessagingClient = (serviceWorkerSupported, pwaMode) => {
+    if (serviceWorkerSupported && (!isRunningInAstro)) {
+        // We need to create window.Mobify.WebPush.PWAClient
+        // at this point. If a project is configured to use
+        // non-progressive Messaging, it will load the
+        // webpush-client-loader, which will then detect that
+        // window.Mobify.WebPush.PWAClient exists and do nothing.
+        window.Mobify = window.Mobify || {}
+        window.Mobify.WebPush = window.Mobify.WebPush || {}
+        window.Mobify.WebPush.PWAClient = {}
+
+        if (messagingEnabled) {
+            // We know we're not running in Astro, that the service worker is
+            // supported and loaded, and messaging is enabled, so we can load
+            // and initialize the Messaging client, returning the promise
+            // from init().
+            return loadAndInitMessagingClient(DEBUG, MESSAGING_SITE_ID, pwaMode)
+        }
+    }
+
+    return Promise.resolve(null)
+}
+
+/**
+ * A setTimeout wraps this trigger function in order to control the exact
+ * timing that any tracking pixels are downloaded as the app initializes.
+ * More specifically, downloading of any tracking pixels should not delay
+ * the downloading of any other scripts (i.e. service workers, etc.)
+ *
+ * @param pwaMode {Boolean} true for PWA mode, false for nonPWA mode. This
+ * affects the set of dimensions configured on the tracker, and whether
+ * an initial timing point is collected (it's done in PWA mode only).
+ *
+ * @returns {Promise.<*>} resolved when setup is complete and any app
+ * start events have been sent.
+ */
+const triggerAppStartEvent = (pwaMode) => {
+
+    let resolver
+    const resultPromise = new Promise((resolve) => {
+        resolver = resolve
+    })
+
+    setTimeout(
+        () => {
+            Sandy.init(window)
+            Sandy.create(AJS_SLUG, 'auto') // eslint-disable-line no-undef
+            const tracker = Sandy.trackers[Sandy.DEFAULT_TRACKER_NAME]
+            tracker.set('mobify_adapted', pwaMode)
+            tracker.set('platform', pwaMode ? 'PWA' : 'nonPWA')
+
+            if (pwaMode) {
+                // Collect timing point for when app has started loading in order to
+                // determine % dropoff of users who don't make it to the "pageview" event.
+                const navigationStart = window.performance && performance.timing && performance.timing.navigationStart
+                const mobifyStart = window.Mobify && Mobify.points && Mobify.points[0]
+                const timingStart = navigationStart || mobifyStart
+                if (timingStart) {
+                    const timing = Date.now() - timingStart
+                    window.sandy('send', 'timing', 'timing', 'appStart', '', timing)
+                    window.Progressive.PerformanceTiming.appStart = timing
+                }
+            }
+
+            // The act of running Sandy.init() blows away the binding of
+            // window.sandy.instance in the pixel client. We are restoring it
+            // here for now and will revisit this when we rewrite the Sandy
+            // tracking pixel client
+            window.sandy.instance = Sandy
+            loaderLog('Sandy initialization done')
+            resolver()
+        }, 0
+    )
+
+    return resultPromise
 }
 
 let waitForBodyPromise
@@ -237,6 +326,10 @@ const waitForBody = () => {
     return waitForBodyPromise
 }
 
+/**
+ * Initialize the app. Assumes that all needed polyfills have been
+ * loaded.
+ */
 const loadPWA = () => {
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
@@ -262,7 +355,7 @@ const loadPWA = () => {
     }
 
     initCacheManifest(cacheHashManifest)
-    triggerAppStartEvent()
+    triggerAppStartEvent(true)
 
     /* eslint-disable max-len */
     loadAsset('meta', {
@@ -392,12 +485,14 @@ const loadPWA = () => {
         }).then(() => window.Astro)
     }
 
-    // Attempt to load the worker.
+    // Attempt to load the worker, in PWA mode
     (('serviceWorker' in navigator)
-        ? loadWorker()
+        ? loadWorker(true)
         : Promise.resolve(false)
     ).then((serviceWorkerSupported) => {
-        setupMessagingClient(serviceWorkerSupported, messagingEnabled)
+        // Start the process of fetching and initializing the
+        // Messaging client, in PWA mode.
+        setupMessagingClient(serviceWorkerSupported, true)
     })
 
     // Prefetch analytics - it's something that we will be downloading later,
@@ -416,8 +511,61 @@ if (shouldPreview()) {
     loadPreview()
 } else {
     // Run the app.
-    if (isSupportedBrowser() && isPWARoute()) {
+    if (isSupportedPWABrowser() && isPWARoute()) {
         loadPWA()
+    } else if (isSupportedNonPWAMessagingBrowser()) {
+        loaderLog('Starting setup for nonPWA mode')
+        initCacheManifest(cacheHashManifest)
+
+        // This a browser that supports our non-PWA mode, so we can assume that
+        // service workers are supported. Load the worker in non-PWA mode, and
+        // (in parallel) initialize analytics.
+        // We assume that the browsers supporting nonPWA mode do not need any
+        // polyfills. If any are needed, this would be the point to load them.
+        Promise.all(
+            // There are a number of steps that we can run simultaneously;
+            // initializing the worker, initializing Analytics and waiting
+            // for the <body> tag to exist.
+            [
+                loadWorker(false),
+                triggerAppStartEvent(false),
+                // We're loaded in a script located in <head> but we need to inject
+                // scripts using `loadScript` which places them in <body> - so
+                // we must wait until <body> exists.
+                waitForBody()
+            ]
+        )
+            .then((results) => {
+                loaderLog('Completing setup for nonPWA mode')
+
+                // This is called early so that the Promise is available
+                // to any scripts that need to chain from it. It gets
+                // resolved when setupMessagingClient completes.
+                createGlobalMessagingClientInitPromise(messagingEnabled)
+
+                // Set up the Messaging client integration (we do this after
+                // analytics is set up, so that window.Sandy.instance is
+                // available to Messaging). The serviceWorkerLoadedAndReady
+                // result from loadWorker is available as results[0].
+                // We ignore the Promise returned from this call, since
+                // we want to continue to load and setup the non-pwa
+                // script anyway, whether Messaging succeeds or not.
+                setupMessagingClient(results[0], false)
+                    .then((state) => loaderLog(`Messaging init complete with state ${JSON.stringify(state)}`))
+
+                // This load will execute in parallel with setup of the
+                // Messaging client.
+                return loadScriptAsPromise({
+                    id: 'mobify-non-pwa-script',
+                    src: getAssetUrl('non-pwa.js'),
+                    // We do nothing if the script fails
+                    rejectOnError: true
+                })
+            })
+            // we reach this point when the Messaging client has been
+            // loaded and initialized, and the non-pwa.js script has
+            // been loaded. We can now init the non-pwa script.
+            .then(() => window.Mobify.NonPWA.init())
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
