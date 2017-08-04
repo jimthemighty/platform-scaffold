@@ -29,16 +29,8 @@ export const addToCart = (code, qty) => (dispatch) => {
         })
 }
 
-export const removeFromCart = (code) => (dispatch) => (
-    getCartUtility()
-        .then(({entries = []}) => {
-            const productEntry = entries.find((entry) => (entry.product || {}).code === code)
-            if (!productEntry || typeof productEntry.entryNumber === 'undefined') {
-                throw new Error('Unable to delete item from cart')
-            }
-            return productEntry.entryNumber
-        })
-        .then((entryNumber) => makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries/${entryNumber}`, {method: 'DELETE'}))
+export const removeFromCart = (entryNumber) => (dispatch) => (
+    makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries/${entryNumber}`, {method: 'DELETE'})
         .then((response) => {
             if (response.status !== 200) {
                 throw new Error('Unable to delete item from cart')
@@ -52,16 +44,8 @@ export const removeFromCart = (code) => (dispatch) => (
         })
 )
 
-export const updateItemQuantity = (code, qty) => (dispatch) => (
-    getCartUtility()
-        .then(({entries = []}) => {
-            const productEntry = entries.find((entry) => (entry.product || {}).code === code)
-            if (!productEntry || typeof productEntry.entryNumber === 'undefined') {
-                throw new Error('Unable to update item quantity')
-            }
-            return productEntry.entryNumber
-        })
-        .then((entryNumber) => makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries/${entryNumber}`, {method: 'PUT'}, {qty}))
+export const updateItemQuantity = (entryNumber, qty) => (dispatch) => (
+    makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries/${entryNumber}`, {method: 'PUT'}, {qty})
         .then((response) => {
             if (response.status !== 200) {
                 throw new Error('Unable to update item quantity')

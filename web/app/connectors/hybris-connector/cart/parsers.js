@@ -42,7 +42,8 @@ export const parseCartContents = (cart) => {
     const items = entries.map((entry) => {
         const {
             basePrice: {formattedValue: itemPrice} = {},
-            product: {code: id},
+            entryNumber: id,
+            product: {code: productId},
             quantity,
             totalPrice: {formattedValue: linePrice} = {}} = entry
         return {
@@ -50,7 +51,7 @@ export const parseCartContents = (cart) => {
             href: getProductHref(id),
             itemPrice,
             linePrice,
-            productId: id,
+            productId,
             quantity
         }
     })
