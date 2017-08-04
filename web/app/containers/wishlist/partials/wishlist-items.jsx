@@ -17,7 +17,7 @@ import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-import {addToCartFromWishlist} from '../actions'
+import {addToCartFromWishlist, editWishlistItem} from '../actions'
 
 const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemId}) => (
     <Button
@@ -70,9 +70,8 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
                             <Button
                                 className="u-text-size-small u-color-brand u-flex-none u-text-letter-spacing-normal"
                                 innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
-                                href={'test/url'}
                                 data-analytics-name={UI_NAME.editItem}
-                                onClick={() => console.log('test edit button')}
+                                onClick={() => editWishlistItem(productId, itemId)}
                                 >
                                 Edit
                             </Button>
@@ -96,6 +95,7 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
 
 WishlistItems.propTypes = {
     addToCartFromWishlist: PropTypes.func,
+    editWishlistItem: PropTypes.func,
     productItemClassNames: PropTypes.string,
     products: PropTypes.array
 }
@@ -108,7 +108,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    addToCartFromWishlist
+    addToCartFromWishlist,
+    editWishlistItem
 }
 
 export default connect(

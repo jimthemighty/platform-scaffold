@@ -12,6 +12,7 @@ import * as appActions from '../app/actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 
@@ -33,6 +34,11 @@ export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch,
         })
 }
 
+export const editWishlistItem = (productId, itemId) => (dispatch, getState) => {
+    return browserHistory.push({
+        pathname: `/wishlist/index/configure/id/${itemId}/product_id/${productId}/`
+    })
+}
 
 export const goToCheckout = () => (dispatch) => {
     dispatch(closeModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist))
