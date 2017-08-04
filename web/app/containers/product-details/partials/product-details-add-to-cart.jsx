@@ -16,8 +16,21 @@ import Icon from 'progressive-web-sdk/dist/components/icon'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
+import {updateWishlistItem} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 
-const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, error, handleSubmit, addToWishlist}) => {
+const ProductDetailsAddToCart = ({
+    available,
+    quantity,
+    setQuantity,
+    onSubmit,
+    isConfigure,
+    disabled,
+    isInCheckout,
+    error,
+    handleSubmit,
+    addToWishlist,
+    updateWishlistItem
+}) => {
     const stepperProps = {
         decrementIcon: 'minus',
         disabled,
@@ -65,11 +78,11 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
             <div className="u-border-light-top u-border-light-bottom u-margin-top-md">
                 <Button
                     icon="wishlist-add"
-                    title="Wishlist"
+                    title={isConfigure ? 'Update in Wishlist' : 'Wishlist'}
                     iconClassName="u-margin-end"
                     showIconText={true}
                     className="u-color-brand u-text-letter-spacing-normal u-width-full"
-                    onClick={() => addToWishlist(quantity)}
+                    onClick={() => isConfigure ? addToWishlist(quantity) : updateWishlistItem(productId, itemId)}
                     data-analytics-name={UI_NAME.wishlist}
                 />
             </div>
@@ -86,21 +99,25 @@ ProductDetailsAddToCart.propTypes = {
     error: PropTypes.object,
     handleSubmit: PropTypes.func,
     initialValues: PropTypes.object,
+    isConfigure: PropTypes.bool,
     isInCheckout: PropTypes.bool,
-    quantity: PropTypes.number
+    quantity: PropTypes.number,
+    updateWishlistItem: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
     available: getProductAvailability,
     quantity: selectors.getItemQuantity,
     disabled: selectors.getAddToCartDisabled,
-    initialValues: getProductInitialValues
+    initialValues: getProductInitialValues,
+    isConfigure
 })
 
 const mapDispatchToProps = {
     setQuantity: actions.setItemQuantity,
     onSubmit: actions.submitCartForm,
-    addToWishlist: actions.addToWishlist
+    addToWishlist: actions.addToWishlist,
+    updateWishlistItem
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({

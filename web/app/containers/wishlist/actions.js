@@ -15,6 +15,7 @@ import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
+export const isConfiguringWishlist = createAction('User is configuring a wishlist item', ['isConfiguringWishlist'])
 
 export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch, getState) => {
     const wishlistID = getWishlistID(getState())
@@ -34,8 +35,9 @@ export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch,
         })
 }
 
-export const editWishlistItem = (productId, itemId) => (dispatch, getState) => {
-    browserHistory.push({
+export const editWishlistItem = (productId, itemId) => (dispatch) => {
+    dispatch(isConfiguringWishlist())
+    return browserHistory.push({
         pathname: `/wishlist/index/configure/id/${itemId}/product_id/${productId}/`
     })
 }
