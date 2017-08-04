@@ -9,11 +9,12 @@ import {SubmissionError} from 'redux-form'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey} from '../selectors'
 import {fetchPageData} from '../app/commands'
+import {parseLocations} from '../checkout/parsers'
 import {getCart} from '../cart/commands'
+import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    receiveAccountAddressData,
     receiveAccountInfoData,
     receiveWishlistData,
     receiveWishlistUIData,
@@ -21,15 +22,17 @@ import {
     receiveCurrentOrderNumber
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+
+import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {
     buildFormData,
     createAddressRequestObject,
-    fetchCustomerAddresses
+    updateCustomerAddresses
 } from './utils'
-import {jqueryAjaxWrapper, parseAddress} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
-import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
+import {jqueryAjaxWrapper} from '../utils'
+import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
+import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo, parseOrder} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
@@ -59,11 +62,17 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    return fetchCustomerAddresses()
-        .then(({customer: {addresses}}) => {
-            const parsedAddresses = addresses.map((address) => parseAddress(address))
-            return dispatch(receiveAccountAddressData(parsedAddresses))
+    return makeRequest('https://www.merlinspotions.com/checkout/cart/')
+        .then(jqueryResponse)
+        .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            // we're going to fetch the cart page so we can re-use the country
+            // parsing functionality from initCartPage
+            const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
+            const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
+
+            return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
         })
+        .then(() => dispatch(updateCustomerAddresses()))
 }
 
 export const initWishlistPage = (url) => (dispatch) => {
@@ -235,10 +244,35 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
         })
 }
 
+export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
+        .then(() => dispatch(updateCustomerAddresses()))
+}
+
+export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    const formData = {
+        form_key: formKey,
+        ...createAddressRequestObject(address)
+    }
+    return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
+        .then(() => dispatch(updateCustomerAddresses()))
+}
+
+export const addAddress = (address) => (dispatch, getState) => {
+    const formKey = getFormKey(getState())
+    const formData = {
+        form_key: formKey,
+        ...createAddressRequestObject(address)
+    }
+    return submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/')
+        .then(() => dispatch(updateCustomerAddresses()))
+}
+
 /* eslint-disable camelcase */
 export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
-    const currentState = getState()
-    const formKey = getFormKey(currentState)
+    const formKey = getFormKey(getState())
     const {firstname, lastname} = splitFullName(names)
     const formData = {
         firstname,

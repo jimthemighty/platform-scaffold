@@ -113,6 +113,35 @@ export const getCurrentProductID = (url) => {
     return productID
 }
 
+export const parseAddressResponse = ({
+                            first_name,
+                            last_name,
+                            phone,
+                            postal_code,
+                            address1,
+                            address2,
+                            city,
+                            state_code,
+                            preferred,
+                            country_code,
+                            address_id
+                        }) => {
+
+    return {
+        firstname: first_name,
+        lastname: last_name ? last_name : '', // eslint-disable-line
+        telephone: phone,
+        postcode: postal_code,
+        addressLine1: address1,
+        addressLine2: address2,
+        preferred,
+        id: address_id,
+        city,
+        countryId: country_code.toUpperCase(),
+        regionId: state_code,
+        region: state_code
+    }
+}
 export const getInitialSelectedVariant = (variants, initialValues) => {
     return variants.find(({values}) => {
         return Object.keys(values).every((key) => {
@@ -233,20 +262,6 @@ const getPaymentMethod = (paymentInstruments) => (
     })
 )
 
-const parseOrderAddress = (address) => (
-    {
-        firstname: address.first_name,
-        lastname: address.last_name,
-        addressLine1: address.address1,
-        addressLine2: address.address2,
-        city: address.city,
-        region: address.state_code,
-        postcode: address.postal_code,
-        country: address.country_code.toUpperCase(),
-        telephone: address.phone
-    }
-)
-
 export const parseOrder = ({
     order_no,
     creation_date,
@@ -277,8 +292,8 @@ export const parseOrder = ({
             subtotal: formatPrice(product_sub_total),
             paymentMethods: getPaymentMethod(payment_instruments),
             shippingMethod: `${shipping_method.name}: ${shipping_method.description}`,
-            shippingAddress: parseOrderAddress(shipping_address),
-            billingAddress: parseOrderAddress(billing_address),
+            shippingAddress: parseAddressResponse(shipping_address),
+            billingAddress: parseAddressResponse(billing_address),
             items: product_items.map(({item_text, product_id, quantity, price}) => {
                 return {
                     itemName: item_text,
