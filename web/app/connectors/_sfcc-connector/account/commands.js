@@ -16,13 +16,8 @@ import {
     receiveCurrentOrderNumber
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-<<<<<<< HEAD
-import {parseWishlistProducts, parseOrder} from '../parsers'
-import {createOrderAddressObject} from '../checkout/utils'
-=======
-import {parseWishlistProducts, parseAddressResponse} from '../parsers'
+import {parseWishlistProducts, parseAddressResponse, parseOrder} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
->>>>>>> 7edda8c59a858f77a0c8e071f9d9fa17605ee4ac
 import {
     initSfccSession,
     deleteAuthToken,
