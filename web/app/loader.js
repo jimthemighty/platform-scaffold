@@ -58,32 +58,34 @@ window.Progressive = {
     }
 }
 
-// Track First Paint and First Contentful Paint
-if ('PerformanceObserver' in window) {
-    const paintObserver = new window.PerformanceObserver((list) => {
-        for (const entry of list.getEntries()) {
-            const metricName = entry.name
-            const timing = Math.round(entry.startTime + entry.duration)
-            if (metricName === 'first-paint') {
-                window.Progressive.PerformanceTiming.firstPaint = timing
-            } else if (metricName === 'first-contentful-paint') {
-                window.Progressive.PerformanceTiming.firstContentfulPaint = timing
+const trackPerformance = () => {
+    // Track First Paint and First Contentful Paint
+    if ('PerformanceObserver' in window) {
+        const paintObserver = new window.PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+                const metricName = entry.name
+                const timing = Math.round(entry.startTime + entry.duration)
+                if (metricName === 'first-paint') {
+                    window.Progressive.PerformanceTiming.firstPaint = timing
+                } else if (metricName === 'first-contentful-paint') {
+                    window.Progressive.PerformanceTiming.firstContentfulPaint = timing
+                }
             }
-        }
-    })
-    paintObserver.observe({entryTypes: ['paint']})
-}
-
-// Track Time to Interaction snippet for tti-ployfill
-// Reference: https://github.com/GoogleChrome/tti-polyfill#usage
-if ('PerformanceLongTaskTiming' in window) {
-    const ttiObserver = window.__tti = {
-        e: []
+        })
+        paintObserver.observe({entryTypes: ['paint']})
     }
-    ttiObserver.o = new window.PerformanceObserver((list) => {
-        ttiObserver.e = ttiObserver.e.concat(list.getEntries())
-    })
-    ttiObserver.o.observe({entryTypes: ['longtask']})
+
+    // Track Time to Interaction snippet for tti-ployfill
+    // Reference: https://github.com/GoogleChrome/tti-polyfill#usage
+    if ('PerformanceLongTaskTiming' in window) {
+        const ttiObserver = window.__tti = {
+            e: []
+        }
+        ttiObserver.o = new window.PerformanceObserver((list) => {
+            ttiObserver.e = ttiObserver.e.concat(list.getEntries())
+        })
+        ttiObserver.o.observe({entryTypes: ['longtask']})
+    }
 }
 
 const isPWARoute = () => {
@@ -331,6 +333,7 @@ const waitForBody = () => {
  * loaded.
  */
 const loadPWA = () => {
+    trackPerformance()
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
     if (window.loadScriptsSynchronously === undefined) {
