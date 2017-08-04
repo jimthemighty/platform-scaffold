@@ -120,7 +120,7 @@ export const parseAddress = (address) => {
     return {
         city: address.city,
         countryId: address.country_id,
-        default: address.default_shipping,
+        preferred: address.default_shipping,
         id: `${address.id}`,
         firstname: address.firstname,
         lastname: address.lastname,
