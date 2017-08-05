@@ -10,8 +10,9 @@ import {
     setRegisterLoaded,
     receiveWishlistData,
     receiveWishlistUIData,
+    receiveAccountInfoData,
+    removeWishlistItem,
     receiveAccountAddressData,
-    receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse} from '../parsers'
@@ -25,13 +26,15 @@ import {
     checkForResponseFault,
     deleteBasketID,
     storeBasketID,
-    getAuthTokenPayload,
+    getCustomerID,
     fetchItemData
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {splitFullName} from '../../../utils/utils'
 import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
+import {addToCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
+import {removeItemFromWishlist as removeItemFromWishlistCommand} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 
 const initLoginData = () => (dispatch) => {
     dispatch(setSigninLoaded())
@@ -171,8 +174,7 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const fetchAddressData = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
 
     return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
             .then((res) => res.json())
@@ -183,8 +185,7 @@ export const fetchAddressData = () => (dispatch) => {
 }
 export const addAddress = (address) => (dispatch) => {
     const addressData = createOrderAddressObject(address)
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
 
     const requestBody = {
         ...addressData,
@@ -198,8 +199,7 @@ export const addAddress = (address) => (dispatch) => {
 }
 
 export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-line
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
 
     return makeApiRequest(`/customers/${customerId}/addresses/${addressId}`, {method: 'DELETE'})
         .then(() => dispatch(fetchAddressData()))
@@ -207,8 +207,7 @@ export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-li
 
 export const editAddress = (address, addressId) => (dispatch) => { // eslint-disable-line
     const addressData = createOrderAddressObject(address)
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
 
     return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {...addressData}, {method: 'PATCH'})
         .then(() => dispatch(fetchAddressData()))
@@ -244,16 +243,14 @@ const handleAccountInfoData = ({first_name, last_name, login}) => (
 /* eslint-enable camelcase */
 
 export const initAccountInfoPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     return makeApiJsonRequest(`/customers/${customerId}`)
         .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
 }
 
 
 export const updateAccountInfo = ({names, email}) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     const {firstname, lastname} = splitFullName(names)
 
     const requestBody = {
@@ -271,8 +268,7 @@ export const updateAccountInfo = ({names, email}) => (dispatch) => {
 }
 
 export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     const requestBody = {
         current_password: currentPassword,
         password: newPassword
@@ -302,8 +298,7 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
 }
 
 export const initWishlistPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerID = JSON.parse(sub).customer_info.customer_id
+    const customerID = getCustomerID()
 
     return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
         .then((response) => response.json())
@@ -317,7 +312,10 @@ export const initWishlistPage = () => (dispatch) => {
             }
             const wishlistResponse = data[0]
             const wishlistItems = parseWishlistProducts(wishlistResponse)
-            const wishlistData = {products: wishlistItems}
+            const wishlistData = {
+                products: wishlistItems,
+                id: wishlistResponse.id
+            }
 
             if (wishlistResponse.name) {
                 wishlistData.title = wishlistResponse.name
@@ -331,4 +329,25 @@ export const initWishlistPage = () => (dispatch) => {
 
                 })
         })
+}
+
+export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispatch) => {
+    const customerID = getCustomerID()
+    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemID}`, {method: 'DELETE'})
+        .then((response) => response.text())
+        .then((responseText) => {
+            if (!responseText.length) {
+                return Promise.resolve({})
+            }
+
+            return JSON.parse(responseText)
+        })
+        .then(checkForResponseFault)
+        .then(() => dispatch(removeWishlistItem(productId)))
+}
+
+export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemID}) => (dispatch) => {
+    // add the item to the cart
+    return dispatch(addToCart(productId, quantity))
+        .then(() => dispatch(removeItemFromWishlistCommand(itemID, wishlistID, productId, quantity)))
 }
