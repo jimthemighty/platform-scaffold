@@ -45,6 +45,7 @@ import {initShippingPage} from './containers/checkout-shipping/actions'
 import {initPaymentPage} from './containers/checkout-payment/actions'
 
 import {checkIfOffline} from './containers/app/actions'
+import {hasFetchedCurrentPath} from 'progressive-web-sdk/dist/store/offline/selectors'
 
 import {getURL} from './utils/utils'
 import {isRunningInAstro, pwaNavigate} from './utils/astro-integration'
@@ -69,9 +70,12 @@ if (isRunningInAstro) {
     }
 }
 
-const initPage = (initAction) => (url, routeName) => (dispatch) => {
+const initPage = (initAction) => (url, routeName) => (dispatch, getState) => {
     return dispatch(initAction(url, routeName))
-        .then(() => dispatch(setFetchedPage(url)))
+        .then(() => {
+            trackPerformance(PERFORMANCE_METRICS.isSavedPage, hasFetchedCurrentPath(getState()) ? 'true' : 'false')
+            dispatch(setFetchedPage(url))
+        })
         .then(() => {
             dispatch(onPageReady(routeName))
             trackPerformance(PERFORMANCE_METRICS.templateAPIEnd)
