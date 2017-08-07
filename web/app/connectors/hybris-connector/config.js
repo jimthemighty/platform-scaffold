@@ -20,6 +20,8 @@ export const getApiEndPoint = () => `${API_HOST}/${API_TYPE}/${API_VERSION}/${ge
 export const getCatalogEndPoint = () => `${getApiEndPoint()}/catalogs/${getCatalogId()}/${getCatalogVersionId()}`
 export const getAuthEndPoint = () => `${API_HOST}/authorizationserver/oauth/token`
 
+export const getProductEndPoint = (productId) => `/products/${productId}?fields=FULL`
+
 export const getImageType = (type) => config.imagesTypes[type]
 export const getImageSize = (size) => config.imagesSizes[size]
 export const getVariantQualifier = (variantType) => config.qualifiers[getBaseSiteId()][variantType]

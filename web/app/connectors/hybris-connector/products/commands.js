@@ -9,6 +9,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
+import {getProductEndPoint} from '../config'
 import {makeApiRequest} from '../utils'
 import {parseProductDetails} from '../parsers'
 import {getProductHref, getDefaultVariantId, getProductIDFromURL} from './products/utils'
@@ -38,7 +39,7 @@ const loadProduct = (productDetailsData) => (dispatch) => {
 
 export const initProductDetailsPage = (url, routeName) => (dispatch, getState) => {
     const productId = getProductIDFromURL(url)
-    const productEndpoint = `/products/${productId}?fields=FULL`
+    const productEndpoint = getProductEndPoint(productId)
     const currentState = getState()
     const productState = getProductById(productId)(currentState).toJS()
     const productStateDefaultVariantId = getDefaultVariantId(productState)
