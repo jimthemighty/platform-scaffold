@@ -5,6 +5,7 @@
 import {DEFAULT_IMAGE, STOCK_STATUS} from './constants'
 import {getCategoryPath, getImageType, getImageSize, getVariantQualifier, getVariantType} from './config'
 import {parseStyleAndSizeBaseOptions, parseStyleBaseOptionAndVariantOptions, parseStyleOrSizeBaseOption, parseVariantOptions} from './products/parsers'
+import {getProductHref, setInitialVariantValues} from './products/utils'
 
 export const parseCategories = (categories, root = '') => {
     return categories.map((category) => {
@@ -126,45 +127,6 @@ const parseVariants = (baseOptions, variantOptions, variantType) => {
         variants = parseVariantOptions(variantOptions, variantType)
     }
     return variants
-}
-
-const setInitialVariantValues = (variants, id, variationCategories) => {
-    const currentVariant = variants.find((variant) => variant.id === id)
-    if (currentVariant) {
-        return currentVariant.values
-    }
-
-    const defaultVariant = {}
-    variationCategories.forEach(({id, values}) => {
-        defaultVariant[id] = values[0].value
-    })
-
-    return defaultVariant
-}
-
-export const getInitialSelectedVariant = (variants = [], initialValues) => {
-    return variants.find(({values}) => {
-        return Object.keys(values).every((key) => {
-            return values[key] === initialValues[key]
-        })
-    })
-}
-
-export const getDefaultVariantId = (productDetailsData) => {
-    const {variants, initialValues} = productDetailsData
-    const defaultVariant = getInitialSelectedVariant(variants, initialValues)
-    const defaultVariantId = defaultVariant ? defaultVariant.values[productDetailsData.variantType] : null
-    return defaultVariantId
-}
-
-export const getProductHref = (productID) => `/product_id/${productID}`
-
-export const getProductIDFromURL = (url) => {
-    if (!url) {
-        return ''
-    }
-    const splitURL = url.split('/')
-    return splitURL[splitURL.length - 1]
 }
 
 export const parseProductDetails = ({baseOptions = [], code, description, images = [], name, price, purchasable, summary, stock, variantOptions = [], variantType}) => {

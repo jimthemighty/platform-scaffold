@@ -10,7 +10,8 @@ import {
 import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {makeApiRequest} from '../utils'
-import {getDefaultVariantId, getProductHref, getProductIDFromURL, parseProductDetails} from '../parsers'
+import {parseProductDetails} from '../parsers'
+import {getProductHref, getDefaultVariantId, getProductIDFromURL} from './products/utils'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
 const loadProduct = (productDetailsData) => (dispatch) => {
