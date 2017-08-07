@@ -4,7 +4,7 @@
 
 import {DEFAULT_IMAGE, STOCK_STATUS} from './constants'
 import {getCategoryPath, getImageType, getImageSize, getVariantQualifier, getVariantType} from './config'
-
+import {parseStyleAndSizeBaseOptions, parseStyleBaseOptionAndVariantOptions, parseStyleOrSizeBaseOption, parseVariantOptions} from './products/parsers'
 
 export const parseCategories = (categories, root = '') => {
     return categories.map((category) => {
@@ -50,6 +50,37 @@ const parseThumbnail = (thumbnail) => {
     }
 }
 
+/**
+ * @param {Array} variantOptions- variantOptions of current product
+ * @example
+ * [
+ *   {
+ *      "code": "300717433",
+ *      "variantOptionQualifiers": [
+ *        { "name": "Size", "qualifier": "size", "value": "L"},
+ *        { "name": "Style", "qualifier": "style", "value": "heather berry" }
+ *       ]
+ *   }
+ * ]
+ *
+ * @param {string} qualifierType - the variant qualifier
+ * @example "size"
+ *
+ * @param {string} variantType - the variant type
+ * @example "ApparelSizeVariantProduct"
+ *
+ * @return {Object} - VariationCategory
+ * @example
+ * {
+       "id": "ApparelSizeVariantProduct",
+       "label": "Size",
+       "name": "ApparelSizeVariantProduct",
+       "values": [
+            { "label": "S", "value": "1978440"},
+            { "label": "M", "value": "1978441"}
+       ]
+ * }
+ */
 const parseVariantionOptions = (variantOptions, qualifierType, variantType) => {
     const variantQualifier = variantOptions[0].variantOptionQualifiers.find((i) => i.qualifier === qualifierType)
     const values = variantOptions.map((option) => {
@@ -73,8 +104,8 @@ const parseVariationCategories = (baseOptions = [], variantOptions, productVaria
         parseVariantionOptions(options, getVariantQualifier(variantType), variantType))
 
     if (variantOptions.length) {
-        const parsedVariantionOptions = parseVariantionOptions(variantOptions, getVariantQualifier(productVariantType), productVariantType)
-        variationCategories.push(parsedVariantionOptions)
+        variationCategories.push(
+            parseVariantionOptions(variantOptions, getVariantQualifier(productVariantType), productVariantType))
     }
     return variationCategories
 }
@@ -82,45 +113,17 @@ const parseVariationCategories = (baseOptions = [], variantOptions, productVaria
 const parseVariants = (baseOptions, variantOptions, variantType) => {
     let variants = []
     if (baseOptions.length) {
-        const styleVariantOptions = baseOptions.find((i) => i.variantType === getVariantType('style'))
-        const sizeVariantOptions = baseOptions.find((i) => i.variantType === getVariantType('size'))
-
-        const selectedStyleVariant = styleVariantOptions ? styleVariantOptions.selected.code : ''
-        if (sizeVariantOptions && styleVariantOptions) {
-            variants = sizeVariantOptions.options.map((option) => {
-                const id = option.code
-                const values = {
-                    [styleVariantOptions.variantType]: selectedStyleVariant,
-                    [sizeVariantOptions.variantType]: id
-                }
-                return {id, values}
-            })
-        } else if (styleVariantOptions && variantOptions) {
-            variants = variantOptions.map((option) => {
-                const id = selectedStyleVariant
-                const values = {
-                    [styleVariantOptions.variantType]: selectedStyleVariant,
-                    [variantType]: option.code
-                }
-                return {id, values}
-            })
-        } else if (styleVariantOptions) {
-            variants = styleVariantOptions.options.map((option) => {
-                const id = option.code
-                const values = {
-                    [styleVariantOptions.variantType]: id
-                }
-                return {id, values}
-            })
+        const styleBaseOptions = baseOptions.find((i) => i.variantType === (getVariantType('style') || getVariantType('color')))
+        const sizeBaseOptions = baseOptions.find((i) => i.variantType === getVariantType('size'))
+        if (styleBaseOptions && sizeBaseOptions) {
+            variants = parseStyleAndSizeBaseOptions(sizeBaseOptions, styleBaseOptions)
+        } else if (styleBaseOptions && variantOptions.length) {
+            variants = parseStyleBaseOptionAndVariantOptions(variantOptions, styleBaseOptions, variantType)
+        } else if (styleBaseOptions || sizeBaseOptions) {
+            variants = parseStyleOrSizeBaseOption(styleBaseOptions || sizeBaseOptions)
         }
-    } else if (variantOptions) {
-        variants = variantOptions.map((option) => {
-            const id = option.code
-            const values = {
-                [variantType]: id
-            }
-            return {id, values}
-        })
+    } else if (variantOptions.length) {
+        variants = parseVariantOptions(variantOptions, variantType)
     }
     return variants
 }
@@ -157,11 +160,14 @@ export const getDefaultVariantId = (productDetailsData) => {
 export const getProductHref = (productID) => `/product_id/${productID}`
 
 export const getProductIDFromURL = (url) => {
-    const splitURL = url ? url.split('/') : []
+    if (!url) {
+        return ''
+    }
+    const splitURL = url.split('/')
     return splitURL[splitURL.length - 1]
 }
 
-export const parseProductDetails = ({baseOptions = [], code, description, images = [], name, price, purchasable, stock, variantOptions = [], variantType}) => {
+export const parseProductDetails = ({baseOptions = [], code, description, images = [], name, price, purchasable, summary, stock, variantOptions = [], variantType}) => {
     const hasVariations = baseOptions.length || variantOptions.length
     const variationCategories = hasVariations ? parseVariationCategories(baseOptions, variantOptions, variantType) : []
     const variants = hasVariations ? parseVariants(baseOptions, variantOptions, variantType) : []
@@ -172,7 +178,7 @@ export const parseProductDetails = ({baseOptions = [], code, description, images
         id: code,
         title: name,
         price: price.formattedValue,
-        description,
+        description: summary + description,
         available: stock.stockLevelStatus !== STOCK_STATUS.OUT_OF_STOCK && stock.stockLevel > 0,
         thumbnail,
         images: parsedImages,
