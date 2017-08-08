@@ -25,7 +25,7 @@ import {
     receiveWishlistResponse
 } from './utils'
 import {jqueryAjaxWrapper, parseAddress} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, UPDATE_WISHLIST_URL} from '../config'
+import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, UPDATE_WISHLIST_URL, WISHLIST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import {isFormResponseInvalid, parseAccountInfo} from './parsers'
@@ -120,6 +120,7 @@ export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (
     }
 
     return makeFormEncodedRequest(UPDATE_WISHLIST_URL, payload, {method: 'POST'})
+        .then(() => WISHLIST_URL)
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'

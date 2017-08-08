@@ -354,3 +354,8 @@ export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemID})
     return dispatch(addToCart(productId, quantity))
         .then(() => dispatch(removeItemFromWishlistCommand(itemID, wishlistID, productId, quantity)))
 }
+
+export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
+    const customerID = getCustomerID()
+    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, body, {method: 'PATCH'})
+}
