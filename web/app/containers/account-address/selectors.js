@@ -4,7 +4,7 @@
 
 import {createSelector} from 'reselect'
 import {getUi} from '../../store/selectors'
-import {getAllAddresses, getDefaultAddress} from '../../store/user/selectors'
+import {getAllAddresses, getDefaultAddress} from 'progressive-web-sdk/dist/store/user/selectors'
 
 import {createGetSelector} from 'reselect-immutable-helpers'
 

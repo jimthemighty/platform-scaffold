@@ -5,36 +5,36 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import * as selectors from '../../containers/product-details/selectors'
+import {getWishlistItemQuantity} from '../../containers/wishlist/selectors'
 import {stripEvent} from '../../utils/utils'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getProductThumbnail, getProductTitle, getProductPrice} from 'progressive-web-sdk/dist/store/products/selectors'
-import * as productDetailsActions from '../../containers/product-details/actions'
-import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../constants'
+import * as wishlistActions from '../../containers/wishlist/actions'
+import {WISHLIST_ITEM_ADDED_MODAL} from '../constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
 import ItemAddedModalContents from '../../components/item-added-modal-contents'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, onGoToWishlist, duration, isWishlistAdded}) => (
+const WishlistItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, duration}) => (
     <Sheet
         open={open}
         onDismiss={onDismiss}
         duration={duration}
         effect="slide-bottom"
-        className="m-product-details__item-added-modal"
+        className="m-wishlist__item-added-modal"
         coverage="50%"
         shrinkToContent
     >
         <ItemAddedModalContents
-            headerText={`Product Added to ${isWishlistAdded ? 'Wishlist' : 'Cart'}`}
+            headerText="Product Added to Cart"
             ctaButtonOptions={{
-                text: isWishlistAdded ? 'View Wishlist' : 'Go To Checkout',
-                onClick: isWishlistAdded ? onGoToWishlist : onGoToCheckout,
-                'data-analytics-name': isWishlistAdded ? UI_NAME.wishlist : UI_NAME.checkout
+                text: 'Go To Checkout',
+                onClick: onGoToCheckout,
+                'data-analytics-name': UI_NAME.checkout
             }}
-            ctaClickHandler={isWishlistAdded ? onGoToWishlist : onGoToCheckout}
+            ctaClickHandler={onGoToCheckout}
             onDismiss={onDismiss}
             title={title}
             thumbnail={thumbnail}
@@ -44,12 +44,11 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
     </Sheet>
 )
 
-ProductDetailsItemAddedModal.propTypes = {
+WishlistItemAddedModal.propTypes = {
     /**
      * Duration will define the time the animation takes to complete.
      */
     duration: PropTypes.number,
-    isWishlistAdded: PropTypes.bool,
     open: PropTypes.bool,
     price: PropTypes.string,
     quantity: PropTypes.number,
@@ -59,26 +58,23 @@ ProductDetailsItemAddedModal.propTypes = {
     }),
     title: PropTypes.string,
     onDismiss: PropTypes.func,
-    onGoToCheckout: PropTypes.func,
-    onGoToWishlist: PropTypes.func
+    onGoToCheckout: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
-    isWishlistAdded: selectors.getIsWishlistAdded,
     thumbnail: getProductThumbnail,
-    open: isModalOpen(PRODUCT_DETAILS_ITEM_ADDED_MODAL),
-    quantity: selectors.getItemQuantity,
+    open: isModalOpen(WISHLIST_ITEM_ADDED_MODAL),
+    quantity: getWishlistItemQuantity,
     title: getProductTitle,
     price: getProductPrice
 })
 
 const mapDispatchToProps = {
-    onGoToCheckout: productDetailsActions.goToCheckout,
-    onGoToWishlist: productDetailsActions.goToWishlist,
-    onDismiss: stripEvent(() => closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
+    onGoToCheckout: wishlistActions.goToCheckout,
+    onDismiss: stripEvent(() => closeModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist))
 }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ProductDetailsItemAddedModal)
+)(WishlistItemAddedModal)

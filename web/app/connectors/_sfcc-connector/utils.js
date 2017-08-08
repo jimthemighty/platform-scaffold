@@ -98,6 +98,10 @@ export const getCustomerData = (authorization) => {
     return subData.customer_info
 }
 
+export const getCustomerID = () => {
+    return getCustomerData().customer_id
+}
+
 export const isUserLoggedIn = (authorization) => {
     try {
         return !getCustomerData(authorization).guest

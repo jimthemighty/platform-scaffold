@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createSelector} from 'reselect'
-import {getUser} from '../../store/selectors'
+import {getUser} from 'progressive-web-sdk/dist/store/user/selectors'
 
 export const getAccountInfoInitialValues = createSelector(getUser, (user) => {
     return user.get('names') ? {
