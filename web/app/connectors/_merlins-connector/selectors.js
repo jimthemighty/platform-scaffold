@@ -6,7 +6,7 @@ import Immutable from 'immutable'
 import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
 
-import {getIsLoggedIn} from '../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 
 export const getIntegrationManager = ({integrationManager}) => integrationManager
 export const getCustomerEntityID = createGetSelector(getIntegrationManager, 'customerEntityID', '')
