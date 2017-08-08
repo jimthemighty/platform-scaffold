@@ -11,7 +11,7 @@ import {Accordion, AccordionItem} from 'progressive-web-sdk/dist/components/acco
 
 const ProductDetailsDescription = ({description}) => (
     <div className="u-padding-top-md u-bg-color-neutral-10">
-        <Accordion className="t-product-details__description u-bg-color-neutral-00" initialOpenItems={[0]}>
+        <Accordion className="t-product-details__description" initialOpenItems={[0]}>
             <AccordionItem header="Product Description" closeIconName="close" openIconName="plus">
                 <p>{description}</p>
             </AccordionItem>
