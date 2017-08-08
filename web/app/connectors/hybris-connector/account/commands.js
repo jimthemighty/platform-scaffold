@@ -8,23 +8,19 @@ import {setRegisterLoaded, setSigninLoaded} from 'progressive-web-sdk/dist/integ
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {getAuthEndPoint, getHomeURL} from '../config'
+import {getRegisterUserErrorData} from './utils'
 
-import {deleteSession, storeAuthTokenAndExpiration, storeUserType, deleteBasketID, USER_REGISTERED} from '../utils'
+import {deleteSession, makeApiRequest, makeUnAuthenticatedApiRequest, storeAuthTokenAndExpiration, storeUserType, deleteBasketID, USER_REGISTERED} from '../utils'
 import {fetchNavigationData} from '../app/commands'
 
-/* eslint-disable no-unused-vars */
-
-export const initLoginPage = (url, routeName) => (dispatch) => {
-    console.log('[Hybris Connector] Called initLoginPage stub with parameters:', url, routeName)
+const initLoginData = () => (dispatch) => {
     dispatch(setSigninLoaded())
-    return Promise.resolve()
-}
-
-export const initRegisterPage = (url, routeName) => (dispatch) => {
-    console.log('[Hybris Connector] Called initRegisterPage stub with parameters:', url, routeName)
     dispatch(setRegisterLoaded())
     return Promise.resolve()
 }
+
+export const initLoginPage = initLoginData
+export const initRegisterPage = initLoginData
 
 export const navigateToSection = (router, routes, sectionName) => (dispatch) => {
     console.log('[Hybris Connector] Called navigateToSection stub with parameters:', router, routes, sectionName)
@@ -32,9 +28,10 @@ export const navigateToSection = (router, routes, sectionName) => (dispatch) => 
 }
 
 export const login = (username, password) => (dispatch) => {
-    let responseHeaders
+    /* eslint-disable no-unused-vars */
     let basketContents
-    let customerID
+    /* eslint-enable no-unused-vars */
+
     const body = {
         client_id: 'mobile_android',
         grant_type: 'password',
@@ -50,10 +47,7 @@ export const login = (username, password) => (dispatch) => {
             // Actual login call
             return makeFormEncodedRequest(getAuthEndPoint(), body, {method: 'POST'})
         })
-        .then((response) => {
-            responseHeaders = response.headers
-            return response.json()
-        })
+        .then((response) => response.json())
         .then((responseJSON) => {
             if (responseJSON.error) {
                 let errorMessage = 'Username or password is incorrect'
@@ -63,35 +57,34 @@ export const login = (username, password) => (dispatch) => {
                 throw new SubmissionError({_error: errorMessage})
             }
             storeAuthTokenAndExpiration(responseJSON)
-            customerID = responseJSON.uid
             dispatch(setLoggedIn(true))
             dispatch(receiveUserEmail(responseJSON.uid))
             storeUserType(USER_REGISTERED)
             dispatch(fetchNavigationData())
             return deleteBasketID()
         })
-            /*
+        /*
         // Check if the user has a basket already
-        .then(() => makeApiRequest(`/customers/${customerID}/baskets`, {method: 'GET'}))
+        .then(() => makeApiRequest(`/users/current/carts`, {method: 'GET'}))
         .then((response) => response.json())
-        .then(({baskets}) => {
-            if (!baskets || baskets.length === 0) {
-                return createBasket(basketContents)
-            }
+        .then(({carts: baskets}) => {
+             if (!baskets || baskets.length === 0) {
+             return createBasket(basketContents)
+             }
 
-            const basketID = baskets[0].basket_id
-            storeBasketID(basketID)
-            if (!basketContents.product_items) {
-                // There is no basket to merge, so return the existing one
-                return Promise.resolve(baskets[0])
-            }
-            // update basket with contents (product_items)
-            return makeApiJsonRequest(
-                `/baskets/${basketID}/items`,
-                basketContents.product_items,
-                {method: 'POST'}
-            )
-                .then(checkForResponseFault)
+             const basketID = baskets[0].basket_id
+             storeBasketID(basketID)
+             if (!basketContents.product_items) {
+             // There is no basket to merge, so return the existing one
+             return Promise.resolve(baskets[0])
+             }
+             // update basket with contents (product_items)
+             return makeApiJsonRequest(
+             `/baskets/${basketID}/items`,
+             basketContents.product_items,
+             {method: 'POST'}
+             )
+             .then(checkForResponseFault)
         })
         .then((basket) => dispatch(handleCartData(basket)))
         */
@@ -110,11 +103,43 @@ export const logout = () => (dispatch) => {
 }
 
 export const registerUser = (firstname, lastname, email, password) => (dispatch) => {
-    console.log('[Hybris Connector] Called registerUser stub with parameters:', firstname, lastname, email, password)
-
-    // This promise should resolve to the URL of the account page
-    // to redirect the user to.
-    return Promise.resolve()
+    return makeUnAuthenticatedApiRequest('/titles')
+        .then((response) => response.json())
+        .then((json) => json)
+        .then(({titles}) => {
+            if (!titles || !titles.length) {
+                throw new SubmissionError({_error: 'Unable to create account.'})
+            }
+            const titleCode = titles[0].code
+            const requestOptions = {
+                method: 'POST',
+                body: JSON.stringify({
+                    uid: email,
+                    password,
+                    firstName: firstname,
+                    lastName: lastname,
+                    titleCode
+                })
+            }
+            return makeApiRequest('/users', requestOptions)
+        })
+        .then((response) => {
+            let result
+            if (response.status === 201) {
+                result = Promise.resolve(response)
+            } else {
+                result = response.json()
+            }
+            return result
+        })
+        .then((response) => {
+            if (response.status !== 201) {
+                const errorData = getRegisterUserErrorData(response)
+                throw new SubmissionError(errorData)
+            }
+            // Creating a user doesn't sign them in automatically, so dispatch the login command
+            return dispatch(login(email, password, true))
+        })
 }
 
 export const updateShippingAddress = (formValues) => (dispatch) => {
