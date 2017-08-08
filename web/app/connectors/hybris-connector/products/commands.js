@@ -3,69 +3,97 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 /* eslint-disable no-unused-vars */
-
 import {
     receiveProductDetailsProductData,
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
-import {receiveFormInfo} from '../actions'
+import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
+import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
+import {getProductEndPoint} from '../config'
+import {makeApiRequest} from '../utils'
+import {parseProductDetails} from '../parsers'
+import {getProductHref, getDefaultVariantId, getProductIDFromURL} from './utils'
+import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
-export const initProductDetailsPage = (url, routeName) => (dispatch) => {
-    console.log('[Hybris Connector] Called initProductDetailsPage stub with arguments:', url, routeName)
-
-    const id = '1'
-
-    const image = {
-        src: '//via.placeholder.com/350x350',
-        alt: 'Product 1'
+const loadProduct = (productDetailsData) => (dispatch) => {
+    const {id} = productDetailsData
+    const productDetailsMap = {
+        [id]: productDetailsData
     }
-
-    const exampleData = {
-        [id]: {
-            price: '$10.00',
-            available: true,
-            href: window.location.href,
-            thumbnail: image,
-            title: 'Product 1',
-            images: [image, image],
-            id: '1',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-        }
-    }
-
-    const exampleUIData = {
+    const UIData = {
         [id]: {
             breadcrumbs: [{
                 href: '/',
                 text: 'Home'
             }, {
-                href: window.location.href,
-                text: 'Product 1'
+                href: productDetailsData.href,
+                text: productDetailsData.title
             }],
             itemQuantity: 1
         }
     }
-
-    const exampleFormData = {
-        [id]: {
-            submitUrl: 'submit',
-            method: 'POST',
-            uenc: '',
-            hiddenInputs: {}
-        }
-    }
-
-    // For more information on the shape of the expected data, see ../../products/types
     dispatch(receiveCurrentProductId(id))
-    dispatch(receiveProductDetailsProductData(exampleData))
-    dispatch(receiveProductDetailsUIData(exampleUIData))
-    dispatch(receiveFormInfo(exampleFormData))
-    return Promise.resolve()
+    dispatch(receiveProductDetailsProductData(productDetailsMap))
+    dispatch(receiveProductDetailsUIData(UIData))
 }
 
-export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch) => {
-    console.log('[Hybris Connector] Called getProductVariantData stub with arguments:', variationSelections, variants, categoryIds)
+export const initProductDetailsPage = (url, routeName) => (dispatch, getState) => {
+    const productId = getProductIDFromURL(url)
+    const productEndpoint = getProductEndPoint(productId)
+    const currentState = getState()
+    const productState = getProductById(productId)(currentState).toJS()
+    const productStateDefaultVariantId = getDefaultVariantId(productState)
+    if (!productState || !productState.id) {
+        return makeApiRequest(productEndpoint, {method: 'GET'})
+            .then((response) => {
+                if (response.status === 400) {
+                    return Promise.reject()
+                } else {
+                    return response.json()
+                }
+            })
+            .then((responseJSON) => {
+                const currentPath = getProductIDFromURL(window.location.pathname)
+                const productDetailsData = {...parseProductDetails(responseJSON)}
+
+                dispatch(loadProduct(productDetailsData))
+
+                if (!productDetailsData.purchasable) {
+                    const defaultVariantId = getDefaultVariantId(productDetailsData)
+                    if (defaultVariantId) {
+                        dispatch(initProductDetailsPage(defaultVariantId))
+                    }
+                } else if (currentPath !== productId) {
+                    dispatch(setCurrentURL(getProductHref(productId)))
+                }
+            })
+    } else if (!productState.purchasable && productStateDefaultVariantId) {
+        return dispatch(initProductDetailsPage(productStateDefaultVariantId))
+    } else {
+        return dispatch(loadProduct(productState))
+    }
+}
+
+export const getProductVariantData = (variationSelections, variants, categoryIds) => (dispatch, getState) => {
+    const currentState = getState()
+    const oldVariantSelection = currentState.form[ADD_TO_CART_FORM_NAME].initial
+    const changedVariantKey = Object.keys(oldVariantSelection).find((k) => oldVariantSelection[k] !== variationSelections[k])
+    if (changedVariantKey) {
+        const selectedProductID = variationSelections[changedVariantKey]
+        const productState = getProductById(selectedProductID)(currentState).toJS()
+        if (!productState || !productState.id) {
+            const productHref = getProductHref(selectedProductID)
+            dispatch(setCurrentURL(productHref))
+            dispatch(initProductDetailsPage(productHref))
+        } else if (!productState.purchasable) {
+            const defaultVariantId = getDefaultVariantId(productState)
+            if (defaultVariantId) {
+                dispatch(initProductDetailsPage(defaultVariantId))
+            }
+        } else {
+            dispatch(loadProduct(productState))
+        }
+    }
     return Promise.resolve()
 }
 
