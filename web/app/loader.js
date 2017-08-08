@@ -121,11 +121,11 @@ const sendPerformanceEvent = (tracker) => {
 }
 
 const triggerNonPWAPerformanceEvent = (tracker) => {
-    if (window.addEventListener) {
+    if ('addEventListener' in window) {
         window.addEventListener('load', () => {
             sendPerformanceEvent(tracker)
         })
-    } else if (window.attachEvent) { // IE DOM
+    } else if ('attachEvent' in window) { // IE DOM
         window.attachEvent('onload', () => {
             sendPerformanceEvent(tracker)
         })
