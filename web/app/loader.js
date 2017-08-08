@@ -295,6 +295,16 @@ const hasAMPPage = (validUrlList, path) => {
     })
 }
 
+const addAMPLinkTags = () => {
+    // Only add AMP tag for specified URLs
+    if (hasAMPPage(validAMPUrls, window.location.pathname)) {
+        loadAsset('link', {
+            rel: 'amphtml',
+            href: `${baseAMPUrl}${window.location.pathname}`
+        })
+    }
+}
+
 const loadPWA = () => {
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
@@ -339,14 +349,7 @@ const loadPWA = () => {
         content: 'utf-8'
     })
 
-    // Only add AMP tag for specified URLs
-    const ampPath = hasAMPPage(validAMPUrls, window.location.pathname)
-    if (ampPath) {
-        loadAsset('link', {
-            rel: 'amphtml',
-            href: `${baseAMPUrl}${window.location.pathname}`
-        })
-    }
+    addAMPLinkTags()
 
     loadAsset('link', {
         href: getAssetUrl('main.css'),
@@ -490,7 +493,7 @@ if (shouldPreview()) {
     } else if (isSupportedNonPWAMessagingBrowser()) {
         loaderLog('Starting setup for nonPWA mode')
         initCacheManifest(cacheHashManifest)
-
+        addAMPLinkTags()
         // This a browser that supports our non-PWA mode, so we can assume that
         // service workers are supported. Load the worker in non-PWA mode, and
         // (in parallel) initialize analytics.
@@ -543,6 +546,7 @@ if (shouldPreview()) {
     } else {
         // If it's not a supported browser or there is no PWA view for this page,
         // still load a.js to record analytics.
+        addAMPLinkTags()
         waitForBody().then(() => {
             loadScript(
                 {
