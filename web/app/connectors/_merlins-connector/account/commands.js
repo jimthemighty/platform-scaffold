@@ -25,7 +25,7 @@ import {
     receiveWishlistResponse
 } from './utils'
 import {jqueryAjaxWrapper, parseAddress} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
+import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, UPDATE_WISHLIST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import {isFormResponseInvalid, parseAccountInfo} from './parsers'
@@ -107,17 +107,19 @@ export const addToCartFromWishlist = ({itemId, productId, quantity}) => (dispatc
 
 export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()
 
-export const updateWishlistItem = () => (dispatch) => {
-    /*
-    https://www.merlinspotions.com/wishlist/index/updateItemOptions/
-    POST
-    id:87    <- wishlist ID
-    product:1 <- ProductID
-    qty:1 <- QUANTITY
-    uenc:aHR0cHM6Ly93d3cubWVybGluc3BvdGlvbnMuY29tL3dpc2hsaXN0L2luZGV4L2NvbmZpZ3VyZS9pZC84Ny9wcm9kdWN0X2lkLzEv
-    options:8 <- selected variant, but only 1 variant option is selected??
-    form_key:4MZdOaZGasppn7h2
-    */
+export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
+    const currentState = getState()
+    const payload = {
+        product: productId,
+        qty: quantity,
+        id: wishlistId,
+        form_key: getFormKey(currentState),
+        // This won't always be defined, but add to wishlist will still work
+        // if it's missing
+        uenc: getUenc(productId)(currentState)
+    }
+
+    return makeFormEncodedRequest(UPDATE_WISHLIST_URL, payload, {method: 'POST'})
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
