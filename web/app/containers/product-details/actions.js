@@ -167,8 +167,8 @@ export const addToWishlist = (quantity) => (dispatch, getState) => {
 }
 
 export const updateItemInWishlist = (quantity) => (dispatch, getState) => {
-    const itemId = window.location.pathname.match(/id\/(\d+)/)[0]
-    const productId = window.location.pathname.match(/product_id\/(\d+)\//)[1]
+    const itemId = window.location.pathname.match(/\/id\/(\w+)\//)[1]
+    const productId = window.location.pathname.match(/\/product_id\/(\w+)\//)[1]
     const wishlistId = getWishlistID(getState())
 
     return dispatch(updateWishlistItem(itemId, wishlistId, productId, quantity))
