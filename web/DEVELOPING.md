@@ -17,7 +17,7 @@ Then navigate back to this directory and run:
 ```
 cd ../platform-scaffold/web
 npm link progressive-web-sdk
-npm run dev
+npm start
 ```
 
 
