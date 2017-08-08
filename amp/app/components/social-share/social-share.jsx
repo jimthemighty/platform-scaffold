@@ -20,9 +20,9 @@ const SocialShare = ({
     isBlock,
     isInline
 }) => {
-    const classes = classNames('c-social-share', {
-        'c--inline': isInline,
-        'c--block': isBlock
+    const classes = classNames('a-social-share', {
+        'a--inline': isInline,
+        'a--block': isBlock
     }, className)
 
     if (isInline && isBlock === true) {
@@ -52,13 +52,15 @@ SocialShare.propTypes = {
         endpoint: PropTypes.string,
         height: PropTypes.number,
         href: PropTypes.string,
-        layout: PropTypes.string,
+        layout: PropTypes.oneOf(['container', 'fill', 'fixed', 'fixed-height', 'flex-item', 'nodisplay', 'responsive']),
         media: PropTypes.string,
+        paramText: PropTypes.string,
         quote: PropTypes.string,
         socialItemClass: PropTypes.string,
+        socialShareClass: PropTypes.string,
         subject: PropTypes.string,
         text: PropTypes.string,
-        url: PropTypes.number,
+        url: PropTypes.string,
         width: PropTypes.number
     })).isRequired,
 
@@ -68,12 +70,12 @@ SocialShare.propTypes = {
     className: PropTypes.string,
 
     /**
-     * Add `c--inline` class to element if true.
+     * Add `a--inline` class to element if true.
      */
     isBlock: PropTypes.bool,
 
     /**
-     * Add `c--block` class to element if true.
+     * Add `a--block` class to element if true.
      */
     isInline: PropTypes.bool,
 }

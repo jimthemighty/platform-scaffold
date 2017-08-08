@@ -25,7 +25,7 @@ const SocialShareItem = ({
     url,
     width
 }) => {
-    const classes = classNames('c-social-share__item', socialItemClass)
+    const classes = classNames('a-social-share__item', socialItemClass)
 
     // if type is facebook and it requires value for `data-param-app_id` attribute
     if (type === 'facebook') {
@@ -55,7 +55,7 @@ const SocialShareItem = ({
             ></amp-social-share>
 
             {text &&
-                <div className="c-social-share__text">
+                <div className="a-social-share__text">
                     {text}
                 </div>
             }
@@ -65,8 +65,8 @@ const SocialShareItem = ({
 }
 
 SocialShareItem.defaultProps = {
-    width: '60',
-    height: '44'
+    width: 60,
+    height: 44
 }
 
 SocialShareItem.propTypes = {
@@ -135,7 +135,7 @@ SocialShareItem.propTypes = {
     quote: PropTypes.string,
 
     /**
-     * Class to add to `c-social-share__item` element.
+     * Class to add to `a-social-share__item` element.
      */
     socialItemClass: PropTypes.string,
 
@@ -150,14 +150,14 @@ SocialShareItem.propTypes = {
     subject: PropTypes.string,
 
     /**
-     * Text place in the `c-social-share__text` element.
+     * Text place in the `a-social-share__text` element.
      */
     text: PropTypes.string,
 
     /**
      * `data-param-url`: optional, defaults to: `rel=canonical` URL
      */
-    url: PropTypes.number,
+    url: PropTypes.string,
 
     /**
      * Width of item.

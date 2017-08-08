@@ -7,7 +7,7 @@
 // Root
 // ---
 
-.c-social-share {
+.a-social-share {
     // Root Class. Contains all core styles, typically for the component's
     // wrapper element.
 }
@@ -15,10 +15,10 @@
 // Modifier: Inline Items
 // ---
 
-.c-social-share.c--inline {
+.a-social-share.a--inline {
     display: flex;
 
-    .c-social-share__item {
+    .a-social-share__item {
         + * {
             margin-left: $unit;
         }
@@ -28,10 +28,10 @@
 // Modifier: Block Items
 // ---
 
-.c-social-share.c--block {
+.a-social-share.a--block {
     display: block;
 
-    .c-social-share__item {
+    .a-social-share__item {
         + * {
             margin-top: $unit;
         }
@@ -41,14 +41,14 @@
 // Modifiers: Block and Inline Items
 // ---
 
-.c-social-share.c--inline,
-.c-social-share.c--block {
-    .c-social-share__item {
+.a-social-share.a--inline,
+.a-social-share.a--block {
+    .a-social-share__item {
         display: flex;
         align-items: center;
     }
 
-    .c-social-share__text {
+    .a-social-share__text {
         flex: 1 1 auto;
         margin-left: $unit;
     }
@@ -57,6 +57,6 @@
 
 // Item
 
-.c-social-share__item {
+.a-social-share__item {
     display: inline-block;
 }
