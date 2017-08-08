@@ -305,6 +305,10 @@ const addAMPLinkTags = () => {
     }
 }
 
+/**
+* Initialize the app. Assumes that all needed polyfills have been
+* loaded.
+*/
 const loadPWA = () => {
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
