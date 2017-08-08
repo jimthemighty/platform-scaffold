@@ -12,7 +12,7 @@ import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductEndPoint} from '../config'
 import {makeApiRequest} from '../utils'
 import {parseProductDetails} from '../parsers'
-import {getProductHref, getDefaultVariantId, getProductIDFromURL} from './products/utils'
+import {getProductHref, getDefaultVariantId, getProductIDFromURL} from './utils'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
 const loadProduct = (productDetailsData) => (dispatch) => {
