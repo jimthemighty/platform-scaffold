@@ -16,7 +16,7 @@ export const registerConfig = (cfg) => {
 
 export const getSiteID = () => config.siteID
 export const getSiteBaseURL = () => { return config.siteBaseURL ? config.siteBaseURL : '' }
-export const atob = () => { return config.atob ? config.atob : window.atob }
+export const atob = (...args) => { return config.atob ? config.atob(...args) : window.atob(...args) }
 
 export const getApiEndPoint = () => `${getSiteBaseURL()}/s/${getSiteID()}/dw/${API_TYPE}/${API_VERSION}`
 

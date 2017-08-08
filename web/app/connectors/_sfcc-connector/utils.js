@@ -28,13 +28,10 @@ const removeCookieValue = (keyName) => {
 
 const setItemInBrowserStorage = (keyName, value) => {
     // Use session storage if it's supported
-    if (supportsSessionStorage()) {
     if (configuredStorageAvailable()) {
         setItemInStorage(keyName, value)
-    } else if (supportsSessionStorage()) {
-        // Use session storage if it's supported
     // Use session storage if it's supported
-    if (isSessionStorageAvailable()) {
+    } else if (isSessionStorageAvailable()) {
         window.sessionStorage.setItem(keyName, value)
     } else {
         // Use Cookies otherwise
@@ -43,11 +40,9 @@ const setItemInBrowserStorage = (keyName, value) => {
 }
 
 const getItemFromBrowserStorage = (keyName) => {
-    if (supportsSessionStorage()) {
     if (configuredStorageAvailable()) {
         return getItemInStorage(keyName)
-    } else if (supportsSessionStorage()) {
-    if (isSessionStorageAvailable()) {
+    } else if (isSessionStorageAvailable()) {
         return window.sessionStorage.getItem(keyName)
     }
 
@@ -55,11 +50,9 @@ const getItemFromBrowserStorage = (keyName) => {
 }
 
 const removeItemFromBrowserStorage = (keyName) => {
-    if (supportsSessionStorage()) {
     if (configuredStorageAvailable()) {
         removeItemInStorage(keyName)
-    } else if (supportsSessionStorage()) {
-    if (isSessionStorageAvailable()) {
+    } else if (isSessionStorageAvailable()) {
         window.sessionStorage.removeItem(keyName)
     } else {
         removeCookieValue(keyName)
@@ -103,7 +96,7 @@ export const getAuthTokenPayload = (authToken) => {
     // The token consists of 3 parts: header, payload and signature
     // separated by a '.', each part is encoded
     // we only need the payload
-    return JSON.parse((atob()(authToken.split('.')[1])))
+    return JSON.parse(atob(authToken.split('.')[1]))
 }
 
 export const getCustomerData = (authorization) => {
@@ -293,4 +286,3 @@ export const fetchItemData = (items) => (dispatch, getState) => {
         })
     ).then(() => ({updatedProducts, updatedCartItems}))
 }
-
