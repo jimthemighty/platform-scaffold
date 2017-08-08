@@ -12,15 +12,51 @@
     // wrapper element.
 }
 
+// Modifier: Inline Items
+// ---
+
+.c-social-share.c--inline {
+    display: flex;
+
+    .c-social-share__item {
+        + * {
+            margin-left: $unit;
+        }
+    }
+}
+
+// Modifier: Block Items
+// ---
+
+.c-social-share.c--block {
+    display: block;
+
+    .c-social-share__item {
+        + * {
+            margin-top: $unit;
+        }
+    }
+}
+
+// Modifiers: Block and Inline Items
+// ---
+
+.c-social-share.c--inline,
+.c-social-share.c--block {
+    .c-social-share__item {
+        display: flex;
+        align-items: center;
+    }
+
+    .c-social-share__text {
+        flex: 1 1 auto;
+        margin-left: $unit;
+    }
+}
+
 
 // Item
 
 .c-social-share__item {
-
-}
-
-// Modifier: Inline Item
-// ---
-.c-social-share__item.c--inline {
-
+    display: inline-block;
 }

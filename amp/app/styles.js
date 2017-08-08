@@ -88,6 +88,10 @@ import Pagination from './components/pagination/index'
 import PaginationBase from './components/pagination/_base.scss'
 import PaginationTheme from './styles/themes/amp-components/_pagination.scss'
 
+import SocialShare from './components/social-share/index'
+import SocialShareBase from './components/social-share/_base.scss'
+import SocialShareTheme from './components/social-share/_theme.scss'
+
 
 // Containers
 import Footer from './containers/footer/container'
@@ -136,6 +140,7 @@ styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
 styles.set(Pagination, [PaginationBase, PaginationTheme])
+styles.set(SocialShare, [SocialShareBase, SocialShareTheme])
 
 
 // Containers
