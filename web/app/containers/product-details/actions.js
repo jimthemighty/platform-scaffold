@@ -6,15 +6,15 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-
 import {getItemQuantity} from './selectors'
 import {getWishlistURL, getSignInURL} from '../app/selectors'
 import {getCurrentProductId, getProductVariants, getProductVariationCategories, getProductVariationCategoryIds} from 'progressive-web-sdk/dist/store/products/selectors'
-import {getAddToCartFormValues} from '../../store/form/selectors'
+import {getAddToCartFormValues, getFormValues} from '../../store/form/selectors'
 import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
-
 import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {getProductVariantData, addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
+import {updateWishlistItem} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+
 import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
@@ -160,4 +160,9 @@ export const addToWishlist = (quantity) => (dispatch, getState) => {
                 throw error
             }
         })
+}
+
+export const updateItemInWishlist = () => (dispatch, getState) => {
+    const formValues = getFormValues(formKey) // formkey for addtocart
+    return dispatch(updateWishlistItem())
 }

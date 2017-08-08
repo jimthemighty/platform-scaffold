@@ -107,6 +107,18 @@ export const addToCartFromWishlist = ({itemId, productId, quantity}) => (dispatc
 
 export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()
 
+export const updateWishlistItem = () => (dispatch) => {
+    /*
+    https://www.merlinspotions.com/wishlist/index/updateItemOptions/
+    POST
+    id:87    <- wishlist ID
+    product:1 <- ProductID
+    qty:1 <- QUANTITY
+    uenc:aHR0cHM6Ly93d3cubWVybGluc3BvdGlvbnMuY29tL3dpc2hsaXN0L2luZGV4L2NvbmZpZ3VyZS9pZC84Ny9wcm9kdWN0X2lkLzEv
+    options:8 <- selected variant, but only 1 variant option is selected??
+    form_key:4MZdOaZGasppn7h2
+    */
+}
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
