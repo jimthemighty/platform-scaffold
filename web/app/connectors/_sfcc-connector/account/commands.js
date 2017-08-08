@@ -357,5 +357,14 @@ export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemID})
 
 export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
     const customerID = getCustomerID()
-    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, body, {method: 'PATCH'})
+    const requestBody = {
+        quantity,
+        product_id: productId,
+        id: itemId
+    }
+    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, requestBody, {method: 'PATCH'})
+        // .then((res) => res.json())
+        .then((res) => {
+            return res
+        })
 }

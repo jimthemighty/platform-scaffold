@@ -4,7 +4,7 @@
 
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
+import {getWishlistID, getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {SubmissionError} from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getItemQuantity} from './selectors'
@@ -15,9 +15,7 @@ import {
     getProductVariationCategories,
     getProductVariationCategoryIds
 } from 'progressive-web-sdk/dist/store/products/selectors'
-import {getProductDetails} from '../product-details/selectors'
 import {getAddToCartFormValues} from '../../store/form/selectors'
-import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {getProductVariantData, addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {updateWishlistItem} from 'progressive-web-sdk/dist/integration-manager/account/commands'
@@ -169,7 +167,7 @@ export const addToWishlist = (quantity) => (dispatch, getState) => {
 }
 
 export const updateItemInWishlist = (quantity) => (dispatch, getState) => {
-    const itemId = window.location.pathname.match(/id\/(\d+)/)[1]
+    const itemId = window.location.pathname.match(/id\/(\d+)/)[0]
     const productId = window.location.pathname.match(/product_id\/(\d+)\//)[1]
     const wishlistId = getWishlistID(getState())
 
