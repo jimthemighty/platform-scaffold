@@ -2,7 +2,6 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-/* eslint-disable react/self-closing-comp */
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 import {ampComponent} from 'mobify-amp-sdk/dist/amp-sdk'
@@ -16,10 +15,19 @@ import SocialShareItem from './social-share-item'
  */
 
 const SocialShare = ({
+    options,
     className,
-    options
+    isBlock,
+    isInline
 }) => {
-    const classes = classNames('c-social-share', className)
+    const classes = classNames('c-social-share', {
+        'c--inline': isInline,
+        'c--block': isBlock
+    }, className)
+
+    if (isInline && isBlock === true) {
+        return new Error('You cannot have both inline and block, please pick one.')
+    }
 
     return (
         <div className={classes}>
@@ -44,7 +52,6 @@ SocialShare.propTypes = {
         endpoint: PropTypes.string,
         height: PropTypes.number,
         href: PropTypes.string,
-        isInline: PropTypes.bool,
         layout: PropTypes.string,
         media: PropTypes.string,
         quote: PropTypes.string,
@@ -59,6 +66,16 @@ SocialShare.propTypes = {
      * Adds values to the `class` attribute of the root element
      */
     className: PropTypes.string,
+
+    /**
+     * Add `c--inline` class to element if true.
+     */
+    isBlock: PropTypes.bool,
+
+    /**
+     * Add `c--block` class to element if true.
+     */
+    isInline: PropTypes.bool,
 }
 
 SocialShare.scripts = [

@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+/* eslint-disable react/self-closing-comp */
 import React, {PropTypes} from 'react'
 import classNames from 'classnames'
 
@@ -13,19 +14,18 @@ const SocialShareItem = ({
     endpoint,
     height,
     href,
-    isInline,
     layout,
     media,
+    paramText,
     quote,
     socialItemClass,
+    socialShareClass,
     subject,
     text,
     url,
     width
 }) => {
-    const classes = classNames('c-social-share__item', {
-        'c--inline': isInline ? true : false
-    }, socialItemClass)
+    const classes = classNames('c-social-share__item', socialItemClass)
 
     // if type is facebook and it requires value for `data-param-app_id` attribute
     if (type === 'facebook') {
@@ -35,25 +35,32 @@ const SocialShareItem = ({
     }
 
     return (
-        <amp-social-share
-            class={classes}
-            type={type}
-            layout={layout}
-            width={width}
-            height={height}
-            data-share-endpoint={endpoint}
-            data-param-subject={subject}
-            data-param-body={body}
-            data-param-app_id={appId}
-            data-param-href={href}
-            data-param-quote={quote}
-            data-param-url={url}
-            data-param-media={media}
-            data-param-description={description}
-            data-param-text={text}
-        >
-            {body}
-        </amp-social-share>
+        <div className={classes}>
+            <amp-social-share
+                class={socialShareClass}
+                type={type}
+                layout={layout}
+                width={width}
+                height={height}
+                data-share-endpoint={endpoint}
+                data-param-subject={subject}
+                data-param-body={body}
+                data-param-app_id={appId}
+                data-param-href={href}
+                data-param-quote={quote}
+                data-param-url={url}
+                data-param-media={media}
+                data-param-description={description}
+                data-param-text={paramText}
+            ></amp-social-share>
+
+            {text &&
+                <div className="c-social-share__text">
+                    {text}
+                </div>
+            }
+        </div>
+
     )
 }
 
@@ -76,7 +83,7 @@ SocialShareItem.propTypes = {
     appId: PropTypes.string,
 
     /**
-     * Add content to the body.
+     * `data-param-body`: optional, defaults to: rel=canonical URL.
      */
     body: PropTypes.string,
 
@@ -105,11 +112,6 @@ SocialShareItem.propTypes = {
     href: PropTypes.string,
 
     /**
-     * Add `c--inline` class to element if true.
-     */
-    isInline: PropTypes.bool,
-
-    /**
      * Layouts Supported
      */
     layout: PropTypes.oneOf(['container', 'fill', 'fixed', 'fixed-height', 'flex-item', 'nodisplay', 'responsive']),
@@ -122,14 +124,25 @@ SocialShareItem.propTypes = {
     media: PropTypes.string,
 
     /**
+     * `data-param-text`: optional, defaults to: "Current page title - current
+     * page URL"
+     */
+    paramText: PropTypes.string,
+
+    /**
      * `data-param-quote`: optional. Can be used to share a quote or text.
      */
     quote: PropTypes.string,
 
     /**
-     * Class to add to `amp-social-share` item.
+     * Class to add to `c-social-share__item` element.
      */
     socialItemClass: PropTypes.string,
+
+    /**
+     * Class to add to `amp-social-share` element.
+     */
+    socialShareClass: PropTypes.string,
 
     /**
      * `data-param-subject`: optional, defaults to: Current page title.
@@ -137,8 +150,7 @@ SocialShareItem.propTypes = {
     subject: PropTypes.string,
 
     /**
-     * `data-param-text`: optional, defaults to: "Current page title - current
-     * page URL"
+     * Text place in the `c-social-share__text` element.
      */
     text: PropTypes.string,
 
