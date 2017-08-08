@@ -10,7 +10,7 @@ git clone git@github.com:mobify/progressive-web-sdk.git
 cd progressive-web-sdk
 npm link
 npm install # REQUIRED!!
-npm run dev:build # Some assets required by the scaffold build are only created by this command (/dist/*)
+npm run prod:build # Some assets required by the scaffold build are only created by this command (/dist/*)
 ```
 
 Then navigate back to this directory and run:
