@@ -13,11 +13,11 @@ import SocialShare from '../../../components/social-share'
 // Selectors
 import {getProductDescription} from 'progressive-web-sdk/dist/store/products/selectors'
 
-const foo = [{type: 'twitter', url: 'someURLhere', text: 'some text here'}]
+const foo = [{type: 'twitter', url: 'someURLhere', text: 'some text here'}, {type: 'facebook', url: 'someURLhere', text: 'some text here', isInline: true, appId: 'foo'}]
 
 const ProductDetailsDescription = ({description}) => (
     <div className="u-padding-top-md u-bg-color-neutral-10">
-        <SocialShare options={foo} />
+        <SocialShare options={foo} isBlock />
 
         <Accordion className="t-product-details__description u-bg-color-neutral-00" initialOpenItems={[0]}>
             <AccordionItem header="Product Description" closeIconName="close" openIconName="plus">
