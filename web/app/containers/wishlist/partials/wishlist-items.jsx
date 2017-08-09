@@ -16,7 +16,7 @@ import ProductItem from '../../../components/product-item'
 import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {getWishlistItemQuantity} from './selectors'
+import {getWishlistItemQuantity} from '../selectors'
 import {addToCartFromWishlist, removeWishlistItem, editWishlistItem, setItemQuantity} from '../actions'
 
 const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemId}) => (
