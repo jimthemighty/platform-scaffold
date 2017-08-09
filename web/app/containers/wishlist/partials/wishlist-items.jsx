@@ -17,7 +17,7 @@ import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-import {addToCartFromWishlist, editWishlistItem} from '../actions'
+import {addToCartFromWishlist, removeWishlistItem, editWishlistItem} from '../actions'
 
 const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemId}) => (
     <Button
@@ -39,7 +39,7 @@ const OutOfStockMessage = () => (
     <Feedback isError icon="caution" isBlock title="out-of-stock" text="This item is out of stock." />
 )
 
-const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, productItemClassNames}) => (
+const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, removeWishlistItem, productItemClassNames}) => (
     <List>
         {products.length ?
             products.map((product) => {
@@ -78,7 +78,7 @@ const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, produ
                             <Button
                                 className="u-text-size-small u-color-brand u-text-letter-spacing-normal qa-cart__remove-item"
                                 innerClassName="u-padding-end-0 u-padding-bottom-0 u-padding-start-0"
-                                onClick={() => console.log('test remove button')}
+                                onClick={() => removeWishlistItem(itemId)}
                                 data-analytics-name={UI_NAME.removeItem}
                                 >
                                 Remove
@@ -97,7 +97,8 @@ WishlistItems.propTypes = {
     addToCartFromWishlist: PropTypes.func,
     editWishlistItem: PropTypes.func,
     productItemClassNames: PropTypes.string,
-    products: PropTypes.array
+    products: PropTypes.array,
+    removeWishlistItem: PropTypes.func
 }
 
 
@@ -109,7 +110,8 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     addToCartFromWishlist,
-    editWishlistItem
+    editWishlistItem,
+    removeWishlistItem
 }
 
 export default connect(

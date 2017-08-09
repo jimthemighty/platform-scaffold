@@ -332,9 +332,9 @@ export const initWishlistPage = () => (dispatch) => {
         })
 }
 
-export const removeItemFromWishlist = (itemId, wishlistID, productId) => (dispatch) => {
+export const removeItemFromWishlist = (itemId, wishlistId, productId) => (dispatch) => {
     const customerID = getCustomerID()
-    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemId}`, {method: 'DELETE'})
+    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {method: 'DELETE'})
         .then((response) => response.text())
         .then((responseText) => {
             if (!responseText.length) {
@@ -354,11 +354,9 @@ export const addToCartFromWishlist = (productId, {quantity, wishlistId, itemId})
 }
 
 export const updateWishlistItem = (itemId, wishlistId) => (dispatch, getState) => {
-    const customerID = getCustomerID()
     const productId = getCurrentProductId(getState())
-
     // PATCH is only for updating priority, quantity, public properties of the wishlist item.
     // POST then DELETE is required for replacing products
     return dispatch(addItemToWishlist(productId))
-        .then(() => makeApiRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {method: 'DELETE'}))
+        .then(() => dispatch(removeItemFromWishlist(itemId, wishlistId, productId)))
 }

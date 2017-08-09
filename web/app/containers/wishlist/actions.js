@@ -13,7 +13,7 @@ import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-mana
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
+import {removeItemFromWishlist} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 export const isConfiguringWishlist = createAction('User is configuring a wishlist item', ['isConfiguringWishlist'])
 
@@ -46,4 +46,8 @@ export const editWishlistItem = (productId, itemId) => (dispatch) => {
 export const goToCheckout = () => (dispatch) => {
     dispatch(closeModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist))
     dispatch(appActions.goToCheckout())
+}
+
+export const removeWishlistItem = (itemId) => (dispatch) => {
+    return
 }
