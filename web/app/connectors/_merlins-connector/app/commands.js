@@ -102,9 +102,11 @@ export const searchProducts = (query) => (dispatch) => {
 
 
 export const initApp = () => (dispatch) => {
-    // Use the pre-existing form_key if it already exists
-    const formKey = getCookieValue('form_key') || generateFormKeyCookie()
-    dispatch(receiveFormKey(formKey))
+    if (typeof document !== 'undefined') {
+        // Use the pre-existing form_key if it already exists
+        const formKey = getCookieValue('form_key') || generateFormKeyCookie()
+        dispatch(receiveFormKey(formKey))
+    }
 
     dispatch(setAccountAddressURL(ACCOUNT_ADDRESS_URL))
     dispatch(setAccountInfoURL(ACCOUNT_INFO_URL))
