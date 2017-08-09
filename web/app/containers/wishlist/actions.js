@@ -18,10 +18,11 @@ export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Q
 export const isConfiguringWishlist = createAction('User is configuring a wishlist item', ['isConfiguringWishlist'])
 
 export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch, getState) => {
-    const wishlistID = getWishlistID(getState())
+    const wishlistId = getWishlistID(getState())
     dispatch(receiveCurrentProductId(productId))
     dispatch(receiveWishlistItemQuantity(quantity))
-    return dispatch(addToCartFromWishlistCommand({productId, quantity, wishlistID, itemId}))
+
+    return dispatch(addToCartFromWishlistCommand(productId, {quantity, wishlistId, itemId}))
         .then(() => dispatch(openModal(WISHLIST_ITEM_ADDED_MODAL, UI_NAME.wishlist)))
         .catch(({message}) => {
             if (message && /redirect/i.test(message)) {

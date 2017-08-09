@@ -349,13 +349,13 @@ export const removeItemFromWishlist = (itemId, wishlistID, productId) => (dispat
         .then(() => dispatch(removeWishlistItem(productId)))
 }
 
-export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemId}) => (dispatch) => {
+export const addToCartFromWishlist = (productId, {quantity, wishlistId, itemId}) => (dispatch) => {
     // add the item to the cart
     return dispatch(addToCart(productId, quantity))
-        .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistID, productId, quantity)))
+        .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId, quantity)))
 }
 
-export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
+export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch) => {
     const customerID = getCustomerID()
     const requestBody = {
         quantity,
