@@ -18,7 +18,7 @@ import Field from 'mobify-amp-sdk/dist/components/field'
 import List from 'mobify-amp-sdk/dist/components/list'
 import Pagination from 'mobify-amp-sdk/dist/components/pagination'
 import ProductTile from '../../../components/product-tile'
-
+import Card from '../../../components/card'
 
 // Selectors
 import * as selectors from '../../../../../web/app/containers/product-list/selectors'
@@ -62,20 +62,19 @@ export const getPaginationHref = (offset, currentUrl, pageCount) => {
 
 const ResultList = ({products}) => (
     <List className="a--borderless">
-        {
-            products.map((prod) =>
+        {products.map((product, idx) => (
+            <Card hasShadow key={product ? product.id : idx}>
                 <ProductTile
-                    href={prod.href}
-                    key={prod.id}
-                    price={prod.price}
+                    href={product.href}
+                    price={product.price}
                     thumbnail={{
-                        alt: prod.title,
-                        src: prod.thumbnail.src
+                        alt: product.title,
+                        src: product.thumbnail.src
                     }}
-                    title={prod.title}
+                    title={product.title}
                 />
-            )
-        }
+            </Card>
+        ))}
     </List>
 )
 

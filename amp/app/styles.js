@@ -77,6 +77,9 @@ import SkipLinksBase from 'mobify-amp-sdk/dist/components/skip-links/_base.scss'
 
 
 // Local Components
+import Card from './components/card/index'
+import CardTheme from './components/card/_theme.scss'
+
 import IconLabelButton from './components/icon-label-button/index'
 import IconLabelButtonBase from './components/icon-label-button/_base.scss'
 
@@ -130,6 +133,7 @@ styles.set(SkipLinks, [SkipLinksBase])
 
 
 // Local Components
+styles.set(Card, [CardTheme])
 styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
