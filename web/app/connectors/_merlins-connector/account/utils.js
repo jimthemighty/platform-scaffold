@@ -2,10 +2,12 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
+import {parseAddress} from '../utils'
 import {getCookieValue} from '../../../utils/utils'
 import {
     receiveWishlistData,
-    receiveWishlistUIData
+    receiveWishlistUIData,
+    receiveAccountAddressData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from './parsers'
@@ -44,6 +46,7 @@ export const createAddressRequestObject = (formValues) => {
         addressLine1,
         addressLine2,
         countryId,
+        preferred,
         city,
         regionId,
         region,
@@ -59,7 +62,9 @@ export const createAddressRequestObject = (formValues) => {
         postcode,
         city,
         street: addressLine2 ? [addressLine1, addressLine2] : [addressLine1, ''],
-        region_id: regionId,
+        region_id: regionId || '',
+        default_billing: preferred ? '1' : '',
+        default_shipping: preferred ? '1' : '',
         region: region || '',
         country_id: countryId,
     }
@@ -87,4 +92,12 @@ export const fetchCustomerAddresses = () => {
     const fetchURL = `/rest/default/V1/carts/mine`
     return makeRequest(fetchURL, {method: 'GET'})
         .then((response) => response.json())
+}
+
+export const updateCustomerAddresses = () => (dispatch) => {
+    const fetchURL = `/rest/default/V1/carts/mine`
+    return makeRequest(fetchURL, {method: 'GET'})
+        .then((response) => response.json())
+        .then(({customer: {addresses}}) => addresses.map((address) => parseAddress(address)))
+        .then((addresses) => dispatch(receiveAccountAddressData(addresses)))
 }

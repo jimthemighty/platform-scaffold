@@ -21,6 +21,8 @@ export const UPDATE_WISHLIST_URL = '/wishlist/index/updateItemOptions/'
 export const buildQueryURL = (query) => `${SEARCH_SUGGESTION_URL}${buildQueryString(query)}&_=${Date.now()}`
 export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`
 
+export const getDeleteAddressURL = (addressId, formKey) => `https://www.merlinspotions.com/customer/address/delete/id/${addressId}/form_key/${formKey}`
+
 // configuration is not currently used by the Merlin's connector
 let config = {} // eslint-disable-line
 
