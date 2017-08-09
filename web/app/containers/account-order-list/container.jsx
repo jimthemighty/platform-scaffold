@@ -13,7 +13,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getOrderList} from './selectors'
-import {reorderItems} from './actions'
+import {reorderItems, navigateToOrder} from './actions'
 import OrderBlock from './partials/account-order-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 
@@ -44,7 +44,7 @@ NoOrder.propTypes = {
     dashboardURL: PropTypes.string,
 }
 
-const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
+const AccountOrderList = ({reorderItems, dashboardURL, orders, navigateToOrder}) => {
     return (
         <div>
             {orders.length ?
@@ -76,6 +76,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                                     <div className="u-flexbox">
                                         <div className="u-flex u-border-end">
                                             <Button
+                                                onClick={() => navigateToOrder(order.orderNumber, order.viewHref)}
                                                 type="button"
                                                 title="View"
                                                 className="u-width-full u-color-brand u-border-top"
@@ -112,6 +113,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
 
 AccountOrderList.propTypes = {
     dashboardURL: PropTypes.string,
+    navigateToOrder: PropTypes.func,
     orders: PropTypes.array,
     reorderItems: PropTypes.func
 }
@@ -122,7 +124,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    reorderItems
+    reorderItems,
+    navigateToOrder
 }
 
 export default template(

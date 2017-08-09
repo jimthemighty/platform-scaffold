@@ -298,7 +298,7 @@ export const parseOrder = ({
                 return {
                     itemName: item_text,
                     price: formatPrice(price),
-                    quantity,
+                    quantity: `${quantity}`,
                     productId: product_id
                 }
             })
@@ -312,14 +312,18 @@ export const parseOrdersResponse = ({data}) => {
         order_no,
         confirmation_status,
         creation_date,
-        billing_address,
+        shipments: [
+            {
+                shipping_address: {full_name}
+            }
+        ],
         order_total
     }) => {
         ordersMap[order_no] = {
             orderNumber: order_no,
             date: creation_date,
-            shipTo: billing_address,
-            total: order_total,
+            shipTo: full_name,
+            total: formatPrice(order_total),
             status: confirmation_status
         }
     })
