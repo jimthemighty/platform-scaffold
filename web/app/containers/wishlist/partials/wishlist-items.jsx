@@ -16,8 +16,8 @@ import ProductItem from '../../../components/product-item'
 import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-
-import {addToCartFromWishlist, removeWishlistItem, editWishlistItem} from '../actions'
+import {getWishlistItemQuantity} from './selectors'
+import {addToCartFromWishlist, removeWishlistItem, editWishlistItem, setItemQuantity} from '../actions'
 
 const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemId}) => (
     <Button
@@ -39,11 +39,18 @@ const OutOfStockMessage = () => (
     <Feedback isError icon="caution" isBlock title="out-of-stock" text="This item is out of stock." />
 )
 
-const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, removeWishlistItem, productItemClassNames}) => (
+const WishlistItems = ({
+    products,
+    addToCartFromWishlist,
+    editWishlistItem,
+    removeWishlistItem,
+    productItemClassNames,
+    setItemQuantity
+}) => (
     <List>
         {products.length ?
             products.map((product) => {
-                const {productId, thumbnail, itemId, title, quantity, price, available} = product
+                const {quantity, productId, thumbnail, itemId, title, price, available} = product
                 const itemFooter = available ?
                     <AddToCartButton quantity={quantity} productId={productId} addToCartFromWishlist={addToCartFromWishlist} itemId={itemId} />
                     : <OutOfStockMessage />
@@ -59,7 +66,7 @@ const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, remov
                         <FieldRow className="u-align-bottom">
                             <ItemQuantityStepper
                                 cartItemId={productId}
-                                changeQuantity={this.changeQuantity}
+                                changeQuantity={() => setItemQuantity(quantity)}
                                 quantity={quantity}
                             />
 
@@ -98,20 +105,23 @@ WishlistItems.propTypes = {
     editWishlistItem: PropTypes.func,
     productItemClassNames: PropTypes.string,
     products: PropTypes.array,
-    removeWishlistItem: PropTypes.func
+    removeWishlistItem: PropTypes.func,
+    setItemQuantity: PropTypes.func
 }
 
 
 
 
 const mapStateToProps = createPropsSelector({
-    products: getWishlistProducts
+    products: getWishlistProducts,
+    quantity: getWishlistItemQuantity
 })
 
 const mapDispatchToProps = {
     addToCartFromWishlist,
     editWishlistItem,
-    removeWishlistItem
+    removeWishlistItem,
+    setItemQuantity
 }
 
 export default connect(

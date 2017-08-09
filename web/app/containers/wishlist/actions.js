@@ -14,8 +14,13 @@ import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-mana
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
+
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 export const isConfiguringWishlist = createAction('User is configuring a wishlist item', ['isConfiguringWishlist'])
+
+export const setItemQuantity = (quantity) => (dispatch) => {
+    return dispatch(receiveWishlistItemQuantity(quantity))
+}
 
 export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch, getState) => {
     const wishlistId = getWishlistID(getState())
