@@ -27,13 +27,9 @@ import {
     receiveWishlistResponse,
     updateCustomerAddresses
 } from './utils'
-import {jqueryAjaxWrapper, parseAddress} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, UPDATE_WISHLIST_URL, WISHLIST_URL} from '../config'
-import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-
 
 import {jqueryAjaxWrapper} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
+import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL, UPDATE_WISHLIST_URL, WISHLIST_URL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {isFormResponseInvalid, parseAccountInfo} from './parsers'
 
