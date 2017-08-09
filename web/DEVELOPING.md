@@ -54,3 +54,9 @@ import initConnector from './init-sfcc-connector'
 3. Open Preview using the following link:
 
 https://preview.mobify.com/?url=https%3A%2F%2Fmobify-tech-prtnr-na03-dw.demandware.net%2Fon%2Fdemandware.store%2FSites-2017refresh-Site%2Fdefault%2FHome-Show&site_folder=https%3A%2F%2Flocalhost%3A8443%2Floader.js&disabled=0&domain=&scope=1
+
+## Adding AMP links for PDP/PLP pages
+
+If your project has Mobify [AMP](https://www.ampproject.org/) enabled, you can link the AMP versions of your web pages for each of your product description, listing, etc. pages by adjusting or adding to the `baseAMPUrl` and `validAMPUrls` variables within the `./web/app/ampUrls.js` file. The `baseAMPUrl` variable refers to the domain you are serving your AMP pages from, whereas each entity within the `validAMPUrls` array refer to the relative paths to your resources.
+
+To verify that your AMP pages are being linked correctly, you can run your dev server and use the [AMP validator](https://validator.ampproject.org/) chrome plugin. The validator plugin icon will turn green on a valid AMP page, and blue on a web page that links to an AMP page, which upon clicking, should redirect you to the linked AMP page.

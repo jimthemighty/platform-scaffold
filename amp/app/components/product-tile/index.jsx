@@ -42,7 +42,7 @@ ProductImage.propTypes = {
 const ProductTile = ({className, thumbnail, href, price, title}) => {
 
     return (
-        <ListTile className="c-product-tile u-card" href={href}>
+        <ListTile className="c-product-tile" href={href}>
             <ProductItem customWidth="45%"
                 className={classNames('u-align-center', className)}
                 title={<h2 className={titleClassName}>{title}</h2>}
