@@ -2,7 +2,8 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {
-    addToCartFromWishlist as addToCartFromWishlistCommand
+    addToCartFromWishlist as addToCartFromWishlistCommand,
+    removeItemFromWishlist
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {WISHLIST_ITEM_ADDED_MODAL} from '../../modals/constants'
@@ -13,7 +14,6 @@ import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-mana
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getWishlistID} from 'progressive-web-sdk/dist/store/user/selectors'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-import {removeItemFromWishlist} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 export const isConfiguringWishlist = createAction('User is configuring a wishlist item', ['isConfiguringWishlist'])
 
