@@ -114,7 +114,15 @@ export const addToCartFromWishlist = (productId, {itemId, quantity}) => (dispatc
         })
 }
 
-export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()
+export const removeItemFromWishlist = (itemId) => (dispatch, getState) => {
+    const requestBody = {
+        item: parseInt(itemId),
+        form_key: getFormKey(getState())
+    }
+    return makeFormEncodedRequest('/wishlist/index/remove/', requestBody, {method: 'POST'})
+        .then(() => dispatch(fetchPageData('/wishlist/')))
+        .then(([$, $response]) => dispatch(receiveWishlistResponse($, $response)))
+}
 
 export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
     const currentState = getState()
