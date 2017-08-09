@@ -12,7 +12,7 @@ import {deleteAddress} from 'progressive-web-sdk/dist/integration-manager/accoun
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import AddressBlock from '../../components/address-block'
-import {getDefaultAddress, getAddresses} from '../../store/user/selectors'
+import {getDefaultAddress, getAddresses} from 'progressive-web-sdk/dist/store/user/selectors'
 import {getAccountURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'

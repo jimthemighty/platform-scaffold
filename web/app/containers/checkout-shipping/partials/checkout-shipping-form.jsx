@@ -9,7 +9,7 @@ import * as ReduxForm from 'redux-form'
 import isEmail from 'validator/lib/isEmail'
 
 import {validateFullName} from '../../../utils/utils'
-import {getIsLoggedIn} from '../../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {getInitialShippingAddress} from '../../../store/checkout/shipping/selectors'
 
 import {submitShipping} from '../actions'
