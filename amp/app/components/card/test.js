@@ -47,6 +47,6 @@ test('renders header and footer if header and footer props present', () => {
 
     expect(headerTag.length).toBe(1)
     expect(headerTag.text()).toBe(headerText)
-    expect(footerTag.length()).toBe(1)
+    expect(footerTag.length).toBe(1)
     expect(footerTag.text()).toBe(footerText)
 })
