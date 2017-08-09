@@ -168,8 +168,11 @@ export const addToWishlist = (quantity) => (dispatch, getState) => {
 
 export const updateItemInWishlist = (quantity) => (dispatch, getState) => {
     const itemId = window.location.pathname.match(/\/id\/(\w+)\//)[1]
-    const productId = window.location.pathname.match(/\/product_id\/(\w+)\//)[1]
     const wishlistId = getWishlistID(getState())
 
-    return dispatch(updateWishlistItem(itemId, wishlistId, productId, quantity))
+    return dispatch(updateWishlistItem(itemId, wishlistId, quantity))
+        .then(() => {
+            dispatch(setIsWishlistAdded(true))
+            return dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
+        })
 }

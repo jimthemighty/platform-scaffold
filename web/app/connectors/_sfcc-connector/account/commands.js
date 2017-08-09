@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-
+import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selectors'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {
     setSigninLoaded,
@@ -17,6 +17,7 @@ import {
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
+import {addItemToWishlist} from '../products/commands'
 import {
     initSfccSession,
     deleteAuthToken,
@@ -352,12 +353,12 @@ export const addToCartFromWishlist = (productId, {quantity, wishlistId, itemId})
         .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId, quantity)))
 }
 
-export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch) => {
+export const updateWishlistItem = (itemId, wishlistId) => (dispatch, getState) => {
     const customerID = getCustomerID()
-    const requestBody = {
-        quantity,
-        product_id: productId,
-        id: itemId
-    }
-    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, requestBody, {method: 'PATCH'})
+    const productId = getCurrentProductId(getState())
+
+    // PATCH is only for updating priority, quantity, public properties of the wishlist item.
+    // POST then DELETE is required for replacing products
+    return dispatch(addItemToWishlist(productId))
+        .then(() => makeApiRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {method: 'DELETE'}))
 }
