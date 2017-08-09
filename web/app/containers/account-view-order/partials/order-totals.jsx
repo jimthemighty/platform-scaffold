@@ -13,7 +13,7 @@ import {
     getOrderTax,
     getOrderShippingTotal,
     getOrderSubtotal
-} from '../../../store/user/orders/selectors'
+} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 
 const OrderTotals = ({
     subtotal,

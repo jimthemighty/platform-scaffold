@@ -15,7 +15,7 @@ import {
     receiveAccountAddressData,
     receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {getCurrentOrderNumber} from '../../../store/user/orders/selectors'
+import {getCurrentOrderNumber} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 import {receiveWishlistProductData, receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse, parseOrder, parseOrdersResponse} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'

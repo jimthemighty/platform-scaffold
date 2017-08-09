@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import {getAccountOrderListURL} from '../../app/selectors'
-import {getCurrentOrderNumber, getOrderDate, getOrderStatus} from '../../../store/user/orders/selectors'
+import {getCurrentOrderNumber, getOrderDate, getOrderStatus} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 
 

@@ -13,7 +13,7 @@ import {
     getOrderBillingAddress,
     getOrderShippingAddress,
     getOrderShippingMethod
-} from '../../../store/user/orders/selectors'
+} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 
 const OrderInformation = ({
     billingAddress,

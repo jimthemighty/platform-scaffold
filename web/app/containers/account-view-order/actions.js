@@ -4,7 +4,7 @@
 
 import {reorderPreviousOrder} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-import {getCurrentOrderId} from '../../store/user/orders/selectors'
+import {getCurrentOrderId} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 
 export const reorderItem = () => (dispatch, getState) => {
     return dispatch(reorderPreviousOrder(getCurrentOrderId(getState())))

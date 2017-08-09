@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import SkeletonBlock from 'progressive-web-sdk/dist/components/skeleton-block'
 import Card from '../../../components/card'
 
-import {getOrderItems} from '../../../store/user/orders/selectors'
+import {getOrderItems} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 
 const OrderItems = ({
     items
