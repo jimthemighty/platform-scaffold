@@ -12,7 +12,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ReorderButton = ({onReorderClick}) => (
-    <div className="">
+    <div className="u-padding-md">
         <Button
             icon="cart"
             onClick={onReorderClick}

@@ -8,7 +8,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const PrintButton = () => (
-    <div className="">
+    <div className="u-padding-start-md u-padding-end-md">
         <Button
             onClick={() => window.print()}
             iconClassName="u-margin-end"

@@ -17,13 +17,15 @@ import PrintButton from './partials/print-button'
 const AccountViewOrder = () => (
     <div className="t-account-view-order">
         <AccountViewOrderHeader />
-        <h3>Items Ordered</h3>
-        <OrderItems />
-        <OrderTotals />
-        <ReorderButton />
-        <h3>Order Information</h3>
-        <OrderInformation />
-        <PrintButton />
+        <div className="t-account-view-order__content u-padding-top-md u-padding-bottom-md">
+            <h3 className="t-account-view-order__heading u-padding-start-md u-padding-top-lg u-padding-bottom-lg">Items Ordered</h3>
+            <OrderItems />
+            <OrderTotals />
+            <ReorderButton />
+            <h3 className="t-account-view-order__heading u-padding-start-md u-padding-top-lg u-padding-bottom-lg">Order Information</h3>
+            <OrderInformation />
+            <PrintButton />
+        </div>
     </div>
 )
 

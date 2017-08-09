@@ -21,18 +21,18 @@ const OrderInformation = ({
     shippingAddress,
     shippingMethod
 }) => (
-    <div className="">
-        <Card className="c--border" header="Shipping Address">
-            <AddressBlock {...shippingAddress} />
+    <div className="u-padding-md">
+        <Card className="u-margin-top-md u-margin-bottom-md" hasBorder header="Shipping Address" headerClassName="u-padding-top u-padding-start-md u-text-weight-bold">
+            <AddressBlock className="u-color-neutral-50" {...shippingAddress} />
         </Card>
-        <Card className="c--border" header="Shipping Method">
-            {shippingMethod}
+        <Card className="u-margin-top-md u-margin-bottom-md" hasBorder header="Shipping Method" headerClassName="u-padding-top u-padding-start-md u-text-weight-bold">
+            <div className="u-padding-md u-color-neutral-50">{shippingMethod}</div>
         </Card>
-        <Card className="c--border" header="Billing Address">
-            <AddressBlock {...billingAddress} />
+        <Card className="u-margin-top-md u-margin-bottom-md" hasBorder header="Billing Address" headerClassName="u-padding-top u-padding-start-md u-text-weight-bold">
+            <AddressBlock className="u-color-neutral-50" {...billingAddress} />
         </Card>
-        <Card className="c--border" header="Payment Method">
-            {paymentMethods && paymentMethods.map((paymentMethod) => paymentMethod)}
+        <Card className="u-margin-top-md u-margin-bottom-lg" hasBorder header="Payment Method" headerClassName="u-padding-top u-padding-start-md u-text-weight-bold">
+            <div className="u-padding-md u-color-neutral-50">{paymentMethods && paymentMethods.map((paymentMethod) => paymentMethod)}</div>
         </Card>
     </div>
 )

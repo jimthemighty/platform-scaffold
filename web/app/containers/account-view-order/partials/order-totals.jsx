@@ -21,7 +21,7 @@ const OrderTotals = ({
     tax,
     total
 }) => (
-    <div className="">
+    <div className="u-padding-md">
         <Ledger>
 
             <LedgerRow
@@ -41,9 +41,8 @@ const OrderTotals = ({
 
             />
             <LedgerRow
-                className="u-border-0"
+                className="u-border-0 u-text-size-big u-text-weight-bold"
                 label="Total"
-                isTotal={true}
                 value={total}
             />
         </Ledger>

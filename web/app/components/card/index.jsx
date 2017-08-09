@@ -15,18 +15,24 @@ const Card = ({
     children,
     footer,
     hasShadow,
-    hasBorder
+    hasBorder,
+    headerClassName,
+    innerClassName
 }) => {
     const classes = classNames('c-card', {
         'c--shadow': hasShadow,
         'c--border': hasBorder,
     }, className)
 
+    const headerClasses = classNames('c-card__header', headerClassName)
+
+    const innerClasses = classNames('c-card__inner', innerClassName)
+
     return (
         <article className={classes}>
-            <div className="c-card__inner">
+            <div className={innerClasses}>
                 {header &&
-                    <header className="c-card__header">
+                    <header className={headerClasses}>
                         {header}
                     </header>
                 }
@@ -75,6 +81,10 @@ Card.propTypes = {
      * Header content of the card
      */
     header: PropTypes.node,
+    /**
+     * Classes to add to the header
+     */
+    headerClassName: PropTypes.string
 }
 
 export default Card
