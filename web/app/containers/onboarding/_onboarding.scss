@@ -2,6 +2,7 @@
 // ===
 //
 // @TODO: Come back and clean up the below selectors when working on onboarding.
+// 1. To override inline styles
 
 .t-onboarding {
     height: 100vh;
@@ -12,6 +13,7 @@
     }
 
     .carousel-item > div {
+        display: block !important; // 1
         height: 100%;
     }
 
