@@ -3,9 +3,6 @@ import {Accordion} from 'mobify-amp-sdk/dist/components/accordion/index'
 import AccordionBase from 'mobify-amp-sdk/dist/components/accordion/_base.scss'
 import AccordionTheme from './styles/themes/amp-components/_accordion.scss'
 
-import Img from 'mobify-amp-sdk/dist/components/img/index'
-import ImgBase from 'mobify-amp-sdk/dist/components/img/_base.scss'
-
 import Breadcrumbs from 'mobify-amp-sdk/dist/components/breadcrumbs/index'
 import BreadcrumbsBase from 'mobify-amp-sdk/dist/components/breadcrumbs/_base.scss'
 import BreadcrumbsTheme from './styles/themes/amp-components/_breadcrumbs.scss'
@@ -38,10 +35,11 @@ import IconLabel from 'mobify-amp-sdk/dist/components/icon-label/index'
 import IconLabelBase from 'mobify-amp-sdk/dist/components/icon-label/_base.scss'
 import IconLabelTheme from './styles/themes/amp-components/_icon-label.scss'
 
+import Img from 'mobify-amp-sdk/dist/components/img/index'
+import ImgBase from 'mobify-amp-sdk/dist/components/img/_base.scss'
+
 import Lightbox from 'mobify-amp-sdk/dist/components/lightbox/index'
 import LightboxBase from 'mobify-amp-sdk/dist/components/lightbox/_base.scss'
-
-import Link from 'mobify-amp-sdk/dist/components/link/index'
 
 import List from 'mobify-amp-sdk/dist/components/list/index'
 import ListTheme from './styles/themes/amp-components/_list.scss'
@@ -62,6 +60,10 @@ import NavMenu from 'mobify-amp-sdk/dist/components/nav-menu/index'
 import NavMenuBase from 'mobify-amp-sdk/dist/components/nav-menu/_base.scss'
 import NavMenuTheme from './styles/themes/amp-components/_nav-menu.scss'
 
+import Pagination from 'mobify-amp-sdk/dist/components/pagination/index'
+import PaginationBase from 'mobify-amp-sdk/dist/components/pagination/_base.scss'
+import PaginationTheme from './styles/themes/amp-components/_pagination.scss'
+
 import Search from 'mobify-amp-sdk/dist/components/search/index'
 import SearchBase from 'mobify-amp-sdk/dist/components/search/_base.scss'
 import SearchTheme from './styles/themes/amp-components/_search.scss'
@@ -75,6 +77,9 @@ import SkipLinksBase from 'mobify-amp-sdk/dist/components/skip-links/_base.scss'
 
 
 // Local Components
+import Card from './components/card/index'
+import CardTheme from './components/card/_theme.scss'
+
 import IconLabelButton from './components/icon-label-button/index'
 import IconLabelButtonBase from './components/icon-label-button/_base.scss'
 
@@ -83,10 +88,6 @@ import ProductItemBase from './components/product-item/_base.scss'
 
 import ProductTile from './components/product-tile/index'
 import ProductTileBase from './components/product-tile/_base.scss'
-
-import Pagination from './components/pagination/index'
-import PaginationBase from './components/pagination/_base.scss'
-import PaginationTheme from './styles/themes/amp-components/_pagination.scss'
 
 
 // Containers
@@ -110,7 +111,6 @@ const styles = new Map()
 
 // SDK Components
 styles.set(Accordion, [AccordionBase, AccordionTheme])
-styles.set(Img, [ImgBase])
 styles.set(Breadcrumbs, [BreadcrumbsBase, BreadcrumbsTheme])
 styles.set(Button, [ButtonBase, ButtonTheme])
 styles.set(Carousel, [CarouselBase, CarouselTheme])
@@ -119,23 +119,24 @@ styles.set(FieldRow, [FieldRowBase, FieldRowTheme])
 styles.set(HeaderBar, [HeaderBarBase, HeaderBarTheme])
 styles.set(Icon, [IconBase, IconTheme])
 styles.set(IconLabel, [IconLabelBase, IconLabelTheme])
+styles.set(Img, [ImgBase])
 styles.set(Lightbox, [LightboxBase])
-styles.set(Link)
 styles.set(List, [ListTheme])
 styles.set(ListTile, [ListTileBase, ListTileTheme])
 styles.set(Nav, [NavBase, NavTheme])
 styles.set(NavItem, [NavItemBase, NavItemTheme])
 styles.set(NavMenu, [NavMenuBase, NavMenuTheme])
+styles.set(Pagination, [PaginationBase, PaginationTheme])
 styles.set(Search, [SearchBase, SearchTheme])
 styles.set(Sheet, [SheetBase, SheetTheme])
 styles.set(SkipLinks, [SkipLinksBase])
 
 
 // Local Components
+styles.set(Card, [CardTheme])
 styles.set(IconLabelButton, [IconLabelButtonBase])
 styles.set(ProductItem, [ProductItemBase])
 styles.set(ProductTile, [ProductTileBase])
-styles.set(Pagination, [PaginationBase, PaginationTheme])
 
 
 // Containers
