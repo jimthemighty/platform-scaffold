@@ -15,11 +15,18 @@ const OrderItems = ({
 }) => (
     <div className="">
         {items ?
-            items.map(({itemName, price, quantity}) => (
+            items.map(({itemName, price, quantity, options}) => (
                 <Card header={itemName} key={itemName}>
                     <div className="u-flexbox">
                         <div className="u-flex">
-                            Ordered: {quantity}
+                            {options &&
+                                options.map((option) => (
+                                    <p key={option.value} className="u-color-neutral-50">
+                                        {option.label}: {option.value}
+                                    </p>
+                                ))
+                            }
+                            <p className="u-color-neutral-50">Ordered: {quantity}</p>
                         </div>
                         <div className="u-text-align-end u-flex">
                             {price}

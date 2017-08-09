@@ -75,6 +75,13 @@ const parseAddress = ($addressBlock) => {
     }
 }
 
+const parseOption = ($option) => {
+    return {
+        label: $option.text(),
+        value: $option.next('dd').text()
+    }
+}
+
 export const parseOrder = ($, $response) => {
     return {
         orderNumber: getOrderNumber($response.find('.page-title')),
@@ -97,7 +104,10 @@ export const parseOrder = ($, $response) => {
                 return {
                     price: getTextFrom($itemRow, '.subtotal .price'),
                     quantity: getTextFrom($itemRow, '.items-qty .content'),
-                    itemName: getTextFrom($itemRow, '.product-item-name')
+                    itemName: getTextFrom($itemRow, '.product-item-name'),
+                    options: $itemRow.find('.item-options dt')
+                        .get()
+                        .map((option) => parseOption($(option)))
                 }
             })
     }

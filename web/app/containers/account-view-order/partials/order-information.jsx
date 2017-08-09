@@ -23,16 +23,16 @@ const OrderInformation = ({
 }) => (
     <div className="">
         <Card className="c--border" header="Shipping Address">
-            <AddressBlock {...shippingAddress} countryId={shippingAddress && shippingAddress.country} />
+            <AddressBlock {...shippingAddress} />
         </Card>
         <Card className="c--border" header="Shipping Method">
             {shippingMethod}
         </Card>
         <Card className="c--border" header="Billing Address">
-            <AddressBlock {...billingAddress} countryId={billingAddress && billingAddress.country} />
+            <AddressBlock {...billingAddress} />
         </Card>
         <Card className="c--border" header="Payment Method">
-            {paymentMethods.map((paymentMethod) => paymentMethod)}
+            {paymentMethods && paymentMethods.map((paymentMethod) => paymentMethod)}
         </Card>
     </div>
 )
@@ -40,7 +40,7 @@ const OrderInformation = ({
 
 OrderInformation.propTypes = {
     billingAddress: PropTypes.object,
-    paymentMethods: PropTypes.string,
+    paymentMethods: PropTypes.arrayOf(PropTypes.string),
     shippingAddress: PropTypes.object,
     shippingMethod: PropTypes.string
 }
