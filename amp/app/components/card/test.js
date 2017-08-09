@@ -2,14 +2,15 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {mount, shallow} from 'enzyme'
 /* eslint-env jest */
+/* eslint-disable newline-per-chained-call */
+import {shallowHOC as shallow} from 'mobify-amp-sdk/dist/test-utils'
 import React from 'react'
 
 import Card from './index.jsx'
 
 test('Card renders without errors', () => {
-    const wrapper = mount(<Card />)
+    const wrapper = shallow(<Card />)
     expect(wrapper.length).toBe(1)
 })
 
