@@ -11,6 +11,7 @@ import * as MODAL from './constants'
 import Navigation from './navigation/container'
 import MiniCart from './mini-cart/container'
 import ProductDetailsItemAddedModal from './product-details-item-added/container'
+import WishlistItemAddedModal from './wishlist-item-added/container'
 import CartEstimateShippingModal from './cart-estimate-shipping/container'
 import CartWishlistModal from './cart-wishlist/container'
 import CartRemoveItemModal from './cart-remove-item/container'
@@ -28,6 +29,7 @@ const modals = {
     [MODAL.OFFLINE_MODAL]: {content: <OfflineModal />},
     [MODAL.MINI_CART_MODAL]: {content: <MiniCart />},
     [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: {content: <ProductDetailsItemAddedModal />},
+    [MODAL.WISHLIST_ITEM_ADDED_MODAL]: {content: <WishlistItemAddedModal />},
     [MODAL.PRODUCT_LIST_FILTER_MODAL]: {content: <ProductListFilterModal />},
     [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
     [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},

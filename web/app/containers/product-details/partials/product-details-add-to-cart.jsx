@@ -69,7 +69,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                     iconClassName="u-margin-end"
                     showIconText={true}
                     className="u-color-brand u-text-letter-spacing-normal u-width-full"
-                    onClick={addToWishlist}
+                    onClick={() => addToWishlist(quantity)}
                     data-analytics-name={UI_NAME.wishlist}
                 />
             </div>
