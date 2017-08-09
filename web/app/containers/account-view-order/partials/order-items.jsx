@@ -16,7 +16,7 @@ const OrderItems = ({
     <div className="">
         {items ?
             items.map(({itemName, price, quantity, options}) => (
-                <Card header={itemName} key={itemName} className="u-border-bottom" headerClassName="u-padding" innerClassName="u-padding-start-md u-padding-end-md">
+                <Card header={itemName} key={itemName} className="u-border-bottom" headerClassName="u-padding-start u-padding-bottom" innerClassName="u-padding-md">
                     <div className="u-flexbox u-align-bottom">
                         <div className="u-flex u-text-height-small u-text-quiet u-padding-start u-padding-bottom">
                             {options &&
