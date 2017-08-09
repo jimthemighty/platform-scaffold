@@ -13,6 +13,7 @@ const AddressBlock = ({
     addressLine2,
     city,
     countryId,
+    country,
     postcode,
     telephone,
     region
@@ -36,8 +37,8 @@ const AddressBlock = ({
         :
             <SkeletonText width="70%" style={{lineHeight: '20px', display: 'block'}} />
         }
-        {countryId ?
-            <p>{countryId}</p>
+        {countryId || country ?
+            <p>{countryId || country}</p>
         :
             <SkeletonText width="40%" style={{lineHeight: '20px', display: 'block'}} />
         }
@@ -53,6 +54,7 @@ AddressBlock.propTypes = {
     addressLine1: PropTypes.string,
     addressLine2: PropTypes.string,
     city: PropTypes.string,
+    country: PropTypes.string,
     countryId: PropTypes.string,
     firstname: PropTypes.string,
     lastname: PropTypes.string,

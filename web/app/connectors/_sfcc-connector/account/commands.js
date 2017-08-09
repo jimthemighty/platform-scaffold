@@ -12,9 +12,9 @@ import {
     receiveWishlistUIData,
     receiveAccountAddressData,
     receiveAccountInfoData,
-    receiveAccountOrderListData,
-    receiveCurrentOrderNumber
+    receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
+import {getCurrentOrderNumber} from '../../../store/user/orders/selectors'
 import {receiveWishlistProductData, receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse, parseOrder} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
@@ -335,19 +335,15 @@ export const initWishlistPage = () => (dispatch) => {
         })
 }
 
-export const initAccountViewOrderPage = () => (dispatch) => {
-    // const idMatch = /orderId=(\d+)\//.exec(url)
-    // const id = idMatch ? idMatch[1] : ''
-    const id = '00004501'
-    // set current order Number
-    dispatch(receiveCurrentOrderNumber(id))
-    return makeApiRequest(`/orders/${id}`, {method: 'GET'})
+export const initAccountViewOrderPage = () => (dispatch, getState) => {
+    const currentOrderNumber = getCurrentOrderNumber(getState())
+    return makeApiRequest(`/orders/${currentOrderNumber}`, {method: 'GET'})
         .then((response) => response.json())
         .then((responseJSON) => {
             const orderData = parseOrder(responseJSON)
-            return dispatch(fetchItemData(orderData[id].items))
+            return dispatch(fetchItemData(orderData[currentOrderNumber].items))
                 .then(({updatedProducts, updatedCartItems}) => {
-                    orderData[id].items = updatedCartItems
+                    orderData[currentOrderNumber].items = updatedCartItems
                     dispatch(receiveProductsData(updatedProducts))
                     dispatch(receiveAccountOrderListData(orderData))
                 })
