@@ -30,6 +30,12 @@ import {
     updateCustomerAddresses
 } from './utils'
 
+import {
+    isFormResponseInvalid,
+    parseWishlistProducts,
+    parseAccountInfo,
+    parseOrderListData
+} from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
@@ -310,10 +316,16 @@ export const initAccountViewOrderPage = (url) => (dispatch) => {
         })
 }
 
+export const initAccountOrderListPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+        .then(([$, $response]) => {
+            return dispatch(receiveAccountOrderListData(parseOrderListData($, $response)))
+        })
+}
+
 export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { // eslint-disable-line
     const formKey = getFormKey(getState())
     const orderId = orderNumber.replace(/^0+/, '')
     return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
         .then(() => '/checkout/cart/')
 }
-

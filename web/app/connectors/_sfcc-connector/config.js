@@ -38,5 +38,6 @@ export const getPaymentURL = () => `${getBaseURL()}COBilling-Start`
 export const getConfirmationURL = () => `${getBaseURL()}COSummary-Submit`
 export const getAccountAddressURL = () => `${getBaseURL()}Address-List`
 export const getAccountInfoURL = () => `${getBaseURL()}Account-EditProfile`
+export const getOrderListURL = () => `${getBaseURL()}Order-History`
 
 export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`

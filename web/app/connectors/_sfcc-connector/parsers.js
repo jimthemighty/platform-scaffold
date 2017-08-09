@@ -306,3 +306,23 @@ export const parseOrder = ({
     }
 }
 /* eslint-enable camelcase */
+export const parseOrdersResponse = ({data}) => {
+    const ordersMap = {}
+    data.forEach(({
+        order_no,
+        confirmation_status,
+        creation_date,
+        billing_address,
+        order_total
+    }) => {
+        ordersMap[order_no] = {
+            orderNumber: order_no,
+            date: creation_date,
+            shipTo: billing_address,
+            total: order_total,
+            status: confirmation_status
+        }
+    })
+
+    return ordersMap
+}

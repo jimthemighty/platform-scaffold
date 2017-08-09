@@ -16,7 +16,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {getCurrentOrderNumber} from '../../../store/user/orders/selectors'
 import {receiveWishlistProductData, receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts, parseAddressResponse, parseOrder} from '../parsers'
+import {parseWishlistProducts, parseAddressResponse, parseOrder, parseOrdersResponse} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
 import {
     initSfccSession,
@@ -32,7 +32,7 @@ import {
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {splitFullName} from '../../../utils/utils'
-import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
+import {getDashboardURL, getCartURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
 
 const initLoginData = () => (dispatch) => {
@@ -348,4 +348,28 @@ export const initAccountViewOrderPage = () => (dispatch, getState) => {
                     dispatch(receiveAccountOrderListData(orderData))
                 })
         })
+}
+export const initAccountOrderListPage = () => (dispatch) => {
+    const {sub} = getAuthTokenPayload()
+    const customerID = JSON.parse(sub).customer_info.customer_id
+
+    return makeApiRequest(`/customers/${customerID}/orders`, {method: 'GET'})
+        .then((res) => res.json())
+        .then((res) => {
+            return dispatch(receiveAccountOrderListData(parseOrdersResponse(res)))
+        })
+}
+
+const addItemsToCart = (items) => (dispatch) => {
+    createBasket()
+        .then(({basket_id}) => {
+            return makeApiJsonRequest(`/baskets/${basket_id}/items`, items, {method: 'POST'}) // eslint-disable-line
+        })
+}
+
+export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
+    return makeApiRequest(`/orders/${orderNumber}`, {method: 'GET'})
+        .then((res) => res.json())
+        .then(({product_items}) => dispatch(addItemsToCart(product_items)))
+        .then(() => getCartURL())
 }

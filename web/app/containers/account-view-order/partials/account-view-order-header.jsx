@@ -6,7 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
-import {getOrderListURL} from '../../app/selectors'
+import {getAccountOrderListURL} from '../../app/selectors'
 import {getCurrentOrderNumber} from '../../../store/user/orders/selectors'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 
@@ -34,7 +34,7 @@ AccountViewOrderHeader.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     orderNumber: getCurrentOrderNumber,
-    ordersURL: getOrderListURL
+    ordersURL: getAccountOrderListURL
 })
 
 export default connect(

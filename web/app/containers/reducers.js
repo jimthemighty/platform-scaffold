@@ -10,6 +10,7 @@ import navigation from '../modals/navigation/reducer' // navigation is a special
 import accountAddress from './account-address/reducer'
 import accountDashboard from './account-dashboard/reducer'
 import accountInfo from './account-info/reducer'
+import accountOrderList from './account-order-list/reducer'
 import app from './app/reducer'
 import cart from './cart/reducer'
 import checkoutConfirmation from './checkout-confirmation/reducer'
@@ -29,6 +30,7 @@ const uiReducer = combineReducers({
     accountAddress,
     accountDashboard,
     accountInfo,
+    accountOrderList,
     app,
     cart,
     checkoutConfirmation,

@@ -55,3 +55,4 @@ export const ProductList = PWALoadable(() => import('./product-list/container' /
 export const AccountAddress = PWALoadable(() => import('./account-address/container' /* webpackChunkName: "account-address" */), 'account-address')
 export const Wishlist = PWALoadable(() => import('./wishlist/container' /* webpackChunkName: "wishlist" */), 'wishlist')
 export const AccountViewOrder = PWALoadable(() => import('./account-view-order/container' /* webpackChunkName: "account-view-order" */), 'account-view-order')
+export const AccountOrderList = PWALoadable(() => import('./account-order-list/container' /* webpackChunkName: "account-order-list" */), 'account-order-list')
