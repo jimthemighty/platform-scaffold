@@ -43,7 +43,7 @@ const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, produ
     <List>
         {products.length ?
             products.map((product) => {
-                const {productId, thumbnail, itemId, title, quantity, price, available, itemID} = product
+                const {productId, thumbnail, itemId, title, quantity, price, available} = product
                 const itemFooter = available ?
                     <AddToCartButton quantity={quantity} productId={productId} addToCartFromWishlist={addToCartFromWishlist} itemId={itemId} />
                     : <OutOfStockMessage />
@@ -71,7 +71,7 @@ const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, produ
                                 className="u-text-size-small u-color-brand u-flex-none u-text-letter-spacing-normal"
                                 innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
                                 data-analytics-name={UI_NAME.editItem}
-                                onClick={() => editWishlistItem(productId, (itemId || itemID))}
+                                onClick={() => editWishlistItem(productId, (itemId))}
                                 >
                                 Edit
                             </Button>

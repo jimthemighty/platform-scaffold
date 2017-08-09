@@ -195,7 +195,7 @@ export const parseWishlistProducts = (wishlistData) => {
             return {
                 productId,
                 quantity: wishlistItem.quantity,
-                itemID: wishlistItem.id
+                itemId: wishlistItem.id
             }
         })
     }

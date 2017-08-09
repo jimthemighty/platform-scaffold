@@ -334,9 +334,9 @@ export const initWishlistPage = () => (dispatch) => {
         })
 }
 
-export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispatch) => {
+export const removeItemFromWishlist = (itemId, wishlistID, productId) => (dispatch) => {
     const customerID = getCustomerID()
-    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemID}`, {method: 'DELETE'})
+    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemId}`, {method: 'DELETE'})
         .then((response) => response.text())
         .then((responseText) => {
             if (!responseText.length) {
@@ -349,10 +349,10 @@ export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispat
         .then(() => dispatch(removeWishlistItem(productId)))
 }
 
-export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemID}) => (dispatch) => {
+export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemId}) => (dispatch) => {
     // add the item to the cart
     return dispatch(addToCart(productId, quantity))
-        .then(() => dispatch(removeItemFromWishlistCommand(itemID, wishlistID, productId, quantity)))
+        .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistID, productId, quantity)))
 }
 
 export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
@@ -363,8 +363,4 @@ export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (
         id: itemId
     }
     return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, requestBody, {method: 'PATCH'})
-        // .then((res) => res.json())
-        .then((res) => {
-            return res
-        })
 }
