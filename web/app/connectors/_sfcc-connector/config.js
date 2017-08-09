@@ -1,6 +1,12 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+import engine from 'store/src/store-engine'
+import sessionStorage from 'store/storages/sessionStorage'
+import cookieStorage from 'store/storages/cookieStorage'
+
+import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+
 import {buildQueryString} from '../../utils/utils'
 
 const API_TYPE = 'shop'
@@ -12,11 +18,14 @@ let config = {}
 
 export const registerConfig = (cfg) => {
     config = cfg
+    if (!config.storageType) {
+        config.storageType = isSessionStorageAvailable() ? sessionStorage : cookieStorage
+    }
+    config.storageInstance = engine.createStore([config.storageType])
 }
 
 export const getSiteID = () => config.siteID
 export const getSiteBaseURL = () => { return config.siteBaseURL ? config.siteBaseURL : '' }
-export const atob = (...args) => { return config.atob ? config.atob(...args) : window.atob(...args) }
 
 export const getApiEndPoint = () => `${getSiteBaseURL()}/s/${getSiteID()}/dw/${API_TYPE}/${API_VERSION}`
 
@@ -43,7 +52,4 @@ export const getAccountInfoURL = () => `${getBaseURL()}Account-EditProfile`
 
 export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`
 
-export const configuredStorageAvailable = () => config.setItemInStorage && config.getItemInStorage && config.removeItemInStorage
-export const setItemInStorage = (key, value) => config.setItemInStorage(key, value)
-export const getItemInStorage = (key) => config.getItemInStorage(key)
-export const removeItemInStorage = (key) => config.removeItemInStorage(key)
+export const getStorage = () => config.storageInstance

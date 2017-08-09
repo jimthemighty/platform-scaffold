@@ -8,7 +8,7 @@ import thunk from 'redux-thunk'
 import {fromJS} from 'immutable'
 import Promise from 'bluebird'
 import _jsdom from 'jsdom'
-import atob from 'atob'
+import memoryStorage from 'store/storages/memoryStorage'
 
 import ampPackageJson from '../../package.json'
 import fs from 'fs'
@@ -40,32 +40,14 @@ const jquery = fs.readFileSync(`${jqueryDir}/jquery.min.js`, 'utf-8')
 
 export const jsdomEnv = () => jsdom.envAsync('', [], {src: jquery})
 
-const storage = {}
-
-const setItemInStorage = (key, value) => {
-    storage[key] = value
-}
-
-const getItemInStorage = (key) => {
-    return storage[key]
-}
-
-const removeItemInStorage = (key) => {
-    delete storage[key]
-}
-
-
 export const initializeStore = (fullUrl, containers) => {
     return jsdomEnv().then((window) => {
         registerConnector(Connector({
             jqueryResponse: jqueryResponse(window),
-            setItemInStorage,
-            getItemInStorage,
-            removeItemInStorage,
+            storageType: memoryStorage,
             siteBaseURL: ampPackageJson.siteUrl,
             siteID: '2017refresh',
-            clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93',
-            atob
+            clientID: '5640cc6b-f5e9-466e-9134-9853e9f9db93'
         }))
 
         const uiReducer = combineReducers({
