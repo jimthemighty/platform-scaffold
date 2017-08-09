@@ -37,3 +37,16 @@ test('renders the contents of the className prop if present', () => {
         expect(wrapper.hasClass(name)).toBe(true)
     })
 })
+
+test('renders header and footer if header and footer props present', () => {
+    const headerText = 'header'
+    const footerText = 'footer'
+    const wrapper = shallow(<Card header={<div>{headerText}</div>} footer={<div>{footerText}</div>} />)
+    const headerTag = wrapper.find('.c-card__header')
+    const footerTag = wrapper.find('.c-card__footer')
+
+    expect(headerTag.length).toBe(1)
+    expect(headerTag.text()).toBe(headerText)
+    expect(footerTag.length()).toBe(1)
+    expect(footerTag.text()).toBe(footerText)
+})
