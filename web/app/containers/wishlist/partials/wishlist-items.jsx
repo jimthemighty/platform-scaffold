@@ -71,14 +71,14 @@ const WishlistItems = ({products, addToCartFromWishlist, editWishlistItem, remov
                                 className="u-text-size-small u-color-brand u-flex-none u-text-letter-spacing-normal"
                                 innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
                                 data-analytics-name={UI_NAME.editItem}
-                                onClick={() => editWishlistItem(productId, (itemId))}
+                                onClick={() => editWishlistItem(productId, itemId)}
                                 >
                                 Edit
                             </Button>
                             <Button
                                 className="u-text-size-small u-color-brand u-text-letter-spacing-normal qa-cart__remove-item"
                                 innerClassName="u-padding-end-0 u-padding-bottom-0 u-padding-start-0"
-                                onClick={() => removeWishlistItem(itemId)}
+                                onClick={() => removeWishlistItem(productId, itemId)}
                                 data-analytics-name={UI_NAME.removeItem}
                                 >
                                 Remove

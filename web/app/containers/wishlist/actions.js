@@ -48,6 +48,7 @@ export const goToCheckout = () => (dispatch) => {
     dispatch(appActions.goToCheckout())
 }
 
-export const removeWishlistItem = (itemId) => (dispatch) => {
-    return
+export const removeWishlistItem = (productId, itemId) => (dispatch, getState) => {
+    const wishlistId = getWishlistID(getState())
+    return dispatch(removeItemFromWishlist(itemId, wishlistId, productId))
 }
