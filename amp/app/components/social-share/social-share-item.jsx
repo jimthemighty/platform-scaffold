@@ -27,13 +27,6 @@ const SocialShareItem = ({
 }) => {
     const classes = classNames('a-social-share__item', socialItemClass)
 
-    // if type is facebook and it requires value for `data-param-app_id` attribute
-    if (type === 'facebook') {
-        if (appId === undefined) {
-            return new Error('Facebook requires `appId` for the Facebook Share dialog.')
-        }
-    }
-
     return (
         <div className={classes}>
             <amp-social-share
@@ -69,6 +62,13 @@ SocialShareItem.defaultProps = {
     height: 44
 }
 
+const appIdPropType = (props) => {
+    if (props.type === 'facebook' && !props.appId) {
+        return new Error('appId is required for facebook')
+    }
+    return null
+}
+
 SocialShareItem.propTypes = {
     /**
      * PropTypes comments are REQUIRED for components to be included
@@ -80,7 +80,7 @@ SocialShareItem.propTypes = {
      * This parameter is the Facebook `app_id` that's required for the Facebook
      * Share dialog.
      */
-    appId: PropTypes.string,
+    appId: appIdPropType,
 
     /**
      * `data-param-body`: optional, defaults to: rel=canonical URL.
@@ -165,4 +165,4 @@ SocialShareItem.propTypes = {
     width: PropTypes.number
 }
 
-export default SocialShareItem
+export {SocialShareItem as default, appIdPropType}

@@ -6,6 +6,7 @@ import {shallowHOC as shallow} from 'mobify-amp-sdk/dist/test-utils' // change t
 import {mount} from 'enzyme'
 /* eslint-env jest */
 import React from 'react'
+import {appIdPropType} from './social-share-item'
 
 // Components
 import SocialShare from './index.js'
@@ -70,4 +71,36 @@ test('check if the options passing to the social share component', () => {
     expect(twitterItem.prop('text')).toBe(twitterText)
 })
 
-// check for errors
+//
+test('only includes isInline class when both isInline and isBlock are present', () => {
+    const wrapper = shallow(<SocialShare isInline isBlock />)
+    expect(wrapper.hasClass('a--inline')).toBe(true)
+    expect(wrapper.hasClass('a--block')).toBe(false)
+})
+
+test('check if socialItemClass is included when passing options', () => {
+    const twitter = 'twitter'
+    const socialItemClass = 'test'
+    const options = [
+        {type: twitter, socialItemClass},
+    ]
+
+    const wrapper = mount(<SocialShare options={options} />)
+    expect(wrapper.find('SocialShareItem').prop('socialItemClass')).toBe('test')
+})
+
+test('check if text class is included when passing option with text', () => {
+    const twitter = 'twitter'
+    const options = [
+        {type: twitter, text: 'testing twitter'},
+    ]
+
+    const wrapper = mount(<SocialShare options={options} />)
+    expect(wrapper.find('.a-social-share__text').length).toBe(1)
+})
+
+test('fails propType validation id appId is not passed for facebook', () => {
+    expect(
+        appIdPropType({type: 'facebook'})
+    ).toEqual(new Error('appId is required for facebook'))
+})

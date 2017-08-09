@@ -21,13 +21,9 @@ const SocialShare = ({
     isInline
 }) => {
     const classes = classNames('a-social-share', {
-        'a--inline': isInline,
-        'a--block': isBlock
+        'a--inline': (isInline && isBlock) || isInline,
+        'a--block': isBlock && !isInline
     }, className)
-
-    if (isInline && isBlock === true) {
-        return new Error('You cannot have both inline and block, please pick one.')
-    }
 
     return (
         <div className={classes}>
