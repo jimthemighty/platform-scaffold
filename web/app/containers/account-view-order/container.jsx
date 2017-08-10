@@ -3,9 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import React from 'react'
-import {connect} from 'react-redux'
 import template from '../../template'
-import {createPropsSelector} from 'reselect-immutable-helpers'
 import AccountViewOrderHeader from './partials/account-view-order-header'
 import OrderTotals from './partials/order-totals'
 import OrderItems from './partials/order-items'

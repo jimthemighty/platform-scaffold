@@ -370,7 +370,7 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
         .then(({product_items}) => dispatch(addItemsToCart(product_items)))
         .then(() => getCartURL())
 }
-    
+
 export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispatch) => {
     const customerID = getCustomerID()
     return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemID}`, {method: 'DELETE'})

@@ -84,7 +84,11 @@ Card.propTypes = {
     /**
      * Classes to add to the header
      */
-    headerClassName: PropTypes.string
+    headerClassName: PropTypes.string,
+    /**
+     * Classes to add to the inner container of the component
+     */
+    innerClassName: PropTypes.string
 }
 
 export default Card
