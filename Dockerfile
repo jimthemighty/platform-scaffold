@@ -1,7 +1,7 @@
 # build process:
 # docker build -t mobify/scaffold-docker .
 # to run:
-# docker run -it -v `pwd`/web:/home/ubuntu/platform-scaffold/web mobify/scaffold-docker bash
+# docker run -it -p 8443:8443 -v `pwd`/web/app:/home/ubuntu/platform-scaffold/web/app mobify/scaffold-docker
 
 FROM mobify/cci-docker-primary:0.0.15
 MAINTAINER Mobify <ops@mobify.com>
