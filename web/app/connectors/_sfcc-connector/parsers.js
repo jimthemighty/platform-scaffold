@@ -285,6 +285,7 @@ export const parseOrder = ({
     return {
         [order_no]: {
             orderNumber: order_no,
+            id: order_no,
             date: new Date(creation_date).toLocaleDateString(),
             status: confirmation_status,
             total: formatPrice(order_total),
