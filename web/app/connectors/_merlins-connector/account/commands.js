@@ -10,7 +10,6 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
-import {parseLocations} from '../checkout/parsers'
 import {getCart} from '../cart/commands'
 import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
@@ -32,7 +31,7 @@ import {
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL, UPDATE_WISHLIST_URL, WISHLIST_URL, getWishlistQuantityUrl} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-import {isFormResponseInvalid, parseAccountInfo} from './parsers'
+import {isFormResponseInvalid, parseAccountInfo, parseAccountLocations} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -61,15 +60,13 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    return makeRequest('https://www.merlinspotions.com/checkout/cart/')
+    return makeRequest('/customer/address/new/')
         .then(jqueryResponse)
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
             // we're going to fetch the cart page so we can re-use the country
             // parsing functionality from initCartPage
-            const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
-            const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
-
-            return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+            const magentoFieldData = extractMagentoJson($response)
+            return dispatch(receiveCheckoutLocations(parseAccountLocations(magentoFieldData, $response)))
         })
         .then(() => dispatch(updateCustomerAddresses()))
 }
