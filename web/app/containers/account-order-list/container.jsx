@@ -107,7 +107,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                         className="u-margin-top-lg"
                         onChange={() => console.log('Changed Page')}
                         currentPage={1}
-                        pageCount={5}
+                        pageCount={1}
                         showCurrentPageMessage={true}
                         showPageButtons={false}
                     />
