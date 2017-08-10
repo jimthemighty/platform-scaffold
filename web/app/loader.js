@@ -54,6 +54,9 @@ const IS_LOADED_LOCALLY = getBuildOrigin().indexOf('cdn.mobify.com') === -1
 //  True if the loader is being loaded in preview mode
 const IS_PREVIEW = isPreview()
 
+//  True if the loader has been loaded via a V8+ tag
+const IS_V8_TAG = isV8Tag()
+
 //  If and only if IS_PREVIEW is true, this defines whether the preview
 //  is for PWA mode (true) or non-PWA mode (false). If IS_PREVIEW is
 //  false, this value has no meaning.
@@ -151,13 +154,14 @@ const isPWARoute = () => {
  * @return {boolean} true if this browser supports PWAs.
  */
 const isSupportedPWABrowser = () => {
-    // If we are in PWA preview mode, return true now, so that
+    // If we are in V8 tag PWA preview mode, return true now, so that
     // we force-load preview, ignoring the UA
-    if (IS_PREVIEW && IS_PREVIEW_PWA_MODE) {
+    if (IS_V8_TAG && IS_PREVIEW && IS_PREVIEW_PWA_MODE) {
         return true
     }
 
-    // By default, the PWA will run on all mobile browsers except Samsung and Firefox.
+    // By default, the PWA will run on all mobile browsers except Samsung
+    // and Firefox.
     const ua = window.navigator.userAgent
     return /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua) &&
             !isSamsungBrowser(ua) &&
@@ -181,9 +185,9 @@ const isSupportedNonPWABrowser = () => {
         return false
     }
 
-    // If we are in non-PWA preview mode, return true now, so that
+    // If we are in V8 tag non-PWA preview mode, return true now, so that
     // we force-load preview, ignoring the UA
-    if (IS_PREVIEW && !IS_PREVIEW_PWA_MODE) {
+    if (IS_V8_TAG && IS_PREVIEW && !IS_PREVIEW_PWA_MODE) {
         return true
     }
 
@@ -415,7 +419,7 @@ const loadPWA = () => {
         // script tags via document.write, so we want to detect for poor connections
         // and load async in those cases. More info can be found here:
         // https://developers.google.com/web/updates/2016/08/removing-document-write
-        window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
+        window.loadScriptsSynchronously = documentWriteSupported() && IS_V8_TAG
     }
 
     const neededPolyfills = getNeededPolyfills()
@@ -587,10 +591,26 @@ if (shouldPreview()) {
     // If preview is being used, load a completely different file from this one and do nothing.
     loadPreview()
 } else {
+    let pwaBrowser = isSupportedPWABrowser()
+    let nonPwaBrowser = isSupportedNonPWABrowser()
+
+    if (!pwaBrowser && !nonPwaBrowser) {
+        // If we're in preview mode using a V8 tag, then we may need to override the
+        // pwaBrowser / nonPwaBrowser flags, to force the loader to run even on
+        // a non-supported browser.
+        if (IS_V8_TAG && IS_PREVIEW) {
+            loaderLog(
+                `Forcing loader to run in ${IS_PREVIEW_PWA_MODE ? 'PWA' : 'non-PWA'} preview mode`
+            )
+            pwaBrowser = IS_PREVIEW_PWA_MODE
+            nonPwaBrowser = !IS_PREVIEW_PWA_MODE
+        }
+    }
+
     // Run the app.
-    if (isSupportedPWABrowser() && isPWARoute()) {
+    if (pwaBrowser && isPWARoute()) {
         loadPWA()
-    } else if (isSupportedNonPWABrowser()) {
+    } else if (nonPwaBrowser) {
         loaderLog('Starting setup for nonPWA mode')
         initCacheManifest(cacheHashManifest)
 
