@@ -1,12 +1,10 @@
-export const getProductHref = (productID) => `/product_id/${productID}`
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-export const getProductIDFromURL = (url) => {
-    if (!url) {
-        return ''
-    }
-    const splitURL = url.split('/')
-    return splitURL[splitURL.length - 1]
-}
+import {PATHS} from '../constants'
+
+export const getProductHref = (productID) => `/${PATHS.PDP}/${productID}`
 
 const getInitialSelectedVariant = (variants = [], initialValues) => {
     return variants.find(({values}) => {

@@ -221,3 +221,11 @@ export const makeUnAuthenticatedApiRequest = (path, options) => {
     }
     return makeRequest(getApiEndPoint() + path, requestOptions)
 }
+
+export const extractLastPartOfURL = (url) => {
+    if (!url) {
+        return ''
+    }
+    const splitURL = url.split('/')
+    return splitURL[splitURL.length - 1]
+}

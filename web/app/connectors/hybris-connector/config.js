@@ -1,6 +1,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+import {PATHS} from './constants'
 
 const API_HOST = 'https://hydemo-electronics.thinkwrap.com'
 const API_TYPE = 'rest'
@@ -21,13 +22,15 @@ export const getCatalogEndPoint = () => `${getApiEndPoint()}/catalogs/${getCatal
 export const getAuthEndPoint = () => `${API_HOST}/authorizationserver/oauth/token`
 
 export const getProductEndPoint = (productId) => `/products/${productId}?fields=FULL`
+export const getCategoryEndPoint = (catId) => `/catalogs/${getCatalogId()}/${getCatalogVersionId()}/categories/${catId}`
+export const getSearchEndPoint = (catId) => `/products/search/?pageSize=5&currentPage=0&fields=FULL&query=:relevance:allCategories:${catId}`
 
 export const getImageType = (type) => config.imagesTypes[type]
 export const getImageSize = (size) => config.imagesSizes[size]
 export const getVariantQualifier = (variantType) => config.qualifiers[getBaseSiteId()][variantType]
 export const getVariantType = (qualifier) => config.variants[getBaseSiteId()][qualifier]
 
-export const getCategoryPath = (id) => `/c/${id}`
+export const getCategoryPath = (id) => `/${PATHS.CATEGORY}/${id}`
 
 export const getCartURL = () => '/checkout/cart/'
 export const getCheckoutShippingURL = () => '/x1'

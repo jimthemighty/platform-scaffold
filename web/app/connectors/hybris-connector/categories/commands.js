@@ -4,60 +4,119 @@
 
 /* eslint-disable no-unused-vars */
 
-import {receiveCategoryContents} from 'progressive-web-sdk/dist/integration-manager/categories/results'
+import {receiveCategoryContents, receiveCategoryInformation, receiveCategorySortOptions} from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
+import {getCategoryEndPoint, getSearchEndPoint} from '../config'
+import {parseProductListData, parseCategoryData} from './parsers'
+import {extractLastPartOfURL, makeApiRequest} from '../utils'
+import {PATHS} from '../constants'
+
+const fetchCategoryInfo = (catId) => {
+    if (catId) {
+        const categoryInfoEndpoint = getCategoryEndPoint(catId)
+        return makeApiRequest(categoryInfoEndpoint, {method: 'GET'})
+            .then((response) => {
+                if (response.status === 400) {
+                    return Promise.reject()
+                } else {
+                    return response.json()
+                }
+            })
+    }
+    return Promise.resolve()
+}
+
+/**
+ * @param {string} path - category path
+ * @example "/cat/clothes/tshirts/270100"
+ *
+ * @param {string} catId - category id
+ * @example "270100"
+ *
+ * @return {string} - path of parent category
+ * @example "/cat/clothes/tshirts"
+ */
+const getParentCategoryPath = (path, catId) => {
+    if (!path || !catId) {
+        return null
+    }
+
+    const index = path.indexOf(`/${catId}`)
+    const catPath = path.slice(0, index)
+
+    if (catPath === `/${PATHS.CATEGORY}`) {
+        return null
+    }
+
+    return catPath
+}
+
+/**
+ * @param {string} path - category path
+ * @example "/cat/clothes"
+ *
+ */
+const getParentCategoryInfo = (catPath) => (dispatch) => {
+    if (!catPath) {
+        return null
+    }
+
+    const catId = extractLastPartOfURL(catPath)
+    const parentCategoryPath = getParentCategoryPath(catPath, catId)
+
+    if (parentCategoryPath) {
+        dispatch(getParentCategoryInfo(parentCategoryPath))
+    }
+
+    return fetchCategoryInfo(catId)
+        .then((response) => response)
+        .then((response) => {
+            const catName = response.name
+            dispatch(receiveCategoryInformation(catPath, {
+                id: catPath,
+                title: catName,
+                href: catPath,
+                parentId: parentCategoryPath
+            }))
+        })
+}
 
 export const initProductListPage = (url, routeName) => (dispatch) => {
-    console.log('[Hybris Connector] Called initProductListPage stub')
+    let categoryName
+    const categoryId = extractLastPartOfURL(url)
+    const searchEndpoint = getSearchEndPoint(categoryId)
 
-    const thumbnail = {
-        src: '//via.placeholder.com/350x350',
-        alt: 'Product Image'
+    if (categoryId) {
+        return fetchCategoryInfo(categoryId)
+            .then((response) => {
+                categoryName = response.name || ''
+                return Promise.resolve()
+            })
+            .then(() => makeApiRequest(searchEndpoint, {method: 'GET'}))
+            .then((response) => {
+                if (response.status === 400) {
+                    return Promise.reject()
+                } else {
+                    return response.json()
+                }
+            })
+            .then((responseJSON) => {
+                const pathKey = urlToPathKey(url)
+                const productListData = parseProductListData(responseJSON)
+                const categoryData = parseCategoryData(responseJSON)
+                const parentCategoryPath = getParentCategoryPath(pathKey, categoryId)
+
+                dispatch(receiveProductListProductData(productListData))
+                dispatch(receiveCategoryContents(pathKey, categoryData))
+                dispatch(receiveCategoryInformation(pathKey, {
+                    id: pathKey,
+                    title: categoryName,
+                    href: pathKey,
+                    parentId: parentCategoryPath
+                }))
+                dispatch(getParentCategoryInfo(parentCategoryPath))
+            })
     }
-
-    const sharedData = {
-        price: '$10.00',
-        available: true,
-        images: [thumbnail],
-        thumbnail
-    }
-
-    const exampleProductData = {
-        '1': { // eslint-disable-line
-            id: '1',
-            title: 'Product 1',
-            href: '/product1.html',
-            ...sharedData
-        },
-        '2': { // eslint-disable-line
-            id: '2',
-            title: 'Product 2',
-            href: '/product2.html',
-            ...sharedData
-        },
-        '3': { // eslint-disable-line
-            id: '3',
-            title: 'Product 3',
-            href: '/product3.html',
-            ...sharedData
-        }
-    }
-
-    const exampleCategoryData = {
-        itemCount: 3,
-        products: [
-            '1',
-            '2',
-            '3'
-        ]
-    }
-
-    const pathKey = urlToPathKey(url)
-
-    // For more information on the shape of the expected data, see ../../products/types
-    dispatch(receiveProductListProductData(exampleProductData))
-    // For more information on the shape of the expected data, see ../../categories/types
-    dispatch(receiveCategoryContents(pathKey, exampleCategoryData))
     return Promise.resolve()
 }

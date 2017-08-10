@@ -21,13 +21,20 @@ export const parseCategories = (categories, root = '') => {
 
 const parseImages = (images = []) => {
     if (images.length) {
-        const galleryImages = images.filter((image) => image.imageType === getImageType('gallery'))
+        let galleryImages = images.filter((image) => image.imageType === getImageType('gallery'))
+
+        // If there are no gallery images we use the primary instead
+        if (!galleryImages.length) {
+            galleryImages = images.filter((image) => image.imageType === getImageType('primary'))
+        }
+
         const productImages = galleryImages.filter((image) => image.format === getImageSize('product'))
         const thumbnailImages = galleryImages.filter((image) => image.format === getImageSize('thumbnail'))
         const zoomImages = galleryImages.filter((image) => image.format === getImageSize('zoom'))
-        return productImages.map(({altText: alt, url: src}, index) => {
-            const {url: thumbnailSrc = ''} = thumbnailImages.find((image) => image.galleryIndex === index)
-            const {url: zoomSrc = ''} = zoomImages.find((image) => image.galleryIndex === index)
+
+        return productImages.map(({altText: alt = '', url: src}, index) => {
+            const {url: thumbnailSrc = ''} = thumbnailImages.find((image) => image.galleryIndex === index) || {}
+            const {url: zoomSrc = ''} = zoomImages.find((image) => image.galleryIndex === index) || {}
             return {
                 alt,
                 src,
@@ -40,10 +47,10 @@ const parseImages = (images = []) => {
     }
 }
 
-const parseThumbnail = (thumbnail) => {
+const parseThumbnail = (thumbnail, productName) => {
     if (thumbnail) {
         return {
-            alt: thumbnail.altText,
+            alt: thumbnail.altText ? thumbnail.altText : productName,
             src: thumbnail.url,
         }
     } else {
@@ -129,25 +136,25 @@ const parseVariants = (baseOptions, variantOptions, variantType) => {
     return variants
 }
 
-export const parseProductDetails = ({baseOptions = [], code, description, images = [], name, price, purchasable, summary, stock, variantOptions = [], variantType}) => {
+export const parseProductDetails = ({baseOptions = [], code, description, images = [], name, price, purchasable, summary, stock, variantOptions = [], variantType}, full = false) => {
     const hasVariations = baseOptions.length || variantOptions.length
     const variationCategories = hasVariations ? parseVariationCategories(baseOptions, variantOptions, variantType) : []
     const variants = hasVariations ? parseVariants(baseOptions, variantOptions, variantType) : []
-    const thumbnail = parseThumbnail(images.find((image) => image.imageType === getImageType('primary') && image.format === getImageSize('thumbnail')))
+    const thumbnail = parseThumbnail(images.find((image) => image.imageType === getImageType('primary') && image.format === getImageSize('thumbnail')), name)
     const parsedImages = parseImages(images)
     return {
+        available: stock ? stock.stockLevelStatus !== STOCK_STATUS.OUT_OF_STOCK && stock.stockLevel > 0 : undefined,
+        description: (summary || description) ? `${summary} ${description}` : undefined,
+        full,
         href: getProductHref(code),
         id: code,
-        title: name,
-        price: price ? price.formattedValue : '',
-        description: `${summary} ${description}`,
-        available: stock ? stock.stockLevelStatus !== STOCK_STATUS.OUT_OF_STOCK && stock.stockLevel > 0 : false,
-        thumbnail,
         images: parsedImages,
         initialValues: variants ? setInitialVariantValues(variants, code, variationCategories) : {},
+        price: price ? price.formattedValue : undefined,
         purchasable,
-        variationCategories,
+        title: name,
+        thumbnail,
         variants,
-        variantType: variantType ? variantType : '',
-    }
+        variantType,
+        variationCategories,    }
 }

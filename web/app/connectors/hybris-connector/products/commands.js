@@ -10,9 +10,9 @@ import {
 import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductEndPoint} from '../config'
-import {makeApiRequest} from '../utils'
+import {extractLastPartOfURL, makeApiRequest} from '../utils'
 import {parseProductDetails} from '../parsers'
-import {getProductHref, getDefaultVariantId, getProductIDFromURL} from './utils'
+import {getProductHref, getDefaultVariantId} from './utils'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
 const loadProduct = (productDetailsData) => (dispatch) => {
@@ -35,15 +35,17 @@ const loadProduct = (productDetailsData) => (dispatch) => {
     dispatch(receiveCurrentProductId(id))
     dispatch(receiveProductDetailsProductData(productDetailsMap))
     dispatch(receiveProductDetailsUIData(UIData))
+    return Promise.resolve()
 }
 
 export const initProductDetailsPage = (url, routeName) => (dispatch, getState) => {
-    const productId = getProductIDFromURL(url)
+    const productId = extractLastPartOfURL(url)
     const productEndpoint = getProductEndPoint(productId)
     const currentState = getState()
     const productState = getProductById(productId)(currentState).toJS()
     const productStateDefaultVariantId = getDefaultVariantId(productState)
-    if (!productState || !productState.id) {
+
+    if ((!productState || !productState.full) && productId) {
         return makeApiRequest(productEndpoint, {method: 'GET'})
             .then((response) => {
                 if (response.status === 400) {
@@ -53,8 +55,8 @@ export const initProductDetailsPage = (url, routeName) => (dispatch, getState) =
                 }
             })
             .then((responseJSON) => {
-                const currentPath = getProductIDFromURL(window.location.pathname)
-                const productDetailsData = {...parseProductDetails(responseJSON)}
+                const currentPath = extractLastPartOfURL(window.location.pathname)
+                const productDetailsData = {...parseProductDetails(responseJSON, true)}
 
                 dispatch(loadProduct(productDetailsData))
 
@@ -81,7 +83,7 @@ export const getProductVariantData = (variationSelections, variants, categoryIds
     if (changedVariantKey) {
         const selectedProductID = variationSelections[changedVariantKey]
         const productState = getProductById(selectedProductID)(currentState).toJS()
-        if (!productState || !productState.id) {
+        if (!productState || !productState.full) {
             const productHref = getProductHref(selectedProductID)
             dispatch(setCurrentURL(productHref))
             dispatch(initProductDetailsPage(productHref))
