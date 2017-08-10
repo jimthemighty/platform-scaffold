@@ -10,7 +10,10 @@ import {
     setCheckoutShippingURL,
     setCartURL,
     setSignInURL,
-    setWishlistURL
+    setWishlistURL,
+    setAccountInfoURL,
+    setAccountAddressURL,
+    setAccountURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {parseCategories, parseSearchSuggestions} from '../parsers'
@@ -21,8 +24,10 @@ import {
     getCheckoutShippingURL,
     getCartURL,
     getWishlistURL,
-    getMyAccountURL,
-    buildSearchURL
+    buildSearchURL,
+    getAccountAddressURL,
+    getAccountInfoURL,
+    getDashboardURL,
 } from '../config'
 import {
     ACCOUNT_NAV_ITEM,
@@ -47,7 +52,7 @@ export const fetchNavigationData = () => (dispatch) => {
                         icon: 'user',
                         className: 'u-margin-top-md u-border-top'
                     },
-                    path: getMyAccountURL()
+                    path: getDashboardURL()
                 },
                 {
                     type: isLoggedIn ? ACCOUNT_NAV_ITEM : SIGNED_OUT_ACCOUNT_NAV_ITEM,
@@ -90,7 +95,7 @@ export const getSearchSuggestions = (query) => (dispatch) => {
 }
 
 export const searchProducts = (query) => (dispatch) => {
-    browserHistory.push({pathname: buildSearchURL(query)})
+    browserHistory.push(buildSearchURL(query))
 }
 
 export const initApp = () => (dispatch) => {
@@ -102,6 +107,9 @@ export const initApp = () => (dispatch) => {
             dispatch(setCartURL(getCartURL()))
             dispatch(setWishlistURL(getWishlistURL()))
             dispatch(setSignInURL(getSignInURL()))
+            dispatch(setAccountAddressURL(getAccountAddressURL()))
+            dispatch(setAccountInfoURL(getAccountInfoURL()))
+            dispatch(setAccountURL(getDashboardURL()))
             if (!customerData.guest) {
                 dispatch(setLoggedIn(true))
                 return utils.makeApiRequest(`/customers/${customerData.customer_id}`, {method: 'GET'})

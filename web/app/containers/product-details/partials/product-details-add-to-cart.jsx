@@ -15,6 +15,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
 const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, error, handleSubmit, addToWishlist}) => {
     const stepperProps = {
@@ -28,7 +29,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form id={ADD_TO_CART_FORM_NAME} data-analytics-name={UI_NAME.addToCart} onSubmit={handleSubmit(onSubmit)}>
             <ProductDetailsVariations error={error} />
 
             <div className="u-margin-top-lg u-padding-start-md u-padding-end-md">
@@ -68,7 +69,7 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
                     iconClassName="u-margin-end"
                     showIconText={true}
                     className="u-color-brand u-text-letter-spacing-normal u-width-full"
-                    onClick={addToWishlist}
+                    onClick={() => addToWishlist(quantity)}
                     data-analytics-name={UI_NAME.wishlist}
                 />
             </div>
@@ -103,7 +104,7 @@ const mapDispatchToProps = {
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({
-    form: 'product-add-to-cart',
+    form: ADD_TO_CART_FORM_NAME,
     enableReinitialize: true
 })(ProductDetailsAddToCart)
 

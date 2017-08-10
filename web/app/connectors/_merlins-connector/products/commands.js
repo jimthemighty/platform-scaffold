@@ -9,6 +9,7 @@ import {
     receiveProductDetailsProductData,
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {productDetailsParser, productDetailsUIParser, pdpAddToCartFormParser} from './parsers'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
@@ -32,6 +33,14 @@ export const initProductDetailsPage = (url) => (dispatch) => {
             dispatch(receiveProductDetailsUIData({[id]: productDetailsUIParser($, $response)}))
             dispatch(receiveProductDetailsProductData({[id]: productDetailsData}))
             dispatch(receiveFormInfo({[id]: pdpAddToCartFormParser($, $response)}))
+
+            if (url.includes('wishlist/index/configure')) {
+                dispatch(addNotification(
+                    'configureProfuct',
+                    'You need to choose options for your item.',
+                    true
+                ))
+            }
         })
         .catch((error) => { console.info(error.message) })
 }

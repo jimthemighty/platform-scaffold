@@ -61,3 +61,18 @@ export const initAccountDashboard = (url) => (dispatch) => {
     console.log('[Stub Connector] Called initAccountDashboard stub with parameters:', url)
     return Promise.resolve()
 }
+
+export const initWishlistPage = (url) => (dispatch) => {
+    console.log('[Stub Connector] Called initWishlistPage stub with parameters:', url)
+    return Promise.resolve()
+}
+
+export const addToCartFromWishlist = (url) => (dispatch) => {
+    console.log('[Stub Connector] Called addToCartFromWishlist stub with parameters:', url)
+    return Promise.resolve()
+}
+
+export const removeItemFromWishlist = (url) => (dispatch) => {
+    console.log('[Stub Connector] Called removeItemFromWishlist stub with parameters:', url)
+    return Promise.resolve()
+}
