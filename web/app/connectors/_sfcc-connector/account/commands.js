@@ -361,10 +361,7 @@ export const updateWishlistItem = (itemId, wishlistId) => (dispatch, getState) =
         .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId)))
 }
 
-export const updateWishlistQuantity = (quantity, itemId, wishlistId) => {
+export const updateWishlistQuantity = (quantity, itemId, wishlistId) => (dispatch) => {
     const customerID = getCustomerID()
-    const requestBody = {
-
-    }
-    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, requestBody, {method: 'DELETE'})
+    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {quantity}, {method: 'PATCH'})
 }
