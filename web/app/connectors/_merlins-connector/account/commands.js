@@ -339,6 +339,8 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
 }
 
-export const updateWishlistQuantity = (quantity, itemId) => {
+export const updateWishlistQuantity = (quantity, itemId) => (dispatch) => {
+    debugger
+    debugger
     return Promise.resolve()
 }
