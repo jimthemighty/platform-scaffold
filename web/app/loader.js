@@ -49,7 +49,7 @@ const timingStart = navigationStart || mobifyStart
 //  a preview environment. `web/service-worker-loader.js` will use this value
 //  to determine whether it should load from a local development server, or
 //  from the CDN.
-const IS_LOADED_FROM_CDN = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+const IS_LOADED_LOCALLY = getBuildOrigin().indexOf('cdn.mobify.com') === -1
 
 //  True if the loader is being loaded in preview mode
 const IS_PREVIEW = isPreview()
@@ -212,7 +212,10 @@ const getServiceWorkerURL = (pwaMode) => {
      */
     // The 'pwa=1' or 'pwa=0' parameter in this URL should not change format - the
     // worker does a regex test to match the exact string.
-    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOADED_FROM_CDN}&b=${cacheHashManifest.buildDate}&pwa=${pwaMode ? 1 : 0}`
+    // The IS_LOADED_LOCALLY flag is used to set the value of the `preview`
+    // query parameter. Technically, this parameter defines whether the main code
+    // of the worker should come from the local development server.
+    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOADED_LOCALLY}&b=${cacheHashManifest.buildDate}&pwa=${pwaMode ? 1 : 0}`
 
     const workerPathElements = [SW_LOADER_PATH]
 
