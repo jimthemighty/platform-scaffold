@@ -4,41 +4,39 @@
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
+import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {getCookieValue, splitFullName} from '../../../utils/utils'
-import {getFormKey} from '../selectors'
+import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
-import {parseLocations} from '../checkout/parsers'
 import {getCart} from '../cart/commands'
 import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveAccountInfoData,
-    receiveWishlistData,
-    receiveWishlistUIData,
     receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 
 import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {
     buildFormData,
     createAddressRequestObject,
+    receiveWishlistResponse,
     updateCustomerAddresses
 } from './utils'
 
 import {
     isFormResponseInvalid,
-    parseWishlistProducts,
     parseAccountInfo,
-    parseOrderListData
+    parseOrderListData,
+    parseAccountLocations
 } from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -67,37 +65,59 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    return makeRequest('https://www.merlinspotions.com/checkout/cart/')
+    return makeRequest('/customer/address/new/')
         .then(jqueryResponse)
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
             // we're going to fetch the cart page so we can re-use the country
             // parsing functionality from initCartPage
-            const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
-            const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
-
-            return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+            const magentoFieldData = extractMagentoJson($response)
+            return dispatch(receiveCheckoutLocations(parseAccountLocations(magentoFieldData, $response)))
         })
         .then(() => dispatch(updateCustomerAddresses()))
 }
 
 export const initWishlistPage = (url) => (dispatch) => {
     return (dispatch(fetchPageData(url)))
-        .then(([$, $response]) => {
-            const {
-                wishlistItems,
-                products
-            } = parseWishlistProducts($, $response)
-            const formURL = $response.find('#wishlist-view-form').attr('action')
-            const wishlistData = {
-                title: $response.find('.page-title').text(),
-                products: wishlistItems,
-                shareURL: formURL ? formURL.replace('update', 'share') : ''
+        .then(([$, $response]) => dispatch(receiveWishlistResponse($, $response)))
+}
+
+export const addToCartFromWishlist = ({itemId, productId, quantity}) => (dispatch, getState) => {
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+    const uenc = getUenc(productId)(currentState)
+    const href = '/wishlist/index/cart/'
+    const requestData = {
+        item: itemId,
+        qty: quantity,
+        uenc,
+        form_key: formKey
+    }
+    return makeFormEncodedRequest(href, requestData, {method: 'POST'})
+        .then((response) => {
+            if (response.url.includes('configure')) {
+                // the response is a redirect to the PDP
+                // The user needs to select their options
+                browserHistory.push({
+                    pathname: extractPathFromURL(response.url)
+                })
+                // Throw an error to prevent showing the item added modal
+                throw new Error('Redirecting to PDP, item not added')
+            } else {
+                return jqueryResponse(response)
+                    .then((res) => {
+                        const [$, $response] = res
+
+                        // Don't return this promise because we don't
+                        // need to wait until this returns to update the wishlist UI
+                        dispatch(getCart())
+
+                        dispatch(receiveWishlistResponse($, $response))
+                    })
             }
-            dispatch(receiveWishlistProductData(products))
-            dispatch(receiveWishlistData(wishlistData))
-            dispatch(receiveWishlistUIData({contentLoaded: true}))
         })
 }
+
+export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()
 
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'

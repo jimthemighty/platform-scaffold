@@ -220,10 +220,11 @@ export const parseSearchSuggestions = ({product_suggestions: {products}}) => {
 export const parseWishlistProducts = (wishlistData) => {
     if (wishlistData.customer_product_list_items) {
         return wishlistData.customer_product_list_items.map((wishlistItem) => {
-            const id = wishlistItem.product_id
+            const productId = wishlistItem.product_id
             return {
-                id,
-                quantity: wishlistItem.quantity
+                productId,
+                quantity: wishlistItem.quantity,
+                itemID: wishlistItem.id
             }
         })
     }

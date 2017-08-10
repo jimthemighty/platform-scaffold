@@ -28,7 +28,7 @@ import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
 import {getCartItemsFull} from 'progressive-web-sdk/dist/store/cart/selectors'
-import {getIsLoggedIn} from '../../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
 import {
     prepareEstimateAddress,

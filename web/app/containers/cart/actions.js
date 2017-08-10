@@ -21,7 +21,7 @@ import {addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/pr
 import {cartExpired, handleCartExpiryError} from '../app/actions'
 import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {getIsLoggedIn} from '../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
 import {getEstimateShippingAddress} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
