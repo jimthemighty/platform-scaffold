@@ -348,8 +348,7 @@ export const initAccountViewOrderPage = () => (dispatch, getState) => {
         })
 }
 export const initAccountOrderListPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerID = JSON.parse(sub).customer_info.customer_id
+    const customerID = getCustomerID()
 
     return makeApiRequest(`/customers/${customerID}/orders`, {method: 'GET'})
         .then((res) => res.json())
