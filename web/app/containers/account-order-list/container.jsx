@@ -17,6 +17,7 @@ import {reorderItems} from './actions'
 import OrderBlock from './partials/account-order-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import Pagination from 'progressive-web-sdk/dist/components/pagination'
+import {getNextOrderPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 
 const NoOrder = ({dashboardURL}) => (
     <div className="t-account-order-list__empty">
@@ -45,7 +46,7 @@ NoOrder.propTypes = {
     dashboardURL: PropTypes.string,
 }
 
-const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
+const AccountOrderList = ({reorderItems, dashboardURL, orders, getNextOrderPage}) => {
     return (
         <div>
             {orders.length ?
@@ -105,9 +106,9 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                     </div>
                     <Pagination
                         className="u-margin-top-lg"
-                        onChange={() => console.log('Changed Page')}
+                        onChange={(pageNumber) => getNextOrderPage(pageNumber)}
                         currentPage={1}
-                        pageCount={1}
+                        pageCount={5}
                         showCurrentPageMessage={true}
                         showPageButtons={false}
                     />
@@ -121,6 +122,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
 
 AccountOrderList.propTypes = {
     dashboardURL: PropTypes.string,
+    getNextOrderPage: PropTypes.func,
     orders: PropTypes.array,
     reorderItems: PropTypes.func
 }
@@ -131,7 +133,8 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    reorderItems
+    reorderItems,
+    getNextOrderPage
 }
 
 export default template(
