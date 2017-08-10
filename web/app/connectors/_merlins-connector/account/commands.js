@@ -16,7 +16,9 @@ import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    receiveAccountInfoData
+    receiveAccountInfoData,
+    receiveWishlistProductData,
+    receiveUpdatedWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 
 import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
@@ -340,11 +342,12 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
 
 export const updateWishlistQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
     const formKey = getFormKey(getState())
-
+    dispatch(receiveUpdatedWishlistItem({itemId, quantity}))
     const requestBody = {
-        form_key: formKey
+        form_key: formKey,
+        do: '',
     }
     requestBody[`qty[${itemId}]`] = quantity
-
+    requestBody[`description[${itemId}]`] = ''
     return makeFormEncodedRequest(getWishlistQuantityUrl(wishlistId), requestBody, {method: 'POST'})
 }
