@@ -149,17 +149,9 @@ const isPWARoute = () => {
 
 /**
  * Determine if the browser is one that supports PWAs.
- * In preview mode, always return true unless we are previewing in nonPWA
- * mode.
  * @return {boolean} true if this browser supports PWAs.
  */
 const isSupportedPWABrowser = () => {
-    // If we are in V8 tag PWA preview mode, return true now, so that
-    // we force-load preview, ignoring the UA
-    if (IS_V8_TAG && IS_PREVIEW && IS_PREVIEW_PWA_MODE) {
-        return true
-    }
-
     // By default, the PWA will run on all mobile browsers except Samsung
     // and Firefox.
     const ua = window.navigator.userAgent
@@ -183,12 +175,6 @@ const isSupportedNonPWABrowser = () => {
     // browser, even in preview mode.
     if (!('serviceWorker' in navigator)) {
         return false
-    }
-
-    // If we are in V8 tag non-PWA preview mode, return true now, so that
-    // we force-load preview, ignoring the UA
-    if (IS_V8_TAG && IS_PREVIEW && !IS_PREVIEW_PWA_MODE) {
-        return true
     }
 
     const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
