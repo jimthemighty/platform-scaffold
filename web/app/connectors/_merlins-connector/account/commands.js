@@ -16,7 +16,6 @@ import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveAccountInfoData,
-    receiveWishlistProductData,
     receiveUpdatedWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 

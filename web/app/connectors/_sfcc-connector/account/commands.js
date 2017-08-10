@@ -13,6 +13,7 @@ import {
     receiveAccountInfoData,
     removeWishlistItem,
     receiveAccountAddressData,
+    receiveUpdatedWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse} from '../parsers'
@@ -363,5 +364,6 @@ export const updateWishlistItem = (itemId, wishlistId) => (dispatch, getState) =
 
 export const updateWishlistQuantity = (quantity, itemId, wishlistId) => (dispatch) => {
     const customerID = getCustomerID()
+    dispatch(receiveUpdatedWishlistItem({itemId, quantity}))
     return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {quantity}, {method: 'PATCH'})
 }
