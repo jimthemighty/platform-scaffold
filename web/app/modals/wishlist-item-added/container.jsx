@@ -5,7 +5,6 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
-import {getWishlistItemQuantity} from '../../containers/wishlist/selectors'
 import {stripEvent} from '../../utils/utils'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getProductThumbnail, getProductTitle, getProductPrice} from 'progressive-web-sdk/dist/store/products/selectors'
@@ -64,7 +63,6 @@ WishlistItemAddedModal.propTypes = {
 const mapStateToProps = createPropsSelector({
     thumbnail: getProductThumbnail,
     open: isModalOpen(WISHLIST_ITEM_ADDED_MODAL),
-    quantity: getWishlistItemQuantity,
     title: getProductTitle,
     price: getProductPrice
 })

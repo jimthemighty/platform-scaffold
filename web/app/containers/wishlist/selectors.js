@@ -12,5 +12,3 @@ export const getWishlist = createSelector(
 )
 
 export const getContentLoaded = createGetSelector(getWishlist, 'contentLoaded', false)
-
-export const getWishlistItemQuantity = createGetSelector(getWishlist, 'itemQuantity')

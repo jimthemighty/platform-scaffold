@@ -338,3 +338,8 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
 export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
 }
+
+export const updateWishlistQuantity = (quantity, itemId) => {
+
+    return
+}
