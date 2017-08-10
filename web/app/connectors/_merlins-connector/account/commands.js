@@ -29,7 +29,7 @@ import {
 } from './utils'
 
 import {jqueryAjaxWrapper} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL, UPDATE_WISHLIST_URL, WISHLIST_URL} from '../config'
+import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL, UPDATE_WISHLIST_URL, WISHLIST_URL, getWishlistQuantityUrl} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {isFormResponseInvalid, parseAccountInfo} from './parsers'
 
@@ -339,8 +339,13 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
 }
 
-export const updateWishlistQuantity = (quantity, itemId) => (dispatch) => {
-    debugger
-    debugger
-    return Promise.resolve()
+export const updateWishlistQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
+    const formKey = getFormKey(getState())
+
+    const requestBody = {
+        form_key: formKey
+    }
+    requestBody[`qty[${itemId}]`] = quantity
+
+    return makeFormEncodedRequest(getWishlistQuantityUrl(wishlistId), requestBody, {method: 'POST'})
 }
