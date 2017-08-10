@@ -27,7 +27,8 @@ const logger = {
     appStarted: (port) => {
         console.log(`Server started ${chalk.green('✓')}`)
 
-        const encodedUrl = encodeURIComponent(url)
+        const pwaEncodedUrl = encodeURIComponent(url)
+        const nonPwaEncodedUrl = encodeURIComponent(`${url}&non-pwa=1`)
         const encodedSiteFolder = encodeURIComponent(siteFolder(port))
 
         console.log(
@@ -39,11 +40,16 @@ const logger = {
         )
 
         console.log(
-            chalk.bold('Preview URL: ') + // eslint-disable-line prefer-template
-            chalk.magenta(`https://preview.mobify.com/?url=${encodedUrl}&site_folder=${encodedSiteFolder}&disabled=0&domain=&scope=0`) + '\n' +
-            divider + '\n' +
+            chalk.bold('PWA Preview URL: ') + // eslint-disable-line prefer-template
+            chalk.magenta(`https://preview.mobify.com/?url=${pwaEncodedUrl}&site_folder=${encodedSiteFolder}&disabled=0&domain=&scope=0`) +
+            chalk.bold('\nNon-PWA Preview URL: ') + // eslint-disable-line prefer-template
+            chalk.magenta(`https://preview.mobify.com/?url=${nonPwaEncodedUrl}&site_folder=${encodedSiteFolder}&disabled=0&domain=&scope=0`) + '\n'        )
+
+        console.log(
+            divider + '\n' + // eslint-disable-line prefer-template
             chalk.blue(`Press ${chalk.italic('CTRL-C')} to stop`) + '\n'
         )
+
     },
 }
 
