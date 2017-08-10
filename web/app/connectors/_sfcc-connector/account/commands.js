@@ -12,7 +12,7 @@ import {
     receiveWishlistUIData,
     receiveAccountInfoData,
     removeWishlistItem,
-    receiveAccountAddressData,
+    receiveSavedAddresses,
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse} from '../parsers'
@@ -180,7 +180,7 @@ export const fetchAddressData = () => (dispatch) => {
             .then((res) => res.json())
             .then(({data}) => {
                 const addresses = data ? data.map((address) => parseAddressResponse(address)) : []
-                return dispatch(receiveAccountAddressData(addresses))
+                return dispatch(receiveSavedAddresses(addresses))
             })
 }
 export const addAddress = (address) => (dispatch) => {

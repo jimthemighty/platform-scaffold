@@ -7,7 +7,7 @@ import {getCookieValue} from '../../../utils/utils'
 import {
     receiveWishlistData,
     receiveWishlistUIData,
-    receiveAccountAddressData
+    receiveSavedAddresses
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from './parsers'
@@ -99,5 +99,5 @@ export const updateCustomerAddresses = () => (dispatch) => {
     return makeRequest(fetchURL, {method: 'GET'})
         .then((response) => response.json())
         .then(({customer: {addresses}}) => addresses.map((address) => parseAddress(address)))
-        .then((addresses) => dispatch(receiveAccountAddressData(addresses)))
+        .then((addresses) => dispatch(receiveSavedAddresses(addresses)))
 }
