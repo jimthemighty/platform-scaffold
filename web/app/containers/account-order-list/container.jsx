@@ -16,6 +16,7 @@ import {getOrderList} from './selectors'
 import {reorderItems} from './actions'
 import OrderBlock from './partials/account-order-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
+import Pagination from 'progressive-web-sdk/dist/components/pagination'
 
 const NoOrder = ({dashboardURL}) => (
     <div className="t-account-order-list__empty">
@@ -102,6 +103,14 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders}) => {
                             />
                         ))}
                     </div>
+                    <Pagination
+                        className="u-margin-top-lg"
+                        onChange={() => console.log('Changed Page')}
+                        currentPage={1}
+                        pageCount={5}
+                        showCurrentPageMessage={true}
+                        showPageButtons={false}
+                    />
                 </div>
             :
                 <NoOrder dashboardURL={dashboardURL} />
