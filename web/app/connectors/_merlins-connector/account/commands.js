@@ -30,7 +30,7 @@ import {
 import {jqueryAjaxWrapper} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo, parseAccountLocations} from './parsers'
+import {isFormResponseInvalid, parseAccountInfo, parseAccountLocations} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
