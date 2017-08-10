@@ -4,7 +4,8 @@
 
 import {createSelector} from 'reselect'
 import {createGetSelector} from 'reselect-immutable-helpers'
-import {getUi, getUser} from '../../store/selectors'
+import {getUi} from '../../store/selectors'
+import {getUser} from 'progressive-web-sdk/dist/store/user/selectors'
 
 export const getAccountOrderList = createSelector(
     getUi,
