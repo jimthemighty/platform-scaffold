@@ -7,7 +7,6 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -17,7 +16,7 @@ import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    receiveAccountInfoData,
+    receiveAccountInfoData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 
 import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
