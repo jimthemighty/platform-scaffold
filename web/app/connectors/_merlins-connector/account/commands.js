@@ -340,6 +340,5 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
 }
 
 export const updateWishlistQuantity = (quantity, itemId) => {
-
-    return
+    return Promise.resolve()
 }

@@ -50,7 +50,6 @@ const WishlistItems = ({
         {products.length ?
             products.map((product) => {
                 const {quantity, productId, thumbnail, itemId, title, price, available} = product
-
                 const itemFooter = available ?
                     <AddToCartButton quantity={quantity} productId={productId} addToCartFromWishlist={addToCartFromWishlist} itemId={itemId} />
                     : <OutOfStockMessage />
@@ -66,7 +65,7 @@ const WishlistItems = ({
                         <FieldRow className="u-align-bottom">
                             <ItemQuantityStepper
                                 cartItemId={productId}
-                                changeQuantity={updateWishlistQuantity}
+                                changeQuantity={(newQuantity) => updateWishlistQuantity(newQuantity, itemId)}
                                 quantity={quantity}
                             />
 

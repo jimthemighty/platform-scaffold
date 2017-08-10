@@ -54,6 +54,7 @@ export const removeWishlistItem = (productId, itemId) => (dispatch, getState) =>
     return dispatch(removeItemFromWishlist(itemId, wishlistId, productId))
 }
 
-export const updateWishlistQuantity = (quantity, itemId) => (dispatch) => {
-    return dispatch(updateWishlistQuantityCommand(quantity, itemId))
+export const updateWishlistQuantity = (quantity, itemId) => (dispatch, getState) => {
+    const wishlistId = getWishlistID(getState())
+    return dispatch(updateWishlistQuantityCommand(quantity, itemId, wishlistId))
 }

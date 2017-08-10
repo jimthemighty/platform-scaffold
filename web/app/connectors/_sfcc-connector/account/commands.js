@@ -360,3 +360,11 @@ export const updateWishlistItem = (itemId, wishlistId) => (dispatch, getState) =
     return dispatch(addItemToWishlist(productId))
         .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId)))
 }
+
+export const updateWishlistQuantity = (quantity, itemId, wishlistId) => {
+    const customerID = getCustomerID()
+    const requestBody = {
+
+    }
+    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, requestBody, {method: 'DELETE'})
+}
