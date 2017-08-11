@@ -19,7 +19,7 @@ export const parseCategories = (categories, root = '') => {
     })
 }
 
-const parseImages = (images = []) => {
+export const parseImages = (images = []) => {
     if (images.length) {
         let galleryImages = images.filter((image) => image.imageType === getImageType('gallery'))
 
@@ -47,7 +47,7 @@ const parseImages = (images = []) => {
     }
 }
 
-const parseThumbnail = (thumbnail, productName) => {
+export const parseThumbnail = (thumbnail, productName) => {
     if (thumbnail) {
         return {
             alt: thumbnail.altText ? thumbnail.altText : productName,

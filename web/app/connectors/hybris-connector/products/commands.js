@@ -49,7 +49,7 @@ export const initProductDetailsPage = (url, routeName) => (dispatch, getState) =
         return makeApiRequest(productEndpoint, {method: 'GET'})
             .then((response) => {
                 if (response.status === 400) {
-                    return Promise.reject()
+                    throw new Error(response.statusText)
                 } else {
                     return response.json()
                 }
@@ -68,6 +68,10 @@ export const initProductDetailsPage = (url, routeName) => (dispatch, getState) =
                 } else if (currentPath !== productId) {
                     dispatch(setCurrentURL(getProductHref(productId)))
                 }
+            })
+            .catch((err) => {
+                console.log('Error retrieving product', err)
+                throw new Error(`Unable to find product with ID ${productId}`)
             })
     } else if (!productState.purchasable && productStateDefaultVariantId) {
         return dispatch(initProductDetailsPage(productStateDefaultVariantId))

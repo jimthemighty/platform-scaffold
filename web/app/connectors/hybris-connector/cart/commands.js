@@ -4,67 +4,78 @@
 
 /* eslint-disable no-unused-vars */
 
-import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
-import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {getCartID, getUserType, makeApiRequest} from '../utils'
+import {getCart as getCartUtility, handleCartData} from './utils'
 
 export const initCartPage = (url, routeName) => (dispatch) => {
     console.log('[Hybris Connector] Called initCartPage stub with arguments:', url, routeName)
     return Promise.resolve()
 }
 
-export const getCart = () => (dispatch) => {
-    console.log('[Hybris Connector] Called getCart stub')
+export const getCart = () => (dispatch) =>
+    getCartUtility().then((cart) => dispatch(handleCartData(cart)))
 
-    const exampleCartData = {
-        items: [{
-            id: '1',
-            productId: '1',
-            href: '/product1.html',
-            quantity: 1,
-            itemPrice: '$10.00',
-            linePrice: '$10.00'
-        }],
-        subtotal: '$10.00',
-        orderTotal: '$10.00'
-    }
-
-    const image = {
-        src: '//via.placeholder.com/350x350',
-        alt: 'Product 1'
-    }
-    const exampleCartProducts = {
-        '1': { // eslint-disable-line
-            price: '$10.00',
-            available: true,
-            href: '/product1.html',
-            thumbnail: image,
-            title: 'Product 1',
-            id: '1',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-        }
-    }
-
-    // For more information on the shape of the expected data, see progressive-web-sdk/integration-manager/cart/types
-    dispatch(receiveCartContents(exampleCartData))
-    dispatch(receiveCartProductData(exampleCartProducts))
-    return Promise.resolve()
+export const addToCart = (code, qty) => (dispatch) => {
+    return getCartUtility()
+        .then((cart) => makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries`, {method: 'POST'}, {code, qty}))
+        .then((response) => {
+            if (response.status !== 200) {
+                throw new Error('Unable to add item to cart')
+            } else {
+                return response.json()
+            }
+        })
+        .then((responseJSON) => {
+            const {quantityAdded, statusCode} = responseJSON
+            if (quantityAdded === 0) {
+                throw new Error(`Unable to add item to cart due to ${statusCode}`)
+            }
+        })
+        .then(() => getCartUtility())
+        .then((cart) => dispatch(handleCartData(cart)))
+        .catch((err) => {
+            console.log('Error adding product to cart', err)
+            throw new Error('Unable to add item to cart')
+        })
 }
 
-export const addToCart = (productId, quantity) => (dispatch) => {
-    console.log('[Hybris Connector] Called addToCart stub with arguments:', productId, quantity)
-    return Promise.resolve()
-}
+export const removeFromCart = (entryNumber) => (dispatch) => (
+    makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries/${entryNumber}`, {method: 'DELETE'})
+        .then((response) => {
+            if (response.status !== 200) {
+                throw new Error('Unable to delete item from cart')
+            }
+        })
+        .then(() => getCartUtility())
+        .then((cart) => dispatch(handleCartData(cart)))
+        .catch((err) => {
+            console.log('Error removing product from cart', err)
+            throw new Error('Unable to delete item from cart')
+        })
+)
 
-export const removeFromCart = (itemID) => (dispatch) => {
-    console.log('[Hybris Connector] Called removeFromCart stub with arguments:', itemID)
-    return Promise.resolve()
-}
-
-export const updateItemQuantity = (itemID, quantity) => (dispatch) => {
-    console.log('[Hybris Connector] Called updateItemQuantity stub with arguments:', itemID, quantity)
-    return Promise.resolve()
-}
-
+export const updateItemQuantity = (entryNumber, qty) => (dispatch) => (
+    makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/entries/${entryNumber}`, {method: 'PUT'}, {qty})
+        .then((response) => {
+            if (response.status !== 200) {
+                throw new Error('Unable to update item quantity')
+            } else {
+                return response.json()
+            }
+        })
+        .then((responseJSON) => {
+            const {quantityAdded, statusCode} = responseJSON
+            if (quantityAdded === 0) {
+                throw new Error(`Unable to update item quantity due to ${statusCode}`)
+            }
+        })
+        .then(() => getCartUtility())
+        .then((cart) => dispatch(handleCartData(cart)))
+        .catch((err) => {
+            console.log('Error updating cart item quantity', err)
+            throw new Error('Unable to update item quantity')
+        })
+)
 
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch) => {
     console.log('[Hybris Connector] Called fetchTaxEstimate stub with arguments:', address, shippingMethod)

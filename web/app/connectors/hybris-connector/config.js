@@ -47,7 +47,7 @@ export const getWishlistURL = () => '/wishlist/'
 
 
 export const getRequestHeaders = () => ({
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
 })
 
 export const getAuthHeaders = () => ({
