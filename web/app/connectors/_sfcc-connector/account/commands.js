@@ -339,21 +339,10 @@ export const initAccountOrderListPage = () => (dispatch) => {
     const {sub} = getAuthTokenPayload()
     const customerID = JSON.parse(sub).customer_info.customer_id
 
-    return makeApiRequest(`/customers/${customerID}/orders?count=1`, {method: 'GET'})
+    return makeApiRequest(`/customers/${customerID}/orders?count=256`, {method: 'GET'})
         .then((res) => res.json())
         .then((res) => {
             dispatch(receiveOrderListPagination(1))
-            return dispatch(receiveAccountOrderListData(parseOrdersResponse(res)))
-        })
-}
-
-export const getNextOrderPage = (pageNumber) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerID = JSON.parse(sub).customer_info.customer_id
-    return makeApiRequest(`/customers/${customerID}/orders?count=${pageNumber}`, {method: 'GET'})
-        .then((res) => res.json())
-        .then((res) => {
-            dispatch(receiveOrderListPagination(pageNumber))
             return dispatch(receiveAccountOrderListData(parseOrdersResponse(res)))
         })
 }

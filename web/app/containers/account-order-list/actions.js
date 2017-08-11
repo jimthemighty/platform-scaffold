@@ -12,3 +12,7 @@ export const reorderItems = (orderId) => (dispatch) => {
     return dispatch(reorderPreviousOrder(orderId))
         .then((pathname) => browserHistory.push({pathname}))
 }
+
+export const getNextPage = (pageNumber) => (dispatch) => {
+    return dispatch()
+}
