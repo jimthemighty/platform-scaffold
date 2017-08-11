@@ -9,7 +9,7 @@ import {receiveProductListProductData} from 'progressive-web-sdk/dist/integratio
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {getCategoryEndPoint, getSearchEndPoint} from '../config'
 import {parseProductListData, parseCategoryData} from './parsers'
-import {extractLastPartOfURL, makeApiRequest} from '../utils'
+import {extractLastPartOfURL, getQueryStringValue, makeApiRequest} from '../utils'
 import {PATHS} from '../constants'
 
 const fetchCategoryInfo = (catId) => {
@@ -85,7 +85,9 @@ const getParentCategoryInfo = (catPath) => (dispatch) => {
 export const initProductListPage = (url, routeName) => (dispatch) => {
     let categoryName
     const categoryId = extractLastPartOfURL(url)
-    const searchEndpoint = getSearchEndPoint(categoryId)
+    const pageInQueryString = getQueryStringValue('p')
+    const page = pageInQueryString ? (pageInQueryString - 1) : 0
+    const searchEndpoint = getSearchEndPoint(categoryId, page)
 
     if (categoryId) {
         return fetchCategoryInfo(categoryId)

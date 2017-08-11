@@ -2,6 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {PATHS} from './constants'
+import {ITEMS_PER_PAGE} from '../../containers/product-list/constants'
 
 const API_HOST = 'https://hydemo-electronics.thinkwrap.com'
 const API_TYPE = 'rest'
@@ -23,7 +24,7 @@ export const getAuthEndPoint = () => `${API_HOST}/authorizationserver/oauth/toke
 
 export const getProductEndPoint = (productId) => `/products/${productId}?fields=FULL`
 export const getCategoryEndPoint = (catId) => `/catalogs/${getCatalogId()}/${getCatalogVersionId()}/categories/${catId}`
-export const getSearchEndPoint = (catId) => `/products/search/?pageSize=5&currentPage=0&fields=FULL&query=:relevance:allCategories:${catId}`
+export const getSearchEndPoint = (catId, page) => `/products/search/?pageSize=${ITEMS_PER_PAGE}&currentPage=${page}&fields=FULL&query=:relevance:allCategories:${catId}`
 
 export const getImageType = (type) => config.imagesTypes[type]
 export const getImageSize = (size) => config.imagesSizes[size]
