@@ -19,7 +19,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {cartExpired, handleCartExpiryError} from '../app/actions'
-import {getDiscountCode, getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
@@ -83,16 +83,12 @@ export const removeItem = (itemID) => (dispatch) => {
         .catch((error) => dispatch(cartUpdateError(error)))
 }
 
-export const saveToWishlist = (productId, itemId, productURL) => (dispatch, getState) => {
+export const saveToWishlist = (productId, itemId, productURL, quantity) => (dispatch, getState) => {
     dispatch(setIsWishlistComplete(false))
     dispatch(openModal(CART_WISHLIST_MODAL, UI_NAME.wishlist))
     if (!getIsLoggedIn(getState())) {
         return Promise.resolve()
     }
-
-    const cartItems = getCartItems(getState())
-    const itemToAdd = cartItems.find((item) => item.get('id') === itemId)
-    const quantity = itemToAdd ? itemToAdd.get('quantity') : 1
 
     return dispatch(addItemToWishlist(productId, productURL, quantity))
         .then(() => {
