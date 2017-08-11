@@ -128,12 +128,12 @@ export const submitRegisterForm = (formValues) => (dispatch) => {
         password
     } = formValues
 
-    // `hybrisRegisterFields` is specific to Hybris Connector
-    // You can delete this if you are not using Hybris Connector
-    const hybrisRegisterFields = {
-        titleCode: 'mr'
-    }
+    const extraFields = {}
 
-    return dispatch(registerUser(firstname, lastname, email, password, hybrisRegisterFields))
+    // `titleCode` is specific to Hybris Connector
+    // You can delete this if you are not using Hybris Connector
+    extraFields.titleCode = 'mr'
+
+    return dispatch(registerUser(firstname, lastname, email, password, extraFields))
         .then(handleLoginSuccess)
 }
