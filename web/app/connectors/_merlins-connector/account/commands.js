@@ -16,7 +16,8 @@ import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveAccountInfoData,
-    receiveUpdatedWishlistItem
+    receiveUpdatedWishlistItem,
+    removeWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 
 import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
@@ -117,8 +118,7 @@ export const removeItemFromWishlist = (itemId) => (dispatch, getState) => {
         form_key: getFormKey(getState())
     }
     return makeFormEncodedRequest('/wishlist/index/remove/', requestBody, {method: 'POST'})
-        .then(() => dispatch(fetchPageData('/wishlist/')))
-        .then(([$, $response]) => dispatch(receiveWishlistResponse($, $response)))
+        .then(() => dispatch(removeWishlistItem(itemId)))
 }
 
 export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
