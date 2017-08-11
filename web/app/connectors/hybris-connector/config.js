@@ -24,7 +24,7 @@ export const getAuthEndPoint = () => `${API_HOST}/authorizationserver/oauth/toke
 
 export const getProductEndPoint = (productId) => `/products/${productId}?fields=FULL`
 export const getCategoryEndPoint = (catId) => `/catalogs/${getCatalogId()}/${getCatalogVersionId()}/categories/${catId}`
-export const getSearchEndPoint = (catId, page) => `/products/search/?pageSize=${ITEMS_PER_PAGE}&currentPage=${page}&fields=FULL&query=:relevance:allCategories:${catId}`
+export const getSearchEndPoint = (catId, page, sort) => `/products/search/?pageSize=${ITEMS_PER_PAGE}&currentPage=${page}&fields=FULL&query=:${sort}:allCategories:${catId}`
 
 export const getImageType = (type) => config.imagesTypes[type]
 export const getImageSize = (size) => config.imagesSizes[size]

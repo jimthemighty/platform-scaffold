@@ -28,3 +28,10 @@ export const parseCategoryData = ({pagination, products = []}) => {
     }
     return categoryData
 }
+
+export const parseSortOptions = ({sorts = []}) => {
+    return sorts.map(({code, name}) => ({
+        id: code,
+        label: name
+    }))
+}

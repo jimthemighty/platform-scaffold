@@ -8,7 +8,7 @@ import {receiveCategoryContents, receiveCategoryInformation, receiveCategorySort
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {getCategoryEndPoint, getSearchEndPoint} from '../config'
-import {parseProductListData, parseCategoryData} from './parsers'
+import {parseProductListData, parseCategoryData, parseSortOptions} from './parsers'
 import {extractLastPartOfURL, getQueryStringValue, makeApiRequest} from '../utils'
 import {PATHS} from '../constants'
 
@@ -87,7 +87,8 @@ export const initProductListPage = (url, routeName) => (dispatch) => {
     const categoryId = extractLastPartOfURL(url)
     const pageInQueryString = getQueryStringValue('p')
     const page = pageInQueryString ? (pageInQueryString - 1) : 0
-    const searchEndpoint = getSearchEndPoint(categoryId, page)
+    const sortOption = getQueryStringValue('sort') || 'relevance'
+    const searchEndpoint = getSearchEndPoint(categoryId, page, sortOption)
 
     if (categoryId) {
         return fetchCategoryInfo(categoryId)
@@ -109,15 +110,24 @@ export const initProductListPage = (url, routeName) => (dispatch) => {
                 const categoryData = parseCategoryData(responseJSON)
                 const parentCategoryPath = getParentCategoryPath(pathKey, categoryId)
 
+                // Receive page contents
                 dispatch(receiveProductListProductData(productListData))
                 dispatch(receiveCategoryContents(pathKey, categoryData))
                 dispatch(receiveCategoryInformation(pathKey, {
                     id: pathKey,
-                    title: categoryName,
                     href: pathKey,
-                    parentId: parentCategoryPath
+                    parentId: parentCategoryPath,
+                    title: categoryName
                 }))
+
+                // Receive category hierarchy
                 dispatch(getParentCategoryInfo(parentCategoryPath))
+
+                // Receive sorting options
+                const sortOptions = parseSortOptions(responseJSON)
+                if (sortOptions.length > 0) {
+                    dispatch(receiveCategorySortOptions(pathKey, sortOptions))
+                }
             })
     }
     return Promise.resolve()
