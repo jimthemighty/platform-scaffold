@@ -46,7 +46,13 @@ export const submitRegisterForm = () => {
             billingAddressData
         } = registrationFormSelector(getState())
 
-        return dispatch(registerUser(firstname, lastname, email, password))
+        // `hybrisRegisterFields` is specific to Hybris Connector
+        // You can delete this if you are not using Hybris Connector
+        const hybrisRegisterFields = {
+            titleCode: 'mr'
+        }
+
+        return dispatch(registerUser(firstname, lastname, email, password, hybrisRegisterFields))
             .then(() => {
                 dispatch(openModal(CHECKOUT_CONFIRMATION_MODAL, UI_NAME.createAccountConfirmation))
                 return dispatch(updateShippingAddress(shippingData))
