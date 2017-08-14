@@ -4,12 +4,13 @@
 
 /* eslint-disable no-unused-vars */
 
-import {receiveCategoryContents, receiveCategoryInformation, receiveCategorySortOptions} from 'progressive-web-sdk/dist/integration-manager/categories/results'
+import {receiveCategoryContents, receiveCategoryFilterOptions, receiveCategoryInformation, receiveCategorySortOptions} from 'progressive-web-sdk/dist/integration-manager/categories/results'
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
+import {urlToPathKey, urlToBasicPathKey} from 'progressive-web-sdk/dist/utils/utils'
+import {changeFilterTo} from '../../../store/categories/actions'
 import {getCategoryEndPoint, getSearchEndPoint} from '../config'
-import {parseProductListData, parseCategoryData} from './parsers'
-import {extractLastPartOfURL, makeApiRequest} from '../utils'
+import {parseCategoryData, parseFacets, parseProductListData, parseSortOptions} from './parsers'
+import {extractLastPartOfURL, getQueryStringValue, makeApiRequest} from '../utils'
 import {PATHS} from '../constants'
 
 const fetchCategoryInfo = (catId) => {
@@ -82,10 +83,14 @@ const getParentCategoryInfo = (catPath) => (dispatch) => {
         })
 }
 
-export const initProductListPage = (url, routeName) => (dispatch) => {
+export const initProductListPage = (url, routeName) => (dispatch, getState) => {
     let categoryName
     const categoryId = extractLastPartOfURL(url)
-    const searchEndpoint = getSearchEndPoint(categoryId)
+    const pageInQueryString = getQueryStringValue('p')
+    const page = pageInQueryString ? (pageInQueryString - 1) : 0
+    const sortOption = getQueryStringValue('sort') || 'relevance'
+    const appliedFilters = getQueryStringValue('filters')
+    const searchEndpoint = getSearchEndPoint(categoryId, page, sortOption, appliedFilters ? `:${appliedFilters}` : '')
 
     if (categoryId) {
         return fetchCategoryInfo(categoryId)
@@ -103,19 +108,44 @@ export const initProductListPage = (url, routeName) => (dispatch) => {
             })
             .then((responseJSON) => {
                 const pathKey = urlToPathKey(url)
+                const pathKeyWithoutQuery = urlToBasicPathKey(pathKey)
                 const productListData = parseProductListData(responseJSON)
                 const categoryData = parseCategoryData(responseJSON)
                 const parentCategoryPath = getParentCategoryPath(pathKey, categoryId)
 
+                // Receive page contents
                 dispatch(receiveProductListProductData(productListData))
                 dispatch(receiveCategoryContents(pathKey, categoryData))
-                dispatch(receiveCategoryInformation(pathKey, {
+                dispatch(receiveCategoryInformation(pathKeyWithoutQuery, {
                     id: pathKey,
-                    title: categoryName,
-                    href: pathKey,
-                    parentId: parentCategoryPath
+                    href: pathKeyWithoutQuery,
+                    parentId: parentCategoryPath,
+                    title: categoryName
                 }))
+
+                // Receive category hierarchy
                 dispatch(getParentCategoryInfo(parentCategoryPath))
+
+                // Receive sorting options
+                const sortOptions = parseSortOptions(responseJSON)
+                if (sortOptions.length > 0) {
+                    dispatch(receiveCategorySortOptions(pathKeyWithoutQuery, sortOptions))
+                }
+
+                // Receive filters
+                const currentState = getState()
+                const stateFilterOptions = currentState.categories.toJS().filterOptions
+                const stateCategoryFilterOptions = stateFilterOptions ? stateFilterOptions[pathKeyWithoutQuery] : null
+
+                if (!stateCategoryFilterOptions) {
+                    const filterOptions = parseFacets(responseJSON, appliedFilters)
+                    if (filterOptions.length > 0) {
+                        dispatch(receiveCategoryFilterOptions(pathKeyWithoutQuery, filterOptions))
+                    }
+                }
+                if (appliedFilters) {
+                    dispatch(changeFilterTo(appliedFilters))
+                }
             })
     }
     return Promise.resolve()

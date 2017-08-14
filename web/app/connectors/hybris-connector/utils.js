@@ -224,6 +224,19 @@ export const extractLastPartOfURL = (url) => {
     if (!url) {
         return ''
     }
+
     const splitURL = url.split('/')
-    return splitURL[splitURL.length - 1]
+    const lastPartUrl = splitURL[splitURL.length - 1]
+    const queryStringIndex = lastPartUrl.indexOf('?')
+
+    // Check if there is a query string in URL
+    if (queryStringIndex === -1) {
+        return lastPartUrl
+    } else {
+        return lastPartUrl.substring(0, queryStringIndex)
+    }
 }
+
+
+export const getQueryStringValue = (key) =>
+    decodeURIComponent(window.location.search.replace(new RegExp('^(?:.*[&\\?]' + encodeURIComponent(key).replace(/[\.\+\*]/g, '\\$&') + '(?:\\=([^&]*))?)?.*$', 'i'), '$1'))
