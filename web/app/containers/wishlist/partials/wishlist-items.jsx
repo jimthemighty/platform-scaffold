@@ -17,6 +17,10 @@ import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {addToCartFromWishlist, removeWishlistItem, editWishlistItem, updateWishlistQuantity} from '../actions'
+import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {
+    ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL
+} from '../../../modals/constants'
 
 const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemId}) => (
     <Button
@@ -42,7 +46,7 @@ const WishlistItems = ({
     products,
     addToCartFromWishlist,
     editWishlistItem,
-    removeWishlistItem,
+    openRemoveItemModal,
     productItemClassNames,
     updateWishlistQuantity
 }) => (
@@ -84,7 +88,10 @@ const WishlistItems = ({
                             <Button
                                 className="u-text-size-small u-color-brand u-text-letter-spacing-normal qa-cart__remove-item"
                                 innerClassName="u-padding-end-0 u-padding-bottom-0 u-padding-start-0"
-                                onClick={() => removeWishlistItem(productId, itemId)}
+                                onClick={() => {
+                                    openRemoveItemModal()
+
+                                }}
                                 data-analytics-name={UI_NAME.removeItem}
                                 >
                                 Remove
@@ -102,13 +109,12 @@ const WishlistItems = ({
 WishlistItems.propTypes = {
     addToCartFromWishlist: PropTypes.func,
     editWishlistItem: PropTypes.func,
+    openRemoveItemModal: PropTypes.func,
     productItemClassNames: PropTypes.string,
     products: PropTypes.array,
     removeWishlistItem: PropTypes.func,
     updateWishlistQuantity: PropTypes.func
 }
-
-
 
 
 const mapStateToProps = createPropsSelector({
@@ -119,7 +125,8 @@ const mapDispatchToProps = {
     addToCartFromWishlist,
     editWishlistItem,
     removeWishlistItem,
-    updateWishlistQuantity
+    updateWishlistQuantity,
+    openRemoveItemModal: () => openModal(ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL, UI_NAME.wishlist),
 }
 
 export default connect(

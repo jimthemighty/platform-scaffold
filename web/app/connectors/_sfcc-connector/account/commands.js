@@ -359,8 +359,8 @@ export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, g
     const productUrl = getProductHref(getState())
     // PATCH is only for updating priority, quantity, public properties of the wishlist item.
     // POST then DELETE is required for replacing products
-    return dispatch(addItemToWishlist(productId, productUrl, quantity))
-        .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId)))
+    return dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId))
+        .then(() => dispatch(addItemToWishlist(productId, productUrl, quantity)))
 }
 
 export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch) => {
