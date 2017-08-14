@@ -8,6 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL} from '../constants'
 import {removeWishlistItem} from '../../containers/wishlist/actions'
+import {getRemoveWishlistItemData} from '../../containers/wishlist/selectors'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 
@@ -16,7 +17,8 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const AccountRemoveWishlistItemModal = ({closeModal, isOpen, removeWishlistItem, productId, itemId, duration}) => {
+const AccountRemoveWishlistItemModal = ({closeModal, isOpen, removeWishlistItem, itemData, duration}) => {
+    const {productId, itemId} = itemData
     return (
         <Sheet
             className="pw--no-shadow m-cart__remove-item-confirmation-modal"
@@ -83,11 +85,7 @@ AccountRemoveWishlistItemModal.propTypes = {
     /**
     * The id of the item being deleted
     */
-    itemId: React.PropTypes.string,
-    /**
-     * The id of the product being deleted
-     */
-    productId: React.PropTypes.string,
+    itemData: React.PropTypes.object,
     /**
     * Removes the wishlist item
     */
@@ -96,8 +94,7 @@ AccountRemoveWishlistItemModal.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     isOpen: isModalOpen(ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL),
-    productId: getWishlistProductId,
-    itemId: getWishlistItemId
+    itemData: getRemoveWishlistItemData
 })
 
 const mapDispatchToProps = {

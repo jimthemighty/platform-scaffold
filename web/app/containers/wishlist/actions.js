@@ -19,6 +19,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 export const receiveWishlistItemQuantity = createAction('Receive Wishlist Item Quantity', ['itemQuantity'])
 export const isConfiguringWishlist = createAction('User is configuring a wishlist item', ['isConfiguringWishlist'])
+export const setRemoveWishlistItemData = createAction('User opened modal to remove wishlist item', ['removeWishlistItemData'])
 
 export const addToCartFromWishlist = (productId, quantity, itemId) => (dispatch, getState) => {
     const wishlistId = getWishlistID(getState())

@@ -16,7 +16,7 @@ import ProductItem from '../../../components/product-item'
 import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {addToCartFromWishlist, removeWishlistItem, editWishlistItem, updateWishlistQuantity} from '../actions'
+import {addToCartFromWishlist, removeWishlistItem, editWishlistItem, updateWishlistQuantity, setRemoveWishlistItemData} from '../actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {
     ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL
@@ -48,6 +48,7 @@ const WishlistItems = ({
     editWishlistItem,
     openRemoveItemModal,
     productItemClassNames,
+    setRemoveWishlistItemData,
     updateWishlistQuantity
 }) => (
     <List>
@@ -90,7 +91,7 @@ const WishlistItems = ({
                                 innerClassName="u-padding-end-0 u-padding-bottom-0 u-padding-start-0"
                                 onClick={() => {
                                     openRemoveItemModal()
-
+                                    setRemoveWishlistItemData({productId, itemId})
                                 }}
                                 data-analytics-name={UI_NAME.removeItem}
                                 >
@@ -113,6 +114,7 @@ WishlistItems.propTypes = {
     productItemClassNames: PropTypes.string,
     products: PropTypes.array,
     removeWishlistItem: PropTypes.func,
+    setRemoveWishlistItemData: PropTypes.func,
     updateWishlistQuantity: PropTypes.func
 }
 
@@ -126,6 +128,7 @@ const mapDispatchToProps = {
     editWishlistItem,
     removeWishlistItem,
     updateWishlistQuantity,
+    setRemoveWishlistItemData,
     openRemoveItemModal: () => openModal(ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL, UI_NAME.wishlist),
 }
 
