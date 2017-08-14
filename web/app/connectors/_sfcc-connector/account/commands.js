@@ -345,7 +345,7 @@ export const removeItemFromWishlist = (itemId, wishlistId, productId) => (dispat
             return JSON.parse(responseText)
         })
         .then(checkForResponseFault)
-        .then(() => dispatch(removeWishlistItem(productId)))
+        .then(() => dispatch(removeWishlistItem(itemId)))
 }
 
 export const addToCartFromWishlist = (productId, {quantity, wishlistId, itemId}) => (dispatch) => {
