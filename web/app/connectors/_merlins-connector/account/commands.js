@@ -327,7 +327,7 @@ export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, g
     const payload = {
         product: productId,
         qty: quantity,
-        id: wishlistId,
+        id: itemId,
         form_key: getFormKey(currentState),
         // This won't always be defined, but add to wishlist will still work
         // if it's missing
@@ -335,6 +335,7 @@ export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, g
     }
 
     return makeFormEncodedRequest(UPDATE_WISHLIST_URL, payload, {method: 'POST'})
+        .then(() => dispatch(receiveUpdatedWishlistItem({itemId, quantity})))
         .then(() => WISHLIST_URL)
 }
 
