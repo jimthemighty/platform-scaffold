@@ -31,7 +31,7 @@ AddToCartButton.propTypes = {
     addToCartFromWishlist: PropTypes.func,
     itemId: PropTypes.string,
     productId: PropTypes.string,
-    quantity: PropTypes.Number
+    quantity: PropTypes.number
 }
 
 const OutOfStockMessage = () => (
