@@ -1,4 +1,4 @@
-/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
+/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, SITE_NAME, MESSAGING_ENABLED, DEBUG */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
@@ -419,6 +419,10 @@ const loadPWA = () => {
         content: 'utf-8'
     })
 
+    loadAsset('meta', {
+        name: 'apple-mobile-web-app-title',
+        content: SITE_NAME
+    })
     loadAsset('link', {
         href: getAssetUrl('main.css'),
         rel: 'stylesheet',
