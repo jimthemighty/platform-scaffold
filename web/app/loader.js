@@ -424,6 +424,11 @@ const loadPWA = () => {
         content: SITE_NAME
     })
 
+    loadAsset('meta', {
+        name: 'apple-mobile-web-app-capable',
+        content: 'yes'
+    })
+
     loadAsset('link', {
         rel: 'apple-touch-icon',
         href: getAssetUrl('static/img/global/apple-touch-icon.png')
