@@ -4,6 +4,7 @@
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
+import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selectors'
 import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
@@ -119,22 +120,6 @@ export const removeItemFromWishlist = (itemId) => (dispatch, getState) => {
     }
     return makeFormEncodedRequest('/wishlist/index/remove/', requestBody, {method: 'POST'})
         .then(() => dispatch(removeWishlistItem(itemId)))
-}
-
-export const updateWishlistItem = (itemId, wishlistId, productId, quantity) => (dispatch, getState) => {
-    const currentState = getState()
-    const payload = {
-        product: productId,
-        qty: quantity,
-        id: wishlistId,
-        form_key: getFormKey(currentState),
-        // This won't always be defined, but add to wishlist will still work
-        // if it's missing
-        uenc: getUenc(productId)(currentState)
-    }
-
-    return makeFormEncodedRequest(UPDATE_WISHLIST_URL, payload, {method: 'POST'})
-        .then(() => WISHLIST_URL)
 }
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
@@ -334,6 +319,23 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
 
 export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
+}
+
+export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {
+    const currentState = getState()
+    const productId = getCurrentProductId(currentState)
+    const payload = {
+        product: productId,
+        qty: quantity,
+        id: wishlistId,
+        form_key: getFormKey(currentState),
+        // This won't always be defined, but add to wishlist will still work
+        // if it's missing
+        uenc: getUenc(productId)(currentState)
+    }
+
+    return makeFormEncodedRequest(UPDATE_WISHLIST_URL, payload, {method: 'POST'})
+        .then(() => WISHLIST_URL)
 }
 
 export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
