@@ -14,10 +14,10 @@ each environment.
 
 Compatibility is communicated through imports, eg:
 
-    ```
-    import Sheet from 'progressive-web-sdk/sheet'   // A PWA-compatible sheet
-    import Sheet from 'mobify-amp-sdk/sheet'   // An AMP-compatible sheet
-    ```
+```JavaScript
+import Sheet from 'progressive-web-sdk/sheet'   // A PWA-compatible sheet
+import Sheet from 'mobify-amp-sdk/sheet'   // An AMP-compatible sheet
+```
 
 ### Do we want PWA/AMP components to have the same structure?
 
@@ -55,6 +55,13 @@ We imagine partners will
 
   4) Integration Manager / Connector code will be usable unmodified.
 
+## Configuring Mobify/Customer GA
+
+If your AMP project has been created with the `platform-generator`, by now you should already have a Mobify GA-ID set up in the project's `package.json` file. If not, you can add a `gaAccount` field to your `./amp/package.json` file to configure your Mobify GA-ID. To further configure customer AMP GA-ID, include another field in your `package.json` file, being `ampgaAccount`, and set it to the customer GA-ID.
+
+To test and ensure that AMP is sending data correctly to Google Analytics for the configured GA-ID's:
+- `npm run dev`, open the chrome debugger, switch to the network tab, and visit `localhost:3000/potions.html`
+- You should see two requests fire to Google Analytics. You can search for your newly set GA-ID's to find the analytics request. If not, you have configured something incorrectly.
 
 ## Custom Domains
 
