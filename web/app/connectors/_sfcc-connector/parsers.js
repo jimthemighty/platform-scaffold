@@ -263,14 +263,14 @@ export const parseOrdersResponse = ({data}) => {
         order_no,
         confirmation_status,
         creation_date,
-        shipping_address,
+        customer_info,
         order_total
     }) => {
         ordersMap[order_no] = {
             orderNumber: order_no,
             date: creation_date,
             shippingAddress: {
-                fullName: `${shipping_address.first_name} ${shipping_address.last_name}`
+                fullName: customer_info.customer_name
             },
             total: order_total,
             status: confirmation_status
