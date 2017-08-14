@@ -336,7 +336,7 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
 }
 
-export const updateWishlistQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
+export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
     const formKey = getFormKey(getState())
     dispatch(receiveUpdatedWishlistItem({itemId, quantity}))
     const requestBody = {

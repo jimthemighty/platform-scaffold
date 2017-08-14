@@ -4,7 +4,7 @@
 
 import {
     addToCartFromWishlist as addToCartFromWishlistCommand,
-    updateWishlistQuantity as updateWishlistQuantityCommand,
+    updateWishlistItemQuantity as updateWishlistQuantityCommand,
     removeItemFromWishlist
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
