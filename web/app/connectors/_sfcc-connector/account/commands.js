@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selectors'
+import {getCurrentProductId, getProductHref} from 'progressive-web-sdk/dist/store/products/selectors'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {
     setSigninLoaded,
@@ -354,11 +354,12 @@ export const addToCartFromWishlist = (productId, {quantity, wishlistId, itemId})
         .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId, quantity)))
 }
 
-export const updateWishlistItem = (itemId, wishlistId) => (dispatch, getState) => {
+export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {
     const productId = getCurrentProductId(getState())
+    const productUrl = getProductHref(getState())
     // PATCH is only for updating priority, quantity, public properties of the wishlist item.
     // POST then DELETE is required for replacing products
-    return dispatch(addItemToWishlist(productId))
+    return dispatch(addItemToWishlist(productId, productUrl, quantity))
         .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId)))
 }
 
