@@ -35,7 +35,7 @@ import {
     parseAccountLocations
 } from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
+import {CART_URL, LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initLoginPage = (url) => (dispatch) => {
@@ -330,5 +330,5 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { /
     const formKey = getFormKey(getState())
     const orderId = orderNumber.replace(/^0+/, '')
     return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
-        .then(() => '/checkout/cart/')
+        .then(() => CART_URL)
 }

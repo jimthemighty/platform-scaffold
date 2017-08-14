@@ -113,13 +113,15 @@ export const parseOrderListData = ($, $response) => {
         .find('#my-orders-table tbody tr')
         .each((_, item) => {
             const $item = $(item)
-            const orderNumber = $item.find('.id').text()
+            const orderNumber = getTextFrom($item, '.id')
             ordersMap[orderNumber] = {
                 orderNumber,
-                date: $item.find('.date').text(),
-                shipTo: $item.find('.shipping').text(),
-                total: $item.find('.total .price').text(),
-                status: $item.find('.status').text(),
+                date: getTextFrom($item, '.date'),
+                shippingAddress: {
+                    fullName: getTextFrom($item, '.shipping')
+                },
+                total: getTextFrom($item, '.total .price'),
+                status: getTextFrom($item, '.status'),
                 id: JSON.parse($item.find('.action.order').attr('data-post')).action.match(/order_id\/(\d+)/)[1]
             }
         })

@@ -29,8 +29,7 @@ import {
     deleteBasketID,
     storeBasketID,
     getCustomerID,
-    fetchItemData,
-    getAuthTokenPayload
+    fetchItemData
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {splitFullName} from '../../../utils/utils'
@@ -336,14 +335,13 @@ export const initWishlistPage = () => (dispatch) => {
 }
 
 export const initAccountOrderListPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerID = JSON.parse(sub).customer_info.customer_id
+    const customerID = getCustomerID()
 
     return makeApiRequest(`/customers/${customerID}/orders?count=256`, {method: 'GET'})
         .then((res) => res.json())
-        .then((res) => {
+        .then((resJSON) => {
             dispatch(receiveOrderListPagination(1))
-            return dispatch(receiveAccountOrderListData(parseOrdersResponse(res)))
+            return dispatch(receiveAccountOrderListData(parseOrdersResponse(resJSON)))
         })
 }
 
