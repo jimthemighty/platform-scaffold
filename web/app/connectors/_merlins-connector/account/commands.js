@@ -338,7 +338,6 @@ export const updateAccountPassword = (formValues) => (dispatch) => {
 
 export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
     const formKey = getFormKey(getState())
-    dispatch(receiveUpdatedWishlistItem({itemId, quantity}))
     const requestBody = {
         form_key: formKey,
         do: '',
@@ -346,4 +345,5 @@ export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dis
     requestBody[`qty[${itemId}]`] = quantity
     requestBody[`description[${itemId}]`] = ''
     return makeFormEncodedRequest(getWishlistQuantityUrl(wishlistId), requestBody, {method: 'POST'})
+        .then(() => dispatch(receiveUpdatedWishlistItem({itemId, quantity})))
 }
