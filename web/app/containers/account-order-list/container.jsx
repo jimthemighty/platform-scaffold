@@ -12,13 +12,11 @@ import Card from '../../components/card'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {getOrderList} from './selectors'
-import {reorderItems} from './actions'
+import {getOrderList, getOrdersPage, getNumOrderPages} from './selectors'
+import {reorderItems, setOrderListPage} from './actions'
 import OrderBlock from './partials/account-order-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import Pagination from 'progressive-web-sdk/dist/components/pagination'
-import {getNextOrderPage} from 'progressive-web-sdk/dist/integration-manager/account/commands'
-import {getOrdersPage} from 'progressive-web-sdk/dist/store/user/selectors'
 
 const NoOrder = ({dashboardURL}) => (
     <div className="t-account-order-list__empty">
@@ -47,7 +45,7 @@ NoOrder.propTypes = {
     dashboardURL: PropTypes.string,
 }
 
-const AccountOrderList = ({reorderItems, dashboardURL, orders, getNextOrderPage, currentPage}) => {
+const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage, currentPage, numOfOrderPages}) => {
     return (
         <div>
             {orders.length ?
@@ -107,9 +105,9 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, getNextOrderPage,
                     </div>
                     <Pagination
                         className="u-margin-top-lg"
-                        onChange={(pageNumber) => getNextOrderPage(pageNumber)}
+                        onChange={(pageNumber) => setOrderListPage(pageNumber)}
                         currentPage={currentPage}
-                        pageCount={5}
+                        pageCount={numOfOrderPages}
                         showCurrentPageMessage={true}
                         showPageButtons={false}
                     />
@@ -124,20 +122,22 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, getNextOrderPage,
 AccountOrderList.propTypes = {
     currentPage: PropTypes.number,
     dashboardURL: PropTypes.string,
-    getNextOrderPage: PropTypes.func,
+    numOfOrderPages: PropTypes.number,
     orders: PropTypes.array,
-    reorderItems: PropTypes.func
+    reorderItems: PropTypes.func,
+    setOrderListPage: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
     currentPage: getOrdersPage,
     dashboardURL: getAccountURL,
-    orders: getOrderList
+    orders: getOrderList,
+    numOfOrderPages: getNumOrderPages
 })
 
 const mapDispatchToProps = {
     reorderItems,
-    getNextOrderPage
+    setOrderListPage
 }
 
 export default template(

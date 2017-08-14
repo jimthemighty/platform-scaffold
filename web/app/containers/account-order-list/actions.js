@@ -7,12 +7,9 @@ import {reorderPreviousOrder} from 'progressive-web-sdk/dist/integration-manager
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 export const receiveData = createAction('Receive AccountOrderList data')
+export const setOrderListPage = createAction('Receive the paginated orderlist page', ['pageNumber'])
 
 export const reorderItems = (orderId) => (dispatch) => {
     return dispatch(reorderPreviousOrder(orderId))
         .then((pathname) => browserHistory.push({pathname}))
-}
-
-export const getNextPage = (pageNumber) => (dispatch) => {
-    return dispatch()
 }

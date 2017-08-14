@@ -13,8 +13,7 @@ import {
     receiveAccountInfoData,
     removeWishlistItem,
     receiveAccountAddressData,
-    receiveAccountOrderListData,
-    receiveOrderListPagination
+    receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse, parseOrdersResponse} from '../parsers'
@@ -337,10 +336,9 @@ export const initWishlistPage = () => (dispatch) => {
 export const initAccountOrderListPage = () => (dispatch) => {
     const customerID = getCustomerID()
 
-    return makeApiRequest(`/customers/${customerID}/orders?count=256`, {method: 'GET'})
+    return makeApiRequest(`/customers/${customerID}/orders`, {method: 'GET'})
         .then((res) => res.json())
         .then((resJSON) => {
-            dispatch(receiveOrderListPagination(1))
             return dispatch(receiveAccountOrderListData(parseOrdersResponse(resJSON)))
         })
 }

@@ -18,10 +18,23 @@ const PLACEHOLDER = {
     text: undefined
 }
 
-export const getOrderList = createSelector(getUser, (user) => {
-    return user.get('orders') ? user
+export const getOrdersPage = createGetSelector(getAccountOrderList, 'pageNumber', 1)
+
+export const getOrderList = createSelector(getUser, getOrdersPage, (user, pageNumber) => {
+
+    const orders = user && user.get('orders') ? user
         .get('orders')
         .toIndexedSeq()
         .toArray()
         .map((order) => order.toJS()) : new Array(3).fill(PLACEHOLDER)
+
+    return orders.slice(pageNumber - 1, pageNumber) // TODO: update to proper pagination instead of 1 order per page (only for testing)
+})
+
+export const getNumOrderPages = createSelector(getUser, (user) => {
+    return user && user.get('orders') ? user
+        .get('orders')
+        .toIndexedSeq()
+        .toArray()
+        .length : 3 // same number of PLACEHOLDERS (new Array(3).fill(PLACEHOLDER))
 })
