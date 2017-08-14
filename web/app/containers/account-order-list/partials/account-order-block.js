@@ -9,7 +9,7 @@ import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 const OrderBlock = ({
     date,
     total,
-    shipTo,
+    shippingAddress,
     status,
 }) => (
     <div className="u-padding-md">
@@ -24,8 +24,8 @@ const OrderBlock = ({
             </div>
             <div className="u-flexbox">
                 <dt className="u-flex u-margin-0 u-text-weight-regular u-color-neutral-50">Ship to</dt>
-                {shipTo ?
-                    <dd className="u-flex">{shipTo}</dd>
+                {shippingAddress ?
+                    <dd className="u-flex">{shippingAddress.fullName}</dd>
                 :
                     <SkeletonText className="u-flex" width="50%" style={{lineHeight: '20px', display: 'block'}} />
                 }
@@ -52,7 +52,7 @@ const OrderBlock = ({
 
 OrderBlock.propTypes = {
     date: PropTypes.string,
-    shipTo: PropTypes.string,
+    shippingAddress: PropTypes.object,
     status: PropTypes.string,
     total: PropTypes.string
 }
