@@ -28,7 +28,7 @@ export const getOrderList = createSelector(getUser, getOrdersPage, (user, pageNu
         .toArray()
         .map((order) => order.toJS()) : new Array(3).fill(PLACEHOLDER)
 
-    return orders.slice((pageNumber - 1) * 5, (pageNumber * 5) - 1)
+    return orders.slice((pageNumber - 1) * 5, pageNumber * 5)
 })
 
 export const getNumOrderPages = createSelector(getUser, (user) => {
