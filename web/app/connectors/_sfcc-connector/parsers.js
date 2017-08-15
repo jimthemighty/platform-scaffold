@@ -272,7 +272,7 @@ export const parseOrdersResponse = ({data}) => {
             shippingAddress: {
                 fullName: customer_info.customer_name
             },
-            total: order_total,
+            total: order_total.toString(),
             status: confirmation_status
         }
     })
