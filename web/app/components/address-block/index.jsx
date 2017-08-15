@@ -20,7 +20,7 @@ const AddressBlock = ({
     region,
     className
 }) => {
-    const classes = classNames('u-padding-md', className)
+    const classes = classNames('u-padding-md c-address-block', className)
     return (
         <div className={classes}>
             {firstname ?
