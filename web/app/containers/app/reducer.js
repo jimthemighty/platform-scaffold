@@ -14,6 +14,7 @@ import {
     setWishlistURL,
     setSignInURL,
     setAccountURL,
+    setA2HSMode,
     setAccountInfoURL,
     setAccountAddressURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
@@ -31,6 +32,7 @@ export default handleActions({
     [setAccountInfoURL]: mergePayload,
     [setAccountAddressURL]: mergePayload,
     [setAccountURL]: mergePayload,
+    [setA2HSMode]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,
     [appActions.toggleHideApp]: mergePayload
 }, initialState)
