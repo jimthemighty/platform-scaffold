@@ -268,7 +268,7 @@ export const parseOrdersResponse = ({data}) => {
     }) => {
         ordersMap[order_no] = {
             orderNumber: order_no,
-            date: creation_date ? creation_date.split('T')[0] : '', // eslint-disable-line
+            date: new Date(creation_date).toLocaleDateString(),
             shippingAddress: {
                 fullName: customer_info.customer_name
             },
