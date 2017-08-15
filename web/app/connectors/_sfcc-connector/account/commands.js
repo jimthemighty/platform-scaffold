@@ -348,6 +348,7 @@ const addItemsToCart = (items) => (dispatch) => {
         .then(({basket_id}) => {
             return makeApiJsonRequest(`/baskets/${basket_id}/items`, items, {method: 'POST'}) // eslint-disable-line
         })
+        .then((basket) => dispatch(handleCartData(basket)))
 }
 
 export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
