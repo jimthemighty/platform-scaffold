@@ -268,11 +268,11 @@ export const parseOrdersResponse = ({data}) => {
     }) => {
         ordersMap[order_no] = {
             orderNumber: order_no,
-            date: creation_date,
+            date: creation_date ? creation_date.split('T')[0] : '', // eslint-disable-line
             shippingAddress: {
                 fullName: customer_info.customer_name
             },
-            total: order_total.toString(),
+            total: formatPrice(order_total),
             status: confirmation_status
         }
     })
