@@ -28,13 +28,13 @@ export const getOrderList = createSelector(getUser, getOrdersPage, (user, pageNu
         .toArray()
         .map((order) => order.toJS()) : new Array(3).fill(PLACEHOLDER)
 
-    return orders.slice(pageNumber - 1, pageNumber) // TODO: update to proper pagination instead of 1 order per page (only for testing)
+    return orders.slice((pageNumber - 1) * 5, (pageNumber * 5) - 1)
 })
 
 export const getNumOrderPages = createSelector(getUser, (user) => {
-    return user && user.get('orders') ? user
+    return user && user.get('orders') ? Math.ceil(user
         .get('orders')
         .toIndexedSeq()
         .toArray()
-        .length : 3 // same number of PLACEHOLDERS (new Array(3).fill(PLACEHOLDER))
+        .length / 5) : 3 // same number of PLACEHOLDERS (new Array(3).fill(PLACEHOLDER))
 })

@@ -336,7 +336,7 @@ export const initWishlistPage = () => (dispatch) => {
 export const initAccountOrderListPage = () => (dispatch) => {
     const customerID = getCustomerID()
 
-    return makeApiRequest(`/customers/${customerID}/orders`, {method: 'GET'})
+    return makeApiRequest(`/customers/${customerID}/orders?count=200`, {method: 'GET'})
         .then((res) => res.json())
         .then((resJSON) => {
             return dispatch(receiveAccountOrderListData(parseOrdersResponse(resJSON)))
