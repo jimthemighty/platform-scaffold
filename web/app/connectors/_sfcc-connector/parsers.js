@@ -314,17 +314,15 @@ export const parseOrdersResponse = ({data}) => {
         order_no,
         confirmation_status,
         creation_date,
-        shipments: [
-            {
-                shipping_address: {full_name}
-            }
-        ],
+        customer_info,
         order_total
     }) => {
         ordersMap[order_no] = {
             orderNumber: order_no,
             date: new Date(creation_date).toLocaleDateString(),
-            shipTo: full_name,
+            shippingAddress: {
+                fullName: customer_info.customer_name
+            },
             total: formatPrice(order_total),
             status: confirmation_status
         }

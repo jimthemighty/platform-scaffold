@@ -18,10 +18,23 @@ const PLACEHOLDER = {
     text: undefined
 }
 
-export const getOrderList = createSelector(getUser, (user) => {
-    return user.get('orders') ? user
+export const getOrdersPage = createGetSelector(getAccountOrderList, 'pageNumber', 1)
+
+export const getOrderList = createSelector(getUser, getOrdersPage, (user, pageNumber) => {
+
+    const orders = user && user.get('orders') ? user
         .get('orders')
         .toIndexedSeq()
         .toArray()
         .map((order) => order.toJS()) : new Array(3).fill(PLACEHOLDER)
+
+    return orders.slice((pageNumber - 1) * 5, pageNumber * 5)
+})
+
+export const getNumOrderPages = createSelector(getUser, (user) => {
+    return user && user.get('orders') ? Math.ceil(user
+        .get('orders')
+        .toIndexedSeq()
+        .toArray()
+        .length / 5) : 3 // same number of PLACEHOLDERS (new Array(3).fill(PLACEHOLDER))
 })

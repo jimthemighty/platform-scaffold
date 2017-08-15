@@ -11,7 +11,6 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
-import {parseLocations} from '../checkout/parsers'
 import {getCart} from '../cart/commands'
 import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
@@ -34,10 +33,11 @@ import {
     isFormResponseInvalid,
     parseAccountInfo,
     parseOrderListData,
-    parseOrder
+    parseOrder,
+    parseAccountLocations
 } from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
+import {CART_URL, LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initLoginPage = (url) => (dispatch) => {
@@ -67,15 +67,13 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    return makeRequest('https://www.merlinspotions.com/checkout/cart/')
+    return makeRequest('/customer/address/new/')
         .then(jqueryResponse)
         .then(([$, $response]) => { // eslint-disable-line no-unused-vars
             // we're going to fetch the cart page so we can re-use the country
             // parsing functionality from initCartPage
-            const ESTIMATE_FIELD_PATH = ['#block-summary', 'Magento_Ui/js/core/app', 'components', 'block-summary', 'children', 'block-shipping', 'children', 'address-fieldsets', 'children']
-            const magentoFieldData = extractMagentoJson($response).getIn(ESTIMATE_FIELD_PATH)
-
-            return dispatch(receiveCheckoutLocations(parseLocations(magentoFieldData)))
+            const magentoFieldData = extractMagentoJson($response)
+            return dispatch(receiveCheckoutLocations(parseAccountLocations(magentoFieldData, $response)))
         })
         .then(() => dispatch(updateCustomerAddresses()))
 }
@@ -350,5 +348,5 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { /
     const formKey = getFormKey(getState())
     const orderId = orderNumber.replace(/^0+/, '')
     return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
-        .then(() => '/checkout/cart/')
+        .then(() => CART_URL)
 }

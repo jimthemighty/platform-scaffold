@@ -12,10 +12,11 @@ import Card from '../../components/card'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {getOrderList} from './selectors'
-import {reorderItems, navigateToOrder} from './actions'
+import {getOrderList, getOrdersPage, getNumOrderPages} from './selectors'
+import {reorderItems, setOrderListPage, navigateToOrder} from './actions'
 import OrderBlock from './partials/account-order-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
+import Pagination from 'progressive-web-sdk/dist/components/pagination'
 
 const NoOrder = ({dashboardURL}) => (
     <div className="t-account-order-list__empty">
@@ -44,7 +45,7 @@ NoOrder.propTypes = {
     dashboardURL: PropTypes.string,
 }
 
-const AccountOrderList = ({reorderItems, dashboardURL, orders, navigateToOrder}) => {
+const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage, navigateToOrder, currentPage, numOfOrderPages}) => {
     return (
         <div>
             {orders.length ?
@@ -103,6 +104,14 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, navigateToOrder})
                             />
                         ))}
                     </div>
+                    <Pagination
+                        className="u-margin-top-lg"
+                        onChange={(pageNumber) => setOrderListPage(pageNumber)}
+                        currentPage={currentPage}
+                        pageCount={numOfOrderPages}
+                        showCurrentPageMessage={true}
+                        showPageButtons={false}
+                    />
                 </div>
             :
                 <NoOrder dashboardURL={dashboardURL} />
@@ -112,20 +121,26 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, navigateToOrder})
 }
 
 AccountOrderList.propTypes = {
+    currentPage: PropTypes.number,
     dashboardURL: PropTypes.string,
     navigateToOrder: PropTypes.func,
+    numOfOrderPages: PropTypes.number,
     orders: PropTypes.array,
-    reorderItems: PropTypes.func
+    reorderItems: PropTypes.func,
+    setOrderListPage: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
+    currentPage: getOrdersPage,
     dashboardURL: getAccountURL,
-    orders: getOrderList
+    orders: getOrderList,
+    numOfOrderPages: getNumOrderPages
 })
 
 const mapDispatchToProps = {
     reorderItems,
-    navigateToOrder
+    navigateToOrder,
+    setOrderListPage
 }
 
 export default template(

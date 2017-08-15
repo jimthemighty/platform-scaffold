@@ -10,6 +10,7 @@ import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {getAccountOrderListURL} from '../app/selectors'
 
 export const receiveData = createAction('Receive AccountOrderList data')
+export const setOrderListPage = createAction('Receive the paginated orderlist page', ['pageNumber'])
 
 export const reorderItems = (orderId) => (dispatch) => {
     return dispatch(reorderPreviousOrder(orderId))

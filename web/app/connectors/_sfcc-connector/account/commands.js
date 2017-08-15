@@ -185,6 +185,7 @@ export const fetchAddressData = () => (dispatch) => {
                 return dispatch(receiveAccountAddressData(addresses))
             })
 }
+
 export const addAddress = (address) => (dispatch) => {
     const addressData = createOrderAddressObject(address)
     const customerId = getCustomerID()
@@ -347,13 +348,14 @@ export const initAccountViewOrderPage = () => (dispatch, getState) => {
                 })
         })
 }
+
 export const initAccountOrderListPage = () => (dispatch) => {
     const customerID = getCustomerID()
 
-    return makeApiRequest(`/customers/${customerID}/orders`, {method: 'GET'})
+    return makeApiRequest(`/customers/${customerID}/orders?count=200`, {method: 'GET'})
         .then((res) => res.json())
-        .then((res) => {
-            return dispatch(receiveAccountOrderListData(parseOrdersResponse(res)))
+        .then((resJSON) => {
+            return dispatch(receiveAccountOrderListData(parseOrdersResponse(resJSON)))
         })
 }
 
@@ -362,6 +364,7 @@ const addItemsToCart = (items) => (dispatch) => {
         .then(({basket_id}) => {
             return makeApiJsonRequest(`/baskets/${basket_id}/items`, items, {method: 'POST'}) // eslint-disable-line
         })
+        .then((basket) => dispatch(handleCartData(basket)))
 }
 
 export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
