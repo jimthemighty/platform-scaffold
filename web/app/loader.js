@@ -51,8 +51,9 @@ const timingStart = navigationStart || mobifyStart
 //  from the CDN.
 const IS_LOADED_LOCALLY = getBuildOrigin().indexOf('cdn.mobify.com') === -1
 
-//  True if the loader is being loaded in preview mode
-const IS_PREVIEW = isPreview()
+//  True if the loader is being loaded in preview mode (either as detected
+//  by the SDK, or if the V8.1 tag set the flag.
+const IS_PREVIEW = isPreview() || window.Mobify.isPreview
 
 //  True if the loader has been loaded via a V8+ tag
 const IS_V8_TAG = isV8Tag()
@@ -60,7 +61,12 @@ const IS_V8_TAG = isV8Tag()
 //  If and only if IS_PREVIEW is true, this defines whether the preview
 //  is for PWA mode (true) or non-PWA mode (false). If IS_PREVIEW is
 //  false, this value has no meaning.
-const IS_PREVIEW_PWA_MODE = !(/non-pwa=1/.test(window.location.hash))
+const IS_PREVIEW_PWA_MODE = !(
+    // This flag is set by the V8.1 tag
+    window.Mobify.nonPWAMode ||
+    // Test the hash directly to support earlier tags
+    /non-pwa=1/.test(window.location.hash)
+)
 
 setLoaderDebug(DEBUG || IS_PREVIEW)
 
@@ -149,25 +155,38 @@ const isPWARoute = () => {
 
 /**
  * Determine if the browser is one that supports PWAs.
+ *
+ * If loaded by a V8+ tag, the decision is based on the shouldLoadPWA
+ * flag set by the tag. For a non V8 tag, we check the UA directly.
+ *
  * @return {boolean} true if this browser supports PWAs.
  */
 const isSupportedPWABrowser = () => {
     // By default, the PWA will run on all mobile browsers except Samsung
-    // and Firefox.
+    // and Firefox. The tag contains a browser test that sets the
+    // window.Mobify.shouldLoadPWA flag for a set of browsers, but this
+    // function may also apply stricter checks.
     const ua = window.navigator.userAgent
-    return /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua) &&
-            !isSamsungBrowser(ua) &&
-            !isFirefoxBrowser(ua)
+    return (
+        // For a V8 tag, use the flag set by the tag
+        (IS_V8_TAG && window.Mobify.shouldLoadPWA) ||
+        // For a non-V8 tag check the UA directly
+        /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua)
+    ) &&
+    // Always return false if this is Firefox or a Samsung browser
+    !isSamsungBrowser(ua) &&
+    !isFirefoxBrowser(ua)
 }
 
-const MINIMUM_NON_PWA_CHROME = 59   // todo!
+const MINIMUM_NON_PWA_CHROME = 49
+const MINIMUM_NON_PWA_FIREFOX = 49
+
 /**
  * Returns true if the browser supports the nonPWA client. Note that
  * isSupportedPWABrowser and isSupportedNonPWABrowser *might* both
  * return true for a given browser; support is not mutually exclusive.
  * By default, non-PWA mode will run on Chrome (above
- * minimum version numbers).
- * todo - firefox?
+ * a minimum version) and Firefox.
  * @returns {boolean}
  */
 const isSupportedNonPWABrowser = () => {
@@ -177,8 +196,17 @@ const isSupportedNonPWABrowser = () => {
         return false
     }
 
-    const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
-    return raw ? (parseInt(raw[2], 10) >= MINIMUM_NON_PWA_CHROME) : false
+    let match = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
+    if (match && parseInt(match[2], 10) >= MINIMUM_NON_PWA_CHROME) {
+        return true
+    }
+
+    match = navigator.userAgent.match(/Firefox\/([0-9]+)\./)
+    if (match && parseInt(match[1], 10) >= MINIMUM_NON_PWA_FIREFOX) {
+        return true
+    }
+
+    return false
 }
 
 /**
@@ -577,27 +605,20 @@ if (shouldPreview()) {
     // If preview is being used, load a completely different file from this one and do nothing.
     loadPreview()
 } else {
-    let pwaBrowser = isSupportedPWABrowser()
-    let nonPwaBrowser = isSupportedNonPWABrowser()
-
-    if (!pwaBrowser && !nonPwaBrowser) {
-        // If we're in preview mode using a V8 tag, then we may need to override the
-        // pwaBrowser / nonPwaBrowser flags, to force the loader to run even on
-        // a non-supported browser.
-        if (IS_V8_TAG && IS_PREVIEW) {
-            loaderLog(
-                `Forcing loader to run in ${IS_PREVIEW_PWA_MODE ? 'PWA' : 'non-PWA'} preview mode`
-            )
-            pwaBrowser = IS_PREVIEW_PWA_MODE
-            nonPwaBrowser = !IS_PREVIEW_PWA_MODE
-        }
-    }
-
     // Run the app.
-    if (pwaBrowser && isPWARoute()) {
+    if (
+        // Load the PWA if the browser supports it and the route matches...
+        (isSupportedPWABrowser() && isPWARoute()) ||
+        // ...or if we are in PWA preview mode (force-load the PWA)
+        (IS_PREVIEW && IS_PREVIEW_PWA_MODE)
+    ) {
+        loaderLog('Starting in PWA mode')
         loadPWA()
-    } else if (nonPwaBrowser) {
-        loaderLog('Starting setup for nonPWA mode')
+    } else if (isSupportedNonPWABrowser()) {
+        // In preview mode, we arrive here when IS_PREVIEW_PWA_MODE is
+        // false - the default for preview is to load the PWA, not non-PWA
+        // mode.
+        loaderLog('Starting in nonPWA mode')
         initCacheManifest(cacheHashManifest)
 
         // This a browser that supports our non-PWA mode, so we can assume that
