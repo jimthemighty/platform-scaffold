@@ -62,11 +62,10 @@ export const fetchPageData = (url) => (dispatch) => {
         .then(jqueryResponse)
         .then((res) => {
             const [$, $response] = res
-            // const isLoggedIn = parseLoginStatus($response)
+
             const {customer} = JSON.parse(localStorage.getItem('mage-cache-storage'))
             const isLoggedIn = !!customer.fullname
-            debugger
-            debugger
+
             dispatch(setLoggedIn(isLoggedIn))
             dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
             return res

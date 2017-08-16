@@ -130,6 +130,13 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
+            // todo set localStorage full name from jquery response
+            const magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+            const information = $response.find('.box-information .box-content br')[1].parentNode.childNodes
+            magentoCacheStorage.customer.fullname = information[0].textContent
+            magentoCacheStorage.customer.email = information[2].textContent
+            localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
+
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
 
@@ -207,7 +214,10 @@ export const logout = () => (dispatch) => (
         // Don't wait for the cart to do everything else
         .then(() => {
             dispatch(getCart())
-            dispatch(setLoggedIn(false))
+            const magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+            magentoCacheStorage.customer.fullname = ''
+            magentoCacheStorage.customer.email = ''
+            localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
         })
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active
