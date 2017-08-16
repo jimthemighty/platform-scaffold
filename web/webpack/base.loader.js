@@ -67,7 +67,8 @@ module.exports = {
             MESSAGING_SITE_ID: `'${webPackageJson.messagingSiteId}'`,
             NATIVE_WEBPACK_ASTRO_VERSION: readNativeAstroVersion(),
             PROJECT_SLUG: `'${webPackageJson.projectSlug}'`,
-            AJS_SLUG: `'${webPackageJson.aJSSlug}'`
+            AJS_SLUG: `'${webPackageJson.aJSSlug}'`,
+            SITE_NAME: `"${webPackageJson.siteName}"`
         })
     ]
 }
