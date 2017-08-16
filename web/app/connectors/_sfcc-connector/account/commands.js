@@ -83,6 +83,8 @@ export const login = (username, password) => (dispatch) => {
             customerID = responseJSON.customer_id
             storeAuthToken(authorization)
             dispatch(setLoggedIn(true))
+            debugger
+            debugger
             dispatch(fetchNavigationData())
             deleteBasketID()
             return initSfccSession(authorization)
