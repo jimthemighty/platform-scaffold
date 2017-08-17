@@ -20,6 +20,7 @@ import AccountRemoveAddressModal from './account-remove-address/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
+import AccountRemoveWishlistItemModal from './account-remove-wishlist-item/container'
 
 const modals = {
     // You can set transition duration for individual modal:
@@ -36,6 +37,7 @@ const modals = {
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
     [MODAL.ACCOUNT_ADDRESS_MODAL]: {content: <AccountAddressModal />},
     [MODAL.ACCOUNT_REMOVE_ADDRESS_MODAL]: {content: <AccountRemoveAddressModal />},
+    [MODAL.ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL]: {content: <AccountRemoveWishlistItemModal />},
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }
 

@@ -77,11 +77,15 @@ export const receiveWishlistResponse = ($, $response) => (dispatch) => {
         productsFormInfo
     } = parseWishlistProducts($, $response)
     const formURL = $response.find('#wishlist-view-form').attr('action')
+    const wishlistIdMatch = formURL.match(/wishlist_id\/(\d+)/)
+
     const wishlistData = {
         title: $response.find('.page-title').text(),
         products: wishlistItems,
-        shareURL: formURL ? formURL.replace('update', 'share') : ''
+        shareURL: formURL ? formURL.replace('update', 'share') : '',
+        id: wishlistIdMatch ? wishlistIdMatch[1] : ''
     }
+
     dispatch(receiveWishlistProductData(products))
     dispatch(receiveWishlistData(wishlistData))
     dispatch(receiveWishlistUIData({contentLoaded: true}))
