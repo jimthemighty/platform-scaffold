@@ -182,3 +182,7 @@ export const validateCCNumber = (ccNumber) => {
 
     return checkSum !== 0 && (checkSum % 10) === 0
 }
+
+export const isStandalone = () => {
+    return /homescreen=1/.test(window.location.href) || window.matchMedia('(display-mode: standalone)').matches
+}
