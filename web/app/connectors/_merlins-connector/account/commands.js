@@ -18,6 +18,7 @@ import {
     setRegisterLoaded,
     receiveAccountInfoData,
     receiveAccountOrderListData,
+    receiveCurrentOrderNumber,
     receiveUpdatedWishlistItem,
     removeWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
@@ -34,6 +35,7 @@ import {
     isFormResponseInvalid,
     parseAccountInfo,
     parseOrderListData,
+    parseOrder,
     parseAccountLocations
 } from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
@@ -334,6 +336,22 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
 
 export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
+}
+
+
+export const initAccountViewOrderPage = (url) => (dispatch) => {
+    const idMatch = /order_id\/(\d+)\//.exec(url)
+    const id = idMatch ? idMatch[1] : ''
+    return (dispatch(fetchPageData(url)))
+        .then(([$, $response]) => {
+            const orderData = {
+                ...parseOrder($, $response),
+                id
+            }
+            // set current order Number
+            dispatch(receiveCurrentOrderNumber(orderData.orderNumber))
+            dispatch(receiveAccountOrderListData({[orderData.orderNumber]: orderData}))
+        })
 }
 
 export const initAccountOrderListPage = (url) => (dispatch) => {

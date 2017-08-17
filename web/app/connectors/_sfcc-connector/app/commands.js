@@ -29,7 +29,7 @@ import {
     getAccountAddressURL,
     getAccountInfoURL,
     getDashboardURL,
-    getOrderListURL
+    getAccountOrderListURL
 } from '../config'
 import {
     ACCOUNT_NAV_ITEM,
@@ -109,7 +109,7 @@ export const initApp = () => (dispatch) => {
             dispatch(setCartURL(getCartURL()))
             dispatch(setWishlistURL(getWishlistURL()))
             dispatch(setSignInURL(getSignInURL()))
-            dispatch(setAccountOrderListURL(getOrderListURL()))
+            dispatch(setAccountOrderListURL(getAccountOrderListURL()))
             dispatch(setAccountAddressURL(getAccountAddressURL()))
             dispatch(setAccountInfoURL(getAccountInfoURL()))
             dispatch(setAccountURL(getDashboardURL()))

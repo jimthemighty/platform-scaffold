@@ -42,7 +42,6 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
     return defaultVariant
 }
 
-
 export const getProductHref = (productID) => `/s/${getSiteID()}/${productID}.html`
 
 export const parseProductDetails = ({id, name, price, inventory, long_description, image_groups, variants, variation_attributes}) => {
@@ -257,6 +256,58 @@ export const parseFilterOptions = (refinements) => {
     }, [])
 }
 
+/* eslint-disable camelcase */
+const getPaymentMethod = (paymentInstruments) => (
+    paymentInstruments.map(({payment_card: {card_type, masked_number}}) => {
+        return `${card_type} ${masked_number}`
+    })
+)
+
+export const parseOrder = ({
+    order_no,
+    creation_date,
+    confirmation_status,
+    order_total,
+    tax_total,
+    shipping_total,
+    shipping_total_tax,
+    product_sub_total,
+    billing_address,
+    product_items,
+    shipments: [
+        {
+            shipping_method,
+            shipping_address
+        }
+    ],
+    payment_instruments
+}) => {
+    return {
+        [order_no]: {
+            orderNumber: order_no,
+            id: order_no,
+            date: new Date(creation_date).toLocaleDateString(),
+            status: confirmation_status,
+            total: formatPrice(order_total),
+            tax: formatPrice(tax_total),
+            shippingTotal: formatPrice(shipping_total + shipping_total_tax),
+            subtotal: formatPrice(product_sub_total),
+            paymentMethods: getPaymentMethod(payment_instruments),
+            shippingMethod: `${shipping_method.name}: ${shipping_method.description}`,
+            shippingAddress: parseAddressResponse(shipping_address),
+            billingAddress: parseAddressResponse(billing_address),
+            items: product_items.map(({item_text, product_id, quantity, price}) => {
+                return {
+                    itemName: item_text,
+                    price: formatPrice(price),
+                    quantity: `${quantity}`,
+                    productId: product_id
+                }
+            })
+        }
+    }
+}
+/* eslint-enable camelcase */
 export const parseOrdersResponse = ({data}) => {
     const ordersMap = {}
     data.forEach(({

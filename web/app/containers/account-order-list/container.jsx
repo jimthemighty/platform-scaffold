@@ -13,7 +13,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getOrderList, getOrdersPage, getNumOrderPages} from './selectors'
-import {reorderItems, setOrderListPage} from './actions'
+import {reorderItems, setOrderListPage, navigateToOrder} from './actions'
 import OrderBlock from './partials/account-order-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import Pagination from 'progressive-web-sdk/dist/components/pagination'
@@ -45,7 +45,7 @@ NoOrder.propTypes = {
     dashboardURL: PropTypes.string,
 }
 
-const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage, currentPage, numOfOrderPages}) => {
+const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage, navigateToOrder, currentPage, numOfOrderPages}) => {
     return (
         <div>
             {orders.length ?
@@ -77,6 +77,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage,
                                     <div className="u-flexbox">
                                         <div className="u-flex u-border-end">
                                             <Button
+                                                onClick={() => navigateToOrder(order.orderNumber, order.viewHref)}
                                                 type="button"
                                                 title="View"
                                                 className="u-width-full u-color-brand u-border-top"
@@ -122,6 +123,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage,
 AccountOrderList.propTypes = {
     currentPage: PropTypes.number,
     dashboardURL: PropTypes.string,
+    navigateToOrder: PropTypes.func,
     numOfOrderPages: PropTypes.number,
     orders: PropTypes.array,
     reorderItems: PropTypes.func,
@@ -137,6 +139,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     reorderItems,
+    navigateToOrder,
     setOrderListPage
 }
 

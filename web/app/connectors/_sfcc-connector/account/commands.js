@@ -16,8 +16,9 @@ import {
     receiveAccountOrderListData,
     receiveUpdatedWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts, parseAddressResponse, parseOrdersResponse} from '../parsers'
+import {getCurrentOrderNumber} from 'progressive-web-sdk/dist/store/user/orders/selectors'
+import {receiveWishlistProductData, receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {parseWishlistProducts, parseAddressResponse, parseOrder, parseOrdersResponse} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
 import {addItemToWishlist} from '../products/commands'
 import {
@@ -335,6 +336,20 @@ export const initWishlistPage = () => (dispatch) => {
         })
 }
 
+export const initAccountViewOrderPage = () => (dispatch, getState) => {
+    const currentOrderNumber = getCurrentOrderNumber(getState())
+    return makeApiRequest(`/orders/${currentOrderNumber}`, {method: 'GET'})
+        .then((response) => response.json())
+        .then((responseJSON) => {
+            const orderData = parseOrder(responseJSON)
+            return dispatch(fetchItemData(orderData[currentOrderNumber].items))
+                .then(({updatedProducts, updatedCartItems}) => {
+                    orderData[currentOrderNumber].items = updatedCartItems
+                    dispatch(receiveProductsData(updatedProducts))
+                    dispatch(receiveAccountOrderListData(orderData))
+                })
+        })
+}
 
 export const initAccountOrderListPage = () => (dispatch) => {
     const customerID = getCustomerID()
@@ -360,7 +375,6 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
         .then(({product_items}) => dispatch(addItemsToCart(product_items)))
         .then(() => getCartURL())
 }
-
 
 export const removeItemFromWishlist = (itemId, wishlistId) => (dispatch) => {
     const customerID = getCustomerID()
