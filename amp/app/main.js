@@ -13,7 +13,7 @@ import ReactDOMServer from 'react-dom/server'
 import {Provider} from 'react-redux'
 import * as awsServerlessExpress from 'aws-serverless-express'
 import ampPackageJson from '../package.json'
-import {staticURL} from './utils'
+import {staticURL, canonicalURL} from './utils'
 
 import Analytics from 'mobify-amp-sdk/dist/components/analytics'
 import ProductDetails from './containers/product-details/container'
@@ -33,10 +33,6 @@ import styles from './styles'
 const fonts = [
     '<link href="https://fonts.googleapis.com/css?family=Oswald:200,400" rel="stylesheet">'
 ]
-
-const getFullUrl = (req) => {
-    return `${ampPackageJson.siteUrl}${req.url}`
-}
 
 const render = (req, res, store, component) => {
     const components = new Set()
@@ -65,7 +61,7 @@ const render = (req, res, store, component) => {
     const state = store.getState()
     const rendered = ampPage({
         title: state.app.get(PAGE_TITLE),
-        canonicalURL: getFullUrl(req),
+        canonicalURL: canonicalURL(req),
         body,
         css: styleIncludes.map((x) => x.toString()
                                        .trim()
@@ -78,7 +74,7 @@ const render = (req, res, store, component) => {
 }
 
 const handlePage = (page) => (req, res, next) => {
-    initializeStore(getFullUrl(req), page)
+    initializeStore(canonicalURL(req), page)
         .then((store) => render(req, res, store, page))
         .catch(next)
 }

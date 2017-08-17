@@ -36,7 +36,7 @@ const getEnvironmentBaseURL = () => {
     if (env === 'dev') {
         return LIVE_BASE_URLS.dev
     }
-    return env.toLowerCase() === 'staging' ? LIVE_BASE_URLS.staging : LIVE_BASE_URLS.prod
+    return env === 'staging' ? LIVE_BASE_URLS.staging : LIVE_BASE_URLS.prod
 }
 
 
