@@ -47,10 +47,11 @@ export const initProductDetailsPage = (url) => (dispatch) => {
 
 export const getProductVariantData = () => (dispatch) => Promise.resolve()
 
-export const addItemToWishlist = (productId) => (dispatch, getState) => {
+export const addItemToWishlist = (productId, productUrl, quantity) => (dispatch, getState) => {
     const currentState = getState()
     const payload = {
         product: productId,
+        qty: quantity,
         // This won't always be defined, but add to wishlist will still work
         // if it's missing
         uenc: getUenc(productId)(currentState)

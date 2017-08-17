@@ -16,8 +16,11 @@ import ProductItem from '../../../components/product-item'
 import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-
-import {addToCartFromWishlist} from '../actions'
+import {addToCartFromWishlist, removeWishlistItem, editWishlistItem, updateWishlistQuantity, setRemoveWishlistItemData} from '../actions'
+import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {
+    ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL
+} from '../../../modals/constants'
 
 const AddToCartButton = ({addToCartFromWishlist, productId, quantity, itemId}) => (
     <Button
@@ -32,18 +35,26 @@ AddToCartButton.propTypes = {
     addToCartFromWishlist: PropTypes.func,
     itemId: PropTypes.string,
     productId: PropTypes.string,
-    quantity: PropTypes.Number
+    quantity: PropTypes.number
 }
 
 const OutOfStockMessage = () => (
     <Feedback isError icon="caution" isBlock title="out-of-stock" text="This item is out of stock." />
 )
 
-const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames}) => (
+const WishlistItems = ({
+    products,
+    addToCartFromWishlist,
+    editWishlistItem,
+    openRemoveItemModal,
+    productItemClassNames,
+    setRemoveWishlistItemData,
+    updateWishlistQuantity
+}) => (
     <List>
         {products.length ?
             products.map((product) => {
-                const {productId, thumbnail, itemId, title, quantity, price, available} = product
+                const {quantity, productId, thumbnail, itemId, title, price, available} = product
                 const itemFooter = available ?
                     <AddToCartButton quantity={quantity} productId={productId} addToCartFromWishlist={addToCartFromWishlist} itemId={itemId} />
                     : <OutOfStockMessage />
@@ -59,7 +70,7 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
                         <FieldRow className="u-align-bottom">
                             <ItemQuantityStepper
                                 cartItemId={productId}
-                                changeQuantity={this.changeQuantity}
+                                changeQuantity={(newQuantity) => updateWishlistQuantity(newQuantity, itemId)}
                                 quantity={quantity}
                             />
 
@@ -70,16 +81,18 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
                             <Button
                                 className="u-text-size-small u-color-brand u-flex-none u-text-letter-spacing-normal"
                                 innerClassName="pw--no-min-width u-padding-start-0 u-padding-bottom-0"
-                                href={'test/url'}
                                 data-analytics-name={UI_NAME.editItem}
-                                onClick={() => console.log('test edit button')}
+                                onClick={() => editWishlistItem(productId, itemId)}
                                 >
                                 Edit
                             </Button>
                             <Button
                                 className="u-text-size-small u-color-brand u-text-letter-spacing-normal qa-cart__remove-item"
                                 innerClassName="u-padding-end-0 u-padding-bottom-0 u-padding-start-0"
-                                onClick={() => console.log('test remove button')}
+                                onClick={() => {
+                                    openRemoveItemModal()
+                                    setRemoveWishlistItemData({productId, itemId})
+                                }}
                                 data-analytics-name={UI_NAME.removeItem}
                                 >
                                 Remove
@@ -96,11 +109,14 @@ const WishlistItems = ({products, addToCartFromWishlist, productItemClassNames})
 
 WishlistItems.propTypes = {
     addToCartFromWishlist: PropTypes.func,
+    editWishlistItem: PropTypes.func,
+    openRemoveItemModal: PropTypes.func,
     productItemClassNames: PropTypes.string,
-    products: PropTypes.array
+    products: PropTypes.array,
+    removeWishlistItem: PropTypes.func,
+    setRemoveWishlistItemData: PropTypes.func,
+    updateWishlistQuantity: PropTypes.func
 }
-
-
 
 
 const mapStateToProps = createPropsSelector({
@@ -108,7 +124,12 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    addToCartFromWishlist
+    addToCartFromWishlist,
+    editWishlistItem,
+    removeWishlistItem,
+    updateWishlistQuantity,
+    setRemoveWishlistItemData,
+    openRemoveItemModal: () => openModal(ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL, UI_NAME.wishlist),
 }
 
 export default connect(
