@@ -1,6 +1,7 @@
 ## To be released
+- Add "View Orders" list to My Account [#912](https://github.com/mobify/platform-scaffold/pull/912)
 - Add Edit, Delete, and Add to account addresses [#892](https://github.com/mobify/platform-scaffold/pull/892)
-- Add view wishlist page to app 
+- Add view wishlist page to app
     - Add initWishlist page commands to SFCC, merlins and stub connectors [#891](https://github.com/mobify/platform-scaffold/pull/891)
     - Add addToCartFromWishlist commands to SFCC, Merlins and stub connectors [#908](https://github.com/mobify/platform-scaffold/pull/908)
 - Bump Lighthouse to version 2.2.1 [889](https://github.com/mobify/platform-scaffold/pull/889)
