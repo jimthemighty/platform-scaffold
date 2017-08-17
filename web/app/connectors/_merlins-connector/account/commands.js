@@ -132,9 +132,14 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             // todo set localStorage full name from jquery response
             const magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-            const information = $response.find('.box-information .box-content br')[1].parentNode.childNodes
-            magentoCacheStorage.customer.fullname = information[0].textContent
-            magentoCacheStorage.customer.email = information[2].textContent
+            const textNodes = $response
+                .find('.box-information .box-content p')
+                .contents()
+                .filter((_, item) => item.nodeType === Node.TEXT_NODE)
+                .map((_, item) => item.textContent.trim())
+
+            magentoCacheStorage.customer.fullname = textNodes[0]
+            magentoCacheStorage.customer.email = textNodes[1]
             localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
 
             if (isFormResponseInvalid($response, formSelector)) {
