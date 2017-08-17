@@ -347,7 +347,7 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { /
     const formKey = getFormKey(getState())
     const orderId = orderNumber.replace(/^0+/, '')
     return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
-        .then(() => CART_URL) 
+        .then(() => CART_URL)
 }
 
 export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {
