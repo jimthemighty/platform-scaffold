@@ -51,7 +51,9 @@ class App extends React.Component {
         this.hidePreloaderWhenCSSIsLoaded()
         this.props.fetchSvgSprite()
         this.props.initApp()
-        this.props.setStandAloneAppFlag(isStandalone())
+        const standalone = isStandalone()
+        console.log('****** Standalone flag set to:', standalone)
+        this.props.setStandAloneAppFlag(standalone)
         WebFont.load({
             google: {
                 families: ['Oswald:200,400']
