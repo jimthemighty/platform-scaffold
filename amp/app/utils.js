@@ -27,7 +27,6 @@ export const pathFromURL = (url) => {
     return url.startsWith(packagejson.siteUrl) ? url.substring(packagejson.siteUrl.length) : url
 }
 
-
 /**
  * Return base URL of the current amp bundle environment
  */
@@ -38,7 +37,6 @@ const getEnvironmentBaseURL = () => {
     }
     return env === 'staging' ? LIVE_BASE_URLS.staging : LIVE_BASE_URLS.prod
 }
-
 
 /**
  * Return the canonical equivalent URL for a local, AMP URL.
