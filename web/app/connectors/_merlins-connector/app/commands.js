@@ -9,7 +9,7 @@ import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {parseLoginStatus, parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {
     CHECKOUT_SHIPPING_URL,
     WISHLIST_URL,
@@ -63,9 +63,8 @@ export const fetchPageData = (url) => (dispatch) => {
         .then((res) => {
             const [$, $response] = res
 
-            const {customer} = JSON.parse(localStorage.getItem('mage-cache-storage'))
+            const {customer} = isLocalStorageAvailable() ? JSON.parse(localStorage.getItem('mage-cache-storage')) : {customer: {}}
             const isLoggedIn = !!customer.fullname
-
             dispatch(setLoggedIn(isLoggedIn))
             dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
             return res

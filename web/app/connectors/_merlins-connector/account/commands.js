@@ -4,10 +4,9 @@
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
-import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
+import {extractPathFromURL, isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -131,13 +130,16 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             // todo set localStorage full name from jquery response
-            const magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+            const magentoCacheStorage = isLocalStorageAvailable ? JSON.parse(localStorage.getItem('mage-cache-storage')) : getCookieValue('ls-mage-cache-storage')
+            document.cookie = 'name: mage-cache-storage \ '
             const textNodes = $response
                 .find('.box-information .box-content p')
                 .contents()
                 .filter((_, item) => item.nodeType === Node.TEXT_NODE)
                 .map((_, item) => item.textContent.trim())
 
+            // if there is no local storage support it falls back to the following cookie:
+            // ls_mage-cache-storage	%7B%22customer%22%3A%7B%22fullname%22%3A%22Mobify%20Mobify%22%2C%22firstname%22%3A%22Mobify%22%2C%22data_id%22%3A1502998993%7D%2C%22compare-products%22%3A%7B%22count%22%3A0%2C%22countCaption%22%3A%220%20items%22%2C%22listUrl%22%3A%22https%3A%2F%2Fwww.merlinspotions.com%2Fcatalog%2Fproduct_compare%2Findex%2Fuenc%2FaHR0cHM6Ly93d3cubWVybGluc3BvdGlvbnMuY29tL2N1c3RvbWVyL3NlY3Rpb24vbG9hZC8_c2VjdGlvbnM9JnVwZGF0ZV9zZWN0aW9uX2lkPWZhbHNlJl89MTUwMjk5ODk5MTIwMg%2C%2C%2F%22%2C%22items%22%3A%5B%5D%2C%22data_id%22%3A1502998993%7D%2C%22last-ordered-items%22%3A%7B%22items%22%3A%5B%5D%2C%22data_id%22%3A1502998993%7D%2C%22review%22%3A%7B%22nickname%22%3A%22%22%2C%22title%22%3A%22%22%2C%22detail%22%3A%22%22%2C%22data_id%22%3A1502998993%7D%2C%22wishlist%22%3A%7B%22counter%22%3A%222%20items%22%2C%22items%22%3A%5B%7B%22image%22%3A%7B%22template%22%3A%22Magento_Catalog%2Fproduct%2Fimage_with_borders%22%2C%22src%22%3A%22https%3A%2F%2Fwww.merlinspotions.com%2Fmedia%2Fcatalog%2Fproduct%2Fcache%2F1%2Fthumbnail%2F75x90%2Fbeff4985b56e3afdbeabfc89641a4582%2Fa%2Fg%2Faging-potion-1.jpg%22%2C%22width%22%3A%2275%22%2C%22height%22%3A%2290%22%2C%22alt%22%3A%22Aging%20Potion%22%7D%2C%22product_url%22%3A%22https%3A%2F%2Fwww.merlinspotions.com%2Faging-potion.html%22%2C%22product_name%22%3A%22Aging%20Potion%22%2C%22product_price%22%3A%22%22%2C%22product_is_saleable_and_visible%22%3Atrue%2C%22product_has_required_options%22%3Afalse%2C%22add_to_cart_params%22%3A%22%7B%5C%22action%5C%22%3A%5C%22https%3A%5C%5C%2F%5C%5C%2Fwww.merlinspotions.com%5C%5C%2Fwishlist%5C%5C%2Findex%5C%5C%2Fcart%5C%5C%2F%5C%22%2C%5C%22data%5C%22%3A%7B%5C%22item%5C%22%3A%5C%22114%5C%22%2C%5C%22qty%5C%22%3A%5C%2215.0000%5C%22%2C%5C%22uenc%5C%22%3A%5C%22aHR0cHM6Ly93d3cubWVybGluc3BvdGlvbnMuY29tL2N1c3RvbWVyL2FjY291bnQv%5C%22%7D%7D%22%2C%22delete_item_params%22%3A%22%7B%5C%22action%5C%22%3A%5C%22https%3A%5C%5C%2F%5C%5C%2Fwww.merlinspotions.com%5C%5C%2Fwishlist%5C%5C%2Findex%5C%5C%2Fremove%5C%5C%2F%5C%22%2C%5C%22data%5C%22%3A%7B%5C%22item%5C%22%3A%5C%22114%5C%22%2C%5C%22uenc%5C%22%3A%5C%22aHR0cHM6Ly93d3cubWVybGluc3BvdGlvbnMuY29tL2N1c3RvbWVyL2FjY291bnQv%5C%22%7D%7D%22%7D%2C%7B%22image%22%3A%7B%22template%22%3A%22Magento_Catalog%2Fproduct%2Fimage_with_borders%22%2C%22src%22%3A%22https%3A%2F%2Fwww.merlinspotions.com%2Fmedia%2Fcatalog%2Fproduct%2Fcache%2F1%2Fthumbnail%2F75x90%2Fbeff4985b56e3afdbeabfc89641a4582%2Fu%2Fn%2Funicorn-blood-1.jpg%22%2C%22width%22%3A%2275%22%2C%22height%22%3A%2290%22%2C%22alt%22%3A%22Unicorn%20Blood%22%7D%2C%22product_url%22%3A%22https%3A%2F%2Fwww.merlinspotions.com%2Funicorn-blood.html%22%2C%22product_name%22%3A%22Unicorn%20Blood%22%2C%22product_price%22%3A%22%22%2C%22product_is_saleable_and_visible%22%3Afalse%2C%22product_has_required_options%22%3Afalse%2C%22add_to_cart_params%22%3A%22%7B%5C%22action%5C%22%3A%5C%22https%3A%5C%5C%2F%5C%5C%2Fwww.merlinspotions.com%5C%5C%2Fwishlist%5C%5C%2Findex%5C%5C%2Fcart%5C%5C%2F%5C%22%2C%5C%22data%5C%22%3A%7B%5C%22item%5C%22%3A%5C%22100%5C%22%2C%5C%22qty%5C%22%3A%5C%224.0000%5C%22%2C%5C%22uenc%5C%22%3A%5C%22aHR0cHM6Ly93d3cubWVybGluc3BvdGlvbnMuY29tL2N1c3RvbWVyL2FjY291bnQv%5C%22%7D%7D%22%2C%22delete_item_params%22%3A%22%7B%5C%22action%5C%22%3A%5C%22https%3A%5C%5C%2F%5C%5C%2Fwww.merlinspotions.com%5C%5C%2Fwishlist%5C%5C%2Findex%5C%5C%2Fremove%5C%5C%2F%5C%22%2C%5C%22data%5C%22%3A%7B%5C%22item%5C%22%3A%5C%22100%5C%22%2C%5C%22uenc%5C%22%3A%5C%22aHR0cHM6Ly93d3cubWVybGluc3BvdGlvbnMuY29tL2N1c3RvbWVyL2FjY291bnQv%5C%22%7D%7D%22%7D%5D%2C%22data_id%22%3A1502998993%7D%7D	www.merlinspotions.com	/customer/account	8/15/2027, 12:43:17 PM	3.44 KB
             magentoCacheStorage.customer.fullname = textNodes[0]
             magentoCacheStorage.customer.email = textNodes[1]
             localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
