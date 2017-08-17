@@ -1,6 +1,8 @@
 import process from 'process'
 import packagejson from '../package.json'
 import URL from 'url'
+import {getEnvironment} from 'mobify-amp-sdk/dist/amp-sdk'
+import {LIVE_BASE_URLS} from './constants'
 
 /**
  * Prepend the static URL to a static asset path. The path must be relative to
@@ -27,10 +29,22 @@ export const pathFromURL = (url) => {
 
 
 /**
+ * Return base URL of the current amp bundle environment
+ */
+const getEnvironmentBaseURL = () => {
+    const env = getEnvironment()
+    if (env === 'dev') {
+        return LIVE_BASE_URLS.dev
+    }
+    return env.toLowerCase() === 'staging' ? LIVE_BASE_URLS.staging : LIVE_BASE_URLS.prod
+}
+
+
+/**
  * Return the canonical equivalent URL for a local, AMP URL.
  */
 export const canonicalURL = (localURL) => {
-    const canonical = URL.parse(packagejson.siteUrl)
+    const canonical = URL.parse(getEnvironmentBaseURL())
     const local = URL.parse(localURL)
     local.protocol = canonical.protocol
     local.hostname = canonical.hostname
