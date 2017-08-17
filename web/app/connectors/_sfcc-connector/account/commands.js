@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-
+import {getCurrentProductId, getProductHref} from 'progressive-web-sdk/dist/store/products/selectors'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {
     setSigninLoaded,
@@ -13,12 +13,14 @@ import {
     receiveAccountInfoData,
     removeWishlistItem,
     receiveAccountAddressData,
+    receiveUpdatedWishlistItem,
     receiveAccountOrderListData
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {getCurrentOrderNumber} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 import {receiveWishlistProductData, receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts, parseAddressResponse, parseOrder, parseOrdersResponse} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
+import {addItemToWishlist} from '../products/commands'
 import {
     initSfccSession,
     deleteAuthToken,
@@ -374,9 +376,9 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
         .then(() => getCartURL())
 }
 
-export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispatch) => {
+export const removeItemFromWishlist = (itemId, wishlistId) => (dispatch) => {
     const customerID = getCustomerID()
-    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistID}/items/${itemID}`, {method: 'DELETE'})
+    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {method: 'DELETE'})
         .then((response) => response.text())
         .then((responseText) => {
             if (!responseText.length) {
@@ -386,11 +388,26 @@ export const removeItemFromWishlist = (itemID, wishlistID, productId) => (dispat
             return JSON.parse(responseText)
         })
         .then(checkForResponseFault)
-        .then(() => dispatch(removeWishlistItem(productId)))
+        .then(() => dispatch(removeWishlistItem(itemId)))
 }
 
-export const addToCartFromWishlist = ({productId, quantity, wishlistID, itemID}) => (dispatch) => {
+export const addToCartFromWishlist = (productId, {quantity, wishlistId, itemId}) => (dispatch) => {
     // add the item to the cart
     return dispatch(addToCart(productId, quantity))
-        .then(() => dispatch(removeItemFromWishlistCommand(itemID, wishlistID, productId, quantity)))
+        .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId, quantity)))
+}
+
+export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {
+    const productId = getCurrentProductId(getState())
+    const productUrl = getProductHref(getState())
+    // PATCH is only for updating priority, quantity, public properties of the wishlist item.
+    // POST then DELETE is required for replacing products
+    return dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId))
+        .then(() => dispatch(addItemToWishlist(productId, productUrl, quantity)))
+}
+
+export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch) => {
+    const customerID = getCustomerID()
+    dispatch(receiveUpdatedWishlistItem({itemId, quantity}))
+    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {quantity}, {method: 'PATCH'})
 }

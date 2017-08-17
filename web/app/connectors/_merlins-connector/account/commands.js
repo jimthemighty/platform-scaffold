@@ -4,10 +4,10 @@
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
+import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selectors'
 import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -18,7 +18,9 @@ import {
     setRegisterLoaded,
     receiveAccountInfoData,
     receiveAccountOrderListData,
-    receiveCurrentOrderNumber
+    receiveCurrentOrderNumber,
+    receiveUpdatedWishlistItem,
+    removeWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 
 import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
@@ -37,7 +39,7 @@ import {
     parseAccountLocations
 } from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
-import {CART_URL, LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
+import {CART_URL, LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL, UPDATE_WISHLIST_URL, WISHLIST_URL, getWishlistQuantityUrl} from '../config'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initLoginPage = (url) => (dispatch) => {
@@ -83,7 +85,7 @@ export const initWishlistPage = (url) => (dispatch) => {
         .then(([$, $response]) => dispatch(receiveWishlistResponse($, $response)))
 }
 
-export const addToCartFromWishlist = ({itemId, productId, quantity}) => (dispatch, getState) => {
+export const addToCartFromWishlist = (productId, {itemId, quantity}) => (dispatch, getState) => {
     const currentState = getState()
     const formKey = getFormKey(currentState)
     const uenc = getUenc(productId)(currentState)
@@ -119,8 +121,14 @@ export const addToCartFromWishlist = ({itemId, productId, quantity}) => (dispatc
         })
 }
 
-export const removeItemFromWishlist = () => (dispatch) => Promise.resolve()
-
+export const removeItemFromWishlist = (itemId) => (dispatch, getState) => {
+    const requestBody = {
+        item: parseInt(itemId),
+        form_key: getFormKey(getState())
+    }
+    return makeFormEncodedRequest('/wishlist/index/remove/', requestBody, {method: 'POST'})
+        .then(() => dispatch(removeWishlistItem(itemId)))
+}
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
@@ -349,4 +357,34 @@ export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { /
     const orderId = orderNumber.replace(/^0+/, '')
     return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
         .then(() => CART_URL)
+}
+
+export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {
+    const currentState = getState()
+    const productId = getCurrentProductId(currentState)
+    const payload = {
+        product: productId,
+        qty: quantity,
+        id: itemId,
+        form_key: getFormKey(currentState),
+        // This won't always be defined, but add to wishlist will still work
+        // if it's missing
+        uenc: getUenc(productId)(currentState)
+    }
+
+    return makeFormEncodedRequest(UPDATE_WISHLIST_URL, payload, {method: 'POST'})
+        .then(() => dispatch(receiveUpdatedWishlistItem({itemId, quantity})))
+        .then(() => WISHLIST_URL)
+}
+
+export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
+    const formKey = getFormKey(getState())
+    const requestBody = {
+        form_key: formKey,
+        do: '',
+    }
+    requestBody[`qty[${itemId}]`] = quantity
+    requestBody[`description[${itemId}]`] = ''
+    return makeFormEncodedRequest(getWishlistQuantityUrl(wishlistId), requestBody, {method: 'POST'})
+        .then(() => dispatch(receiveUpdatedWishlistItem({itemId, quantity})))
 }
