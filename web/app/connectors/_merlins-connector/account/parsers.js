@@ -106,3 +106,24 @@ export const parseAccountLocations = (magentoResponse, $response) => {
         regions
     }
 }
+
+export const parseOrderListData = ($, $response) => {
+    const ordersMap = {}
+    $response
+        .find('#my-orders-table tbody tr')
+        .each((_, item) => {
+            const $item = $(item)
+            const orderNumber = getTextFrom($item, '.id')
+            ordersMap[orderNumber] = {
+                orderNumber,
+                date: getTextFrom($item, '.date'),
+                shippingAddress: {
+                    fullName: getTextFrom($item, '.shipping')
+                },
+                total: getTextFrom($item, '.total .price'),
+                status: getTextFrom($item, '.status'),
+                id: JSON.parse($item.find('.action.order').attr('data-post')).action.match(/order_id\/(\d+)/)[1]
+            }
+        })
+    return ordersMap
+}

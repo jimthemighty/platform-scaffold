@@ -17,6 +17,7 @@ import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveAccountInfoData,
+    receiveAccountOrderListData,
     receiveUpdatedWishlistItem,
     removeWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
@@ -29,10 +30,24 @@ import {
     updateCustomerAddresses
 } from './utils'
 
+import {
+    isFormResponseInvalid,
+    parseAccountInfo,
+    parseOrderListData,
+    parseAccountLocations
+} from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL, UPDATE_WISHLIST_URL, WISHLIST_URL, getWishlistQuantityUrl} from '../config'
+import {
+    CART_URL,
+    LOGIN_POST_URL,
+    CREATE_ACCOUNT_POST_URL,
+    getDeleteAddressURL,
+    UPDATE_WISHLIST_URL,
+    WISHLIST_URL,
+    getWishlistQuantityUrl
+} from '../config'
+
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
-import {isFormResponseInvalid, parseAccountInfo, parseAccountLocations} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -319,6 +334,20 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
 
 export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
+}
+
+export const initAccountOrderListPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+        .then(([$, $response]) => {
+            return dispatch(receiveAccountOrderListData(parseOrderListData($, $response)))
+        })
+}
+
+export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    const orderId = orderNumber.replace(/^0+/, '')
+    return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
+        .then(() => CART_URL)
 }
 
 export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {

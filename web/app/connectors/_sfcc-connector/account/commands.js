@@ -13,10 +13,11 @@ import {
     receiveAccountInfoData,
     removeWishlistItem,
     receiveAccountAddressData,
+    receiveAccountOrderListData,
     receiveUpdatedWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts, parseAddressResponse} from '../parsers'
+import {parseWishlistProducts, parseAddressResponse, parseOrdersResponse} from '../parsers'
 import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
 import {addItemToWishlist} from '../products/commands'
 import {
@@ -33,7 +34,7 @@ import {
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {splitFullName} from '../../../utils/utils'
-import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
+import {getDashboardURL, getCartURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
 import {addToCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {removeItemFromWishlist as removeItemFromWishlistCommand} from 'progressive-web-sdk/dist/integration-manager/account/commands'
@@ -185,6 +186,7 @@ export const fetchAddressData = () => (dispatch) => {
                 return dispatch(receiveAccountAddressData(addresses))
             })
 }
+
 export const addAddress = (address) => (dispatch) => {
     const addressData = createOrderAddressObject(address)
     const customerId = getCustomerID()
@@ -332,6 +334,33 @@ export const initWishlistPage = () => (dispatch) => {
                 })
         })
 }
+
+
+export const initAccountOrderListPage = () => (dispatch) => {
+    const customerID = getCustomerID()
+
+    return makeApiRequest(`/customers/${customerID}/orders?count=200`, {method: 'GET'})
+        .then((res) => res.json())
+        .then((resJSON) => {
+            return dispatch(receiveAccountOrderListData(parseOrdersResponse(resJSON)))
+        })
+}
+
+const addItemsToCart = (items) => (dispatch) => {
+    createBasket()
+        .then(({basket_id}) => {
+            return makeApiJsonRequest(`/baskets/${basket_id}/items`, items, {method: 'POST'}) // eslint-disable-line
+        })
+        .then((basket) => dispatch(handleCartData(basket)))
+}
+
+export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
+    return makeApiRequest(`/orders/${orderNumber}`, {method: 'GET'})
+        .then((res) => res.json())
+        .then(({product_items}) => dispatch(addItemsToCart(product_items)))
+        .then(() => getCartURL())
+}
+
 
 export const removeItemFromWishlist = (itemId, wishlistId) => (dispatch) => {
     const customerID = getCustomerID()

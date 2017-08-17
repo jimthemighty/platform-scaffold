@@ -256,3 +256,26 @@ export const parseFilterOptions = (refinements) => {
         return filters
     }, [])
 }
+
+export const parseOrdersResponse = ({data}) => {
+    const ordersMap = {}
+    data.forEach(({
+        order_no,
+        confirmation_status,
+        creation_date,
+        customer_info,
+        order_total
+    }) => {
+        ordersMap[order_no] = {
+            orderNumber: order_no,
+            date: new Date(creation_date).toLocaleDateString(),
+            shippingAddress: {
+                fullName: customer_info.customer_name
+            },
+            total: formatPrice(order_total),
+            status: confirmation_status
+        }
+    })
+
+    return ordersMap
+}

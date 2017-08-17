@@ -1,0 +1,15 @@
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+/* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
+/* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+
+import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
+import {reorderPreviousOrder} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
+
+export const receiveData = createAction('Receive AccountOrderList data')
+export const setOrderListPage = createAction('Receive the paginated orderlist page', ['pageNumber'])
+
+export const reorderItems = (orderId) => (dispatch) => {
+    return dispatch(reorderPreviousOrder(orderId))
+        .then((pathname) => browserHistory.push({pathname}))
+}

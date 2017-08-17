@@ -16,6 +16,7 @@ export const LOGIN_POST_URL = '/customer/account/loginPost/'
 export const MY_ACCOUNT_URL = '/customer/account/'
 export const ACCOUNT_ADDRESS_URL = '/customer/address/'
 export const ACCOUNT_INFO_URL = '/customer/account/edit/'
+export const ACCOUNT_ORDER_LIST_URL = '/sales/order/history/'
 export const UPDATE_WISHLIST_URL = '/wishlist/index/updateItemOptions/'
 
 export const getWishlistQuantityUrl = (wishlistId) => `/wishlist/index/update/wishlist_id/${wishlistId}/`

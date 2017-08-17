@@ -13,6 +13,7 @@ import {
     AccountDashboard,
     AccountAddress,
     AccountInfo,
+    AccountOrderList,
     Cart,
     CheckoutConfirmation,
     CheckoutPayment,
@@ -38,7 +39,8 @@ import {
     initAccountDashboardPage,
     initAccountAddressPage,
     initAccountInfoPage,
-    initWishlistPage
+    initWishlistPage,
+    initAccountOrderListPage
 } from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {initCheckoutConfirmationPage} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {initShippingPage} from './containers/checkout-shipping/actions'
@@ -95,6 +97,7 @@ const Router = ({store}) => (
                 <Route component={AccountInfo} path="customer/account/edit/" routeName="accountInfo" fetchAction={initPage(initAccountInfoPage)} />
                 <Route component={AccountDashboard} path="customer/account" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={AccountAddress} path="customer/address" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
+                <Route component={AccountOrderList} path="sales/order/history/" routeName="accountOrderList" fetchAction={initPage(initAccountOrderListPage)} />
                 <Route component={ProductList} path="potions.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="books.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
                 <Route component={ProductList} path="ingredients.html" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
@@ -171,6 +174,7 @@ const Router = ({store}) => (
                 <Route component={Login} path="*/Account-Show" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={AccountDashboard} path="*/Account-Show?dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={AccountAddress} path="*/Address-List" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
+                <Route component={AccountOrderList} path="*/Order-History" routeName="accountOrderList" fetchAction={initPage(initAccountOrderListPage)} />
 
                 <Route component={Cart} path="*/Cart-Show*" routeName="cart" fetchAction={initPage(initCartPage)} />
 

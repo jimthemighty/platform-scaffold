@@ -1,4 +1,5 @@
 ## To be released
+- Add "View Orders" list to My Account [#912](https://github.com/mobify/platform-scaffold/pull/912)
 - Add Edit, Delete, and Add to account addresses [#892](https://github.com/mobify/platform-scaffold/pull/892)
 - Add view wishlist page to app
     - Add initWishlist page commands to SFCC, merlins and stub connectors [#891](https://github.com/mobify/platform-scaffold/pull/891)
