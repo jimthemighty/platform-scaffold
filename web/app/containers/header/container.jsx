@@ -25,6 +25,7 @@ import HeaderTitle from './partials/header-title'
 import StoresAction from './partials/stores-action'
 import CartAction from './partials/cart-action'
 import SearchAction from './partials/search-action'
+import MoreAction from './partials/more-action'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 
@@ -79,6 +80,7 @@ class Header extends React.Component {
             onMiniCartClick,
             onSearchOpenClick,
             onSearchCloseClick,
+            onMoreClick,
             isCollapsed,
             itemCount,
             searchIsOpen,
@@ -108,6 +110,7 @@ class Header extends React.Component {
                         <HeaderTitle isCollapsed={isCollapsed} />
                         <StoresAction innerButtonClassName={innerButtonClassName} />
                         <CartAction innerButtonClassName={innerButtonClassName} onClick={onMiniCartClick} />
+                        <MoreAction innerButtonClassName={innerButtonClassName} onClick={onMoreClick} />
                     </HeaderBar>
                 </div>
 
@@ -154,6 +157,7 @@ Header.propTypes = {
     toggleHeader: PropTypes.func,
     onMenuClick: PropTypes.func,
     onMiniCartClick: PropTypes.func,
+    onMoreClick: PropTypes.func,
     onSearchCloseClick: PropTypes.func,
     onSearchOpenClick: PropTypes.func,
 }
@@ -168,6 +172,7 @@ const mapStateToProps = createPropsSelector({
 const mapDispatchToProps = {
     onMenuClick: () => openModal(NAVIGATION_MODAL, UI_NAME.menu),
     onMiniCartClick: miniCartActions.requestOpenMiniCart,
+    onMoreClick: headerActions.openMore,
     onSearchOpenClick: headerActions.openSearch,
     onSearchCloseClick: headerActions.closeSearch,
     searchSubmit: headerActions.searchSubmit,
