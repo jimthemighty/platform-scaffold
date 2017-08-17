@@ -38,7 +38,7 @@ DashboardLinks.propTypes = {
 }
 
 
-const AccountDashboard = ({addressUrl, accountInfoUrl, orderListURL, wishlistUrl}) => {
+const AccountDashboard = ({addressUrl, accountInfoUrl, wishlistUrl, orderListUrl}) => {
     const links = [
         {
             text: 'Account Information',
@@ -50,7 +50,7 @@ const AccountDashboard = ({addressUrl, accountInfoUrl, orderListURL, wishlistUrl
         },
         {
             text: 'My Orders',
-            href: orderListURL
+            href: orderListUrl
         },
         {
             text: 'My Wish List',
@@ -75,13 +75,13 @@ const AccountDashboard = ({addressUrl, accountInfoUrl, orderListURL, wishlistUrl
 AccountDashboard.propTypes = {
     accountInfoUrl: PropTypes.string,
     addressUrl: PropTypes.string,
-    orderListURL: PropTypes.string,
+    orderListUrl: PropTypes.string,
     wishlistUrl: PropTypes.string
 }
 const mapStateToProps = createPropsSelector({
     addressUrl: getAccountAddressURL,
     accountInfoUrl: getAccountInfoURL,
-    orderListURL: getAccountOrderListURL,
+    orderListUrl: getAccountOrderListURL,
     wishlistUrl: getWishlistURL
 })
 

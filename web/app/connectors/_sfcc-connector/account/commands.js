@@ -13,8 +13,8 @@ import {
     receiveAccountInfoData,
     removeWishlistItem,
     receiveAccountAddressData,
-    receiveUpdatedWishlistItem,
-    receiveAccountOrderListData
+    receiveAccountOrderListData,
+    receiveUpdatedWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {getCurrentOrderNumber} from 'progressive-web-sdk/dist/store/user/orders/selectors'
 import {receiveWishlistProductData, receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'

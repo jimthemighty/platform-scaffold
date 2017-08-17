@@ -39,7 +39,16 @@ import {
     parseAccountLocations
 } from './parsers'
 import {jqueryAjaxWrapper} from '../utils'
-import {CART_URL, LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL, UPDATE_WISHLIST_URL, WISHLIST_URL, getWishlistQuantityUrl} from '../config'
+import {
+    CART_URL,
+    LOGIN_POST_URL,
+    CREATE_ACCOUNT_POST_URL,
+    getDeleteAddressURL,
+    UPDATE_WISHLIST_URL,
+    WISHLIST_URL,
+    getWishlistQuantityUrl
+} from '../config'
+
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initLoginPage = (url) => (dispatch) => {
