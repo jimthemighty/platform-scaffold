@@ -13,6 +13,7 @@ import {
     setWishlistURL,
     setAccountInfoURL,
     setAccountAddressURL,
+    setAccountOrderListURL,
     setAccountURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 import {receiveUserEmail} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
@@ -28,6 +29,7 @@ import {
     getAccountAddressURL,
     getAccountInfoURL,
     getDashboardURL,
+    getAccountOrderListURL
 } from '../config'
 import {
     ACCOUNT_NAV_ITEM,
@@ -107,6 +109,7 @@ export const initApp = () => (dispatch) => {
             dispatch(setCartURL(getCartURL()))
             dispatch(setWishlistURL(getWishlistURL()))
             dispatch(setSignInURL(getSignInURL()))
+            dispatch(setAccountOrderListURL(getAccountOrderListURL()))
             dispatch(setAccountAddressURL(getAccountAddressURL()))
             dispatch(setAccountInfoURL(getAccountInfoURL()))
             dispatch(setAccountURL(getDashboardURL()))
