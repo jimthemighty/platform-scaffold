@@ -9,14 +9,13 @@ const git = require('git-rev-sync');
 const path = require('path');
 const process = require('process');
 const execSync = require('child_process').execSync;
-const common = require('../common');
+const common = require('./common');
 const rimraf = Promise.promisify(require('rimraf'));
 const fs = Promise.promisifyAll(require('fs'));
 const ncp = Promise.promisify(require('ncp').ncp);
 const archiver = require('archiver');
 
-const here = path.resolve(path.join(__dirname))
-const ampRootDir = path.resolve(path.join(__dirname), '..', '..')
+const ampRootDir = path.resolve(path.join(__dirname), '..')
 const buildDir = path.join(ampRootDir, 'build')
 
 const staticInDir = path.join(ampRootDir, 'app', 'static')
@@ -63,10 +62,6 @@ const main = () => {
                 .then(() => webpack(serverOutDir))
                 .then(() => ncp(path.join(ampRootDir, 'app/vendor/jquery.min.js'), path.join(serverOutDir, 'jquery.min.js')))
 
-                .tap(() => info('Copying configs'))
-                .then(() => ncp(path.join(here, 'cloudformation.yaml'), path.join(outputDir, 'cloudformation.yaml')))
-                .then(() => ncp(path.join(here, 'cloudformation-static.yaml'), path.join(outputDir, 'cloudformation-static.yaml')))
-
                 .tap(() => info('Archiving'))
                 .then(() => new Promise(resolve => {
                     const output = fs.createWriteStream(outputZip);
@@ -75,6 +70,7 @@ const main = () => {
                     output.on('close', resolve)
 
                     archive.pipe(output)
+                    archive.append(null, {name: `${commitId}/`});  // Cloud expects an entry for the directory
                     archive.directory(outputDir, commitId)
                     archive.finalize()
                 }))

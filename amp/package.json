@@ -1,5 +1,5 @@
 {
-  "cloudSlug": "merlinspotions-2",
+  "cloudSlug": "merlinspotions",
   "gaAccount": "UA-76264428-1",
   "siteUrl": "https://www.merlinspotions.com",
   "dependencies": {
@@ -36,7 +36,7 @@
     "immutable": "^3.8.1",
     "imports-loader": "^0.7.1",
     "jest-cli": "19.0.2",
-    "mobify-amp-sdk": "0.4.1",
+    "mobify-amp-sdk": "0.6.0",
     "mobify-code-style": "2.8.3",
     "ncp": "2.0.0",
     "node-exceptions": "^2.0.2",
@@ -75,6 +75,7 @@
     "add:component": "amp-sdk-add-component",
     "add:container": "amp-sdk-add-container",
     "build-sprites": "npm run clean:svgs && svg-sprite --svg-xmldecl false --symbol --symbol-dest='.' --symbol-sprite='sprite.svg' --shape-id-generator='a-%s' --dest=./app/static/svg/sprite-dist ../web/app/static/svg/sprite-source/*.svg",
+    "bundles": "amp-sdk-bundles",
     "clean:svgs": "svgo --enable='removeUselessStrokeAndFill' -f ../web/app/static/svg/sprite-source",
     "copyright:lint": "copyright 'app/!(vendor|static)/!(docs)/**/*.js?(x)' 'app/!(vendor|static)/**/*.js?(x)'",
     "copyright:fix": "copyright --fix --update 'app/!(vendor|static)/!(docs)/**/*.js?(x)' 'app/!(vendor|static)/**/*.js?(x)'",
@@ -86,7 +87,7 @@
     "lint:amp-scss": "stylelint './app/**/*.scss' --config ../web/.stylelintrc.yml",
     "test": "cross-env NODE_ENV=test jest",
     "test:all": "npm run lint && npm test -- --coverage",
-    "build": "cross-env NODE_ENV=production node ./scripts/build/build.js",
+    "build": "cross-env NODE_ENV=production node ./scripts/build.js",
     "deploy": "node ./scripts/deploy.js",
     "postinstall": "cross-env-test NODE_ENV=production || node ./scripts/postinstall.js"
   },
