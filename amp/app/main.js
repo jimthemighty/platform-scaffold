@@ -61,7 +61,7 @@ const render = (req, res, store, component) => {
     const state = store.getState()
     const rendered = ampPage({
         title: state.app.get(PAGE_TITLE),
-        canonicalURL: canonicalURL(req),
+        canonicalURL: canonicalURL(req.url),
         body,
         css: styleIncludes.map((x) => x.toString()
                                        .trim()
@@ -74,7 +74,7 @@ const render = (req, res, store, component) => {
 }
 
 const handlePage = (page) => (req, res, next) => {
-    initializeStore(canonicalURL(req), page)
+    initializeStore(canonicalURL(req.url), page)
         .then((store) => render(req, res, store, page))
         .catch(next)
 }
