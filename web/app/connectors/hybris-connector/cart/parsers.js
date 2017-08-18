@@ -32,11 +32,12 @@ export const parseCartProducts = ({entries = []}) =>
 
 export const parseCartContents = (cart) => {
     const {
+        appliedVouchers = [],
         entries = [],
-        subTotal: {formattedValue: subtotal} = {},
-        totalDiscounts: {formattedValue: discount, value: hasDiscount} = {},
-        totalPriceWithTax: {formattedValue: orderTotal} = {},
-        totalTax: {formattedValue: taxes, value: hasTaxes} = {}} = cart
+        subTotal: {formattedValue: subtotal = ''} = {},
+        orderDiscounts: {formattedValue: discount = ''} = {},
+        totalPriceWithTax: {formattedValue: orderTotal = ''} = {},
+        totalTax: {formattedValue: taxes = '', value: hasTaxes = false} = {}} = cart
     const items = entries.map((entry) => {
         const {
             basePrice: {formattedValue: itemPrice} = {},
@@ -60,8 +61,13 @@ export const parseCartContents = (cart) => {
         subtotal
     }
 
-    if (hasDiscount) {
-        cartContents.discount = discount
+    if (appliedVouchers.length) {
+        const appliedVoucher = appliedVouchers[0]
+        cartContents.discount = {
+            label: appliedVoucher.voucherCode,
+            code: appliedVoucher.code,
+            amount: discount
+        }
     }
     if (hasTaxes) {
         cartContents.taxes = taxes

@@ -150,7 +150,4 @@ export const updateBillingAddress = (formValues) => (dispatch) => {
     return Promise.resolve()
 }
 
-export const initAccountDashboard = (url) => (dispatch) => {
-    console.log('[Hybris Connector] Called initAccountDashboard stub with parameters:', url)
-    return Promise.resolve()
-}
+export const initAccountDashboardPage = (url) => (dispatch) => Promise.resolve()

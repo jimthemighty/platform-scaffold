@@ -6,7 +6,7 @@ import {calculateCartID, deleteCartID, makeApiRequest, getCartID, getUserType, s
 import {getCartItems} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {receiveCartProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {receiveCartContents, receiveCartItems} from 'progressive-web-sdk/dist/integration-manager/cart/results'
+import {receiveCartContents, receiveCartItems, receiveCartTotals} from 'progressive-web-sdk/dist/integration-manager/cart/results'
 import {getProductEndPoint} from '../config'
 import {parseCartProducts, parseCartContents} from './parsers'
 import {parseProductDetails} from '../parsers'
@@ -118,4 +118,27 @@ export const handleCartData = (cart) => (dispatch) => {
     dispatch(receiveCartContents(parseCartContents(cart)))
 
     return dispatch(fetchCartItemData())
+}
+
+export const getCartTotals = () => (dispatch) => {
+    return getCart()
+        .then((cart) => {
+            const shipping = {amount: ''}
+            let discount = {amount: '', code: '', label: ''}
+            const {
+                appliedVouchers = [],
+                subTotal: {formattedValue: subtotal = ''} = {},
+                orderDiscounts: {formattedValue: orderDiscount = ''} = {},
+                totalPriceWithTax: {formattedValue: orderTotal = ''} = {},
+                totalTax: {formattedValue: taxes = ''} = {}} = cart
+            if (appliedVouchers.length) {
+                const appliedVoucher = appliedVouchers[0]
+                discount = {
+                    label: appliedVoucher.voucherCode,
+                    code: appliedVoucher.code,
+                    amount: orderDiscount
+                }
+            }
+            return dispatch(receiveCartTotals(shipping, discount, subtotal, taxes, orderTotal))
+        })
 }

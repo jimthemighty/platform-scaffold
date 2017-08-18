@@ -53,6 +53,16 @@ const initConnector = () => {
             gallery: 'GALLERY',
             primary: 'PRIMARY',
         },
+        regions: {
+            'apparel-uk': [
+                {
+                    label: 'Kent',
+                    id: 'GB-KEN',
+                    countryId: 'GB'
+                }
+            ],
+            electronics: []
+        }
     }))
 }
 

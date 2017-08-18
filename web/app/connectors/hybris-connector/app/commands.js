@@ -27,13 +27,23 @@ import {
     LOGGED_IN_NAV
 } from '../../../modals/navigation/constants'
 
+const fetchCategories = (menuItems) => {
+    const requestOptions = {
+        headers: getRequestHeaders()
+    }
+    return makeRequest(`${getCatalogEndPoint()}`, requestOptions)
+        .then((response) => response.json())
+        .then(({categories}) => categories)
+}
+
 export const fetchNavigationData = () => (dispatch) => {
     const requestOptions = {
         headers: getRequestHeaders()
     }
-
     let navData = []
     const menuItems = getMenuConfig() || []
+
+    // Use menu configuration to display categories
     menuItems.reduce((p, menuItem) => {
         return p.then(() => {
             return makeRequest(`${getCatalogEndPoint()}/categories/${menuItem.id}`, requestOptions)
@@ -44,6 +54,21 @@ export const fetchNavigationData = () => (dispatch) => {
                 })
         })
     }, Promise.resolve())
+        // If there isn't any menu configuration, use categories as the are stored in hybris
+        .then(() => {
+            if (navData.length) {
+                return Promise.resolve()
+            } else {
+                return fetchCategories()
+                    .then((categories) => {
+                        for (const cat of categories) {
+                            if (typeof cat.name !== 'undefined') {
+                                navData = navData.concat(parseCategories([cat]))
+                            }
+                        }
+                    })
+            }
+        })
         .then(() => {
             const isLoggedIn = isUserLoggedIn()
             const accountNode = [
@@ -73,7 +98,7 @@ export const fetchNavigationData = () => (dispatch) => {
                     path: getSignInURL()
                 }
             ]
-            const exampleNavigationData = {
+            const navigationData = {
                 path: '/',
                 root: {
                     title: 'Root',
@@ -81,8 +106,7 @@ export const fetchNavigationData = () => (dispatch) => {
                     children: navData.concat(accountNode)
                 }
             }
-
-            return dispatch(receiveNavigationData(exampleNavigationData))
+            return dispatch(receiveNavigationData(navigationData))
         })
 }
 

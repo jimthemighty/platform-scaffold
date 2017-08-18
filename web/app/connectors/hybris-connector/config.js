@@ -18,6 +18,7 @@ export const getBaseSiteId = () => config.baseSiteId
 export const getCatalogId = () => config.catalogId[getBaseSiteId()]
 export const getCatalogVersionId = () => config.catalogVersionId
 export const getMenuConfig = () => config.menuConfig[getBaseSiteId()]
+export const getRegions = () => config.regions[getBaseSiteId()]
 export const getApiEndPoint = () => `${API_HOST}/${API_TYPE}/${API_VERSION}/${getBaseSiteId()}`
 export const getCatalogEndPoint = () => `${getApiEndPoint()}/catalogs/${getCatalogId()}/${getCatalogVersionId()}`
 export const getAuthEndPoint = () => `${API_HOST}/authorizationserver/oauth/token`
@@ -39,7 +40,7 @@ export const getCheckoutShippingURL = () => '/x1'
 export const getConfirmationURL = () => '/x2'
 export const getDashboardURL = () => '/x3'
 export const getHomeURL = () => '/'
-export const getMyAccountURL = () => '/x5'
+export const getMyAccountURL = () => '/customer/account'
 export const getPaymentURL = () => '/x6'
 export const getSignInURL = () => '/customer/account/login/'
 export const getSignOutURL = () => '/x7'

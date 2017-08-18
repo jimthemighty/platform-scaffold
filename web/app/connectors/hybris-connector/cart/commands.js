@@ -5,12 +5,11 @@
 /* eslint-disable no-unused-vars */
 
 import {getCartID, getUserType, makeApiRequest} from '../utils'
-import {getCart as getCartUtility, handleCartData} from './utils'
+import {getCart as getCartUtility, getCartTotals, handleCartData} from './utils'
+import {populateLocationsData} from '../checkout/utils'
+import {PROMO_ERROR} from '../../../containers/cart/constants'
 
-export const initCartPage = (url, routeName) => (dispatch) => {
-    console.log('[Hybris Connector] Called initCartPage stub with arguments:', url, routeName)
-    return Promise.resolve()
-}
+export const initCartPage = (url, routeName) => (dispatch) => dispatch(populateLocationsData())
 
 export const getCart = () => (dispatch) =>
     getCartUtility().then((cart) => dispatch(handleCartData(cart)))
@@ -77,17 +76,34 @@ export const updateItemQuantity = (entryNumber, qty) => (dispatch) => (
         })
 )
 
+
 export const fetchTaxEstimate = (address, shippingMethod) => (dispatch) => {
     console.log('[Hybris Connector] Called fetchTaxEstimate stub with arguments:', address, shippingMethod)
     return Promise.resolve()
 }
 
 export const putPromoCode = (couponCode) => (dispatch) => {
-    console.log('[Hybris Connector] Called putPromoCode stub with arguments:', couponCode)
-    return Promise.resolve()
+    if (couponCode) {
+        return makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/vouchers`, {method: 'POST'}, {voucherId: couponCode})
+            .then((response) => {
+                // Check if coupon is valid
+                if (response.status !== 200) {
+                    throw Error(`${PROMO_ERROR}, code is invalid`)
+                }
+            })
+            .then(() => dispatch(getCartTotals()))
+    } else {
+        return Promise.resolve()
+    }
 }
 
 export const deletePromoCode = (couponCode) => (dispatch) => {
-    console.log('[Hybris Connector] Called deletePromoCode stub with arguments:', couponCode)
-    return Promise.resolve()
+    return makeApiRequest(`/users/${getUserType()}/carts/${getCartID()}/vouchers/${couponCode}`, {method: 'DELETE'})
+        .then((response) => {
+            // Check if coupon was deleted
+            if (response.status !== 200) {
+                throw new Error('Failed to remove promo code')
+            }
+        })
+        .then(() => dispatch(getCartTotals()))
 }
