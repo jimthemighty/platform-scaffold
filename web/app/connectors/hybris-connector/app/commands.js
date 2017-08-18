@@ -4,16 +4,17 @@
 
 /* eslint-disable no-unused-vars */
 
-import {initHybrisAuth, isUserLoggedIn} from '../utils'
-
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCart} from '../cart/commands'
-import {getCartURL, getCatalogEndPoint, getMenuConfig, getHomeURL, getMyAccountURL, getRequestHeaders, getSignInURL, getWishlistURL} from '../config'
+import {buildSearchURL, getCartURL, getCatalogEndPoint, getMenuConfig, getHomeURL, getMyAccountURL, getRequestHeaders, getSearchSuggestionsEndPoint, getSignInURL, getWishlistURL} from '../config'
+import {parseSearchSuggestions} from './parser'
 import {parseCategories} from '../parsers'
+import {initHybrisAuth, isUserLoggedIn, makeApiRequest} from '../utils'
 
 import {
     receiveNavigationData,
+    receiveSearchSuggestions,
     setCheckoutShippingURL,
     setCartURL,
     setSignInURL,
@@ -108,6 +109,29 @@ export const fetchNavigationData = () => (dispatch) => {
             }
             return dispatch(receiveNavigationData(navigationData))
         })
+}
+
+export const getSearchSuggestions = (query) => (dispatch) => {
+    // Only make request search when query is 2 characters or more.
+    // Empty list if less than 2 characters
+    if (query.length < 2) {
+        return dispatch(receiveSearchSuggestions(null))
+    }
+
+    const searchSuggestionsEndpoint = getSearchSuggestionsEndPoint(query)
+    return makeApiRequest(searchSuggestionsEndpoint, {method: 'GET'})
+        .then((response) => {
+            if (response.status !== 200) {
+                throw new Error(response.statusText)
+            } else {
+                return response.json()
+            }
+        })
+        .then((responseJSON) => dispatch(receiveSearchSuggestions(parseSearchSuggestions(responseJSON))))
+}
+
+export const searchProducts = (query) => (dispatch) => {
+    browserHistory.push(buildSearchURL(query))
 }
 
 export const initApp = () => (dispatch) => {

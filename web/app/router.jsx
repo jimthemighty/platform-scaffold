@@ -186,6 +186,7 @@ const Router = ({store}) => (
                 {/* Hybris Connector routes */}
                 <Route component={ProductDetails} path="product_id/*" routeName="productDetailsPage" fetchAction={initPage(initProductDetailsPage)} />
                 <Route component={ProductList} path="cat/*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
+                <Route component={ProductList} path="search/*" routeName="productListPage" fetchAction={initPage(initProductListPage)} />
             </Route>
         </SDKRouter>
     </Provider>

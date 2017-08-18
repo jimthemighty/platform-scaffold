@@ -47,6 +47,7 @@ export const parseFacets = ({facets = []}, appliedFilters) => {
                 filterQuery = encodeURIComponent(`${queryValues[queryValuesLength - 2]}:${queryValues[queryValuesLength - 1]}`)
             }
             return {
+                active: selected,
                 count,
                 label: name,
                 query: !selected ? filterQuery : appliedFilters,

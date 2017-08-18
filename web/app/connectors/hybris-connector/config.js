@@ -1,6 +1,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+import {buildQueryString} from '../../utils/utils'
+
 import {PATHS} from './constants'
 import {ITEMS_PER_PAGE} from '../../containers/product-list/constants'
 
@@ -27,6 +29,9 @@ export const getProductEndPoint = (productId) => `/products/${productId}?fields=
 export const getCategoryEndPoint = (catId) => `/catalogs/${getCatalogId()}/${getCatalogVersionId()}/categories/${catId}`
 export const getSearchEndPoint = (catId, page, sort, filters) =>
     `/products/search/?pageSize=${ITEMS_PER_PAGE}&currentPage=${page}&fields=FULL&query=:${sort}:allCategories:${catId}${filters}`
+export const getFreeTextSearchEndPoint = (searchTerm, page, sort, filters) =>
+    `/products/search/?pageSize=${ITEMS_PER_PAGE}&currentPage=${page}&fields=FULL&query=${searchTerm}:${sort}${filters}`
+export const getSearchSuggestionsEndPoint = (searchTerm) => `/products/suggestions?term=${searchTerm}&fields=FULL`
 
 export const getImageType = (type) => config.imagesTypes[type]
 export const getImageSize = (size) => config.imagesSizes[size]
@@ -45,8 +50,9 @@ export const getPaymentURL = () => '/x6'
 export const getSignInURL = () => '/customer/account/login/'
 export const getSignOutURL = () => '/x7'
 export const getWishlistURL = () => '/wishlist/'
+export const getSearchURL = () => '/search/'
 
-// export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`
+export const buildSearchURL = (query) => `${getSearchURL()}${buildQueryString(query)}`
 
 
 export const getRequestHeaders = () => ({

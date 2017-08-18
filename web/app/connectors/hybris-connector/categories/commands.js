@@ -8,7 +8,7 @@ import {receiveCategoryContents, receiveCategoryFilterOptions, receiveCategoryIn
 import {receiveProductListProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {urlToPathKey, urlToBasicPathKey} from 'progressive-web-sdk/dist/utils/utils'
 import {changeFilterTo} from '../../../store/categories/actions'
-import {getCategoryEndPoint, getSearchEndPoint} from '../config'
+import {getCategoryEndPoint, getFreeTextSearchEndPoint, getSearchEndPoint, getSearchURL} from '../config'
 import {parseCategoryData, parseFacets, parseProductListData, parseSortOptions} from './parsers'
 import {extractLastPartOfURL, getQueryStringValue, makeApiRequest} from '../utils'
 import {PATHS} from '../constants'
@@ -84,18 +84,40 @@ const getParentCategoryInfo = (catPath) => (dispatch) => {
 }
 
 export const initProductListPage = (url, routeName) => (dispatch, getState) => {
-    let categoryName
-    const categoryId = extractLastPartOfURL(url)
-    const pageInQueryString = getQueryStringValue('p')
-    const page = pageInQueryString ? (pageInQueryString - 1) : 0
+    const pathKey = urlToPathKey(url)
+    const pathKeyWithoutQuery = urlToBasicPathKey(pathKey)
+    const isSearch = pathKey.includes(getSearchURL())
+    const categoryId = !isSearch ? extractLastPartOfURL(url) : null
+    const pageNumber = getQueryStringValue('p') ? getQueryStringValue('p') - 1 : 0
     const sortOption = getQueryStringValue('sort') || 'relevance'
     const appliedFilters = getQueryStringValue('filters')
-    const searchEndpoint = getSearchEndPoint(categoryId, page, sortOption, appliedFilters ? `:${appliedFilters}` : '')
+    const searchTerm = getQueryStringValue('q')
+    let categoryName
+    const searchEndpoint = isSearch ?
+        getFreeTextSearchEndPoint(searchTerm, pageNumber, sortOption, appliedFilters ? `:${appliedFilters}` : '') :
+        getSearchEndPoint(categoryId, pageNumber, sortOption, appliedFilters ? `:${appliedFilters}` : '')
 
-    if (categoryId) {
+    // Clean active filter if there isn't any filter applied in query string
+    if (!appliedFilters) {
+        dispatch(changeFilterTo(null))
+    }
+
+    if (isSearch) {
+        dispatch(receiveCategoryInformation(pathKeyWithoutQuery, {
+            id: pathKey,
+            href: pathKeyWithoutQuery,
+            parentId: null,
+            searchTerm,
+            title: `Search results for ${searchTerm}`
+        }))
+    }
+
+    if (categoryId || searchTerm) {
         return fetchCategoryInfo(categoryId)
             .then((response) => {
-                categoryName = response.name || ''
+                if (!isSearch) {
+                    categoryName = response.name
+                }
                 return Promise.resolve()
             })
             .then(() => makeApiRequest(searchEndpoint, {method: 'GET'}))
@@ -107,8 +129,6 @@ export const initProductListPage = (url, routeName) => (dispatch, getState) => {
                 }
             })
             .then((responseJSON) => {
-                const pathKey = urlToPathKey(url)
-                const pathKeyWithoutQuery = urlToBasicPathKey(pathKey)
                 const productListData = parseProductListData(responseJSON)
                 const categoryData = parseCategoryData(responseJSON)
                 const parentCategoryPath = getParentCategoryPath(pathKey, categoryId)
@@ -116,32 +136,28 @@ export const initProductListPage = (url, routeName) => (dispatch, getState) => {
                 // Receive page contents
                 dispatch(receiveProductListProductData(productListData))
                 dispatch(receiveCategoryContents(pathKey, categoryData))
-                dispatch(receiveCategoryInformation(pathKeyWithoutQuery, {
-                    id: pathKey,
-                    href: pathKeyWithoutQuery,
-                    parentId: parentCategoryPath,
-                    title: categoryName
-                }))
 
-                // Receive category hierarchy
-                dispatch(getParentCategoryInfo(parentCategoryPath))
+                // Receive category hierarchy information
+                if (!isSearch) {
+                    dispatch(receiveCategoryInformation(pathKeyWithoutQuery, {
+                        id: pathKey,
+                        href: pathKeyWithoutQuery,
+                        parentId: parentCategoryPath,
+                        title: categoryName
+                    }))
+                    dispatch(getParentCategoryInfo(parentCategoryPath))
+                }
 
-                // Receive sorting options
+                // Receive sort options
                 const sortOptions = parseSortOptions(responseJSON)
                 if (sortOptions.length > 0) {
                     dispatch(receiveCategorySortOptions(pathKeyWithoutQuery, sortOptions))
                 }
 
                 // Receive filters
-                const currentState = getState()
-                const stateFilterOptions = currentState.categories.toJS().filterOptions
-                const stateCategoryFilterOptions = stateFilterOptions ? stateFilterOptions[pathKeyWithoutQuery] : null
-
-                if (!stateCategoryFilterOptions) {
-                    const filterOptions = parseFacets(responseJSON, appliedFilters)
-                    if (filterOptions.length > 0) {
-                        dispatch(receiveCategoryFilterOptions(pathKeyWithoutQuery, filterOptions))
-                    }
+                const filterOptions = parseFacets(responseJSON, appliedFilters)
+                if (filterOptions.length > 0 && !appliedFilters) {
+                    dispatch(receiveCategoryFilterOptions(pathKeyWithoutQuery, filterOptions))
                 }
                 if (appliedFilters) {
                     dispatch(changeFilterTo(appliedFilters))
