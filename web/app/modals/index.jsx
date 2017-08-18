@@ -18,6 +18,7 @@ import CartRemoveItemModal from './cart-remove-item/container'
 import AccountAddressModal from './account-add-address/container'
 import AccountRemoveAddressModal from './account-remove-address/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
+import MoreMenuModal from './more-menu/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
 
@@ -36,7 +37,8 @@ const modals = {
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
     [MODAL.ACCOUNT_ADDRESS_MODAL]: {content: <AccountAddressModal />},
     [MODAL.ACCOUNT_REMOVE_ADDRESS_MODAL]: {content: <AccountRemoveAddressModal />},
-    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
+    [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />},
+    [MODAL.MORE_MENU]: {content: <MoreMenuModal />}
 }
 
 class ModalManager extends React.Component {
