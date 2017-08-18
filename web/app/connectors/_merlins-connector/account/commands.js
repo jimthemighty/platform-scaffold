@@ -141,13 +141,12 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
                 magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
             } else {
                 const mageCookie = getCookieValue('ls-mage-cache-storage')
-                const decodedCookie = mageCookie ? decodeURIComponent(mageCookie) : {customer: {}}
+                const decodedCookie = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {customer: {}}
                 magentoCacheStorage = decodedCookie
             }
 
             magentoCacheStorage.customer.fullname = fullname
             magentoCacheStorage.customer.email = email
-
             if (isLocalStorageAvailable()) {
                 localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
             } else {
