@@ -91,6 +91,10 @@ if (process.env.NODE_ENV !== 'test') {
     app.use(morgan(onLambda ? 'short' : 'dev'))
 }
 
+app.use('/static', express.static(path.resolve('./app/static'), {
+    fallthrough: false
+}))
+
 app.get('/potions.html', handlePage(ProductList))
 app.get('/books.html', handlePage(ProductList))
 app.get('/ingredients.html', handlePage(ProductList))
@@ -100,7 +104,7 @@ app.get('/charms.html', handlePage(ProductList))
 app.get('/checkout/cart/configure/id/*/product_id/*/', handlePage(ProductDetails))
 app.get('*.html', handlePage(ProductDetails))
 
-app.use('/static', express.static(path.resolve('./app/static')))
+app.use((req, res) => res.status(404).send('Not found'))
 
 
 if (!onLambda && require.main === module) {
