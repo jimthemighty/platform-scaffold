@@ -16,7 +16,7 @@ const MoreAction = ({innerButtonClassName, onClick}) => (
             onClick={onClick}
             data-analytics-name={UI_NAME.showSearchBar}
         >
-            <IconLabel label="More" iconName="more" iconSize="medium" />
+            <IconLabel label="Back" iconName="caret-left" iconSize="medium" />
         </Button>
     </HeaderBarActions>
 )

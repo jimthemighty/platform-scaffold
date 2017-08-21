@@ -80,7 +80,7 @@ class Header extends React.Component {
             onMiniCartClick,
             onSearchOpenClick,
             onSearchCloseClick,
-            onMoreClick,
+            goBack,
             isCollapsed,
             itemCount,
             searchIsOpen,
@@ -110,7 +110,7 @@ class Header extends React.Component {
                         <HeaderTitle isCollapsed={isCollapsed} />
                         <StoresAction innerButtonClassName={innerButtonClassName} />
                         <CartAction innerButtonClassName={innerButtonClassName} onClick={onMiniCartClick} />
-                        <MoreAction innerButtonClassName={innerButtonClassName} onClick={onMoreClick} />
+                        <MoreAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
                     </HeaderBar>
                 </div>
 
@@ -148,6 +148,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
     clearSuggestions: PropTypes.func,
+    goBack: PropTypes.func,
     isCollapsed: PropTypes.bool,
     itemCount: PropTypes.number,
     searchIsOpen: PropTypes.bool,
@@ -157,7 +158,6 @@ Header.propTypes = {
     toggleHeader: PropTypes.func,
     onMenuClick: PropTypes.func,
     onMiniCartClick: PropTypes.func,
-    onMoreClick: PropTypes.func,
     onSearchCloseClick: PropTypes.func,
     onSearchOpenClick: PropTypes.func,
 }
@@ -172,7 +172,7 @@ const mapStateToProps = createPropsSelector({
 const mapDispatchToProps = {
     onMenuClick: () => openModal(NAVIGATION_MODAL, UI_NAME.menu),
     onMiniCartClick: miniCartActions.requestOpenMiniCart,
-    onMoreClick: headerActions.openMore,
+    goBack: headerActions.goBack,
     onSearchOpenClick: headerActions.openSearch,
     onSearchCloseClick: headerActions.closeSearch,
     searchSubmit: headerActions.searchSubmit,

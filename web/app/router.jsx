@@ -5,6 +5,7 @@ import {Router as SDKRouter, Route, IndexRoute} from 'progressive-web-sdk/dist/r
 import {Provider} from 'react-redux'
 
 import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
+import {pushHistoryItem, setIsHistoryPage} from 'progressive-web-sdk/dist/store/app/actions'
 
 // Containers
 import App from './containers/app/container'
@@ -71,9 +72,17 @@ if (isRunningInAstro) {
 }
 
 const initPage = (initAction) => (url, routeName) => (dispatch, getState) => {
+    const currentState = getState()
+    const isHistoryPage = currentState.app.get('isHistoryPage')
+    if (isHistoryPage) {
+        dispatch(setIsHistoryPage(false))
+    } else {
+        dispatch(pushHistoryItem(url))
+    }
+
     return dispatch(initAction(url, routeName))
         .then(() => {
-            trackPerformance(PERFORMANCE_METRICS.isSavedPage, hasFetchedCurrentPath(getState()) ? 'true' : 'false')
+            trackPerformance(PERFORMANCE_METRICS.isSavedPage, hasFetchedCurrentPath(currentState ? 'true' : 'false'))
             dispatch(setFetchedPage(url))
         })
         .then(() => {
