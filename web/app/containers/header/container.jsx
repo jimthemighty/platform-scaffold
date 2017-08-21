@@ -26,8 +26,10 @@ import StoresAction from './partials/stores-action'
 import CartAction from './partials/cart-action'
 import SearchAction from './partials/search-action'
 import MoreAction from './partials/more-action'
+import BackAction from './partials/back-action'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
+// import {isStandalone} from '../../utils/utils'
 
 const SCROLL_CHECK_INTERVAL = 200
 
@@ -105,7 +107,11 @@ class Header extends React.Component {
             <header className="t-header" ref={(el) => { this.headerHeight = el ? el.scrollHeight : Number.MAX_VALUE }}>
                 <div className="t-header__bar">
                     <HeaderBar>
-                        <NavigationAction innerButtonClassName={innerButtonClassName} onClick={onMenuClick} />
+                        {true ? // eslint-disable-line
+                            <BackAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
+                            :
+                            <NavigationAction innerButtonClassName={innerButtonClassName} onClick={onMenuClick} />
+                        }
                         <SearchAction innerButtonClassName={innerButtonClassName} onClick={onSearchOpenClick} />
                         <HeaderTitle isCollapsed={isCollapsed} />
                         <StoresAction innerButtonClassName={innerButtonClassName} />
