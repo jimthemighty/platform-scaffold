@@ -8,7 +8,6 @@ import {mergePayload, setCustomContent} from 'progressive-web-sdk/dist/utils/red
 import * as integrationManagerResults from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 const checkoutReducer = handleActions({
-    [integrationManagerResults.receiveSavedShippingAddresses]: mergePayload,
     [integrationManagerResults.receiveCheckoutLocations]: mergePayload,
     [integrationManagerResults.receiveBillingAddress]: mergePayload,
     [integrationManagerResults.receiveShippingAddress]: mergePayload,
