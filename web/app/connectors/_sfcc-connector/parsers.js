@@ -4,6 +4,7 @@
 
 import {getSiteID, getCategoryPath} from './config'
 import {formatPrice} from './utils'
+import {stringToTitleCase} from '../../utils/utils'
 
 const parseImages = (imageGroups) => {
     const largeImages = imageGroups.filter((imageGroup) => imageGroup.view_type === 'large')[0]
@@ -256,6 +257,18 @@ export const parseFilterOptions = (refinements) => {
     }, [])
 }
 
+const getOrderStatus = (order) => {
+    if (order.status === 'cancelled') {
+        return stringToTitleCase(order.status)
+    }
+
+    if (order.shipping_status === 'shipped') {
+        return stringToTitleCase(order.shipping_status)
+    }
+
+    return 'Being Processed'
+}
+
 /* eslint-disable camelcase */
 const getPaymentMethod = (paymentInstruments) => (
     paymentInstruments.map(({payment_card: {card_type, masked_number}}) => {
@@ -263,31 +276,31 @@ const getPaymentMethod = (paymentInstruments) => (
     })
 )
 
-export const parseOrder = ({
-    order_no,
-    creation_date,
-    confirmation_status,
-    order_total,
-    tax_total,
-    shipping_total,
-    shipping_total_tax,
-    product_sub_total,
-    billing_address,
-    product_items,
-    shipments: [
-        {
-            shipping_method,
-            shipping_address
-        }
-    ],
-    payment_instruments
-}) => {
+export const parseOrder = (order) => {
+    const {
+        order_no,
+        creation_date,
+        order_total,
+        tax_total,
+        shipping_total,
+        shipping_total_tax,
+        product_sub_total,
+        billing_address,
+        product_items,
+        shipments: [
+            {
+                shipping_method,
+                shipping_address
+            }
+        ],
+        payment_instruments
+    } = order
     return {
         [order_no]: {
             orderNumber: order_no,
             id: order_no,
             date: new Date(creation_date).toLocaleDateString(),
-            status: confirmation_status,
+            status: getOrderStatus(order),
             total: formatPrice(order_total),
             tax: formatPrice(tax_total),
             shippingTotal: formatPrice(shipping_total + shipping_total_tax),
@@ -310,13 +323,13 @@ export const parseOrder = ({
 /* eslint-enable camelcase */
 export const parseOrdersResponse = ({data}) => {
     const ordersMap = {}
-    data.forEach(({
-        order_no,
-        confirmation_status,
-        creation_date,
-        customer_info,
-        order_total
-    }) => {
+    data.forEach((order) => {
+        const {
+            order_no,
+            creation_date,
+            customer_info,
+            order_total
+        } = order
         ordersMap[order_no] = {
             orderNumber: order_no,
             date: new Date(creation_date).toLocaleDateString(),
@@ -324,7 +337,7 @@ export const parseOrdersResponse = ({data}) => {
                 fullName: customer_info.customer_name
             },
             total: formatPrice(order_total),
-            status: confirmation_status
+            status: getOrderStatus(order)
         }
     })
 
