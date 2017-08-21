@@ -251,7 +251,7 @@ export const fetchItemData = (items) => (dispatch, getState) => {
                             label: attribute.name,
                             value: selectedVariant.name
                         }
-                    }) : {}
+                    }) : []
 
                     const product = {
                         ...productState,
