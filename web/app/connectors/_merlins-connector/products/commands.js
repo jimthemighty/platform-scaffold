@@ -34,7 +34,7 @@ export const initProductDetailsPage = (url) => (dispatch) => {
             dispatch(receiveProductDetailsProductData({[id]: productDetailsData}))
             dispatch(receiveFormInfo({[id]: pdpAddToCartFormParser($, $response)}))
 
-            if (url.includes('wishlist/index/configure')) {
+            if (url.includes('wishlist/index/configure') && productDetailsData.variants.length) {
                 dispatch(addNotification(
                     'configureProfuct',
                     'You need to choose options for your item.',
