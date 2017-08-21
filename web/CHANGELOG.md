@@ -18,6 +18,7 @@
 - Update the Mobify V8 tag [#923](https://github.com/mobify/platform-scaffold/pull/923)
 - Add performance metrics instrumentation [#926](https://github.com/mobify/platform-scaffold/pull/926)
 - Functionality to edit & remove wishlist items [#934](https://github.com/mobify/platform-scaffold/pull/934)
+- Support force-loading in both PWA or nonPWA mode in preview [#938](https://github.com/mobify/platform-scaffold/pull/938)
 
 ## 0.17.3 (July 7, 2017)
 - Moved a pair of browser storage detection methods to SDK [#850](https://github.com/mobify/platform-scaffold/pull/850)
