@@ -113,10 +113,7 @@ const parseBreadcrumbs = ($, $breadcrumbsLinks) => {
         .map((breadcrumbLink) => parseTextLink($(breadcrumbLink)))
 }
 
-const getAvailabilityFrom = ($content) => {
-    const availability = getTextFrom($content, '.product-info-stock-sku [title="Availability"]')
-    return availability.toLowerCase() === 'in stock'
-}
+const getAvailabilityFrom = ($content) => !!$content.find('button.tocart').length
 
 export const productDetailsParser = ($, $html) => {
     const $mainContent = $html.find('.page-main')
