@@ -83,13 +83,14 @@ export const removeItem = (itemID) => (dispatch) => {
         .catch((error) => dispatch(cartUpdateError(error)))
 }
 
-export const saveToWishlist = (productId, itemId, productURL) => (dispatch, getState) => {
+export const saveToWishlist = (productId, itemId, productURL, quantity) => (dispatch, getState) => {
     dispatch(setIsWishlistComplete(false))
     dispatch(openModal(CART_WISHLIST_MODAL, UI_NAME.wishlist))
     if (!getIsLoggedIn(getState())) {
         return Promise.resolve()
     }
-    return dispatch(addItemToWishlist(productId, productURL))
+
+    return dispatch(addItemToWishlist(productId, productURL, quantity))
         .then(() => {
             dispatch(removeItem(itemId))
             dispatch(setIsWishlistComplete(true))
