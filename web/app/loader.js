@@ -1,5 +1,5 @@
 /* global NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, MESSAGING_ENABLED, DEBUG */
-import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
+import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest, isV8Tag} from 'progressive-web-sdk/dist/asset-utils'
 import {isSamsungBrowser, isFirefoxBrowser, isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
@@ -168,6 +168,8 @@ const attemptToInitializeApp = () => {
     const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
     const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
 
+    const IS_V8_TAG = isV8Tag() // TODO: Remove this! Hotfix for V8 tag to be removed during next release
+
     window.Progressive = {
         AstroPromise: Promise.resolve({}),
         Messaging: {
@@ -180,6 +182,15 @@ const attemptToInitializeApp = () => {
 
         if (!isRunningInAstro) {
             displayPreloader(preloadCSS, preloadHTML, preloadJS)
+        }
+
+        // TODO: Remove this! Hotfix for V8 tag to be removed during next release
+        //
+        // We are typically loaded synchronously - so we end up in <head>, and
+        // therefore <body> does not exist yet. Write it out first, so we can
+        // add elements to it after this point
+        if (IS_V8_TAG && document.getElementsByTagName('body').length === 0) {
+            document.write('<body>')
         }
 
         // Create React mounting target
@@ -288,6 +299,16 @@ const attemptToInitializeApp = () => {
         // and thus we want to fetch it so execution is not delayed to prevent
         // time to interactive from being delayed.
         prefetchLink({href: '//www.google-analytics.com/analytics.js'})
+
+        // TODO: Remove this! Hotfix for V8 tag to be removed during next release
+        if (IS_V8_TAG && document.querySelectorAll('plaintext').length <= 0) {
+            // If the plaintext tag is already present in the page, this means that
+            // the desktop site has already been prevented from rendering. This
+            // is due to the use of an older Mobify tag (pre V8), which inserts
+            // the plaintext tag inline.
+            document.write('<plaintext style="display: none;">')
+        }
+
     } else {
         const capturing = document.createElement('script')
         capturing.async = true
