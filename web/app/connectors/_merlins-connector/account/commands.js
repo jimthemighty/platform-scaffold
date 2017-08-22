@@ -4,7 +4,7 @@
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
-import {extractPathFromURL, isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
@@ -26,9 +26,8 @@ import {
     updateCustomerAddresses
 } from './utils'
 
-import {jqueryAjaxWrapper} from '../utils'
+import {jqueryAjaxWrapper, updateLoggedInState} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
-import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {isFormResponseInvalid, parseAccountInfo, parseAccountLocations} from './parsers'
 
 export const initLoginPage = (url) => (dispatch) => {
@@ -128,30 +127,8 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
             throw new SubmissionError({_error: 'Failed to login due to network error.'})
         })
         .then((res) => {
-            let magentoCacheStorage
-            const useLocalStorage = isLocalStorageAvailable()
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            const [fullname, email] = $response
-                .find('.box-information .box-content p')
-                .contents()
-                .filter((_, item) => item.nodeType === Node.TEXT_NODE)
-                .map((_, item) => item.textContent.trim())
-
-            if (useLocalStorage) {
-                magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-            } else {
-                const mageCookie = getCookieValue('ls-mage-cache-storage')
-                const decodedCookie = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {customer: {}}
-                magentoCacheStorage = decodedCookie
-            }
-
-            magentoCacheStorage.customer.fullname = fullname
-            magentoCacheStorage.customer.email = email
-            if (isLocalStorageAvailable()) {
-                localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
-            } else {
-                document.cookie = `ls-mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/`
-            }
+            updateLoggedInState($response)
 
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))

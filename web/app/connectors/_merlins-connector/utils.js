@@ -4,7 +4,8 @@
 
 import {makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getCookieValue} from '../../utils/utils'
-
+import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 /**
  * Formats a floating point string as money (eg. '95.7500' -> '$95.75')
  * @param {String} price
@@ -133,4 +134,32 @@ export const parseAddress = (address) => {
         addressLine2,
         telephone: address.telephone,
     }
+}
+
+export const updateLoggedInState = ($response) => {
+    let magentoCacheStorage
+    const useLocalStorage = isLocalStorageAvailable()
+    const [fullname, email] = $response
+        .find('.box-information .box-content p')
+        .contents()
+        .filter((_, item) => item.nodeType === Node.TEXT_NODE)
+        .map((_, item) => item.textContent.trim())
+
+    if (useLocalStorage) {
+        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+    } else {
+        const mageCookie = getCookieValue('ls-mage-cache-storage')
+        const decodedCookie = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {customer: {}}
+        magentoCacheStorage = decodedCookie
+    }
+
+    magentoCacheStorage.customer.fullname = fullname
+    magentoCacheStorage.customer.email = email
+    if (isLocalStorageAvailable()) {
+        localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
+    } else {
+        document.cookie = `ls-mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/`
+    }
+
+    return
 }
