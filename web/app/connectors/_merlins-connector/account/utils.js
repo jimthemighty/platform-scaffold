@@ -7,7 +7,7 @@ import {getCookieValue} from '../../../utils/utils'
 import {
     receiveWishlistData,
     receiveWishlistUIData,
-    receiveAccountAddressData
+    receiveSavedAddresses
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from './parsers'
@@ -77,11 +77,15 @@ export const receiveWishlistResponse = ($, $response) => (dispatch) => {
         productsFormInfo
     } = parseWishlistProducts($, $response)
     const formURL = $response.find('#wishlist-view-form').attr('action')
+    const wishlistIdMatch = formURL.match(/wishlist_id\/(\d+)/)
+
     const wishlistData = {
         title: $response.find('.page-title').text(),
         products: wishlistItems,
-        shareURL: formURL ? formURL.replace('update', 'share') : ''
+        shareURL: formURL ? formURL.replace('update', 'share') : '',
+        id: wishlistIdMatch ? wishlistIdMatch[1] : ''
     }
+
     dispatch(receiveWishlistProductData(products))
     dispatch(receiveWishlistData(wishlistData))
     dispatch(receiveWishlistUIData({contentLoaded: true}))
@@ -99,5 +103,5 @@ export const updateCustomerAddresses = () => (dispatch) => {
     return makeRequest(fetchURL, {method: 'GET'})
         .then((response) => response.json())
         .then(({customer: {addresses}}) => addresses.map((address) => parseAddress(address)))
-        .then((addresses) => dispatch(receiveAccountAddressData(addresses)))
+        .then((addresses) => dispatch(receiveSavedAddresses(addresses)))
 }

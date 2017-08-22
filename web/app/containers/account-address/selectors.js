@@ -4,7 +4,7 @@
 
 import {createSelector} from 'reselect'
 import {getUi} from '../../store/selectors'
-import {getAddresses, getDefaultAddress} from 'progressive-web-sdk/dist/store/user/selectors'
+import {getSavedAddresses, getDefaultAddress} from 'progressive-web-sdk/dist/store/user/selectors'
 
 import {createGetSelector} from 'reselect-immutable-helpers'
 
@@ -19,7 +19,7 @@ export const getIsEditing = createGetSelector(getAccountAddress, 'isEdit')
 
 export const getAddressFromId = createSelector(
     getAddressID,
-    getAddresses,
+    getSavedAddresses,
     (addressId, addresses) => {
         const address = addresses.find((address) => address.get('id') === addressId)
 
