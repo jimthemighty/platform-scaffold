@@ -26,7 +26,7 @@ import {
     updateCustomerAddresses
 } from './utils'
 
-import {jqueryAjaxWrapper, setLoggedInStorage} from '../utils'
+import {jqueryAjaxWrapper, setLoggedInStorage, updateLoggedInState} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {isFormResponseInvalid, parseAccountInfo, parseAccountLocations} from './parsers'
 
@@ -129,6 +129,7 @@ const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) =
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             setLoggedInStorage($, $response)
+            dispatch(updateLoggedInState($, $response))
 
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
@@ -204,14 +205,12 @@ export const navigateToSection = (router, routes, sectionName) => {
 
 export const logout = () => (dispatch) => (
     makeRequest('/customer/account/logout/')
+        .then(jqueryResponse)
         // Don't wait for the cart to do everything else
-        .then(() => {
+        .then((res) => {
+            const [$, $response] = res // eslint-disable-line no-unused-vars
             dispatch(getCart())
-            dispatch(setLoggedInInStorage(false))
-            const magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-            magentoCacheStorage.customer.fullname = ''
-            magentoCacheStorage.customer.email = ''
-            localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
+            setLoggedInStorage($, $response)
         })
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active

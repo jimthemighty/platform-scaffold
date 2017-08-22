@@ -150,7 +150,7 @@ export const updateLoggedInState = ($, $response) => (dispatch) => {
         magentoCacheStorage = decodedCookie // {} Object
     }
 
-    const isLoggedIn = !!magentoCacheStorage.customer.fullname
+    const isLoggedIn = !!(magentoCacheStorage.customer && magentoCacheStorage.customer.fullname)
     dispatch(setLoggedIn(isLoggedIn))
     dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
 }
@@ -176,15 +176,13 @@ export const setLoggedInStorage = ($, $response) => {
     let magentoCacheStorage
     if (isLocalStorageAvailable()) {
         magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-        magentoCacheStorage.customer.fullname = fullname
-        magentoCacheStorage.customer.email = email
+        magentoCacheStorage.customer = {fullname, email}
         localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
     } else {
         const mageCookie = getCookieValue('ls_mage-cache-storage')
         const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
         magentoCacheStorage = decodedCookie // {} Object
-        magentoCacheStorage.customer.fullname = fullname
-        magentoCacheStorage.customer.email = email
+        magentoCacheStorage.customer = {fullname, email}
         const updatedCookie = `ls_mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/; expires=;`
         document.cookie = updatedCookie
     }
