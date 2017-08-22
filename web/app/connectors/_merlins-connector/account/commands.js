@@ -26,7 +26,7 @@ import {
     updateCustomerAddresses
 } from './utils'
 
-import {jqueryAjaxWrapper, updateLoggedInState} from '../utils'
+import {jqueryAjaxWrapper, setLoggedInStorage} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {isFormResponseInvalid, parseAccountInfo, parseAccountLocations} from './parsers'
 
@@ -128,7 +128,7 @@ const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) =
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            dispatch(updateLoggedInState($response))
+            setLoggedInStorage($, $response)
 
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
@@ -207,6 +207,7 @@ export const logout = () => (dispatch) => (
         // Don't wait for the cart to do everything else
         .then(() => {
             dispatch(getCart())
+            dispatch(setLoggedInInStorage(false))
             const magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
             magentoCacheStorage.customer.fullname = ''
             magentoCacheStorage.customer.email = ''

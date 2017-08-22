@@ -5,11 +5,9 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
-import {parseLoginStatus, parseSearchSuggestions} from './parser'
-import {parseNavigation} from '../navigation/parser'
+import {updateLoggedInState} from '../utils'
+import {parseSearchSuggestions} from './parser'
 import {receiveFormKey} from '../actions'
-import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {
     CHECKOUT_SHIPPING_URL,
     WISHLIST_URL,
@@ -28,12 +26,10 @@ import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 
 import {
-    receiveNavigationData,
     receiveSearchSuggestions,
     setCheckoutShippingURL,
     setCartURL,
     setWishlistURL,
-    setLoggedIn,
     setSignInURL,
     setAccountAddressURL,
     setAccountInfoURL,
@@ -62,11 +58,7 @@ export const fetchPageData = (url) => (dispatch) => {
         .then(jqueryResponse)
         .then((res) => {
             const [$, $response] = res
-            const {customer} = isLocalStorageAvailable() ? JSON.parse(localStorage.getItem('mage-cache-storage')) : {customer: {}}
-            const isLoggedIn = !!(customer && customer.fullname)
-
-            dispatch(setLoggedIn(isLoggedIn))
-            dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
+            dispatch(updateLoggedInState($, $response))
             return res
         })
         .catch((error) => {

@@ -4,8 +4,10 @@
 
 import {makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getCookieValue} from '../../utils/utils'
-import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
+import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
 import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+import {parseNavigation} from './navigation/parser'
+
 /**
  * Formats a floating point string as money (eg. '95.7500' -> '$95.75')
  * @param {String} price
@@ -136,30 +138,55 @@ export const parseAddress = (address) => {
     }
 }
 
-export const updateLoggedInState = ($response) => (dispatch) => {
-    let magentoCacheStorage
+export const updateLoggedInState = ($, $response) => (dispatch) => {
+    let magentoCacheStorage // what we want to assign to LS or cookie
     const useLocalStorage = isLocalStorageAvailable()
+
+    if (useLocalStorage) {
+        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+    } else {
+        const mageCookie = getCookieValue('ls_mage-cache-storage')
+        const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
+        magentoCacheStorage = decodedCookie // {} Object
+    }
+
+    const isLoggedIn = !!magentoCacheStorage.customer.fullname
+    dispatch(setLoggedIn(isLoggedIn))
+    dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
+}
+
+
+export const setLoggedInStorage = ($, $response) => {
     const [fullname, email] = $response
         .find('.box-information .box-content p')
         .contents()
         .filter((_, item) => item.nodeType === Node.TEXT_NODE)
         .map((_, item) => item.textContent.trim())
 
-    if (useLocalStorage) {
-        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-    } else {
-        const mageCookie = getCookieValue('ls-mage-cache-storage')
-        const decodedCookie = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {customer: {}}
-        magentoCacheStorage = decodedCookie
+    const isLoggedIn = !!fullname
+
+    if (!isLoggedIn) { // user is logging out
+        if (isLocalStorageAvailable()) {
+            return localStorage.setItem('mage-cache-storage', {})
+        }
+        document.cookie = 'ls_mage-cache-storage={}; path=/; expires=;'
+        return null
     }
 
-    magentoCacheStorage.customer.fullname = fullname
-    magentoCacheStorage.customer.email = email
+    let magentoCacheStorage
     if (isLocalStorageAvailable()) {
+        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+        magentoCacheStorage.customer.fullname = fullname
+        magentoCacheStorage.customer.email = email
         localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
     } else {
-        document.cookie = `ls-mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/`
+        const mageCookie = getCookieValue('ls_mage-cache-storage')
+        const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
+        magentoCacheStorage = decodedCookie // {} Object
+        magentoCacheStorage.customer.fullname = fullname
+        magentoCacheStorage.customer.email = email
+        const updatedCookie = `ls_mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/; expires=;`
+        document.cookie = updatedCookie
     }
-
-    return dispatch(setLoggedIn(!!magentoCacheStorage))
+    return null
 }
