@@ -167,7 +167,7 @@ export const setLoggedInStorage = ($, $response) => {
 
     if (!isLoggedIn) { // user is logging out
         if (isLocalStorageAvailable()) {
-            return localStorage.setItem('mage-cache-storage', {})
+            return localStorage.setItem('mage-cache-storage', '{}')
         }
         document.cookie = 'ls_mage-cache-storage={}; path=/; expires=;'
         return null
