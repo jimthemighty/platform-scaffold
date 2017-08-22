@@ -182,6 +182,8 @@ const attemptToInitializeApp = () => {
             displayPreloader(preloadCSS, preloadHTML, preloadJS)
         }
 
+        document.write('<body>')
+
         // Create React mounting target
         const body = document.getElementsByTagName('body')[0]
         const reactTarget = document.createElement('div')
@@ -288,6 +290,15 @@ const attemptToInitializeApp = () => {
         // and thus we want to fetch it so execution is not delayed to prevent
         // time to interactive from being delayed.
         prefetchLink({href: '//www.google-analytics.com/analytics.js'})
+
+        if (document.querySelectorAll('plaintext').length > 0) {
+            // If the plaintext tag is already present in the page, this means that
+            // the desktop site has already been prevented from rendering. This
+            // is due to the use of an older Mobify tag (pre V8), which inserts
+            // the plaintext tag inline.
+            return
+        }
+        document.write('<plaintext style="display: none;">')
     } else {
         const capturing = document.createElement('script')
         capturing.async = true
