@@ -119,7 +119,7 @@ const clearMessageCookie = () => {
 const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
 const EXISTING_ACCT_REGEX = /already an account/
 
-const submitForm = (href, formValues, formSelector, responseUrl) => {
+const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) => {
     clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
@@ -128,7 +128,7 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            updateLoggedInState($response)
+            dispatch(updateLoggedInState($response))
 
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
@@ -166,7 +166,7 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
         formData.persistent_remember_me = 'on'
     }
 
-    return submitForm(LOGIN_POST_URL, formData, '.form-login', '/customer/account')
+    return dispatch(submitForm(LOGIN_POST_URL, formData, '.form-login', '/customer/account'))
 }
 
 export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
@@ -184,7 +184,7 @@ export const registerUser = (firstname, lastname, email, password, rememberMe) =
     if (rememberMe) {
         formData.persistent_remember_me = 'on'
     }
-    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account', '/customer/account')
+    return dispatch(submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account', '/customer/account'))
 }
 
 const findPathForRoute = (routes, routeName) => {
@@ -278,7 +278,7 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
         form_key: formKey,
         ...createAddressRequestObject(address)
     }
-    return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/')
+    return dispatch(submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/'))
         .then(() => dispatch(updateCustomerAddresses()))
 }
 
@@ -288,7 +288,7 @@ export const addAddress = (address) => (dispatch, getState) => {
         form_key: formKey,
         ...createAddressRequestObject(address)
     }
-    return submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/')
+    return dispatch(submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/'))
         .then(() => dispatch(updateCustomerAddresses()))
 }
 
@@ -308,7 +308,7 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
     }
 
     dispatch(receiveAccountInfoData({names, email}))
-    return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
+    return dispatch(submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/'))
 }
 
 

@@ -136,7 +136,7 @@ export const parseAddress = (address) => {
     }
 }
 
-export const updateLoggedInState = ($response) => {
+export const updateLoggedInState = ($response) => (dispatch) => {
     let magentoCacheStorage
     const useLocalStorage = isLocalStorageAvailable()
     const [fullname, email] = $response
@@ -161,5 +161,5 @@ export const updateLoggedInState = ($response) => {
         document.cookie = `ls-mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/`
     }
 
-    return
+    return dispatch(setLoggedIn(!!magentoCacheStorage))
 }
