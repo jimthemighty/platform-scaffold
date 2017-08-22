@@ -14,7 +14,7 @@ import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {NAVIGATION_MODAL} from '../../modals/constants'
 import * as selectors from './selectors'
 import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
-
+import {getBrowsingHistory} from 'progressive-web-sdk/dist/store/app/selectors'
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Search from 'progressive-web-sdk/dist/components/search'
@@ -71,7 +71,7 @@ class Header extends React.Component {
 
         // Don't trigger the action unless things have changed
         if (newIsCollapsed !== isCollapsed) {
-            this.props.toggleHeader(newIsCollapsed)
+            // this.props.toggleHeader(newIsCollapsed) do not want this on A2HS mode
         }
     }
 
@@ -86,8 +86,10 @@ class Header extends React.Component {
             isCollapsed,
             itemCount,
             searchIsOpen,
-            searchSuggestions
+            searchSuggestions,
+            appHistory
         } = this.props
+        const showBackButton = appHistory && appHistory.length > 1
 
         if (isRunningInAstro) {
             trigger('cart:count-updated', {
@@ -107,7 +109,7 @@ class Header extends React.Component {
             <header className="t-header" ref={(el) => { this.headerHeight = el ? el.scrollHeight : Number.MAX_VALUE }}>
                 <div className="t-header__bar">
                     <HeaderBar>
-                        {true ? // eslint-disable-line
+                        {showBackButton ?
                             <BackAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
                             :
                             <NavigationAction innerButtonClassName={innerButtonClassName} onClick={onMenuClick} />
@@ -116,7 +118,7 @@ class Header extends React.Component {
                         <HeaderTitle isCollapsed={isCollapsed} />
                         <StoresAction innerButtonClassName={innerButtonClassName} />
                         <CartAction innerButtonClassName={innerButtonClassName} onClick={onMiniCartClick} />
-                        <MoreAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
+                        <MoreAction innerButtonClassName={innerButtonClassName} onClick={() => alert('Clicked More')} />
                     </HeaderBar>
                 </div>
 
@@ -153,6 +155,7 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
+    appHistory: PropTypes.array,
     clearSuggestions: PropTypes.func,
     goBack: PropTypes.func,
     isCollapsed: PropTypes.bool,
@@ -172,7 +175,8 @@ const mapStateToProps = createPropsSelector({
     isCollapsed: selectors.getIsCollapsed,
     itemCount: getCartSummaryCount,
     searchIsOpen: selectors.getSearchIsOpen,
-    searchSuggestions: selectors.getSearchSuggestions
+    searchSuggestions: selectors.getSearchSuggestions,
+    appHistory: getBrowsingHistory
 })
 
 const mapDispatchToProps = {
