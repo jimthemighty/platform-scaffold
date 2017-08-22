@@ -47,3 +47,4 @@ export const getProductDetailsBreadcrumbs = createGetSelector(
 )
 export const getIsWishlistAdded = createGetSelector(getProductDetails, 'isWishlistAdded')
 
+export const getIsShareOpen = createGetSelector(getProductDetails, 'isShareOpen')

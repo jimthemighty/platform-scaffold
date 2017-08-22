@@ -14,8 +14,21 @@ import ProductDetailsVariations from './product-details-variations'
 import Button from 'progressive-web-sdk/dist/components/button'
 import Icon from 'progressive-web-sdk/dist/components/icon'
 import Stepper from 'progressive-web-sdk/dist/components/stepper'
+import Share from 'progressive-web-sdk/dist/components/share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
+
+const openShareButton = (
+    <Button
+        icon="share"
+        title="Share"
+        iconClassName="u-margin-end"
+        showIconText={true}
+        className="u-color-brand u-text-letter-spacing-normal u-width-full"
+        data-analytics-name={UI_NAME.share}
+        type="button"
+    />
+)
 
 const ProductDetailsAddToCart = ({
     available,
@@ -24,11 +37,13 @@ const ProductDetailsAddToCart = ({
     onSubmit,
     disabled,
     isInCheckout,
+    isShareOpen,
     isInWishlist,
     error,
     handleSubmit,
     addToWishlist,
-    updateWishlistItem
+    updateWishlistItem,
+    setOpenShare
 }) => {
     const stepperProps = {
         decrementIcon: 'minus',
@@ -74,13 +89,13 @@ const ProductDetailsAddToCart = ({
                     />
                 </div>
             }
-            <div className="u-border-light-top u-border-light-bottom u-margin-top-md">
+            <div className="u-flexbox u-border-light-top u-border-light-bottom u-margin-top-md">
                 <Button
                     icon="wishlist-add"
                     title={isInWishlist ? 'Update in Wishlist' : 'Wishlist'}
                     iconClassName="u-margin-end"
                     showIconText={true}
-                    className="u-color-brand u-text-letter-spacing-normal u-width-full"
+                    className="u-flex u-border-light-end u-color-brand u-text-letter-spacing-normal u-width-full"
                     onClick={() => {
                         if (isInWishlist) {
                             return updateWishlistItem(quantity)
@@ -89,8 +104,16 @@ const ProductDetailsAddToCart = ({
                     }}
                     data-analytics-name={UI_NAME.wishlist}
                 />
+                <Share
+                    className="u-flex"
+                    onShow={() => setOpenShare(true)}
+                    onDismiss={() => setOpenShare(false)}
+                    open={isShareOpen}
+                    triggerElement={openShareButton}
+                />
             </div>
         </form>
+
     )
 }
 
@@ -105,7 +128,9 @@ ProductDetailsAddToCart.propTypes = {
     initialValues: PropTypes.object,
     isInCheckout: PropTypes.bool,
     isInWishlist: PropTypes.bool,
+    isShareOpen: PropTypes.bool,
     quantity: PropTypes.number,
+    setOpenShare: PropTypes.bool,
     updateWishlistItem: PropTypes.func
 }
 
@@ -113,14 +138,16 @@ const mapStateToProps = createPropsSelector({
     available: getProductAvailability,
     quantity: selectors.getItemQuantity,
     disabled: selectors.getAddToCartDisabled,
-    initialValues: getProductInitialValues
+    initialValues: getProductInitialValues,
+    isShareOpen: selectors.getIsShareOpen
 })
 
 const mapDispatchToProps = {
     setQuantity: actions.setItemQuantity,
     onSubmit: actions.submitCartForm,
     addToWishlist: actions.addToWishlist,
-    updateWishlistItem: actions.updateItemInWishlist
+    updateWishlistItem: actions.updateItemInWishlist,
+    setOpenShare: actions.setOpenShare
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({

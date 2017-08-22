@@ -27,6 +27,7 @@ import * as appActions from '../app/actions'
 
 export const setIsWishlistAdded = createAction('Set is wishlist added', ['isWishlistAdded'])
 export const receiveNewItemQuantity = createAction('Set item quantity')
+export const setOpenShare = createAction('Set is share open', ['isShareOpen'])
 export const setItemQuantity = (quantity) => (dispatch, getStore) => {
     dispatch(receiveNewItemQuantity({
         [getCurrentProductId(getStore())]: {
