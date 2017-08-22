@@ -18,6 +18,8 @@ import Share from 'progressive-web-sdk/dist/components/share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
+// @TODO: Add correct analytics names to share
+
 const openShareButton = (
     <Button
         icon="share"
@@ -28,6 +30,26 @@ const openShareButton = (
         data-analytics-name={UI_NAME.share}
         type="button"
     />
+)
+
+const shareHeaderContent = (dismissShareModal) => (
+    <div className="u-flex-none u-border-bottom">
+        <div className="u-flexbox u-align-center">
+            <h1 className="u-flex u-padding-lg u-h4">
+                Share via
+            </h1>
+
+            <div className="u-flexbox u-flex-none u-align-center u-justify-center">
+                <Button
+                    className="u-text-uppercase"
+                    onClick={dismissShareModal}
+                    data-analytics-name={UI_NAME.dismissModal}
+                >
+                    <Icon name="close" title="Close" />
+                </Button>
+            </div>
+        </div>
+    </div>
 )
 
 const ProductDetailsAddToCart = ({
@@ -110,6 +132,8 @@ const ProductDetailsAddToCart = ({
                     onDismiss={() => setOpenShare(false)}
                     open={isShareOpen}
                     triggerElement={openShareButton}
+                    headerContent={shareHeaderContent(() => setOpenShare(false))}
+                    coverage="40%"
                 />
             </div>
         </form>
@@ -131,7 +155,7 @@ ProductDetailsAddToCart.propTypes = {
     isShareOpen: PropTypes.bool,
     quantity: PropTypes.number,
     setOpenShare: PropTypes.bool,
-    updateWishlistItem: PropTypes.func
+    updateWishlistItem: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
@@ -147,7 +171,7 @@ const mapDispatchToProps = {
     onSubmit: actions.submitCartForm,
     addToWishlist: actions.addToWishlist,
     updateWishlistItem: actions.updateItemInWishlist,
-    setOpenShare: actions.setOpenShare
+    setOpenShare: actions.setOpenShare,
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({
