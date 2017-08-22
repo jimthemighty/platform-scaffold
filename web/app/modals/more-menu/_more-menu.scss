@@ -1,0 +1,32 @@
+.m-more-menu {
+    position: fixed;
+    top: $unit*1.5;
+    right: $unit;
+
+    display: flex;
+    overflow-y: auto; // 1
+    flex-direction: column;
+    flex: 1 1 auto;
+    z-index: 999;
+
+    background-color: white;
+    opacity: 0;
+
+    transition: opacity 200ms ease-in;
+
+    &.m--active {
+        opacity: 1;
+    }
+}
+
+.m-more-menu__shade {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $z3-depth;
+
+    opacity: 0;
+
+}
