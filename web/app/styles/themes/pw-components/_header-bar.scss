@@ -9,6 +9,39 @@
     color: $neutral-00;
 }
 
+// A2HS Mode
+// ---
+
+.t-header-bar__a2hs {
+    .pw-header-bar__actions:nth-child(1) {
+        order: 1;
+    }
+    .pw-header-bar__actions:nth-child(2) {
+        order: 3;
+    }
+    .pw-header-bar__actions:nth-child(4) {
+        order: 4;
+    }
+    .pw-header-bar__actions:nth-child(5) {
+        order: 5;
+    }
+    .pw-header-bar__actions:nth-child(6) {
+        order: 6;
+    }
+    .pw-header-bar__actions {
+        .pw-icon-label__label {
+            display: none;
+        }
+    }
+
+    .pw-header-bar > .u-flex {
+        order: 2;
+
+        .pw-header-bar__title {
+            justify-content: initial;
+        }
+    }
+}
 
 // Title
 // ---

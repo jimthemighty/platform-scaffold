@@ -29,7 +29,7 @@ import MoreAction from './partials/more-action'
 import BackAction from './partials/back-action'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
-// import {isStandalone} from '../../utils/utils'
+import {isStandalone} from '../../utils/utils'
 
 const SCROLL_CHECK_INTERVAL = 200
 
@@ -108,7 +108,7 @@ class Header extends React.Component {
         return (
             <header className="t-header" ref={(el) => { this.headerHeight = el ? el.scrollHeight : Number.MAX_VALUE }}>
                 <div className="t-header__bar">
-                    <HeaderBar>
+                    <HeaderBar className={isStandalone ? 't-header-bar__a2hs' : ''}>
                         {showBackButton ?
                             <BackAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
                             :
@@ -159,6 +159,7 @@ Header.propTypes = {
     clearSuggestions: PropTypes.func,
     goBack: PropTypes.func,
     isCollapsed: PropTypes.bool,
+    isStandalone: PropTypes.bool,
     itemCount: PropTypes.number,
     searchIsOpen: PropTypes.bool,
     searchQueryChanged: PropTypes.func,
@@ -173,6 +174,7 @@ Header.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     isCollapsed: selectors.getIsCollapsed,
+    isStandalone,
     itemCount: getCartSummaryCount,
     searchIsOpen: selectors.getSearchIsOpen,
     searchSuggestions: selectors.getSearchSuggestions,
