@@ -4,6 +4,7 @@
 
 import {getSiteID, getCategoryPath} from './config'
 import {formatPrice} from './utils'
+import {stringToTitleCase} from '../../utils/utils'
 
 const parseImages = (imageGroups) => {
     const largeImages = imageGroups.filter((imageGroup) => imageGroup.view_type === 'large')[0]
@@ -41,7 +42,6 @@ const setInitialVariantValues = (variants, id, variationCategories) => {
 
     return defaultVariant
 }
-
 
 export const getProductHref = (productID) => `/s/${getSiteID()}/${productID}.html`
 
@@ -224,7 +224,7 @@ export const parseWishlistProducts = (wishlistData) => {
             return {
                 productId,
                 quantity: wishlistItem.quantity,
-                itemID: wishlistItem.id
+                itemId: wishlistItem.id
             }
         })
     }
@@ -255,4 +255,91 @@ export const parseFilterOptions = (refinements) => {
         }
         return filters
     }, [])
+}
+
+const getOrderStatus = (order) => {
+    if (order.status === 'cancelled') {
+        return stringToTitleCase(order.status)
+    }
+
+    if (order.shipping_status === 'shipped') {
+        return stringToTitleCase(order.shipping_status)
+    }
+
+    return 'Being Processed'
+}
+
+/* eslint-disable camelcase */
+const getPaymentMethod = (paymentInstruments) => (
+    paymentInstruments.map(({payment_card: {card_type, masked_number}}) => {
+        return `${card_type} ${masked_number}`
+    })
+)
+
+export const parseOrder = (order) => {
+    const {
+        order_no,
+        creation_date,
+        order_total,
+        tax_total,
+        shipping_total,
+        shipping_total_tax,
+        product_sub_total,
+        billing_address,
+        product_items,
+        shipments: [
+            {
+                shipping_method,
+                shipping_address
+            }
+        ],
+        payment_instruments
+    } = order
+    return {
+        [order_no]: {
+            orderNumber: order_no,
+            id: order_no,
+            date: new Date(creation_date).toLocaleDateString(),
+            status: getOrderStatus(order),
+            total: formatPrice(order_total),
+            tax: formatPrice(tax_total),
+            shippingTotal: formatPrice(shipping_total + shipping_total_tax),
+            subtotal: formatPrice(product_sub_total),
+            paymentMethods: getPaymentMethod(payment_instruments),
+            shippingMethod: `${shipping_method.name}: ${shipping_method.description}`,
+            shippingAddress: parseAddressResponse(shipping_address),
+            billingAddress: parseAddressResponse(billing_address),
+            items: product_items.map(({item_text, product_id, quantity, price}) => {
+                return {
+                    itemName: item_text,
+                    price: formatPrice(price),
+                    quantity: `${quantity}`,
+                    productId: product_id
+                }
+            })
+        }
+    }
+}
+/* eslint-enable camelcase */
+export const parseOrdersResponse = ({data}) => {
+    const ordersMap = {}
+    data.forEach((order) => {
+        const {
+            order_no,
+            creation_date,
+            customer_info,
+            order_total
+        } = order
+        ordersMap[order_no] = {
+            orderNumber: order_no,
+            date: new Date(creation_date).toLocaleDateString(),
+            shippingAddress: {
+                fullName: customer_info.customer_name
+            },
+            total: formatPrice(order_total),
+            status: getOrderStatus(order)
+        }
+    })
+
+    return ordersMap
 }

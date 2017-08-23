@@ -186,3 +186,7 @@ export const validateCCNumber = (ccNumber) => {
 export const isStandalone = () => {
     return /homescreen=1/.test(window.location.href) || window.matchMedia('(display-mode: standalone)').matches
 }
+
+// Converts a string into title case
+// https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+export const stringToTitleCase = (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())

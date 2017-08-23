@@ -15,7 +15,8 @@ import {
     setSignInURL,
     setAccountURL,
     setAccountInfoURL,
-    setAccountAddressURL
+    setAccountAddressURL,
+    setAccountOrderListURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initialState = fromJS({
@@ -31,6 +32,7 @@ export default handleActions({
     [setAccountInfoURL]: mergePayload,
     [setAccountAddressURL]: mergePayload,
     [setAccountURL]: mergePayload,
+    [setAccountOrderListURL]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,
     [appActions.toggleHideApp]: mergePayload,
     [appActions.setStandAloneAppFlag]: mergePayload

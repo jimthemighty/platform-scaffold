@@ -8,13 +8,11 @@ import {createGetSelector} from 'reselect-immutable-helpers'
 import {getCheckout} from '../../selectors'
 import {getShippingMethods, getEmailAddress} from '../selectors'
 import {getShippingSavedAddressID} from '../../form/selectors'
+import {getSavedAddresses} from 'progressive-web-sdk/dist/store/user/selectors'
 
 export const getShipping = createGetSelector(getCheckout, 'shipping', Immutable.Map())
 
 export const getShippingCustomContent = createGetSelector(getShipping, 'custom', Immutable.Map())
-
-export const getSavedAddresses = createGetSelector(getCheckout, 'storedAddresses', Immutable.List())
-
 
 export const getSelectedSavedShippingAddress = createSelector(
     getSavedAddresses,
