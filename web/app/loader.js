@@ -1,4 +1,4 @@
-/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, SITE_NAME, MESSAGING_ENABLED, DEBUG, NON_PWA_ENABLED */
+/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, SITE_NAME, MESSAGING_ENABLED, DEBUG, WEBPACK_NON_PWA_ENABLED */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
@@ -30,7 +30,7 @@ import preloadJS from 'raw-loader!./preloader/preload.js' // eslint-disable-line
 
 const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
 const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
-const nonPwaEnabled = NON_PWA_ENABLED // replaced at build time
+const nonPwaEnabled = WEBPACK_NON_PWA_ENABLED // replaced at build time
 
 const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
 const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
