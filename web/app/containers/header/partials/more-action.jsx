@@ -7,7 +7,7 @@ import React, {PropTypes} from 'react'
 import Button from 'progressive-web-sdk/dist/components/button'
 import IconLabel from 'progressive-web-sdk/dist/components/icon-label'
 import {HeaderBarActions} from 'progressive-web-sdk/dist/components/header-bar'
-// import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const MoreMenuAction = ({innerButtonClassName, onClick}) => (
     <HeaderBarActions>
@@ -16,7 +16,7 @@ const MoreMenuAction = ({innerButtonClassName, onClick}) => (
                 id="more-menu"
                 innerClassName={innerButtonClassName}
                 onClick={onClick}
-                data-analytics-name="more_menu" // Update this
+                data-analytics-name={UI_NAME.moreMenu}
             >
                 <IconLabel label="More" iconName="more" iconSize="medium" />
             </Button>
