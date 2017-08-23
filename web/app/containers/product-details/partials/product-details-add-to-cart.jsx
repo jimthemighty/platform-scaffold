@@ -27,7 +27,7 @@ const openShareButton = (
         iconClassName="u-margin-end"
         showIconText={true}
         className="u-color-brand u-text-letter-spacing-normal u-width-full"
-        data-analytics-name={UI_NAME.share}
+        data-analytics-name={UI_NAME.shareModal}
         type="button"
     />
 )
