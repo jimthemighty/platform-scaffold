@@ -61,8 +61,9 @@ module.exports = {
             }
         }),
         new webpack.DefinePlugin({
-            // This is defined as a boolean, not a string
+            // These are defined as a boolean, not a string
             MESSAGING_ENABLED: `${webPackageJson.messagingEnabled}`,
+            WEBPACK_NON_PWA_ENABLED: `${webPackageJson.nonPwaEnabled}`,
             // These are defined as string constants
             MESSAGING_SITE_ID: `'${webPackageJson.messagingSiteId}'`,
             NATIVE_WEBPACK_ASTRO_VERSION: readNativeAstroVersion(),
