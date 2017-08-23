@@ -98,6 +98,10 @@ export const getCustomerData = (authorization) => {
     return subData.customer_info
 }
 
+export const getCustomerID = () => {
+    return getCustomerData().customer_id
+}
+
 export const isUserLoggedIn = (authorization) => {
     try {
         return !getCustomerData(authorization).guest
@@ -239,7 +243,7 @@ export const fetchItemData = (items) => (dispatch, getState) => {
                 .then(({image_groups, name, page_title, price, short_description, variation_values, variation_attributes}) => {
                     const productHref = getProductHref(productId)
                     const productState = getProductById(productId)(getState()).toJS()
-                    const options = variation_attributes.map((attribute) => {
+                    const options = variation_values ? variation_attributes.map((attribute) => { // eslint-disable-line
                         const selectedId = variation_values[attribute.id]
                         const selectedVariant = attribute.values.find((val) => val.value === selectedId) // eslint-disable-line
 
@@ -247,7 +251,7 @@ export const fetchItemData = (items) => (dispatch, getState) => {
                             label: attribute.name,
                             value: selectedVariant.name
                         }
-                    })
+                    }) : []
 
                     const product = {
                         ...productState,

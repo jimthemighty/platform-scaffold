@@ -17,7 +17,19 @@ import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
-const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, disabled, isInCheckout, error, handleSubmit, addToWishlist}) => {
+const ProductDetailsAddToCart = ({
+    available,
+    quantity,
+    setQuantity,
+    onSubmit,
+    disabled,
+    isInCheckout,
+    isInWishlist,
+    error,
+    handleSubmit,
+    addToWishlist,
+    updateWishlistItem
+}) => {
     const stepperProps = {
         decrementIcon: 'minus',
         disabled,
@@ -65,11 +77,16 @@ const ProductDetailsAddToCart = ({available, quantity, setQuantity, onSubmit, di
             <div className="u-border-light-top u-border-light-bottom u-margin-top-md">
                 <Button
                     icon="wishlist-add"
-                    title="Wishlist"
+                    title={isInWishlist ? 'Update in Wishlist' : 'Wishlist'}
                     iconClassName="u-margin-end"
                     showIconText={true}
                     className="u-color-brand u-text-letter-spacing-normal u-width-full"
-                    onClick={addToWishlist}
+                    onClick={() => {
+                        if (isInWishlist) {
+                            return updateWishlistItem(quantity)
+                        }
+                        return addToWishlist(quantity)
+                    }}
                     data-analytics-name={UI_NAME.wishlist}
                 />
             </div>
@@ -87,7 +104,9 @@ ProductDetailsAddToCart.propTypes = {
     handleSubmit: PropTypes.func,
     initialValues: PropTypes.object,
     isInCheckout: PropTypes.bool,
-    quantity: PropTypes.number
+    isInWishlist: PropTypes.bool,
+    quantity: PropTypes.number,
+    updateWishlistItem: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
@@ -100,7 +119,8 @@ const mapStateToProps = createPropsSelector({
 const mapDispatchToProps = {
     setQuantity: actions.setItemQuantity,
     onSubmit: actions.submitCartForm,
-    addToWishlist: actions.addToWishlist
+    addToWishlist: actions.addToWishlist,
+    updateWishlistItem: actions.updateItemInWishlist
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({

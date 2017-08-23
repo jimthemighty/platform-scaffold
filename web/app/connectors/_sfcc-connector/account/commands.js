@@ -3,19 +3,24 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {SubmissionError} from 'redux-form'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
-
+import {getCurrentProductId, getProductHref} from 'progressive-web-sdk/dist/store/products/selectors'
 import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 import {
     setSigninLoaded,
     setRegisterLoaded,
     receiveWishlistData,
     receiveWishlistUIData,
-    receiveAccountAddressData,
-    receiveAccountInfoData
+    receiveAccountInfoData,
+    removeWishlistItem,
+    receiveSavedAddresses,
+    receiveAccountOrderListData,
+    receiveUpdatedWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
-import {parseWishlistProducts} from '../parsers'
-import {createOrderAddressObject} from '../checkout/utils'
+import {getCurrentOrderNumber} from 'progressive-web-sdk/dist/store/user/orders/selectors'
+import {receiveWishlistProductData, receiveProductsData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {parseWishlistProducts, parseAddressResponse, parseOrder, parseOrdersResponse} from '../parsers'
+import {createOrderAddressObject, populateLocationsData} from '../checkout/utils'
+import {addItemToWishlist} from '../products/commands'
 import {
     initSfccSession,
     deleteAuthToken,
@@ -25,13 +30,15 @@ import {
     checkForResponseFault,
     deleteBasketID,
     storeBasketID,
-    getAuthTokenPayload,
+    getCustomerID,
     fetchItemData
 } from '../utils'
 import {requestCartData, createBasket, handleCartData} from '../cart/utils'
 import {splitFullName} from '../../../utils/utils'
-import {getDashboardURL, getApiEndPoint, getRequestHeaders} from '../config'
+import {getDashboardURL, getCartURL, getApiEndPoint, getRequestHeaders} from '../config'
 import {fetchNavigationData} from '../app/commands'
+import {addToCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
+import {removeItemFromWishlist as removeItemFromWishlistCommand} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 
 const initLoginData = () => (dispatch) => {
     dispatch(setSigninLoaded())
@@ -166,19 +173,50 @@ export const registerUser = (firstname, lastname, email, password) => (dispatch)
 
 }
 
-const addAddress = (formValues, addressName) => {
-    const addressData = createOrderAddressObject(formValues)
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
+    return Promise.resolve()
+}
+
+export const fetchAddressData = () => (dispatch) => {
+    const customerId = getCustomerID()
+
+    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
+            .then((res) => res.json())
+            .then(({data}) => {
+                const addresses = data ? data.map((address) => parseAddressResponse(address)) : []
+                return dispatch(receiveSavedAddresses(addresses))
+            })
+}
+
+export const addAddress = (address) => (dispatch) => {
+    const addressData = createOrderAddressObject(address)
+    const customerId = getCustomerID()
+
     const requestBody = {
         ...addressData,
-        address_id: addressName
+        address_id: address.addressName
     }
+
     return makeApiJsonRequest(`/customers/${customerId}/addresses`, requestBody, {method: 'POST'})
         .then(checkForResponseFault)
+        .then(() => dispatch(fetchAddressData()))
         .catch(() => { throw Error('Unable to save address') })
 }
 
+export const deleteAddress = (addressId) => (dispatch) => { // eslint-disable-line
+    const customerId = getCustomerID()
+
+    return makeApiRequest(`/customers/${customerId}/addresses/${addressId}`, {method: 'DELETE'})
+        .then(() => dispatch(fetchAddressData()))
+}
+
+export const editAddress = (address, addressId) => (dispatch) => { // eslint-disable-line
+    const addressData = createOrderAddressObject(address)
+    const customerId = getCustomerID()
+
+    return makeApiJsonRequest(`/customers/${customerId}/addresses/${addressId}`, {...addressData}, {method: 'PATCH'})
+        .then(() => dispatch(fetchAddressData()))
+}
 
 // updateShippingAddress and updateBillingAddress are separate commands to
 // support other connectors that require different actions for saving a
@@ -186,55 +224,20 @@ const addAddress = (formValues, addressName) => {
 // SFCC doesn't diferentiate between the two address types,
 // so these commands do effectively the same thing
 export const updateShippingAddress = (formValues) => (dispatch) => {
-    return addAddress(formValues, 'shipping_address')
+    formValues.addressName = 'shipping_address'
+    return dispatch(addAddress(formValues))
 }
 
 export const updateBillingAddress = (formValues) => (dispatch) => {
-    return addAddress(formValues, 'billing_address')
-}
-
-export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disable-line
-    return Promise.resolve()
+    formValues.addressName = 'billing_address'
+    return dispatch(addAddress(formValues))
 }
 
 export const initAccountAddressPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
-
-    return makeApiRequest(`/customers/${customerId}/addresses`, {method: 'GET'})
-        .then((res) => res.json())
-        .then(({data}) => {
-            const addresses = data
-                        .map(({
-                            first_name,
-                            last_name,
-                            phone,
-                            postal_code,
-                            address1,
-                            address2,
-                            city,
-                            state_code,
-                            preferred,
-                            country_code
-                        }) => {
-
-                            return {
-                                firstname: first_name,
-                                lastname: last_name,
-                                telephone: phone,
-                                postcode: postal_code,
-                                addressLine1: address1,
-                                addressLine2: address2,
-                                default: preferred,
-                                city,
-                                countryId: country_code.toUpperCase(),
-                                regionId: state_code
-                            }
-                        })
-
-            return dispatch(receiveAccountAddressData(addresses))
-        })
+    dispatch(populateLocationsData())
+    return dispatch(fetchAddressData())
 }
+
 /* eslint-disable camelcase */
 const handleAccountInfoData = ({first_name, last_name, login}) => (
     {
@@ -245,16 +248,14 @@ const handleAccountInfoData = ({first_name, last_name, login}) => (
 /* eslint-enable camelcase */
 
 export const initAccountInfoPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     return makeApiJsonRequest(`/customers/${customerId}`)
         .then((res) => dispatch(receiveAccountInfoData((handleAccountInfoData(res)))))
 }
 
 
 export const updateAccountInfo = ({names, email}) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     const {firstname, lastname} = splitFullName(names)
 
     const requestBody = {
@@ -272,8 +273,7 @@ export const updateAccountInfo = ({names, email}) => (dispatch) => {
 }
 
 export const updateAccountPassword = ({currentPassword, newPassword}) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerId = JSON.parse(sub).customer_info.customer_id
+    const customerId = getCustomerID()
     const requestBody = {
         current_password: currentPassword,
         password: newPassword
@@ -303,8 +303,7 @@ export const updateAccountPassword = ({currentPassword, newPassword}) => (dispat
 }
 
 export const initWishlistPage = () => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerID = JSON.parse(sub).customer_info.customer_id
+    const customerID = getCustomerID()
 
     return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
         .then((response) => response.json())
@@ -318,7 +317,10 @@ export const initWishlistPage = () => (dispatch) => {
             }
             const wishlistResponse = data[0]
             const wishlistItems = parseWishlistProducts(wishlistResponse)
-            const wishlistData = {products: wishlistItems}
+            const wishlistData = {
+                products: wishlistItems,
+                id: wishlistResponse.id
+            }
 
             if (wishlistResponse.name) {
                 wishlistData.title = wishlistResponse.name
@@ -332,4 +334,80 @@ export const initWishlistPage = () => (dispatch) => {
 
                 })
         })
+}
+
+export const initAccountViewOrderPage = () => (dispatch, getState) => {
+    const currentOrderNumber = getCurrentOrderNumber(getState())
+    return makeApiRequest(`/orders/${currentOrderNumber}`, {method: 'GET'})
+        .then((response) => response.json())
+        .then((responseJSON) => {
+            const orderData = parseOrder(responseJSON)
+            return dispatch(fetchItemData(orderData[currentOrderNumber].items))
+                .then(({updatedProducts, updatedCartItems}) => {
+                    orderData[currentOrderNumber].items = updatedCartItems
+                    dispatch(receiveProductsData(updatedProducts))
+                    dispatch(receiveAccountOrderListData(orderData))
+                })
+        })
+}
+
+export const initAccountOrderListPage = () => (dispatch) => {
+    const customerID = getCustomerID()
+
+    return makeApiRequest(`/customers/${customerID}/orders?count=200`, {method: 'GET'})
+        .then((res) => res.json())
+        .then((resJSON) => {
+            return dispatch(receiveAccountOrderListData(parseOrdersResponse(resJSON)))
+        })
+}
+
+const addItemsToCart = (items) => (dispatch) => {
+    createBasket()
+        .then(({basket_id}) => {
+            return makeApiJsonRequest(`/baskets/${basket_id}/items`, items, {method: 'POST'}) // eslint-disable-line
+        })
+        .then((basket) => dispatch(handleCartData(basket)))
+}
+
+export const reorderPreviousOrder = (orderNumber) => (dispatch) => {
+    return makeApiRequest(`/orders/${orderNumber}`, {method: 'GET'})
+        .then((res) => res.json())
+        .then(({product_items}) => dispatch(addItemsToCart(product_items)))
+        .then(() => getCartURL())
+}
+
+export const removeItemFromWishlist = (itemId, wishlistId) => (dispatch) => {
+    const customerID = getCustomerID()
+    return makeApiRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {method: 'DELETE'})
+        .then((response) => response.text())
+        .then((responseText) => {
+            if (!responseText.length) {
+                return Promise.resolve({})
+            }
+
+            return JSON.parse(responseText)
+        })
+        .then(checkForResponseFault)
+        .then(() => dispatch(removeWishlistItem(itemId)))
+}
+
+export const addToCartFromWishlist = (productId, {quantity, wishlistId, itemId}) => (dispatch) => {
+    // add the item to the cart
+    return dispatch(addToCart(productId, quantity))
+        .then(() => dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId, quantity)))
+}
+
+export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {
+    const productId = getCurrentProductId(getState())
+    const productUrl = getProductHref(getState())
+    // PATCH is only for updating priority, quantity, public properties of the wishlist item.
+    // POST then DELETE is required for replacing products
+    return dispatch(removeItemFromWishlistCommand(itemId, wishlistId, productId))
+        .then(() => dispatch(addItemToWishlist(productId, productUrl, quantity)))
+}
+
+export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch) => {
+    const customerID = getCustomerID()
+    dispatch(receiveUpdatedWishlistItem({itemId, quantity}))
+    return makeApiJsonRequest(`/customers/${customerID}/product_lists/${wishlistId}/items/${itemId}`, {quantity}, {method: 'PATCH'})
 }

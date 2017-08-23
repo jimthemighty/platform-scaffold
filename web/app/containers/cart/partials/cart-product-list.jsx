@@ -10,7 +10,7 @@ import {openRemoveItemModal, saveToWishlist, updateItem} from '../actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 
 import {getCartItemsFull, getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
-import {getIsLoggedIn} from '../../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 
 import {noop} from 'progressive-web-sdk/dist/utils/utils'
 
@@ -60,7 +60,7 @@ class CartProductItem extends React.Component {
     }
 
     saveForLater() {
-        this.props.onSaveLater(this.props.productId, this.props.cartItemId, this.props.href)
+        this.props.onSaveLater(this.props.productId, this.props.cartItemId, this.props.href, this.props.quantity)
     }
 
     render() {

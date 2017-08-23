@@ -13,11 +13,13 @@ import ProductNearestStores from './partials/product-nearest-stores'
 
 const ProductDetails = ({route: {routeName}}) => {
     const isInCheckout = (routeName === 'cartEditPage')
+    const isInWishlist = (routeName === 'wishlistEditPage')
+
     return (
         <div className="t-product-details">
-            <ProductDetailsHeading isInCheckout={isInCheckout} />
+            <ProductDetailsHeading isInCheckout={isInCheckout} isInWishlist={isInWishlist} />
             <ProductDetailsCarousel />
-            <ProductDetailsAddToCart isInCheckout={isInCheckout} />
+            <ProductDetailsAddToCart isInCheckout={isInCheckout} isInWishlist={isInWishlist} />
             <ProductDetailsDescription />
             <div className="u-padding-md u-bg-color-neutral-10">
                 <ProductNearestStores title="The Product is sold in the store" viewAllStoresText="Check all stores" class="u-margin-all" />

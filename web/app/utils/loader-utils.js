@@ -1,51 +1,17 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+import {isLocalStorageAvailable, loadScriptAsPromise} from 'progressive-web-sdk/dist/utils/utils'
 
-import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+let loaderDebug = false
 
-export const loadScript = ({id, src, onload, isAsync = true, onerror}) => {
-    const script = document.createElement('script')
-
-    // Setting UTF-8 as our encoding ensures that certain strings (i.e.
-    // Japanese text) are not improperly converted to something else. We
-    // do this on the vendor scripts also just in case any libs we
-    // import have localized strings in them.
-    script.charset = 'utf-8'
-    script.async = isAsync
-    script.id = id
-    script.src = src
-    if (typeof onload === 'function') {
-        script.onload = onload
+export const loaderLog = (...args) => {
+    if (loaderDebug) {
+        console.log('[Loader]', ...args)
     }
-    if (typeof onerror === 'function') {
-        script.onerror = onerror
-    }
-
-    document.getElementsByTagName('body')[0].appendChild(script)
 }
 
-export const loadScriptAsPromise = ({id, src, onload, isAsync = true, rejectOnError = true}) => {
-    return new Promise(
-        (resolve, reject) => {
-
-            const resolver = () => {
-                if (typeof onload === 'function') {
-                    onload()
-                }
-                resolve()
-            }
-
-            loadScript({
-                id,
-                src,
-                onload: resolver,
-                isAsync,
-                onerror: rejectOnError ? (e) => reject(new URIError(`The script ${e.target.src} is not accessible.`)) : resolve
-            })
-        }
-    )
-}
+export const setLoaderDebug = (debug) => { loaderDebug = debug }
 
 export const prefetchLink = ({href}) => {
     const link = document.createElement('link')
@@ -69,7 +35,7 @@ const logMessagingSetupError = () => console.error('`LoaderUtils.createGlobalMes
 let clientInitResolver = logMessagingSetupError
 let clientInitRejecter = logMessagingSetupError
 export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
-    if (!messagingEnabled) {
+    if (!messagingEnabled || window.Progressive.MessagingClientInitPromise) {
         return
     }
 
@@ -84,21 +50,20 @@ export const createGlobalMessagingClientInitPromise = (messagingEnabled) => {
  * storing a Promise in window.Progressive.MessagingClientInitPromise that
  * is resolved when the load and initialization is complete. If either load
  * or init fails, the Promise is rejected.
+ * @returns {Promise.<*>} the same Promise
  */
-export const loadAndInitMessagingClient = (debug, siteId) => {
+export const loadAndInitMessagingClient = (debug, siteId, pwaMode) => {
     loadScriptAsPromise({
         id: 'progressive-web-messaging-client',
         src: MESSAGING_PWA_CLIENT_PATH,
         rejectOnError: true
     })
-        .then(() => {
+        .then(() => (
             // We assume window.Progressive will exist at this point.
-            const messagingClient = window.Progressive.MessagingClient || {}
-
-            return messagingClient
-                .init({debug, siteId})
+            window.Progressive.MessagingClient
+                .init({debug, siteId, pwaMode})
                 .then(clientInitResolver)
-        })
+        ))
         /**
          * Potential errors:
          * - URIError thrown by `loadScriptAsPromise` rejection
@@ -106,10 +71,13 @@ export const loadAndInitMessagingClient = (debug, siteId) => {
          * - expected error if Messaging is unavailable on the device (i.e. Safari)
          */
         .catch(clientInitRejecter)
+
+    return window.Progressive.MessagingClientInitPromise
 }
 
 const MESSAGING_PWA_SW_VERSION_PATH = 'https://webpush-cdn.mobify.net/pwa-serviceworker-version.json'
 const messagingSWVersionKey = 'messagingServiceWorkerVersion'
+const messagingSWUpdateKey = 'messagingSWVersionUpdate'
 
 /**
  * Kick off a fetch for the service worker version, returning a Promise
@@ -117,14 +85,24 @@ const messagingSWVersionKey = 'messagingServiceWorkerVersion'
  * @returns {*|Promise.<T>}
  */
 export const updateMessagingSWVersion = () => {
+    loaderLog(`Updating ${MESSAGING_PWA_SW_VERSION_PATH}`)
     return fetch(MESSAGING_PWA_SW_VERSION_PATH)
         .then((response) => response.json())
         .then((versionData) => {
             // Persist the result in localStorage
-            if (isLocalStorageAvailable() && versionData) {
-                localStorage.setItem(
-                    messagingSWVersionKey,
-                    `${versionData.SERVICE_WORKER_CURRENT_VERSION || ''}_${versionData.SERVICE_WORKER_CURRENT_HASH || ''}`
+            if (isLocalStorageAvailable()) {
+                if (versionData) {
+                    localStorage.setItem(
+                        messagingSWVersionKey,
+                        `${versionData.SERVICE_WORKER_CURRENT_VERSION || ''}_${versionData.SERVICE_WORKER_CURRENT_HASH || ''}`
+                    )
+                }
+
+                // Update the sessionStorage marker that tells us we
+                // successfully checked. See getMessagingSWVersion
+                sessionStorage.setItem(
+                    messagingSWUpdateKey,
+                    'checked'
                 )
             }
             return versionData
@@ -133,4 +111,44 @@ export const updateMessagingSWVersion = () => {
         .catch((error) => { console.log(error) })
 }
 
-export const getMessagingSWVersion = () => localStorage.getItem(messagingSWVersionKey) || ''
+/**
+ * Get the current Messaging service worker version. The semantics of this
+ * are a little complex.
+ *
+ * On the first call of a session, this function will return whatever
+ * version it has stored in localStorage, and *also* kick off a network
+ * request to update that. However, it will continue to return that same
+ * initial version for all calls in the same session, so that the service
+ * worker URL remains the same for that session. If there is a newer version,
+ * it will be registered on the first call of the *next* session. This avoids
+ * the service worker being unnecessarily updated during a session.
+ *
+ * @return {string}
+ */
+export const getMessagingSWVersion = () => {
+    // Once per session (as defined by sessionStorage lifetime), update
+    // the messaging service worker version data.
+    if (!isLocalStorageAvailable()) {
+        return ''
+    }
+
+    // If we have not yet kicked off an async update of the version data,
+    // do that now. The flag we check is set in session storage
+    // when an update completes, so it will be done once per session.
+    if (!sessionStorage.getItem(messagingSWUpdateKey)) {
+        updateMessagingSWVersion()
+    }
+
+    // If we have stored a version string in session storage, return
+    // that now. This will be true after the first call of a session.
+    let version = sessionStorage.getItem(messagingSWVersionKey) || ''
+    if (version) {
+        return version
+    }
+
+    // Grab any version string stored in localStorage, update sessionStorage
+    // and return it.
+    version = localStorage.getItem(messagingSWVersionKey) || 'latest'
+    sessionStorage.setItem(messagingSWVersionKey, version)
+    return version
+}

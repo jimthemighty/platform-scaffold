@@ -8,7 +8,7 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {setCurrentURL, receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {urlToPathKey} from 'progressive-web-sdk/dist/utils/utils'
-import {makeApiRequest, makeApiJsonRequest, getAuthTokenPayload, checkForResponseFault} from '../utils'
+import {makeApiRequest, makeApiJsonRequest, getCustomerID, checkForResponseFault} from '../utils'
 import {parseProductDetails, getCurrentProductID, getProductHref, getInitialSelectedVariant} from '../parsers'
 
 export const initProductDetailsPage = (url) => (dispatch) => {
@@ -72,12 +72,11 @@ const NEW_WISHILIST_PAYLOAD = {
     name: 'My Wish List'
 }
 
-export const addItemToWishlist = (productId) => (dispatch) => {
-    const {sub} = getAuthTokenPayload()
-    const customerID = JSON.parse(sub).customer_info.customer_id
+export const addItemToWishlist = (productId, productUrl, quantity) => (dispatch) => {
+    const customerID = getCustomerID()
 
     return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
-        .then((response) => response.json())
+        .then((res) => res.json())
         .then(({count, data}) => {
             if (count) {
                 return data[0]
@@ -94,7 +93,7 @@ export const addItemToWishlist = (productId) => (dispatch) => {
             const requestBody = {
                 type: 'product',
                 product_id: productId,
-                quantity: 1
+                quantity
             }
 
             return makeApiJsonRequest(
