@@ -13,32 +13,29 @@
 // ---
 
 .t-header-bar__a2hs {
-    .pw-header-bar__actions:nth-child(1) {
+    .t-header-bar__back, .t-header-bar__nav {
         order: 1;
     }
-    .pw-header-bar__actions:nth-child(2) {
+    .t-header-bar__title {
+        order: 2;
+        .pw-header-bar__title {
+            justify-content: initial;
+        }
+
+    }
+    .t-header-bar__search {
         order: 3;
     }
-    .pw-header-bar__actions:nth-child(4) {
+    .t-header-bar__cart {
         order: 4;
     }
-    .pw-header-bar__actions:nth-child(5) {
+    .t-header-bar__more {
         order: 5;
     }
-    .pw-header-bar__actions:nth-child(6) {
-        order: 6;
-    }
+
     .pw-header-bar__actions {
         .pw-icon-label__label {
             display: none;
-        }
-    }
-
-    .pw-header-bar > .u-flex {
-        order: 2;
-
-        .pw-header-bar__title {
-            justify-content: initial;
         }
     }
 }

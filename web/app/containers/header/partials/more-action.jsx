@@ -10,7 +10,7 @@ import {HeaderBarActions} from 'progressive-web-sdk/dist/components/header-bar'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const MoreMenuAction = ({innerButtonClassName, onClick}) => (
-    <HeaderBarActions>
+    <HeaderBarActions className="t-header-bar__more">
         <div role="navigation">
             <Button
                 id="more-menu"

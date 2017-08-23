@@ -112,7 +112,7 @@ class Header extends React.Component {
         return (
             <header className="t-header" ref={(el) => { this.headerHeight = el ? el.scrollHeight : Number.MAX_VALUE }}>
                 <div className="t-header__bar">
-                    <HeaderBar className={isStandalone ? 't-header-bar__a2hs' : ''}>
+                    <HeaderBar className={isStandaloneApp ? 't-header-bar__a2hs' : ''}>
                         {showBackButton ?
                             <BackAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
                             :

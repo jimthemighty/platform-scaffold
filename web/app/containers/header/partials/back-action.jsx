@@ -10,7 +10,7 @@ import {HeaderBarActions} from 'progressive-web-sdk/dist/components/header-bar'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const BackAction = ({innerButtonClassName, onClick}) => (
-    <HeaderBarActions>
+    <HeaderBarActions className="t-header-bar__back">
         <Button
             innerClassName={innerButtonClassName}
             onClick={onClick}
