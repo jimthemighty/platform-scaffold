@@ -452,6 +452,11 @@ const loadPWA = () => {
     initCacheManifest(cacheHashManifest)
     triggerAppStartEvent(true)
 
+    loadAsset('meta', {
+        name: 'format-detection',
+        content: 'telephone=no'
+    })
+
     /* eslint-disable max-len */
     loadAsset('meta', {
         name: 'viewport',
