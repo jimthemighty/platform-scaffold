@@ -1,4 +1,4 @@
-/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, SITE_NAME, MESSAGING_ENABLED, DEBUG */
+/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, SITE_NAME, MESSAGING_ENABLED, DEBUG, NON_PWA_ENABLED */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
@@ -30,6 +30,7 @@ import preloadJS from 'raw-loader!./preloader/preload.js' // eslint-disable-line
 
 const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
 const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
+const nonPwaEnabled = NON_PWA_ENABLED // replaced at build time
 
 const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
 const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
@@ -643,7 +644,7 @@ if (shouldPreview()) {
     ) {
         loaderLog('Starting in PWA mode')
         loadPWA()
-    } else if (isSupportedNonPWABrowser()) {
+    } else if (NON_PWA_ENABLED && isSupportedNonPWABrowser()) {
         // In preview mode, we arrive here when IS_PREVIEW_PWA_MODE is
         // false - the default for preview is to load the PWA, not non-PWA
         // mode.
