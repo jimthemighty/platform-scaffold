@@ -60,7 +60,7 @@ class CartProductItem extends React.Component {
     }
 
     saveForLater() {
-        this.props.onSaveLater(this.props.productId, this.props.cartItemId, this.props.href)
+        this.props.onSaveLater(this.props.productId, this.props.cartItemId, this.props.href, this.props.quantity)
     }
 
     render() {

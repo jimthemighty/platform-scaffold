@@ -72,11 +72,11 @@ const NEW_WISHILIST_PAYLOAD = {
     name: 'My Wish List'
 }
 
-export const addItemToWishlist = (productId) => (dispatch) => {
+export const addItemToWishlist = (productId, productUrl, quantity) => (dispatch) => {
     const customerID = getCustomerID()
 
     return makeApiRequest(`/customers/${customerID}/product_lists`, {method: 'GET'})
-        .then((response) => response.json())
+        .then((res) => res.json())
         .then(({count, data}) => {
             if (count) {
                 return data[0]
@@ -93,7 +93,7 @@ export const addItemToWishlist = (productId) => (dispatch) => {
             const requestBody = {
                 type: 'product',
                 product_id: productId,
-                quantity: 1
+                quantity
             }
 
             return makeApiJsonRequest(
