@@ -11,7 +11,7 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 export const setAddressID = createAction('Set Address ID', ['addressID'])
 export const setIsEditing = createAction('Set isEdit', ['isEdit'])
 
-export const submitAddAddress = (formValues) => (dispatch, getState) => {
+export const submitAddAddress = (formValues) => (dispatch) => {
     const {firstname, lastname} = splitFullName(formValues.name)
     // Merlin's connector doens't support address names,
     // and SFCC requires an address name.
