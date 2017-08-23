@@ -154,7 +154,7 @@ ProductDetailsAddToCart.propTypes = {
     isInWishlist: PropTypes.bool,
     isShareOpen: PropTypes.bool,
     quantity: PropTypes.number,
-    setOpenShare: PropTypes.bool,
+    setOpenShare: PropTypes.func,
     updateWishlistItem: PropTypes.func,
 }
 
