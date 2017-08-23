@@ -95,7 +95,15 @@ if ('PerformanceObserver' in window) {
             }
         }
     })
-    paintObserver.observe({entryTypes: ['paint']})
+    try {
+        paintObserver.observe({entryTypes: ['paint']})
+    } catch (e) {
+        // If the `entryTypes` doesn't contain any supported entries (e.g. Safari 11)
+        // https://w3c.github.io/performance-timeline/#dom-performanceobserver-observe()
+        if (e.name !== 'TypeError') {
+            throw e
+        }
+    }
 }
 
 const trackTTI = () => {
@@ -425,7 +433,13 @@ const waitForBody = () => {
  * loaded.
  */
 const loadPWA = () => {
-    trackTTI()
+    try {
+        trackTTI()
+    } catch (e) {
+        if (typeof console !== 'undefined') {
+            console.error(e.message)
+        }
+    }
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
     if (window.loadScriptsSynchronously === undefined) {
