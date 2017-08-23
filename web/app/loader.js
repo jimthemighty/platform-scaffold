@@ -644,7 +644,7 @@ if (shouldPreview()) {
     ) {
         loaderLog('Starting in PWA mode')
         loadPWA()
-    } else if (NON_PWA_ENABLED && isSupportedNonPWABrowser()) {
+    } else if (nonPwaEnabled && isSupportedNonPWABrowser()) {
         // In preview mode, we arrive here when IS_PREVIEW_PWA_MODE is
         // false - the default for preview is to load the PWA, not non-PWA
         // mode.
