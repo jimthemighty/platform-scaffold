@@ -12,27 +12,6 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 export const setAddressID = createAction('Set Address ID', ['addressID'])
 export const setIsEditing = createAction('Set isEdit', ['isEdit'])
 
-// currently unused, checks set if address Id exists
-const assignAddressName = (addresses) => {
-    let idSet = Immutable.Set()
-    let addressId = Math
-        .random()
-        .toString(36)
-        .slice(2)
-    addresses.forEach(({id}) => {
-        idSet = idSet.add(id)
-    })
-
-    while (idSet.has(addressId)) {
-        addressId = Math
-            .random()
-            .toString(36)
-            .slice(2)
-    }
-
-    return addressId
-}
-
 export const submitAddAddress = (formValues) => (dispatch, getState) => {
     const {firstname, lastname} = splitFullName(formValues.name)
     // Merlin's connector doens't support address names,
@@ -55,4 +34,33 @@ export const submitEditAddress = (formValues) => (dispatch) => {
 
 export const removeAddress = (id) => (dispatch) => {
     return dispatch(deleteAddress(id))
+}
+
+
+
+
+
+
+
+
+
+// currently unused, collision check example
+const checkForAddressIDCollisions = (addresses) => {
+    let idSet = Immutable.Set()
+    let addressId = Math
+        .random()
+        .toString(36)
+        .slice(2)
+    addresses.forEach(({id}) => {
+        idSet = idSet.add(id)
+    })
+
+    while (idSet.has(addressId)) {
+        addressId = Math
+            .random()
+            .toString(36)
+            .slice(2)
+    }
+
+    return addressId
 }
