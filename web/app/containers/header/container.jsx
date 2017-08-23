@@ -84,6 +84,7 @@ class Header extends React.Component {
             onSearchCloseClick,
             goBack,
             isCollapsed,
+            isStandalone,
             itemCount,
             searchIsOpen,
             searchSuggestions,
