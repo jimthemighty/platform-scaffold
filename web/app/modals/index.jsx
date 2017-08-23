@@ -70,10 +70,13 @@ class ModalManager extends React.Component {
         let openModal
         for (const modal in isOpen) {
             if (isOpen[modal]) {
-                openModal = React.cloneElement(
-                    modals[modal].content,
-                    {duration: modals[modal].customDuration || duration}
-                )
+                const currentModalData = modals[modal]
+                if (currentModalData) {
+                    openModal = React.cloneElement(
+                        currentModalData.content,
+                        {duration: currentModalData.customDuration || duration}
+                    )
+                }
             }
         }
         return openModal
