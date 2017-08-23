@@ -11,6 +11,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import classNames from 'classnames'
 import WebFont from 'webfontloader'
 import {isRunningInAstro} from '../../utils/astro-integration'
+import {isStandalone} from '../../utils/utils'
 
 import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 
@@ -50,6 +51,9 @@ class App extends React.Component {
         this.hidePreloaderWhenCSSIsLoaded()
         this.props.fetchSvgSprite()
         this.props.initApp()
+        const standalone = isStandalone()
+        console.log('****** Standalone flag set to:', standalone)
+        this.props.setStandAloneAppFlag(standalone)
         WebFont.load({
             google: {
                 families: ['Oswald:200,400']
@@ -207,6 +211,7 @@ App.propTypes = {
     isModalOpen: PropTypes.object,
     notifications: PropTypes.array,
     removeNotification: PropTypes.func,
+    setStandAloneAppFlag: PropTypes.func,
     /**
      * The SVG icon sprite needed in order for all Icons to work
      */
@@ -232,7 +237,9 @@ const mapDispatchToProps = {
     fetchSvgSprite: appActions.fetchSvgSprite,
     toggleHideApp: appActions.toggleHideApp,
     fetchPage: (fetchAction, url, routeName) => fetchAction(url, routeName),
-    initApp
+    initApp,
+    setStandAloneAppFlag: appActions.setStandAloneAppFlag
+
 }
 
 export default connect(
