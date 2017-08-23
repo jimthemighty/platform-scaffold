@@ -45,7 +45,7 @@ class MoreMenuModal extends React.Component {
             className="u-width-block-full"
             innerClassName="u-text-size-medium u-justify-start u-padding-start-lg u-padding-end-lg"
             text="Share..."
-            data-analytics-name={UI_NAME.shareMenu || 'share'}
+            data-analytics-name={UI_NAME.shareMenu}
         />)
 
         return (
