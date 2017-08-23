@@ -3,7 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import Immutable from 'immutable'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {splitFullName} from '../../utils/utils'
 import {addAddress, deleteAddress, editAddress} from 'progressive-web-sdk/dist/integration-manager/account/commands'
@@ -34,33 +33,4 @@ export const submitEditAddress = (formValues) => (dispatch) => {
 
 export const removeAddress = (id) => (dispatch) => {
     return dispatch(deleteAddress(id))
-}
-
-
-
-
-
-
-
-
-
-// currently unused, collision check example
-const checkForAddressIDCollisions = (addresses) => {
-    let idSet = Immutable.Set()
-    let addressId = Math
-        .random()
-        .toString(36)
-        .slice(2)
-    addresses.forEach(({id}) => {
-        idSet = idSet.add(id)
-    })
-
-    while (idSet.has(addressId)) {
-        addressId = Math
-            .random()
-            .toString(36)
-            .slice(2)
-    }
-
-    return addressId
 }
