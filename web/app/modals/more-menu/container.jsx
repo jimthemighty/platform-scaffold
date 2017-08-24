@@ -11,6 +11,7 @@ import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actio
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import Button from 'progressive-web-sdk/dist/components/button'
+import Icon from 'progressive-web-sdk/dist/components/icon'
 import Divider from 'progressive-web-sdk/dist/components/divider'
 import Share from 'progressive-web-sdk/dist/components/share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
@@ -20,6 +21,26 @@ import {getAccountURL} from '../../containers/app/selectors'
 import {LOCATION_URL} from '../../containers/app/constants'
 
 const SHARE_MODAL = 'share'
+
+const shareHeaderContent = (dismissShareModal) => (
+    <div className="u-flex-none u-border-bottom">
+        <div className="u-flexbox u-align-center">
+            <h1 className="u-flex u-padding-lg u-h4">
+                Share via
+            </h1>
+
+            <div className="u-flexbox u-flex-none u-align-center u-justify-center">
+                <Button
+                    className="u-text-uppercase"
+                    onClick={dismissShareModal}
+                    data-analytics-name={UI_NAME.dismissModal}
+                >
+                    <Icon name="close" title="Close" />
+                </Button>
+            </div>
+        </div>
+    </div>
+)
 
 
 class MoreMenuModal extends React.Component {
@@ -93,6 +114,8 @@ class MoreMenuModal extends React.Component {
                                 open={isShareOpen}
                                 onShow={openShare}
                                 onDismiss={closeShare}
+                                headerContent={shareHeaderContent(closeShare)}
+                                coverage="40%"
                             />
                         </div>
                     </div>

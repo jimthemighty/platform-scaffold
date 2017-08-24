@@ -1,15 +1,23 @@
+// Share Theme
+// ===
 
 
 .pw-share__option {
-    background-color: transparent;
+    background: transparent;
 }
 
 .pw-share__option-icon {
-
     .pw-icon.pw--x-large {
-        width: $unit * 6;
-        height: $unit * 6;
-        background-color: transparent;
-        color: $brand-color;
+        width: $unit * 5;
+        height: $unit * 5;
     }
+
+    .pw-icon-label__label {
+        color: $neutral-40;
+        text-transform: capitalize;
+    }
+}
+
+.pw-share__option + .pw-share__option {
+    margin-top: $unit * 3;
 }
