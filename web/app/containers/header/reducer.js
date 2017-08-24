@@ -23,9 +23,7 @@ const header = handleActions({
         const historyUrl = payload.replace(/[?,&]homescreen=1/, '')
         const appHistory = state.get('appHistory')
 
-        // Don't want to add URL to stack if we navigate to the same route
-        // i.e. home -> home, back button should not be enabled
-        if (appHistory && appHistory.size && historyUrl !== appHistory.last()) {
+        if (appHistory && appHistory.size) {
             return state.setIn(['appHistory'], Immutable.fromJS(state.get('appHistory').concat(historyUrl)))
         }
 
