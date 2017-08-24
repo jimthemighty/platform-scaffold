@@ -32,6 +32,13 @@ import {
     updateCustomerAddresses
 } from './utils'
 
+import {
+    isFormResponseInvalid,
+    parseAccountInfo,
+    parseOrderListData,
+    parseOrder,
+    parseAccountLocations
+} from './parsers'
 import {jqueryAjaxWrapper, setLoggedInStorage} from '../utils'
 import {
     CART_URL,
@@ -42,15 +49,9 @@ import {
     WISHLIST_URL,
     getWishlistQuantityUrl
 } from '../config'
-import {
-    isFormResponseInvalid,
-    parseAccountInfo,
-    parseOrderListData,
-    parseOrder,
-    parseAccountLocations
-} from './parsers'
+
 import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
-import {parseNavigation} from './navigation/parser'
+import {parseNavigation} from '../navigation/parser'
 
 const updateLoggedInState = ($, $response) => (dispatch) => {
     let magentoCacheStorage // what we want to assign to LS or cookie
