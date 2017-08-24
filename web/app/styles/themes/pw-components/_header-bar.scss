@@ -14,12 +14,17 @@
 
 .t--standalone {
 
-    .t-header-bar__back, .t-header-bar__nav {
+    .t-header-bar__back {
+        order: 1;
+    }
+
+    .t-header-bar__nav {
         order: 1;
     }
 
     .t-header-bar__title {
         order: 2;
+
         .pw-header-bar__title {
             justify-content: initial;
         }
