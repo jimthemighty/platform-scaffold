@@ -39,7 +39,6 @@ import {
     setAccountAddressURL,
     setAccountInfoURL,
     setAccountURL,
-    setA2HSMode,
     setAccountOrderListURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 

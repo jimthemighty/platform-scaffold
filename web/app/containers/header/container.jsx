@@ -31,7 +31,6 @@ import BackAction from './partials/back-action'
 import MoreMenuAction from './partials/more-action'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
-import {isStandalone} from '../../utils/utils'
 
 const SCROLL_CHECK_INTERVAL = 200
 
@@ -72,8 +71,9 @@ class Header extends React.Component {
         const newIsCollapsed = window.pageYOffset > this.headerHeight
 
         // Don't trigger the action unless things have changed
-        if (newIsCollapsed !== isCollapsed) {
-            // this.props.toggleHeader(newIsCollapsed) do not want this on A2HS mode
+        // Don't trigger on A2HS / Standalone mode
+        if (newIsCollapsed !== isCollapsed && !this.props.isStandaloneApp) {
+            this.props.toggleHeader(newIsCollapsed)
         }
     }
 
