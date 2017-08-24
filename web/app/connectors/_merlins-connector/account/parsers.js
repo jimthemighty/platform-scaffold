@@ -72,12 +72,19 @@ const getOrderNumber = ($pageTitle) => {
     return orderIdMatch ? orderIdMatch[1] : ''
 }
 
-const parseAddress = ($addressBlock) => {
+const parseAddress = ($, $addressBlock) => {
     const addressLines = $addressBlock.html().split('<br>')
     const addressLength = addressLines.length
     const containsAddressLine2 = addressLength === 6
     const {firstname, lastname} = splitFullName(addressLines[0])
     const [city, state, postcode] = addressLines[addressLength - 3].split(',')
+    // on iOS the phone number may be wrapped in an <a> tag due to their
+    // phone number detection so to remove the <a> tag we'll wrap the HTML
+    // in a div and get the text of the div (ie. with no a tag)
+    const phoneNumber = $('<div>')
+        .html(addressLines[addressLength - 1])
+        .text()
+
 
     return {
         firstname,
@@ -88,7 +95,7 @@ const parseAddress = ($addressBlock) => {
         region: state.trim(),
         postcode: postcode.trim(),
         country: addressLines[addressLength - 2].trim(),
-        telephone: addressLines[addressLength - 1].replace(/T:\s*/, '').trim()
+        telephone: phoneNumber.replace(/T:\s*/, '').trim()
     }
 }
 
@@ -110,8 +117,8 @@ export const parseOrder = ($, $response) => {
         subtotal: getTextFrom($response, 'tfoot .subtotal .price'),
         paymentMethods: [getTextFrom($response, '.box-order-billing-method .box-content')],
         shippingMethod: getTextFrom($response, '.box-order-shipping-method .box-content'),
-        shippingAddress: parseAddress($response.find('.box-order-shipping-address address')),
-        billingAddress: parseAddress($response.find('.box-order-billing-address address')),
+        shippingAddress: parseAddress($, $response.find('.box-order-shipping-address address')),
+        billingAddress: parseAddress($, $response.find('.box-order-billing-address address')),
         items: $response.find('.table-order-items tbody')
             .children()
             .get()
