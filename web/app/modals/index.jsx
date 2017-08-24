@@ -11,12 +11,16 @@ import * as MODAL from './constants'
 import Navigation from './navigation/container'
 import MiniCart from './mini-cart/container'
 import ProductDetailsItemAddedModal from './product-details-item-added/container'
+import WishlistItemAddedModal from './wishlist-item-added/container'
 import CartEstimateShippingModal from './cart-estimate-shipping/container'
 import CartWishlistModal from './cart-wishlist/container'
 import CartRemoveItemModal from './cart-remove-item/container'
+import AccountAddressModal from './account-add-address/container'
+import AccountRemoveAddressModal from './account-remove-address/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
+import AccountRemoveWishlistItemModal from './account-remove-wishlist-item/container'
 
 const modals = {
     // You can set transition duration for individual modal:
@@ -26,10 +30,14 @@ const modals = {
     [MODAL.OFFLINE_MODAL]: {content: <OfflineModal />},
     [MODAL.MINI_CART_MODAL]: {content: <MiniCart />},
     [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: {content: <ProductDetailsItemAddedModal />},
+    [MODAL.WISHLIST_ITEM_ADDED_MODAL]: {content: <WishlistItemAddedModal />},
     [MODAL.PRODUCT_LIST_FILTER_MODAL]: {content: <ProductListFilterModal />},
     [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
     [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
+    [MODAL.ACCOUNT_ADDRESS_MODAL]: {content: <AccountAddressModal />},
+    [MODAL.ACCOUNT_REMOVE_ADDRESS_MODAL]: {content: <AccountRemoveAddressModal />},
+    [MODAL.ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL]: {content: <AccountRemoveWishlistItemModal />},
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }
 

@@ -10,6 +10,11 @@
 @import '../containers/header/header';
 @import '../containers/footer/footer';
 @import '../containers/login/login';
+@import '../containers/account-dashboard/account-dashboard';
+@import '../containers/account-address/account-address';
+@import '../containers/account-info/account-info';
+@import '../containers/account-order-list/account-order-list';
+@import '../containers/account-view-order/account-view-order';
 @import '../containers/product-details/product-details';
 @import '../containers/checkout-header/checkout-header';
 @import '../containers/checkout-footer/checkout-footer';
@@ -17,3 +22,4 @@
 @import '../containers/checkout-payment/checkout-payment';
 @import '../containers/checkout-confirmation/checkout-confirmation';
 @import '../containers/offline/offline';
+@import '../containers/wishlist/wishlist';

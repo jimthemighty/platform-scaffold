@@ -14,6 +14,89 @@ const parseCarouselItems = (magentoObject) => {
     return carouselSetup.toJS()
 }
 
+
+const parseVariationCategories = (magentoObject) => {
+    const optionList = magentoObject
+            .getIn(['#product_addtocart_form', 'configurable', 'spConfig', 'attributes'])
+            .toJS()
+
+    return Object.keys(optionList).map((key) => {
+        const option = optionList[key]
+        const {code, id, label, options} = option
+        const values = options.map(({label, products, id}) => {
+            return {
+                label,
+                value: id,
+                products
+            }
+        })
+
+        return {
+            id,
+            name: code,
+            label,
+            values
+        }
+    })
+}
+
+const parseVariantIds = (variationCategories) => variationCategories
+                                                .map((category) => category.values)
+                                                .reduce((a, b) => a.concat(b))
+                                                .reduce((a, b) => {
+                                                    return a.products && b.products ? a.products.concat(b.products) : a
+                                                })
+
+
+const parseDefaultVariant = (magentoObject) => {
+    const {defaultValues} = magentoObject
+            .getIn(['#product_addtocart_form', 'configurable', 'spConfig'])
+            .toJS()
+
+    return defaultValues
+}
+
+const buildVariantFromId = (id, variationCategories) => {
+    const variant = {
+        id,
+        values: {},
+        attributeIds: {}
+    }
+
+    variationCategories.forEach((category) => {
+        const selectedCategory = category.values.find((option) => option.products.find((product) => product === id))
+        variant.values[category.name] = selectedCategory.value
+        variant.attributeIds[category.name] = category.id
+    })
+
+    return variant
+}
+
+const buildVariants = (magentoObject, variationCategories) => {
+    const variantIds = parseVariantIds(variationCategories)
+    return variantIds.map((id) => buildVariantFromId(id, variationCategories))
+}
+
+
+const setInitialVariantValues = (variationCategories, magentoObject) => {
+    const initialValues = {}
+    const selectedVariant = parseDefaultVariant(magentoObject)
+
+    if (selectedVariant) {
+        variationCategories.forEach(({id, name}) => {
+            initialValues[name] = selectedVariant[id]
+        })
+
+        return initialValues
+    }
+
+    variationCategories.forEach(({name, values}) => {
+        initialValues[name] = values[0].value
+    })
+
+    return initialValues
+}
+
 const carouselItemsToImages = (carouselItems) => {
     return carouselItems.map(({img, isMain, full, thumb, caption}) => ({
         alt: '',
@@ -30,16 +113,15 @@ const parseBreadcrumbs = ($, $breadcrumbsLinks) => {
         .map((breadcrumbLink) => parseTextLink($(breadcrumbLink)))
 }
 
-const getAvailabilityFrom = ($content) => {
-    const availability = getTextFrom($content, '.product-info-stock-sku [title="Availability"]')
-    return availability.toLowerCase() === 'in stock'
-}
+const getAvailabilityFrom = ($content) => !!$content.find('button.tocart').length
 
 export const productDetailsParser = ($, $html) => {
     const $mainContent = $html.find('.page-main')
     const magentoObject = extractMagentoJson($html)
     const carouselItems = parseCarouselItems(magentoObject)
     const images = carouselItemsToImages(carouselItems)
+    const hasVariants = !!magentoObject.getIn(['#product_addtocart_form', 'configurable', 'spConfig', 'attributes'])
+    const variationCategories = hasVariants ? parseVariationCategories(magentoObject) : []
 
     return {
         id: $mainContent.find('#product_addtocart_form input[name="product"]').val(),
@@ -47,7 +129,10 @@ export const productDetailsParser = ($, $html) => {
         price: getTextFrom($mainContent, '.product-info-price .price-wrapper .price'),
         description: getTextFrom($mainContent, '.product.info.detailed .product.attibute.description p'),
         available: getAvailabilityFrom($mainContent),
-        images
+        images,
+        initialValues: hasVariants ? setInitialVariantValues(variationCategories, magentoObject) : {},
+        variants: hasVariants ? buildVariants(magentoObject, variationCategories) : [],
+        variationCategories
     }
 }
 

@@ -7,7 +7,7 @@ import thunk from 'redux-thunk'
 import Immutable from 'immutable'
 
 import rootReducer from '../containers/reducers'
-import userReducer from './user/reducer'
+import userReducer from 'progressive-web-sdk/dist/store/user/reducer'
 import cartReducer from 'progressive-web-sdk/dist/store/cart/reducer'
 import categoryReducer from './categories/reducer'
 import modalReducer from 'progressive-web-sdk/dist/store/modals/reducer'
@@ -22,10 +22,11 @@ import {reducer as formReducer} from 'redux-form'
 
 import analytics from 'redux-analytics'
 import analyticsManager from 'progressive-web-sdk/dist/analytics/analytics-manager'
+import {ReduxFormPluginOption} from 'progressive-web-sdk/dist/analytics/actions'
 
 analyticsManager.init({
     projectSlug: AJS_SLUG,              // eslint-disable-line no-undef
-    mobifyGAID: 'UA-78284797-2',
+    mobifyGAID: WEBPACK_MOBIFY_GA_ID,   // eslint-disable-line no-undef
     ecommerceLibrary: 'ec',
     debug: DEBUG                        // eslint-disable-line no-undef
 })
@@ -47,7 +48,7 @@ const configureStore = (initialState) => {
         checkout: checkoutReducer,
         offline: offlineReducer,
         integrationManager: imReducer,
-        form: formReducer,
+        form: formReducer.plugin(ReduxFormPluginOption),
         pushMessaging: pushMessagingReducer
     })
 

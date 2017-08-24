@@ -20,6 +20,9 @@ import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {OFFLINE_MODAL} from '../../modals/constants'
+import {isRunningInAstro, trigger} from '../../utils/astro-integration'
+import {getCartURL} from './selectors'
+
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
@@ -70,16 +73,18 @@ export const fetchSvgSprite = () => (dispatch) => {
 }
 
 
-export const signOut = () => (dispatch) => (
-    dispatch(logout()).then(() => {
-        // Desktop's message includes 'redirect to home page' message
-        // so we'll just hardcode a message instead
-        dispatch(addNotification(
-            'signedOutNotification',
-            'You are now signed out'
-        ))
-    })
-)
+export const signOut = () => (dispatch) => {
+    return dispatch(logout())
+        .then(() => browserHistory.push({pathname: '/'}))
+        .then(() => {
+            // Desktop's message includes 'redirect to home page' message
+            // so we'll just hardcode a message instead
+            dispatch(addNotification(
+                'signedOutNotification',
+                'You are now signed out'
+            ))
+        })
+}
 
 export const cartExpired = () => (dispatch) => {
     // navigate to homepage, show notification
@@ -98,4 +103,14 @@ export const handleCartExpiryError = (error) => (dispatch) => {
         return dispatch(cartExpired())
     }
     throw error
+}
+
+export const goToCheckout = () => (dispatch, getState) => {
+    if (isRunningInAstro) {
+        // If we're running in Astro, we want to dismiss open the cart modal,
+        // otherwise, navigating is taken care of by the button press
+        trigger('open:cart-modal')
+    } else {
+        browserHistory.push(getCartURL(getState()))
+    }
 }

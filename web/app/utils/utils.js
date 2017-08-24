@@ -30,6 +30,37 @@ export const getPath = ({pathname, search}) => pathname + search
 export const getURL = (location) =>
     window.location.origin + getPath(location)
 
+/**
+ * Returns query string given an object of parameters
+ * @param {object} params - contains list of keys and values
+ * @returns {string} - url query string
+ */
+export const makeQueryString = (params) => {
+    if (typeof params === 'undefined' || typeof params !== 'object') {
+        return ''
+    }
+
+    let query = '?'
+    let index = 0
+
+    for (const key in params) {
+        if (params[key]) {
+            index++
+            const param = key
+            const value = params[key]
+            if (index === 1) {
+                query += `${param}=${value}`
+            } else {
+                query += `&${param}=${value}`
+            }
+        }
+    }
+    if (query.length <= 1) {
+        return ''
+    }
+    return query
+}
+
 
 // Regex courtesy of https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
 export const getCookieValue = (cookieName) => {
@@ -93,7 +124,7 @@ export const createTypedAction = (description, type, key) => createReduxAction(
 )
 
 export const buildQueryString = (query) => {
-    return query.replace(/ /g, '+')
+    return `?q=${query.replace(/ /g, '+')}`
 }
 
 export const validateFullName = (fullName) => {
@@ -151,3 +182,6 @@ export const validateCCNumber = (ccNumber) => {
 
     return checkSum !== 0 && (checkSum % 10) === 0
 }
+// Converts a string into title case
+// https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+export const stringToTitleCase = (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())

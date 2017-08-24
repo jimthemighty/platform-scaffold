@@ -8,7 +8,6 @@
 @include wrap-at-root("#app", 1) {
     @import 'utilities/border';
     @import 'utilities/box-shadow';
-    @import 'utilities/card';
     @import 'utilities/color';
     @import 'utilities/dimensions';
     @import 'utilities/display';

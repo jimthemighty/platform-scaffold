@@ -4,6 +4,9 @@ import {onRouteChanged} from 'progressive-web-sdk/dist/store/app/actions'
 import {removeAllNotifications} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {incrementPageCount} from 'progressive-web-sdk/dist/store/push-messaging/actions'
 
+import {PERFORMANCE_METRICS} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {trackPerformance} from 'progressive-web-sdk/dist/analytics/actions'
+
 import {trigger as astroTrigger} from './utils/astro-integration'
 
 import {getURL, getPath} from './utils/utils'
@@ -34,14 +37,20 @@ const template = (WrappedComponent) => {
         }
 
         componentWillMount() {
+            trackPerformance(PERFORMANCE_METRICS.templateWillMount)
             this.dispatchRouteChange(this.props)
         }
 
         componentDidMount() {
+            trackPerformance(PERFORMANCE_METRICS.templateDidMount)
             astroTrigger('pwa-navigated', {
                 url: getURL(this.props.location),
                 source: 'componentDidMount'
             })
+        }
+
+        componentWillUpdate() {
+            trackPerformance(PERFORMANCE_METRICS.templateWillMount)
         }
 
         componentWillReceiveProps(nextProps) {
@@ -52,6 +61,7 @@ const template = (WrappedComponent) => {
         }
 
         componentDidUpdate() {
+            trackPerformance(PERFORMANCE_METRICS.templateDidMount)
             astroTrigger('pwa-navigated', {
                 url: getURL(this.props.location),
                 source: 'componentDidUpdate'

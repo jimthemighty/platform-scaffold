@@ -6,7 +6,7 @@ import {buildQueryString} from '../../utils/utils'
 const API_TYPE = 'shop'
 const API_VERSION = 'v17_4'
 
-export const SEARCH_URL = '/catalogsearch/result/?q=+'
+export const SEARCH_URL = '/catalogsearch/result/'
 
 let config = {}
 
@@ -29,10 +29,15 @@ const getBaseURL = () => `/on/demandware.store/Sites-${getSiteID()}-Site/default
 
 export const getHomeURL = () => `${getBaseURL()}Home-Show`
 export const getSignInURL = () => `${getBaseURL()}Account-Show`
+export const getDashboardURL = () => `${getBaseURL()}Account-Show?dashboard`
 export const getSignOutURL = () => `${getBaseURL()}Logout-Logout`
 export const getCheckoutShippingURL = () => `${getBaseURL()}COShipping-Start`
 export const getCartURL = () => `${getBaseURL()}Cart-Show`
+export const getWishlistURL = () => `${getBaseURL()}Wishlist-Show`
 export const getPaymentURL = () => `${getBaseURL()}COBilling-Start`
 export const getConfirmationURL = () => `${getBaseURL()}COSummary-Submit`
+export const getAccountAddressURL = () => `${getBaseURL()}Address-List`
+export const getAccountInfoURL = () => `${getBaseURL()}Account-EditProfile`
+export const getAccountOrderListURL = () => `${getBaseURL()}Order-History`
 
 export const buildSearchURL = (query) => `${SEARCH_URL}${buildQueryString(query)}`

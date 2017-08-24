@@ -13,13 +13,11 @@ import * as productDetailsActions from '../../containers/product-details/actions
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 
-import Button from 'progressive-web-sdk/dist/components/button'
-import Icon from 'progressive-web-sdk/dist/components/icon'
-import ProductItem from '../../components/product-item'
+import ItemAddedModalContents from '../../components/item-added-modal-contents'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, duration}) => (
+const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, thumbnail, onGoToCheckout, onGoToWishlist, duration, isWishlistAdded}) => (
     <Sheet
         open={open}
         onDismiss={onDismiss}
@@ -29,58 +27,20 @@ const ProductDetailsItemAddedModal = ({open, onDismiss, quantity, title, price, 
         coverage="50%"
         shrinkToContent
     >
-        {/* Modal header */}
-        <div className="u-flex-none u-border-bottom">
-            <div className="u-flexbox u-align-center">
-                <h1 className="u-flex u-padding-lg u-h4 u-text-uppercase">
-                    Product Added to Cart
-                </h1>
-
-                <div className="m-product-details__item-added-modal-close u-flexbox u-flex-none u-align-center u-justify-center">
-                    <Button
-                        className="u-text-uppercase"
-                        onClick={onDismiss}
-                        data-analytics-name={UI_NAME.dismissModal}
-                    >
-                        <Icon name="close" title="Close" className="m-product-details__item-added-modal-icon" />
-                    </Button>
-                </div>
-            </div>
-        </div>
-
-        <div className="u-flexbox u-direction-column u-flex u-padding-md">
-            {/* Modal product information */}
-            <div className="u-flex u-margin-bottom-md">
-                <ProductItem customWidth="20%"
-                    title={<h2 className="u-h5 u-text-family u-text-weight-medium">{title}</h2>}
-                    image={<img role="presentation" src={thumbnail.src} alt={thumbnail.alt} width="60px" />}
-                >
-                    <div className="u-flexbox u-justify-between u-padding-top-sm">
-                        <p>Qty: {quantity}</p>
-                        <p className="u-text-weight-bold">{price}</p>
-                    </div>
-                </ProductItem>
-            </div>
-
-            {/* Buttons */}
-            <div className="u-flex-none">
-                <Button
-                    onClick={onGoToCheckout}
-                    className="pw--primary u-width-full u-margin-bottom-md u-text-uppercase"
-                    innerClassName="u-text-align-center"
-                    data-analytics-name={UI_NAME.checkout}
-                >
-                    Go To Checkout
-                </Button>
-                <Button
-                    className="pw--tertiary u-width-full u-text-uppercase"
-                    onClick={onDismiss}
-                    data-analytics-name={UI_NAME.continueShopping}
-                >
-                    Continue Shopping
-                </Button>
-            </div>
-        </div>
+        <ItemAddedModalContents
+            headerText={`Product Added to ${isWishlistAdded ? 'Wishlist' : 'Cart'}`}
+            ctaButtonOptions={{
+                text: isWishlistAdded ? 'View Wishlist' : 'Go To Checkout',
+                onClick: isWishlistAdded ? onGoToWishlist : onGoToCheckout,
+                'data-analytics-name': isWishlistAdded ? UI_NAME.wishlist : UI_NAME.checkout
+            }}
+            ctaClickHandler={isWishlistAdded ? onGoToWishlist : onGoToCheckout}
+            onDismiss={onDismiss}
+            title={title}
+            thumbnail={thumbnail}
+            quantity={quantity}
+            price={price}
+        />
     </Sheet>
 )
 
@@ -89,6 +49,7 @@ ProductDetailsItemAddedModal.propTypes = {
      * Duration will define the time the animation takes to complete.
      */
     duration: PropTypes.number,
+    isWishlistAdded: PropTypes.bool,
     open: PropTypes.bool,
     price: PropTypes.string,
     quantity: PropTypes.number,
@@ -99,9 +60,11 @@ ProductDetailsItemAddedModal.propTypes = {
     title: PropTypes.string,
     onDismiss: PropTypes.func,
     onGoToCheckout: PropTypes.func,
+    onGoToWishlist: PropTypes.func
 }
 
 const mapStateToProps = createPropsSelector({
+    isWishlistAdded: selectors.getIsWishlistAdded,
     thumbnail: getProductThumbnail,
     open: isModalOpen(PRODUCT_DETAILS_ITEM_ADDED_MODAL),
     quantity: selectors.getItemQuantity,
@@ -111,6 +74,7 @@ const mapStateToProps = createPropsSelector({
 
 const mapDispatchToProps = {
     onGoToCheckout: productDetailsActions.goToCheckout,
+    onGoToWishlist: productDetailsActions.goToWishlist,
     onDismiss: stripEvent(() => closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
 }
 

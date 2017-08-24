@@ -8,9 +8,9 @@ import CarouselItem from 'progressive-web-sdk/dist/components/carousel/carousel-
 import Carousel from 'progressive-web-sdk/dist/components/carousel'
 import Button from 'progressive-web-sdk/dist/components/button'
 
-const OnboardingScreen = ({imageURL, imageAlt, title, subtitle, primaryButton, laterButton, actionButton, id}) => {
+const OnboardingScreen = ({imageURL, imageAlt, title, subtitle, primaryButton, laterButton, actionButton, id, active}) => {
     return (
-        <CarouselItem caption="Get started" key={id} className="carousel-item">
+        <CarouselItem caption="Get started" key={id} className="carousel-item" active={active}>
             <div className="carousel-item-wrapper u-direction-column">
                 <div className="u-flex u-flexbox u-align-center u-justify-center">
                     <div>
@@ -41,6 +41,7 @@ const OnboardingScreen = ({imageURL, imageAlt, title, subtitle, primaryButton, l
 
 OnboardingScreen.propTypes = {
     actionButton: React.PropTypes.object,
+    active: React.PropTypes.bool,
     id: React.PropTypes.string,
     imageAlt: React.PropTypes.string,
     imageURL: React.PropTypes.string,
