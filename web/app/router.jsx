@@ -5,7 +5,7 @@ import {Router as SDKRouter, Route, IndexRoute} from 'progressive-web-sdk/dist/r
 import {Provider} from 'react-redux'
 
 import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
-import {pushHistoryItem, setIsHistoryPage} from 'progressive-web-sdk/dist/store/app/actions'
+import {pushHistoryItem, setIsHistoryPage} from './containers/header/actions'
 
 // Containers
 import App from './containers/app/container'
