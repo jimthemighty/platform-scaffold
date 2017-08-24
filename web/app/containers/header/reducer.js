@@ -25,7 +25,7 @@ const header = handleActions({
 
         // Don't want to add URL to stack if we navigate to the same route
         // i.e. home -> home, back button should not be enabled
-        if (appHistory && historyUrl !== appHistory.last()) {
+        if (appHistory && appHistory.size && historyUrl !== appHistory.last()) {
             return state.setIn(['appHistory'], Immutable.fromJS(state.get('appHistory').concat(historyUrl)))
         }
 
