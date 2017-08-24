@@ -9,45 +9,6 @@
     color: $neutral-00;
 }
 
-// Standalone Mode
-// ---
-
-.t--standalone {
-
-    .t-header-bar__back {
-        order: 1;
-    }
-
-    .t-header-bar__nav {
-        order: 1;
-    }
-
-    .t-header-bar__title {
-        order: 2;
-
-        .pw-header-bar__title {
-            justify-content: initial;
-        }
-
-    }
-
-    .t-header-bar__search {
-        order: 3;
-    }
-
-    .t-header-bar__cart {
-        order: 4;
-    }
-
-    .t-header-bar__more {
-        order: 5;
-    }
-
-    .pw-icon-label__label {
-        display: none;
-    }
-}
-
 // Title
 // ---
 

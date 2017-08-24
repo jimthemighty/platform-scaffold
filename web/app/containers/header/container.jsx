@@ -104,13 +104,16 @@ class Header extends React.Component {
             't--hide-label': isCollapsed
         })
 
+        const headerBarClassNames = classnames('t-header__bar', {
+            't--standalone': isStandaloneApp
+        })
         const searchIcon = <Icon name="search" title="Submit search" />
         const clearIcon = <Icon name="close" title="Clear search field" />
 
         return (
             <header className="t-header" ref={(el) => { this.headerHeight = el ? el.scrollHeight : Number.MAX_VALUE }}>
-                <div className="t-header__bar">
-                    <HeaderBar className={isStandaloneApp ? 't--standalone' : ''}>
+                <div className={headerBarClassNames}>
+                    <HeaderBar>
                         {showBackButton ?
                             <BackAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
                             :
