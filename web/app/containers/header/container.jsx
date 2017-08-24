@@ -14,7 +14,6 @@ import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {NAVIGATION_MODAL, MORE_MENU} from '../../modals/constants'
 import * as selectors from './selectors'
 import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
-import {getBrowsingHistory} from 'progressive-web-sdk/dist/store/app/selectors'
 import {isStandaloneApp} from '../app/selectors'
 
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
@@ -91,9 +90,8 @@ class Header extends React.Component {
             itemCount,
             searchIsOpen,
             searchSuggestions,
-            appHistory
+            showBackButton
         } = this.props
-        const showBackButton = isStandaloneApp && appHistory && appHistory.length > 1
 
         if (isRunningInAstro) {
             trigger('cart:count-updated', {
@@ -163,7 +161,6 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-    appHistory: PropTypes.array,
     clearSuggestions: PropTypes.func,
     goBack: PropTypes.func,
     isCollapsed: PropTypes.bool,
@@ -173,6 +170,7 @@ Header.propTypes = {
     searchQueryChanged: PropTypes.func,
     searchSubmit: PropTypes.func,
     searchSuggestions: PropTypes.array,
+    showBackButton: PropTypes.bool,
     toggleHeader: PropTypes.func,
     onMenuClick: PropTypes.func,
     onMiniCartClick: PropTypes.func,
@@ -187,7 +185,7 @@ const mapStateToProps = createPropsSelector({
     itemCount: getCartSummaryCount,
     searchIsOpen: selectors.getSearchIsOpen,
     searchSuggestions: selectors.getSearchSuggestions,
-    appHistory: getBrowsingHistory
+    showBackButton: selectors.showBackButton
 })
 
 const mapDispatchToProps = {
