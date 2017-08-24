@@ -93,7 +93,7 @@ class Header extends React.Component {
             searchSuggestions,
             appHistory
         } = this.props
-        const showBackButton = appHistory && appHistory.length > 1
+        const showBackButton = isStandaloneApp && appHistory && appHistory.length > 1
 
         if (isRunningInAstro) {
             trigger('cart:count-updated', {
