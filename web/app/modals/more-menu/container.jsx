@@ -9,7 +9,6 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {MORE_MENU} from '../constants'
 import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
-import {getRemoveItemID} from '../../containers/cart/selectors'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Divider from 'progressive-web-sdk/dist/components/divider'
@@ -95,7 +94,6 @@ class MoreMenuModal extends React.Component {
                                 onShow={openShare}
                                 onDismiss={closeShare}
                             />
-                            
                         </div>
                     </div>
                 </div>
