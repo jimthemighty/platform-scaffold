@@ -109,5 +109,6 @@ export const initApp = () => (dispatch) => {
     dispatch(setWishlistURL(WISHLIST_URL))
     dispatch(setSignInURL(SIGN_IN_URL))
     dispatch(setAccountURL(MY_ACCOUNT_URL))
-    return dispatch(setCartURL(CART_URL))
+    dispatch(setCartURL(CART_URL))
+    return Promise.resolve()
 }
