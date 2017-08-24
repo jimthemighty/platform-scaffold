@@ -78,6 +78,9 @@ if (isRunningInAstro) {
 const initPage = (initAction) => (url, routeName) => (dispatch, getState) => {
     const currentState = getState()
     const isHistoryPage = currentState.app.get('isHistoryPage')
+
+    // If we're landing on a page navigated to from the "Back" button,
+    // we don't want to push the history item onto the stack
     if (isHistoryPage) {
         dispatch(setIsHistoryPage(false))
     } else {
