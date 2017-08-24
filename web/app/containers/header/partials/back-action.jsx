@@ -14,7 +14,7 @@ const BackAction = ({innerButtonClassName, onClick}) => (
         <Button
             innerClassName={innerButtonClassName}
             onClick={onClick}
-            data-analytics-name={UI_NAME.showSearchBar}
+            data-analytics-name={UI_NAME.navigateBack}
         >
             <IconLabel label="Back" iconName="chevron-left" iconSize="medium" />
         </Button>
