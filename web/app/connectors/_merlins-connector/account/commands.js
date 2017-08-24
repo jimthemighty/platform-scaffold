@@ -6,7 +6,8 @@ import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/util
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
-import {browserHistory} from 'progressive-web-sdk/dist/routing'
+import {browserHistory, isLocalStorageAvailable} from 'progressive-web-sdk/dist/routing'
+
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -26,9 +27,28 @@ import {
     updateCustomerAddresses
 } from './utils'
 
-import {jqueryAjaxWrapper, setLoggedInStorage, updateLoggedInState} from '../utils'
+import {jqueryAjaxWrapper, setLoggedInStorage} from '../utils'
 import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL, getDeleteAddressURL} from '../config'
 import {isFormResponseInvalid, parseAccountInfo, parseAccountLocations} from './parsers'
+import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
+import {parseNavigation} from './navigation/parser'
+
+const updateLoggedInState = ($, $response) => (dispatch) => {
+    let magentoCacheStorage // what we want to assign to LS or cookie
+    const useLocalStorage = isLocalStorageAvailable()
+
+    if (useLocalStorage) {
+        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+    } else {
+        const mageCookie = getCookieValue('ls_mage-cache-storage')
+        const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
+        magentoCacheStorage = decodedCookie // {} Object
+    }
+
+    const isLoggedIn = !!(magentoCacheStorage.customer && magentoCacheStorage.customer.fullname)
+    dispatch(setLoggedIn(isLoggedIn))
+    dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
+}
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))

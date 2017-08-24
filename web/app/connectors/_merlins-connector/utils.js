@@ -4,9 +4,7 @@
 
 import {makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getCookieValue} from '../../utils/utils'
-import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
 import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
-import {parseNavigation} from './navigation/parser'
 
 /**
  * Formats a floating point string as money (eg. '95.7500' -> '$95.75')
@@ -138,24 +136,6 @@ export const parseAddress = (address) => {
     }
 }
 
-export const updateLoggedInState = ($, $response) => (dispatch) => {
-    let magentoCacheStorage // what we want to assign to LS or cookie
-    const useLocalStorage = isLocalStorageAvailable()
-
-    if (useLocalStorage) {
-        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-    } else {
-        const mageCookie = getCookieValue('ls_mage-cache-storage')
-        const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
-        magentoCacheStorage = decodedCookie // {} Object
-    }
-
-    const isLoggedIn = !!(magentoCacheStorage.customer && magentoCacheStorage.customer.fullname)
-    dispatch(setLoggedIn(isLoggedIn))
-    dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
-}
-
-
 export const setLoggedInStorage = ($, $response) => {
     const [fullname, email] = $response
         .find('.box-information .box-content p')
@@ -163,14 +143,15 @@ export const setLoggedInStorage = ($, $response) => {
         .filter((_, item) => item.nodeType === Node.TEXT_NODE)
         .map((_, item) => item.textContent.trim())
 
-    const isLoggedIn = !!fullname
+    const isLoggingIn = !!fullname
 
-    if (!isLoggedIn) { // user is logging out
+    // user is logging out
+    if (!isLoggingIn) {
         if (isLocalStorageAvailable()) {
             return localStorage.setItem('mage-cache-storage', '{}')
         }
         document.cookie = 'ls_mage-cache-storage={}; path=/; expires=;'
-        return null
+        return true
     }
 
     let magentoCacheStorage
@@ -186,5 +167,5 @@ export const setLoggedInStorage = ($, $response) => {
         const updatedCookie = `ls_mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/; expires=;`
         document.cookie = updatedCookie
     }
-    return null
+    return true
 }
