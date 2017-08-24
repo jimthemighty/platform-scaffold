@@ -18,8 +18,6 @@ import Share from 'progressive-web-sdk/dist/components/share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
 
-// @TODO: Add correct analytics names to share
-
 const openShareButton = (
     <Button
         icon="share"
