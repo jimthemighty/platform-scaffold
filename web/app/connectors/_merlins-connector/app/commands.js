@@ -99,12 +99,6 @@ export const searchProducts = (query) => (dispatch) => {
 
 
 export const initApp = () => (dispatch) => {
-
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        dispatch(setA2HSMode(true))
-    }
-    dispatch(setA2HSMode(true))
-
     // Use the pre-existing form_key if it already exists
     const formKey = getCookieValue('form_key') || generateFormKeyCookie()
     dispatch(receiveFormKey(formKey))

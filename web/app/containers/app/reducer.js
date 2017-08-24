@@ -14,7 +14,6 @@ import {
     setWishlistURL,
     setSignInURL,
     setAccountURL,
-    setA2HSMode,
     setAccountInfoURL,
     setAccountAddressURL,
     setAccountOrderListURL
@@ -33,7 +32,6 @@ export default handleActions({
     [setAccountInfoURL]: mergePayload,
     [setAccountAddressURL]: mergePayload,
     [setAccountURL]: mergePayload,
-    [setA2HSMode]: mergePayload,
     [setAccountOrderListURL]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,
     [appActions.toggleHideApp]: mergePayload,
