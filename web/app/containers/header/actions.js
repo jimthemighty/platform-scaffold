@@ -39,8 +39,8 @@ export const searchSubmit = (query) => (dispatch) => {
 export const goBack = () => (dispatch, getState) => {
     dispatch(popHistoryItem())
     dispatch(setIsHistoryPage(true))
-    const {app} = getState()
-    const history = app.get('appHistory')
+    const {ui: {header}} = getState()
+    const history = header.get('appHistory')
     const pathname = extractPathFromURL(history.last())
     return browserHistory.push({pathname})
 }
