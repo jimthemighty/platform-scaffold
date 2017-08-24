@@ -5,7 +5,7 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-import {updateLoggedInState} from '../utils'
+import {updateLoggedInState} from '../account/commands'
 import {parseSearchSuggestions} from './parser'
 import {receiveFormKey} from '../actions'
 import {

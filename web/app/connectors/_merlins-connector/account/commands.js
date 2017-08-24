@@ -53,7 +53,7 @@ import {
 import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
 import {parseNavigation} from '../navigation/parser'
 
-const updateLoggedInState = ($, $response) => (dispatch) => {
+export const updateLoggedInState = ($, $response) => (dispatch) => {
     let magentoCacheStorage // what we want to assign to LS or cookie
     const useLocalStorage = isLocalStorageAvailable()
 
