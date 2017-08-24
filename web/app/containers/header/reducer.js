@@ -20,11 +20,16 @@ const header = handleActions({
     [headerActions.closeSearch]: (state) => state.set('searchIsOpen', false).set('searchSuggestions', null),
     [headerActions.clearSuggestions]: (state) => state.set('searchSuggestions', null),
     [headerActions.pushHistoryItem]: (state, {payload}) => {
-        if (state.get('appHistory')) {
-            return state.setIn(['appHistory'], Immutable.fromJS(state.get('appHistory').concat(payload)))
+        const historyUrl = payload.replace(/[?,&]homescreen=1/, '')
+        const appHistory = state.get('appHistory')
+
+        // Don't want to add URL to stack if we navigate to the same route
+        // i.e. home -> home, back button should not be enabled
+        if (appHistory && historyUrl !== appHistory.last()) {
+            return state.setIn(['appHistory'], Immutable.fromJS(state.get('appHistory').concat(historyUrl)))
         }
 
-        return state.setIn(['appHistory'], Immutable.fromJS([payload]))
+        return state.setIn(['appHistory'], Immutable.fromJS([historyUrl]))
     },
     [headerActions.popHistoryItem]: (state) => {
         if (state.get('appHistory').size > 1) {
