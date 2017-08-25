@@ -323,7 +323,7 @@ export const parseOrder = (order) => {
 /* eslint-enable camelcase */
 export const parseOrdersResponse = ({data}) => {
     const ordersMap = {}
-    data.forEach((order) => {
+    data && data.forEach((order) => {
         const {
             order_no,
             creation_date,
