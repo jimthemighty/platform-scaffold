@@ -26,6 +26,7 @@ import {getCartURL} from './selectors'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
+export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['standaloneApp'])
 
 
 /**
