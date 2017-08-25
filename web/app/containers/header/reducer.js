@@ -24,7 +24,7 @@ const header = handleActions({
         const appHistory = state.get('appHistory')
 
         if (appHistory && appHistory.last() === historyUrl) {
-            return appHistory
+            return state
         }
 
         if (appHistory && appHistory.size) {
