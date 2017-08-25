@@ -154,12 +154,13 @@ export const setLoggedInStorage = ($, $response) => {
     }
 
     if (isLocalStorageAvailable()) {
-        const userInfo = JSON.parse(localStorage.getItem('mage-cache-storage'))
+        const mageStorage = localStorage.getItem('mage-cache-storage')
+        const userInfo = mageStorage ? JSON.parse(mageStorage) : {}
         userInfo.customer = {fullname, email}
         localStorage.setItem('mage-cache-storage', JSON.stringify(userInfo))
     } else {
         const mageCookie = getCookieValue('ls_mage-cache-storage')
-        const userInfo = JSON.parse(decodeURIComponent(mageCookie))
+        const userInfo = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {}
         userInfo.customer = {fullname, email}
         const updatedCookie = `ls_mage-cache-storage=${encodeURIComponent(JSON.stringify(userInfo))}; path=/; expires=;`
         document.cookie = updatedCookie

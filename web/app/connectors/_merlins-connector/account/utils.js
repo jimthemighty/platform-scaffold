@@ -110,11 +110,13 @@ export const readLoggedInState = () => {
     const useLocalStorage = isLocalStorageAvailable()
 
     if (useLocalStorage) {
-        const {customer} = JSON.parse(localStorage.getItem('mage-cache-storage'))
+        const mageStorage = localStorage.getItem('mage-cache-storage')
+        const {customer} = mageStorage ? JSON.parse(mageStorage) : {}
         return !!(customer && customer.fullname)
     }
+
     const mageCookie = getCookieValue('ls_mage-cache-storage')
-    const {customer} = JSON.parse(decodeURIComponent(mageCookie))
+    const {customer} = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {}
 
     return !!(customer && customer.fullname)
 }
