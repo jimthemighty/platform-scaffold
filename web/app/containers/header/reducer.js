@@ -23,6 +23,10 @@ const header = handleActions({
         const historyUrl = payload.replace(/[?,&]homescreen=1/, '')
         const appHistory = state.get('appHistory')
 
+        if (appHistory && appHistory.last() === historyUrl) {
+            return appHistory
+        }
+
         if (appHistory && appHistory.size) {
             return state.setIn(['appHistory'], Immutable.fromJS(state.get('appHistory').concat(historyUrl)))
         }
