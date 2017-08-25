@@ -58,11 +58,6 @@ export const fetchPageData = (url) => (dispatch) => {
 
     return request
         .then(jqueryResponse)
-        .then((res) => {
-            const [$, $response] = res
-            dispatch(updateLoggedInState($, $response))
-            return res
-        })
         .catch((error) => {
             console.info(error.message)
             if (error.name !== 'FetchError') {
