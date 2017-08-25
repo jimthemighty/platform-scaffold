@@ -9,6 +9,8 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as selectors from '../selectors'
 import {getProductInitialValues, getProductAvailability} from 'progressive-web-sdk/dist/store/products/selectors'
 import * as actions from '../actions'
+import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import ProductDetailsVariations from './product-details-variations'
 import Button from 'progressive-web-sdk/dist/components/button'
@@ -17,6 +19,7 @@ import Stepper from 'progressive-web-sdk/dist/components/stepper'
 import Share from 'progressive-web-sdk/dist/components/share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {ADD_TO_CART_FORM_NAME} from '../../../store/form/constants'
+import ShareHeader from '../../../components/share-header'
 
 const openShareButton = (
     <Button
@@ -30,25 +33,7 @@ const openShareButton = (
     />
 )
 
-const shareHeaderContent = (dismissShareModal) => (
-    <div className="u-flex-none u-border-bottom">
-        <div className="u-flexbox u-align-center">
-            <h1 className="u-flex u-padding-lg u-h4">
-                Share via
-            </h1>
-
-            <div className="u-flexbox u-flex-none u-align-center u-justify-center">
-                <Button
-                    className="u-text-uppercase"
-                    onClick={dismissShareModal}
-                    data-analytics-name={UI_NAME.dismissModal}
-                >
-                    <Icon name="close" title="Close" />
-                </Button>
-            </div>
-        </div>
-    </div>
-)
+const SHARE_MODAL = 'share'
 
 const ProductDetailsAddToCart = ({
     available,
@@ -63,7 +48,8 @@ const ProductDetailsAddToCart = ({
     handleSubmit,
     addToWishlist,
     updateWishlistItem,
-    setOpenShare
+    openShare,
+    closeShare
 }) => {
     const stepperProps = {
         decrementIcon: 'minus',
@@ -126,11 +112,11 @@ const ProductDetailsAddToCart = ({
                 />
                 <Share
                     className="u-flex"
-                    onShow={() => setOpenShare(true)}
-                    onDismiss={() => setOpenShare(false)}
+                    onShow={openShare}
+                    onDismiss={closeShare}
                     open={isShareOpen}
                     triggerElement={openShareButton}
-                    headerContent={shareHeaderContent(() => setOpenShare(false))}
+                    headerContent={ShareHeader(closeShare)}
                     coverage="40%"
                 />
             </div>
@@ -144,6 +130,7 @@ ProductDetailsAddToCart.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     addToWishlist: PropTypes.func,
     available: PropTypes.bool,
+    closeShare: React.PropTypes.func,
     disabled: PropTypes.bool,
     error: PropTypes.object,
     handleSubmit: PropTypes.func,
@@ -151,6 +138,7 @@ ProductDetailsAddToCart.propTypes = {
     isInCheckout: PropTypes.bool,
     isInWishlist: PropTypes.bool,
     isShareOpen: PropTypes.bool,
+    openShare: React.PropTypes.func,
     quantity: PropTypes.number,
     setOpenShare: PropTypes.func,
     updateWishlistItem: PropTypes.func,
@@ -161,7 +149,8 @@ const mapStateToProps = createPropsSelector({
     quantity: selectors.getItemQuantity,
     disabled: selectors.getAddToCartDisabled,
     initialValues: getProductInitialValues,
-    isShareOpen: selectors.getIsShareOpen
+    isShareOpen: isModalOpen(SHARE_MODAL),
+    // isShareOpen: selectors.getIsShareOpen
 })
 
 const mapDispatchToProps = {
@@ -169,7 +158,9 @@ const mapDispatchToProps = {
     onSubmit: actions.submitCartForm,
     addToWishlist: actions.addToWishlist,
     updateWishlistItem: actions.updateItemInWishlist,
-    setOpenShare: actions.setOpenShare,
+    // setOpenShare: actions.setOpenShare,
+    closeShare: () => closeModal(SHARE_MODAL, UI_NAME.shareModal),
+    openShare: () => openModal(SHARE_MODAL, UI_NAME.shareModal)
 }
 
 const ProductDetailsAddToCartReduxForm = ReduxForm.reduxForm({
