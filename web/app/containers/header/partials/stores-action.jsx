@@ -11,7 +11,7 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {LOCATION_URL} from '../../app/constants'
 
 const StoresAction = ({innerButtonClassName}) => (
-    <HeaderBarActions>
+    <HeaderBarActions className="t-header-bar__stores">
         <Button
             innerClassName={innerButtonClassName}
             className="t-header__link"
