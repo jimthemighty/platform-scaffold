@@ -108,15 +108,15 @@ export const updateCustomerAddresses = () => (dispatch) => {
 
 export const readLoggedInState = () => {
     const useLocalStorage = isLocalStorageAvailable()
+    let magentoStorage
 
     if (useLocalStorage) {
-        const mageStorage = localStorage.getItem('mage-cache-storage')
-        const {customer} = mageStorage ? JSON.parse(mageStorage) : {}
-        return !!(customer && customer.fullname)
+        const magentoCache = localStorage.getItem('mage-cache-storage')
+        magentoStorage = magentoCache ? JSON.parse(magentoCache) : {}
+    } else {
+        const magentoCache = getCookieValue('ls_mage-cache-storage')
+        magentoStorage = magentoCache ? JSON.parse(decodeURIComponent(magentoCache)) : {}
     }
 
-    const mageCookie = getCookieValue('ls_mage-cache-storage')
-    const {customer} = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {}
-
-    return !!(customer && customer.fullname)
+    return !!(magentoStorage.customer && magentoStorage.customer.fullname)
 }

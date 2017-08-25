@@ -5,6 +5,9 @@
 import {makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getCookieValue} from '../../utils/utils'
 import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
+import {parseNavigation} from './navigation/parser'
+import {readLoggedInState} from './account/utils'
 
 /**
  * Formats a floating point string as money (eg. '95.7500' -> '$95.75')
@@ -136,7 +139,7 @@ export const parseAddress = (address) => {
     }
 }
 
-export const setLoggedInStorage = ($, $response) => {
+const setLoggedInStorage = ($, $response) => {
     const [fullname, email] = $response
         .find('.box-information .box-content p')
         .contents()
@@ -166,4 +169,12 @@ export const setLoggedInStorage = ($, $response) => {
         document.cookie = updatedCookie
     }
     return true
+}
+
+export const updateLoggedInState = (res) => (dispatch) => {
+    const [$, $response] = res
+    setLoggedInStorage($, $response)
+    const isLoggedIn = readLoggedInState()
+    dispatch(setLoggedIn(isLoggedIn))
+    dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
 }

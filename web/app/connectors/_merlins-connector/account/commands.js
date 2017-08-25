@@ -8,7 +8,6 @@ import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selec
 import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
@@ -29,8 +28,7 @@ import {
     buildFormData,
     createAddressRequestObject,
     receiveWishlistResponse,
-    updateCustomerAddresses,
-    readLoggedInState
+    updateCustomerAddresses
 } from './utils'
 
 import {
@@ -40,7 +38,7 @@ import {
     parseOrder,
     parseAccountLocations
 } from './parsers'
-import {jqueryAjaxWrapper, setLoggedInStorage} from '../utils'
+import {jqueryAjaxWrapper, updateLoggedInState} from '../utils'
 import {
     CART_URL,
     LOGIN_POST_URL,
@@ -50,9 +48,6 @@ import {
     WISHLIST_URL,
     getWishlistQuantityUrl
 } from '../config'
-
-import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
-import {parseNavigation} from '../navigation/parser'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -149,7 +144,7 @@ const clearMessageCookie = () => {
 const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
 const EXISTING_ACCT_REGEX = /already an account/
 
-const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) => {
+const submitForm = (href, formValues, formSelector) => (dispatch) => {
     clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
@@ -158,10 +153,6 @@ const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) =
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
-            setLoggedInStorage($, $response)
-            const isLoggedIn = readLoggedInState()
-            dispatch(setLoggedIn(isLoggedIn))
-            dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
 
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
@@ -180,7 +171,7 @@ const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) =
                     _error: message
                 })
             }
-            return responseUrl
+            return res
         })
 }
 
@@ -199,7 +190,9 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
         formData.persistent_remember_me = 'on'
     }
 
-    return dispatch(submitForm(LOGIN_POST_URL, formData, '.form-login', '/customer/account'))
+    return dispatch(submitForm(LOGIN_POST_URL, formData, '.form-login'))
+        .then((res) => dispatch(updateLoggedInState(res)))
+        .then(() => '/customer/account')
 }
 
 export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
@@ -217,7 +210,8 @@ export const registerUser = (firstname, lastname, email, password, rememberMe) =
     if (rememberMe) {
         formData.persistent_remember_me = 'on'
     }
-    return dispatch(submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account', '/customer/account'))
+    return dispatch(submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account'))
+        .then(() => '/customer/account')
 }
 
 const findPathForRoute = (routes, routeName) => {
@@ -240,9 +234,8 @@ export const logout = () => (dispatch) => (
         .then(jqueryResponse)
         // Don't wait for the cart to do everything else
         .then((res) => {
-            const [$, $response] = res // eslint-disable-line no-unused-vars
+            dispatch(updateLoggedInState(res))
             dispatch(getCart())
-            setLoggedInStorage($, $response)
         })
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active
@@ -310,8 +303,9 @@ export const editAddress = (address, addressId) => (dispatch, getState) => { // 
         form_key: formKey,
         ...createAddressRequestObject(address)
     }
-    return dispatch(submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit', '/customer/address/index/'))
+    return dispatch(submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit'))
         .then(() => dispatch(updateCustomerAddresses()))
+        .then(() => '/customer/address/index/')
 }
 
 export const addAddress = (address) => (dispatch, getState) => {
@@ -320,8 +314,9 @@ export const addAddress = (address) => (dispatch, getState) => {
         form_key: formKey,
         ...createAddressRequestObject(address)
     }
-    return dispatch(submitForm('/customer/address/formPost/', formData, '.form-address-edit', '/customer/address/index/'))
+    return dispatch(submitForm('/customer/address/formPost/', formData, '.form-address-edit'))
         .then(() => dispatch(updateCustomerAddresses()))
+        .then(() => '/customer/address/index/')
 }
 
 /* eslint-disable camelcase */
@@ -340,7 +335,8 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
     }
 
     dispatch(receiveAccountInfoData({names, email}))
-    return dispatch(submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/'))
+    return dispatch(submitForm('/customer/account/editPost/', formData, '.form-edit-account'))
+        .then(() => '/customer/account/edit/')
 }
 
 
