@@ -5,8 +5,8 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-import {updateLoggedInState} from '../account/commands'
 import {parseSearchSuggestions} from './parser'
+import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
 import {
     CHECKOUT_SHIPPING_URL,
@@ -24,8 +24,7 @@ import {
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
-
-
+import {readLoggedInState} from '../account/utils'
 import {
     receiveSearchSuggestions,
     setCheckoutShippingURL,
@@ -35,7 +34,8 @@ import {
     setAccountAddressURL,
     setAccountInfoURL,
     setAccountURL,
-    setAccountOrderListURL
+    setAccountOrderListURL,
+    receiveNavigationData
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 const requestCapturedDoc = () => {
@@ -58,6 +58,12 @@ export const fetchPageData = (url) => (dispatch) => {
 
     return request
         .then(jqueryResponse)
+        .then((res) => {
+            const [$, $response] = res
+            const isLoggedIn = readLoggedInState()
+            dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
+            return res
+        })
         .catch((error) => {
             console.info(error.message)
             if (error.name !== 'FetchError') {

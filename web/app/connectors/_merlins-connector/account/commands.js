@@ -7,7 +7,7 @@ import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selectors'
 import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
-import {browserHistory, isLocalStorageAvailable} from 'progressive-web-sdk/dist/routing'
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {getCookieValue, splitFullName} from '../../../utils/utils'
 import {getFormKey, getUenc} from '../selectors'
@@ -29,7 +29,8 @@ import {
     buildFormData,
     createAddressRequestObject,
     receiveWishlistResponse,
-    updateCustomerAddresses
+    updateCustomerAddresses,
+    readLoggedInState
 } from './utils'
 
 import {
@@ -52,23 +53,6 @@ import {
 
 import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
 import {parseNavigation} from '../navigation/parser'
-
-export const updateLoggedInState = ($, $response) => (dispatch) => {
-    let magentoCacheStorage // what we want to assign to LS or cookie
-    const useLocalStorage = isLocalStorageAvailable()
-
-    if (useLocalStorage) {
-        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-    } else {
-        const mageCookie = getCookieValue('ls_mage-cache-storage')
-        const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
-        magentoCacheStorage = decodedCookie // {} Object
-    }
-
-    const isLoggedIn = !!(magentoCacheStorage.customer && magentoCacheStorage.customer.fullname)
-    dispatch(setLoggedIn(isLoggedIn))
-    dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
-}
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -175,7 +159,10 @@ const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) =
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             setLoggedInStorage($, $response)
-            dispatch(updateLoggedInState($, $response))
+
+            const isLoggedIn = readLoggedInState()
+            dispatch(setLoggedIn(isLoggedIn))
+            dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
 
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))

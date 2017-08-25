@@ -12,7 +12,7 @@ import {
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from './parsers'
 import {receiveFormInfo} from '../actions'
-
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/routing'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const buildFormData = (formValues) => {
@@ -104,4 +104,19 @@ export const updateCustomerAddresses = () => (dispatch) => {
         .then((response) => response.json())
         .then(({customer: {addresses}}) => addresses.map((address) => parseAddress(address)))
         .then((addresses) => dispatch(receiveSavedAddresses(addresses)))
+}
+
+export const readLoggedInState = () => {
+    let magentoCacheStorage // what we want to assign to LS or cookie
+    const useLocalStorage = isLocalStorageAvailable()
+
+    if (useLocalStorage) {
+        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
+    } else {
+        const mageCookie = getCookieValue('ls_mage-cache-storage')
+        const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
+        magentoCacheStorage = decodedCookie // {} Object
+    }
+
+    return !!(magentoCacheStorage.customer && magentoCacheStorage.customer.fullname)
 }
