@@ -145,7 +145,6 @@ export const setLoggedInStorage = ($, $response) => {
 
     const isLoggingIn = !!fullname
 
-    // user is logging out
     if (!isLoggingIn) {
         if (isLocalStorageAvailable()) {
             return localStorage.setItem('mage-cache-storage', '{}')
@@ -154,17 +153,15 @@ export const setLoggedInStorage = ($, $response) => {
         return true
     }
 
-    let magentoCacheStorage
     if (isLocalStorageAvailable()) {
-        magentoCacheStorage = JSON.parse(localStorage.getItem('mage-cache-storage'))
-        magentoCacheStorage.customer = {fullname, email}
-        localStorage.setItem('mage-cache-storage', JSON.stringify(magentoCacheStorage))
+        const userInfo = JSON.parse(localStorage.getItem('mage-cache-storage'))
+        userInfo.customer = {fullname, email}
+        localStorage.setItem('mage-cache-storage', JSON.stringify(userInfo))
     } else {
         const mageCookie = getCookieValue('ls_mage-cache-storage')
-        const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
-        magentoCacheStorage = decodedCookie // {} Object
-        magentoCacheStorage.customer = {fullname, email}
-        const updatedCookie = `ls_mage-cache-storage=${encodeURIComponent(JSON.stringify(magentoCacheStorage))}; path=/; expires=;`
+        const userInfo = JSON.parse(decodeURIComponent(mageCookie))
+        userInfo.customer = {fullname, email}
+        const updatedCookie = `ls_mage-cache-storage=${encodeURIComponent(JSON.stringify(userInfo))}; path=/; expires=;`
         document.cookie = updatedCookie
     }
     return true
