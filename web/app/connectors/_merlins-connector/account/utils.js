@@ -12,7 +12,7 @@ import {
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from './parsers'
 import {receiveFormInfo} from '../actions'
-import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/routing'
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const buildFormData = (formValues) => {
@@ -115,7 +115,7 @@ export const readLoggedInState = () => {
     } else {
         const mageCookie = getCookieValue('ls_mage-cache-storage')
         const decodedCookie = JSON.parse(decodeURIComponent(mageCookie))
-        magentoCacheStorage = decodedCookie // {} Object
+        magentoCacheStorage = decodedCookie
     }
 
     return !!(magentoCacheStorage.customer && magentoCacheStorage.customer.fullname)

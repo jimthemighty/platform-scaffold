@@ -159,7 +159,6 @@ const submitForm = (href, formValues, formSelector, responseUrl) => (dispatch) =
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
             setLoggedInStorage($, $response)
-
             const isLoggedIn = readLoggedInState()
             dispatch(setLoggedIn(isLoggedIn))
             dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
