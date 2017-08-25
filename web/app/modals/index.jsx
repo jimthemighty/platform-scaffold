@@ -18,6 +18,7 @@ import CartRemoveItemModal from './cart-remove-item/container'
 import AccountAddressModal from './account-add-address/container'
 import AccountRemoveAddressModal from './account-remove-address/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
+import MoreMenuModal from './more-menu/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
 import AccountRemoveWishlistItemModal from './account-remove-wishlist-item/container'
@@ -37,6 +38,7 @@ const modals = {
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
     [MODAL.ACCOUNT_ADDRESS_MODAL]: {content: <AccountAddressModal />},
     [MODAL.ACCOUNT_REMOVE_ADDRESS_MODAL]: {content: <AccountRemoveAddressModal />},
+    [MODAL.MORE_MENU]: {content: <MoreMenuModal />},
     [MODAL.ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL]: {content: <AccountRemoveWishlistItemModal />},
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }
@@ -68,10 +70,13 @@ class ModalManager extends React.Component {
         let openModal
         for (const modal in isOpen) {
             if (isOpen[modal]) {
-                openModal = React.cloneElement(
-                    modals[modal].content,
-                    {duration: modals[modal].customDuration || duration}
-                )
+                const currentModalData = modals[modal]
+                if (currentModalData) {
+                    openModal = React.cloneElement(
+                        currentModalData.content,
+                        {duration: currentModalData.customDuration || duration}
+                    )
+                }
             }
         }
         return openModal

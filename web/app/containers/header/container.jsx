@@ -11,9 +11,10 @@ import classnames from 'classnames'
 import * as headerActions from './actions'
 import * as miniCartActions from '../../modals/mini-cart/actions'
 import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {NAVIGATION_MODAL} from '../../modals/constants'
+import {NAVIGATION_MODAL, MORE_MENU} from '../../modals/constants'
 import * as selectors from './selectors'
 import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {isStandaloneApp} from '../app/selectors'
 
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
@@ -25,6 +26,7 @@ import HeaderTitle from './partials/header-title'
 import StoresAction from './partials/stores-action'
 import CartAction from './partials/cart-action'
 import SearchAction from './partials/search-action'
+import MoreMenuAction from './partials/more-action'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 
@@ -77,9 +79,11 @@ class Header extends React.Component {
             clearSuggestions,
             onMenuClick,
             onMiniCartClick,
+            onMoreMenuClick,
             onSearchOpenClick,
             onSearchCloseClick,
             isCollapsed,
+            isStandaloneApp,
             itemCount,
             searchIsOpen,
             searchSuggestions
@@ -106,8 +110,13 @@ class Header extends React.Component {
                         <NavigationAction innerButtonClassName={innerButtonClassName} onClick={onMenuClick} />
                         <SearchAction innerButtonClassName={innerButtonClassName} onClick={onSearchOpenClick} />
                         <HeaderTitle isCollapsed={isCollapsed} />
-                        <StoresAction innerButtonClassName={innerButtonClassName} />
+                        {!isStandaloneApp &&
+                            <StoresAction innerButtonClassName={innerButtonClassName} />
+                        }
                         <CartAction innerButtonClassName={innerButtonClassName} onClick={onMiniCartClick} />
+                        {isStandaloneApp &&
+                            <MoreMenuAction innerButtonClassName={innerButtonClassName} onClick={onMoreMenuClick} />
+                        }
                     </HeaderBar>
                 </div>
 
@@ -146,6 +155,7 @@ class Header extends React.Component {
 Header.propTypes = {
     clearSuggestions: PropTypes.func,
     isCollapsed: PropTypes.bool,
+    isStandaloneApp: PropTypes.bool,
     itemCount: PropTypes.number,
     searchIsOpen: PropTypes.bool,
     searchQueryChanged: PropTypes.func,
@@ -154,12 +164,14 @@ Header.propTypes = {
     toggleHeader: PropTypes.func,
     onMenuClick: PropTypes.func,
     onMiniCartClick: PropTypes.func,
+    onMoreMenuClick: PropTypes.func,
     onSearchCloseClick: PropTypes.func,
     onSearchOpenClick: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
     isCollapsed: selectors.getIsCollapsed,
+    isStandaloneApp,
     itemCount: getCartSummaryCount,
     searchIsOpen: selectors.getSearchIsOpen,
     searchSuggestions: selectors.getSearchSuggestions
@@ -170,6 +182,7 @@ const mapDispatchToProps = {
     onMiniCartClick: miniCartActions.requestOpenMiniCart,
     onSearchOpenClick: headerActions.openSearch,
     onSearchCloseClick: headerActions.closeSearch,
+    onMoreMenuClick: () => openModal(MORE_MENU, 'more_menu'),
     searchSubmit: headerActions.searchSubmit,
     toggleHeader: headerActions.toggleHeader,
     searchQueryChanged: headerActions.searchQueryChanged,
