@@ -17,7 +17,7 @@ const HeaderTitle = ({isCollapsed}) => {
     })
 
     return (
-        <div className="u-flex">
+        <div className="u-flex t-header-bar__title">
             <HeaderBarTitle>
                 <Link href="/" className={linkClassName}>
                     <DangerousHTML html={logo}>
