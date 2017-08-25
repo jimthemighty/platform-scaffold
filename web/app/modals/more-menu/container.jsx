@@ -16,7 +16,8 @@ import Share from 'progressive-web-sdk/dist/components/share'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import ShareHeader from '../../components/share-header'
 
-import {getAccountURL} from '../../containers/app/selectors'
+import {getAccountURL, getSignInURL} from '../../containers/app/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 
 import {LOCATION_URL} from '../../containers/app/constants'
 
@@ -35,7 +36,7 @@ class MoreMenuModal extends React.Component {
     }
 
     render() {
-        const {closeModal, accountURL, isOpen, closeShare, openShare, isShareOpen} = this.props
+        const {closeModal, accountURL, isOpen, closeShare, openShare, isShareOpen, signInURL, isLoggedIn} = this.props
         const modalClasses = classNames('m-more-menu', {
             'm--active': isOpen && this.state.active
         })
@@ -65,10 +66,10 @@ class MoreMenuModal extends React.Component {
                             <Button
                                 innerClassName={`${linkClasses} u-color-neutral-60`}
                                 iconClassName="u-color-brand u-margin-end"
-                                href={accountURL}
+                                href={isLoggedIn ? accountURL : signInURL}
                                 icon="user"
                                 data-analytics-name={UI_NAME.showStoreLocator}
-                                title="My Account"
+                                title={isLoggedIn ? 'My Account' : 'Sign In'}
                                 showIconText
                             />
                         </div>
@@ -125,6 +126,10 @@ MoreMenuModal.propTypes = {
      */
     closeShare: React.PropTypes.func,
     /**
+     * Indicates if the user is logged in
+    */
+    isLoggedIn: React.PropTypes.bool,
+    /**
      * Whether the modal is open or not
      */
     isOpen: React.PropTypes.bool,
@@ -136,12 +141,18 @@ MoreMenuModal.propTypes = {
      * A function to open the share modal
      */
     openShare: React.PropTypes.func,
+    /**
+     * The URL for the sign in page
+     */
+    signInURL: React.PropTypes.string
 }
 
 const mapStateToProps = createPropsSelector({
     accountURL: getAccountURL,
+    isLoggedIn: getIsLoggedIn,
     isOpen: isModalOpen(MORE_MENU),
-    isShareOpen: isModalOpen(SHARE_MODAL)
+    isShareOpen: isModalOpen(SHARE_MODAL),
+    signInURL: getSignInURL
 })
 
 const mapDispatchToProps = {
