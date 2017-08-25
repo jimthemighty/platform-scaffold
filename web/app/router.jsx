@@ -89,7 +89,7 @@ const initPage = (initAction) => (url, routeName) => (dispatch, getState) => {
 
     return dispatch(initAction(url, routeName))
         .then(() => {
-            trackPerformance(PERFORMANCE_METRICS.isSavedPage, hasFetchedCurrentPath(currentState ? 'true' : 'false'))
+            trackPerformance(PERFORMANCE_METRICS.isSavedPage, hasFetchedCurrentPath(currentState) ? 'true' : 'false')
             dispatch(setFetchedPage(url))
         })
         .then(() => {
