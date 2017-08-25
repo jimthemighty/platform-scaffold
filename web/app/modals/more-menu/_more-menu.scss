@@ -7,8 +7,8 @@
     position: fixed;
     top: $unit*2; // 1
     right: $unit*2; // 1
-
     z-index: 999;
+
     display: flex;
     overflow-y: auto; // 1
     flex-direction: column;
@@ -16,6 +16,7 @@
 
     opacity: 0;
     background-color: white;
+    box-shadow: $box-shadow;
 
     transition: opacity 200ms ease-in;
 
@@ -33,5 +34,4 @@
     z-index: $z3-depth;
 
     opacity: 0;
-
 }
