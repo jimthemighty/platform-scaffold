@@ -6,12 +6,20 @@ import {STATES} from './constants'
 import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 
 export const populateLocationsData = () => receiveCheckoutLocations({
-    countries: [{
-        id: 'us',
-        label: 'United States',
-        regionRequired: true,
-        postcodeRequired: true
-    }],
+    countries: [
+        {
+            id: '',
+            label: '',
+            regionRequired: false,
+            postcodeRequired: false
+        },
+        {
+            id: 'us',
+            label: 'United States',
+            regionRequired: true,
+            postcodeRequired: true
+        }
+    ],
     regions: STATES
 })
 
