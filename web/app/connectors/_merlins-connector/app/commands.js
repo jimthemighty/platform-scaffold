@@ -35,6 +35,7 @@ import {
     setAccountInfoURL,
     setAccountURL,
     setAccountOrderListURL,
+    setLoggedIn,
     receiveNavigationData
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
@@ -61,6 +62,7 @@ export const fetchPageData = (url) => (dispatch) => {
         .then((res) => {
             const [$, $response] = res
             const isLoggedIn = readLoggedInState()
+            dispatch(setLoggedIn(isLoggedIn))
             dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
             return res
         })
