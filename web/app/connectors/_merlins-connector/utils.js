@@ -4,6 +4,10 @@
 
 import {makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {getCookieValue} from '../../utils/utils'
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
+import {setLoggedIn, receiveNavigationData} from 'progressive-web-sdk/dist/integration-manager/results'
+import {parseNavigation} from './navigation/parser'
+import {readLoggedInState} from './account/utils'
 
 /**
  * Formats a floating point string as money (eg. '95.7500' -> '$95.75')
@@ -133,4 +137,44 @@ export const parseAddress = (address) => {
         addressLine2,
         telephone: address.telephone,
     }
+}
+
+const setLoggedInStorage = ($, $response) => {
+    const [fullname, email] = $response
+        .find('.box-information .box-content p')
+        .contents()
+        .filter((_, item) => item.nodeType === Node.TEXT_NODE)
+        .map((_, item) => item.textContent.trim())
+
+    const isLoggingIn = !!fullname
+
+    if (!isLoggingIn) {
+        if (isLocalStorageAvailable()) {
+            return localStorage.setItem('mage-cache-storage', '{}')
+        }
+        document.cookie = 'ls_mage-cache-storage={}; path=/; expires=;'
+        return true
+    }
+
+    if (isLocalStorageAvailable()) {
+        const mageStorage = localStorage.getItem('mage-cache-storage')
+        const userInfo = mageStorage ? JSON.parse(mageStorage) : {}
+        userInfo.customer = {fullname, email}
+        localStorage.setItem('mage-cache-storage', JSON.stringify(userInfo))
+    } else {
+        const mageCookie = getCookieValue('ls_mage-cache-storage')
+        const userInfo = mageCookie ? JSON.parse(decodeURIComponent(mageCookie)) : {}
+        userInfo.customer = {fullname, email}
+        const updatedCookie = `ls_mage-cache-storage=${encodeURIComponent(JSON.stringify(userInfo))}; path=/; expires=;`
+        document.cookie = updatedCookie
+    }
+    return true
+}
+
+export const updateLoggedInState = (res) => (dispatch) => {
+    const [$, $response] = res
+    setLoggedInStorage($, $response)
+    const isLoggedIn = readLoggedInState()
+    dispatch(setLoggedIn(isLoggedIn))
+    dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
 }
