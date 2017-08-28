@@ -236,7 +236,7 @@ const mapDispatchToProps = {
     toggleHideApp: appActions.toggleHideApp,
     fetchPage: (fetchAction, url, routeName) => fetchAction(url, routeName),
     initApp,
-    setStandAloneAppFlag: appActions.setStandAloneAppFlag
+    setStandAloneAppFlag: appActions.checkIfStandAlone
 
 }
 

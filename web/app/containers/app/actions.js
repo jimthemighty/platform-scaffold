@@ -6,6 +6,7 @@
 /* eslint-disable import/named */
 
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {sendStandAloneAnalytics} from 'progressive-web-sdk/dist/analytics/actions'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
@@ -27,6 +28,14 @@ import {getCartURL} from './selectors'
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
 export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['standaloneApp'])
+
+export const checkIfStandAlone = (isStandalone) => (dispatch) => {
+    dispatch(setStandAloneAppFlag(isStandalone))
+    if (isStandalone) {
+        console.log('app is in standalone mode')
+        dispatch(sendStandAloneAnalytics())
+    }
+}
 
 
 /**
