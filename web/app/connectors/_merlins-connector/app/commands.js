@@ -5,11 +5,9 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
-import {parseLoginStatus, parseSearchSuggestions} from './parser'
+import {parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-
 import {
     CHECKOUT_SHIPPING_URL,
     WISHLIST_URL,
@@ -26,20 +24,19 @@ import {
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
-
-
+import {readLoggedInState} from '../account/utils'
 import {
-    receiveNavigationData,
     receiveSearchSuggestions,
     setCheckoutShippingURL,
     setCartURL,
     setWishlistURL,
-    setLoggedIn,
     setSignInURL,
     setAccountAddressURL,
     setAccountInfoURL,
     setAccountURL,
-    setAccountOrderListURL
+    setAccountOrderListURL,
+    setLoggedIn,
+    receiveNavigationData
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 const requestCapturedDoc = () => {
@@ -64,7 +61,7 @@ export const fetchPageData = (url) => (dispatch) => {
         .then(jqueryResponse)
         .then((res) => {
             const [$, $response] = res
-            const isLoggedIn = parseLoginStatus($response)
+            const isLoggedIn = readLoggedInState()
             dispatch(setLoggedIn(isLoggedIn))
             dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
             return res
