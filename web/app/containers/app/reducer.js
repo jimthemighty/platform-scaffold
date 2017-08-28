@@ -35,5 +35,4 @@ export default handleActions({
     [setAccountOrderListURL]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,
     [appActions.toggleHideApp]: mergePayload,
-    [appActions.setStandAloneAppFlag]: mergePayload
 }, initialState)

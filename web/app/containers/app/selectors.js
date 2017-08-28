@@ -19,4 +19,3 @@ export const getAccountAddressURL = createGetSelector(getApp, 'accountAddressURL
 export const getAccountInfoURL = createGetSelector(getApp, 'accountInfoURL')
 export const getAccountURL = createGetSelector(getApp, 'accountURL')
 export const getAccountOrderListURL = createGetSelector(getApp, 'orderListURL')
-export const isStandaloneApp = createGetSelector(getApp, 'standaloneApp')

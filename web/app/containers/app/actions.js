@@ -15,6 +15,7 @@ import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
+import {isStandalone} from '../../utils/utils'
 
 import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
@@ -23,16 +24,16 @@ import {addNotification} from 'progressive-web-sdk/dist/store/notifications/acti
 import {OFFLINE_MODAL} from '../../modals/constants'
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartURL} from './selectors'
+import {setStandAloneAppFlag} from 'progressive-web-sdk/dist/store/app/actions'
 
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
-export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['standaloneApp'])
 
-export const checkIfStandAlone = (isStandalone) => (dispatch) => {
-    dispatch(setStandAloneAppFlag(isStandalone))
-    if (isStandalone) {
-        console.log('app is in standalone mode')
+export const checkIfStandAlone = () => (dispatch) => {
+    const isStandAloneFlag = isStandalone()
+    dispatch(setStandAloneAppFlag(isStandAloneFlag))
+    if (isStandAloneFlag) {
         dispatch(sendStandAloneAnalytics())
     }
 }
