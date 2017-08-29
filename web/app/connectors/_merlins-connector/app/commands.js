@@ -70,8 +70,6 @@ export const fetchPageData = (url) => (dispatch) => {
             console.info(error.message)
             if (error.name !== 'FetchError') {
                 throw error
-            } else {
-                dispatch(setPageFetchError(error.message))
             }
         })
 }
