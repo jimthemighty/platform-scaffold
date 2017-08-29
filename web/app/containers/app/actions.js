@@ -6,7 +6,6 @@
 /* eslint-disable import/named */
 
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {createPropsSelector} from 'reselect-immutable-helpers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
@@ -22,7 +21,7 @@ import {
     trackOfflinePage,
     clearOfflinePages
 } from 'progressive-web-sdk/dist/store/offline/actions'
-
+import {sendOfflineModeUsedAnalytics, sendOfflinePageview} from 'progressive-web-sdk/dist/analytics/actions'
 import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
@@ -38,29 +37,25 @@ export const toggleHideApp = createAction('Toggling the hiding of App', ['hideAp
 export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['standaloneApp'])
 
 
-const startOfflineTimer = (offlineModeStartTime) => (dispatch) => {
-    if (!offlineModeStartTime) {
-        dispatch(setOfflineModeStartTime(Date.now()))
-    }
-}
-
-
-
 const sendOfflineAnalytics = (offlineModeStartTime) => (dispatch, getState) => {
     const timestamp = Date.now()
     const offlineModeDuration = timestamp - offlineModeStartTime
-    const pagesViewed = getOfflinePageViews(getState())
-    const pageCount = pagesViewed.size
-    const failedPages = pagesViewed.filter(({inCache}) => !inCache).size
+    const pagesViewed = getOfflinePageViews(getState()).toJS()
 
-    const data = {
-        duration: offlineModeDuration,
-        timestamp,
-        failedPageCount: failedPages,
-        cachedPageCount: pageCount - failedPages
+    pagesViewed.forEach(({routeName, inCache, title, url}) => {
+        dispatch(sendOfflinePageview(url, routeName, title, inCache))
+    })
+
+    dispatch(sendOfflineModeUsedAnalytics(offlineModeDuration, timestamp, pagesViewed))
+}
+
+const setUpOfflineMode = (offlineModeStartTime, url, routeName, pageFetchError = 'Network failure, using worker cache') => (dispatch) => {
+    // set offline mode start time if we haven't already
+    if (!offlineModeStartTime) {
+        dispatch(setOfflineModeStartTime(Date.now()))
     }
-
-    return data
+    dispatch(trackOfflinePage({url, routeName, title: window.document.title}))
+    dispatch(setPageFetchError(pageFetchError))
 }
 
 
@@ -81,10 +76,7 @@ export const checkIfOffline = (url, routeName) => (dispatch, getState) => {
         .then((response) => response.json())
         .then((json) => {
             if (json.offline) {
-                // set offline mode start time if we haven't already
-                dispatch(startOfflineTimer(offlineModeStartTime))
-                dispatch(trackOfflinePage({url, routeName}))
-                dispatch(setPageFetchError('Network failure, using worker cache'))
+                dispatch(setUpOfflineMode(offlineModeStartTime, url, routeName))
             } else {
                 // if we have an offline mode start time then we're transitioning from offline to online
                 // calculate the time we were offline for
@@ -103,10 +95,7 @@ export const checkIfOffline = (url, routeName) => (dispatch, getState) => {
         .catch((error) => {
             // In cases where we don't have the worker installed, this means
             // we indeed have a network failure, so switch on offline
-            dispatch(setPageFetchError(error.message))
-            // set offline mode start time
-            dispatch(startOfflineTimer(offlineModeStartTime))
-            dispatch(trackOfflinePage({url, routeName}))
+            dispatch(setUpOfflineMode(offlineModeStartTime, url, routeName, error.message))
         })
 }
 
