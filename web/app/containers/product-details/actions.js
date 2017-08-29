@@ -19,7 +19,6 @@ import {getAddToCartFormValues} from '../../store/form/selectors'
 import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {getProductVariantData, addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {updateWishlistItem} from 'progressive-web-sdk/dist/integration-manager/account/commands'
-import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
@@ -39,13 +38,13 @@ export const addToCartStarted = createAction('Add to cart started')
 export const addToCartComplete = createAction('Add to cart complete')
 
 export const goToCheckout = () => (dispatch) => {
-    dispatch(closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
+    dispatch(appActions.closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
     dispatch(appActions.goToCheckout())
 }
 
 export const goToWishlist = () => (dispatch, getState) => {
     dispatch(setIsWishlistAdded(false))
-    dispatch(closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
+    dispatch(appActions.closeModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
 
     browserHistory.push({
         pathname: getWishlistURL(getState())
@@ -101,7 +100,7 @@ export const submitCartForm = (formValues) => (dispatch, getStore) => {
     return dispatch(itemIdMatch ? updateCartItem(itemIdMatch[1], qty, productId, variant) : addToCart(productId, qty, variant))
         .then(() => {
             dispatch(setIsWishlistAdded(false))
-            return dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
+            return dispatch(appActions.openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
         })
         .catch((error) => {
             console.error('Error adding to cart', error)
@@ -151,7 +150,7 @@ export const addToWishlist = (quantity) => (dispatch, getState) => {
     return dispatch(addItemToWishlist(productID, window.location.href, quantity))
         .then(() => {
             dispatch(setIsWishlistAdded(true))
-            return dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
+            return dispatch(appActions.openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
         })
         .catch((error) => {
             if (/Failed to fetch|Add Request Failed|Unable to add item/i.test(error.message)) {
@@ -173,6 +172,6 @@ export const updateItemInWishlist = (quantity) => (dispatch, getState) => {
     return dispatch(updateWishlistItem(itemId, wishlistId, quantity))
         .then(() => {
             dispatch(setIsWishlistAdded(true))
-            return dispatch(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
+            return dispatch(appActions.openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.wishlist))
         })
 }

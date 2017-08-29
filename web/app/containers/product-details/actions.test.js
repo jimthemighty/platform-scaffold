@@ -5,7 +5,7 @@
 /* eslint-env jest */
 import Immutable from 'immutable'
 
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {openModal} from '../app/actions'
 
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
 import {addToCartStarted, submitCartForm} from './actions'
