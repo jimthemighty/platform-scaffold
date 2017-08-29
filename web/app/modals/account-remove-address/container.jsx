@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {ACCOUNT_REMOVE_ADDRESS_MODAL} from '../constants'
 import {removeAddress} from '../../containers/account-address/actions'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../../containers/app/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getAddressID} from '../../containers/account-address/selectors'
 
