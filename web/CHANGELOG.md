@@ -1,6 +1,7 @@
 ## To be released
 - Update header bar when displaying in Add to homescreen mode [#983](https://github.com/mobify/platform-scaffold/pull/983)
 - Add Share to PDP [#963](https://github.com/mobify/platform-scaffold/pull/963)
+- Add analytics for standalone mode [#981](https://github.com/mobify/platform-scaffold/pull/981)
 
 ## 0.20.0 (August 24, 2017)
 - Add "View Orders" list to My Account [#912](https://github.com/mobify/platform-scaffold/pull/912)
