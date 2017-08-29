@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {CART_REMOVE_ITEM_MODAL} from '../constants'
 import {removeItem} from '../../containers/cart/actions'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../../containers/app/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getRemoveItemID} from '../../containers/cart/selectors'
 

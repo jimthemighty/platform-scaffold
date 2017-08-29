@@ -12,7 +12,7 @@ import * as selectors from '../selectors'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {validatePageNumber} from 'progressive-web-sdk/dist/utils/utils'
 import {PRODUCT_LIST_FILTER_MODAL} from '../../../modals/constants'
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {openModal} from '../../app/actions'
 import {changeFilterTo} from '../../../store/categories/actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 

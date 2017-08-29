@@ -11,7 +11,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Image from 'progressive-web-sdk/dist/components/image'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../../containers/app/actions'
 
 import {MINI_CART_MODAL} from '../constants'
 import {MINI_CART_CONTENT_CLASSES} from './constants'

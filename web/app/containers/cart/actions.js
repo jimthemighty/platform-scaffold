@@ -3,7 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {fetchShippingMethodsEstimate} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {
     PROMO_ERROR
@@ -18,7 +17,7 @@ import {
     deletePromoCode
 } from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
-import {cartExpired, handleCartExpiryError} from '../app/actions'
+import {cartExpired, handleCartExpiryError, closeModal, openModal} from '../app/actions'
 import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'

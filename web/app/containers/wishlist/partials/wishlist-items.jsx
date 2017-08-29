@@ -17,7 +17,7 @@ import ProductImage from '../../../components/product-image'
 import NoWishlistItems from './no-wishlist-items'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {addToCartFromWishlist, removeWishlistItem, editWishlistItem, updateWishlistQuantity, setRemoveWishlistItemData} from '../actions'
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {openModal} from '../../app/actions'
 import {
     ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL
 } from '../../../modals/constants'
