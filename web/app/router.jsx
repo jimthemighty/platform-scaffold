@@ -188,7 +188,7 @@ const Router = ({store}) => (
 
                 <Route component={Login} path="*/Account-Show" routeName="signin" fetchAction={initPage(initLoginPage)} />
                 <Route component={AccountInfo} path="*/Account-EditProfile" routeName="accountInfo" fetchAction={initPage(initAccountInfoPage)} />
-                <Route component={AccountDashboard} path="*/Account-Show?dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+                <Route component={AccountDashboard} path="*/Account-Show/dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={AccountAddress} path="*/Address-List" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
                 <Route component={AccountOrderList} path="*/Order-History" routeName="accountOrderList" fetchAction={initPage(initAccountOrderListPage)} />
                 <Route component={AccountViewOrder} path="*/Order-History*?showOrder*" routeName="accountViewOrder" fetchAction={initPage(initAccountViewOrderPage)} />
