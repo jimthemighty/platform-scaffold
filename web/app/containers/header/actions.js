@@ -6,7 +6,6 @@
 import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/utils/action-creation'
 import {getSearchSuggestions, searchProducts} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 import {EVENT_ACTION} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 export const pushHistoryItem = createAction('Added item to history stack')
@@ -36,11 +35,8 @@ export const searchSubmit = (query) => (dispatch) => {
     dispatch(searchProducts(query))
 }
 
-export const goBack = () => (dispatch, getState) => {
+export const goBack = () => (dispatch) => {
     dispatch(popHistoryItem())
     dispatch(setIsHistoryPage(true))
-    const {ui: {header}} = getState()
-    const history = header.get('appHistory')
-    const pathname = extractPathFromURL(history.last())
-    return browserHistory.push({pathname})
+    return browserHistory.goBack()
 }
