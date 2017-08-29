@@ -6,6 +6,7 @@
 /* eslint-disable import/named */
 
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import {createPropsSelector} from 'reselect-immutable-helpers'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
@@ -13,13 +14,20 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
-import {setPageFetchError, clearPageFetchError, setOfflineModeStartTime, clearOfflineModeStartTime} from 'progressive-web-sdk/dist/store/offline/actions'
+import {
+    setPageFetchError,
+    clearPageFetchError,
+    setOfflineModeStartTime,
+    clearOfflineModeStartTime,
+    trackOfflinePage,
+    clearOfflinePages
+} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
-import {getOfflineModeStartTime} from 'progressive-web-sdk/dist/store/offline/selectors'
+import {getOfflineModeStartTime, getOfflinePageViews} from 'progressive-web-sdk/dist/store/offline/selectors'
 import {OFFLINE_MODAL} from '../../modals/constants'
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartURL} from './selectors'
@@ -36,12 +44,32 @@ const startOfflineTimer = (offlineModeStartTime) => (dispatch) => {
     }
 }
 
+
+
+const sendOfflineAnalytics = (offlineModeStartTime) => (dispatch, getState) => {
+    const timestamp = Date.now()
+    const offlineModeDuration = timestamp - offlineModeStartTime
+    const pagesViewed = getOfflinePageViews(getState())
+    const pageCount = pagesViewed.size
+    const failedPages = pagesViewed.filter(({inCache}) => !inCache).size
+
+    const data = {
+        duration: offlineModeDuration,
+        timestamp,
+        failedPageCount: failedPages,
+        cachedPageCount: pageCount - failedPages
+    }
+
+    return data
+}
+
+
 /**
  * Make a separate request that is intercepted by the worker. The worker will
  * return a JSON object where `{offline: true}` if the request failed, which we
  * can use to detect if we're offline.
  */
-export const checkIfOffline = () => (dispatch, getState) => {
+export const checkIfOffline = (url, routeName) => (dispatch, getState) => {
     // we need to cachebreak every request to ensure we don't get something
     // stale from the disk cache on the device - the CDN will ignore query
     // parameters for this asset, however
@@ -52,20 +80,18 @@ export const checkIfOffline = () => (dispatch, getState) => {
     })
         .then((response) => response.json())
         .then((json) => {
-            
             if (json.offline) {
-                // set offline mode start time
+                // set offline mode start time if we haven't already
                 dispatch(startOfflineTimer(offlineModeStartTime))
-                if (!offlineModeStartTime) {
-                    dispatch(setOfflineModeStartTime(Date.now()))
-                }
+                dispatch(trackOfflinePage({url, routeName}))
                 dispatch(setPageFetchError('Network failure, using worker cache'))
             } else {
                 // if we have an offline mode start time then we're transitioning from offline to online
                 // calculate the time we were offline for
                 if (offlineModeStartTime) {
-                    const offlineModeDuration = Date.now() - offlineModeStartTime
+                    dispatch(sendOfflineAnalytics(offlineModeStartTime))
                     dispatch(clearOfflineModeStartTime())
+                    dispatch(clearOfflinePages())
                 }
                 dispatch(clearPageFetchError())
 
@@ -80,6 +106,7 @@ export const checkIfOffline = () => (dispatch, getState) => {
             dispatch(setPageFetchError(error.message))
             // set offline mode start time
             dispatch(startOfflineTimer(offlineModeStartTime))
+            dispatch(trackOfflinePage({url, routeName}))
         })
 }
 

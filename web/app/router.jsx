@@ -97,7 +97,7 @@ const initPage = (initAction) => (url, routeName) => (dispatch, getState) => {
             trackPerformance(PERFORMANCE_METRICS.templateAPIEnd)
         })
         .catch((error) => console.error(`Error executing fetch action for ${routeName}`, error))
-        .then(() => dispatch(checkIfOffline()))
+        .then(() => dispatch(checkIfOffline(url, routeName)))
 }
 
 const Router = ({store}) => (
