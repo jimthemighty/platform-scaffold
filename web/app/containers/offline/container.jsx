@@ -44,4 +44,5 @@ Offline.contextTypes = {
     reload: PropTypes.func
 }
 
-export default template(Offline)
+// export default template(Offline)
+export default Offline
