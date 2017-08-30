@@ -149,9 +149,20 @@ export const isEmailAvailable = () => (dispatch, getState) => {
     return dispatch(onShippingEmailAvailable())
 }
 
-export const fetchShippingMethods = () => (dispatch, getState) => (
-    dispatch(
-        fetchShippingMethodsEstimate(getShippingEstimateAddress(getState()))
-    )
-    .catch((error) => dispatch(handleCartExpiryError(error)))
-)
+export const canFetchShippingMethods = ({addressLine1, city, postcode, countryId, regionId}) => {
+    if (addressLine1 && city && postcode && countryId && regionId) {
+        return true
+    }
+    return false
+}
+
+export const fetchShippingMethods = () => (dispatch, getState) => {
+    const address = getShippingEstimateAddress(getState())
+
+    if (canFetchShippingMethods(address)) {
+        return dispatch(fetchShippingMethodsEstimate(address))
+            .catch((error) => dispatch(handleCartExpiryError(error)))
+    }
+
+    return false
+}
