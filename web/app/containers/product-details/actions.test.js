@@ -5,14 +5,15 @@
 /* eslint-env jest */
 import Immutable from 'immutable'
 
-import {openModal} from '../app/actions'
-
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
 import {addToCartStarted, submitCartForm} from './actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 jest.mock('progressive-web-sdk/dist/integration-manager/cart/commands')
 import {addToCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
+
+jest.mock('../app/actions')
+import {openModal} from '../app/actions'
 
 /* eslint-disable import/namespace */
 
@@ -58,7 +59,8 @@ describe('Add to Cart', () => {
         const submitCartFormThunk = submitCartForm()
 
         return submitCartFormThunk(mockDispatch, getStore).then(() => {
-            expect(mockDispatch).toHaveBeenCalledWith(openModal(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart))
+            expect(mockDispatch).toBeCalled()
+            expect(openModal).toHaveBeenCalledWith(PRODUCT_DETAILS_ITEM_ADDED_MODAL, UI_NAME.addToCart)
         })
     })
 
