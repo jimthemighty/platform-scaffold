@@ -23,7 +23,7 @@ import ShippingMethod from './shipping-method'
 
 const REQUIRED_TEXT = 'Required'
 
-export const validate = (values, props) => {
+const validate = (values, props) => {
     const errors = {}
     const requiredFieldNames = [
         'name',

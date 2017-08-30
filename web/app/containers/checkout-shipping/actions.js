@@ -149,7 +149,7 @@ export const isEmailAvailable = () => (dispatch, getState) => {
     return dispatch(onShippingEmailAvailable())
 }
 
-export const canFetchShippingMethods = ({addressLine1, city, postcode, countryId, regionId}) => {
+const canFetchShippingMethods = ({addressLine1, city, postcode, countryId, regionId}) => {
     if (addressLine1 && city && postcode && countryId && regionId) {
         return true
     }
