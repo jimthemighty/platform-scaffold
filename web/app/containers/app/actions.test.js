@@ -95,6 +95,7 @@ test('checkIfOffline clears offline modal and page fetch errors when it receives
 
             expect(fakeDispatch).toHaveBeenCalledTimes(2)
             expect(fakeDispatch.mock.calls[0][0]).toEqual(clearPageFetchError())
+            expect(fakeDispatch).toBeCalled()
             expect(appActions.closeModal).toHaveBeenCalledWith(OFFLINE_MODAL, UI_NAME.offline)
         })
 })
