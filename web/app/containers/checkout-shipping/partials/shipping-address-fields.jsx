@@ -135,7 +135,6 @@ const ShippingAddressFields = ({
                     name="telephone"
                     label="Phone"
                     caption="In case we need to contact you about your order"
-                    customEventHandlers={{onBlur: fetchShippingMethods}}
                     normalize={normalizePhone}
                 >
                     <input type="tel" noValidate data-analytics-name={UI_NAME.phone} />
