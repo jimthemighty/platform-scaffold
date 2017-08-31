@@ -16,10 +16,7 @@ import {logout} from 'progressive-web-sdk/dist/integration-manager/account/comma
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {OFFLINE_ASSET_URL} from './constants'
-import {
-    closeModal as _closeModal,
-    openModal as _openModal
-} from 'progressive-web-sdk/dist/store/modals/actions'
+import * as modalAction from 'progressive-web-sdk/dist/store/modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {OFFLINE_MODAL} from '../../modals/constants'
@@ -35,12 +32,12 @@ export const lockScroll = createAction('Lock Scroll')
 export const unlockScroll = createAction('Unock Scroll')
 
 export const openModal = (modalName, analyticsName) => (dispatch) => {
-    dispatch(_openModal(modalName, analyticsName))
+    dispatch(modalAction.openModal(modalName, analyticsName))
     dispatch(lockScroll())
 }
 
 export const closeModal = (modalName, analyticsName) => (dispatch) => {
-    dispatch(_closeModal(modalName, analyticsName))
+    dispatch(modalAction.closeModal(modalName, analyticsName))
     dispatch(unlockScroll())
 }
 
