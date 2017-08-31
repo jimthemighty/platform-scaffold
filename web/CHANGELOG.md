@@ -3,6 +3,8 @@
 - Add Share to PDP [#963](https://github.com/mobify/platform-scaffold/pull/963)
 - Fix account dashboard path [#986](https://github.com/mobify/platform-scaffold/pull/986)
 - Fetch shipping methods upon shipping address form completion [#990](https://github.com/mobify/platform-scaffold/pull/990)
+- Fix bug with account login/logout for Merlin's connector [#992](https://github.com/mobify/platform-scaffold/pull/992)
+
 
 ## 0.20.0 (August 24, 2017)
 - Add "View Orders" list to My Account [#912](https://github.com/mobify/platform-scaffold/pull/912)
