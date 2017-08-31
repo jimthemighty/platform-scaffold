@@ -8,14 +8,16 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 
 import {getShippingMethods, hasShippingMethods} from '../../../store/checkout/selectors'
+import {getIsFetchingShippingMethod} from '../selectors'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import Field from 'progressive-web-sdk/dist/components/field'
 import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import ShippingMethodLabel from './shipping-method-label'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+import InlineLoader from 'progressive-web-sdk/dist/components/inline-loader'
 
-const ShippingMethod = ({hasShippingMethods, shippingMethods}) => {
+const ShippingMethod = ({hasShippingMethods, isFetchingShippingMethod, shippingMethods}) => {
     return (
         <div className="t-checkout-shipping__shipping-method">
             <div className="t-checkout-shipping__title u-padding-top-lg u-padding-bottom-md">
@@ -47,11 +49,15 @@ const ShippingMethod = ({hasShippingMethods, shippingMethods}) => {
                 <FieldRow className="u-margin-top-lg">
                     <Button
                         type="submit"
-                        disabled={!hasShippingMethods}
+                        disabled={!hasShippingMethods || isFetchingShippingMethod}
                         className="pw--primary u-width-full u-text-uppercase qa-checkout__continue-to-payment"
                         data-analytics-name={UI_NAME.continueCheckout}
                     >
-                        Continue to Payment
+                        {isFetchingShippingMethod ?
+                            <InlineLoader />
+                        :
+                            ['Continue to Payment']
+                        }
                     </Button>
                 </FieldRow>
             </div>
@@ -68,6 +74,12 @@ ShippingMethod.propTypes = {
     * The flag of whether shipping methods have been fetched
     */
     hasShippingMethods: PropTypes.bool,
+
+    /**
+    * Whether shipping method is being fetched
+    */
+    isFetchingShippingMethod: PropTypes.bool,
+
     /**
     * The available shipping methods for the order
     */
@@ -81,6 +93,7 @@ ShippingMethod.propTypes = {
 
 const mapStateToProps = createPropsSelector({
     hasShippingMethods,
+    isFetchingShippingMethod: getIsFetchingShippingMethod,
     shippingMethods: getShippingMethods
 })
 

@@ -28,6 +28,7 @@ export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #"
 export const setCustomerEmailRecognized = createAction('Set Customer email Recognized', ['customerEmailRecognized'])
 export const setShowAddNewAddress = createAction('Setting the "Saved/New Address" field', ['showAddNewAddress'])
 export const receiveData = createAction('Receive Checkout Shipping Data')
+export const setIsFetchingShippingMethod = createAction('Set fetching shipping method flag', ['isFetchingShippingMethod'])
 
 const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
 
@@ -160,7 +161,9 @@ export const fetchShippingMethods = () => (dispatch, getState) => {
     const address = getShippingEstimateAddress(getState())
 
     if (canFetchShippingMethods(address)) {
+        dispatch(setIsFetchingShippingMethod(true))
         return dispatch(fetchShippingMethodsEstimate(address))
+            .then(() => dispatch(setIsFetchingShippingMethod(false)))
             .catch((error) => dispatch(handleCartExpiryError(error)))
     }
 
@@ -169,7 +172,9 @@ export const fetchShippingMethods = () => (dispatch, getState) => {
 
 export const onSavedShippingAddressChange = (id, savedAddress) => (dispatch) => {
     dispatch(setDefaultShippingAddressId(id))
+    dispatch(setIsFetchingShippingMethod(true))
 
     return dispatch(fetchShippingMethodsEstimate(savedAddress))
+        .then(() => dispatch(setIsFetchingShippingMethod(false)))
         .catch((error) => dispatch(handleCartExpiryError(error)))
 }
