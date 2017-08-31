@@ -6,7 +6,6 @@
 /* eslint-disable import/named */
 
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {sendStandAloneAnalytics} from 'progressive-web-sdk/dist/analytics/actions'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
@@ -26,18 +25,13 @@ import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartURL} from './selectors'
 import {setStandAloneAppFlag} from 'progressive-web-sdk/dist/store/app/actions'
 
-
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
 
 export const checkIfStandAlone = () => (dispatch) => {
     const isStandAloneFlag = isStandalone()
     dispatch(setStandAloneAppFlag(isStandAloneFlag))
-    if (isStandAloneFlag) {
-        dispatch(sendStandAloneAnalytics())
-    }
 }
-
 
 /**
  * Make a separate request that is intercepted by the worker. The worker will
