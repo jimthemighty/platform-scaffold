@@ -166,3 +166,10 @@ export const fetchShippingMethods = () => (dispatch, getState) => {
 
     return false
 }
+
+export const onSavedShippingAddressChange = (id, savedAddress) => (dispatch) => {
+    dispatch(setDefaultShippingAddressId(id))
+
+    return dispatch(fetchShippingMethodsEstimate(savedAddress))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
+}
