@@ -44,10 +44,6 @@ const ShippingAddressFields = ({
         </Button>
     )
 
-    const onBlur = () => {
-        fetchShippingMethods()
-    }
-
     return (
         <div className="t-checkout-shipping__fields u-margin-top-md">
             <FieldRow>
@@ -55,7 +51,7 @@ const ShippingAddressFields = ({
                     component={Field}
                     name="name"
                     label="First & Last Name"
-                    customEventHandlers={{onBlur}}
+                    customEventHandlers={{onBlur: fetchShippingMethods}}
                 >
                     <input type="text" noValidate data-analytics-name={UI_NAME.customerName} />
                 </ReduxForm.Field>
@@ -67,7 +63,7 @@ const ShippingAddressFields = ({
                     name="addressLine1"
                     label="Address"
                     caption={!isCompanyOrAptShown && addCompanyButton}
-                    customEventHandlers={{onBlur}}
+                    customEventHandlers={{onBlur: fetchShippingMethods}}
                 >
                     <input type="text" noValidate data-analytics-name={UI_NAME.address} />
                 </ReduxForm.Field>
@@ -108,7 +104,7 @@ const ShippingAddressFields = ({
                     component={Field}
                     name="city"
                     label="City"
-                    customEventHandlers={{onBlur}}
+                    customEventHandlers={{onBlur: fetchShippingMethods}}
                 >
                     <input type="text" noValidate data-analytics-name={UI_NAME.city} />
                 </ReduxForm.Field>
@@ -119,7 +115,7 @@ const ShippingAddressFields = ({
             </FieldRow>
 
             <FieldRow>
-                <RegionField regions={regions} onBlur={onBlur} />
+                <RegionField regions={regions} onBlur={fetchShippingMethods} />
             </FieldRow>
 
             <FieldRow>
@@ -127,7 +123,7 @@ const ShippingAddressFields = ({
                     component={Field}
                     name="postcode"
                     label="Zip/Postal Code"
-                    customEventHandlers={{onBlur}}
+                    customEventHandlers={{onBlur: fetchShippingMethods}}
                 >
                     <input type="text" noValidate data-analytics-name={UI_NAME.postcode} />
                 </ReduxForm.Field>
@@ -139,7 +135,7 @@ const ShippingAddressFields = ({
                     name="telephone"
                     label="Phone"
                     caption="In case we need to contact you about your order"
-                    customEventHandlers={{onBlur}}
+                    customEventHandlers={{onBlur: fetchShippingMethods}}
                     normalize={normalizePhone}
                 >
                     <input type="tel" noValidate data-analytics-name={UI_NAME.phone} />
