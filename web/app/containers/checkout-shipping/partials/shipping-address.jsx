@@ -8,9 +8,10 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 import classNames from 'classnames'
 
-import {setShowAddNewAddress} from '../actions'
+import {setShowAddNewAddress, fetchShippingMethods} from '../actions'
 import {ADD_NEW_ADDRESS_FIELD, SAVED_SHIPPING_ADDRESS_FIELD} from '../constants'
 import {getIsLoggedIn, getSavedAddresses} from 'progressive-web-sdk/dist/store/user/selectors'
+import {setDefaultShippingAddressId} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {getShowAddNewAddress} from '../selectors'
 
 import Field from 'progressive-web-sdk/dist/components/field'
@@ -19,9 +20,11 @@ import ShippingAddressFields from './shipping-address-fields'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const ShippingAddressForm = ({
+    fetchShippingMethods,
     handleShowAddNewAddress,
     isLoggedIn,
     savedAddresses,
+    setDefaultShippingAddressId,
     showAddNewAddress
 }) => {
 
@@ -61,6 +64,8 @@ const ShippingAddressForm = ({
                     customEventHandlers={{
                         onChange: () => {
                             handleShowAddNewAddress(false)
+                            setDefaultShippingAddressId(id)
+                            fetchShippingMethods(address)
                         }
                     }}
                 >
@@ -142,6 +147,11 @@ ShippingAddressForm.propTypes = {
     disabled: React.PropTypes.bool,
 
     /**
+     * Fetch shipping methods on saved address selection change
+     */
+    fetchShippingMethods: React.PropTypes.func,
+
+    /**
     * The title for the form
     */
     formTitle: React.PropTypes.string,
@@ -167,6 +177,11 @@ ShippingAddressForm.propTypes = {
     savedAddresses: React.PropTypes.array,
 
     /**
+     * Handles selected shipping address
+     */
+    setDefaultShippingAddressId: React.PropTypes.func,
+
+    /**
     * Whether or not to show the "Add New Addres" form fields
     */
     showAddNewAddress: React.PropTypes.bool,
@@ -184,7 +199,9 @@ const mapStateToProps = createPropsSelector({
 })
 
 const mapDispatchToProps = {
-    handleShowAddNewAddress: setShowAddNewAddress
+    fetchShippingMethods,
+    handleShowAddNewAddress: setShowAddNewAddress,
+    setDefaultShippingAddressId
 }
 
 export default connect(
