@@ -4,7 +4,7 @@
 
 /* eslint-env jest */
 
-import {fromJS} from 'immutable'
+import Immutable, {fromJS} from 'immutable'
 import {checkIfOffline} from './actions'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
@@ -28,9 +28,12 @@ test('checkIfOffline dispatches setPageFetchError if network request fails', () 
     global.fetch.mockReturnValueOnce(Promise.reject(new TypeError('failed to fetch')))
 
     const fakeDispatch = jest.fn()
+    const fakeGetState = () => ({
+        offline: Immutable.Map()
+    })
     const thunk = checkIfOffline()
 
-    return thunk(fakeDispatch)
+    return thunk(fakeDispatch, fakeGetState)
         .then(() => {
             expect(global.fetch).toBeCalled()
             expect(global.fetch.mock.calls[0][0]).toMatch(OFFLINE_ASSET_URL)
@@ -54,8 +57,9 @@ test('checkIfOffline dispatches setPageFetchError if it receives modified JSON f
     global.fetch.mockReturnValueOnce(Promise.resolve(mockResponse))
 
     const fakeDispatch = jest.fn()
-    const fakeGetState = () => fromJS({
-        modals: undefined
+    const fakeGetState = () => ({
+        modals: undefined,
+        offline: Immutable.Map()
     })
     const thunk = checkIfOffline()
 
@@ -64,7 +68,7 @@ test('checkIfOffline dispatches setPageFetchError if it receives modified JSON f
             expect(global.fetch).toBeCalled()
             expect(global.fetch.mock.calls[0][0]).toMatch(OFFLINE_ASSET_URL)
 
-            expect(fakeDispatch).toHaveBeenCalledTimes(1)
+            expect(fakeDispatch).toHaveBeenCalledTimes(3)
             expect(fakeDispatch.mock.calls[0][0]).toEqual(setPageFetchError('Network failure, using worker cache'))
         })
 })
@@ -84,7 +88,8 @@ test('checkIfOffline clears offline modal and page fetch errors when it receives
     const fakeGetState = () => ({
         modals: fromJS({
             [OFFLINE_MODAL]: true
-        })
+        }),
+        offline: Immutable.Map()
     })
     const thunk = checkIfOffline()
 

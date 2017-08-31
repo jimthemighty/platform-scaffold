@@ -49,15 +49,12 @@ const sendOfflineAnalytics = (offlineModeStartTime) => (dispatch, getState) => {
     dispatch(sendOfflineModeUsedAnalytics(offlineModeDuration, timestamp, pagesViewed))
 }
 
-const setUpOfflineMode = (offlineModeStartTime, url, routeName, pageFetchError = 'Network failure, using worker cache') => (dispatch) => {
+const startOfflineTimer = (offlineModeStartTime) => (dispatch) => {
     // set offline mode start time if we haven't already
     if (!offlineModeStartTime) {
         dispatch(setOfflineModeStartTime(Date.now()))
     }
-    dispatch(trackOfflinePage({url, routeName, title: window.document.title}))
-    dispatch(setPageFetchError(pageFetchError))
 }
-
 
 /**
  * Make a separate request that is intercepted by the worker. The worker will
@@ -76,7 +73,9 @@ export const checkIfOffline = (url, routeName) => (dispatch, getState) => {
         .then((response) => response.json())
         .then((json) => {
             if (json.offline) {
-                dispatch(setUpOfflineMode(offlineModeStartTime, url, routeName))
+                dispatch(setPageFetchError('Network failure, using worker cache'))
+                dispatch(startOfflineTimer(offlineModeStartTime))
+                dispatch(trackOfflinePage({url, routeName, title: window.document.title}))
             } else {
                 // if we have an offline mode start time then we're transitioning from offline to online
                 // calculate the time we were offline for
@@ -95,7 +94,9 @@ export const checkIfOffline = (url, routeName) => (dispatch, getState) => {
         .catch((error) => {
             // In cases where we don't have the worker installed, this means
             // we indeed have a network failure, so switch on offline
-            dispatch(setUpOfflineMode(offlineModeStartTime, url, routeName, error.message))
+            dispatch(setPageFetchError(error.message))
+            dispatch(startOfflineTimer(offlineModeStartTime))
+            dispatch(trackOfflinePage({url, routeName, title: window.document.title}))
         })
 }
 
