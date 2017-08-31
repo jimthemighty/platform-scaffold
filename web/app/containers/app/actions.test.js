@@ -5,7 +5,7 @@
 /* eslint-env jest */
 
 import {fromJS} from 'immutable'
-import {checkIfOffline, closeModal} from './actions'
+import * as appActions from './actions'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 import {OFFLINE_MODAL} from '../../modals/constants'
 import {OFFLINE_ASSET_URL} from './constants'
@@ -27,7 +27,7 @@ test('checkIfOffline dispatches setPageFetchError if network request fails', () 
     global.fetch.mockReturnValueOnce(Promise.reject(new TypeError('failed to fetch')))
 
     const fakeDispatch = jest.fn()
-    const thunk = checkIfOffline()
+    const thunk = appActions.checkIfOffline()
 
     return thunk(fakeDispatch)
         .then(() => {
@@ -56,7 +56,7 @@ test('checkIfOffline dispatches setPageFetchError if it receives modified JSON f
     const fakeGetState = () => fromJS({
         modals: undefined
     })
-    const thunk = checkIfOffline()
+    const thunk = appActions.checkIfOffline()
 
     return thunk(fakeDispatch, fakeGetState)
         .then(() => {
@@ -85,7 +85,8 @@ test('checkIfOffline clears offline modal and page fetch errors when it receives
             [OFFLINE_MODAL]: true
         })
     })
-    const thunk = checkIfOffline()
+    const thunk = appActions.checkIfOffline()
+    appActions.closeModal = jest.fn()  // eslint-disable-line
 
     return thunk(fakeDispatch, fakeGetState)
         .then(() => {
@@ -94,6 +95,6 @@ test('checkIfOffline clears offline modal and page fetch errors when it receives
 
             expect(fakeDispatch).toHaveBeenCalledTimes(2)
             expect(fakeDispatch.mock.calls[0][0]).toEqual(clearPageFetchError())
-            expect(fakeDispatch.mock.calls[1][0]).toEqual(closeModal(OFFLINE_MODAL, UI_NAME.offline))
+            expect(appActions.closeModal).toHaveBeenCalledWith(OFFLINE_MODAL, UI_NAME.offline)
         })
 })
