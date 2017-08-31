@@ -2,6 +2,10 @@
 - Update header bar when displaying in Add to homescreen mode [#983](https://github.com/mobify/platform-scaffold/pull/983)
 - Add Share to PDP [#963](https://github.com/mobify/platform-scaffold/pull/963)
 - Fix account dashboard path [#986](https://github.com/mobify/platform-scaffold/pull/986)
+- Added Offline mode analytics tracking [#988](https://github.com/mobify/platform-scaffold/pull/988)
+    - Dispatch actions to store data for offline mode
+    - Dispatch actions to send analytics data about offline mode session
+    - Remove template higher order component from offline container
 
 ## 0.20.0 (August 24, 2017)
 - Add "View Orders" list to My Account [#912](https://github.com/mobify/platform-scaffold/pull/912)
