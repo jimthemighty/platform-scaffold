@@ -131,6 +131,13 @@ class App extends React.Component {
             }
         }
 
+        const showOnlyOffline = fetchError && !hasFetchedCurrentPath
+
+        const mainAppWrapperClasses = classNames({
+            'u-flexbox u-flex u-direction-column': !showOnlyOffline,
+            'u-display-none': showOnlyOffline
+        })
+
         return (
             <Lockup locked={scrollManager.locked}>
                 <div
@@ -169,22 +176,17 @@ class App extends React.Component {
 
                             </div>
 
-                            {
-                                // Display main content if we have no network errors or
-                                // if we've already got the content in the store
-                                (!fetchError || hasFetchedCurrentPath) ?
-                                    <div className="u-flexbox u-flex u-direction-column">
-                                        <main id="app-main" className="u-flex" role="main">
-                                            {this.props.children}
-                                        </main>
+                            <div className={mainAppWrapperClasses} >
+                                <main id="app-main" className="u-flex" role="main">
+                                    {this.props.children}
+                                </main>
 
-                                        <div id="app-footer" className="u-flex-none">
-                                            <CurrentFooter />
-                                        </div>
-                                    </div>
-                                :
-                                    <Offline location={children.props.location} route={routeProps} />
-                            }
+                                <div id="app-footer" className="u-flex-none">
+                                    <CurrentFooter />
+                                </div>
+                            </div>
+
+                            {showOnlyOffline && <Offline location={children.props.location} route={routeProps} />}
                         </div>
                     </div>
 

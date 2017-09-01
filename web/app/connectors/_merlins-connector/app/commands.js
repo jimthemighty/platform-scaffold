@@ -23,7 +23,6 @@ import {
 
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
-import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 import {readLoggedInState} from '../account/utils'
 import {
     receiveSearchSuggestions,
@@ -70,8 +69,6 @@ export const fetchPageData = (url) => (dispatch) => {
             console.info(error.message)
             if (error.name !== 'FetchError') {
                 throw error
-            } else {
-                dispatch(setPageFetchError(error.message))
             }
         })
 }

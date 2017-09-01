@@ -2,6 +2,10 @@
 - Update header bar when displaying in Add to homescreen mode [#983](https://github.com/mobify/platform-scaffold/pull/983)
 - Add Share to PDP [#963](https://github.com/mobify/platform-scaffold/pull/963)
 - Fix account dashboard path [#986](https://github.com/mobify/platform-scaffold/pull/986)
+- Added Offline mode analytics tracking [#988](https://github.com/mobify/platform-scaffold/pull/988)
+    - Dispatch actions to store data for offline mode
+    - Dispatch actions to send analytics data about offline mode session
+    - Remove template higher order component from offline container
 - Fix bug with account login/logout for Merlin's connector [#992](https://github.com/mobify/platform-scaffold/pull/992)
 - Add lock/unlock scroll when open/closing modals [#989](https://github.com/mobify/platform-scaffold/pull/989)
 
