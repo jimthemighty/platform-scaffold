@@ -11,7 +11,7 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getProductThumbnail, getProductTitle, getProductPrice} from 'progressive-web-sdk/dist/store/products/selectors'
 import * as productDetailsActions from '../../containers/product-details/actions'
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../constants'
-import {closeModal} from '../../containers/app/actions'
+import {closeModal} from '../actions'
 
 import ItemAddedModalContents from '../../components/item-added-modal-contents'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'

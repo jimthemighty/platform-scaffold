@@ -6,14 +6,14 @@
 import Immutable from 'immutable'
 
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
-import {addToCartStarted, submitCartForm} from './actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 jest.mock('progressive-web-sdk/dist/integration-manager/cart/commands')
 import {addToCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
+jest.mock('../../modals/actions')
+import {openModal} from '../../modals/actions'
 
-jest.mock('../app/actions')
-import {openModal} from '../app/actions'
+import {addToCartStarted, submitCartForm} from './actions'
 
 /* eslint-disable import/namespace */
 

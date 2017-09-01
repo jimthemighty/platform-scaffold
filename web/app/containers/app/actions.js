@@ -16,10 +16,7 @@ import {logout} from 'progressive-web-sdk/dist/integration-manager/account/comma
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {OFFLINE_ASSET_URL} from './constants'
-import {
-    closeModal as _closeModal,
-    openModal as _openModal
-} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../../modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {OFFLINE_MODAL} from '../../modals/constants'
@@ -34,15 +31,6 @@ export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['st
 export const lockScroll = createAction('Lock Scroll')
 export const unlockScroll = createAction('Unock Scroll')
 
-export const openModal = (modalName, analyticsName) => (dispatch) => {
-    dispatch(_openModal(modalName, analyticsName))
-    dispatch(lockScroll())
-}
-
-export const closeModal = (modalName, analyticsName) => (dispatch) => {
-    dispatch(_closeModal(modalName, analyticsName))
-    dispatch(unlockScroll())
-}
 
 /**
  * Make a separate request that is intercepted by the worker. The worker will
@@ -64,6 +52,7 @@ export const checkIfOffline = () => (dispatch, getState) => {
                 dispatch(clearPageFetchError())
 
                 if (isModalOpen(OFFLINE_MODAL)(getState())) {
+                    console.log('HELLO WORLD!!! ')
                     dispatch(closeModal(OFFLINE_MODAL, UI_NAME.offline))
                 }
             }

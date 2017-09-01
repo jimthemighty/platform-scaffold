@@ -17,13 +17,14 @@ import {
     deletePromoCode
 } from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
-import {cartExpired, handleCartExpiryError, closeModal, openModal} from '../app/actions'
+import {cartExpired, handleCartExpiryError} from '../app/actions'
 import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
 import {getEstimateShippingAddress} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
+import {closeModal, openModal} from '../../modals/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])

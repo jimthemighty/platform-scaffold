@@ -10,7 +10,7 @@ import Button from 'progressive-web-sdk/dist/components/button'
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 
 import {OFFLINE_MODAL} from '../constants'
-import {closeModal} from '../../containers/app/actions'
+import {closeModal} from '../actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 

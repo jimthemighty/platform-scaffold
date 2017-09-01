@@ -15,7 +15,7 @@ import AddressBlock from '../../components/address-block'
 import {getDefaultAddress, getAddresses} from 'progressive-web-sdk/dist/store/user/selectors'
 import {getAccountURL} from '../app/selectors'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
-import {openModal} from '../app/actions'
+import {openModal} from '../../modals/actions'
 import {
     ACCOUNT_ADDRESS_MODAL,
     ACCOUNT_REMOVE_ADDRESS_MODAL

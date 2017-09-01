@@ -24,7 +24,8 @@ import {
     SIGNED_OUT_ACCOUNT_NAV_ITEM
 } from './constants'
 import {NAVIGATION_MODAL} from '../constants'
-import {closeModal, signOut} from '../../containers/app/actions'
+import {closeModal} from '../actions'
+import {signOut} from '../../containers/app/actions'
 import {setNavigationPath} from './actions'
 import NavigationSocialIcons from './partials/navigation-social-icons'
 

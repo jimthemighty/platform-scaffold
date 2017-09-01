@@ -9,7 +9,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL} from '../constants'
 import {removeWishlistItem} from '../../containers/wishlist/actions'
 import {getRemoveWishlistItemData} from '../../containers/wishlist/selectors'
-import {closeModal} from '../../containers/app/actions'
+import {closeModal} from './actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import Sheet from 'progressive-web-sdk/dist/components/sheet'

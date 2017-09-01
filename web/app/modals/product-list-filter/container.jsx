@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {PRODUCT_LIST_FILTER_MODAL} from '../constants'
-import {closeModal, openModal} from '../../containers/app/actions'
+import {closeModal, openModal} from '../actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import * as selectors from '../../containers/product-list/selectors'
 
