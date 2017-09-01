@@ -9,7 +9,7 @@ references:
   npm_cache_key: &npm_cache_key
     platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
 
-  npm_cache_key: &npm_cache_key
+  build_cache_key: &build_cache_key
     platform-scaffold-build-{{ .Branch }}
   
   restore_node_modules: &restore_node_modules
