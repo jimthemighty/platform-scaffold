@@ -90,11 +90,6 @@ jobs:
       - *restore_node_modules
       - *restore_build
       - run:
-          name: Build Project
-          command: npm run prod:build
-          background: true
-          working_directory: /home/ubuntu/platform-scaffold/web/
-      - run:
           name: Start Test Server
           command: npm run test:server
           background: true
