@@ -51,7 +51,6 @@ export const checkIfOffline = () => (dispatch, getState) => {
                 dispatch(clearPageFetchError())
 
                 if (isModalOpen(OFFLINE_MODAL)(getState())) {
-                    console.log('HELLO WORLD!!! ')
                     dispatch(closeModal(OFFLINE_MODAL, UI_NAME.offline))
                 }
             }
