@@ -165,8 +165,8 @@ export const fetchShippingMethods = () => (dispatch, getState) => {
     if (canFetchShippingMethods(address)) {
         dispatch(setIsFetchingShippingMethod(true))
         return dispatch(fetchShippingMethodsEstimate(address))
-            .then(() => dispatch(setIsFetchingShippingMethod(false)))
             .catch((error) => dispatch(handleCartExpiryError(error)))
+            .then(() => dispatch(setIsFetchingShippingMethod(false)))
     }
 
     return false
@@ -177,6 +177,6 @@ export const onSavedShippingAddressChange = (id, savedAddress) => (dispatch) => 
     dispatch(setIsFetchingShippingMethod(true))
 
     return dispatch(fetchShippingMethodsEstimate(savedAddress))
-        .then(() => dispatch(setIsFetchingShippingMethod(false)))
         .catch((error) => dispatch(handleCartExpiryError(error)))
+        .then(() => dispatch(setIsFetchingShippingMethod(false)))
 }

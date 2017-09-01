@@ -45,7 +45,7 @@ class ShippingAddressForm extends React.Component {
             showAddNewAddress
         } = this.props
 
-        const renderSavedAddresses = (address) => {
+        const renderSavedAddress = (address) => {
             const {
                 city,
                 countryId,
@@ -103,7 +103,7 @@ class ShippingAddressForm extends React.Component {
                 })
 
                 return [
-                    savedAddresses.map(renderSavedAddresses),
+                    savedAddresses.map(renderSavedAddress),
                     <FieldRow key={ADD_NEW_ADDRESS_FIELD} className={classes}>
                         <div className="u-flex">
                             <ReduxForm.Field
