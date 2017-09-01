@@ -18,123 +18,146 @@ import FieldRow from 'progressive-web-sdk/dist/components/field-row'
 import ShippingAddressFields from './shipping-address-fields'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
-const ShippingAddressForm = ({
-    handleShowAddNewAddress,
-    isLoggedIn,
-    onSavedShippingAddressChange,
-    savedAddresses,
-    showAddNewAddress
-}) => {
-
-    const renderSavedAddresses = (address) => {
+class ShippingAddressForm extends React.Component {
+    componentWillReceiveProps(nextProps) {
+        // After receiving user's address book,
+        // we want to fetch the shipping methods for the first
+        // saved address
         const {
-            city,
-            countryId,
-            firstname,
-            id,
-            lastname,
-            postcode,
-            regionCode,
-            addressLine1,
-            addressLine2
-        } = address
-        const street = [addressLine1, addressLine2].filter((item) => item).join(', ')
-        const shippingAddress = (
-            <div className="u-color-neutral-40">
-                <p className="u-margin-bottom-sm">
-                    {city}, {regionCode}, {countryId}, {postcode}
-                </p>
-                <p>{firstname} {lastname}</p>
-            </div>
-        )
+            onSavedShippingAddressChange,
+            savedAddresses
+        } = this.props
 
-        return (
-            <FieldRow key={id}>
-                <ReduxForm.Field
-                    component={Field}
-                    name={SAVED_SHIPPING_ADDRESS_FIELD}
-                    label={
-                        <strong className="u-text-weight-semi-bold">{street}</strong>
-                    }
-                    caption={shippingAddress}
-                    type="radio"
-                    value={id}
-                    customEventHandlers={{
-                        onChange: () => {
-                            handleShowAddNewAddress(false)
-                            onSavedShippingAddressChange(id, address)
-                        }
-                    }}
-                >
-                    <input
-                        type="radio"
-                        noValidate
-                        value={id}
-                        data-analytics-name={UI_NAME.savedAddress}
-                    />
-                </ReduxForm.Field>
-            </FieldRow>
-        )
-    }
-
-    const renderAddressFormOrSavedAddressesOrBoth = () => {
-        if (isLoggedIn && !!savedAddresses.length) {
-            const classes = classNames('t-checkout-payment__add-new-address', {
-                'u-border-light u-padding-md': showAddNewAddress
-            })
-
-            return [
-                savedAddresses.map(renderSavedAddresses),
-                <FieldRow key={ADD_NEW_ADDRESS_FIELD} className={classes}>
-                    <div className="u-flex">
-                        <ReduxForm.Field
-                            component={Field}
-                            name={SAVED_SHIPPING_ADDRESS_FIELD}
-                            label={
-                                <strong className="u-text-weight-semi-bold">
-                                    Add a new address
-                                </strong>
-                            }
-                            type="radio"
-                            value={ADD_NEW_ADDRESS_FIELD}
-                            customEventHandlers={{
-                                onChange: () => {
-                                    handleShowAddNewAddress(true)
-                                }
-                            }}
-                        >
-                            <input
-                                type="radio"
-                                noValidate
-                                value={ADD_NEW_ADDRESS_FIELD}
-                                data-analytics-name={UI_NAME.addNewAddress}
-                            />
-                        </ReduxForm.Field>
-
-                        {showAddNewAddress &&
-                            <div className="t-checkout-payment__add-new-address-form">
-                                <ShippingAddressFields />
-                            </div>
-                        }
-                    </div>
-                </FieldRow>
-            ]
-        } else {
-            return <ShippingAddressFields />
+        if (nextProps.savedAddresses.length > savedAddresses.length) {
+            onSavedShippingAddressChange(
+                nextProps.savedAddresses[0].id,
+                nextProps.savedAddresses[0]
+            )
         }
     }
 
-    return (
-        <div className="t-checkout-shipping__shipping-address">
-            <div className="t-checkout-shipping__title u-padding-top-lg u-padding-bottom-md">
-                <h2 className="u-h4 u-text-uppercase">Shipping Address</h2>
-            </div>
+    render() {
+        const {
+            handleShowAddNewAddress,
+            isLoggedIn,
+            onSavedShippingAddressChange,
+            savedAddresses,
+            showAddNewAddress
+        } = this.props
 
-            <div className="u-padding-md u-border-light-top u-border-light-bottom u-bg-color-neutral-00">
-                {renderAddressFormOrSavedAddressesOrBoth()}
+        const renderSavedAddresses = (address) => {
+            const {
+                city,
+                countryId,
+                firstname,
+                id,
+                lastname,
+                postcode,
+                regionCode,
+                addressLine1,
+                addressLine2
+            } = address
+            const street = [addressLine1, addressLine2].filter((item) => item).join(', ')
+            const shippingAddress = (
+                <div className="u-color-neutral-40">
+                    <p className="u-margin-bottom-sm">
+                        {city}, {regionCode}, {countryId}, {postcode}
+                    </p>
+                    <p>{firstname} {lastname}</p>
+                </div>
+            )
+
+            return (
+                <FieldRow key={id}>
+                    <ReduxForm.Field
+                        component={Field}
+                        name={SAVED_SHIPPING_ADDRESS_FIELD}
+                        label={
+                            <strong className="u-text-weight-semi-bold">{street}</strong>
+                        }
+                        caption={shippingAddress}
+                        type="radio"
+                        value={id}
+                        customEventHandlers={{
+                            onChange: () => {
+                                handleShowAddNewAddress(false)
+                                onSavedShippingAddressChange(id, address)
+                            }
+                        }}
+                    >
+                        <input
+                            type="radio"
+                            noValidate
+                            value={id}
+                            data-analytics-name={UI_NAME.savedAddress}
+                        />
+                    </ReduxForm.Field>
+                </FieldRow>
+            )
+        }
+
+        const renderAddressFormOrSavedAddressesOrBoth = () => {
+            if (isLoggedIn && !!savedAddresses.length) {
+                const classes = classNames('t-checkout-payment__add-new-address', {
+                    'u-border-light u-padding-md': showAddNewAddress
+                })
+
+                return [
+                    savedAddresses.map(renderSavedAddresses),
+                    <FieldRow key={ADD_NEW_ADDRESS_FIELD} className={classes}>
+                        <div className="u-flex">
+                            <ReduxForm.Field
+                                component={Field}
+                                name={SAVED_SHIPPING_ADDRESS_FIELD}
+                                label={
+                                    <strong className="u-text-weight-semi-bold">
+                                        Add a new address
+                                    </strong>
+                                }
+                                type="radio"
+                                value={ADD_NEW_ADDRESS_FIELD}
+                                customEventHandlers={{
+                                    onChange: () => {
+                                        handleShowAddNewAddress(true)
+
+                                        // Reset checkout shippingAddress and defaultShippingAddressId
+                                        onSavedShippingAddressChange()
+                                    }
+                                }}
+                            >
+                                <input
+                                    type="radio"
+                                    noValidate
+                                    value={ADD_NEW_ADDRESS_FIELD}
+                                    data-analytics-name={UI_NAME.addNewAddress}
+                                />
+                            </ReduxForm.Field>
+
+                            {showAddNewAddress &&
+                                <div className="t-checkout-payment__add-new-address-form">
+                                    <ShippingAddressFields />
+                                </div>
+                            }
+                        </div>
+                    </FieldRow>
+                ]
+            } else {
+                return <ShippingAddressFields />
+            }
+        }
+
+        return (
+            <div className="t-checkout-shipping__shipping-address">
+                <div className="t-checkout-shipping__title u-padding-top-lg u-padding-bottom-md">
+                    <h2 className="u-h4 u-text-uppercase">Shipping Address</h2>
+                </div>
+
+                <div className="u-padding-md u-border-light-top u-border-light-bottom u-bg-color-neutral-00">
+                    {renderAddressFormOrSavedAddressesOrBoth()}
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 ShippingAddressForm.propTypes = {

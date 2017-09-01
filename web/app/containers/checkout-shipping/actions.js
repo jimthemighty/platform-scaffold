@@ -150,6 +150,7 @@ export const isEmailAvailable = () => (dispatch, getState) => {
     return dispatch(onShippingEmailAvailable())
 }
 
+// TODO: move this function into connectors (Hybris)
 const canFetchShippingMethods = ({addressLine1, city, postcode, countryId, regionId}) => {
     if (addressLine1 && city && postcode && countryId && regionId) {
         return true
@@ -159,7 +160,10 @@ const canFetchShippingMethods = ({addressLine1, city, postcode, countryId, regio
 
 export const fetchShippingMethods = () => (dispatch, getState) => {
     const address = getShippingEstimateAddress(getState())
+    console.log(address)
+    console.log('fetchShippingMethods')
 
+    // TODO: move the validation into connectors
     if (canFetchShippingMethods(address)) {
         dispatch(setIsFetchingShippingMethod(true))
         return dispatch(fetchShippingMethodsEstimate(address))
@@ -173,7 +177,7 @@ export const fetchShippingMethods = () => (dispatch, getState) => {
 export const onSavedShippingAddressChange = (id, savedAddress) => (dispatch) => {
     dispatch(setDefaultShippingAddressId(id))
     dispatch(setIsFetchingShippingMethod(true))
-
+    console.log(savedAddress)
     return dispatch(fetchShippingMethodsEstimate(savedAddress))
         .then(() => dispatch(setIsFetchingShippingMethod(false)))
         .catch((error) => dispatch(handleCartExpiryError(error)))
