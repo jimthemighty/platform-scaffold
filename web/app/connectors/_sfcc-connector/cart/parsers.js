@@ -61,11 +61,11 @@ export const parseCartContents = ({
 export const parseCartProducts = ({product_items = []}) => { /* Products */
     const productMap = {}
 
-    product_items.forEach(({product_id, product_name, price, item_text}) => {
+    product_items.forEach(({product_id, product_name, price, item_text, quantity}) => {
         productMap[product_id] = {
             id: product_id,
             title: product_name,
-            price: formatPrice(price),
+            price: formatPrice(price / quantity),
             href: getProductHref(product_id),
             description: item_text,
             available: true
