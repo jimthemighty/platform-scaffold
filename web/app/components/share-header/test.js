@@ -12,6 +12,5 @@ import ShareHeader from './index'
 
 test('ShareHeader renders without errors', () => {
     const wrapper = mount(<ShareHeader />)
-    console.log(wrapper.debug())
     expect(wrapper.length).toBe(1)
 })
