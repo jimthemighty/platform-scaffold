@@ -32,6 +32,10 @@ jobs:
           name: Install Dependencies
           command: npm install
           working_directory: /home/ubuntu/platform-scaffold/web/
+      - run:
+          name: Build Project
+          command: npm run prod:build
+          working_directory: /home/ubuntu/platform-scaffold/web/
       - save_cache:
           key: *npm_cache_key
           paths:
