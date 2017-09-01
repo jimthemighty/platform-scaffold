@@ -31,7 +31,6 @@ export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['st
 export const lockScroll = createAction('Lock Scroll')
 export const unlockScroll = createAction('Unock Scroll')
 
-
 /**
  * Make a separate request that is intercepted by the worker. The worker will
  * return a JSON object where `{offline: true}` if the request failed, which we
