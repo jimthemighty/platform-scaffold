@@ -18,6 +18,7 @@ import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands
 import {hidePreloader} from 'progressive-web-sdk/dist/preloader'
 import DangerousHTML from 'progressive-web-sdk/dist/components/dangerous-html'
 import SkipLinks from 'progressive-web-sdk/dist/components/skip-links'
+import Lockup from 'progressive-web-sdk/dist/components/lockup'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import Header from '../../containers/header/container'
 import Footer from '../../containers/footer/container'
@@ -99,6 +100,7 @@ class App extends React.Component {
             sprite,
             hideApp,
             isModalOpen,
+            scrollManager
         } = this.props
 
         const routeProps = children.props.route
@@ -137,58 +139,60 @@ class App extends React.Component {
         })
 
         return (
-            <div
-                id="app"
-                className={appClassNames}
-                style={{display: hideApp ? 'none' : 'initial'}}
-            >
-                <DangerousHTML html={sprite}>
-                    {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
-                </DangerousHTML>
+            <Lockup locked={scrollManager.locked}>
+                <div
+                    id="app"
+                    className={appClassNames}
+                    style={{display: hideApp ? 'none' : 'initial'}}
+                >
+                    <DangerousHTML html={sprite}>
+                        {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
+                    </DangerousHTML>
 
-                <div aria-hidden={hideModalBackground}>
-                    <SkipLinks items={skipLinksItems} />
+                    <div aria-hidden={hideModalBackground}>
+                        <SkipLinks items={skipLinksItems} />
 
-                    <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
-                        {isRunningInAstro && <NativeConnector />}
+                        <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
+                            {isRunningInAstro && <NativeConnector />}
 
-                        {messagingEnabled && [
-                            <PushMessagingController key="controller" dimScreenOnSystemAsk />,
-                            <DefaultAsk key="ask" showOnPageCount={2} deferOnDismissal={1} />
-                        ]}
+                            {messagingEnabled && [
+                                <PushMessagingController key="controller" dimScreenOnSystemAsk />,
+                                <DefaultAsk key="ask" showOnPageCount={2} deferOnDismissal={1} />
+                            ]}
 
-                        <div id="app-header" className="u-flex-none" role="banner">
-                            <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
-                            {
-                                // Only display banner when we are offline and have content to show
-                                fetchError && hasFetchedCurrentPath && <OfflineBanner />
-                            }
+                            <div id="app-header" className="u-flex-none" role="banner">
+                                <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
+                                {
+                                    // Only display banner when we are offline and have content to show
+                                    fetchError && hasFetchedCurrentPath && <OfflineBanner />
+                                }
 
-                            {notifications &&
-                                <NotificationManager
-                                    notifications={notifications}
-                                    actions={{removeNotification}}
-                                />
-                            }
+                                {notifications &&
+                                    <NotificationManager
+                                        notifications={notifications}
+                                        actions={{removeNotification}}
+                                    />
+                                }
 
-                        </div>
-
-                        <div className={mainAppWrapperClasses} >
-                            <main id="app-main" className="u-flex" role="main">
-                                {this.props.children}
-                            </main>
-
-                            <div id="app-footer" className="u-flex-none">
-                                <CurrentFooter />
                             </div>
+
+                            <div className={mainAppWrapperClasses} >
+                                <main id="app-main" className="u-flex" role="main">
+                                    {this.props.children}
+                                </main>
+
+                                <div id="app-footer" className="u-flex-none">
+                                    <CurrentFooter />
+                                </div>
+                            </div>
+
+                            {showOnlyOffline && <Offline location={children.props.location} route={routeProps} />}
                         </div>
-
-                        {showOnlyOffline && <Offline location={children.props.location} route={routeProps} />}
                     </div>
-                </div>
 
-                <ModalManager />
-            </div>
+                    <ModalManager />
+                </div>
+            </Lockup>
         )
     }
 }
@@ -211,6 +215,7 @@ App.propTypes = {
     isModalOpen: PropTypes.object,
     notifications: PropTypes.array,
     removeNotification: PropTypes.func,
+    scrollManager: PropTypes.object,
     setStandAloneAppFlag: PropTypes.func,
     /**
      * The SVG icon sprite needed in order for all Icons to work
@@ -229,7 +234,8 @@ const mapStateToProps = createPropsSelector({
     hasFetchedCurrentPath,
     isModalOpen: getModals,
     sprite: selectors.getSvgSprite,
-    hideApp: selectors.getHideApp
+    hideApp: selectors.getHideApp,
+    scrollManager: selectors.getScrollManager
 })
 
 const mapDispatchToProps = {

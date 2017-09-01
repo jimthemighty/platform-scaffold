@@ -23,7 +23,7 @@ import {
 } from 'progressive-web-sdk/dist/store/offline/actions'
 import {sendOfflineModeUsedAnalytics, sendOfflinePageview} from 'progressive-web-sdk/dist/analytics/actions'
 import {OFFLINE_ASSET_URL} from './constants'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../../modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getOfflineModeStartTime, getOfflinePageViews} from 'progressive-web-sdk/dist/store/offline/selectors'
@@ -36,6 +36,8 @@ export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
 export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['standaloneApp'])
 
+export const lockScroll = createAction('Lock Scroll')
+export const unlockScroll = createAction('Unock Scroll')
 
 const sendOfflineAnalytics = (offlineModeStartTime) => (dispatch, getState) => {
     const timestamp = Date.now()

@@ -3,7 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {fetchShippingMethodsEstimate} from 'progressive-web-sdk/dist/integration-manager/checkout/commands'
 import {
     PROMO_ERROR
@@ -25,6 +24,7 @@ import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
 import {getEstimateShippingAddress} from '../../store/form/selectors'
 import {getSelectedShippingMethod} from '../../store/checkout/shipping/selectors'
+import {closeModal, openModal} from '../../modals/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 export const setRemoveItemId = createAction('Set item id for removal', ['removeItemId'])

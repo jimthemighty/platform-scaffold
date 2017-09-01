@@ -5,18 +5,21 @@
 /* eslint-env jest */
 
 import Immutable, {fromJS} from 'immutable'
-import {checkIfOffline} from './actions'
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {OFFLINE_MODAL} from '../../modals/constants'
 import {OFFLINE_ASSET_URL} from './constants'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+jest.mock('../../modals/actions')
+import {closeModal} from '../../modals/actions'
+import {checkIfOffline} from './actions'
+
 
 let realFetch
 beforeAll(() => {
     realFetch = global.fetch
     global.fetch = jest.fn()
     global.fetch.mockReturnValue(Promise.resolve())
+
 })
 
 afterAll(() => {
@@ -91,6 +94,7 @@ test('checkIfOffline clears offline modal and page fetch errors when it receives
         }),
         offline: Immutable.Map()
     })
+    // closeModal = jest.fn()  // eslint-disable-line
     const thunk = checkIfOffline()
 
     return thunk(fakeDispatch, fakeGetState)
@@ -100,6 +104,6 @@ test('checkIfOffline clears offline modal and page fetch errors when it receives
 
             expect(fakeDispatch).toHaveBeenCalledTimes(2)
             expect(fakeDispatch.mock.calls[0][0]).toEqual(clearPageFetchError())
-            expect(fakeDispatch.mock.calls[1][0]).toEqual(closeModal(OFFLINE_MODAL, UI_NAME.offline))
+            expect(closeModal).toHaveBeenCalledWith(OFFLINE_MODAL, UI_NAME.offline)
         })
 })

@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import classNames from 'classnames'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {MORE_MENU} from '../constants'
-import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal, openModal} from '../actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
 

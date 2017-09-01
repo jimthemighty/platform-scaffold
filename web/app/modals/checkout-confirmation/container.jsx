@@ -4,7 +4,7 @@
 
 import React from 'react'
 import {CHECKOUT_CONFIRMATION_MODAL} from '../constants'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../actions'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
