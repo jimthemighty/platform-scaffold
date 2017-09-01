@@ -3,7 +3,7 @@ references:
 
   container_config: &container_config
     docker:
-      - image: mobify/cci-test-primary:latest 
+      - image: mobify/cci-docker-primary:0.1.0
     working_directory: /home/ubuntu/platform-scaffold/
 
   npm_cache_key: &npm_cache_key
@@ -29,6 +29,20 @@ jobs:
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
 
+  test-unit:
+    <<: *container_config
+    steps:
+      - checkout
+      - *restore_node_modules
+      - run:
+          name: Lint
+          command: pwd && npm run lint
+          working_directory: /home/ubuntu/platform-scaffold/web/ 
+      - run:
+          name: Run Unit Tests
+          command: npm test -- --runInBand
+          working_directory: /home/ubuntu/platform-scaffold/web/
+  
   test-e2e:
     <<: *container_config
     parallelism: 2
@@ -97,6 +111,9 @@ workflows:
   build_and_test:
     jobs:
       - build
+      - test-unit:
+          requires:
+            - build
       - test-e2e:
           requires:
             - build
