@@ -8,11 +8,19 @@ references:
 
   npm_cache_key: &npm_cache_key
     platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
+
+  npm_cache_key: &npm_cache_key
+    platform-scaffold-build-{{ .Branch }}
   
   restore_node_modules: &restore_node_modules
     restore_cache:
       keys:
         - *npm_cache_key
+
+  restore_build: &restore_build
+    restore_cache:
+      keys:
+        - *build_cache_key
 
 jobs:
   build:
@@ -25,9 +33,13 @@ jobs:
           command: npm install
           working_directory: /home/ubuntu/platform-scaffold/web/
       - save_cache:
-          key: platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
+          key: *npm_cache_key
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
+      - save_cache:
+          key: *build_cache_key
+          paths:
+            - /home/ubuntu/platform-scaffold/web/build
 
   test-unit:
     <<: *container_config
@@ -49,9 +61,10 @@ jobs:
     steps:
       - checkout
       - *restore_node_modules
+      - *restore_build
       - run:
           name: Start Test Server
-          command: bash ./tests/e2e/test-scripts/start-test-server.sh
+          command: npm run test:server
           background: true
           working_directory: /home/ubuntu/platform-scaffold/web/
       - run:
@@ -75,6 +88,7 @@ jobs:
     steps:
       - checkout
       - *restore_node_modules
+      - *restore_build
       - run:
           name: Build Project
           command: npm run prod:build
@@ -82,7 +96,7 @@ jobs:
           working_directory: /home/ubuntu/platform-scaffold/web/
       - run:
           name: Start Test Server
-          command: bash ./tests/e2e/test-scripts/start-test-server.sh
+          command: npm run test:server
           background: true
           working_directory: /home/ubuntu/platform-scaffold/web/
       - run:
