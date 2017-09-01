@@ -16,14 +16,20 @@ import {logout} from 'progressive-web-sdk/dist/integration-manager/account/comma
 import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
 
 import {OFFLINE_ASSET_URL} from './constants'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../../modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {OFFLINE_MODAL} from '../../modals/constants'
+import {isRunningInAstro, trigger} from '../../utils/astro-integration'
+import {getCartURL} from './selectors'
+
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
+export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['standaloneApp'])
 
+export const lockScroll = createAction('Lock Scroll')
+export const unlockScroll = createAction('Unock Scroll')
 
 /**
  * Make a separate request that is intercepted by the worker. The worker will
@@ -100,4 +106,14 @@ export const handleCartExpiryError = (error) => (dispatch) => {
         return dispatch(cartExpired())
     }
     throw error
+}
+
+export const goToCheckout = () => (dispatch, getState) => {
+    if (isRunningInAstro) {
+        // If we're running in Astro, we want to dismiss open the cart modal,
+        // otherwise, navigating is taken care of by the button press
+        trigger('open:cart-modal')
+    } else {
+        browserHistory.push(getCartURL(getState()))
+    }
 }

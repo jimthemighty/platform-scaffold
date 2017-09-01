@@ -9,6 +9,7 @@ import {
     receiveProductDetailsProductData,
     receiveProductDetailsUIData
 } from 'progressive-web-sdk/dist/integration-manager/products/results'
+import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {receiveCurrentProductId} from 'progressive-web-sdk/dist/integration-manager/results'
 import {productDetailsParser, productDetailsUIParser, pdpAddToCartFormParser} from './parsers'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
@@ -32,16 +33,25 @@ export const initProductDetailsPage = (url) => (dispatch) => {
             dispatch(receiveProductDetailsUIData({[id]: productDetailsUIParser($, $response)}))
             dispatch(receiveProductDetailsProductData({[id]: productDetailsData}))
             dispatch(receiveFormInfo({[id]: pdpAddToCartFormParser($, $response)}))
+
+            if (url.includes('wishlist/index/configure') && productDetailsData.variants.length) {
+                dispatch(addNotification(
+                    'configureProfuct',
+                    'You need to choose options for your item.',
+                    true
+                ))
+            }
         })
         .catch((error) => { console.info(error.message) })
 }
 
 export const getProductVariantData = () => (dispatch) => Promise.resolve()
 
-export const addItemToWishlist = (productId) => (dispatch, getState) => {
+export const addItemToWishlist = (productId, productUrl, quantity) => (dispatch, getState) => {
     const currentState = getState()
     const payload = {
         product: productId,
+        qty: quantity,
         // This won't always be defined, but add to wishlist will still work
         // if it's missing
         uenc: getUenc(productId)(currentState)

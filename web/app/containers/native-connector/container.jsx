@@ -9,7 +9,7 @@ import {connect} from 'react-redux'
 
 import {onAstroEvent, disableAstroEvent, jsRpcMethod} from '../../utils/astro-integration'
 
-import {getIsLoggedIn} from '../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 
 import {getCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 

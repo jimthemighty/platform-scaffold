@@ -7,7 +7,7 @@ import thunk from 'redux-thunk'
 import Immutable from 'immutable'
 
 import rootReducer from '../containers/reducers'
-import userReducer from './user/reducer'
+import userReducer from 'progressive-web-sdk/dist/store/user/reducer'
 import cartReducer from 'progressive-web-sdk/dist/store/cart/reducer'
 import categoryReducer from './categories/reducer'
 import modalReducer from 'progressive-web-sdk/dist/store/modals/reducer'

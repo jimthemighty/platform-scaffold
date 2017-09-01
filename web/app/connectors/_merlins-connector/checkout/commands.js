@@ -14,13 +14,13 @@ import {
     receiveShippingAddress,
     receiveCheckoutConfirmationData,
     setDefaultShippingAddressId,
-    receiveSavedShippingAddresses,
     receiveBillingAddress,
     receiveShippingMethods,
     receiveSelectedShippingMethod,
     receiveBillingSameAsShipping
 } from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {receiveCartContents} from 'progressive-web-sdk/dist/integration-manager/cart/results'
+import {receiveSavedAddresses} from 'progressive-web-sdk/dist/integration-manager/account/results'
 import {fetchPageData} from '../app/commands'
 import {getCustomerEntityID, getCartBaseUrl} from '../selectors'
 import {receiveEntityID} from '../actions'
@@ -28,7 +28,7 @@ import {PAYMENT_URL} from '../config'
 import {ADD_NEW_ADDRESS_FIELD} from '../../../containers/checkout-shipping/constants'
 import * as shippingSelectors from '../../../store/checkout/shipping/selectors'
 import {getCartItemsFull} from 'progressive-web-sdk/dist/store/cart/selectors'
-import {getIsLoggedIn} from '../../../store/user/selectors'
+import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {getShippingFormValues} from '../../../store/form/selectors'
 import {
     prepareEstimateAddress,
@@ -87,7 +87,7 @@ export const fetchSavedShippingAddresses = (selectedSavedAddressId) => {
                 })
 
                 dispatch(setDefaultShippingAddressId(selectedSavedAddressId || defaultShippingId))
-                dispatch(receiveSavedShippingAddresses(addresses))
+                dispatch(receiveSavedAddresses(addresses))
             })
     }
 }

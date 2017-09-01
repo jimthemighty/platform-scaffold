@@ -16,6 +16,10 @@ done
 google-chrome --version
 printf "Chrome installed\n"
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57d2869d4d239b6e5934bdd74f71039ea0ad05e8
 echo "Waiting for npm prod:build to complete"
 while [ ! -f build/loader.js ]; do
     if [[ "$counter" -gt 40 ]]; then
@@ -41,3 +45,7 @@ if [[ "$counter" -gt 50 ]]; then
     fi 
 done
 printf "8443 test server is now active\n"      
+<<<<<<< HEAD
+=======
+
+>>>>>>> 57d2869d4d239b6e5934bdd74f71039ea0ad05e8

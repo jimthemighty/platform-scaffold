@@ -11,12 +11,14 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import classNames from 'classnames'
 import WebFont from 'webfontloader'
 import {isRunningInAstro} from '../../utils/astro-integration'
+import {isStandalone} from '../../utils/utils'
 
 import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 
 import {hidePreloader} from 'progressive-web-sdk/dist/preloader'
 import DangerousHTML from 'progressive-web-sdk/dist/components/dangerous-html'
 import SkipLinks from 'progressive-web-sdk/dist/components/skip-links'
+import Lockup from 'progressive-web-sdk/dist/components/lockup'
 import {removeNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import Header from '../../containers/header/container'
 import Footer from '../../containers/footer/container'
@@ -50,6 +52,7 @@ class App extends React.Component {
         this.hidePreloaderWhenCSSIsLoaded()
         this.props.fetchSvgSprite()
         this.props.initApp()
+        this.props.setStandAloneAppFlag(isStandalone())
         WebFont.load({
             google: {
                 families: ['Oswald:200,400']
@@ -97,6 +100,7 @@ class App extends React.Component {
             sprite,
             hideApp,
             isModalOpen,
+            scrollManager
         } = this.props
 
         const routeProps = children.props.route
@@ -128,63 +132,65 @@ class App extends React.Component {
         }
 
         return (
-            <div
-                id="app"
-                className={appClassNames}
-                style={{display: hideApp ? 'none' : 'initial'}}
-            >
-                <DangerousHTML html={sprite}>
-                    {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
-                </DangerousHTML>
+            <Lockup locked={scrollManager.locked}>
+                <div
+                    id="app"
+                    className={appClassNames}
+                    style={{display: hideApp ? 'none' : 'initial'}}
+                >
+                    <DangerousHTML html={sprite}>
+                        {(htmlObj) => <div hidden dangerouslySetInnerHTML={htmlObj} />}
+                    </DangerousHTML>
 
-                <div aria-hidden={hideModalBackground}>
-                    <SkipLinks items={skipLinksItems} />
+                    <div aria-hidden={hideModalBackground}>
+                        <SkipLinks items={skipLinksItems} />
 
-                    <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
-                        {isRunningInAstro && <NativeConnector />}
+                        <div id="app-wrap" className="t-app__wrapper u-flexbox u-direction-column">
+                            {isRunningInAstro && <NativeConnector />}
 
-                        {messagingEnabled && [
-                            <PushMessagingController key="controller" dimScreenOnSystemAsk />,
-                            <DefaultAsk key="ask" showOnPageCount={2} deferOnDismissal={1} />
-                        ]}
+                            {messagingEnabled && [
+                                <PushMessagingController key="controller" dimScreenOnSystemAsk />,
+                                <DefaultAsk key="ask" showOnPageCount={2} deferOnDismissal={1} />
+                            ]}
 
-                        <div id="app-header" className="u-flex-none" role="banner">
-                            <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
+                            <div id="app-header" className="u-flex-none" role="banner">
+                                <CurrentHeader headerHasSignIn={routeProps.headerHasSignIn} />
+                                {
+                                    // Only display banner when we are offline and have content to show
+                                    fetchError && hasFetchedCurrentPath && <OfflineBanner />
+                                }
+
+                                {notifications &&
+                                    <NotificationManager
+                                        notifications={notifications}
+                                        actions={{removeNotification}}
+                                    />
+                                }
+
+                            </div>
+
                             {
-                                // Only display banner when we are offline and have content to show
-                                fetchError && hasFetchedCurrentPath && <OfflineBanner />
-                            }
+                                // Display main content if we have no network errors or
+                                // if we've already got the content in the store
+                                (!fetchError || hasFetchedCurrentPath) ?
+                                    <div className="u-flexbox u-flex u-direction-column">
+                                        <main id="app-main" className="u-flex" role="main">
+                                            {this.props.children}
+                                        </main>
 
-                            {notifications &&
-                                <NotificationManager
-                                    notifications={notifications}
-                                    actions={{removeNotification}}
-                                />
-                            }
-
-                        </div>
-
-                        {
-                            // Display main content if we have no network errors or
-                            // if we've already got the content in the store
-                            (!fetchError || hasFetchedCurrentPath) ?
-                                <div className="u-flexbox u-flex u-direction-column">
-                                    <main id="app-main" className="u-flex" role="main">
-                                        {this.props.children}
-                                    </main>
-
-                                    <div id="app-footer" className="u-flex-none">
-                                        <CurrentFooter />
+                                        <div id="app-footer" className="u-flex-none">
+                                            <CurrentFooter />
+                                        </div>
                                     </div>
-                                </div>
-                            :
-                                <Offline location={children.props.location} route={routeProps} />
-                        }
+                                :
+                                    <Offline location={children.props.location} route={routeProps} />
+                            }
+                        </div>
                     </div>
-                </div>
 
-                <ModalManager />
-            </div>
+                    <ModalManager />
+                </div>
+            </Lockup>
         )
     }
 }
@@ -207,6 +213,8 @@ App.propTypes = {
     isModalOpen: PropTypes.object,
     notifications: PropTypes.array,
     removeNotification: PropTypes.func,
+    scrollManager: PropTypes.object,
+    setStandAloneAppFlag: PropTypes.func,
     /**
      * The SVG icon sprite needed in order for all Icons to work
      */
@@ -224,7 +232,8 @@ const mapStateToProps = createPropsSelector({
     hasFetchedCurrentPath,
     isModalOpen: getModals,
     sprite: selectors.getSvgSprite,
-    hideApp: selectors.getHideApp
+    hideApp: selectors.getHideApp,
+    scrollManager: selectors.getScrollManager
 })
 
 const mapDispatchToProps = {
@@ -232,7 +241,9 @@ const mapDispatchToProps = {
     fetchSvgSprite: appActions.fetchSvgSprite,
     toggleHideApp: appActions.toggleHideApp,
     fetchPage: (fetchAction, url, routeName) => fetchAction(url, routeName),
-    initApp
+    initApp,
+    setStandAloneAppFlag: appActions.setStandAloneAppFlag
+
 }
 
 export default connect(

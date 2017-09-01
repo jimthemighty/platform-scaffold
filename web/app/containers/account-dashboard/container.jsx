@@ -13,7 +13,9 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 
 import {
     getAccountAddressURL,
-    getAccountInfoURL
+    getAccountInfoURL,
+    getAccountOrderListURL,
+    getWishlistURL
 } from '../app/selectors'
 
 const DashboardLinks = ({link: {text, href}}) => {
@@ -36,7 +38,7 @@ DashboardLinks.propTypes = {
 }
 
 
-const AccountDashboard = ({addressUrl, accountInfoUrl}) => {
+const AccountDashboard = ({addressUrl, accountInfoUrl, wishlistUrl, orderListUrl}) => {
     const links = [
         {
             text: 'Account Information',
@@ -48,11 +50,11 @@ const AccountDashboard = ({addressUrl, accountInfoUrl}) => {
         },
         {
             text: 'My Orders',
-            href: '/sales/order/history/'
+            href: orderListUrl
         },
         {
             text: 'My Wish List',
-            href: '/wishlist/'
+            href: wishlistUrl
         },
         {
             text: 'My Subscriptions',
@@ -72,11 +74,15 @@ const AccountDashboard = ({addressUrl, accountInfoUrl}) => {
 
 AccountDashboard.propTypes = {
     accountInfoUrl: PropTypes.string,
-    addressUrl: PropTypes.string
+    addressUrl: PropTypes.string,
+    orderListUrl: PropTypes.string,
+    wishlistUrl: PropTypes.string
 }
 const mapStateToProps = createPropsSelector({
     addressUrl: getAccountAddressURL,
-    accountInfoUrl: getAccountInfoURL
+    accountInfoUrl: getAccountInfoURL,
+    orderListUrl: getAccountOrderListURL,
+    wishlistUrl: getWishlistURL
 })
 
 export default template(connect(

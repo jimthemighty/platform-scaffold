@@ -5,11 +5,9 @@
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
-
-import {parseLoginStatus, parseSearchSuggestions} from './parser'
+import {parseSearchSuggestions} from './parser'
 import {parseNavigation} from '../navigation/parser'
 import {receiveFormKey} from '../actions'
-
 import {
     CHECKOUT_SHIPPING_URL,
     WISHLIST_URL,
@@ -18,6 +16,7 @@ import {
     MY_ACCOUNT_URL,
     ACCOUNT_ADDRESS_URL,
     ACCOUNT_INFO_URL,
+    ACCOUNT_ORDER_LIST_URL,
     buildQueryURL,
     buildSearchURL
 } from '../config'
@@ -25,19 +24,19 @@ import {
 import {getCookieValue} from '../../../utils/utils'
 import {generateFormKeyCookie} from '../../../utils/magento-utils'
 import {setPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
-
-
+import {readLoggedInState} from '../account/utils'
 import {
-    receiveNavigationData,
     receiveSearchSuggestions,
     setCheckoutShippingURL,
     setCartURL,
     setWishlistURL,
-    setLoggedIn,
     setSignInURL,
     setAccountAddressURL,
     setAccountInfoURL,
-    setAccountURL
+    setAccountURL,
+    setAccountOrderListURL,
+    setLoggedIn,
+    receiveNavigationData
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 const requestCapturedDoc = () => {
@@ -62,7 +61,7 @@ export const fetchPageData = (url) => (dispatch) => {
         .then(jqueryResponse)
         .then((res) => {
             const [$, $response] = res
-            const isLoggedIn = parseLoginStatus($response)
+            const isLoggedIn = readLoggedInState()
             dispatch(setLoggedIn(isLoggedIn))
             dispatch(receiveNavigationData(parseNavigation($, $response, isLoggedIn)))
             return res
@@ -98,10 +97,13 @@ export const searchProducts = (query) => (dispatch) => {
 export const initApp = () => (dispatch) => {
     // Use the pre-existing form_key if it already exists
     const formKey = getCookieValue('form_key') || generateFormKeyCookie()
+    // Make sure the form key is stored in a cookie
+    document.cookie = `form_key=${formKey};`
     dispatch(receiveFormKey(formKey))
 
     dispatch(setAccountAddressURL(ACCOUNT_ADDRESS_URL))
     dispatch(setAccountInfoURL(ACCOUNT_INFO_URL))
+    dispatch(setAccountOrderListURL(ACCOUNT_ORDER_LIST_URL))
     dispatch(setCheckoutShippingURL(CHECKOUT_SHIPPING_URL))
     dispatch(setWishlistURL(WISHLIST_URL))
     dispatch(setSignInURL(SIGN_IN_URL))

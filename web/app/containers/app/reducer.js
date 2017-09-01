@@ -15,12 +15,16 @@ import {
     setSignInURL,
     setAccountURL,
     setAccountInfoURL,
-    setAccountAddressURL
+    setAccountAddressURL,
+    setAccountOrderListURL
 } from 'progressive-web-sdk/dist/integration-manager/results'
 
 export const initialState = fromJS({
     sprite: '',
-    hideApp: true
+    hideApp: true,
+    scrollManager: {
+        locked: false
+    }
 })
 
 export default handleActions({
@@ -31,6 +35,22 @@ export default handleActions({
     [setAccountInfoURL]: mergePayload,
     [setAccountAddressURL]: mergePayload,
     [setAccountURL]: mergePayload,
+    [setAccountOrderListURL]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,
-    [appActions.toggleHideApp]: mergePayload
+    [appActions.toggleHideApp]: mergePayload,
+    [appActions.setStandAloneAppFlag]: mergePayload,
+    [appActions.unlockScroll]: (state) => {
+        return state.mergeDeep({
+            scrollManager: {
+                locked: false
+            }
+        })
+    },
+    [appActions.lockScroll]: (state) => {
+        return state.mergeDeep({
+            scrollManager: {
+                locked: true
+            }
+        })
+    }
 }, initialState)

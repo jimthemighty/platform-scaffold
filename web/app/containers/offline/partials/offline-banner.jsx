@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 
 import IconLabelButton from '../../../components/icon-label-button'
 import {OFFLINE_MODAL} from '../../../modals/constants'
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {openModal} from '../../../modals/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 /**

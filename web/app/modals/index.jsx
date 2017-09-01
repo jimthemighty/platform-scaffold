@@ -11,12 +11,17 @@ import * as MODAL from './constants'
 import Navigation from './navigation/container'
 import MiniCart from './mini-cart/container'
 import ProductDetailsItemAddedModal from './product-details-item-added/container'
+import WishlistItemAddedModal from './wishlist-item-added/container'
 import CartEstimateShippingModal from './cart-estimate-shipping/container'
 import CartWishlistModal from './cart-wishlist/container'
 import CartRemoveItemModal from './cart-remove-item/container'
+import AccountAddressModal from './account-add-address/container'
+import AccountRemoveAddressModal from './account-remove-address/container'
 import CheckoutConfirmationModal from './checkout-confirmation/container'
+import MoreMenuModal from './more-menu/container'
 import OfflineModal from './offline/container'
 import ProductListFilterModal from './product-list-filter/container'
+import AccountRemoveWishlistItemModal from './account-remove-wishlist-item/container'
 
 const modals = {
     // You can set transition duration for individual modal:
@@ -26,10 +31,15 @@ const modals = {
     [MODAL.OFFLINE_MODAL]: {content: <OfflineModal />},
     [MODAL.MINI_CART_MODAL]: {content: <MiniCart />},
     [MODAL.PRODUCT_DETAILS_ITEM_ADDED_MODAL]: {content: <ProductDetailsItemAddedModal />},
+    [MODAL.WISHLIST_ITEM_ADDED_MODAL]: {content: <WishlistItemAddedModal />},
     [MODAL.PRODUCT_LIST_FILTER_MODAL]: {content: <ProductListFilterModal />},
     [MODAL.CART_ESTIMATE_SHIPPING_MODAL]: {content: <CartEstimateShippingModal />},
     [MODAL.CART_WISHLIST_MODAL]: {content: <CartWishlistModal />},
     [MODAL.CART_REMOVE_ITEM_MODAL]: {content: <CartRemoveItemModal />},
+    [MODAL.ACCOUNT_ADDRESS_MODAL]: {content: <AccountAddressModal />},
+    [MODAL.ACCOUNT_REMOVE_ADDRESS_MODAL]: {content: <AccountRemoveAddressModal />},
+    [MODAL.MORE_MENU]: {content: <MoreMenuModal />},
+    [MODAL.ACCOUNT_REMOVE_WISHLIST_ITEM_MODAL]: {content: <AccountRemoveWishlistItemModal />},
     [MODAL.CHECKOUT_CONFIRMATION_MODAL]: {content: <CheckoutConfirmationModal />}
 }
 
@@ -47,9 +57,12 @@ class ModalManager extends React.Component {
             // Close Modal
             // Set a delay for modal close animation
             if (isOpen[nextModal] !== nextIsOpen[nextModal]) {
-                const delay = modals[nextModal].customDuration || duration
-                setTimeout(() => this.forceUpdate(), delay)
-                return false
+                const currentModalData = modals[nextModal]
+                if (currentModalData) {
+                    const delay = modals[nextModal].customDuration || duration
+                    setTimeout(() => this.forceUpdate(), delay)
+                    return false
+                }
             }
         }
         return true
@@ -60,10 +73,13 @@ class ModalManager extends React.Component {
         let openModal
         for (const modal in isOpen) {
             if (isOpen[modal]) {
-                openModal = React.cloneElement(
-                    modals[modal].content,
-                    {duration: modals[modal].customDuration || duration}
-                )
+                const currentModalData = modals[modal]
+                if (currentModalData) {
+                    openModal = React.cloneElement(
+                        currentModalData.content,
+                        {duration: currentModalData.customDuration || duration}
+                    )
+                }
             }
         }
         return openModal

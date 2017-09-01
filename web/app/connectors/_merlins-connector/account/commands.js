@@ -4,31 +4,50 @@
 
 import {makeRequest, makeFormEncodedRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 import {jqueryResponse} from 'progressive-web-sdk/dist/jquery-response'
+import {getCurrentProductId} from 'progressive-web-sdk/dist/store/products/selectors'
+import {extractPathFromURL} from 'progressive-web-sdk/dist/utils/utils'
 import {SubmissionError} from 'redux-form'
-
+import {browserHistory} from 'progressive-web-sdk/dist/routing'
 import {getCookieValue, splitFullName} from '../../../utils/utils'
-import {getFormKey} from '../selectors'
+import {getFormKey, getUenc} from '../selectors'
 import {fetchPageData} from '../app/commands'
 import {getCart} from '../cart/commands'
+import {extractMagentoJson} from '../../../utils/magento-utils'
 import {
     setSigninLoaded,
     setRegisterLoaded,
-    receiveAccountAddressData,
     receiveAccountInfoData,
-    receiveWishlistData,
-    receiveWishlistUIData
+    receiveAccountOrderListData,
+    receiveCurrentOrderNumber,
+    receiveUpdatedWishlistItem,
+    removeWishlistItem
 } from 'progressive-web-sdk/dist/integration-manager/account/results'
-import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
+
+import {receiveCheckoutLocations} from 'progressive-web-sdk/dist/integration-manager/checkout/results'
 import {
     buildFormData,
     createAddressRequestObject,
-    fetchCustomerAddresses
+    receiveWishlistResponse,
+    updateCustomerAddresses
 } from './utils'
-import {jqueryAjaxWrapper, parseAddress} from '../utils'
-import {LOGIN_POST_URL, CREATE_ACCOUNT_POST_URL} from '../config'
-import {setLoggedIn} from 'progressive-web-sdk/dist/integration-manager/results'
 
-import {isFormResponseInvalid, parseWishlistProducts, parseAccountInfo} from './parsers'
+import {
+    isFormResponseInvalid,
+    parseAccountInfo,
+    parseOrderListData,
+    parseOrder,
+    parseAccountLocations
+} from './parsers'
+import {jqueryAjaxWrapper, updateLoggedInState} from '../utils'
+import {
+    CART_URL,
+    LOGIN_POST_URL,
+    CREATE_ACCOUNT_POST_URL,
+    getDeleteAddressURL,
+    UPDATE_WISHLIST_URL,
+    WISHLIST_URL,
+    getWishlistQuantityUrl
+} from '../config'
 
 export const initLoginPage = (url) => (dispatch) => {
     return dispatch(fetchPageData(url))
@@ -57,32 +76,66 @@ export const initAccountDashboardPage = (url) => (dispatch) => { // eslint-disab
 }
 
 export const initAccountAddressPage = (url) => (dispatch) => { // eslint-disable-line
-    return fetchCustomerAddresses()
-        .then(({customer: {addresses}}) => {
-            const parsedAddresses = addresses.map((address) => parseAddress(address))
-            return dispatch(receiveAccountAddressData(parsedAddresses))
+    return makeRequest('/customer/address/new/')
+        .then(jqueryResponse)
+        .then(([$, $response]) => { // eslint-disable-line no-unused-vars
+            // we're going to fetch the cart page so we can re-use the country
+            // parsing functionality from initCartPage
+            const magentoFieldData = extractMagentoJson($response)
+            return dispatch(receiveCheckoutLocations(parseAccountLocations(magentoFieldData, $response)))
         })
+        .then(() => dispatch(updateCustomerAddresses()))
 }
 
 export const initWishlistPage = (url) => (dispatch) => {
     return (dispatch(fetchPageData(url)))
-        .then(([$, $response]) => {
-            const {
-                wishlistItems,
-                products
-            } = parseWishlistProducts($, $response)
-            const formURL = $response.find('#wishlist-view-form').attr('action')
-            const wishlistData = {
-                title: $response.find('.page-title').text(),
-                products: wishlistItems,
-                shareURL: formURL ? formURL.replace('update', 'share') : ''
+        .then(([$, $response]) => dispatch(receiveWishlistResponse($, $response)))
+}
+
+export const addToCartFromWishlist = (productId, {itemId, quantity}) => (dispatch, getState) => {
+    const currentState = getState()
+    const formKey = getFormKey(currentState)
+    const uenc = getUenc(productId)(currentState)
+    const href = '/wishlist/index/cart/'
+    const requestData = {
+        item: itemId,
+        qty: quantity,
+        uenc,
+        form_key: formKey
+    }
+    return makeFormEncodedRequest(href, requestData, {method: 'POST'})
+        .then((response) => {
+            if (response.url.includes('configure')) {
+                // the response is a redirect to the PDP
+                // The user needs to select their options
+                browserHistory.push({
+                    pathname: extractPathFromURL(response.url)
+                })
+                // Throw an error to prevent showing the item added modal
+                throw new Error('Redirecting to PDP, item not added')
+            } else {
+                return jqueryResponse(response)
+                    .then((res) => {
+                        const [$, $response] = res
+
+                        // Don't return this promise because we don't
+                        // need to wait until this returns to update the wishlist UI
+                        dispatch(getCart())
+
+                        dispatch(receiveWishlistResponse($, $response))
+                    })
             }
-            dispatch(receiveWishlistProductData(products))
-            dispatch(receiveWishlistData(wishlistData))
-            dispatch(receiveWishlistUIData({contentLoaded: true}))
         })
 }
 
+export const removeItemFromWishlist = (itemId) => (dispatch, getState) => {
+    const requestBody = {
+        item: parseInt(itemId),
+        form_key: getFormKey(getState())
+    }
+    return makeFormEncodedRequest('/wishlist/index/remove/', requestBody, {method: 'POST'})
+        .then(() => dispatch(removeWishlistItem(itemId)))
+}
 
 const MAGENTO_MESSAGE_COOKIE = 'mage-messages'
 const clearMessageCookie = () => {
@@ -91,7 +144,7 @@ const clearMessageCookie = () => {
 const DEFAULT_ERROR_TEXT = 'Username or password is incorrect'
 const EXISTING_ACCT_REGEX = /already an account/
 
-const submitForm = (href, formValues, formSelector, responseUrl) => {
+const submitForm = (href, formValues, formSelector) => {
     clearMessageCookie()
     return makeFormEncodedRequest(href, formValues, {method: 'POST'})
         .then(jqueryResponse)
@@ -100,6 +153,7 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
         })
         .then((res) => {
             const [$, $response] = res // eslint-disable-line no-unused-vars
+
             if (isFormResponseInvalid($response, formSelector)) {
                 const messages = JSON.parse(decodeURIComponent(getCookieValue(MAGENTO_MESSAGE_COOKIE)))
 
@@ -117,7 +171,7 @@ const submitForm = (href, formValues, formSelector, responseUrl) => {
                     _error: message
                 })
             }
-            return responseUrl
+            return res
         })
 }
 
@@ -136,7 +190,9 @@ export const login = (username, password, rememberMe) => (dispatch, getState) =>
         formData.persistent_remember_me = 'on'
     }
 
-    return submitForm(LOGIN_POST_URL, formData, '.form-login', '/customer/account')
+    return submitForm(LOGIN_POST_URL, formData, '.form-login')
+        .then((res) => dispatch(updateLoggedInState(res)))
+        .then(() => '/customer/account')
 }
 
 export const registerUser = (firstname, lastname, email, password, rememberMe) => (dispatch, getState) => {
@@ -154,7 +210,8 @@ export const registerUser = (firstname, lastname, email, password, rememberMe) =
     if (rememberMe) {
         formData.persistent_remember_me = 'on'
     }
-    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account', '/customer/account')
+    return submitForm(CREATE_ACCOUNT_POST_URL, formData, '.form-create-account')
+        .then(() => '/customer/account')
 }
 
 const findPathForRoute = (routes, routeName) => {
@@ -174,10 +231,11 @@ export const navigateToSection = (router, routes, sectionName) => {
 
 export const logout = () => (dispatch) => (
     makeRequest('/customer/account/logout/')
+        .then(jqueryResponse)
         // Don't wait for the cart to do everything else
-        .then(() => {
+        .then((res) => {
+            dispatch(updateLoggedInState(res))
             dispatch(getCart())
-            dispatch(setLoggedIn(false))
         })
         // Update navigation menu and logged in flag
         // Need to request current location so that the right entry is active
@@ -233,10 +291,37 @@ export const updateBillingAddress = (paymentData) => (dispatch) => {
         })
 }
 
+export const deleteAddress = (addressId) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    return makeRequest(getDeleteAddressURL(addressId, formKey), {method: 'POST'})
+        .then(() => dispatch(updateCustomerAddresses()))
+}
+
+export const editAddress = (address, addressId) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    const formData = {
+        form_key: formKey,
+        ...createAddressRequestObject(address)
+    }
+    return submitForm(`/customer/address/formPost/id/${addressId}`, formData, '.form-address-edit')
+        .then(() => dispatch(updateCustomerAddresses()))
+        .then(() => '/customer/address/index/')
+}
+
+export const addAddress = (address) => (dispatch, getState) => {
+    const formKey = getFormKey(getState())
+    const formData = {
+        form_key: formKey,
+        ...createAddressRequestObject(address)
+    }
+    return submitForm('/customer/address/formPost/', formData, '.form-address-edit')
+        .then(() => dispatch(updateCustomerAddresses()))
+        .then(() => '/customer/address/index/')
+}
+
 /* eslint-disable camelcase */
 export const updateAccountInfo = ({names, email, currentPassword, newPassword}) => (dispatch, getState) => {
-    const currentState = getState()
-    const formKey = getFormKey(currentState)
+    const formKey = getFormKey(getState())
     const {firstname, lastname} = splitFullName(names)
     const formData = {
         firstname,
@@ -250,10 +335,71 @@ export const updateAccountInfo = ({names, email, currentPassword, newPassword}) 
     }
 
     dispatch(receiveAccountInfoData({names, email}))
-    return submitForm('/customer/account/editPost/', formData, '.form-edit-account', '/customer/account/edit/')
+    return submitForm('/customer/account/editPost/', formData, '.form-edit-account')
+        .then(() => '/customer/account/edit/')
 }
 
 
 export const updateAccountPassword = (formValues) => (dispatch) => {
     dispatch(updateAccountInfo(formValues))
+}
+
+
+export const initAccountViewOrderPage = (url) => (dispatch) => {
+    const idMatch = /order_id\/(\d+)\//.exec(url)
+    const id = idMatch ? idMatch[1] : ''
+    return (dispatch(fetchPageData(url)))
+        .then(([$, $response]) => {
+            const orderData = {
+                ...parseOrder($, $response),
+                id
+            }
+            // set current order Number
+            dispatch(receiveCurrentOrderNumber(orderData.orderNumber))
+            dispatch(receiveAccountOrderListData({[orderData.orderNumber]: orderData}))
+        })
+}
+
+export const initAccountOrderListPage = (url) => (dispatch) => {
+    return dispatch(fetchPageData(url))
+        .then(([$, $response]) => {
+            return dispatch(receiveAccountOrderListData(parseOrderListData($, $response)))
+        })
+}
+
+export const reorderPreviousOrder = (orderNumber) => (dispatch, getState) => { // eslint-disable-line
+    const formKey = getFormKey(getState())
+    const orderId = orderNumber.replace(/^0+/, '')
+    return makeFormEncodedRequest(`/sales/order/reorder/order_id/${orderId}/`, {form_key: formKey}, {method: 'POST'})
+        .then(() => CART_URL)
+}
+
+export const updateWishlistItem = (itemId, wishlistId, quantity) => (dispatch, getState) => {
+    const currentState = getState()
+    const productId = getCurrentProductId(currentState)
+    const payload = {
+        product: productId,
+        qty: quantity,
+        id: itemId,
+        form_key: getFormKey(currentState),
+        // This won't always be defined, but add to wishlist will still work
+        // if it's missing
+        uenc: getUenc(productId)(currentState)
+    }
+
+    return makeFormEncodedRequest(UPDATE_WISHLIST_URL, payload, {method: 'POST'})
+        .then(() => dispatch(receiveUpdatedWishlistItem({itemId, quantity})))
+        .then(() => WISHLIST_URL)
+}
+
+export const updateWishlistItemQuantity = (quantity, itemId, wishlistId) => (dispatch, getState) => {
+    const formKey = getFormKey(getState())
+    const requestBody = {
+        form_key: formKey,
+        do: '',
+    }
+    requestBody[`qty[${itemId}]`] = quantity
+    requestBody[`description[${itemId}]`] = ''
+    return makeFormEncodedRequest(getWishlistQuantityUrl(wishlistId), requestBody, {method: 'POST'})
+        .then(() => dispatch(receiveUpdatedWishlistItem({itemId, quantity})))
 }
