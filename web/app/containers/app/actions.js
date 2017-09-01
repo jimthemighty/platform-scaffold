@@ -13,12 +13,20 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
-import {setPageFetchError, clearPageFetchError} from 'progressive-web-sdk/dist/store/offline/actions'
-
+import {
+    setPageFetchError,
+    clearPageFetchError,
+    setOfflineModeStartTime,
+    clearOfflineModeStartTime,
+    trackOfflinePage,
+    clearOfflinePages
+} from 'progressive-web-sdk/dist/store/offline/actions'
+import {sendOfflineModeUsedAnalytics, sendOfflinePageview} from 'progressive-web-sdk/dist/analytics/actions'
 import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from '../../modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
+import {getOfflineModeStartTime, getOfflinePageViews} from 'progressive-web-sdk/dist/store/offline/selectors'
 import {OFFLINE_MODAL} from '../../modals/constants'
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartURL} from './selectors'
@@ -31,15 +39,36 @@ export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['st
 export const lockScroll = createAction('Lock Scroll')
 export const unlockScroll = createAction('Unock Scroll')
 
+const sendOfflineAnalytics = (offlineModeStartTime) => (dispatch, getState) => {
+    const timestamp = Date.now()
+    const offlineModeDuration = timestamp - offlineModeStartTime
+    const pagesViewed = getOfflinePageViews(getState()).toJS()
+
+    pagesViewed.forEach(({routeName, inCache, title, url}) => {
+        dispatch(sendOfflinePageview(url, routeName, title, inCache))
+    })
+
+    dispatch(sendOfflineModeUsedAnalytics(offlineModeDuration, timestamp, pagesViewed))
+}
+
+const startOfflineTimer = (offlineModeStartTime) => (dispatch) => {
+    // set offline mode start time if we haven't already
+    if (!offlineModeStartTime) {
+        dispatch(setOfflineModeStartTime(Date.now()))
+    }
+}
+
 /**
  * Make a separate request that is intercepted by the worker. The worker will
  * return a JSON object where `{offline: true}` if the request failed, which we
  * can use to detect if we're offline.
  */
-export const checkIfOffline = () => (dispatch, getState) => {
+export const checkIfOffline = (url, routeName) => (dispatch, getState) => {
     // we need to cachebreak every request to ensure we don't get something
     // stale from the disk cache on the device - the CDN will ignore query
     // parameters for this asset, however
+    const currentState = getState()
+    const offlineModeStartTime = getOfflineModeStartTime(currentState)
     return fetch(`${OFFLINE_ASSET_URL}?${Date.now()}`, {
         cache: 'no-store'
     })
@@ -47,10 +76,19 @@ export const checkIfOffline = () => (dispatch, getState) => {
         .then((json) => {
             if (json.offline) {
                 dispatch(setPageFetchError('Network failure, using worker cache'))
+                dispatch(startOfflineTimer(offlineModeStartTime))
+                dispatch(trackOfflinePage({url, routeName, title: window.document.title}))
             } else {
+                // if we have an offline mode start time then we're transitioning from offline to online
+                // calculate the time we were offline for
+                if (offlineModeStartTime) {
+                    dispatch(sendOfflineAnalytics(offlineModeStartTime))
+                    dispatch(clearOfflineModeStartTime())
+                    dispatch(clearOfflinePages())
+                }
                 dispatch(clearPageFetchError())
 
-                if (isModalOpen(OFFLINE_MODAL)(getState())) {
+                if (isModalOpen(OFFLINE_MODAL)(currentState)) {
                     dispatch(closeModal(OFFLINE_MODAL, UI_NAME.offline))
                 }
             }
@@ -59,6 +97,8 @@ export const checkIfOffline = () => (dispatch, getState) => {
             // In cases where we don't have the worker installed, this means
             // we indeed have a network failure, so switch on offline
             dispatch(setPageFetchError(error.message))
+            dispatch(startOfflineTimer(offlineModeStartTime))
+            dispatch(trackOfflinePage({url, routeName, title: window.document.title}))
         })
 }
 
