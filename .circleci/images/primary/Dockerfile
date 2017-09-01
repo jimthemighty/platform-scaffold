@@ -7,14 +7,11 @@
 #
 # Documentation on the Dockerfile syntax is available here:
 # https://docs.docker.com/reference/builder/
-FROM openjdk:8-jdk
+FROM mobify/ubuntu:15.10
 MAINTAINER Mobify <ops@mobify.com>
 
 ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 6.11.0
-ENV YARN_VERSION 0.24.6
-
-USER root
 
 #   -> Install additional packages:
 RUN apt-get update && apt-get install -yf apt-utils \
@@ -26,40 +23,51 @@ RUN apt-get update && apt-get install -yf apt-utils \
                                           unzip xvfb && \
     apt-get update --fix-missing && apt-get -yf upgrade 
 
-# Install Chrome
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
-# Update Chrome
-RUN \
-    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-    apt-get update \
-    apt-get --fix-broken install google-chrome-stable
+# install java 8
+#
+RUN if grep -q Debian /etc/os-release && grep -q jessie /etc/os-release; then \
+    echo "deb http://http.us.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list \
+    && echo "deb-src http://http.us.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list \
+    && sudo apt-get update; sudo apt-get install -yf -t jessie-backports openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk openjdk-8-jdk-headless \
+  ; else \
+    sudo apt-get update; sudo apt-get install -yf openjdk-8-jre openjdk-8-jre-headless openjdk-8-jdk openjdk-8-jdk-headless \
+  ; fi
 
-RUN apt-get update && apt-get install libnss3-tools 
 
 # Install node 6
+#
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - &&\
   apt-get install -y nodejs
 
-# Accept SSL Cert
-# Initialize database of certificates
-RUN mkdir -p $HOME/.pki/nssdb
-# Pass in a password
-RUN certutil -d $HOME/.pki/nssdb -N --empty-password
-# Add self-signed SSL certificate
-RUN pwd
-RUN certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n localhost.pem -i localhost.pem
+## install phantomjs
+#
+RUN PHANTOMJS_URL="https://circle-downloads.s3.amazonaws.com/circleci-images/cache/linux-amd64/phantomjs-latest.tar.bz2" \
+  && sudo apt-get install libfontconfig \
+  && curl --silent --show-error --location --fail --retry 3 --output /tmp/phantomjs.tar.bz2 ${PHANTOMJS_URL} \
+  && tar -x -C /tmp -f /tmp/phantomjs.tar.bz2 \
+  && sudo mv /tmp/phantomjs-*-linux-x86_64/bin/phantomjs /usr/local/bin \
+  && rm -rf /tmp/phantomjs.tar.bz2 /tmp/phantomjs-* \
+  && phantomjs --version
 
+# install chrome
+RUN curl --silent --show-error --location --fail --retry 3 --output /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+      && (sudo dpkg -i /tmp/google-chrome-stable_current_amd64.deb || sudo apt-get -fy install)  \
+      && rm -rf /tmp/google-chrome-stable_current_amd64.deb \
+      && sudo sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' \
+           "/opt/google/chrome/google-chrome" \
+      && google-chrome --version
+
+RUN export CHROMEDRIVER_RELEASE=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE) \
+      && curl --silent --show-error --location --fail --retry 3 --output /tmp/chromedriver_linux64.zip "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_RELEASE/chromedriver_linux64.zip" \
+      && cd /tmp \
+      && unzip chromedriver_linux64.zip \
+      && rm -rf chromedriver_linux64.zip \
+      && sudo mv chromedriver /usr/local/bin/chromedriver \
+      && sudo chmod +x /usr/local/bin/chromedriver \
+      && chromedriver --version
+
+# start xvfb automatically to avoid needing to express in circle.yml
 ENV DISPLAY :99
-
-# Install Xvfb init script
-ADD xvfb_init /etc/init.d/xvfb
-RUN chmod a+x /etc/init.d/xvfb
-ADD xvfb-daemon-run /usr/bin/xvfb-daemon-run
-RUN chmod a+x /usr/bin/xvfb-daemon-run
-
-# Allow root to execute Google Chrome by replacing launch script
-ADD google-chrome-launcher /usr/bin/google-chrome
-RUN chmod a+x /usr/bin/google-chrome
-CMD [ "bash" ]
+RUN printf '#!/bin/sh\nXvfb :99 -screen 0 1280x1024x24 &\nexec "$@"\n' > /tmp/entrypoint \
+	&& chmod +x /tmp/entrypoint \
+        && sudo mv /tmp/entrypoint /docker-entrypoint.sh
