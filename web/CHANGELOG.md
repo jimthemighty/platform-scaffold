@@ -1,6 +1,8 @@
 ## To be released
 - Update header bar when displaying in Add to homescreen mode [#983](https://github.com/mobify/platform-scaffold/pull/983)
 - Add Share to PDP [#963](https://github.com/mobify/platform-scaffold/pull/963)
+- Fix account dashboard path [#986](https://github.com/mobify/platform-scaffold/pull/986)
+- Fix bug with account login/logout for Merlin's connector [#992](https://github.com/mobify/platform-scaffold/pull/992)
 - Add analytics for standalone mode [#981](https://github.com/mobify/platform-scaffold/pull/981)
 
 ## 0.20.0 (August 24, 2017)
