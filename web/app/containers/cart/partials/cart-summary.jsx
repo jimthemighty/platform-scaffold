@@ -78,7 +78,7 @@ const CartSummary = ({
         </Button>
     )
 
-    const renderDiscount = ({amount, couponCode, text, id}, index) => (
+    const renderDiscount = ({amount, couponCode, text, id}, index) => ( // eslint-disable-line react/prop-types
         <LedgerRow
             key={index}
             label={`${couponCode}: ${text}`}
