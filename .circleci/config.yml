@@ -46,7 +46,7 @@ jobs:
           working_directory: /home/ubuntu/platform-scaffold/web/
       - run: 
           name: Run end2end Test
-          command: bash ./tests/e2e/test-scripts/run-e2e-in-parallel.sh
+          command: xvfb-run -a ./tests/e2e/test-scripts/run-e2e-in-parallel.sh
           when: always
           working_directory: /home/ubuntu/platform-scaffold/web/
       - store_artifacts:
@@ -85,7 +85,7 @@ jobs:
           working_directory: /home/ubuntu/platform-scaffold/web/
       - run:
           name: Lighthouse Tests
-          command: npm run test:pwa-preview
+          command: xvfb-run -a npm run test:pwa-preview
           when: always
           working_directory: /home/ubuntu/platform-scaffold/web/
       - store_artifacts:
