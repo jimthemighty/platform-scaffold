@@ -81,7 +81,6 @@ const CartSummary = ({
     const renderDiscount = ({amount, couponCode, text, id}, index) => (
         <LedgerRow
             key={index}
-            className="pw--sale"
             label={`${couponCode}: ${text}`}
             labelAction={removeButton(id)}
             value={amount}
