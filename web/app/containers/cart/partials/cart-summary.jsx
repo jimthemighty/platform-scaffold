@@ -68,22 +68,22 @@ const CartSummary = ({
         </Button>
     )
 
-    const removeButton = (
+    const removeButton = (id) => (
         <Button
             innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal"
-            onClick={removePromoCode}
+            onClick={() => removePromoCode(id)}
             data-analytics-name={UI_NAME.removePromotionCode}
         >
             Remove Discount
         </Button>
     )
 
-    const renderDiscount = ({amount, couponCode, text}, index) => (
+    const renderDiscount = ({amount, couponCode, text, id}, index) => (
         <LedgerRow
             key={index}
             className="pw--sale"
             label={`${couponCode}: ${text}`}
-            labelAction={removeButton}
+            labelAction={removeButton(id)}
             value={amount}
         />
     )
@@ -116,8 +116,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {discounts &&
-                    discounts.map(renderDiscount)}
+                    {discounts && discounts.map(renderDiscount)}
 
                     {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)

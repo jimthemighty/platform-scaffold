@@ -88,4 +88,13 @@ export const putPromoCode = (couponCode) => (dispatch) => {
             .then((basket) => dispatch(handleCartData(basket)))
 }
 
+export const deletePromoCode = (couponId) => (dispatch) => {
+    return createBasket()
+            .then((basket) => makeApiRequest(`/baskets/${basket.basket_id}/coupons/${couponId}`, {method: 'DELETE'}))
+            .then((response) => response.json())
+            .catch(() => { throw new Error('Unable to remove coupon') })
+            .then((basket) => dispatch(updateExpiredCart(basket)))
+            .then((basket) => dispatch(handleCartData(basket)))
+}
+
 export const fetchTaxEstimate = () => Promise.reject('Method not implemented')

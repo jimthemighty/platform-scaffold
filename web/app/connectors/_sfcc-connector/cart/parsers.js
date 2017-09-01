@@ -12,7 +12,8 @@ export const parseCartContents = ({
     product_sub_total,
     merchandize_total_tax,
     order_total,
-    order_price_adjustments = []
+    order_price_adjustments = [],
+    coupon_items = []
 }) => { /* Cart */
     const items = product_items.map(({item_id, product_id, price_after_order_discount, quantity}) => ({
         id: item_id,
@@ -27,11 +28,15 @@ export const parseCartContents = ({
         linePrice: `${formatPrice(price_after_order_discount)}`
     }))
 
-    const discounts = order_price_adjustments.map(({coupon_code = '', item_text, price}) => ({
-        couponCode: coupon_code,
-        text: item_text,
-        amount: formatPrice(price)
-    }))
+    const discounts = order_price_adjustments.map(({coupon_code = '', item_text, price}) => {
+        coupon_items.find(({code}) => code === coupon_code)
+        return {
+            couponCode: coupon_code,
+            text: item_text,
+            amount: formatPrice(price),
+            id: coupon_items.find(({code}) => code === coupon_code).coupon_item_id
+        }
+    })
 
     return {
         items,
