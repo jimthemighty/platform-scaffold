@@ -76,4 +76,16 @@ export const updateItemQuantity = (itemId, quantity) => (dispatch) => dispatch(u
 
 export const initCartPage = () => (dispatch) => Promise.resolve(dispatch(populateLocationsData()))
 
+export const putPromoCode = (couponCode) => (dispatch) => {
+    const requestBody = {
+        code: couponCode
+    }
+
+    return createBasket()
+            .then((basket) => makeApiJsonRequest(`/baskets/${basket.basket_id}/coupons`, requestBody, {method: 'POST'}))
+            .catch(() => { throw new Error('Unable to apply coupon') })
+            .then((basket) => dispatch(updateExpiredCart(basket)))
+            .then((basket) => dispatch(handleCartData(basket)))
+}
+
 export const fetchTaxEstimate = () => Promise.reject('Method not implemented')

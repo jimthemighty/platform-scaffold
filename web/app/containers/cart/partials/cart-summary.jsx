@@ -54,8 +54,7 @@ const CartSummary = ({
     selectedShippingLabel,
     zipCode,
     taxAmount,
-    discountAmount,
-    discountLabel,
+    discounts,
     onCalculateClick,
     removePromoCode
 }) => {
@@ -79,6 +78,16 @@ const CartSummary = ({
         </Button>
     )
 
+    const renderDiscount = ({amount, couponCode, text}, index) => (
+        <LedgerRow
+            key={index}
+            className="pw--sale"
+            label={`${couponCode}: ${text}`}
+            labelAction={removeButton}
+            value={amount}
+        />
+    )
+
     return (
         <div className="t-cart__summary">
             <Accordion className="u-margin-top u-bg-color-neutral-00">
@@ -99,15 +108,6 @@ const CartSummary = ({
                         value={subtotal}
                     />
 
-                    {(discountAmount && discountLabel) &&
-                        <LedgerRow
-                            className="pw--sale"
-                            label={`Discount: ${discountLabel}`}
-                            labelAction={removeButton}
-                            value={discountAmount}
-                        />
-                    }
-
                     {(zipCode !== null && zipCode !== undefined) &&
                         <LedgerRow
                             label={`Shipping (${selectedShippingLabel})`}
@@ -115,6 +115,9 @@ const CartSummary = ({
                             key={`Shipping (${selectedShippingLabel})`}
                         />
                     }
+
+                    {discounts &&
+                    discounts.map(renderDiscount)}
 
                     {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)
@@ -151,8 +154,7 @@ const CartSummary = ({
 
 CartSummary.propTypes = {
     checkoutShippingURL: PropTypes.string,
-    discountAmount: PropTypes.string,
-    discountLabel: PropTypes.string,
+    discounts: PropTypes.array,
     orderTotal: PropTypes.string,
     removePromoCode: PropTypes.func,
     selectedShippingLabel: PropTypes.string,
@@ -165,8 +167,7 @@ CartSummary.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    discountAmount: cartSelectors.getDiscountAmount,
-    discountLabel: cartSelectors.getDiscountLabel,
+    discounts: cartSelectors.getDiscounts,
     checkoutShippingURL: getCheckoutShippingURL,
     subtotal: cartSelectors.getSubtotal,
     orderTotal: cartSelectors.getOrderTotal,

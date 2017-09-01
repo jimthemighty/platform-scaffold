@@ -217,6 +217,10 @@ export const formatPrice = (price) => {
     if (!price) {
         price = 0
     }
+
+    if (price < 0) {
+        return `-$${(price * -1).toFixed(2)}`
+    }
     return `$${price.toFixed(2)}`
 }
 

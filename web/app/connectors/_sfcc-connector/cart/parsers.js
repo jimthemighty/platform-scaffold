@@ -6,7 +6,14 @@ import {getProductHref} from '../parsers'
 import {formatPrice} from '../utils'
 
 /* eslint-disable camelcase */
-export const parseCartContents = ({product_items = [], product_sub_total, merchandize_total_tax, order_total}) => { /* Cart */
+export const parseCartContents = ({
+    product_items = [],
+    product_total,
+    product_sub_total,
+    merchandize_total_tax,
+    order_total,
+    order_price_adjustments = []
+}) => { /* Cart */
     const items = product_items.map(({item_id, product_id, price_after_order_discount, quantity}) => ({
         id: item_id,
         productId: product_id,
@@ -20,6 +27,12 @@ export const parseCartContents = ({product_items = [], product_sub_total, mercha
         linePrice: `${formatPrice(price_after_order_discount)}`
     }))
 
+    const discounts = order_price_adjustments.map(({coupon_code = '', item_text, price}) => ({
+        couponCode: coupon_code,
+        text: item_text,
+        amount: formatPrice(price)
+    }))
+
     return {
         items,
         subtotal: formatPrice(product_sub_total),
@@ -27,10 +40,14 @@ export const parseCartContents = ({product_items = [], product_sub_total, mercha
             label: 'Tax',
             amount: formatPrice(merchandize_total_tax)
         },
+        discounts,
         /* TODO: shipping: undefined, */
         // order_total isn't provided by SFCC until many details have
         // been provided so we fall back to product_sub_total when its missing
-        orderTotal: formatPrice(order_total || product_sub_total)
+
+        // Here we use product_total instead of product_sub_total because
+        // product_sub_total doesn't take discounts into account
+        orderTotal: formatPrice(order_total || product_total)
     }
 }
 /* eslint-enable camelcase */
