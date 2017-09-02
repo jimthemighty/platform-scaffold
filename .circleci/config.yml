@@ -10,7 +10,7 @@ references:
     platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
 
   build_cache_key: &build_cache_key
-    platform-scaffold-build-{{ .Branch }}
+    platform-scaffold-build-$CIRCLE_SHA1
   
   restore_node_modules: &restore_node_modules
     restore_cache:
