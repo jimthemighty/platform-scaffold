@@ -70,19 +70,20 @@ const CartSummary = ({
 
     const removeButton = (id) => (
         <Button
-            innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal"
+            innerClassName="u-color-brand u-padding-start u-text-letter-spacing-normal"
             onClick={() => removePromoCode(id)}
             data-analytics-name={UI_NAME.removePromotionCode}
         >
-            Remove Discount
+            Remove
         </Button>
     )
 
     const renderDiscount = ({amount, couponCode, text, id}, index) => ( // eslint-disable-line react/prop-types
         <LedgerRow
             key={index}
-            label={`${couponCode}: ${text}`}
+            label={`Discount: ${couponCode}`}
             labelAction={removeButton(id)}
+            labelDescription={text}
             value={amount}
         />
     )
