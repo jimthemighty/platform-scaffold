@@ -30,7 +30,7 @@ const ItemPrice = ({
                 {discount ?
                     <div>
                         <span className="u-h5 u-color-accent u-text-weight-bold">{linePrice}</span>
-                        <span className="u-text-quiet u-text-strikethrough u-padding-start">{`$${priceValue}`}</span>
+                        <span className="u-text-quiet u-text-strikethrough u-padding-start">{originalPrice}</span>
                     </div>
                 :
                     <div className="u-h5 u-color-accent u-text-weight-bold">{linePrice}</div>

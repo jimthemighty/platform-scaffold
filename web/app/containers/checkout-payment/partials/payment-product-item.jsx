@@ -15,6 +15,7 @@ const PaymentProductItem = ({
     thumbnail,
     title,
     options,
+    price,
     itemPrice,
     linePrice,
     quantity
@@ -27,6 +28,10 @@ const PaymentProductItem = ({
             height="104px"
         />
     )
+
+    const linePriceValue = parseFloat(linePrice.substring(1))
+    const priceValue = parseFloat(price.substring(1)) * quantity
+    const discount = linePriceValue < priceValue
 
     return (
         <ProductItem customWidth="20%"
@@ -51,14 +56,18 @@ const PaymentProductItem = ({
                 </div>
 
                 <div className="u-text-align-end u-flex">
-                    <div>
+                    {discount ?
+                        <div>
+                            <span className="u-h5 u-color-accent u-text-weight-semi-bold">{linePrice}</span>
+                            <span className="u-text-quiet u-text-strikethrough u-padding-start">{price}</span>
+                        </div>
+                    :
                         <div className="u-h5 u-text-weight-semi-bold">
                             {linePrice}
                         </div>
-
-                        <div className="u-text-quiet">
-                            <em>{itemPrice} each</em>
-                        </div>
+                    }
+                    <div className="u-text-quiet">
+                        <em>{itemPrice} each</em>
                     </div>
                 </div>
             </div>

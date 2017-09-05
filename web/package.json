@@ -90,7 +90,7 @@
     "nightwatch-commands": "3.0.0",
     "node-sass": "4.5.3",
     "postcss-loader": "1.3.3",
-    "progressive-web-sdk": "~0.20.4-preview.0",
+    "progressive-web-sdk": "~0.20.3-preview.0",
     "prompt": "1.0.0",
     "raw-loader": "0.5.1",
     "react-addons-test-utils": "15.4.2",
