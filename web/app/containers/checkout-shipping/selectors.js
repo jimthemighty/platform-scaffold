@@ -10,6 +10,8 @@ export const getCheckoutShipping = createSelector(getUi, ({checkoutShipping}) =>
 
 export const getIsCompanyOrAptShown = createGetSelector(getCheckoutShipping, 'isCompanyOrAptShown')
 
+export const getIsFetchingShippingMethod = createGetSelector(getCheckoutShipping, 'isFetchingShippingMethod')
+
 export const getCustomerEmailRecognized = createGetSelector(getCheckoutShipping, 'customerEmailRecognized')
 
 export const getEmailError = createGetSelector(getCheckoutShipping, 'emailError')

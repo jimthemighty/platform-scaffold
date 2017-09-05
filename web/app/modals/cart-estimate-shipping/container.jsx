@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import {CART_ESTIMATE_SHIPPING_MODAL} from '../constants'
 import {ESTIMATE_FORM_NAME} from '../../store/form/constants'
 
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getAvailableRegions} from 'progressive-web-sdk/dist/store/checkout/selectors'
 import {submitEstimateShipping} from '../../containers/cart/actions'

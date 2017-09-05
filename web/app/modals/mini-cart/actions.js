@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getCart} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {openModal} from '../actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {MINI_CART_MODAL} from '../constants'
 
