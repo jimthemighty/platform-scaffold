@@ -3,8 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getSiteID, getCategoryPath} from './config'
-import {formatPrice} from './utils'
-import {stringToTitleCase} from '../../utils/utils'
+import {stringToTitleCase, formatPrice} from '../../utils/utils'
 
 const parseImages = (imageGroups) => {
     const largeImages = imageGroups.filter((imageGroup) => imageGroup.view_type === 'large')[0]

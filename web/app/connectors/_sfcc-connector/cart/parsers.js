@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getProductHref} from '../parsers'
-import {formatPrice} from '../utils'
+import {formatPrice} from '../../../utils/utils'
 
 /* eslint-disable camelcase */
 export const parseCartContents = ({

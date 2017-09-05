@@ -7,6 +7,7 @@ import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from './parsers'
 import {getApiEndPoint, getRequestHeaders} from './config'
+import {formatPrice} from '../../utils/utils'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'
@@ -213,17 +214,6 @@ export const makeUnAuthenticatedApiRequest = (path, options) => {
     return makeRequest(getApiEndPoint() + path, requestOptions)
 }
 
-export const formatPrice = (price) => {
-    if (!price) {
-        price = 0
-    }
-
-    if (price < 0) {
-        return `-$${(price * -1).toFixed(2)}`
-    }
-    return `$${price.toFixed(2)}`
-}
-
 const imageFromJson = (imageJson, name, description) => ({
     /* Image */
     src: imageJson.link,
@@ -287,4 +277,3 @@ export const fetchItemData = (items) => (dispatch, getState) => {
         })
     ).then(() => ({updatedProducts, updatedCartItems}))
 }
-

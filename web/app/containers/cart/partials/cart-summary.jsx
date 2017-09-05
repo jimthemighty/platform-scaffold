@@ -11,6 +11,7 @@ import {openModal} from '../../../modals/actions'
 import {getSelectedShippingLabel, getPostcode} from '../../../store/checkout/shipping/selectors'
 import {getCheckoutShippingURL} from '../../app/selectors'
 import {removePromoCode} from '../actions'
+import {formatPrice} from '../../../utils/utils'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import CartPromoForm from './cart-promo-form'
@@ -78,15 +79,38 @@ const CartSummary = ({
         </Button>
     )
 
+    const renderDiscountTotal = () => {
+        const totalDiscount = discounts.reduce((total, discount) => {
+            const current = parseFloat(discount.amount.replace('$', ''))
+            return total + current
+        }, 0)
+
+        return (<LedgerRow
+            key="-1"
+            className="t-cart__summary-discounts"
+            label={`Discounts`}
+            value={formatPrice(totalDiscount)}
+        />)
+    }
+
     const renderDiscount = ({amount, couponCode, text, id}, index) => ( // eslint-disable-line react/prop-types
         <LedgerRow
             key={index}
+            className="t-cart__summary-discounts"
             label={`Discount: ${couponCode}`}
             labelAction={removeButton(id)}
             labelDescription={text}
             value={amount}
         />
     )
+
+    const renderDiscounts = () => {
+        if (!discounts.length) {
+            return undefined
+        }
+
+        return [renderDiscountTotal(), discounts.map(renderDiscount)]
+    }
 
     return (
         <div className="t-cart__summary">
@@ -116,7 +140,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {discounts && discounts.map(renderDiscount)}
+                    {renderDiscounts()}
 
                     {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)

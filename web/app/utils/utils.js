@@ -190,3 +190,14 @@ export const isStandalone = () => {
 // Converts a string into title case
 // https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
 export const stringToTitleCase = (str) => str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+
+export const formatPrice = (price) => {
+    if (!price) {
+        price = 0
+    }
+
+    if (price < 0) {
+        return `-$${(price * -1).toFixed(2)}`
+    }
+    return `$${price.toFixed(2)}`
+}
