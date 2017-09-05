@@ -4,16 +4,16 @@ references:
   container_config: &container_config
     docker:
       - image: mobify/cci-docker-primary:0.1.0
-    working_directory: /home/ubuntu/platform-scaffold/
+    working_directory: /home/ubuntu/lancome/
 
   repo_cache_key: &repo_cache_key
-    platform-scaffold-repo-{{ .Branch }}-{{ .Revision }}
+    lancome-repo-{{ .Branch }}-{{ .Revision }}
 
   npm_cache_key: &npm_cache_key
-    platform-scaffold-npm-{{ .Branch }}-{{ checksum "web/package.json" }}
+    lancome-npm-{{ .Branch }}-{{ checksum "web/package.json" }}
 
   build_cache_key: &build_cache_key
-    platform-scaffold-build-{{ checksum ".circle-sha" }}
+    lancome-build-{{ .Branch }}-{{ checksum ".circle-sha" }}
   
   restore_repo: &restore_repo
     restore_cache:
@@ -42,41 +42,40 @@ jobs:
           key: *repo_cache_key
           paths:
             - .
-      - *restore_node_modules
+      - restore_cache:
+          key: *npm_cache_key
+          paths:
+            - /home/ubuntu/lancome/web/node_modules
       - run:
           name: Install Dependencies
           command: npm install
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
       - run:
           name: Build Project
           command: npm run prod:build
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
       - save_cache:
           key: *npm_cache_key
           paths:
-            - /home/ubuntu/platform-scaffold/web/node_modules
+            - /home/ubuntu/lancome/web/node_modules 
       - save_cache:
           key: *build_cache_key
           paths:
-            - /home/ubuntu/platform-scaffold/web/build
+            - /home/ubuntu/lancome/web/build
 
-  test-unit:
+  test-lint:
     <<: *container_config
     steps:
       - *restore_repo
       - *restore_node_modules
+      - *restore_build
       - run:
-          name: Lint
-          command: pwd && npm run lint
-          working_directory: /home/ubuntu/platform-scaffold/web/ 
-      - run:
-          name: Run Unit Tests
-          command: npm test -- --runInBand
-          working_directory: /home/ubuntu/platform-scaffold/web/
-  
-  test-e2e:
+          name: Run Lint Tests
+          command: npm run lint
+          working_directory: /home/ubuntu/lancome/web/
+
+  test-guest-checkout:
     <<: *container_config
-    parallelism: 2
     steps:
       - *restore_repo
       - *restore_node_modules
@@ -85,24 +84,24 @@ jobs:
           name: Start Test Server
           command: npm run test:server
           background: true
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
       - run:
           name: Wait for Server
           command: bash ./scripts/wait-for-dependencies.sh
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
       - run: 
           name: Run end2end Test
-          command: xvfb-run -a ./tests/e2e/test-scripts/run-e2e-in-parallel.sh
+          command: xvfb-run -a npm run test:e2e --tests tests/e2e/workflows/guest-checkout.js
           when: always
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
       - store_artifacts:
           path: web/tests/reports/
           when: always
       - store_artifacts:
           path: web/tests/screenshots/
           when: always
-      
-  test-performance:
+  
+  test-registered-checkout:
     <<: *container_config
     steps:
       - *restore_repo
@@ -112,24 +111,101 @@ jobs:
           name: Start Test Server
           command: npm run test:server
           background: true
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
       - run:
           name: Wait for Server
           command: bash ./scripts/wait-for-dependencies.sh
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
+      - run: 
+          name: Run end2end Test
+          command: xvfb-run -a npm run test:e2e --tests tests/e2e/workflows/registered-checkout.js
+          when: always
+          working_directory: /home/ubuntu/lancome/web/
+      - store_artifacts:
+          path: web/tests/reports/
+          when: always
+      - store_artifacts:
+          path: web/tests/screenshots/
+          when: always
+  
+  test-paypal-checkout:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - *restore_build
       - run:
-          name: Accept Cert
-          command: bash ./scripts/accept-cert-ci.sh
-          working_directory: /home/ubuntu/platform-scaffold/web/ 
+          name: Start Test Server
+          command: npm run test:server
+          background: true
+          working_directory: /home/ubuntu/lancome/web/
       - run:
-          name: Analyzing Build Size
-          command: npm run test:max-file-size -- build tests/performance/gzip-size-config.json
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          name: Wait for Server
+          command: bash ./scripts/wait-for-dependencies.sh
+          working_directory: /home/ubuntu/lancome/web/
+      - run: 
+          name: Run end2end Test
+          command: xvfb-run -a npm run test:e2e --tests tests/e2e/workflows/paypal-checkout.js
+          when: always
+          working_directory: /home/ubuntu/lancome/web/
+      - store_artifacts:
+          path: web/tests/reports/
+          when: always
+      - store_artifacts:
+          path: web/tests/screenshots/
+          when: always
+
+  test-shoprunner-checkout:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - *restore_build
       - run:
-          name: Lighthouse Tests
+          name: Start Test Server
+          command: npm run test:server
+          background: true
+          working_directory: /home/ubuntu/lancome/web/
+      - run:
+          name: Wait for Server
+          command: bash ./scripts/wait-for-dependencies.sh
+          working_directory: /home/ubuntu/lancome/web/
+      - run: 
+          name: Run end2end Test
+          command: xvfb-run -a npm run test:e2e --tests tests/e2e/workflows/shoprunner-checkout.js
+          when: always
+          working_directory: /home/ubuntu/lancome/web/
+      - store_artifacts:
+          path: web/tests/reports/
+          when: always
+      - store_artifacts:
+          path: web/tests/screenshots/
+          when: always
+
+  test-lighthouse:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - *restore_build
+      - run:
+          name: Start Test Server
+          command: npm run test:server
+          background: true
+          working_directory: /home/ubuntu/lancome/web/
+      - run:
+          name: Wait for Server
+          command: bash ./scripts/wait-for-dependencies.sh
+          working_directory: /home/ubuntu/lancome/web/
+      - run:
+          name: Verifying if files are under 2mb
+          command: npm run test:build-size
+          working_directory: /home/ubuntu/lancome/web/
+      - run: 
+          name: Run Lighthouse
           command: xvfb-run -a npm run test:pwa-preview
           when: always
-          working_directory: /home/ubuntu/platform-scaffold/web/
+          working_directory: /home/ubuntu/lancome/web/
       - store_artifacts:
           path: web/tests/performance/lighthouse/reports/
           when: always
@@ -138,13 +214,19 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - test-unit:
+      - build:
+      - test-lint:
           requires:
             - build
-      - test-e2e:
+      - test-guest-checkout:
           requires:
             - build
-      - test-performance:
+      - test-paypal-checkout:
+          requires:
+            - build
+      - test-shoprunner-checkout:
+          requires:
+            - build
+      - test-lighthouse:
           requires:
             - build
