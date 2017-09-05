@@ -6,23 +6,25 @@ references:
       - image: mobify/cci-docker-primary:0.1.0
     working_directory: /home/ubuntu/platform-scaffold/
 
-  checkout_code: &checkout_code
-      - checkout 
-      - run:
-          name: save SHA to a file
-          command: echo $CIRCLE_SHA1 > .circle-sha
-      
+  repo_cache_key: &repo_cache_key
+    platform-scaffold-repo-{{ .Branch }}-{{ .Revision }}
+
   npm_cache_key: &npm_cache_key
-    platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
+    platform-scaffold-npm-{{ .Branch }}-{{ checksum "web/package.json" }}
 
   build_cache_key: &build_cache_key
     platform-scaffold-build-{{ checksum ".circle-sha" }}
   
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - *repo_cache_key
+
   restore_node_modules: &restore_node_modules
     restore_cache:
       keys:
         - *npm_cache_key
-
+  
   restore_build: &restore_build
     restore_cache:
       keys:
@@ -32,7 +34,14 @@ jobs:
   build:
     <<: *container_config
     steps:
-      - *checkout_code
+      - checkout
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
+      - save_cache:
+          key: *repo_cache_key
+          paths:
+            - .
       - *restore_node_modules
       - run:
           name: Install Dependencies
@@ -54,7 +63,7 @@ jobs:
   test-unit:
     <<: *container_config
     steps:
-      - *checkout_code
+      - *restore_repo
       - *restore_node_modules
       - run:
           name: Lint
@@ -69,7 +78,7 @@ jobs:
     <<: *container_config
     parallelism: 2
     steps:
-      - *checkout_code
+      - *restore_repo
       - *restore_node_modules
       - *restore_build
       - run:
@@ -96,7 +105,7 @@ jobs:
   test-performance:
     <<: *container_config
     steps:
-      - *checkout_code
+      - *restore_repo
       - *restore_node_modules
       - *restore_build
       - run:
