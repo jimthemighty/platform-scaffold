@@ -9,7 +9,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as selectors from '../selectors'
 import {getProductInitialValues, getProductAvailability} from 'progressive-web-sdk/dist/store/products/selectors'
 import * as actions from '../actions'
-import {closeModal, openModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal, openModal} from '../../../modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 
 import ProductDetailsVariations from './product-details-variations'

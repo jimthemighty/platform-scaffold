@@ -44,7 +44,12 @@ const INITIAL_SHIPPING_ADDRESS = {
     addressLine1: '',
     postcode: '',
     telephone: '',
-    city: ''
+    city: '',
+    region: '',
+    regionCode: '',
+    regionId: '',
+    id: '',
+    preferred: undefined
 }
 
 const shippingMethodEstimateSelector = createPropsSelector({

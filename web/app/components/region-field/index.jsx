@@ -22,7 +22,8 @@ import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const RegionField = ({
     className,
-    regions
+    regions,
+    onBlur
 }) => {
     const classes = classNames('c-region-field', className)
 
@@ -33,6 +34,7 @@ const RegionField = ({
                 component={Field}
                 name="region"
                 label="Region"
+                customEventHandlers={{onBlur}}
             >
                 <input type="text" noValidate data-analytics-name={UI_NAME.region} />
             </ReduxForm.Field>
@@ -44,6 +46,7 @@ const RegionField = ({
             component={Field}
             name="regionId"
             label="State/Province"
+            customEventHandlers={{onBlur}}
         >
             <select data-analytics-name={UI_NAME.region}>
                 <option disabled value="">Please select a region, state, or province</option>
@@ -73,7 +76,12 @@ RegionField.propTypes = {
     regions: PropTypes.arrayOf(PropTypes.shape({
         label: PropTypes.string,
         id: PropTypes.string
-    }))
+    })),
+
+    /**
+     * onBlur callback
+     */
+    onBlur: PropTypes.func
 }
 
 export default RegionField

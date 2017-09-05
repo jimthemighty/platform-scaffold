@@ -7,6 +7,7 @@ import {createAction, createActionWithAnalytics} from 'progressive-web-sdk/dist/
 import {getSearchSuggestions, searchProducts} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 import {EVENT_ACTION} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {browserHistory} from 'progressive-web-sdk/dist/routing'
+import {lockScroll, unlockScroll} from '../app/actions'
 
 export const pushHistoryItem = createAction('Added item to history stack')
 
@@ -25,6 +26,16 @@ export const toggleHeader = createAction('Toggled the header', ['isCollapsed'])
 export const openSearch = createAction('Open header search')
 export const closeSearch = createAction('Close header search')
 export const clearSuggestions = createAction('Clear search suggestion')
+
+export const openSearchModal = () => (dispatch) => {
+    dispatch(openSearch())
+    dispatch(lockScroll())
+}
+
+export const closeSearchModal = () => (dispatch) => {
+    dispatch(closeSearch())
+    dispatch(unlockScroll())
+}
 
 export const searchQueryChanged = (query) => (dispatch) => (
     dispatch(getSearchSuggestions(query))
