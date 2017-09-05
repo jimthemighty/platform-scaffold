@@ -90,7 +90,7 @@ PaymentProductItem.propTypes = {
         label: PropTypes.string,
         value: PropTypes.string
     })),
-
+    price: PropTypes.string,
     /**
      * Number of items
      */
