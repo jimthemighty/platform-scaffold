@@ -10,7 +10,7 @@ references:
     platform-scaffold-{{ .Branch }}-{{ checksum "web/package.json" }}
 
   build_cache_key: &build_cache_key
-    platform-scaffold-build-{{ "$CIRCLE_SHA1" }}
+    platform-scaffold-build-{{ checksum ".circle-sha" }}
   
   restore_node_modules: &restore_node_modules
     restore_cache:
@@ -40,6 +40,9 @@ jobs:
           key: *npm_cache_key
           paths:
             - /home/ubuntu/platform-scaffold/web/node_modules
+      - run:
+          name: save SHA to a file
+          command: echo $CIRCLE_SHA1 > .circle-sha
       - save_cache:
           key: *build_cache_key
           paths:
