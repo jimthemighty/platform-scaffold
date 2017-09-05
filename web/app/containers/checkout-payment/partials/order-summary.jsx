@@ -133,7 +133,7 @@ class OrderSummary extends React.Component {
                             value={subtotal}
                         />
 
-                        {discounts.length ?
+                        {discounts && !!discounts.length ?
                             <LedgerRow
                                 label={`Shipping (${shippingLabel})`}
                                 value={cartshippingRate}
@@ -145,7 +145,7 @@ class OrderSummary extends React.Component {
                             />
                         }
 
-                        {!!discounts.length && discounts.map(renderDiscount)}
+                        {discounts && !!discounts.length && discounts.map(renderDiscount)}
 
                         {taxAmount &&
                             <LedgerRow

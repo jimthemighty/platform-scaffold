@@ -105,10 +105,6 @@ const CartSummary = ({
     )
 
     const renderDiscounts = () => {
-        if (!discounts.length) {
-            return undefined
-        }
-
         return [renderDiscountTotal(), discounts.map(renderDiscount)]
     }
 
@@ -140,7 +136,7 @@ const CartSummary = ({
                         />
                     }
 
-                    {renderDiscounts()}
+                    {discounts && !!discounts.length && renderDiscounts()}
 
                     {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)

@@ -20,8 +20,8 @@ const ItemPrice = ({
 }) => {
     const wrapperClass = classnames(className, 'c-item-price')
 
-    const linePriceValue = parseFloat(linePrice.substring(1))
-    const priceValue = parseFloat(originalPrice.substring(1)) * quantity
+    const linePriceValue = linePrice ? parseFloat(linePrice.substring(1)) : 0
+    const priceValue = originalPrice ? parseFloat(originalPrice.substring(1)) * quantity : 0
     const discount = linePriceValue < priceValue
 
     return (
