@@ -11,7 +11,6 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import classNames from 'classnames'
 import WebFont from 'webfontloader'
 import {isRunningInAstro} from '../../utils/astro-integration'
-import {isStandalone} from '../../utils/utils'
 
 import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 
@@ -52,7 +51,7 @@ class App extends React.Component {
         this.hidePreloaderWhenCSSIsLoaded()
         this.props.fetchSvgSprite()
         this.props.initApp()
-        this.props.setStandAloneAppFlag(isStandalone())
+        this.props.setStandAloneAppFlag()
         WebFont.load({
             google: {
                 families: ['Oswald:200,400']
@@ -244,7 +243,7 @@ const mapDispatchToProps = {
     toggleHideApp: appActions.toggleHideApp,
     fetchPage: (fetchAction, url, routeName) => fetchAction(url, routeName),
     initApp,
-    setStandAloneAppFlag: appActions.setStandAloneAppFlag
+    setStandAloneAppFlag: appActions.checkIfStandAlone
 
 }
 

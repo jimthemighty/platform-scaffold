@@ -8,6 +8,7 @@
     - Dispatch actions to send analytics data about offline mode session
     - Remove template higher order component from offline container
 - Fix bug with account login/logout for Merlin's connector [#992](https://github.com/mobify/platform-scaffold/pull/992)
+- Add analytics for standalone mode [#981](https://github.com/mobify/platform-scaffold/pull/981)
 - Add lock/unlock scroll when open/closing modals [#989](https://github.com/mobify/platform-scaffold/pull/989)
 
 ## 0.20.0 (August 24, 2017)
