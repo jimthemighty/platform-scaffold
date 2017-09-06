@@ -69,7 +69,7 @@ const CartSummary = ({
         </Button>
     )
 
-    const removeButton = (id) => (
+    const RemoveDiscountButton = ({id}) => ( // eslint-disable-line react/prop-types
         <Button
             innerClassName="u-color-brand u-padding-start u-text-letter-spacing-normal"
             onClick={() => removePromoCode(id)}
@@ -98,7 +98,7 @@ const CartSummary = ({
             key={index}
             className="t-cart__summary-discounts"
             label={`Discount: ${couponCode}`}
-            labelAction={removeButton(id)}
+            labelAction={<RemoveDiscountButton id={id} />}
             labelDescription={text}
             value={amount}
         />

@@ -133,8 +133,8 @@ export const submitPromoCode = ({promo}) => (dispatch) => {
         .then(() => dispatch(setPromoSubmitting(false)))
 }
 
-export const removePromoCode = (promo) => (dispatch) => {
-    dispatch(deletePromoCode(promo))
+export const removePromoCode = (promoId) => (dispatch) => {
+    dispatch(deletePromoCode(promoId))
         .catch(() => {
             dispatch(addNotification(
                 'removePromoError',

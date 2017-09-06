@@ -77,7 +77,7 @@ class OrderSummary extends React.Component {
             submitPayment
         } = this.props
 
-        const removeButton = (id) => (
+        const RemoveDiscountButton = ({id}) => (
             <Button
                 innerClassName="u-color-brand u-padding-start u-text-letter-spacing-normal"
                 onClick={() => removePromoCode(id)}
@@ -87,7 +87,7 @@ class OrderSummary extends React.Component {
             </Button>
         )
 
-        const PlaceOrderButton = (
+        const PlaceOrderButton = ({submitPayment, isLoading}) => (
             <Button
                 className="pw--primary u-flex-none u-width-full u-text-uppercase qa-checkout__place-order"
                 type="button"
@@ -108,7 +108,7 @@ class OrderSummary extends React.Component {
                 key={index}
                 className="t-cart__summary-discounts"
                 label={`Discount: ${couponCode}`}
-                labelAction={removeButton(id)}
+                labelAction={<RemoveDiscountButton id={id} />}
                 labelDescription={text}
                 value={amount}
             />
@@ -172,7 +172,7 @@ class OrderSummary extends React.Component {
 
                     {/* This is the statically positioned "Place Your Order" container */}
                     <div className="u-padding-end-md u-padding-start-md">
-                        {PlaceOrderButton}
+                        <PlaceOrderButton submitPayment={submitPayment} isLoading={isLoading} />
                     </div>
 
                     {/* This is the FIXED positioned "Place Your Order" container */}
@@ -182,7 +182,7 @@ class OrderSummary extends React.Component {
                         aria-hidden="true"
                     >
                         <div className="u-padding-md u-bg-color-neutral-00 u-text-align-center">
-                            {PlaceOrderButton}
+                            <PlaceOrderButton submitPayment={submitPayment} isLoading={isLoading} />
                             <p className="u-margin-top-md">
                                 Total: <strong>{orderTotal}</strong>
                             </p>
