@@ -3,7 +3,6 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import React, {PropTypes} from 'react'
-import template from '../../template'
 
 import DangerousHTML from 'progressive-web-sdk/dist/components/dangerous-html'
 import Button from 'progressive-web-sdk/dist/components/button'
@@ -44,4 +43,5 @@ Offline.contextTypes = {
     reload: PropTypes.func
 }
 
-export default template(Offline)
+// export default template(Offline)
+export default Offline

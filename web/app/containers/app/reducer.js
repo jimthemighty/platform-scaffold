@@ -21,7 +21,10 @@ import {
 
 export const initialState = fromJS({
     sprite: '',
-    hideApp: true
+    hideApp: true,
+    scrollManager: {
+        locked: false
+    }
 })
 
 export default handleActions({
@@ -35,5 +38,19 @@ export default handleActions({
     [setAccountOrderListURL]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,
     [appActions.toggleHideApp]: mergePayload,
-    [appActions.setStandAloneAppFlag]: mergePayload
+    [appActions.setStandAloneAppFlag]: mergePayload,
+    [appActions.unlockScroll]: (state) => {
+        return state.mergeDeep({
+            scrollManager: {
+                locked: false
+            }
+        })
+    },
+    [appActions.lockScroll]: (state) => {
+        return state.mergeDeep({
+            scrollManager: {
+                locked: true
+            }
+        })
+    }
 }, initialState)

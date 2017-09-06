@@ -4,7 +4,7 @@
 
 import Immutable from 'immutable'
 import {createSelector} from 'reselect'
-import {createGetSelector} from 'reselect-immutable-helpers'
+import {createGetSelector, createHasSelector} from 'reselect-immutable-helpers'
 
 import {getFormValues} from '../form/selectors'
 import {getCheckout} from '../selectors'
@@ -35,6 +35,6 @@ export const getAvailableRegions = (formKey) => createSelector(
 )
 
 export const getShippingMethods = createGetSelector(getCheckout, 'shippingMethods', Immutable.List())
-
+export const hasShippingMethods = createHasSelector(getCheckout, 'shippingMethods')
 export const getCheckoutCustomContent = createGetSelector(getCheckout, 'custom', Immutable.Map())
 export const getLocationsCustomContent = createGetSelector(getLocations, 'custom', Immutable.Map())

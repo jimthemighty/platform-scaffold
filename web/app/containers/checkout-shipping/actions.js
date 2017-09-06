@@ -28,6 +28,7 @@ export const showCompanyAndApt = createAction('Showing the "Company" and "Apt #"
 export const setCustomerEmailRecognized = createAction('Set Customer email Recognized', ['customerEmailRecognized'])
 export const setShowAddNewAddress = createAction('Setting the "Saved/New Address" field', ['showAddNewAddress'])
 export const receiveData = createAction('Receive Checkout Shipping Data')
+export const setIsFetchingShippingMethod = createAction('Set fetching shipping method flag', ['isFetchingShippingMethod'])
 
 const WELCOME_BACK_NOTIFICATION_ID = 'shippingWelcomeBackMessage'
 
@@ -149,9 +150,33 @@ export const isEmailAvailable = () => (dispatch, getState) => {
     return dispatch(onShippingEmailAvailable())
 }
 
-export const fetchShippingMethods = () => (dispatch, getState) => (
-    dispatch(
-        fetchShippingMethodsEstimate(getShippingEstimateAddress(getState()))
-    )
-    .catch((error) => dispatch(handleCartExpiryError(error)))
-)
+// TODO: move this function into connectors (Hybris)
+const canFetchShippingMethods = ({addressLine1, city, postcode, countryId, regionId}) => {
+    if (addressLine1 && city && postcode && countryId && regionId) {
+        return true
+    }
+    return false
+}
+
+export const fetchShippingMethods = () => (dispatch, getState) => {
+    const address = getShippingEstimateAddress(getState())
+
+    // TODO: move the validation into connectors
+    if (canFetchShippingMethods(address)) {
+        dispatch(setIsFetchingShippingMethod(true))
+        return dispatch(fetchShippingMethodsEstimate(address))
+            .catch((error) => dispatch(handleCartExpiryError(error)))
+            .then(() => dispatch(setIsFetchingShippingMethod(false)))
+    }
+
+    return false
+}
+
+export const onSavedShippingAddressChange = (id, savedAddress) => (dispatch) => {
+    dispatch(setDefaultShippingAddressId(id))
+    dispatch(setIsFetchingShippingMethod(true))
+
+    return dispatch(fetchShippingMethodsEstimate(savedAddress))
+        .catch((error) => dispatch(handleCartExpiryError(error)))
+        .then(() => dispatch(setIsFetchingShippingMethod(false)))
+}

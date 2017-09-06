@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
-import {closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
+import {closeModal} from '../../modals/actions'
 import {splitFullName} from '../../utils/utils'
 import {addAddress, deleteAddress, editAddress} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {ACCOUNT_ADDRESS_MODAL} from '../../modals/constants'
