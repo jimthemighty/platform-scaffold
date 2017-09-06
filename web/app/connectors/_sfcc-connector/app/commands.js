@@ -122,6 +122,7 @@ export const initApp = () => (dispatch) => {
                     })
             }
 
-            return dispatch(setLoggedIn(false))
+            dispatch(setLoggedIn(false))
+            return Promise.resolve()
         })
 }
