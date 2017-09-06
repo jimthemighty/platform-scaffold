@@ -18,36 +18,29 @@ google-chrome --version
 printf "Chrome installed\n"
 
 
-if git rev-parse ; then
-    # Get the current branch on CircleCI or local
-    CURRENT_BRANCH=${CIRCLE_BRANCH:-$(git branch | grep "*" | awk '{ print $2 }')}
-    if [ "$CURRENT_BRANCH" == "master" ]; then
-        exit 0 
+echo "Waiting for npm prod:build to complete"
+while [ ! -f build/loader.js ]; do
+    if [[ "$counter" -gt 40 ]]; then
+        cat logs/startTestServer.log
+        echo 'Build Failed.'
+        exit 1
     else
-        echo "Waiting for npm prod:build to complete"
-        while [ ! -f build/loader.js ]; do
-            if [[ "$counter" -gt 40 ]]; then
-                cat logs/startTestServer.log
-                echo 'Build Failed.'
-                exit 1
-            else
-                counter=$((counter+1))
-                sleep 2
-            fi
-        done 
-        printf "npm prod:build is complete\n"  
-
-        echo "Waiting for test server to become active"
-        while ! nc -z localhost 8443; do 
-        if [[ "$counter" -gt 50 ]]; then
-                cat logs/startTestServer.log
-                echo 'Starting Server Failed.'
-                exit 1
-            else
-                counter=$((counter+1))
-                sleep 2
-            fi 
-        done
-        printf "8443 test server is now active\n"      
+        counter=$((counter+1))
+        sleep 2
     fi
-fi
+done 
+printf "npm prod:build is complete\n"  
+
+echo "Waiting for test server to become active"
+while ! nc -z localhost 8443; do 
+if [[ "$counter" -gt 50 ]]; then
+        cat logs/startTestServer.log
+        echo 'Starting Server Failed.'
+        exit 1
+    else
+        counter=$((counter+1))
+        sleep 2
+    fi 
+done
+printf "8443 test server is now active\n"      
+

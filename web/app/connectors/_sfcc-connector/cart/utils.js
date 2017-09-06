@@ -105,7 +105,7 @@ export const createNewBasket = () => (dispatch) => {
 
 export const isCartExpired = ({fault}) => {
     if (fault) {
-        if (fault.type === 'InvalidCustomerException') {
+        if (fault.type === 'InvalidCustomerException' || fault.type === 'BasketNotFoundException') {
             return true
         }
         throw new Error(fault.message)

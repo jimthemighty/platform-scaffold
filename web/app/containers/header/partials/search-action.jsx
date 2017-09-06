@@ -10,7 +10,7 @@ import {HeaderBarActions} from 'progressive-web-sdk/dist/components/header-bar'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 
 const SearchAction = ({innerButtonClassName, onClick}) => (
-    <HeaderBarActions>
+    <HeaderBarActions className="t-header-bar__search">
         <Button
             innerClassName={innerButtonClassName}
             onClick={onClick}

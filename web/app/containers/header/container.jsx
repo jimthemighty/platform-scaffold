@@ -10,10 +10,11 @@ import classnames from 'classnames'
 
 import * as headerActions from './actions'
 import * as miniCartActions from '../../modals/mini-cart/actions'
-import {openModal} from 'progressive-web-sdk/dist/store/modals/actions'
-import {NAVIGATION_MODAL} from '../../modals/constants'
+import {openModal} from '../../modals/actions'
+import {NAVIGATION_MODAL, MORE_MENU} from '../../modals/constants'
 import * as selectors from './selectors'
 import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
+import {isStandaloneApp} from '../app/selectors'
 
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
@@ -25,6 +26,8 @@ import HeaderTitle from './partials/header-title'
 import StoresAction from './partials/stores-action'
 import CartAction from './partials/cart-action'
 import SearchAction from './partials/search-action'
+import BackAction from './partials/back-action'
+import MoreMenuAction from './partials/more-action'
 
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 
@@ -67,7 +70,8 @@ class Header extends React.Component {
         const newIsCollapsed = window.pageYOffset > this.headerHeight
 
         // Don't trigger the action unless things have changed
-        if (newIsCollapsed !== isCollapsed) {
+        // Don't trigger on A2HS / Standalone mode
+        if (newIsCollapsed !== isCollapsed && !this.props.isStandaloneApp) {
             this.props.toggleHeader(newIsCollapsed)
         }
     }
@@ -77,12 +81,16 @@ class Header extends React.Component {
             clearSuggestions,
             onMenuClick,
             onMiniCartClick,
+            onMoreMenuClick,
             onSearchOpenClick,
             onSearchCloseClick,
+            goBack,
             isCollapsed,
+            isStandaloneApp,
             itemCount,
             searchIsOpen,
-            searchSuggestions
+            searchSuggestions,
+            showBackButton
         } = this.props
 
         if (isRunningInAstro) {
@@ -96,18 +104,30 @@ class Header extends React.Component {
             't--hide-label': isCollapsed
         })
 
+        const headerBarClassNames = classnames('t-header__bar', {
+            't--standalone': isStandaloneApp
+        })
         const searchIcon = <Icon name="search" title="Submit search" />
         const clearIcon = <Icon name="close" title="Clear search field" />
 
         return (
             <header className="t-header" ref={(el) => { this.headerHeight = el ? el.scrollHeight : Number.MAX_VALUE }}>
-                <div className="t-header__bar">
+                <div className={headerBarClassNames}>
                     <HeaderBar>
-                        <NavigationAction innerButtonClassName={innerButtonClassName} onClick={onMenuClick} />
+                        {showBackButton ?
+                            <BackAction innerButtonClassName={innerButtonClassName} onClick={goBack} />
+                            :
+                            <NavigationAction innerButtonClassName={innerButtonClassName} onClick={onMenuClick} />
+                        }
                         <SearchAction innerButtonClassName={innerButtonClassName} onClick={onSearchOpenClick} />
                         <HeaderTitle isCollapsed={isCollapsed} />
-                        <StoresAction innerButtonClassName={innerButtonClassName} />
+                        {!isStandaloneApp &&
+                            <StoresAction innerButtonClassName={innerButtonClassName} />
+                        }
                         <CartAction innerButtonClassName={innerButtonClassName} onClick={onMiniCartClick} />
+                        {isStandaloneApp &&
+                            <MoreMenuAction innerButtonClassName={innerButtonClassName} onClick={onMoreMenuClick} />
+                        }
                     </HeaderBar>
                 </div>
 
@@ -145,31 +165,39 @@ class Header extends React.Component {
 
 Header.propTypes = {
     clearSuggestions: PropTypes.func,
+    goBack: PropTypes.func,
     isCollapsed: PropTypes.bool,
+    isStandaloneApp: PropTypes.bool,
     itemCount: PropTypes.number,
     searchIsOpen: PropTypes.bool,
     searchQueryChanged: PropTypes.func,
     searchSubmit: PropTypes.func,
     searchSuggestions: PropTypes.array,
+    showBackButton: PropTypes.bool,
     toggleHeader: PropTypes.func,
     onMenuClick: PropTypes.func,
     onMiniCartClick: PropTypes.func,
+    onMoreMenuClick: PropTypes.func,
     onSearchCloseClick: PropTypes.func,
     onSearchOpenClick: PropTypes.func,
 }
 
 const mapStateToProps = createPropsSelector({
     isCollapsed: selectors.getIsCollapsed,
+    isStandaloneApp,
     itemCount: getCartSummaryCount,
     searchIsOpen: selectors.getSearchIsOpen,
-    searchSuggestions: selectors.getSearchSuggestions
+    searchSuggestions: selectors.getSearchSuggestions,
+    showBackButton: selectors.showBackButton
 })
 
 const mapDispatchToProps = {
     onMenuClick: () => openModal(NAVIGATION_MODAL, UI_NAME.menu),
     onMiniCartClick: miniCartActions.requestOpenMiniCart,
-    onSearchOpenClick: headerActions.openSearch,
-    onSearchCloseClick: headerActions.closeSearch,
+    goBack: headerActions.goBack,
+    onSearchOpenClick: headerActions.openSearchModal,
+    onSearchCloseClick: headerActions.closeSearchModal,
+    onMoreMenuClick: () => openModal(MORE_MENU, 'more_menu'),
     searchSubmit: headerActions.searchSubmit,
     toggleHeader: headerActions.toggleHeader,
     searchQueryChanged: headerActions.searchQueryChanged,

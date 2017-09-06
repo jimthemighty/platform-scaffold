@@ -5,6 +5,7 @@ import {Router as SDKRouter, Route, IndexRoute} from 'progressive-web-sdk/dist/r
 import {Provider} from 'react-redux'
 
 import {setFetchedPage} from 'progressive-web-sdk/dist/store/offline/actions'
+import {pushHistoryItem, setIsHistoryPage} from './containers/header/actions'
 
 // Containers
 import App from './containers/app/container'
@@ -75,9 +76,20 @@ if (isRunningInAstro) {
 }
 
 const initPage = (initAction) => (url, routeName) => (dispatch, getState) => {
+    const currentState = getState()
+    const isHistoryPage = currentState.ui && currentState.ui.header.get('isHistoryPage')
+
+    // If we're landing on a page navigated to from the "Back" button,
+    // we don't want to push the history item onto the stack
+    if (isHistoryPage) {
+        dispatch(setIsHistoryPage(false))
+    } else {
+        dispatch(pushHistoryItem(url))
+    }
+
     return dispatch(initAction(url, routeName))
         .then(() => {
-            trackPerformance(PERFORMANCE_METRICS.isSavedPage, hasFetchedCurrentPath(getState()) ? 'true' : 'false')
+            trackPerformance(PERFORMANCE_METRICS.isSavedPage, hasFetchedCurrentPath(currentState) ? 'true' : 'false')
             dispatch(setFetchedPage(url))
         })
         .then(() => {
@@ -85,7 +97,7 @@ const initPage = (initAction) => (url, routeName) => (dispatch, getState) => {
             trackPerformance(PERFORMANCE_METRICS.templateAPIEnd)
         })
         .catch((error) => console.error(`Error executing fetch action for ${routeName}`, error))
-        .then(() => dispatch(checkIfOffline()))
+        .then(() => dispatch(checkIfOffline(url, routeName)))
 }
 
 const Router = ({store}) => (
@@ -175,7 +187,8 @@ const Router = ({store}) => (
                 />
 
                 <Route component={Login} path="*/Account-Show" routeName="signin" fetchAction={initPage(initLoginPage)} />
-                <Route component={AccountDashboard} path="*/Account-Show?dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
+                <Route component={AccountInfo} path="*/Account-EditProfile" routeName="accountInfo" fetchAction={initPage(initAccountInfoPage)} />
+                <Route component={AccountDashboard} path="*/Account-Show/dashboard" routeName="account" fetchAction={initPage(initAccountDashboardPage)} />
                 <Route component={AccountAddress} path="*/Address-List" routeName="accountAddress" fetchAction={initPage(initAccountAddressPage)} />
                 <Route component={AccountOrderList} path="*/Order-History" routeName="accountOrderList" fetchAction={initPage(initAccountOrderListPage)} />
                 <Route component={AccountViewOrder} path="*/Order-History*?showOrder*" routeName="accountViewOrder" fetchAction={initPage(initAccountViewOrderPage)} />

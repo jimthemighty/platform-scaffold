@@ -12,7 +12,7 @@ import {
 import {receiveWishlistProductData} from 'progressive-web-sdk/dist/integration-manager/products/results'
 import {parseWishlistProducts} from './parsers'
 import {receiveFormInfo} from '../actions'
-
+import {isLocalStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {makeRequest} from 'progressive-web-sdk/dist/utils/fetch-utils'
 
 export const buildFormData = (formValues) => {
@@ -104,4 +104,19 @@ export const updateCustomerAddresses = () => (dispatch) => {
         .then((response) => response.json())
         .then(({customer: {addresses}}) => addresses.map((address) => parseAddress(address)))
         .then((addresses) => dispatch(receiveSavedAddresses(addresses)))
+}
+
+export const readLoggedInState = () => {
+    const useLocalStorage = isLocalStorageAvailable()
+    let magentoStorage
+
+    if (useLocalStorage) {
+        const magentoCache = localStorage.getItem('mage-cache-storage')
+        magentoStorage = magentoCache ? JSON.parse(magentoCache) : {}
+    } else {
+        const magentoCache = getCookieValue('ls_mage-cache-storage')
+        magentoStorage = magentoCache ? JSON.parse(decodeURIComponent(magentoCache)) : {}
+    }
+
+    return !!(magentoStorage.customer && magentoStorage.customer.fullname)
 }

@@ -1,4 +1,4 @@
-/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, SITE_NAME, MESSAGING_ENABLED, DEBUG */
+/* global AJS_SLUG, NATIVE_WEBPACK_ASTRO_VERSION, MESSAGING_SITE_ID, SITE_NAME, MESSAGING_ENABLED, DEBUG, WEBPACK_NON_PWA_ENABLED */
 import {getAssetUrl, getBuildOrigin, loadAsset, initCacheManifest} from 'progressive-web-sdk/dist/asset-utils'
 import {
     documentWriteSupported,
@@ -8,7 +8,7 @@ import {
     loadScriptAsPromise,
     preventDesktopSiteFromRendering
 } from 'progressive-web-sdk/dist/utils/utils'
-import {shouldPreview, loadPreview, isV8Tag} from 'progressive-web-sdk/dist/utils/preview-utils'
+import {isPreview, isV8Tag, loadPreview, shouldPreview} from 'progressive-web-sdk/dist/utils/preview-utils'
 import {displayPreloader} from 'progressive-web-sdk/dist/preloader'
 import cacheHashManifest from '../tmp/loader-cache-hash-manifest.json'
 import {isRunningInAstro} from './utils/astro-integration'
@@ -30,6 +30,7 @@ import preloadJS from 'raw-loader!./preloader/preload.js' // eslint-disable-line
 
 const ASTRO_VERSION = NATIVE_WEBPACK_ASTRO_VERSION // replaced at build time
 const messagingEnabled = MESSAGING_ENABLED  // replaced at build time
+const nonPwaEnabled = WEBPACK_NON_PWA_ENABLED // replaced at build time
 
 const CAPTURING_CDN = '//cdn.mobify.com/capturejs/capture-latest.min.js'
 const ASTRO_CLIENT_CDN = `//assets.mobify.com/astro/astro-client-${ASTRO_VERSION}.min.js`
@@ -49,9 +50,26 @@ const timingStart = navigationStart || mobifyStart
 //  a preview environment. `web/service-worker-loader.js` will use this value
 //  to determine whether it should load from a local development server, or
 //  from the CDN.
-const IS_LOCAL_PREVIEW = getBuildOrigin().indexOf('cdn.mobify.com') === -1
+const IS_LOADED_LOCALLY = getBuildOrigin().indexOf('cdn.mobify.com') === -1
 
-setLoaderDebug(DEBUG || IS_LOCAL_PREVIEW)
+//  True if the loader is being loaded in preview mode (either as detected
+//  by the SDK, or if the V8.1 tag set the flag.
+const IS_PREVIEW = isPreview() || window.Mobify.isPreview
+
+//  True if the loader has been loaded via a V8+ tag
+const IS_V8_TAG = isV8Tag()
+
+//  If and only if IS_PREVIEW is true, this defines whether the preview
+//  is for PWA mode (true) or non-PWA mode (false). If IS_PREVIEW is
+//  false, this value has no meaning.
+const IS_PREVIEW_PWA_MODE = !(
+    // This flag is set by the V8.1 tag
+    window.Mobify.nonPWAMode ||
+    // Test the hash directly to support earlier tags
+    /non-pwa=1/.test(window.location.hash)
+)
+
+setLoaderDebug(DEBUG || IS_PREVIEW)
 
 window.Progressive = {
     AstroPromise: Promise.resolve({}),
@@ -78,7 +96,15 @@ if ('PerformanceObserver' in window) {
             }
         }
     })
-    paintObserver.observe({entryTypes: ['paint']})
+    try {
+        paintObserver.observe({entryTypes: ['paint']})
+    } catch (e) {
+        // If the `entryTypes` doesn't contain any supported entries (e.g. Safari 11)
+        // https://w3c.github.io/performance-timeline/#dom-performanceobserver-observe()
+        if (e.name !== 'TypeError') {
+            throw e
+        }
+    }
 }
 
 const trackTTI = () => {
@@ -136,30 +162,60 @@ const isPWARoute = () => {
     return ReactRegexes.some((regex) => regex.test(window.location.pathname))
 }
 
+/**
+ * Determine if the browser is one that supports PWAs.
+ *
+ * If loaded by a V8+ tag, the decision is based on the shouldLoadPWA
+ * flag set by the tag. For a non V8 tag, we check the UA directly.
+ *
+ * @return {boolean} true if this browser supports PWAs.
+ */
 const isSupportedPWABrowser = () => {
-    // By default, the PWA will run on all mobile browsers except Samsung and Firefox.
+    // By default, the PWA will run on all mobile browsers except Samsung
+    // and Firefox. The tag contains a browser test that sets the
+    // window.Mobify.shouldLoadPWA flag for a set of browsers, but this
+    // function may also apply stricter checks.
     const ua = window.navigator.userAgent
-    return /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua) &&
-            !isSamsungBrowser(ua) &&
-            !isFirefoxBrowser(ua)
+    return (
+        // For a V8 tag, use the flag set by the tag
+        (IS_V8_TAG && window.Mobify.shouldLoadPWA) ||
+        // For a non-V8 tag check the UA directly
+        /ip(hone|od)|android.*(mobile)|blackberry.*applewebkit|bb1\d.*mobile/i.test(ua)
+    ) &&
+    // Always return false if this is Firefox or a Samsung browser
+    !isSamsungBrowser(ua) &&
+    !isFirefoxBrowser(ua)
 }
 
-const MINIMUM_NON_PWA_CHROME = 59   // todo!
+const MINIMUM_NON_PWA_CHROME = 49
+const MINIMUM_NON_PWA_FIREFOX = 49
+
 /**
  * Returns true if the browser supports the nonPWA client. Note that
- * isSupportedPWABrowser and isSupportedNonPWAMessagingBrowser *might* both
+ * isSupportedPWABrowser and isSupportedNonPWABrowser *might* both
  * return true for a given browser; support is not mutually exclusive.
+ * By default, non-PWA mode will run on Chrome (above
+ * a minimum version) and Firefox.
  * @returns {boolean}
  */
-const isSupportedNonPWAMessagingBrowser = () => {
-    // By default, non-PWA mode will run on Chrome (above
-    // minimum version numbers).
-    // todo - firefox?
+const isSupportedNonPWABrowser = () => {
+    // If service workers are not supported, then we are not a non-pwa
+    // browser, even in preview mode.
     if (!('serviceWorker' in navigator)) {
         return false
     }
-    const raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
-    return raw ? (parseInt(raw[2], 10) >= MINIMUM_NON_PWA_CHROME) : false
+
+    let match = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)
+    if (match && parseInt(match[2], 10) >= MINIMUM_NON_PWA_CHROME) {
+        return true
+    }
+
+    match = navigator.userAgent.match(/Firefox\/([0-9]+)\./)
+    if (match && parseInt(match[1], 10) >= MINIMUM_NON_PWA_FIREFOX) {
+        return true
+    }
+
+    return false
 }
 
 /**
@@ -183,7 +239,10 @@ const getServiceWorkerURL = (pwaMode) => {
      */
     // The 'pwa=1' or 'pwa=0' parameter in this URL should not change format - the
     // worker does a regex test to match the exact string.
-    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOCAL_PREVIEW}&b=${cacheHashManifest.buildDate}&pwa=${pwaMode ? 1 : 0}`
+    // The IS_LOADED_LOCALLY flag is used to set the value of the `preview`
+    // query parameter. Technically, this parameter defines whether the main code
+    // of the worker should come from the local development server.
+    const SW_LOADER_PATH = `/service-worker-loader.js?preview=${IS_LOADED_LOCALLY}&b=${cacheHashManifest.buildDate}&pwa=${pwaMode ? 1 : 0}`
 
     const workerPathElements = [SW_LOADER_PATH]
 
@@ -375,7 +434,13 @@ const waitForBody = () => {
  * loaded.
  */
 const loadPWA = () => {
-    trackTTI()
+    try {
+        trackTTI()
+    } catch (e) {
+        if (typeof console !== 'undefined') {
+            console.error(e.message)
+        }
+    }
     // We need to check if loadScriptsSynchronously is undefined because if it's
     // previously been set to false, we want it to remain set to false.
     if (window.loadScriptsSynchronously === undefined) {
@@ -383,7 +448,7 @@ const loadPWA = () => {
         // script tags via document.write, so we want to detect for poor connections
         // and load async in those cases. More info can be found here:
         // https://developers.google.com/web/updates/2016/08/removing-document-write
-        window.loadScriptsSynchronously = documentWriteSupported() && isV8Tag()
+        window.loadScriptsSynchronously = documentWriteSupported() && IS_V8_TAG
     }
 
     const neededPolyfills = getNeededPolyfills()
@@ -401,6 +466,11 @@ const loadPWA = () => {
 
     initCacheManifest(cacheHashManifest)
     triggerAppStartEvent(true)
+
+    loadAsset('meta', {
+        name: 'format-detection',
+        content: 'telephone=no'
+    })
 
     /* eslint-disable max-len */
     loadAsset('meta', {
@@ -566,10 +636,19 @@ if (shouldPreview()) {
     loadPreview()
 } else {
     // Run the app.
-    if (isSupportedPWABrowser() && isPWARoute()) {
+    if (
+        // Load the PWA if the browser supports it and the route matches...
+        (isSupportedPWABrowser() && isPWARoute()) ||
+        // ...or if we are in PWA preview mode (force-load the PWA)
+        (IS_PREVIEW && IS_PREVIEW_PWA_MODE)
+    ) {
+        loaderLog('Starting in PWA mode')
         loadPWA()
-    } else if (isSupportedNonPWAMessagingBrowser()) {
-        loaderLog('Starting setup for nonPWA mode')
+    } else if (nonPwaEnabled && isSupportedNonPWABrowser()) {
+        // In preview mode, we arrive here when IS_PREVIEW_PWA_MODE is
+        // false - the default for preview is to load the PWA, not non-PWA
+        // mode.
+        loaderLog('Starting in nonPWA mode')
         initCacheManifest(cacheHashManifest)
 
         // This a browser that supports our non-PWA mode, so we can assume that

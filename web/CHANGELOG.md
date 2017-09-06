@@ -1,4 +1,16 @@
 ## To be released
+- Update header bar when displaying in Add to homescreen mode [#983](https://github.com/mobify/platform-scaffold/pull/983)
+- Add Share to PDP [#963](https://github.com/mobify/platform-scaffold/pull/963)
+- Fix account dashboard path [#986](https://github.com/mobify/platform-scaffold/pull/986)
+- Fetch shipping methods upon shipping address form completion [#990](https://github.com/mobify/platform-scaffold/pull/990)
+- Added Offline mode analytics tracking [#988](https://github.com/mobify/platform-scaffold/pull/988)
+    - Dispatch actions to store data for offline mode
+    - Dispatch actions to send analytics data about offline mode session
+    - Remove template higher order component from offline container
+- Fix bug with account login/logout for Merlin's connector [#992](https://github.com/mobify/platform-scaffold/pull/992)
+- Add lock/unlock scroll when open/closing modals [#989](https://github.com/mobify/platform-scaffold/pull/989)
+
+## 0.20.0 (August 24, 2017)
 - Add "View Orders" list to My Account [#912](https://github.com/mobify/platform-scaffold/pull/912)
 - Add Edit, Delete, and Add to account addresses [#892](https://github.com/mobify/platform-scaffold/pull/892)
 - Add view wishlist page to app
@@ -18,6 +30,7 @@
 - Update the Mobify V8 tag [#923](https://github.com/mobify/platform-scaffold/pull/923)
 - Add performance metrics instrumentation [#926](https://github.com/mobify/platform-scaffold/pull/926)
 - Functionality to edit & remove wishlist items [#934](https://github.com/mobify/platform-scaffold/pull/934)
+- Support force-loading in both PWA or nonPWA mode in preview [#938](https://github.com/mobify/platform-scaffold/pull/938)
 
 ## 0.17.3 (July 7, 2017)
 - Moved a pair of browser storage detection methods to SDK [#850](https://github.com/mobify/platform-scaffold/pull/850)
