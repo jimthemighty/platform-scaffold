@@ -5,7 +5,7 @@ counter=0
 while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | awk '{print $3}')" ]; do 
     echo "still updating chrome..."
     if [ "$counter" -gt 10 ]; then
-        cat logs/installChrome.log
+        cat logs/apt-get.log
         echo 'installing Chrome Failed.'
         exit 1
     else
