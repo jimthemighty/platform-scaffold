@@ -13,7 +13,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
-import {isStandalone} from '../../utils/utils'
+import {isStandalone} from 'progressive-web-sdk/dist/utils/utils'
 import {
     setPageFetchError,
     clearPageFetchError,
