@@ -22,7 +22,7 @@ import {
     trackOfflinePage,
     clearOfflinePages
 } from 'progressive-web-sdk/dist/store/offline/actions'
-import {sendOfflineModeUsedAnalytics, sendOfflinePageview} from 'progressive-web-sdk/dist/analytics/actions'
+import {sendOfflineModeUsedAnalytics, sendOfflinePageview, sendLaunchedFromHomeScreenAnalytics} from 'progressive-web-sdk/dist/analytics/actions'
 import {OFFLINE_ASSET_URL} from './constants'
 import {closeModal} from '../../modals/actions'
 import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
@@ -39,8 +39,11 @@ export const lockScroll = createAction('Lock Scroll')
 export const unlockScroll = createAction('Unock Scroll')
 
 export const checkIfStandAlone = () => (dispatch) => {
-    const isStandAloneFlag = isStandalone()
-    dispatch(setStandAloneAppFlag(isStandAloneFlag))
+    const isAppStandalone = isStandalone()
+    if (isAppStandalone) {
+        dispatch(sendLaunchedFromHomeScreenAnalytics())
+    }
+    dispatch(setStandAloneAppFlag(isAppStandalone))
 }
 
 const sendOfflineAnalytics = (offlineModeStartTime) => (dispatch, getState) => {
