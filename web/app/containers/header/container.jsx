@@ -14,7 +14,7 @@ import {openModal} from '../../modals/actions'
 import {NAVIGATION_MODAL, MORE_MENU} from '../../modals/constants'
 import * as selectors from './selectors'
 import {getCartSummaryCount} from 'progressive-web-sdk/dist/store/cart/selectors'
-import {isStandaloneApp} from '../app/selectors'
+import {isStandaloneApp} from 'progressive-web-sdk/dist/store/app/selectors'
 
 import {HeaderBar} from 'progressive-web-sdk/dist/components/header-bar'
 import Icon from 'progressive-web-sdk/dist/components/icon'
