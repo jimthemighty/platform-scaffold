@@ -134,6 +134,17 @@ jobs:
           path: web/tests/performance/lighthouse/reports/
           when: always
 
+  deploy:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - *restore_build
+      - run:
+          name: Deploy Bundle
+          command: scripts/ci-deploy.sh
+          working_directory: /home/ubuntu/platform-scaffold/web/
+
 workflows:
   version: 2
   build_and_test:
@@ -148,3 +159,14 @@ workflows:
       - test-performance:
           requires:
             - build
+      - deploy:
+          requires:
+            - build
+            - test-unit
+            - test-e2e
+            - test-performance
+          filter:
+            branches:
+              only: 
+               - master
+               - release-*
