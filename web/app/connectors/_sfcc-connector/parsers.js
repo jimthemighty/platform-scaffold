@@ -3,7 +3,8 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getSiteID, getCategoryPath} from './config'
-import {stringToTitleCase, formatPrice} from '../../utils/utils'
+import {stringToTitleCase} from '../../utils/utils'
+import {formatPrice} from '../../utils/money-utils'
 
 const parseImages = (imageGroups) => {
     const largeImages = imageGroups.filter((imageGroup) => imageGroup.view_type === 'large')[0]
@@ -49,7 +50,7 @@ export const parseProductDetails = ({id, name, price, inventory, long_descriptio
     return {
         id,
         title: name,
-        price: `${formatPrice(price)}`,
+        price: formatPrice(price),
         description: long_description,
         available: inventory.orderable,
         thumbnail: images[0],
@@ -71,7 +72,7 @@ export const parseBasketContents = ({product_items, product_sub_total, product_t
         summary_count += quantity
         return {
             product_name,
-            product_price: `${formatPrice(base_price)}`,
+            product_price: formatPrice(base_price),
             product_image: {},
             qty: quantity,
             // item_id is different from product_id

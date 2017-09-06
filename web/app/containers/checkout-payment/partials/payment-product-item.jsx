@@ -10,6 +10,8 @@ import Image from 'progressive-web-sdk/dist/components/image'
 // Local Component
 import ProductItem from '../../../components/product-item'
 
+import {parsePrice} from '../../../utils/money-utils'
+
 const PaymentProductItem = ({
     id,
     thumbnail,
@@ -29,8 +31,8 @@ const PaymentProductItem = ({
         />
     )
 
-    const linePriceValue = parseFloat(linePrice.substring(1))
-    const priceValue = parseFloat(price.substring(1)) * quantity
+    const linePriceValue = parsePrice(linePrice)
+    const priceValue = parsePrice(price) * quantity
     const discount = linePriceValue < priceValue
 
     return (

@@ -7,7 +7,7 @@ import {isSessionStorageAvailable} from 'progressive-web-sdk/dist/utils/utils'
 import {getProductById} from 'progressive-web-sdk/dist/store/products/selectors'
 import {getProductHref} from './parsers'
 import {getApiEndPoint, getRequestHeaders} from './config'
-import {formatPrice} from '../../utils/utils'
+import {formatPrice} from '../../utils/money-utils'
 
 const AUTH_KEY_NAME = 'mob-auth'
 const BASKET_KEY_NAME = 'mob-basket'

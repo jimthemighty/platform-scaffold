@@ -3,7 +3,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
 import {getProductHref} from '../parsers'
-import {formatPrice} from '../../../utils/utils'
+import {formatPrice} from '../../../utils/money-utils'
 
 /* eslint-disable camelcase */
 export const parseCartContents = ({
@@ -24,8 +24,8 @@ export const parseCartContents = ({
         // so that we can use the same route. SFCC doesn't seem to have the same
         // concept. See router.jsx
         configureUrl: `/checkout/cart/configure/id/${item_id}/product_id/${product_id}/`,
-        itemPrice: `${formatPrice(price_after_order_discount / quantity)}`,
-        linePrice: `${formatPrice(price_after_order_discount)}`
+        itemPrice: formatPrice(price_after_order_discount / quantity),
+        linePrice: formatPrice(price_after_order_discount)
     }))
 
     const discounts = order_price_adjustments.map(({coupon_code = '', item_text, price}) => {

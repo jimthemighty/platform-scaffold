@@ -11,7 +11,7 @@ import {openModal} from '../../../modals/actions'
 import {getSelectedShippingLabel, getPostcode} from '../../../store/checkout/shipping/selectors'
 import {getCheckoutShippingURL} from '../../app/selectors'
 import {removePromoCode} from '../actions'
-import {formatPrice} from '../../../utils/utils'
+import {formatPrice, parsePrice} from '../../../utils/money-utils'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import CartPromoForm from './cart-promo-form'
@@ -81,7 +81,7 @@ const CartSummary = ({
 
     const renderDiscountTotal = () => {
         const totalDiscount = discounts.reduce((total, discount) => {
-            const current = parseFloat(discount.amount.replace('$', ''))
+            const current = parsePrice(discount.amount)
             return total + current
         }, 0)
 

@@ -5,6 +5,7 @@
 import React, {PropTypes} from 'react'
 import classnames from 'classnames'
 import Field from 'progressive-web-sdk/dist/components/field'
+import {parsePrice} from '../../utils/money-utils'
 
 /**
  * Displays the price for an item
@@ -20,8 +21,8 @@ const ItemPrice = ({
 }) => {
     const wrapperClass = classnames(className, 'c-item-price')
 
-    const linePriceValue = linePrice ? parseFloat(linePrice.substring(1)) : 0
-    const priceValue = originalPrice ? parseFloat(originalPrice.substring(1)) * quantity : 0
+    const linePriceValue = linePrice ? parsePrice(linePrice) : 0
+    const priceValue = originalPrice ? parsePrice(originalPrice) * quantity : 0
     const discount = linePriceValue < priceValue
 
     return (
