@@ -11,7 +11,6 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import classNames from 'classnames'
 import WebFont from 'webfontloader'
 import {isRunningInAstro} from '../../utils/astro-integration'
-import {isStandalone} from '../../utils/utils'
 
 import {initApp} from 'progressive-web-sdk/dist/integration-manager/app/commands'
 
@@ -52,7 +51,7 @@ class App extends React.Component {
         this.hidePreloaderWhenCSSIsLoaded()
         this.props.fetchSvgSprite()
         this.props.initApp()
-        this.props.setStandAloneAppFlag(isStandalone())
+        this.props.setStandAloneAppFlag()
         WebFont.load({
             google: {
                 families: ['Oswald:200,400']
@@ -131,6 +130,13 @@ class App extends React.Component {
             }
         }
 
+        const showOnlyOffline = fetchError && !hasFetchedCurrentPath
+
+        const mainAppWrapperClasses = classNames({
+            'u-flexbox u-flex u-direction-column': !showOnlyOffline,
+            'u-display-none': showOnlyOffline
+        })
+
         return (
             <Lockup locked={scrollManager.locked}>
                 <div
@@ -169,22 +175,17 @@ class App extends React.Component {
 
                             </div>
 
-                            {
-                                // Display main content if we have no network errors or
-                                // if we've already got the content in the store
-                                (!fetchError || hasFetchedCurrentPath) ?
-                                    <div className="u-flexbox u-flex u-direction-column">
-                                        <main id="app-main" className="u-flex" role="main">
-                                            {this.props.children}
-                                        </main>
+                            <div className={mainAppWrapperClasses} >
+                                <main id="app-main" className="u-flex" role="main">
+                                    {this.props.children}
+                                </main>
 
-                                        <div id="app-footer" className="u-flex-none">
-                                            <CurrentFooter />
-                                        </div>
-                                    </div>
-                                :
-                                    <Offline location={children.props.location} route={routeProps} />
-                            }
+                                <div id="app-footer" className="u-flex-none">
+                                    <CurrentFooter />
+                                </div>
+                            </div>
+
+                            {showOnlyOffline && <Offline location={children.props.location} route={routeProps} />}
                         </div>
                     </div>
 
@@ -242,7 +243,7 @@ const mapDispatchToProps = {
     toggleHideApp: appActions.toggleHideApp,
     fetchPage: (fetchAction, url, routeName) => fetchAction(url, routeName),
     initApp,
-    setStandAloneAppFlag: appActions.setStandAloneAppFlag
+    setStandAloneAppFlag: appActions.checkIfStandAlone
 
 }
 

@@ -38,7 +38,6 @@ export default handleActions({
     [setAccountOrderListURL]: mergePayload,
     [appActions.updateSvgSprite]: mergePayload,
     [appActions.toggleHideApp]: mergePayload,
-    [appActions.setStandAloneAppFlag]: mergePayload,
     [appActions.unlockScroll]: (state) => {
         return state.mergeDeep({
             scrollManager: {
