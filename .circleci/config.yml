@@ -142,7 +142,7 @@ jobs:
       - *restore_build
       - run:
           name: Deploy Bundle
-          command: scripts/ci-deploy.sh
+          command: bash ./scripts/ci-deploy.sh
           working_directory: /home/ubuntu/platform-scaffold/web/
 
 workflows:
@@ -165,7 +165,7 @@ workflows:
             - test-unit
             - test-e2e
             - test-performance
-          filter:
+          filters:  
             branches:
-              only: 
-               - master
+              only: [master, release-*]
+               
