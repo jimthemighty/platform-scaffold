@@ -29,7 +29,7 @@ const getBaseURL = () => `/on/demandware.store/Sites-${getSiteID()}-Site/default
 
 export const getHomeURL = () => `${getBaseURL()}Home-Show`
 export const getSignInURL = () => `${getBaseURL()}Account-Show`
-export const getDashboardURL = () => `${getBaseURL()}Account-Show?dashboard`
+export const getDashboardURL = () => `${getBaseURL()}Account-Show/dashboard`
 export const getSignOutURL = () => `${getBaseURL()}Logout-Logout`
 export const getCheckoutShippingURL = () => `${getBaseURL()}COShipping-Start`
 export const getCartURL = () => `${getBaseURL()}Cart-Show`

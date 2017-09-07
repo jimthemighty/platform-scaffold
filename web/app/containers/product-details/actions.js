@@ -19,10 +19,10 @@ import {getAddToCartFormValues} from '../../store/form/selectors'
 import {addToCart, updateCartItem} from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {getProductVariantData, addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {updateWishlistItem} from 'progressive-web-sdk/dist/integration-manager/account/commands'
-import {openModal, closeModal} from 'progressive-web-sdk/dist/store/modals/actions'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {PRODUCT_DETAILS_ITEM_ADDED_MODAL} from '../../modals/constants'
+import {closeModal, openModal} from '../../modals/actions'
 import * as appActions from '../app/actions'
 
 export const setIsWishlistAdded = createAction('Set is wishlist added', ['isWishlistAdded'])

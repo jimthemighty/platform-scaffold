@@ -19,7 +19,28 @@ const header = handleActions({
     [headerActions.openSearch]: (state) => state.set('searchIsOpen', true),
     [headerActions.closeSearch]: (state) => state.set('searchIsOpen', false).set('searchSuggestions', null),
     [headerActions.clearSuggestions]: (state) => state.set('searchSuggestions', null),
-    [receiveSearchSuggestions]: (state, {payload}) => state.set('searchSuggestions', payload)
+    [headerActions.pushHistoryItem]: (state, {payload}) => {
+        const historyUrl = payload.replace(/[?,&]homescreen=1/, '')
+        const appHistory = state.get('appHistory')
+
+        if (appHistory && appHistory.last() === historyUrl) {
+            return state
+        }
+
+        if (appHistory && appHistory.size) {
+            return state.setIn(['appHistory'], Immutable.fromJS(state.get('appHistory').concat(historyUrl)))
+        }
+
+        return state.setIn(['appHistory'], Immutable.fromJS([historyUrl]))
+    },
+    [headerActions.popHistoryItem]: (state) => {
+        if (state.get('appHistory').size > 1) {
+            return state.setIn(['appHistory'], state.get('appHistory').pop()) // pop is safe since this is an Immutable List
+        }
+        return state
+    },
+    [receiveSearchSuggestions]: (state, {payload}) => state.set('searchSuggestions', payload),
+    [headerActions.setIsHistoryPage]: mergePayload
 }, initialState)
 
 

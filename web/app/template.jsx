@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {onRouteChanged} from 'progressive-web-sdk/dist/store/app/actions'
+import {unlockScroll} from './containers/app/actions'
 import {removeAllNotifications} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {incrementPageCount} from 'progressive-web-sdk/dist/store/push-messaging/actions'
 
@@ -34,6 +35,7 @@ const template = (WrappedComponent) => {
             }
 
             dispatch(removeAllNotifications())
+            dispatch(unlockScroll())
         }
 
         componentWillMount() {

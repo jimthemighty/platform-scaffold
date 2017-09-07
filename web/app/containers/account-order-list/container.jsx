@@ -105,7 +105,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage,
                         ))}
                     </div>
                     <Pagination
-                        className="u-margin-top-lg"
+                        className="u-padding-md"
                         onChange={(pageNumber) => setOrderListPage(pageNumber)}
                         currentPage={currentPage}
                         pageCount={numOfOrderPages}
