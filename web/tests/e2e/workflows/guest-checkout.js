@@ -19,7 +19,6 @@ let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
-const ENV = process.env.NODE_ENV || 'test'
 
 export default {
     '@tags': ['checkout'],
@@ -33,8 +32,8 @@ export default {
         pushMessaging = new PushMessaging(browser)
     },
 
-    after: (browser) => {
-        browser.end()
+    after: () => {
+        Home.prototype.closeBrowser()
     },
 
     // The following tests are conducted in sequence within the same session.

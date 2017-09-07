@@ -33,9 +33,9 @@ export default {
         pushMessaging = new PushMessaging(browser)
     },
 
-    after: (browser) => {
+    after: () => {
         // cart.removeItems()
-        browser.end()
+        Home.prototype.closeBrowser()
     },
 
     // The following tests are conducted in sequence within the same session.

@@ -5,7 +5,6 @@
 import Home from '../page-objects/home'
 
 let home
-const ENV = process.env.NODE_ENV || 'test'
 
 // On the homepage, at least the following skip
 // links should be present on the page...
@@ -20,8 +19,8 @@ export default {
         home = new Home(browser)
     },
 
-    after: (browser) => {
-        browser.end()
+    after: () => {
+        Home.prototype.closeBrowser()
     },
 
     'Home Page': () => {
