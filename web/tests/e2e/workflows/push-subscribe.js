@@ -24,8 +24,8 @@ export default {
         browser.timeoutsAsyncScript(2000)
     },
 
-    after: (browser) => {
-        Home.prototype.closeBrowser(browser)
+    after: () => {
+        home.closeBrowser()
     },
 
     'Push Subscribe - Step 1 - Home': () => {

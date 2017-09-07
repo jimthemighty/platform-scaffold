@@ -19,8 +19,8 @@ export default {
         home = new Home(browser)
     },
 
-    after: (browser) => {
-        Home.prototype.closeBrowser(browser)
+    after: () => {
+        home.closeBrowser()
     },
 
     'Home Page': () => {

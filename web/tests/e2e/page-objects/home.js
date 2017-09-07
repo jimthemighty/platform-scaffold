@@ -32,12 +32,13 @@ Home.prototype.openBrowserToHomepage = function() {
         .assert.visible(selectors.wrapper)
 }
 
-Home.prototype.closeBrowser = function(browser) {
+Home.prototype.closeBrowser = function() {
     if (ENV === 'debug') {
         console.log('Debugging, not closing browser')
     } else {
-        browser.end()
+        this.browser.end()
     }
+    return this
 }
 
 Home.prototype.navigateToProductList = function(PRODUCT_LIST_INDEX) {
