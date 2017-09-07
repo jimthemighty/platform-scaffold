@@ -89,7 +89,7 @@ Checkout.prototype.continueToPayment = function() {
         .waitForElementVisible(selectors.continueToPayment)
         // Workaround. Pause for fetching shipping methods.
         .pause(3000)
-        .click(selectors.continueToPayment)
+        .triggerClick(selectors.continueToPayment)
     return this
 }
 
