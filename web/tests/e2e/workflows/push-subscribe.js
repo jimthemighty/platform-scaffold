@@ -12,7 +12,6 @@ let productList
 let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
-const ENV = process.env.NODE_ENV || 'test'
 
 export default {
     '@tags': ['messaging'],
