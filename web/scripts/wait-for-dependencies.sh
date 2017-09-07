@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-
 echo "Waiting for Chrome to finish installing"
 baseline="59"
 counter=0
 while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | awk '{print $3}')" ]; do 
     echo "still updating chrome..."
     if [ "$counter" -gt 10 ]; then
-        cat logs/installChrome.log
+        cat logs/apt-get.log
         echo 'installing Chrome Failed.'
         exit 1
     else
@@ -16,7 +15,6 @@ while [ "$baseline" -gt "$(google-chrome --version | awk -F '.' '{print $1}' | a
 done
 google-chrome --version
 printf "Chrome installed\n"
-
 
 echo "Waiting for npm prod:build to complete"
 while [ ! -f build/loader.js ]; do
@@ -43,4 +41,3 @@ if [[ "$counter" -gt 50 ]]; then
     fi 
 done
 printf "8443 test server is now active\n"      
-
