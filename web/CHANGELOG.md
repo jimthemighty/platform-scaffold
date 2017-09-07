@@ -1,4 +1,6 @@
 ## To be released
+- Update E2E Tests to have debug flag [#1002](https://github.com/mobify/platform-scaffold/pull/1002)
+- Add Circle2.0 config and DockerFile [#983](https://github.com/mobify/platform-scaffold/pull/881)
 - Update header bar when displaying in Add to homescreen mode [#983](https://github.com/mobify/platform-scaffold/pull/983)
 - Add Share to PDP [#963](https://github.com/mobify/platform-scaffold/pull/963)
 - Fix account dashboard path [#986](https://github.com/mobify/platform-scaffold/pull/986)

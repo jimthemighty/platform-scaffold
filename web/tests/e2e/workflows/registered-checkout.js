@@ -19,7 +19,6 @@ let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
-const ENV = process.env.NODE_ENV || 'test'
 
 export default {
     '@tags': ['checkout'],
@@ -33,26 +32,18 @@ export default {
         pushMessaging = new PushMessaging(browser)
     },
 
-    after: (browser) => {
+    after: () => {
         // cart.removeItems()
-        browser.end()
+        home.closeBrowser()
     },
 
     // The following tests are conducted in sequence within the same session.
 
-    'Checkout - Registered - Navigate to Home': (browser) => {
-        if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
-        } else {
-            console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
-        }
-        browser
-            .waitForElementVisible(home.selectors.wrapper)
-            .assert.visible(home.selectors.wrapper)
+    'Checkout - Registered - Step 1 - Navigate to Home': () => {
+        home.openBrowserToHomepage()
     },
 
-    'Checkout - Registered - Navigate from Home to ProductList': (browser) => {
+    'Checkout - Registered - Step 2 - Navigate from Home to ProductList': (browser) => {
         home.navigateToProductList(PRODUCT_LIST_INDEX)
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
@@ -63,18 +54,18 @@ export default {
         pushMessaging.dismissDefaultAsk()
     },
 
-    'Checkout - Registered - Navigate from ProductList to ProductDetails': (browser) => {
+    'Checkout - Registered - Step 3 - Navigate from ProductList to ProductDetails': (browser) => {
         productList.navigateToProductDetails(PRODUCT_INDEX)
         browser
             .waitForElementVisible(productDetails.selectors.productDetailsTemplateIdentifier)
             .assert.visible(productDetails.selectors.productDetailsTemplateIdentifier)
     },
 
-    'Checkout - Registered - Add item to Shopping Cart': () => {
+    'Checkout - Registered - Step 4 - Add item to Shopping Cart': () => {
         productDetails.addItemToCart()
     },
 
-    'Checkout - Registered - Navigate from ProductDetails to Cart': (browser) => {
+    'Checkout - Registered - Step 5 - Navigate from ProductDetails to Cart': (browser) => {
         if (productDetails.inStock) {
             productDetails.navigateToCart()
             browser
@@ -85,7 +76,7 @@ export default {
         }
     },
 
-    'Checkout - Registered - Navigate from Cart to Checkout': (browser) => {
+    'Checkout - Registered - Step 6 - Navigate from Cart to Checkout': (browser) => {
         if (productDetails.inStock) {
             cart.navigateToCheckout()
             browser
@@ -96,7 +87,7 @@ export default {
         }
     },
 
-    'Checkout - Registered - Continue to Registered Checkout': (browser) => {
+    'Checkout - Registered - Step 7 - Continue to Registered Checkout': (browser) => {
         if (productDetails.inStock) {
             checkout.continueAsRegistered()
             browser
@@ -105,14 +96,14 @@ export default {
         }
     },
 
-    'Checkout - Registered - Choose shipping info': (browser) => {
+    'Checkout - Registered - Step 8 - Choose shipping info': (browser) => {
         if (productDetails.inStock) {
             checkout.chooseShippingInfo()
             browser.waitForElementVisible(`${checkout.selectors.addressListOption} .pw--checked`)
         }
     },
 
-    'Checkout - Registered - Fill out Registered Checkout Payment Details form': (browser) => {
+    'Checkout - Registered - Step 9 - Fill out Registered Checkout Payment Details form': (browser) => {
         if (productDetails.inStock) {
             checkout.continueToPayment()
             checkout.fillPaymentInfo()
@@ -122,7 +113,7 @@ export default {
         }
     },
 
-    'Checkout - Registered - Verify Submit Order button is visible': (browser) => {
+    'Checkout - Registered - Step 10 - Verify Submit Order button is visible': (browser) => {
         if (productDetails.inStock) {
             browser
                 .waitForElementVisible(checkout.selectors.placeOrder)
