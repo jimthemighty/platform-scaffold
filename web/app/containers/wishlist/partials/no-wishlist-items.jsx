@@ -11,7 +11,7 @@ const NoWishlistItems = () => (
         <Icon
             name="wishlist-add"
             className="u-color-brand"
-            size="large"
+            size="huge"
         />
         <div className="u-text-align-center u-padding-lg">
             You have no items in your wishlist.
