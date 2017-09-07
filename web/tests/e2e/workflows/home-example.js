@@ -24,16 +24,8 @@ export default {
         browser.end()
     },
 
-    'Home Page': (browser) => {
-        if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
-        } else {
-            console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
-        }
-        browser
-            .waitForElementVisible(home.selectors.wrapper)
-            .assert.visible(home.selectors.wrapper)
+    'Home Page': () => {
+        home.openBrowserToHomepage()
     },
 
     'Skip Links': (browser) => {

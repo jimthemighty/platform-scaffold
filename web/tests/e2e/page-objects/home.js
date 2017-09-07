@@ -1,6 +1,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+const ENV = process.env.NODE_ENV || 'test'
 
 const selectors = {
     wrapper: '.t-home__container',
@@ -18,6 +19,19 @@ const Home = function(browser) {
     this.browser = browser
     this.selectors = selectors
 }
+
+Home.prototype.openBrowserToHomepage = function() {
+    if (ENV === 'production') {
+        this.browser.url(process.env.npm_package_siteUrl)
+    } else {
+        console.log('Running preview.')
+        this.browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+    }
+    this.browser
+        .waitForElementVisible(selectors.wrapper)
+        .assert.visible(selectors.wrapper)
+}
+
 
 Home.prototype.navigateToProductList = function(PRODUCT_LIST_INDEX) {
     // Navigate from Home to ProductList

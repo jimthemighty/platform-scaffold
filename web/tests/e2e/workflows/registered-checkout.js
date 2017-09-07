@@ -40,16 +40,8 @@ export default {
 
     // The following tests are conducted in sequence within the same session.
 
-    'Checkout - Registered - Navigate to Home': (browser) => {
-        if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
-        } else {
-            console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
-        }
-        browser
-            .waitForElementVisible(home.selectors.wrapper)
-            .assert.visible(home.selectors.wrapper)
+    'Checkout - Registered - Navigate to Home': () => {
+        home.openBrowserToHomepage()
     },
 
     'Checkout - Registered - Navigate from Home to ProductList': (browser) => {

@@ -29,16 +29,8 @@ export default {
         browser.end()
     },
 
-    'Push Subscribe - Home': (browser) => {
-        if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
-        } else {
-            console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
-        }
-        browser
-            .waitForElementVisible(home.selectors.wrapper)
-            .assert.visible(home.selectors.wrapper)
+    'Push Subscribe - Home': () => {
+        home.openBrowserToHomepage()
     },
 
     'Push Subscribe - Navigate and Accept Default Ask': (browser) => {
