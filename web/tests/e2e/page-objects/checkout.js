@@ -15,7 +15,7 @@ const selectors = {
     city: 'input[name*="city"]',
     country: 'select[name*="country"]',
     state: '[name*="region"]',
-    postCode: 'input[name*="code"]',
+    postCode: 'input[name*="postcode"]',
     phone: 'input[name*="phone"]',
     addressListOption: '.t-checkout-shipping__shipping-address .pw-field-row',
     shippingMethod: '.t-checkout-shipping__shipping-method .pw--checked',
@@ -31,7 +31,7 @@ const selectors = {
 }
 
 const userData = {
-    // Export a test email and password as environment variables with the following names
+    // TODO: Export a test email and password as environment variables with the following names
     email: 'mobifyautomation@gmail.com',
     password: 'p4ssword',
 
@@ -113,6 +113,9 @@ Checkout.prototype.fillShippingInfo = function() {
         .setValue(selectors.state, userData.state)
         .setValue(selectors.postCode, userData.postCode)
         .setValue(selectors.phone, userData.phone)
+
+        .log('Finished filling out shipping info form fields')
+
     return this
 }
 

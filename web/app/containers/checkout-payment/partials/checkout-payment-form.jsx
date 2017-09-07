@@ -62,7 +62,7 @@ const validate = (values) => {
         errors.cvv = INVALID_TEXT
     }
 
-    if (values.postcode && !isPostalCode(values.postcode)) {
+    if (values.countryId && values.postcode && !isPostalCode(values.postcode, values.countryId.toUpperCase())) {
         errors.postcode = INVALID_TEXT
     }
 

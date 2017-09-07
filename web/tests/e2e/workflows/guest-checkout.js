@@ -34,7 +34,7 @@ export default {
     },
 
     after: (browser) => {
-        browser.end()
+        //browser.end()
     },
 
     // The following tests are conducted in sequence within the same session.

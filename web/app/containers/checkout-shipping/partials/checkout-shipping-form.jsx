@@ -54,7 +54,7 @@ const validate = (values, props) => {
         errors.username = REQUIRED_TEXT
     }
 
-    if (values.postcode && !isPostalCode(values.postcode)) {
+    if (values.countryId && values.postcode && !isPostalCode(values.postcode, values.countryId.toUpperCase())) {
         errors.postcode = 'Enter a valid postal code' // or zip code?
     }
 
