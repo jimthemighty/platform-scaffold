@@ -32,11 +32,11 @@ Home.prototype.openBrowserToHomepage = function() {
         .assert.visible(selectors.wrapper)
 }
 
-Home.prototype.closeBrowser = function() {
+Home.prototype.closeBrowser = function(browser) {
     if (ENV === 'debug') {
         console.log('Debugging, not closing browser')
     } else {
-        this.browser.end()
+        browser.end()
     }
 }
 

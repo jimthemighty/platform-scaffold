@@ -32,8 +32,8 @@ export default {
         pushMessaging = new PushMessaging(browser)
     },
 
-    after: () => {
-        Home.prototype.closeBrowser()
+    after: (browser) => {
+        Home.prototype.closeBrowser(browser)
     },
 
     // The following tests are conducted in sequence within the same session.

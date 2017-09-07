@@ -16,7 +16,7 @@ npm run
 
 ```
 npm install
-npm start
+npm run dev
 ```
 
 ## Deploying Bundle to Mobify Cloud
@@ -224,7 +224,7 @@ Then verify that the minified contents of the build directory are less than a sp
   }
 ```
 
-Run this command:
+Run this command: 
 
 ```
 npm run test:max-file-size
