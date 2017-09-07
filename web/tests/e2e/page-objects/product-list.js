@@ -17,7 +17,7 @@ const ProductList = function(browser) {
 ProductList.prototype.navigateToProductDetails = function(productIndex) {
     // Navigate from ProductList to ProductDetails
     this.browser
-        .log('Navigating to ProductDetails')
+        .log(`Navigating to ProductList number: ${productIndex}`)
         .waitForElementVisible(selectors.productDetailsItem(productIndex))
         .click(selectors.productDetailsItem(productIndex))
         .waitUntilMobified()
