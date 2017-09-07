@@ -28,11 +28,11 @@ export default {
         Home.prototype.closeBrowser()
     },
 
-    'Push Subscribe - Home': () => {
+    'Push Subscribe - Step 1 - Home': () => {
         home.openBrowserToHomepage()
     },
 
-    'Push Subscribe - Navigate and Accept Default Ask': (browser) => {
+    'Push Subscribe - Step 2 - Navigate and Accept Default Ask': (browser) => {
         home.navigateToProductList(PRODUCT_LIST_INDEX)
         browser.waitForElementVisible(productList.selectors.productDetailsItem(1))
 
