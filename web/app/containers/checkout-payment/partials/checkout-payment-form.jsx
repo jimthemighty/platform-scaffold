@@ -6,6 +6,7 @@ import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import isPostalCode from 'validator/lib/isPostalCode'
 
 import {validateFullName, validateCCExpiry, validateCCNumber} from '../../../utils/utils'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
@@ -57,9 +58,12 @@ const validate = (values) => {
         errors.ccexpiry = INVALID_TEXT
     }
 
-
     if (values.cvv && values.cvv.length !== 3) {
         errors.cvv = INVALID_TEXT
+    }
+
+    if (values.postcode && !isPostalCode(values.postcode)) {
+        errors.postcode = INVALID_TEXT
     }
 
     requiredFieldNames.forEach((fieldName) => {

@@ -6,6 +6,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
+import isPostalCode from 'validator/lib/isPostalCode'
+
 import {ADDRESS_FORM_NAME} from '../../../store/form/constants'
 import Button from 'progressive-web-sdk/dist/components/button'
 import {getIsEditing} from '../selectors'
@@ -27,6 +29,10 @@ const validate = (values, props) => {
         'postcode',
         'telephone'
     ]
+
+    if (values.postcode && !isPostalCode(values.postcode)) {
+        errors.postcode = 'Enter a valid postal code'
+    }
 
     requiredFieldNames.forEach((fieldName) => {
         if (!values[fieldName]) {

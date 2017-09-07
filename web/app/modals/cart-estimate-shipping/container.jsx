@@ -6,6 +6,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+import isPostalCode from 'validator/lib/isPostalCode'
+
 import {CART_ESTIMATE_SHIPPING_MODAL} from '../constants'
 import {ESTIMATE_FORM_NAME} from '../../store/form/constants'
 
@@ -34,10 +36,16 @@ const validate = (values) => {
         'countryId',
         'postcode'
     ]
+
     if (!(values.region || values.regionId)) {
         errors.region = REQUIRED_TEXT
         errors.regionId = REQUIRED_TEXT
     }
+
+    if (values.postcode && !isPostalCode(values.postcode)) {
+        errors.postcode = 'Enter a valid postal code' // or zip code?
+    }
+
     requiredFieldNames.forEach((fieldName) => {
         if (!values[fieldName]) {
             errors[fieldName] = REQUIRED_TEXT
