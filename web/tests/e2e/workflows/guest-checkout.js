@@ -19,7 +19,6 @@ let pushMessaging
 
 const PRODUCT_LIST_INDEX = process.env.PRODUCT_LIST_INDEX || 2
 const PRODUCT_INDEX = process.env.PRODUCT_INDEX || 1
-const ENV = process.env.NODE_ENV || 'test'
 
 export default {
     '@tags': ['checkout'],
@@ -33,25 +32,17 @@ export default {
         pushMessaging = new PushMessaging(browser)
     },
 
-    after: (browser) => {
-        browser.end()
+    after: () => {
+        home.closeBrowser()
     },
 
     // The following tests are conducted in sequence within the same session.
 
-    'Checkout - Guest - Navigate to Home': (browser) => {
-        if (ENV === 'production') {
-            browser.url(process.env.npm_package_siteUrl)
-        } else {
-            console.log('Running preview.')
-            browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
-        }
-        browser
-            .waitForElementVisible(home.selectors.wrapper)
-            .assert.visible(home.selectors.wrapper)
+    'Checkout - Guest - Step 1 - Navigate to Home': () => {
+        home.openBrowserToHomepage()
     },
 
-    'Checkout - Guest - Navigate from Home to ProductList': (browser) => {
+    'Checkout - Guest - Step 2 - Navigate from Home to ProductList': (browser) => {
         home.navigateToProductList(PRODUCT_LIST_INDEX)
         browser
             .waitForElementVisible(productList.selectors.productListTemplateIdentifier)
@@ -62,18 +53,18 @@ export default {
         pushMessaging.dismissDefaultAsk()
     },
 
-    'Checkout - Guest - Navigate from ProductList to ProductDetails': (browser) => {
+    'Checkout - Guest - Step 3 - Navigate from ProductList to ProductDetails': (browser) => {
         productList.navigateToProductDetails(PRODUCT_INDEX)
         browser
             .waitForElementVisible(productDetails.selectors.productDetailsTemplateIdentifier)
             .assert.visible(productDetails.selectors.productDetailsTemplateIdentifier)
     },
 
-    'Checkout - Guest - Add item to Shopping Cart': () => {
+    'Checkout - Guest - Step 4 - Add item to Shopping Cart': () => {
         productDetails.addItemToCart()
     },
 
-    'Checkout - Guest - Navigate from ProductDetails to Cart': (browser) => {
+    'Checkout - Guest - Step 5 - Navigate from ProductDetails to Cart': (browser) => {
         if (productDetails.inStock) {
             productDetails.navigateToCart()
             browser
@@ -84,7 +75,7 @@ export default {
         }
     },
 
-    'Checkout - Guest - Navigate from Cart to Checkout': (browser) => {
+    'Checkout - Guest - Step 6 - Navigate from Cart to Checkout': (browser) => {
         if (productDetails.inStock) {
             cart.navigateToCheckout()
             browser
@@ -93,7 +84,7 @@ export default {
         }
     },
 
-    'Checkout - Guest - Fill out Guest Checkout Shipping Info form': (browser) => {
+    'Checkout - Guest - Step 7 - Fill out Guest Checkout Shipping Info form': (browser) => {
         if (productDetails.inStock) {
             checkout.fillShippingInfo()
             browser
@@ -104,7 +95,7 @@ export default {
         }
     },
 
-    'Checkout - Guest - Fill out Guest Checkout Payment Details form': (browser) => {
+    'Checkout - Guest - Step 8 - Fill out Guest Checkout Payment Details form': (browser) => {
         if (productDetails.inStock) {
             checkout.continueToPayment()
             checkout.fillPaymentInfo()
@@ -114,7 +105,7 @@ export default {
         }
     },
 
-    'Checkout - Guest - Verify Place Your Order button is visible': (browser) => {
+    'Checkout - Guest - Step 9 - Verify Place Your Order button is visible': (browser) => {
         if (productDetails.inStock) {
             browser
                 .waitForElementVisible(checkout.selectors.placeOrder)
