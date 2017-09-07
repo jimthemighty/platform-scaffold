@@ -16,7 +16,7 @@ npm run
 
 ```
 npm install
-npm run dev
+npm start
 ```
 
 ## Deploying Bundle to Mobify Cloud
@@ -182,14 +182,29 @@ npm run test:watch
 
 To verify that changes do not break the guest and registered checkout flows:
 
+First have `npm start` running in another tab
+```
+npm run test:e2e
+```
+
+To run only one test:
+```
+npm run test:e2e --test tests/e2e/workflows/home.js
+```
+
+To run both starting the server and e2e:
 ```
 npm run smoke-test
 ```
 
 To run end-to-end tests on the production environment:
-
 ```
 npm run test:e2e-prod
+```
+
+If a test has failed and you would like to debug a single test:
+```
+npm run test:e2e-debug --test test/e2e/workflows/guest-checkout.js
 ```
 
 ## Lighthouse tests
