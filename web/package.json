@@ -147,6 +147,7 @@
     "test:all": "npm run lint && npm test -- --coverage",
     "test:check-lighthouse-score": "node tests/performance/lighthouse/check-lighthouse-score.js",
     "test:e2e": "cross-env NODE_ENV=test node ./node_modules/nightwatch/bin/runner.js -c ./tests/e2e/nightwatch-config.js --suiteRetries 1",
+    "test:e2e-debug": "cross-env NODE_ENV=debug BABEL_ENV=test node ./node_modules/nightwatch/bin/runner.js -c ./tests/e2e/nightwatch-config.js --suiteRetries 0",
     "test:e2e-prod": "cross-env NODE_ENV=production BABEL_ENV=test node ./node_modules/nightwatch/bin/runner.js -c ./tests/e2e/nightwatch-config.js --suiteRetries 1",
     "test:max-file-size": "node tests/performance/max-file-size.js",
     "test:pwa-prod": "bash ./tests/performance/lighthouse/lighthouse-prod.sh",
