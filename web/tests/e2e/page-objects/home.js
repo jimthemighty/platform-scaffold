@@ -1,6 +1,7 @@
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
+const ENV = process.env.NODE_ENV || 'test'
 
 const selectors = {
     wrapper: '.t-home__container',
@@ -19,10 +20,31 @@ const Home = function(browser) {
     this.selectors = selectors
 }
 
+Home.prototype.openBrowserToHomepage = function() {
+    if (ENV === 'production') {
+        this.browser.url(process.env.npm_package_siteUrl)
+    } else {
+        console.log('Running preview.')
+        this.browser.preview(process.env.npm_package_siteUrl, 'https://localhost:8443/loader.js')
+    }
+    this.browser
+        .waitForElementVisible(selectors.wrapper)
+        .assert.visible(selectors.wrapper)
+}
+
+Home.prototype.closeBrowser = function() {
+    if (ENV === 'debug') {
+        console.log('Debugging, not closing browser')
+    } else {
+        this.browser.end()
+    }
+    return this
+}
+
 Home.prototype.navigateToProductList = function(PRODUCT_LIST_INDEX) {
     // Navigate from Home to ProductList
     this.browser
-        .log('Navigating to ProductList')
+        .log(`Navigating to ProductList number: ${PRODUCT_LIST_INDEX}`)
         .waitForElementVisible(selectors.productListItem(PRODUCT_LIST_INDEX))
         .click(selectors.productListItem(PRODUCT_LIST_INDEX))
     return this

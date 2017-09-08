@@ -13,6 +13,7 @@ import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 import {createAction} from 'progressive-web-sdk/dist/utils/action-creation'
 
 import {logout} from 'progressive-web-sdk/dist/integration-manager/account/commands'
+import {isStandalone} from '../../utils/utils'
 import {
     setPageFetchError,
     clearPageFetchError,
@@ -30,14 +31,17 @@ import {getOfflineModeStartTime, getOfflinePageViews} from 'progressive-web-sdk/
 import {OFFLINE_MODAL} from '../../modals/constants'
 import {isRunningInAstro, trigger} from '../../utils/astro-integration'
 import {getCartURL} from './selectors'
-
+import {setStandAloneAppFlag} from 'progressive-web-sdk/dist/store/app/actions'
 
 export const updateSvgSprite = createAction('Updated SVG sprite', ['sprite'])
 export const toggleHideApp = createAction('Toggling the hiding of App', ['hideApp'])
-export const setStandAloneAppFlag = createAction('Set Standalone app flag', ['standaloneApp'])
-
 export const lockScroll = createAction('Lock Scroll')
 export const unlockScroll = createAction('Unock Scroll')
+
+export const checkIfStandAlone = () => (dispatch) => {
+    const isStandAloneFlag = isStandalone()
+    dispatch(setStandAloneAppFlag(isStandAloneFlag))
+}
 
 const sendOfflineAnalytics = (offlineModeStartTime) => (dispatch, getState) => {
     const timestamp = Date.now()

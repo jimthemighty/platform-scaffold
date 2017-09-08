@@ -33,6 +33,7 @@ const NoOrder = ({dashboardURL}) => (
                 name="empty"
                 className="u-color-brand"
                 size="huge"
+                title="Empty"
             />
             <div className="u-text-align-center u-padding-lg">
                 You have placed no orders.
@@ -105,7 +106,7 @@ const AccountOrderList = ({reorderItems, dashboardURL, orders, setOrderListPage,
                         ))}
                     </div>
                     <Pagination
-                        className="u-margin-top-lg"
+                        className="u-padding-md"
                         onChange={(pageNumber) => setOrderListPage(pageNumber)}
                         currentPage={currentPage}
                         pageCount={numOfOrderPages}

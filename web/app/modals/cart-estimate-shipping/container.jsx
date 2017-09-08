@@ -6,6 +6,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import * as ReduxForm from 'redux-form'
 import {createPropsSelector} from 'reselect-immutable-helpers'
+
 import {CART_ESTIMATE_SHIPPING_MODAL} from '../constants'
 import {ESTIMATE_FORM_NAME} from '../../store/form/constants'
 
@@ -14,6 +15,7 @@ import {isModalOpen} from 'progressive-web-sdk/dist/store/modals/selectors'
 import {getAvailableRegions} from 'progressive-web-sdk/dist/store/checkout/selectors'
 import {submitEstimateShipping} from '../../containers/cart/actions'
 import {isTaxRequestPending} from '../../containers/cart/selectors'
+import {validatePostalCode} from '../../utils/validation'
 
 import Sheet from 'progressive-web-sdk/dist/components/sheet'
 import Button from 'progressive-web-sdk/dist/components/button'
@@ -34,10 +36,16 @@ const validate = (values) => {
         'countryId',
         'postcode'
     ]
+
     if (!(values.region || values.regionId)) {
         errors.region = REQUIRED_TEXT
         errors.regionId = REQUIRED_TEXT
     }
+
+    if (values.countryId && values.postcode && !validatePostalCode(values.postcode, values.countryId.toUpperCase())) {
+        errors.postcode = 'Enter a valid postal code' // or zip code?
+    }
+
     requiredFieldNames.forEach((fieldName) => {
         if (!values[fieldName]) {
             errors[fieldName] = REQUIRED_TEXT

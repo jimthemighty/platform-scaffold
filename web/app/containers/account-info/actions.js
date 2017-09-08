@@ -2,7 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-import {validateFullName} from '../../utils/utils'
+import {validateFullName} from '../../utils/validation'
 import {updateAccountInfo, updateAccountPassword} from 'progressive-web-sdk/dist/integration-manager/account/commands'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {SubmissionError} from 'redux-form'
