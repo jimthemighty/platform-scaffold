@@ -18,7 +18,6 @@ import {
 } from 'progressive-web-sdk/dist/integration-manager/cart/commands'
 import {addItemToWishlist} from 'progressive-web-sdk/dist/integration-manager/products/commands'
 import {cartExpired, handleCartExpiryError} from '../app/actions'
-import {getDiscountCode} from 'progressive-web-sdk/dist/store/cart/selectors'
 import {addNotification} from 'progressive-web-sdk/dist/store/notifications/actions'
 import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {trigger} from '../../utils/astro-integration'
@@ -134,8 +133,8 @@ export const submitPromoCode = ({promo}) => (dispatch) => {
         .then(() => dispatch(setPromoSubmitting(false)))
 }
 
-export const removePromoCode = () => (dispatch, getState) => {
-    dispatch(deletePromoCode(getDiscountCode(getState())))
+export const removePromoCode = (promoId) => (dispatch) => {
+    dispatch(deletePromoCode(promoId))
         .catch(() => {
             dispatch(addNotification(
                 'removePromoError',
