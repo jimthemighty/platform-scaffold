@@ -34,7 +34,7 @@ const AccountRemoveWishlistItemModal = ({closeModal, isOpen, removeWishlistItem,
                 <div className="u-padding-md">
                     <Image
                         src={getAssetUrl('static/img/cart/remove-item@2x.png')}
-                        alt=""
+                        alt="Stars and motion lines indicating something has disappeared"
                         height="75px"
                         width="95px"
                     />
