@@ -8,7 +8,7 @@ import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
 import isEmail from 'validator/lib/isEmail'
 
-import {validateFullName} from '../../../utils/utils'
+import {validateFullName, validatePostalCode} from '../../../utils/validation'
 import {getIsLoggedIn} from 'progressive-web-sdk/dist/store/user/selectors'
 import {getInitialShippingAddress} from '../../../store/checkout/shipping/selectors'
 
@@ -51,6 +51,10 @@ const validate = (values, props) => {
 
     if (!props.isLoggedIn && !values.username) {
         errors.username = REQUIRED_TEXT
+    }
+
+    if (values.countryId && values.postcode && !validatePostalCode(values.postcode, values.countryId.toUpperCase())) {
+        errors.postcode = 'Enter a valid postal code' // or zip code?
     }
 
     requiredFieldNames.forEach((fieldName) => {
