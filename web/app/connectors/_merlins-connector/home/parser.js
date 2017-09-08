@@ -4,7 +4,7 @@
 
 import {parseImage, getTextFrom} from '../../../utils/parser-utils'
 
-const BANNER_SELECTOR = 'strong.logo, .home-t-shirts, .home-erin'
+const BANNER_SELECTOR = 'strong.logo, .home-erin, .home-t-shirts'
 
 const homeParser = ($, $html) => {
     // TODO: fix this when we put mobile assets on desktop
