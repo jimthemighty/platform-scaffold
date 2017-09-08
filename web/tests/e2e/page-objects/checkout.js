@@ -113,7 +113,6 @@ Checkout.prototype.fillShippingInfo = function() {
         .setValue(selectors.state, userData.state)
         .setValue(selectors.postCode, userData.postCode)
         .setValue(selectors.phone, userData.phone)
-
     return this
 }
 
