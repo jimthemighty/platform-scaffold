@@ -11,6 +11,7 @@ import {openModal} from '../../../modals/actions'
 import {getSelectedShippingLabel, getPostcode} from '../../../store/checkout/shipping/selectors'
 import {getCheckoutShippingURL} from '../../app/selectors'
 import {removePromoCode} from '../actions'
+import {formatPrice, parsePrice} from '../../../utils/money-utils'
 
 import Button from 'progressive-web-sdk/dist/components/button'
 import CartPromoForm from './cart-promo-form'
@@ -54,8 +55,7 @@ const CartSummary = ({
     selectedShippingLabel,
     zipCode,
     taxAmount,
-    discountAmount,
-    discountLabel,
+    discounts,
     onCalculateClick,
     removePromoCode
 }) => {
@@ -69,15 +69,44 @@ const CartSummary = ({
         </Button>
     )
 
-    const removeButton = (
+    const RemoveDiscountButton = ({id}) => ( // eslint-disable-line react/prop-types
         <Button
-            innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal"
-            onClick={removePromoCode}
+            innerClassName="u-color-brand u-padding-start u-text-letter-spacing-normal"
+            onClick={() => removePromoCode(id)}
             data-analytics-name={UI_NAME.removePromotionCode}
         >
-            Remove Discount
+            Remove
         </Button>
     )
+
+    const renderDiscountTotal = () => {
+        const totalDiscount = discounts.reduce((total, discount) => {
+            const current = parsePrice(discount.amount)
+            return total + current
+        }, 0)
+
+        return (<LedgerRow
+            key="-1"
+            className="t-cart__summary-discounts"
+            label={`Discounts`}
+            value={formatPrice(totalDiscount)}
+        />)
+    }
+
+    const renderDiscount = ({amount, couponCode, text, id}, index) => ( // eslint-disable-line react/prop-types
+        <LedgerRow
+            key={index}
+            className="t-cart__summary-discounts"
+            label={`Discount: ${couponCode}`}
+            labelAction={<RemoveDiscountButton id={id} />}
+            labelDescription={text}
+            value={amount}
+        />
+    )
+
+    const renderDiscounts = () => {
+        return [renderDiscountTotal(), discounts.map(renderDiscount)]
+    }
 
     return (
         <div className="t-cart__summary">
@@ -99,15 +128,6 @@ const CartSummary = ({
                         value={subtotal}
                     />
 
-                    {(discountAmount && discountLabel) &&
-                        <LedgerRow
-                            className="pw--sale"
-                            label={`Discount: ${discountLabel}`}
-                            labelAction={removeButton}
-                            value={discountAmount}
-                        />
-                    }
-
                     {(zipCode !== null && zipCode !== undefined) &&
                         <LedgerRow
                             label={`Shipping (${selectedShippingLabel})`}
@@ -115,6 +135,8 @@ const CartSummary = ({
                             key={`Shipping (${selectedShippingLabel})`}
                         />
                     }
+
+                    {discounts && !!discounts.length && renderDiscounts()}
 
                     {(taxAmount && zipCode)
                         ? renderTaxAmountRow(taxAmount, zipCode, onCalculateClick)
@@ -151,8 +173,7 @@ const CartSummary = ({
 
 CartSummary.propTypes = {
     checkoutShippingURL: PropTypes.string,
-    discountAmount: PropTypes.string,
-    discountLabel: PropTypes.string,
+    discounts: PropTypes.array,
     orderTotal: PropTypes.string,
     removePromoCode: PropTypes.func,
     selectedShippingLabel: PropTypes.string,
@@ -165,8 +186,7 @@ CartSummary.propTypes = {
 }
 
 const mapStateToProps = createPropsSelector({
-    discountAmount: cartSelectors.getDiscountAmount,
-    discountLabel: cartSelectors.getDiscountLabel,
+    discounts: cartSelectors.getDiscounts,
     checkoutShippingURL: getCheckoutShippingURL,
     subtotal: cartSelectors.getSubtotal,
     orderTotal: cartSelectors.getOrderTotal,

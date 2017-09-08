@@ -65,6 +65,12 @@ $cart__custom-ease-out: cubic-bezier(0.35, 0.35, 0.32, 1);
     }
 }
 
+// clear border-top and padding-top except the first row of discounts
+.t-cart__summary-discounts ~ .t-cart__summary-discounts {
+    padding-top: 0;
+    border-top: 0;
+}
+
 
 // Product Content Placeholder
 // ---

@@ -2,10 +2,7 @@
 /* Copyright (c) 2017 Mobify Research & Development Inc. All rights reserved. */
 /* * *  *  * *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * */
 
-const DOLLAR_SIGN = /\$/
-
-// replacing $ sign with empty string to compare the price
-const getPriceValue = (item) => parseFloat(item.get('price').replace(DOLLAR_SIGN, ''))
+import {parsePrice} from './money-utils'
 
 export const sortLib = {
     // sort by name
@@ -24,7 +21,7 @@ export const sortLib = {
     },
 
     // sort by price
-    price: (a, b) => (getPriceValue(a) - getPriceValue(b)),
+    price: (a, b) => (parsePrice(a.get('price')) - parsePrice(b.get('price'))),
 
     // sort by postition (default)
     position: () => 0
