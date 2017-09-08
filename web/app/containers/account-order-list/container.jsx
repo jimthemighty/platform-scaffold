@@ -10,14 +10,13 @@ import Breadcrumbs from 'progressive-web-sdk/dist/components/breadcrumbs'
 import {getAccountURL} from '../app/selectors'
 import Card from '../../components/card'
 import Button from 'progressive-web-sdk/dist/components/button'
-import Image from 'progressive-web-sdk/dist/components/image'
+import Icon from 'progressive-web-sdk/dist/components/icon'
 import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import {getOrderList, getOrdersPage, getNumOrderPages} from './selectors'
 import {reorderItems, setOrderListPage, navigateToOrder} from './actions'
 import OrderBlock from './partials/account-order-block'
 import SkeletonText from 'progressive-web-sdk/dist/components/skeleton-text'
 import Pagination from 'progressive-web-sdk/dist/components/pagination'
-import {getAssetUrl} from 'progressive-web-sdk/dist/asset-utils'
 
 const NoOrder = ({dashboardURL}) => (
     <div className="t-account-order-list__empty">
@@ -30,12 +29,11 @@ const NoOrder = ({dashboardURL}) => (
             </div>
         </div>
         <div className="u-padding-md u-margin-top-lg u-flexbox u-direction-column u-align-center u-justify-center">
-            <Image
-                className="u-margin-bottom-md"
-                height="140px"
-                width="140px"
-                alt="Illustrated upside-down top hat with a bug flying out"
-                src={getAssetUrl(`static/img/cart/empty-cart@2x.png`)}
+            <Icon
+                name="empty"
+                className="u-color-brand"
+                size="huge"
+                title="Empty"
             />
             <div className="u-text-align-center u-padding-lg">
                 You have placed no orders.
