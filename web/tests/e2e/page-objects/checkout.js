@@ -114,8 +114,6 @@ Checkout.prototype.fillShippingInfo = function() {
         .setValue(selectors.postCode, userData.postCode)
         .setValue(selectors.phone, userData.phone)
 
-        .log('Finished filling out shipping info form fields')
-
     return this
 }
 
