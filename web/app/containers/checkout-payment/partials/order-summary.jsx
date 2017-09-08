@@ -64,8 +64,7 @@ class OrderSummary extends React.Component {
         const {
             cartItems,
             cartshippingRate,
-            discountAmount,
-            discountLabel,
+            discounts,
             isLoading,
             isFixedPlaceOrderShown,
             orderTotal,
@@ -78,17 +77,17 @@ class OrderSummary extends React.Component {
             submitPayment
         } = this.props
 
-        const removeButton = (
+        const RemoveDiscountButton = ({id}) => (
             <Button
-                innerClassName="u-color-brand u-padding-start-0 u-text-letter-spacing-normal"
-                onClick={removePromoCode}
-                data-analytics-name={UI_NAME.removeDiscount}
+                innerClassName="u-color-brand u-padding-start u-text-letter-spacing-normal"
+                onClick={() => removePromoCode(id)}
+                data-analytics-name={UI_NAME.removePromotionCode}
             >
-                Remove Discount
+                Remove
             </Button>
         )
 
-        const PlaceOrderButton = (
+        const PlaceOrderButton = ({submitPayment, isLoading}) => (
             <Button
                 className="pw--primary u-flex-none u-width-full u-text-uppercase qa-checkout__place-order"
                 type="button"
@@ -102,6 +101,17 @@ class OrderSummary extends React.Component {
                     [<Icon key="" name="lock" />, 'Place Your Order']
                 }
             </Button>
+        )
+
+        const renderDiscount = ({amount, couponCode, text, id}, index) => ( // eslint-disable-line react/prop-types
+            <LedgerRow
+                key={index}
+                className="t-cart__summary-discounts"
+                label={`Discount: ${couponCode}`}
+                labelAction={<RemoveDiscountButton id={id} />}
+                labelDescription={text}
+                value={amount}
+            />
         )
 
         return (
@@ -123,7 +133,7 @@ class OrderSummary extends React.Component {
                             value={subtotal}
                         />
 
-                        {discountAmount ?
+                        {discounts && !!discounts.length ?
                             <LedgerRow
                                 label={`Shipping (${shippingLabel})`}
                                 value={cartshippingRate}
@@ -135,6 +145,8 @@ class OrderSummary extends React.Component {
                             />
                         }
 
+                        {discounts && !!discounts.length && discounts.map(renderDiscount)}
+
                         {taxAmount &&
                             <LedgerRow
                                 className="u-flex-none u-border-0"
@@ -142,24 +154,13 @@ class OrderSummary extends React.Component {
                                 value={taxAmount}
                             />
                         }
-
-                        {discountAmount && discountLabel &&
-                            <LedgerRow
-                                className="pw--sale"
-                                label={`Discount: ${discountLabel}`}
-                                labelAction={removeButton}
-                                value={discountAmount}
-                           />
-                        }
                     </Ledger>
 
-                    {(!discountAmount || !discountLabel) &&
-                        <Accordion>
-                            <AccordionItem header="Promo code">
-                                <CartPromoForm />
-                            </AccordionItem>
-                        </Accordion>
-                    }
+                    <Accordion>
+                        <AccordionItem header="Promo code">
+                            <CartPromoForm />
+                        </AccordionItem>
+                    </Accordion>
 
                     <Ledger>
                         <LedgerRow
@@ -171,7 +172,7 @@ class OrderSummary extends React.Component {
 
                     {/* This is the statically positioned "Place Your Order" container */}
                     <div className="u-padding-end-md u-padding-start-md">
-                        {PlaceOrderButton}
+                        <PlaceOrderButton submitPayment={submitPayment} isLoading={isLoading} />
                     </div>
 
                     {/* This is the FIXED positioned "Place Your Order" container */}
@@ -181,7 +182,7 @@ class OrderSummary extends React.Component {
                         aria-hidden="true"
                     >
                         <div className="u-padding-md u-bg-color-neutral-00 u-text-align-center">
-                            {PlaceOrderButton}
+                            <PlaceOrderButton submitPayment={submitPayment} isLoading={isLoading} />
                             <p className="u-margin-top-md">
                                 Total: <strong>{orderTotal}</strong>
                             </p>
@@ -214,14 +215,9 @@ OrderSummary.propTypes = {
     cartshippingRate: PropTypes.string,
 
     /**
-     * Amount of the discount
+     * Array of applied discounts
      */
-    discountAmount: PropTypes.string,
-
-    /**
-     * Label of the discount
-     */
-    discountLabel: PropTypes.string,
+    discounts: PropTypes.array,
 
     /**
      * Whether the fixed 'Place Order' container displays
@@ -282,8 +278,7 @@ OrderSummary.propTypes = {
 const mapStateToProps = createPropsSelector({
     cartItems: cartSelectors.getCartItemsFull,
     cartshippingRate: cartSelectors.getShippingAmount,
-    discountAmount: cartSelectors.getDiscountAmount,
-    discountLabel: cartSelectors.getDiscountLabel,
+    discounts: cartSelectors.getDiscounts,
     subtotal: cartSelectors.getSubtotal,
     orderTotal: cartSelectors.getOrderTotal,
     shippingRate: getSelectedShippingRate,

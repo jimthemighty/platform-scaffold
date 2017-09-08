@@ -5,6 +5,7 @@
 import React, {PropTypes} from 'react'
 import classnames from 'classnames'
 import Field from 'progressive-web-sdk/dist/components/field'
+import {parsePrice} from '../../utils/money-utils'
 
 /**
  * Displays the price for an item
@@ -14,13 +15,27 @@ import Field from 'progressive-web-sdk/dist/components/field'
 const ItemPrice = ({
     linePrice,
     itemPrice,
-    className
+    className,
+    quantity,
+    originalPrice
 }) => {
     const wrapperClass = classnames(className, 'c-item-price')
+
+    const linePriceValue = linePrice ? parsePrice(linePrice) : 0
+    const priceValue = originalPrice ? parsePrice(originalPrice) * quantity : 0
+    const discount = linePriceValue < priceValue
+
     return (
         <Field className={wrapperClass}>
             <div className="u-text-align-end u-flex">
-                <div className="u-h5 u-color-accent u-text-weight-bold">{linePrice}</div>
+                {discount ?
+                    <div>
+                        <span className="u-h5 u-color-accent u-text-weight-bold">{linePrice}</span>
+                        <span className="u-text-quiet u-text-strikethrough u-padding-start">{originalPrice}</span>
+                    </div>
+                :
+                    <div className="u-h5 u-color-accent u-text-weight-bold">{linePrice}</div>
+                }
                 {itemPrice &&
                     <div className="u-text-quiet"><em>{itemPrice} each</em></div>
                 }
@@ -39,7 +54,15 @@ ItemPrice.propTypes = {
     /**
      * The full price for the line item (unit price * quantity)
     */
-    linePrice: PropTypes.string
+    linePrice: PropTypes.string,
+    /**
+     * The original unit price for the item
+    */
+    originalPrice: PropTypes.string,
+    /**
+     * The quantity of this item
+    */
+    quantity: PropTypes.number,
 }
 
 export default ItemPrice

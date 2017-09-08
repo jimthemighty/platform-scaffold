@@ -68,6 +68,7 @@ class CartProductItem extends React.Component {
             cartItemId,
             configureUrl,
             quantity,
+            price,
             itemPrice,
             linePrice,
             thumbnail,
@@ -101,7 +102,7 @@ class CartProductItem extends React.Component {
                         quantity={quantity}
                     />
 
-                    <ItemPrice linePrice={linePrice} itemPrice={itemPrice} />
+                    <ItemPrice linePrice={linePrice} itemPrice={itemPrice} originalPrice={price} quantity={quantity} />
                 </FieldRow>
 
                 <div className="u-flexbox">
@@ -150,6 +151,7 @@ CartProductItem.propTypes = {
     linePrice: PropTypes.string,
     openRemoveItemModal: PropTypes.func,
     options: PropTypes.array,
+    price: PropTypes.string,
     productId: PropTypes.string,
     quantity: PropTypes.number,
     setCurrentProduct: PropTypes.func,

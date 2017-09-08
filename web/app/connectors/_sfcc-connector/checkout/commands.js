@@ -11,6 +11,7 @@ import {parseShippingAddressFromBasket} from './parsers'
 import {getPaymentURL, getConfirmationURL} from '../config'
 import {receiveOrderConfirmationContents} from 'progressive-web-sdk/dist/integration-manager/results'
 import {getCardData} from 'progressive-web-sdk/dist/card-utils'
+import {formatPrice, parsePrice} from '../../../utils/money-utils'
 import {getSelectedShippingMethodValue} from '../../../store/checkout/shipping/selectors'
 import {
     receiveShippingMethods,
@@ -30,7 +31,7 @@ export const fetchShippingMethodsEstimate = (inputAddress = {}) => (dispatch, ge
             const shippingMethods = applicable_shipping_methods
                   .map(({name, description, price, id}) => ({
                       label: `${name} - ${description}`,
-                      cost: `$${price.toFixed(2)}`,
+                      cost: formatPrice(price),
                       id
                   }))
 
@@ -169,7 +170,7 @@ const addPaymentMethod = (formValues, basket) => (dispatch, getState) => {
     const orderTotal = getOrderTotal(getState())
     const type = getCardData(formValues.ccnumber).cardType
     const requestBody = {
-        amount: parseFloat(orderTotal.replace('$', '')),
+        amount: parsePrice(orderTotal),
         payment_method_id: 'CREDIT_CARD',
         payment_card: {
             card_type: type
