@@ -127,6 +127,62 @@ export const buildQueryString = (query) => {
     return `?q=${query.replace(/ /g, '+')}`
 }
 
+export const validateFullName = (fullName) => {
+    return /\w+\s+\w+/.test(fullName)
+}
+
+/**
+ * Checks to see if a credit card has expired given the expiry date.
+ *
+ * @param ccExpiry {string} expects a numeric string with the format "mmyy"
+ */
+export const validateCCExpiry = (ccExpiry) => {
+    // Expects 'mmyy' format
+    if (ccExpiry.length !== 4) {
+        return false
+    }
+    const today = new Date()
+    const thisMonth = today.getMonth() + 1 // month indexing begins at 0
+    const thisYear = today.getFullYear() % 100
+    const expMonth = parseInt(ccExpiry.substring(0, 2))
+    const expYear = parseInt(ccExpiry.substring(2))
+
+    if (thisYear > expYear) {
+        return false
+    } else if (thisYear === expYear && expMonth < thisMonth) {
+        return false
+    } else {
+        return true
+    }
+}
+
+// Luhn Checksum Algorithm - CC validation
+// https://en.wikipedia.org/wiki/Luhn_algorithm
+export const validateCCNumber = (ccNumber) => {
+    // Only allow for numbers spaces as input
+    if (/[^0-9-\s]+/.test(ccNumber)) {
+        return false
+    }
+    // Sanitize the input
+    ccNumber = ccNumber.replace(/\D/g, '')
+
+    let checkSum = 0
+    let isCheckDigit = false
+    for (let i = ccNumber.length - 1; i >= 0; i--) {
+        let currentDigit = parseInt(ccNumber.charAt(i), 10)
+
+        if (isCheckDigit) {
+            currentDigit = (currentDigit *= 2) > 9
+                ? currentDigit -= 9
+                : currentDigit
+        }
+        checkSum += currentDigit
+        isCheckDigit = !isCheckDigit
+    }
+
+    return checkSum !== 0 && (checkSum % 10) === 0
+}
+
 export const isStandalone = () => {
     return /homescreen=1/.test(window.location.href) || window.matchMedia('(display-mode: standalone)').matches
 }
