@@ -36,7 +36,7 @@ const NoOrder = ({dashboardURL}) => (
                 width="140px"
                 alt="Illustrated upside-down top hat with a bug flying out"
                 src={getAssetUrl(`static/img/cart/empty-cart@2x.png`)}
-                />
+            />
             <div className="u-text-align-center u-padding-lg">
                 You have placed no orders.
             </div>
