@@ -99,7 +99,7 @@ const setInitialVariantValues = (variationCategories, magentoObject) => {
 
 const carouselItemsToImages = (carouselItems) => {
     return carouselItems.map(({img, isMain, full, thumb, caption}) => ({
-        alt: '',
+        alt: caption,
         src: img,
         isMain,
         zoomSrc: full,

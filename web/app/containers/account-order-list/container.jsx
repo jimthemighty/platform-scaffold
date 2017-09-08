@@ -33,6 +33,7 @@ const NoOrder = ({dashboardURL}) => (
                 name="empty"
                 className="u-color-brand"
                 size="huge"
+                title="Empty"
             />
             <div className="u-text-align-center u-padding-lg">
                 You have placed no orders.
