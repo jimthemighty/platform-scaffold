@@ -6,11 +6,14 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {createPropsSelector} from 'reselect-immutable-helpers'
 import * as ReduxForm from 'redux-form'
-import {ADDRESS_FORM_NAME} from '../../../store/form/constants'
+
 import Button from 'progressive-web-sdk/dist/components/button'
+import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
+
+import {ADDRESS_FORM_NAME} from '../../../store/form/constants'
+import {validatePostalCode} from '../../../utils/validation'
 import {getIsEditing} from '../selectors'
 import {submitAddAddress, submitEditAddress} from '../actions'
-import {UI_NAME} from 'progressive-web-sdk/dist/analytics/data-objects/'
 import AccountAddressFields from './account-address-fields'
 
 const REQUIRED_TEXT = 'Required'
@@ -27,6 +30,10 @@ const validate = (values, props) => {
         'postcode',
         'telephone'
     ]
+
+    if (values.countryId && values.postcode && !validatePostalCode(values.postcode, values.countryId.toUpperCase())) {
+        errors.postcode = 'Enter a valid postal code'
+    }
 
     requiredFieldNames.forEach((fieldName) => {
         if (!values[fieldName]) {
