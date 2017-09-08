@@ -18,10 +18,15 @@ describe('the home parser', () => {
                     alt: 'Merlins Potions',
                     src: 'https://www.merlinspotions.com/media/logo/default/MerlinsPotions_Logo_Light.png'
                 },
-                {},
                 {
-                    alt: '',
-                    src: 'https://www.merlinspotions.com/media/wysiwyg/MP_banner_4.jpg'
+                    alt: 'free shipping by owl',
+                    src: undefined,
+                    title: undefined
+                },
+                {
+                    alt: 'books',
+                    src: 'https://www.merlinspotions.com/media/wysiwyg/MP_banner_4.jpg',
+                    title: undefined
                 }
             ]
         }
